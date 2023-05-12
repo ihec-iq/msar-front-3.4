@@ -1,0 +1,190 @@
+:root {
+  --primary: #111827;
+  --secondary: #35383c;
+  --secondaryHover: #585c60;
+
+  --primaryLight: #d0d0d0;
+  --secondaryLight: #92969a;
+  --secondaryHoverLight: #818181;
+
+
+  /* vant dropDown reset */
+  --van-collapse-item-content-background-color: none;
+  --van-cell-background-color: none;
+  --van-cell-active-color: none;
+  --van-cell-horizontal-padding: 12px;
+  --van-collapse-item-content-padding: 0px 10px;
+  /* vant */
+
+}
+
+
+.accordion-button::after {
+  margin-left: var(--van-padding-base) !important;
+  color: var(--van-cell-right-icon-color) !important;
+  height: var(--van-cell-line-height) !important;
+  font-size: var(--van-cell-icon-size) !important;
+  line-height: var(--van-cell-line-height) !important;
+}
+.accordion-button:not(.collapsed)::after {
+  margin-left: var(--van-padding-base) !important;
+  color: var(--van-cell-right-icon-color) !important;
+  height: var(--van-cell-line-height) !important;
+  font-size: var(--van-cell-icon-size) !important;
+  line-height: var(--van-cell-line-height) !important;
+}
+.dark .vs__selected {
+  background-color: #111827;
+  border: 1px solid #222;
+}
+/* .v-select {
+  position: inherit !important;
+} */
+.vs__selected {
+  background-color: #DCDDE3;
+  border: 1px solid #999;
+}
+.van-collapse-item__wrapper {
+  overflow: inherit;
+  transition: height var(--van-collapse-item-transition-duration) ease-in-out;
+  will-change: height;
+}
+.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after {
+  border-width: 0;
+}
+.collapse {
+  position: inherit !important;
+  overflow: visible !important;
+}
+.van-cell:after{
+  border: none;
+}
+.dark .van-cell {
+  color: #d1d5db;
+  /* background: #1f2937; */
+}
+.van-cell {
+  color: #373737;
+  /* background: #dcdde3; */
+  align-items: center;
+  padding: 0;
+  padding-right: 5px;
+}
+.dark .disabled {
+  pointer-events: none;
+  color: #646b72 !important;
+  cursor: not-allowed;
+  background-image: none;
+  background-color: #131b2c59 !important;
+}
+.dark .enabled {
+  pointer-events: visible;
+  color: #ccc !important;
+  cursor: auto;
+  background-image: none;
+  background-color: #111827 !important;
+}
+.disabled {
+  pointer-events: none;
+  color: #b1b6bb !important;
+  cursor: not-allowed;
+  background-image: none;
+  background-color: #8a8d94 !important;
+}
+.enabled {
+  pointer-events: visible;
+  color: rgb(52, 52, 52) !important;
+  cursor: auto;
+  background-image: none;
+  background-color: #e5e7eb !important;
+}
+.dark {
+    --bg-primary: 255, 255, 255;
+  --bg-secondary: 245, 246, 247;
+  --bg-tertiary: 238, 238, 238;
+
+  table: #fff;
+  darkNav: #fff;
+  
+  create: #2ecc ;
+  createHover: #139e4d;
+  content: #fff ; 
+
+}
+.icon-shadow {
+  box-shadow: 0px 8px 10px 0px black;
+}
+@tailwind base;
+
+/*scroll for Chrome, Edge, and Safari */
+.dark *::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dark *::-webkit-scrollbar-track {
+  background: var(--primary);
+  /* border-radius: 5px; */
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background-color: var(--secondary);
+  border-radius: 14px;
+  border: 3px solid var(--primary);
+  transition-duration: 500ms;
+}
+
+.dark *::-webkit-scrollbar-thumb:hover{
+  background-color: var(--secondaryHover);
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--primaryLight);
+  /* border-radius: 5px; */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--secondaryLight);
+  border-radius: 14px;
+  border: 3px solid var(--primaryLight);
+  transition-duration: 500ms;
+}
+
+*::-webkit-scrollbar-thumb:hover{
+  background-color: var(--secondaryHoverLight);
+}
+
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+  .select2-dropdown {
+    @apply rounded-b-lg shadow-md;
+  }
+  .select2-search {
+    @apply border border-gray-300 rounded;
+  }
+  .select2-results__group {
+    @apply text-lg font-bold text-gray-900;
+  }
+  .dark .linkExactActiveClass {
+    @apply bg-sideNavActive text-textLight border-l-2 border-sideNavActiveBorder rounded-md
+  }
+  .linkExactActiveClass {
+    @apply bg-sideNavLightActive text-text  border-l-2  border-sideNavLightActiveBorder rounded-md
+  }
+  .nav-router-link{
+    @apply text-white/50  inline-flex justify-center rounded-md 
+  }
+  /* ... */
+
+  
+}
+@media (max-width: 390px) {
+  .text-base {
+    font-size: 12px;
+  }
+}

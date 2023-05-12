@@ -1,0 +1,71 @@
+import { ref, onMounted } from "vue";
+import { defineStore } from "pinia";
+import Api from "@/api/apiConfig";
+import { getError } from "@/utils/helpers";
+import { usePermissionStore } from "./permission";
+import type IUser from "@/types/core/IUser";
+export const useAuthStore = defineStore("useAuthStore", () => {
+  const isAuthenticated = ref<boolean | any>(false);
+  const token = ref<string | any>("");
+  const user = ref<object | any>();
+
+  const login = async (payload: { email: string; password: string }) => {
+    return await new Promise((resolve, reject) => {
+      Api.post("/auth/ho_login", payload)
+        .then((response) => {
+          if (response.status == 200) {
+            checkToken(response.data.token);
+          }
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+  const setToken = (_token: string) => {
+    if (!_token || _token == "") return logout();
+    token.value = _token;
+    localStorage.setItem("isAuthenticated", "1");
+    localStorage.setItem("token", _token);
+    Api.defaults.headers.common["Authorization"] = `Bearer ${_token}`;
+  };
+  const PermissionStore = usePermissionStore();
+  const setUser = (_user: IUser) => {
+    user.value = _user;
+    localStorage.setItem("user", JSON.stringify(_user));
+    PermissionStore.permissions = _user.permissions;
+  };
+  const checkToken = async (_token: string) => {
+    if (_token) setToken(_token);
+    if (!_token) return;
+
+    await Api.post("/auth/ho_me")
+      .then((response) => {
+        setUser(response.data.data);
+      })
+      .catch(() => {
+        logout();
+      });
+  };
+  const getUser = () => {
+    return JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+  };
+  const logout = async () => {
+    isAuthenticated.value = false;
+    token.value = "";
+    user.value = {};
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("isAuthenticated");
+    Api.defaults.headers.common["Authorization"] = "";
+    window.location.href = "/login";
+  };
+  onMounted(async () => {
+    isAuthenticated.value =
+      (await localStorage.getItem("isAuthenticated")) == "1" ? true : false;
+    token.value = await localStorage.getItem("token")?.toString();
+    user.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+  });
+  return { isAuthenticated, token, login, logout, getError, user, getUser };
+});
