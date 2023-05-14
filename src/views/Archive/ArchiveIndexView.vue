@@ -1,17 +1,25 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/Archive/archive";
 import PageTitle from "@/components/general/namePage.vue";
 import useLanguage from "@/stores/i18n/languageStore";
-import type IArchive from "@/types/Archive/IArchive";
+import type { IArchive, IArchiveFilter } from "@/types/Archive/IArchive";
+import type { Ref } from "vue";
 
 const { t } = useLanguage();
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
 const dataBase = ref<Array<IArchive>>([]);
 const { archive } = useArchiveStore();
-const { get } = useArchiveStore();
+const { get, get_filter } = useArchiveStore();
+
+const limits = reactive([
+  { name: "12", val: 12 },
+  { name: "24", val: 24 },
+  { name: "50", val: 50 },
+  { name: "All", val: 999999999 },
+]);
 
 const getData = async () => {
   isLoading.value = true;
@@ -23,20 +31,30 @@ const getData = async () => {
   });
   isLoading.value = false;
 };
+
 const router = useRouter();
 const addArchive = () => {
   archive.id = 0;
   archive.title = "";
   archive.issueDate = new Date().toISOString().split("T")[0];
   archive.files = undefined;
+  archive.number = "";
   archive.description = "";
+  archive.isIn = 0;
+  archive.sectionId = 1;
+  archive.archiveTypeId = 1;
   router.push({
     name: "archiveAdd",
   });
 };
+
+//#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (item: IArchive) => {
-  if (item.title.includes(fastSearch.value)) {
+  if (
+    item.title.includes(fastSearch.value) ||
+    item.way.includes(fastSearch.value)
+  ) {
     return true;
   } else return false;
 };
@@ -47,6 +65,31 @@ const makeFastSearch = () => {
     data.value = dataBase.value.filter(filterByIDName);
   }
 };
+//#endregion
+//#region Search
+const searchFilter = ref<IArchiveFilter>({
+  title: "",
+  issueDateFrom: new Date().toISOString().split("T")[0],
+  issueDateTo: new Date().toISOString().split("T")[0],
+  description: "",
+  way: "",
+  number: "",
+  isIn: -1,
+  sectionId: -1,
+  archiveTypeId: -1,
+});
+const getFilterData = async () => {
+  isLoading.value = true;
+  await get_filter(searchFilter.value).then((response) => {
+    if (response.status == 200) {
+      console.log(response.data);
+      data.value = response.data.data;
+      dataBase.value = response.data.data;
+    }
+  });
+  isLoading.value = false;
+};
+//#endregion
 const update = (id: number) => {
   router.push({
     name: "archiveUpdate",
@@ -97,12 +140,57 @@ onMounted(async () => {
           <div
             class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
           >
-            {{ t("Date") }}
+            {{ t("DateFrom") }}
           </div>
           <input
             type="date"
+            v-model="searchFilter.issueDateFrom"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />
+        </div>
+        <div class="ml-4">
+          <div
+            class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+          >
+            {{ t("DateTo") }}
+          </div>
+          <input
+            type="date"
+            v-model="searchFilter.issueDateTo"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          />
+        </div>
+        <!-- limit -->
+        <div class="limit flex items-center ml-10">
+          <div
+            class="py-3 px-4 flex items-center text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+          >
+            <p>{{ t("Sort By") }}:</p>
+            <select
+              aria-label="select"
+              v-model="searchFilter.limit"
+              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
+              @change="getData()"
+            >
+              <option
+                v-for="limit in limits"
+                :key="limit.val"
+                :value="limit.val"
+                class="text-sm text-indigo-800"
+              >
+                {{ limit.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="ml-4">
+          <button
+            v-if="archive.id == 0"
+            @click="getFilterData()"
+            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+          >
+            {{ t("Search") }}
+          </button>
         </div>
       </div>
       <div class="w-full">

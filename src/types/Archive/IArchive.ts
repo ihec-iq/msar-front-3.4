@@ -1,4 +1,4 @@
-export default interface IArchive {
+export interface IArchive {
   id: number;
   title: string;
   way: string;
@@ -9,5 +9,19 @@ export default interface IArchive {
   isIn: number;
   isInWord?: string;
   archiveTypeId: number;
+  archiveType?: number;
   sectionId: number;
+  section?: number;
+}
+export interface IArchiveFilter {
+  limit?: number;
+  title: string;
+  way?: string;
+  issueDateFrom?: string;
+  issueDateTo?: string;
+  number?: string;
+  description?: string;
+  isIn?: number;
+  archiveTypeId?: number;
+  sectionId?: number;
 }

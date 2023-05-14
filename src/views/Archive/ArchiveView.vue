@@ -12,7 +12,7 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 const namePage = ref("Archive Add");
 const route = useRoute();
 const id = ref(Number(route.params.id));
-
+const isIn = ref(false);
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 
@@ -28,6 +28,7 @@ const onFileChange = (e) => {
 };
 const store = () => {
   errors.value = null;
+  archive.value.isIn = isIn.value ? 1 : 0;
   const formdata = new FormData();
   formdata.append("id", archive.value.id.toString());
   formdata.append("title", archive.value.title.toString());
@@ -38,7 +39,7 @@ const store = () => {
   formdata.append("way", archive.value.way.toString());
   formdata.append("sectionId", archive.value.sectionId.toString());
   formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
-  formdata.append("isIn", archive.value.isIn.toString());
+  formdata.append("isIn", archive.value.isIn == 0 ? "0" : "1");
   archiveStore
     .store(formdata)
     .then((response) => {
@@ -67,6 +68,8 @@ const store = () => {
 function update() {
   errors.value = null;
   // saleCustomer.custom_group_bill_sale_id = props.idBill;
+  archive.value.isIn = isIn.value ? 1 : 0;
+  console.log(archive.value);
   archiveStore
     .update(archive.value)
     .then((response) => {
@@ -111,13 +114,14 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        // await _delete(id).then(() => {
-        //   swalWithBootstrapButtons.fire(
-        //     t("Deleted!"),
-        //     t("Deleted successfully ."),
-        //     "success"
-        //   );
-        // });
+        await archiveStore._delete(archive.value.id).then(() => {
+          swalWithBootstrapButtons.fire(
+            t("Deleted!"),
+            t("Deleted successfully ."),
+            "success"
+          );
+          router.go(-1);
+        });
       }
     });
 };
@@ -129,19 +133,27 @@ const showData = async () => {
         archive.value.id = response.data.data.id;
         archive.value.title = response.data.data.title;
         archive.value.description = response.data.data.description;
-        archive.value.issueDate = response.data.data.issueDate
-          .toISOString()
-          .split("T")[0];
+        archive.value.issueDate = response.data.data.issueDate.split(" ")[0];
         archive.value.number = response.data.data.number;
         archive.value.way = response.data.data.way;
         archive.value.sectionId = response.data.data.sectionId;
         archive.value.archiveTypeId = response.data.data.archiveTypeId;
         archive.value.isIn = response.data.data.isIn;
+        isIn.value = response.data.data.isIn == 0 ? false : true;
         archive.value.isInWord = response.data.data.isInWord;
       }
     })
     .catch((errors) => {
       console.log(errors);
+      Swal.fire({
+        position: "top-end",
+        icon: "warning",
+        title: "Your Archive file not exist !!!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        router.go(-1);
+      });
     });
 };
 const back = () => {
@@ -174,6 +186,18 @@ onMounted(async () => {
         <input
           v-model="archive.title"
           type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
+      </div>
+      <div class="w-1/3 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("isIn") }}{{ isIn }}
+        </div>
+        <input
+          v-model="isIn"
+          type="checkbox"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
@@ -223,7 +247,7 @@ onMounted(async () => {
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >
-      <div class="flex">
+      <div class="flex mr-8">
         <div class="items-center mr-3">
           <button
             v-if="archive.id == 0"
@@ -240,6 +264,7 @@ onMounted(async () => {
             {{ t("Update") }}
           </button>
           <button
+            v-if="archive.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 w-32 rounded-lg text-white ml-2"
           >
