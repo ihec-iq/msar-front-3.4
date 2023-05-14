@@ -1,4 +1,4 @@
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
@@ -7,11 +7,11 @@ import type IUser from "@/types/core/IUser";
 export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);
   const token = ref<string | any>("");
-  const user = ref<object | any>();
+  let user = reactive<object | any>(null);
 
   const login = async (payload: { email: string; password: string }) => {
     return await new Promise((resolve, reject) => {
-      Api.post("/auth/ho_login", payload)
+      Api.post("/login", payload)
         .then((response) => {
           if (response.status == 200) {
             checkToken(response.data.token);
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
   const PermissionStore = usePermissionStore();
   const setUser = (_user: IUser) => {
-    user.value = _user;
+    user = _user;
     localStorage.setItem("user", JSON.stringify(_user));
     PermissionStore.permissions = _user.permissions;
   };
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     if (_token) setToken(_token);
     if (!_token) return;
 
-    await Api.post("/auth/ho_me")
+    await Api.get("/me")
       .then((response) => {
         setUser(response.data.data);
       })
@@ -54,18 +54,18 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const logout = async () => {
     isAuthenticated.value = false;
     token.value = "";
-    user.value = {};
+    user = {};
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
     Api.defaults.headers.common["Authorization"] = "";
-    window.location.href = "/login";
+    //window.location.href = "/login";
   };
   onMounted(async () => {
     isAuthenticated.value =
       (await localStorage.getItem("isAuthenticated")) == "1" ? true : false;
     token.value = await localStorage.getItem("token")?.toString();
-    user.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+    user = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
   });
   return { isAuthenticated, token, login, logout, getError, user, getUser };
 });

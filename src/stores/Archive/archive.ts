@@ -8,20 +8,26 @@ export const useArchiveStore = defineStore("archiveStore", () => {
   const archive = reactive<IArchive>({
     id: 0,
     title: "",
-    date: new Date().toISOString().split("T")[0],
-    file1: undefined,
+    issueDate: new Date().toISOString().split("T")[0],
+    files: undefined,
     description: "",
+    way: "way",
+    number: "123",
+    isIn: 0,
+    isInWord: "",
+    archiveTypeId: 1,
+    sectionId: 1,
   });
 
-  const pathUrl = "/ar/archive";
+  const pathUrl = "/archiveSys/archive";
   async function get() {
     return await Api.get(`${pathUrl}`);
   }
   async function store(prams: object) {
-    return await Api.post(`${pathUrl}`, prams);
+    return await Api.post(`${pathUrl}/store`, prams);
   }
   async function update(prams: object) {
-    return await Api.post(`${pathUrl}/${archive.id}`, prams);
+    return await Api.put(`${pathUrl}/update/${archive.id}`, prams);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);

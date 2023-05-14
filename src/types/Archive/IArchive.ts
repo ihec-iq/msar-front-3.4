@@ -1,7 +1,13 @@
 export default interface IArchive {
   id: number;
   title: string;
-  date: string;
-  file1?: File;
+  way: string;
+  issueDate: string;
+  number: string;
   description: string;
+  files?: Array<File>;
+  isIn: number;
+  isInWord?: string;
+  archiveTypeId: number;
+  sectionId: number;
 }
