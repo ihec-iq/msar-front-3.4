@@ -19,11 +19,12 @@ app.use(router);
 //#region Permission
 import { useAuthStore } from "@/stores/auth";
 import { usePermissionStore } from "@/stores/permission";
-// const { getUser } = useAuthStore();
-// const { setPermissions, can } = usePermissionStore();
+const { getUser } = useAuthStore();
+const { setPermissions, can } = usePermissionStore();
 
 //#region Permission Globally
-// setPermissions(getUser().permissions.concat(defaultPermissions));
+let defaultPermissions: Array<string> =['']
+setPermissions(defaultPermissions.concat(getUser().permissions));
 // console.log(can("admin"));
 //#endregion
 //#endregion

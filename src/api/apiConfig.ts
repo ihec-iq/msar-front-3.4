@@ -1,7 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 const Api = axios.create({
-  baseURL: "http://localhost/AccountXApi-flowUp/public/api",
+  baseURL: "http://localhost/workflow_ihec/public/api",
   // baseURL: "http://192.168.0.120/AccountXApi-flowUp/public/api",
 });
 Api.defaults.withCredentials = true;
@@ -24,7 +24,7 @@ const errorComposer = (error: any) => {
   if (statusCode === 401) {
     Swal.fire({
       position: "top-end",
-      icon: "Warning",
+      icon: "warning",
       title:
         "Your session has expired. Would you like to be redirected to the login page.",
       showConfirmButton: false,
@@ -49,8 +49,4 @@ Api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-// Api.defaults.headers.common[
-//   "Authorization"
-// ] = `Bearer 1|3DNgOcvaEv9aFsp4kAd4xstLRxo52TVrcDNikkst`;
-
 export default Api;

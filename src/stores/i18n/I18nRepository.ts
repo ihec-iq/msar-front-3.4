@@ -34,12 +34,12 @@ class I18nRepository extends ReactiveRepository<I18nInformation> {
 
   public setLanguage(lang: string): void {
     // console.log("set language to : " + lang);
+    const lan = localStorage.getItem("lang");
+    if (lan == "" || lan == null) return;
     if (!this.state.langTextRepo[lang]) {
       //const that = this;
       axios
-        .get<Record<string, string>>(
-          `/src/locales/${localStorage.getItem("lang")}.json`
-        )
+        .get<Record<string, string>>(`/src/locales/${lan}.json`)
         .then((r) => {
           this.state.langTextRepo[lang] = r.data as Record<string, string>;
           this.state.info.lang = lang;

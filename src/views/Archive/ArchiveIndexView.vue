@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/Archive/archive";
 import PageTitle from "@/components/general/namePage.vue";
@@ -8,75 +8,27 @@ import type IArchive from "@/types/Archive/IArchive";
 
 const { t } = useLanguage();
 const isLoading = ref(false);
-const data = ref<Array<IArchive>>([
-  {
-    id: 1,
-    title: "first Title",
-    date: "2022-10-10",
-    description: "<p>first<p/>",
-  },
-  {
-    id: 2,
-    title: "second Title",
-    date: "2022-10-10",
-    description: "<p>second<p/>",
-  },
-  {
-    id: 3,
-    title: "Third Title",
-    date: "2022-10-10",
-    description: "<p>third<p/>",
-  },
-  {
-    id: 4,
-    title: "fourth Title",
-    date: "2022-10-10",
-    description: "<p>fourth<p/>",
-  },
-]);
-const dataBase = ref<Array<IArchive>>([
-  {
-    id: 1,
-    title: "first Title",
-    date: "2022-10-10",
-    description: "<p>first<p/>",
-  },
-  {
-    id: 2,
-    title: "second Title",
-    date: "2022-10-10",
-    description: "<p>second<p/>",
-  },
-  {
-    id: 3,
-    title: "Third Title",
-    date: "2022-10-10",
-    description: "<p>third<p/>",
-  },
-  {
-    id: 4,
-    title: "fourth Title",
-    date: "2022-10-10",
-    description: "<p>fourth<p/>",
-  },
-]);
+const data = ref<Array<IArchive>>([]);
+const dataBase = ref<Array<IArchive>>([]);
 const { archive } = useArchiveStore();
+const { get } = useArchiveStore();
 
-// const getData = async () => {
-//   await getCompanyLite().then((response) => {
-//     if (response.status == 200) {
-//       data.value = response.data.data;
-//       dataBase.value = response.data.data;
-//     }
-//   });
-//   isLoading.value = false;
-// };
+const getData = async () => {
+  isLoading.value = true;
+  await get().then((response) => {
+    if (response.status == 200) {
+      data.value = response.data.data;
+      dataBase.value = response.data.data;
+    }
+  });
+  isLoading.value = false;
+};
 const router = useRouter();
 const addArchive = () => {
   archive.id = 0;
   archive.title = "";
-  archive.date = new Date().toISOString().split("T")[0];
-  archive.file1 = undefined;
+  archive.issueDate = new Date().toISOString().split("T")[0];
+  archive.files = undefined;
   archive.description = "";
   router.push({
     name: "archiveAdd",
@@ -101,6 +53,9 @@ const update = (id: number) => {
     params: { id: id },
   });
 };
+onMounted(async () => {
+  await getData();
+});
 </script>
 <template>
   <PageTitle> {{ t("Archive") }} </PageTitle>
@@ -191,7 +146,7 @@ const update = (id: number) => {
                             {{ t("Title") }}: {{ item.title }}
                           </div>
                           <div class="text-text dark:text-textGray mb-2">
-                            {{ t("Date") }}: {{ item.date }}
+                            {{ t("Date") }}: {{ item.issueDate }}
                           </div>
                           <div class="flex justify-betweens">
                             <div

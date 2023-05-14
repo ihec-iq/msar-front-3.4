@@ -9,7 +9,9 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import useLanguage from "@/stores/i18n/languageStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { date } from "yup/lib/locale";
+const namePage = ref("Archive Add");
+const route = useRoute();
+const id = ref(Number(route.params.id));
 
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
@@ -20,7 +22,6 @@ const { archive } = storeToRefs(useArchiveStore());
 // const {  } = featureStore;
 const router = useRouter();
 const errors = ref(null);
-const isLoading = ref(false);
 const file1 = ref("");
 const onFileChange = (e) => {
   file1.value = e.target.files[0];
@@ -29,12 +30,17 @@ const store = () => {
   errors.value = null;
   const formdata = new FormData();
   formdata.append("id", archive.value.id.toString());
-  formdata.append("title", archive.value.title);
-  formdata.append("description", archive.value.description);
-  formdata.append("passport", file1.value);
-  formdata.append("date", archive.value.date);
+  formdata.append("title", archive.value.title.toString());
+  formdata.append("description", archive.value.description.toString());
+  formdata.append("file1", file1.value);
+  formdata.append("issueDate", archive.value.issueDate.toString());
+  formdata.append("number", archive.value.number.toString());
+  formdata.append("way", archive.value.way.toString());
+  formdata.append("sectionId", archive.value.sectionId.toString());
+  formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
+  formdata.append("isIn", archive.value.isIn.toString());
   archiveStore
-    .store(archive.value)
+    .store(formdata)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -115,22 +121,41 @@ const Delete = async () => {
       }
     });
 };
+const showData = async () => {
+  await archiveStore
+    .show(id.value)
+    .then((response) => {
+      if (response.status == 200) {
+        archive.value.id = response.data.data.id;
+        archive.value.title = response.data.data.title;
+        archive.value.description = response.data.data.description;
+        archive.value.issueDate = response.data.data.issueDate
+          .toISOString()
+          .split("T")[0];
+        archive.value.number = response.data.data.number;
+        archive.value.way = response.data.data.way;
+        archive.value.sectionId = response.data.data.sectionId;
+        archive.value.archiveTypeId = response.data.data.archiveTypeId;
+        archive.value.isIn = response.data.data.isIn;
+        archive.value.isInWord = response.data.data.isInWord;
+      }
+    })
+    .catch((errors) => {
+      console.log(errors);
+    });
+};
 const back = () => {
   router.push({
     name: "archiveIndex",
   });
 };
-const namePage = ref("Archive Add");
-const route = useRoute();
-const id = ref(Number(route.params.id));
-onMounted(() => {
-  console.log(archive.value);
-});
-onMounted(() => {
-  if (Number.isNaN(archive.value.id)) {
+
+onMounted(async () => {
+  if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "Archive Add";
     archive.value.id = 0;
   } else {
+    await showData();
     archive.value.id = id.value;
     namePage.value = "Archive Update";
   }
@@ -159,7 +184,7 @@ onMounted(() => {
           {{ t("Date") }}
         </div>
         <input
-          v-model="archive.date"
+          v-model="archive.issueDate"
           type="date"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
@@ -171,7 +196,7 @@ onMounted(() => {
           {{ t("File1") }}
         </div>
         <input @change="onFileChange" ref="file" type="file" />
-        <img :src="archive.file1" alt="file1" />
+        <img :src="file1" alt="file1" />
       </div>
     </div>
     <div class="mt-10">

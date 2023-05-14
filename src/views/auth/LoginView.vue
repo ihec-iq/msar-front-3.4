@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
-
+import { getError } from "@/utils/helpers";
 const st = i18nRepository.getState();
 const t = (text: string) => {
   return st.langTextRepo[st.info.lang][text] || text;
@@ -38,6 +38,7 @@ const schema = Yup.object().shape({
   password: Yup.string().min(8).required(),
 });
 
+
 const errors = ref();
 const authStore = useAuthStore();
 const router = useRouter();
@@ -51,7 +52,7 @@ const Login = async () => {
       });
     })
     .catch((error) => {
-      errors.value = error.response.data.ErrorMessage;
+      errors.value = getError(error.response);
     });
 };
 </script>
