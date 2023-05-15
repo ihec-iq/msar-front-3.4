@@ -13,7 +13,7 @@ Api.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "token"
 )}`;
 
-// errorComposer will compose a handleGlobally function/
+// errorComposer will compose a handleGlobally function
 const errorComposer = (error: any) => {
   const statusCode = error.response ? error.response.status : null;
   // request not Found

@@ -35,7 +35,7 @@ function onInvalidSubmit() {
 }
 const schema = Yup.object().shape({
   email: Yup.string().required(),
-  password: Yup.string().min(3).required(),
+  password: Yup.string().min(8).required(),
 });
 
 const errors = ref();
@@ -43,7 +43,6 @@ const authStore = useAuthStore();
 const router = useRouter();
 const Login = async () => {
   errors.value = "";
-  console.log("gone");
   await authStore
     .login(loginForm)
     .then(() => {
@@ -52,7 +51,6 @@ const Login = async () => {
       });
     })
     .catch((error) => {
-      console.log("error");
       errors.value = getError(error.response);
     });
 };
