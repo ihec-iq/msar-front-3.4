@@ -20,12 +20,13 @@ export const useArchiveStore = defineStore("archiveStore", () => {
   });
 
   const pathUrl = "/archiveSys/archive";
-  async function get() {
-    return await Api.get(`${pathUrl}`);
+  async function get(page: number = 1) {
+    console.log(`page : ${page}`);
+    return await Api.get(`${pathUrl}?page=${page}`);
   }
-  async function get_filter(params: IArchiveFilter) {
+  async function get_filter(params: IArchiveFilter, page: number) {
     console.log(params);
-    return await Api.get(`${pathUrl}/filter`, { params: params });
+    return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);
