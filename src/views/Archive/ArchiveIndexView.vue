@@ -77,14 +77,19 @@ const searchFilter = ref<IArchiveFilter>({
   archiveTypeId: -1,
 });
 const getFilterData = async (page = 1) => {
-  isLoading.value = true;
-  await get_filter(searchFilter.value, page).then((response) => {
-    if (response.status == 200) {
-      dataPage.value = response.data.data;
-      data.value = response.data.data.data;
-      dataBase.value = response.data.data.data;
-    }
-  });
+  isLoading.value = true;console.log("get_filter")
+  await get_filter(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        console.log(response.data.data);
+        dataPage.value = response.data.data;
+        data.value = response.data.data.data;
+        dataBase.value = response.data.data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   isLoading.value = false;
 };
 //#endregion
@@ -285,12 +290,6 @@ onMounted(async () => {
                         </ul>
                       </div>
                     </div>
-                    <TailwindPagination
-                      class="bg-gray rounded-lg rounded-l-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 hover:bg-gray-100"
-                      :data="dataPage"
-                      @pagination-change-page="getFilterData"
-                      :limit="10"
-                    />
                     <!-- end card -->
                   </div>
                 </div>
@@ -298,13 +297,19 @@ onMounted(async () => {
             </div>
             <!-- end card -->
           </div>
+          <TailwindPagination
+            class="flex justify-center mt-10"
+            :data="dataPage"
+            @pagination-change-page="getFilterData"
+            :limit="10"
+          />
         </div>
       </div>
     </div>
   </div>
 
   <!-- bottom tool bar -->
-  <div class="m-5 fixed bottom-0 right-0">
+  <div class="m-5 fixed bottom-0 ltr:right-0 rtl:left-0">
     <button
       @click="addArchive()"
       class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-0 transition-all duration-300 text-white"

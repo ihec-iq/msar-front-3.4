@@ -143,6 +143,11 @@ const Delete = async () => {
       }
     });
 };
+const previewImage = ref(false);
+const openPreview = () => {
+  previewImage.value = true;
+  console.log("pop opened");
+};
 const showData = async () => {
   await archiveStore
     .show(id.value)
@@ -269,10 +274,41 @@ onMounted(async () => {
         ></quill-editor>
       </div>
     </div>
-    <div class="mt-10">
-      <div id="DropZone">
+    <div class="my-10 flex justify-between w-full">
+      <div class="flex flex-col w-1/2">
+        <div
+          v-for="fileData in archive.files"
+          :key="fileData.id"
+          class="flex flex-col justify-around mr-5"
+        >
+          <div
+            class="bg-gray-700 w-56 h-56 flex flex-col justify-between rounded-lg py-3 px-5"
+          >
+            <div class="w-full flex justify-between">
+              <div :title="fileData.name">
+                {{ fileData.name.substring(0, 8) }}...
+              </div>
+              <div>{{ fileData.size }}</div>
+            </div>
+            <div class="flex">
+              <button
+                @click="openPreview"
+                class="mr-2 bg-update hover:bg-updateHover duration-500 h-10 w-32 rounded-lg text-white"
+              >
+                {{ t("Open") }}
+              </button>
+              <button
+                class="bg-delete hover:bg-deleteHover duration-500 h-10 w-32 rounded-lg text-white"
+              >
+                {{ t("Delete") }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-1/2" id="DropZone">
         <DropZone
-          class="drop-area"
+          class="drop-area bg-gray-800 rounded-lg"
           @files-dropped="addFiles"
           #default="{ dropZoneActive }"
         >
@@ -358,20 +394,33 @@ onMounted(async () => {
     </div>
     <!-- end bottom tool -->
   </div>
+  
+  <!-- open preview -->
+  <van-popup
+    is-link
+    v-model:show="previewImage"
+    class="bg-customer dark:bg-content rounded-lg overflow-hidden"
+  >
+  <div class="h-60 w-60">
+    <img src="" class="h-20 w-20" alt="archive image">
+  </div>
+  </van-popup>
 </template>
 <style scoped>
+.inner {
+  box-shadow: 0px 0px 30px 20px grey;
+}
 .drop-area {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
   padding: 50px;
-  background: rgba(255, 255, 255, 0.333);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   transition: 0.2s ease;
 }
 .drop-area[data-active="true"] {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background: rgba(255, 255, 255, 0.8);
+  background: #111827;
 }
 label {
   font-size: 36px;

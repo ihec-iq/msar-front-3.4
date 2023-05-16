@@ -14,6 +14,7 @@ export interface IArchive {
   section?: number;
 }
 export interface IDocument {
+  name: string;
   path: string;
   extension: string;
   size: string;

@@ -49,6 +49,17 @@ const changeDark = () => {
   themeDark.value = !themeDark.value;
   toggleDark(themeDark.value);
 };
+const searchInput = ref(false);
+document.onkeydown = function (e) {
+  if (
+    (e.key === "k" && (e.ctrlKey || e.metaKey)) ||
+    (e.key === "K" && (e.ctrlKey || e.metaKey))
+  ) {
+    e.preventDefault(); // present "Save Page" from getting triggered.
+    searchInput.value = true;
+    document.getElementById("inputValue")?.focus();
+  }
+};
 onMounted(() => {
   themeDark.value = isDark.value;
 });
@@ -60,7 +71,7 @@ onMounted(() => {
     <div
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4"
     >
-      <div class="flex items-center flex-grow">
+      <div class="flex items-center">
         <div class="text-gray-500 text-2xl">#</div>
         <div class="ml-2 text-sm text-text dark:text-textLight">
           {{ t("General") }}
@@ -80,74 +91,38 @@ onMounted(() => {
           >
         </div> -->
       </div>
+      <div
+        class="relative w-56 duration-500 ease-in-out"
+        :class="{ 'w-[700px]': searchInput }"
+      >
+        <input
+          type="text"
+          id="inputValue"
+          :placeholder="t('Search')"
+          @focus="searchInput = true"
+          @blur="searchInput = false"
+          class="rounded w-full dark:bg-designTableHead bg-LightTableHead text-gray-200 px-2 py-1 duration-300"
+          :class="{ 'py-2 placeholder:text-sm text-lg': searchInput }"
+        />
+        <span
+          class="absolute ltr:right-0 rtl:left-0 mr-1 top-1.5"
+          :class="{ 'top-[14px]': searchInput }"
+        >
+          <svg
+            class="w-4 h-4 text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:text-iconHover"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
+            <path
+              class="heroicon-ui"
+              d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
+            ></path>
+          </svg>
+        </span>
+      </div>
       <div class="flex items-center">
-        <!-- <div class="rtl:ml-4">
-          <input
-            @input="changeDark()"
-            v-model="themeDark"
-            type="checkbox"
-            class="checkbox cursor-pointer"
-            id="checkbox"
-          />
-          <label for="checkbox" class="label cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-3 h-3 fa-moon"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-3 h-3 fa_sun text-yellow-400"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-              />
-            </svg>
-
-            <div class="ball" />
-          </label>
-        </div> -->
-        <a href="#" class="ml-4">
-          <form action="#" class="relative">
-            <input
-              type="text"
-              :placeholder="t('Search')"
-              class="rounded dark:bg-designTableHead bg-LightTableHead text-gray-200 text-xs px-2 py-1"
-            />
-            <span
-              class="absolute ltr:right-0 rtl:left-0 top-0 mr-1"
-              style="top: 6px"
-            >
-              <svg
-                class="w-4 h-4 text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:text-iconHover"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-              >
-                <path
-                  class="heroicon-ui"
-                  d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
-                ></path>
-              </svg>
-            </span>
-          </form>
-        </a>
         <button
           is-link
           @click="showPopup"
