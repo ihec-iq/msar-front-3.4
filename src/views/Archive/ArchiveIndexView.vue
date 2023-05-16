@@ -4,8 +4,13 @@ import { useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/Archive/archive";
 import PageTitle from "@/components/general/namePage.vue";
 import useLanguage from "@/stores/i18n/languageStore";
-import type { IArchive, IArchiveFilter } from "@/types/Archive/IArchive";
+import type {
+  IArchive,
+  IArchiveFilter,
+  IDocument,
+} from "@/types/Archive/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
+import { file } from "@babel/types";
 const { t } = useLanguage();
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
@@ -92,6 +97,15 @@ const update = (id: number) => {
 
 //#region Pagination
 //#endregion
+const getPath = (files: Array<IDocument>) => {
+  if (files.length == 0 || files == null)
+    return "https://picsum.photos/100/150/?random";
+  else {
+    if (files[0].extension == "png" || files[0].extension == "jpg")
+      return String(files[0].path);
+    else return "https://picsum.photos/100/150/?random";
+  }
+};
 onMounted(async () => {
   await getFilterData(1);
 });
@@ -217,7 +231,7 @@ onMounted(async () => {
                       <div class="w-1/4">
                         <img
                           class="rounded-lg cursor-pointer"
-                          src="https://picsum.photos/100/150/?random"
+                          :src="getPath(item.files)"
                           alt=""
                         />
                       </div>
@@ -272,9 +286,10 @@ onMounted(async () => {
                       </div>
                     </div>
                     <TailwindPagination
-                      class="bg-gray rounded-lg rounded-l-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 hover:bg-gray-100"
+                      class="bg-gray rounded-lg rounded-l-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 hover:bg-gray-100"
                       :data="dataPage"
                       @pagination-change-page="getFilterData"
+                      :limit="10"
                     />
                     <!-- end card -->
                   </div>
