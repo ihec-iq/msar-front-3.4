@@ -14,7 +14,7 @@ export interface IArchive {
   section?: number;
 }
 export interface IArchiveFilter {
-  limit?: number;
+  limit: number;
   title: string;
   way?: string;
   issueDateFrom?: string;
