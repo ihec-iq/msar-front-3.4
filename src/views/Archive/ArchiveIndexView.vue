@@ -5,32 +5,22 @@ import { useArchiveStore } from "@/stores/Archive/archive";
 import PageTitle from "@/components/general/namePage.vue";
 import useLanguage from "@/stores/i18n/languageStore";
 import type { IArchive, IArchiveFilter } from "@/types/Archive/IArchive";
-import type { Ref } from "vue";
-
+import { TailwindPagination } from "laravel-vue-pagination";
 const { t } = useLanguage();
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
+const dataPage = ref();
 const dataBase = ref<Array<IArchive>>([]);
 const { archive } = useArchiveStore();
 const { get, get_filter } = useArchiveStore();
 
 const limits = reactive([
-  { name: "12", val: 12 },
-  { name: "24", val: 24 },
-  { name: "50", val: 50 },
+  { name: "6 items", val: 6, selected: true },
+  { name: "12 items", val: 12, selected: false },
+  { name: "24 items", val: 24, selected: false },
+  { name: "50 items", val: 50, selected: false },
   { name: "All", val: 999999999 },
 ]);
-
-const getData = async () => {
-  isLoading.value = true;
-  await get().then((response) => {
-    if (response.status == 200) {
-      data.value = response.data.data;
-      dataBase.value = response.data.data;
-    }
-  });
-  isLoading.value = false;
-};
 
 const router = useRouter();
 const addArchive = () => {
@@ -69,7 +59,10 @@ const makeFastSearch = () => {
 //#region Search
 const searchFilter = ref<IArchiveFilter>({
   title: "",
-  issueDateFrom: new Date().toISOString().split("T")[0],
+  limit: 6,
+  issueDateFrom: new Date(new Date().setDate(new Date().getDate() - 360))
+    .toISOString()
+    .split("T")[0],
   issueDateTo: new Date().toISOString().split("T")[0],
   description: "",
   way: "",
@@ -78,13 +71,13 @@ const searchFilter = ref<IArchiveFilter>({
   sectionId: -1,
   archiveTypeId: -1,
 });
-const getFilterData = async () => {
+const getFilterData = async (page = 1) => {
   isLoading.value = true;
-  await get_filter(searchFilter.value).then((response) => {
+  await get_filter(searchFilter.value, page).then((response) => {
     if (response.status == 200) {
-      console.log(response.data);
-      data.value = response.data.data;
-      dataBase.value = response.data.data;
+      dataPage.value = response.data.data;
+      data.value = response.data.data.data;
+      dataBase.value = response.data.data.data;
     }
   });
   isLoading.value = false;
@@ -96,8 +89,11 @@ const update = (id: number) => {
     params: { id: id },
   });
 };
+
+//#region Pagination
+//#endregion
 onMounted(async () => {
-  await getData();
+  await getFilterData(1);
 });
 </script>
 <template>
@@ -170,12 +166,13 @@ onMounted(async () => {
               aria-label="select"
               v-model="searchFilter.limit"
               class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getData()"
+              @change="getFilterData()"
             >
               <option
                 v-for="limit in limits"
                 :key="limit.val"
                 :value="limit.val"
+                :selected="limit.selected == true"
                 class="text-sm text-indigo-800"
               >
                 {{ limit.name }}
@@ -274,7 +271,11 @@ onMounted(async () => {
                         </ul>
                       </div>
                     </div>
-
+                    <TailwindPagination
+                      class="bg-gray rounded-lg rounded-l-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 hover:bg-gray-100"
+                      :data="dataPage"
+                      @pagination-change-page="getFilterData"
+                    />
                     <!-- end card -->
                   </div>
                 </div>
