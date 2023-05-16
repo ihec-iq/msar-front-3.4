@@ -7,6 +7,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { getError } from "@/utils/helpers";
+import TextInput from "@/components/general/TextInput.vue";
 const st = i18nRepository.getState();
 const t = (text: string) => {
   return st.langTextRepo[st.info.lang][text] || text;
