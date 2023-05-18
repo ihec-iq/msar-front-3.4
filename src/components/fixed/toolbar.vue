@@ -66,10 +66,10 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-sideNavLight dark:bg-toolBar h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full box-border ltr:ml-1 rtl:mr-1"
+    class="print:hidden flex text-white bg-sideNavLight dark:bg-toolBar h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-1 rtl:mr-1"
   >
     <div
-      class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4"
+      class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4 xs:w-full"
     >
       <div class="flex items-center">
         <div class="text-gray-500 text-2xl">#</div>
@@ -93,7 +93,7 @@ onMounted(() => {
       </div>
       <div
         class="relative w-56 duration-500 ease-in-out"
-        :class="{ 'w-[700px]': searchInput }"
+        :class="{ 'lg:w-[700px] xs:w-56': searchInput }"
       >
         <input
           type="text"
@@ -102,7 +102,9 @@ onMounted(() => {
           @focus="searchInput = true"
           @blur="searchInput = false"
           class="rounded w-full dark:bg-designTableHead bg-LightTableHead text-gray-200 px-2 py-1 duration-300"
-          :class="{ 'py-2 placeholder:text-sm text-lg': searchInput }"
+          :class="{
+            'lg:py-2 xs:py-1 placeholder:text-sm text-lg': searchInput,
+          }"
         />
         <span
           class="absolute ltr:right-0 rtl:left-0 mr-1 top-1.5"

@@ -62,9 +62,9 @@ const logo = ref("@assets/logo.svg");
     <div
       :class="{
         'lg:ltr:ml-[80px] lg:rtl:mr-[80px] xs:ltr:ml-[84px]': isClose,
-        'lg:rtl:mr-[304px] lg:ltr:ml-[304px] xs:ltr:ml-[390px]': !isClose,
-        'lg:ltr:ml-[0px] lg:rtl:mr-[0px] xs:ltr:ml-[0px]': is,
-        'lg:rtl:mr-[80px] lg:ltr:ml-[80px] xs:ltr:ml-[84px]': !is,
+        'lg:rtl:mr-[304.2px] lg:ltr:ml-[304.01px] xs:ltr:ml-[390px]': !isClose,
+        'lg:ltr:ml-[0.1px] lg:rtl:mr-[0.001px] xs:ltr:ml-[0.1px]': is,
+        'lg:rtl:mr-[80px] lg:ltr:ml-[80.1px] xs:ltr:ml-[84px]': !is,
       }"
       class="flex-1 overflow-hidden image-bg dark:bg-content flex flex-col min-h-screen h-full"
     >

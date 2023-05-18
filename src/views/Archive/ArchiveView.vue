@@ -43,6 +43,7 @@ const file1 = ref("");
 const onFileChange = (e) => {
   file1.value = e.target.files[0];
 };
+//#region store and update
 const store = () => {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
@@ -57,7 +58,7 @@ const store = () => {
   formdata.append("sectionId", archive.value.sectionId.toString());
   formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formdata.append("isIn", archive.value.isIn == 0 ? "0" : "1");
-
+  console.log(formdata);
   archiveStore
     .store(formdata)
     .then((response) => {
@@ -112,6 +113,8 @@ function update() {
       });
     });
 }
+//#endregion
+
 const Delete = async () => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -143,11 +146,46 @@ const Delete = async () => {
       }
     });
 };
+//#region files
+const forImage = ref<any>();
 const previewImage = ref(false);
-const openPreview = () => {
+const openPreview = (data: any) => {
+  // archive.value.files?.forEach((element) => {
+  // });
+  forImage.value = data.path;
   previewImage.value = true;
-  console.log("pop opened");
 };
+
+const DeleteFile = async () => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn m-2 bg-red-700",
+      cancelButton: "btn bg-grey-400",
+    },
+    buttonsStyling: false,
+  });
+  swalWithBootstrapButtons.fire({
+    title: t("Are You Sure?"),
+    text: t("You Won't Be Able To Revert This!"),
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: t("Yes, delete it!"),
+    cancelButtonText: t("No, cancel!"),
+    reverseButtons: true,
+  });
+  // .then(async (result) => {
+  //   if (result.isConfirmed) {
+  //     await archiveStore._delete(archive.value.id).then(() => {
+  //       swalWithBootstrapButtons.fire(
+  //         t("Deleted!"),
+  //         t("Deleted successfully ."),
+  //         "success"
+  //       );
+  //     });
+  //   }
+  // });
+};
+//#endregion
 const showData = async () => {
   await archiveStore
     .show(id.value)
@@ -290,14 +328,43 @@ onMounted(async () => {
               </div>
               <div>{{ fileData.size }}</div>
             </div>
+            <div
+              v-if="
+                fileData.extension === 'png' || fileData.extension === 'jpg'
+              "
+              class="w-full flex justify-center"
+            >
+              <img class="w-20 h-20" :src="fileData.path" alt="aa" />
+            </div>
+            <div
+              class="w-full flex justify-center"
+              v-if="fileData.extension === 'pdf'"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="60"
+                height="60"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M10 10.5h1q.425 0 .713-.288T12 9.5v-1q0-.425-.288-.713T11 7.5H9.5q-.2 0-.35.15T9 8v4q0 .2.15.35t.35.15q.2 0 .35-.15T10 12v-1.5Zm0-1v-1h1v1h-1Zm5 3q.425 0 .713-.288T16 11.5v-3q0-.425-.288-.713T15 7.5h-1.5q-.2 0-.35.15T13 8v4q0 .2.15.35t.35.15H15Zm-1-1v-3h1v3h-1Zm4-1h.5q.2 0 .35-.15T19 10q0-.2-.15-.35t-.35-.15H18v-1h.5q.2 0 .35-.15T19 8q0-.2-.15-.35t-.35-.15h-1q-.2 0-.35.15T17 8v4q0 .2.15.35t.35.15q.2 0 .35-.15T18 12v-1.5ZM8 18q-.825 0-1.413-.588T6 16V4q0-.825.588-1.413T8 2h12q.825 0 1.413.588T22 4v12q0 .825-.588 1.413T20 18H8Zm-4 4q-.825 0-1.413-.588T2 20V7q0-.425.288-.713T3 6q.425 0 .713.288T4 7v13h13q.425 0 .713.288T18 21q0 .425-.288.713T17 22H4Z"
+                />
+              </svg>
+              <!-- these icons down not working -->
+              <Icon name="uil:github" color="black" />
+              <Icon icon="material-symbols:picture-as-pdf-rounded" />
+              <!-- icons -->
+            </div>
             <div class="flex">
               <button
-                @click="openPreview"
+                @click="openPreview(fileData)"
                 class="mr-2 bg-update hover:bg-updateHover duration-500 h-10 w-32 rounded-lg text-white"
               >
                 {{ t("Open") }}
               </button>
               <button
+                @click="DeleteFile()"
                 class="bg-delete hover:bg-deleteHover duration-500 h-10 w-32 rounded-lg text-white"
               >
                 {{ t("Delete") }}
@@ -394,16 +461,17 @@ onMounted(async () => {
     </div>
     <!-- end bottom tool -->
   </div>
-  
+
   <!-- open preview -->
   <van-popup
     is-link
     v-model:show="previewImage"
-    class="bg-customer dark:bg-content rounded-lg overflow-hidden"
+    :style="{ width: '50%', height: '70%' }"
+    class="bg-customer dark:bg-content rounded-lg overflow-hidden flex justify-center item-center"
   >
-  <div class="h-60 w-60">
-    <img src="" class="h-20 w-20" alt="archive image">
-  </div>
+    <div>
+      <img :src="forImage" class="" alt="archive image" />
+    </div>
   </van-popup>
 </template>
 <style scoped>

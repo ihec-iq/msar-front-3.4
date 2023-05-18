@@ -57,21 +57,21 @@ const Login = async () => {
 };
 </script>
 <template>
-  <div
+  <!-- <div
     class="bg-purple-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-[#0051ff] bottom-0 leading-5 h-full w-full overflow-hidden"
-  ></div>
+  ></div> -->
   <div
     class="relative z-30 overflow-y-hidden sm:flex sm:flex-row justify-evenly bg-transparent rounded-3xl"
   >
     <div
-      class="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10"
+      class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10"
     >
       <div class="self-start hidden lg:flex flex-col text-gray-300">
         <img src="@/assets/image/avatar-3.png" alt="" />
-        <section>
+        <section class="flex justify-center mt-5">
           <div class="content">
-            <h2>Archive</h2>
-            <h2>Archive</h2>
+            <h2>WorkFlow</h2>
+            <h2>WorkFlow</h2>
           </div>
         </section>
         <!-- <p class="pr-3 text-sm opacity-75">
@@ -80,7 +80,7 @@ const Login = async () => {
         </p> -->
       </div>
     </div>
-    <div class="flex justify-center self-center z-10">
+    <div class="flex justify-center z-10">
       <div class="p-12 bg-white mx-auto rounded-3xl w-96">
         <div class="mb-7">
           <h3 class="font-semibold text-2xl text-gray-800">
