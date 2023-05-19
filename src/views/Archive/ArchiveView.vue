@@ -238,8 +238,8 @@ onMounted(async () => {
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
   <div class="w-full p-6">
-    <div class="w-full flex">
-      <div class="w-1/3 mr-2">
+    <div class="w-full flex lg:flex-row xs:flex-col">
+      <div class="lg:w-1/3 mr-2 xs:w-full">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
@@ -251,7 +251,7 @@ onMounted(async () => {
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-      <div class="w-1/3 mr-2">
+      <div class="lg:w-1/3 mr-2 xs:w-full">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
@@ -263,7 +263,7 @@ onMounted(async () => {
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-      <div class="w-1/3 mx-2">
+      <div class="lg:w-1/3 mx-2 xs:w-full">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
@@ -275,7 +275,7 @@ onMounted(async () => {
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-      <div class="w-1/3 mx-2">
+      <div class="lg:w-1/3 mx-2 xs:w-full">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
@@ -287,7 +287,7 @@ onMounted(async () => {
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-      <div class="w-1/3 mx-2">
+      <div class="lg:w-1/3 mx-2 xs:w-full">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
@@ -312,15 +312,15 @@ onMounted(async () => {
         ></quill-editor>
       </div>
     </div>
-    <div class="my-10 flex justify-between w-full">
-      <div class="flex flex-col w-1/2">
+    <div class="my-10 flex justify-between w-full lg:flex-row xs:flex-col">
+      <div class="flex flex-col lg:w-1/2 xs:w-full lg:mb-0 xs:mb-4">
         <div
           v-for="fileData in archive.files"
           :key="fileData.id"
           class="flex flex-col justify-around mr-5"
         >
           <div
-            class="bg-gray-700 w-56 h-56 flex flex-col justify-between rounded-lg py-3 px-5"
+            class="bg-gray-700 w-64 h-64 flex flex-col justify-between rounded-lg py-3 px-5"
           >
             <div class="w-full flex justify-between">
               <div :title="fileData.name">
@@ -373,7 +373,7 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      <div class="w-1/2" id="DropZone">
+      <div class="lg:w-1/2 xs:w-full" id="DropZone">
         <DropZone
           class="drop-area bg-gray-800 rounded-lg"
           @files-dropped="addFiles"
@@ -466,8 +466,7 @@ onMounted(async () => {
   <van-popup
     is-link
     v-model:show="previewImage"
-    :style="{ width: '50%', height: '70%' }"
-    class="bg-customer dark:bg-content rounded-lg overflow-hidden flex justify-center item-center"
+    class="lg:w-1/2 lg:h-[70%] xs:w-[90%] xs:h-[90%] bg-customer dark:bg-content rounded-lg overflow-hidden flex justify-center item-center"
   >
     <div>
       <img :src="forImage" class="" alt="archive image" />

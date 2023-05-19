@@ -157,7 +157,7 @@ onMounted(() => {
     </div>
   </div>
   <van-popup
-    class="bg-customer xl:ltr:left-[1723px] rtl:left-[12.5rem] h-screen z-[999999] xl:w-[20%] xs:w-full xs:ltr:left-[195px] dark:bg-content flex"
+    class="bg-customer xl:ltr:left-[1723px] h-screen z-[999999] xl:w-[20%] xs:w-full dark:bg-content flex"
     v-model:show="showPop"
     round
     ><div class="dark:text-textLight w-full">

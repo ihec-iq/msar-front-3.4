@@ -179,7 +179,9 @@ onMounted(async () => {
           </div>
         </div>
         <!-- limit -->
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 w-[81.5%]">
+        <div
+          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+        >
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
