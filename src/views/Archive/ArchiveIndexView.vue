@@ -78,13 +78,19 @@ const searchFilter = ref<IArchiveFilter>({
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
-  await get_filter(searchFilter.value, page).then((response) => {
-    if (response.status == 200) {
-      dataPage.value = response.data.data;
-      data.value = response.data.data.data;
-      dataBase.value = response.data.data.data;
-    }
-  });
+  console.log("get_filter");
+  await get_filter(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        console.log(response.data.data);
+        dataPage.value = response.data.data;
+        data.value = response.data.data.data;
+        dataBase.value = response.data.data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   isLoading.value = false;
 };
 //#endregion
@@ -114,7 +120,7 @@ onMounted(async () => {
   <PageTitle> {{ t("Archive") }} </PageTitle>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
-    <div class="w-[95%] mb-12 ml-[5%] md:mr-[2%]">
+    <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
       <div
         class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
       >
@@ -146,34 +152,38 @@ onMounted(async () => {
             :placeholder="t('Search for Archive')"
           />
         </div>
-        <div class="ml-4">
-          <div
-            class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-          >
-            {{ t("DateFrom") }}
+        <div class="flex mb-2">
+          <div class="ml-4">
+            <div
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("DateFrom") }}
+            </div>
+            <input
+              type="date"
+              v-model="searchFilter.issueDateFrom"
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            />
           </div>
-          <input
-            type="date"
-            v-model="searchFilter.issueDateFrom"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          />
-        </div>
-        <div class="ml-4">
-          <div
-            class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-          >
-            {{ t("DateTo") }}
+          <div class="ml-4">
+            <div
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("DateTo") }}
+            </div>
+            <input
+              type="date"
+              v-model="searchFilter.issueDateTo"
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            />
           </div>
-          <input
-            type="date"
-            v-model="searchFilter.issueDateTo"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          />
         </div>
         <!-- limit -->
-        <div class="limit flex items-center ml-10">
+        <div
+          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+        >
           <div
-            class="py-3 px-4 flex items-center text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
             <p>{{ t("Sort By") }}:</p>
             <select
@@ -194,9 +204,8 @@ onMounted(async () => {
             </select>
           </div>
         </div>
-        <div class="ml-4">
+        <div class="ml-4 lg:mt-0 xs:mt-2">
           <button
-            v-if="archive.id == 0"
             @click="getFilterData()"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
           >
@@ -220,7 +229,7 @@ onMounted(async () => {
               >
                 <div class="max-w-full relative">
                   <div
-                    class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10"
+                    class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
                   >
                     <!-- card -->
                     <div
@@ -285,14 +294,14 @@ onMounted(async () => {
                         </ul>
                       </div>
                     </div>
-                    <TailwindPagination
-                      class="bg-gray rounded-lg rounded-l-md px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 hover:bg-gray-100"
-                      :data="dataPage"
-                      @pagination-change-page="getFilterData"
-                      :limit="10"
-                    />
                     <!-- end card -->
                   </div>
+                  <TailwindPagination
+                    class="flex justify-center mt-10"
+                    :data="dataPage"
+                    @pagination-change-page="getFilterData"
+                    :limit="10"
+                  />
                 </div>
               </div>
             </div>
@@ -304,7 +313,7 @@ onMounted(async () => {
   </div>
 
   <!-- bottom tool bar -->
-  <div class="m-5 fixed bottom-0 right-0">
+  <div class="m-5 fixed bottom-0 ltr:right-0 rtl:left-0">
     <button
       @click="addArchive()"
       class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-0 transition-all duration-300 text-white"
@@ -325,74 +334,4 @@ onMounted(async () => {
       </svg>
     </button>
   </div>
-  <!-- show bages   -->
-  <!-- <van-popup
-    is-link
-    v-model:show="activate"
-    class="bg-customer dark:bg-content rounded-lg overflow-hidden"
-  >
-    <div class="mb-4 xl:w-[700px] xs:w-[370px]">
-      <div class="flex flex-col w-full">
-        <div class="text-text dark:text-textLight my-3 pl-8 text-xl">
-          {{ t("Activate") }}
-        </div>
-        <div class="flex w-full p-4">
-          <div class="w-1/2 mx-1">
-            <div
-              class="mb-1 md:text-sm text-base ml-2 font-bold text-text dark:text-textLight"
-            >
-              {{ t("Title") }}
-            </div>
-            <input
-              v-model="activated.title"
-              name="title"
-              label=""
-              type="text"
-              class="rounded-md mr-1 p-2 focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 mb-10 font-bold"
-            />
-          </div>
-          <div class="w-1/2 mx-1">
-            <div
-              class="mb-1 md:text-sm text-base ml-2 font-bold text-text dark:text-textLight"
-            >
-              {{ t("Company") }}
-            </div>
-            <vSelect
-              class="w-full h-10 rounded-sm text-text dark:text-textLight bg-selectLight dark:bg-select"
-              v-model="activated.company_id"
-              label="name"
-              :options="companyStore.companies"
-              :reduce="(company:ICompany) => company.id"
-            ></vSelect>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="w-full rounded-lg px-4 pb-1 flex justify-between items-center fixed bottom-1 right-3"
-      >
-        <van-button
-          class="ml-4 border-none bg-back duration-500 h-10 w-32 text-gray-300 hover:bg-backHover rounded-lg"
-          type="primary"
-          is-link
-          @click="activate = false"
-          >{{ t("Close") }}</van-button
-        >
-        <div class="flex">
-          <div class="items-center ml-2">
-            <button
-              @click="store()"
-              class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-gray-300"
-            >
-              {{ t("Active") }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="outer w-px h-full m-auto relative overflow-hidden ml-2">
-      <div class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"></div>
-    </div> 
-  </van-popup>-->
-  <!--  show bages  -->
 </template>
