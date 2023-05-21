@@ -5,7 +5,7 @@ export interface IArchive {
   issueDate: string;
   number: string;
   description: string;
-  files?: Array<IDocument>;
+  files: Array<IDocument>;
   isIn: number;
   isInWord?: string;
   archiveTypeId: number;

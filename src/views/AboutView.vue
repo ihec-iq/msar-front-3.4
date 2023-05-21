@@ -3,7 +3,7 @@
     <section class="text-white md:bg-black">
       <div class="vi-bg">
         <video
-          src="@/assets/world.mp4"
+          src="@/assets/world1.mp4"
           autoplay
           loop
           muted
