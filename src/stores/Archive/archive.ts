@@ -25,11 +25,13 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     return await Api.get(`${pathUrl}?page=${page}`);
   }
   async function get_filter(params: IArchiveFilter, page: number) {
-    console.log(params);
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);
+  }
+  async function add_document(prams: object) {
+    return await Api.post(`${pathUrl}/${archive.id}/document/add`, prams);
   }
   async function update(prams: object) {
     return await Api.put(`${pathUrl}/update/${archive.id}`, prams);

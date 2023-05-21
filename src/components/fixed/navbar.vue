@@ -64,6 +64,7 @@ const { is } = storeToRefs(rtlStore);
 const showPopover = ref(false);
 const authStore = useAuthStore();
 const logout = () => {
+  console.log("Log out");
   authStore.logout();
 };
 //#region "reports"
@@ -130,7 +131,7 @@ onMounted(() => {
           <button
             v-if="!is"
             @click="isClose = !isClose"
-            class="cursor-pointer fixed border border-gray-500 rounded-full p-2 top-2 ltr:left-14 rtl:right-14"
+            class="cursor-pointer lg:block xs:hidden fixed border border-gray-500 rounded-full p-2 top-2 ltr:left-14 rtl:right-14"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -176,7 +177,7 @@ onMounted(() => {
           <router-link
             :to="{ name: 'archiveIndex' }"
             @click.prevent="tab = 'Feature Admin'"
-          >
+          >{{ is }}
             <a
               title="Feature"
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
@@ -193,6 +194,7 @@ onMounted(() => {
                 />
               </svg>
             </a>
+            {{ isClose }}
           </router-link>
 
           <!-- <router-link
