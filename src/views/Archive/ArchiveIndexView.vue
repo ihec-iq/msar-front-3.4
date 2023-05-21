@@ -77,11 +77,9 @@ const searchFilter = ref<IArchiveFilter>({
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
-  console.log("get_filter");
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
-        console.log(response.data.data);
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;

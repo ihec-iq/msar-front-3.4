@@ -30,11 +30,11 @@ export const useArchiveStore = defineStore("archiveStore", () => {
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);
   }
-  async function add_document(prams: object) {
-    return await Api.post(`${pathUrl}/${archive.id}/document/add`, prams);
+  async function add_document(archive_id: number, prams: object) {
+    return await Api.post(`${pathUrl}/${archive_id}/document/add`, prams);
   }
-  async function update(prams: object) {
-    return await Api.put(`${pathUrl}/update/${archive.id}`, prams);
+  async function update(archive_id: number, prams: object) {
+    return await Api.put(`${pathUrl}/update/${archive_id}`, prams);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
@@ -42,7 +42,9 @@ export const useArchiveStore = defineStore("archiveStore", () => {
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
-
+  async function _delete_document(id: number) {
+    return await Api.delete(`${pathUrl}/${archive.id}/document/add/${id}`);
+  }
   return {
     archive,
     get,
@@ -52,5 +54,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     update,
     _delete,
     getError,
+    add_document,
+    _delete_document,
   };
 });

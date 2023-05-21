@@ -9,22 +9,7 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import useLanguage from "@/stores/i18n/languageStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-
-import DropZone from "@/components/DropZone.vue";
 import FilePreview from "@/components/FilePreview.vue";
-
-// File Management
-import useFileList from "@/compositions/file-list";
-
-// Uploader
-import createUploader from "@/compositions/file-uploader";
-const { uploadFiles } = createUploader("YOUR URL HERE");
-const { files, addFiles, removeFile } = useFileList();
-
-function onInputChange(e: any) {
-  addFiles(e.target.files);
-  e.target.value = null; // reset so that selecting the same file again will still cause it to fire this change
-}
 
 const namePage = ref("Archive Add");
 const route = useRoute();
@@ -39,9 +24,12 @@ const { archive } = storeToRefs(useArchiveStore());
 // const {  } = featureStore;
 const router = useRouter();
 const errors = ref(null);
-const file1 = ref("");
+
+const fileInput = ref(null);
 const onFileChange = (e: any) => {
-  file1.value = e.target.files[0];
+  // file1.value = e.target.files[0];
+  // files.value = e.target.files;
+  // console.log(files.value);
 };
 const store = () => {
   errors.value = null;
@@ -50,7 +38,6 @@ const store = () => {
   formdata.append("id", archive.value.id.toString());
   formdata.append("title", archive.value.title.toString());
   formdata.append("description", archive.value.description.toString());
-  formdata.append("file1", file1.value);
   formdata.append("issueDate", archive.value.issueDate.toString());
   formdata.append("number", archive.value.number.toString());
   formdata.append("way", archive.value.way.toString());
@@ -58,6 +45,10 @@ const store = () => {
   formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formdata.append("isIn", archive.value.isIn == 0 ? "0" : "1");
 
+  const files = fileInput.value.files;
+  for (let i = 0; i < files.length; i++) {
+    formdata.append("files[]", files[i]);
+  }
   archiveStore
     .store(formdata)
     .then((response) => {
@@ -84,13 +75,28 @@ const store = () => {
     });
 };
 function update() {
-  errors.value = null;
-  // saleCustomer.custom_group_bill_sale_id = props.idBill;
-  archive.value.isIn = isIn.value ? 1 : 0;
   console.log(archive.value);
+  errors.value = null;
+  archive.value.isIn = isIn.value ? 1 : 0;
+  const formdata = new FormData();
+  formdata.append("id", archive.value.id.toString());
+  formdata.append("title", archive.value.title.toString());
+  formdata.append("description", archive.value.description.toString());
+  formdata.append("issueDate", archive.value.issueDate.toString());
+  formdata.append("number", archive.value.number.toString());
+  formdata.append("way", archive.value.way.toString());
+  formdata.append("sectionId", archive.value.sectionId.toString());
+  formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
+  formdata.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+
+  const files = fileInput.value.files;
+  for (let i = 0; i < files.length; i++) {
+    formdata.append("files[]", files[i]);
+  }
+
   archiveStore
-    .update(archive.value)
-    .then((response) => {
+    .update(archive.value.id, formdata)
+    .then(async (response) => {
       console.log(response.data.data);
       Swal.fire({
         position: "top-end",
@@ -99,7 +105,13 @@ function update() {
         showConfirmButton: false,
         timer: 1500,
       });
-      router.go(-2);
+      for (let i = 0; i < files.value.length; i++) {
+        await archiveStore.add_document(response.data.data.id, {
+          archive_id: response.data.data.id,
+          file: files.value[i],
+        });
+      }
+      router.go(-1);
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
@@ -160,7 +172,6 @@ const showData = async () => {
         archive.value.files = response.data.data.files;
         isIn.value = response.data.data.isIn == 0 ? false : true;
         archive.value.isInWord = response.data.data.isInWord;
-        files.value = archive.value.files;
       }
     })
     .catch((errors) => {
@@ -175,6 +186,9 @@ const showData = async () => {
         router.go(-1);
       });
     });
+};
+const removeFile = () => {
+  console.log("RemoveFile");
 };
 const back = () => {
   router.push({
@@ -213,7 +227,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("isIn") }}{{ isIn }}
+          {{ t("نوع الكتاب") }} : {{ isIn ? "صادر" : "وارد" }}
         </div>
         <input
           v-model="isIn"
@@ -251,8 +265,13 @@ onMounted(async () => {
         >
           {{ t("File1") }}
         </div>
-        <input @change="onFileChange" ref="file" type="file" />
-        <img :src="file1" alt="file1" />
+        <input
+          @change="onFileChange"
+          ref="fileInput"
+          multiple
+          type="file"
+          accept=".pdf,.jpg,.jpeg,.png"
+        />
       </div>
     </div>
     <div class="mt-10">
@@ -271,49 +290,12 @@ onMounted(async () => {
       </div>
     </div>
     <div class="mt-10">
-      <div id="DropZone">
-        <DropZone
-          class="drop-area"
-          @files-dropped="addFiles"
-          #default="{ dropZoneActive }"
-        >
-          <label for="file-input">
-            <span v-if="dropZoneActive">
-              <span>Drop Them Here</span>
-              <span class="smaller">to add them</span>
-            </span>
-            <span v-else>
-              <span>Drag Your Files Here</span>
-              <span class="smaller">
-                or <strong><em>click here</em></strong> to select files
-              </span>
-            </span>
-
-            <input
-              type="file"
-              id="file-input"
-              multiple
-              @change="onInputChange"
-            />
-          </label>
-          <ul class="image-list" v-show="files.length">
-            <FilePreview
-              v-for="file of files"
-              :key="file.id"
-              :file="file"
-              tag="li"
-              @remove="removeFile"
-            />
-          </ul>
-        </DropZone>
-        <button
-          v-if="false"
-          @click.prevent="uploadFiles(files)"
-          class="upload-button"
-        >
-          Upload
-        </button>
+      <div id="showFiles" class="image-list flex">
+        <div class="" v-for="document in archive.files" :key="document.name">
+          <FilePreview :file="document" class="preview-card"></FilePreview>
+        </div>
       </div>
+      <div id="DropZone"></div>
     </div>
     <!-- bottom tool bar -->
     <div
@@ -401,6 +383,12 @@ label .smaller {
   list-style: none;
   flex-wrap: wrap;
   padding: 0;
+}
+.preview-card {
+  display: flex;
+  border: 1px solid #a2a2a2;
+  padding: 5px;
+  margin-left: 5px;
 }
 .upload-button {
   display: block;

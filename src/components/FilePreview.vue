@@ -1,18 +1,31 @@
 <script setup lang="ts">
-defineProps({
+import type { IDocument } from "@/types/Archive/IArchive";
+import { toRefs, onMounted } from "vue";
+import { useArchiveStore } from "@/stores/Archive/archive";
+const { _delete_document } = useArchiveStore();
+const props = defineProps({
   file: { type: Object, required: true },
   tag: { type: String, default: "li" },
 });
 
-defineEmits(["remove"]);
+//defineEmits(["removeFile"]);
+const removeFile = async (id: number) => {
+  await _delete_document(id);
+};
+onMounted(() => {});
 </script>
 <template>
   <component :is="tag" class="file-preview">
-    <button @click="$emit('remove', file)" class="close-icon">&times;</button>
-    <img :src="file.url" :alt="file.file.name" :title="file.file.name" />
+    <button @click="removeFile(file.id)" class="close-icon">&times;</button>
+    <img
+      class="object-cover h-48 w-96"
+      :src="file.path"
+      :alt="file.name"
+      :title="file.name"
+    />
     <span style="color: darkkhaki" class="info">
-      {{ file.file.name }} -
-      {{ Math.round(file.file.size / 1000) + "kb" }}
+      {{ file.name }} -
+      {{ Math.round(file.size / 1000) + "kb" }}
     </span>
 
     <span
