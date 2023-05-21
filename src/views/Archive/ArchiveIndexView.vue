@@ -32,7 +32,7 @@ const addArchive = () => {
   archive.id = 0;
   archive.title = "";
   archive.issueDate = new Date().toISOString().split("T")[0];
-  archive.files = undefined;
+  archive.files = [];
   archive.number = "";
   archive.description = "";
   archive.isIn = 0;
