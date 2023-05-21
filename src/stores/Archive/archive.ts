@@ -9,7 +9,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     id: 0,
     title: "",
     issueDate: new Date().toISOString().split("T")[0],
-    files: undefined,
+    files: [],
     description: "",
     way: "way",
     number: "123",

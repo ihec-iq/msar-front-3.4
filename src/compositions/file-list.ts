@@ -3,6 +3,7 @@ export default function () {
   const files = ref<IFile[]>([]);
 
   const addFiles = (newFiles: IFile[]) => {
+    console.log(newFiles);
     const newUploadableFiles = [...newFiles]
       .map((file) => new UploadableFile(file))
       .filter((file) => !fileExists(file.id));
@@ -23,19 +24,21 @@ export default function () {
 }
 
 class UploadableFile implements IFile {
-  constructor(file: IFile) {
-    this.file = file.file;
+  constructor(file: any) {
+    //console.log(file);
+    this.file = file.File;
     this.name = `${file.name}`;
     this.id = `${file.name}-${file.size}-${file.lastModified}-${file.type}`;
     this.lastModified = `${file.lastModified}`;
-    this.url = URL.createObjectURL(file.file);
+    this.url = URL.createObjectURL(file);
     this.status = null;
     this.size = file.size;
     this.type = file.type;
     this.fileName = "";
+    console.log(this.url);
   }
   name: string;
-  file: Blob;
+  file: MediaSource | Blob;
   id: string;
   url: string;
   status: Boolean | null | string;
@@ -45,7 +48,7 @@ class UploadableFile implements IFile {
   lastModified: string;
 }
 export interface IFile {
-  file: Blob;
+  file: MediaSource | Blob;
   id: string;
   url: string;
   status: Boolean | null | string;

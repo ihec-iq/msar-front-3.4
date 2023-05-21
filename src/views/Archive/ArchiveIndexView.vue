@@ -10,14 +10,13 @@ import type {
   IDocument,
 } from "@/types/Archive/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { file } from "@babel/types";
 const { t } = useLanguage();
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IArchive>>([]);
 const { archive } = useArchiveStore();
-const { get, get_filter } = useArchiveStore();
+const { get_filter } = useArchiveStore();
 
 const limits = reactive([
   { name: "6 items", val: 6, selected: true },

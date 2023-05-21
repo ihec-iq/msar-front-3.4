@@ -1,3 +1,11 @@
+<script setup lang="ts">
+defineProps({
+  file: { type: Object, required: true },
+  tag: { type: String, default: "li" },
+});
+
+defineEmits(["remove"]);
+</script>
 <template>
   <component :is="tag" class="file-preview">
     <button @click="$emit('remove', file)" class="close-icon">&times;</button>
@@ -24,15 +32,6 @@
     >
   </component>
 </template>
-
-<script setup lang="ts">
-defineProps({
-  file: { type: Object, required: true },
-  tag: { type: String, default: "li" },
-});
-
-defineEmits(["remove"]);
-</script>
 
 <style scoped>
 .file-preview {

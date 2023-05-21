@@ -160,7 +160,7 @@ const showData = async () => {
         archive.value.files = response.data.data.files;
         isIn.value = response.data.data.isIn == 0 ? false : true;
         archive.value.isInWord = response.data.data.isInWord;
-        files = archive.value.files;
+        files.value = archive.value.files;
       }
     })
     .catch((errors) => {
