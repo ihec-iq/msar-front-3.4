@@ -25,7 +25,7 @@ const { archive } = storeToRefs(useArchiveStore());
 const router = useRouter();
 const errors = ref(null);
 
-const fileInput = ref(null);
+const fileInput = ref();
 const onFileChange = (e: any) => {
   // file1.value = e.target.files[0];
   // files.value = e.target.files;
@@ -34,23 +34,22 @@ const onFileChange = (e: any) => {
 const store = () => {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
-  const formdata = new FormData();
-  formdata.append("id", archive.value.id.toString());
-  formdata.append("title", archive.value.title.toString());
-  formdata.append("description", archive.value.description.toString());
-  formdata.append("issueDate", archive.value.issueDate.toString());
-  formdata.append("number", archive.value.number.toString());
-  formdata.append("way", archive.value.way.toString());
-  formdata.append("sectionId", archive.value.sectionId.toString());
-  formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
-  formdata.append("isIn", archive.value.isIn == 0 ? "0" : "1");
-
+  const formData = new FormData();
+  formData.append("id", archive.value.id.toString());
+  formData.append("title", archive.value.title.toString());
+  formData.append("description", archive.value.description.toString());
+  formData.append("issueDate", archive.value.issueDate.toString());
+  formData.append("number", archive.value.number.toString());
+  formData.append("way", archive.value.way.toString());
+  formData.append("sectionId", archive.value.sectionId.toString());
+  formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
+  formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
   const files = fileInput.value.files;
   for (let i = 0; i < files.length; i++) {
-    formdata.append("files[]", files[i]);
+    formData.append("files[]", files[i]);
   }
   archiveStore
-    .store(formdata)
+    .store(formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -75,42 +74,33 @@ const store = () => {
     });
 };
 function update() {
-  console.log(archive.value);
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
-  const formdata = new FormData();
-  formdata.append("id", archive.value.id.toString());
-  formdata.append("title", archive.value.title.toString());
-  formdata.append("description", archive.value.description.toString());
-  formdata.append("issueDate", archive.value.issueDate.toString());
-  formdata.append("number", archive.value.number.toString());
-  formdata.append("way", archive.value.way.toString());
-  formdata.append("sectionId", archive.value.sectionId.toString());
-  formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
-  formdata.append("isIn", archive.value.isIn == 0 ? "0" : "1");
-
+  const formData = new FormData();
+  formData.append("id", archive.value.id.toString());
+  formData.append("title", archive.value.title.toString());
+  formData.append("description", archive.value.description.toString());
+  formData.append("issueDate", archive.value.issueDate.toString());
+  formData.append("number", archive.value.number.toString());
+  formData.append("way", archive.value.way.toString());
+  formData.append("sectionId", archive.value.sectionId.toString());
+  formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
+  formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
   const files = fileInput.value.files;
   for (let i = 0; i < files.length; i++) {
-    formdata.append("files[]", files[i]);
+    formData.append("files[]", files[i]);
   }
-
   archiveStore
-    .update(archive.value.id, formdata)
-    .then(async (response) => {
-      console.log(response.data.data);
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Your Archive has been updated",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      for (let i = 0; i < files.value.length; i++) {
-        await archiveStore.add_document(response.data.data.id, {
-          archive_id: response.data.data.id,
-          file: files.value[i],
+    .update(archive.value.id, formData)
+    .then((response) => {
+      if (fileInput.value != null)
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your Archive has been updated",
+          showConfirmButton: false,
+          timer: 1500,
         });
-      }
       router.go(-1);
     })
     .catch((error) => {
@@ -187,8 +177,19 @@ const showData = async () => {
       });
     });
 };
-const removeFile = () => {
-  console.log("RemoveFile");
+const updateList = () => {
+  showData();
+  // archiveStore
+  //   .getDocuments(archive.value.id)
+  //   .then(async (response) => {
+  //     console.log(response.data.data);
+  //     archive.value.files = [];
+  //     archive.value.files = response.data.data;
+  //   })
+  //   .catch((error) => {
+  //     //errors.value = Object.values(error.response.data.errors).flat().join();
+  //     errors.value = archiveStore.getError(error);
+  //   });
 };
 const back = () => {
   router.push({
@@ -291,8 +292,16 @@ onMounted(async () => {
     </div>
     <div class="mt-10">
       <div id="showFiles" class="image-list flex">
-        <div class="" v-for="document in archive.files" :key="document.name">
-          <FilePreview :file="document" class="preview-card"></FilePreview>
+        <div
+          class="preview-card flex-none w-64"
+          v-for="document in archive.files"
+          :key="document.name"
+        >
+          <FilePreview
+            :file="document"
+            @updateList="updateList"
+            class="preview-card"
+          ></FilePreview>
         </div>
       </div>
       <div id="DropZone"></div>

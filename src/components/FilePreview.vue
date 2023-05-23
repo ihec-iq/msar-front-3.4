@@ -1,46 +1,87 @@
 <script setup lang="ts">
-import type { IDocument } from "@/types/Archive/IArchive";
-import { toRefs, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useArchiveStore } from "@/stores/Archive/archive";
-const { _delete_document } = useArchiveStore();
+import useLanguage from "@/stores/i18n/languageStore";
+import Swal from "sweetalert2";
+const { t } = useLanguage();
+const { _deleteDocument } = useArchiveStore();
 const props = defineProps({
   file: { type: Object, required: true },
   tag: { type: String, default: "li" },
 });
+const document = ref(props.file);
+const generateURL = (path: string) => {
+  return new URL(path, import.meta.url);
+};
+const emits = defineEmits<{
+  //(e: "change", id: number): void;
+  (e: "updateList"): void;
+}>();
 
-//defineEmits(["removeFile"]);
 const removeFile = async (id: number) => {
-  await _delete_document(id);
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn m-2 bg-red-700",
+      cancelButton: "btn bg-grey-400",
+    },
+    buttonsStyling: false,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      title: t("Are You Sure?"),
+      text: t("You Won't Be Able To Revert This!"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: t("Yes, delete it!"),
+      cancelButtonText: t("No, cancel!"),
+      reverseButtons: true,
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        await _deleteDocument(id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            emits("updateList");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
 };
 onMounted(() => {});
 </script>
 <template>
   <component :is="tag" class="file-preview">
-    <button @click="removeFile(file.id)" class="close-icon">&times;</button>
+    <button @click="removeFile(document.id)" class="close-icon">&times;</button>
     <img
       class="object-cover h-48 w-96"
-      :src="file.path"
-      :alt="file.name"
-      :title="file.name"
+      :src="generateURL(document.path).toString()"
+      :alt="document.name"
+      :title="document.name"
     />
     <span style="color: darkkhaki" class="info">
-      {{ file.name }} -
-      {{ Math.round(file.size / 1000) + "kb" }}
+      {{ document.name }} -
+      {{ Math.round(document.size) + "kb" }}
     </span>
 
     <span
       class="status-indicator loading-indicator"
-      v-show="file.status == 'loading'"
+      v-show="document.status == 'loading'"
       >In Progress</span
     >
     <span
       class="status-indicator success-indicator"
-      v-show="file.status == true"
+      v-show="document.status == true"
       >Uploaded</span
     >
     <span
       class="status-indicator failure-indicator"
-      v-show="file.status == false"
+      v-show="document.status == false"
       >Error</span
     >
   </component>

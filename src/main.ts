@@ -23,7 +23,7 @@ const { getUser } = useAuthStore();
 const { setPermissions, can } = usePermissionStore();
 
 //#region Permission Globally
-let defaultPermissions: Array<string> =['']
+const defaultPermissions: Array<string> = [""];
 setPermissions(defaultPermissions.concat(getUser().permissions));
 // console.log(can("admin"));
 //#endregion

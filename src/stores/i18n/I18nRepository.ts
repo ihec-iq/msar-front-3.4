@@ -28,7 +28,7 @@ class I18nRepository extends ReactiveRepository<I18nInformation> {
     return new I18nInformationImpl("", {});
   }
   public getState(): I18nInformation {
-    if (!this.state.info.lang) this.setLanguage("en");
+    if (!this.state.info.lang) this.setLanguage("ar");
     return readonly(this.state) as I18nInformation;
   }
 
