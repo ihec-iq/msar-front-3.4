@@ -4,10 +4,16 @@ import { ref, onMounted } from "vue";
 import Toolbar from "./components/fixed/toolbar.vue";
 import navbar from "./components/fixed/navbar.vue";
 import { storeToRefs } from "pinia";
+import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 
 const rtlStore = useRtlStore();
 const { isClose, is } = storeToRefs(rtlStore);
+const st = i18nRepository.getState();
+const t = (text: string) => {
+  const re = st.langTextRepo[st.info.lang][text] || text;
+  return re;
+};
 const show = ref(false);
 document.onkeydown = function (e) {
   if (
@@ -38,7 +44,6 @@ onMounted(() => {
   let lang: string | any = "ar";
   lang = localStorage.getItem("lang");
   htmlEl?.setAttribute("lang", lang);
- 
 });
 
 const logo = ref("@assets/logo.svg");

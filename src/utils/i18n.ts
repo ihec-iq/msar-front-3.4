@@ -1,15 +1,20 @@
 import { createI18n } from "vue-i18n";
-import en from "@/locales/en.json";
-import ar from "@/locales/ar.json";
+import en from "@/locales/en";
+import ar from "@/locales/ar";
 
 export const i18n = createI18n({
-  legacy: false,
-  globalInjection: true,
   fallbackWarn: false,
-  locale: navigator?.language?.slice(0, 2) || "ar",
-  fallbackLocale: ["en", "ar"],
+  locale: "ar",
+  fallbackLocale: ["ar", "en"],
   messages: {
     en,
     ar,
   },
+  // // Rename the $t method to t
+  // legacy: true,
+  // globalInjection: true,
+  // global: true,
+  // // Set the name for the translation method
+  // // Change 't' to any other name you prefer
+  // __l: "t",
 });

@@ -124,20 +124,20 @@ const Delete = async () => {
   });
   swalWithBootstrapButtons
     .fire({
-      title: t("Are You Sure?"),
-      text: t("You Won't Be Able To Revert This!"),
+      title: $t("Are You Sure?"),
+      text: $t("You Won't Be Able To Revert This!"),
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: t("Yes, delete it!"),
-      cancelButtonText: t("No, cancel!"),
+      confirmButtonText: $t("Yes, delete it!"),
+      cancelButtonText: $t("No, cancel!"),
       reverseButtons: true,
     })
     .then(async (result) => {
       if (result.isConfirmed) {
         await archiveStore._delete(archive.value.id).then(() => {
           swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
+            $t("Deleted!"),
+            $t("Deleted successfully ."),
             "success"
           );
           router.go(-1);
@@ -216,7 +216,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("Title") }}
+          {{ $t("Title") }}
         </div>
         <input
           v-model="archive.title"
@@ -228,7 +228,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("نوع الكتاب") }} : {{ isIn ? "صادر" : "وارد" }}
+          {{ t("TypeBook") }} : {{ isIn ? "صادر" : "وارد" }}
         </div>
         <input
           v-model="isIn"
@@ -240,7 +240,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("Date") }}
+          {{ $t("Date") }}
         </div>
         <input
           v-model="archive.issueDate"
@@ -252,7 +252,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("Number") }}
+          {{ $t("NumberBook") }}
         </div>
         <input
           v-model="archive.number"
@@ -264,7 +264,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("File1") }}
+          {{ $t("FileBook") }}
         </div>
         <input
           @change="onFileChange"
@@ -280,7 +280,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("Description") }}
+          {{ $t("Description") }}
         </div>
         <quill-editor
           v-model:content="archive.description"
@@ -321,21 +321,21 @@ onMounted(async () => {
             @click="store()"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
           >
-            {{ t("Create") }}
+            {{ $t("Create") }}
           </button>
           <button
             v-else
             @click="update()"
             class="bg-update hover:bg-updateHover duration-500 h-10 w-32 rounded-lg text-white"
           >
-            {{ t("Update") }}
+            {{ $t("Update") }}
           </button>
           <button
             v-if="archive.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 w-32 rounded-lg text-white ml-2"
           >
-            {{ t("Delete") }}
+            {{ $t("Delete") }}
           </button>
         </div>
       </div>
@@ -345,7 +345,7 @@ onMounted(async () => {
         @click="back()"
         class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
       >
-        {{ t("Back") }}
+        {{ $t("Back") }}
       </button>
     </div>
     <!-- end bottom tool -->
