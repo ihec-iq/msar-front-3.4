@@ -14,7 +14,6 @@ declare module '@vue/runtime-core' {
     CardSkeleton: typeof import('./src/components/general/CardSkeleton.vue')['default']
     CreatorTable: typeof import('./src/components/tables/setting/CreatorTable.vue')['default']
     DragDropFile: typeof import('./src/components/DragDropFile.vue')['default']
-    DropZone: typeof import('./src/components/DropZone.vue')['default']
     EditButton: typeof import('./src/components/dropDown/EditButton.vue')['default']
     FilePreview: typeof import('./src/components/FilePreview.vue')['default']
     InputNumber: typeof import('./src/components/inputs/InputNumber.vue')['default']

@@ -3,6 +3,8 @@ export default {
   NumberBook: "رقم الكتاب",
   FileBook: "تحميل الكتاب",
   TypeBook: "نوع الكتاب",
+  Description: "تفاصيل",
+  Language: "العربية",
   Seats: "المقاعد",
   Stats: "الحالة",
   Action: "المزيد",

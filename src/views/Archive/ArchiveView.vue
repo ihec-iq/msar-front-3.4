@@ -7,9 +7,10 @@ import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
-import useLanguage from "@/stores/i18n/languageStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import FilePreview from "@/components/FilePreview.vue";
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t, setLocale, currentLocale } = useI18n();
 
 const namePage = ref("Archive Add");
 const route = useRoute();
@@ -18,10 +19,9 @@ const isIn = ref(false);
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 
-const { t } = useLanguage();
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
-// const {  } = featureStore;
+
 const router = useRouter();
 const errors = ref(null);
 
@@ -124,20 +124,20 @@ const Delete = async () => {
   });
   swalWithBootstrapButtons
     .fire({
-      title: $t("Are You Sure?"),
-      text: $t("You Won't Be Able To Revert This!"),
+      title: t("Are You Sure?"),
+      text: t("You Won't Be Able To Revert This!"),
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: $t("Yes, delete it!"),
-      cancelButtonText: $t("No, cancel!"),
+      confirmButtonText: t("Yes, delete it!"),
+      cancelButtonText: t("No, cancel!"),
       reverseButtons: true,
     })
     .then(async (result) => {
       if (result.isConfirmed) {
         await archiveStore._delete(archive.value.id).then(() => {
           swalWithBootstrapButtons.fire(
-            $t("Deleted!"),
-            $t("Deleted successfully ."),
+            t("Deleted!"),
+            t("Deleted successfully ."),
             "success"
           );
           router.go(-1);
@@ -196,6 +196,9 @@ const back = () => {
     name: "archiveIndex",
   });
 };
+const changeLanguages = () => {
+  setLocale(currentLocale.value == "en" ? "ar" : "en");
+};
 
 onMounted(async () => {
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -216,7 +219,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ $t("Title") }}
+          {{ t("Title") }}
         </div>
         <input
           v-model="archive.title"
@@ -240,7 +243,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ $t("Date") }}
+          {{ t("Date") }}
         </div>
         <input
           v-model="archive.issueDate"
@@ -252,7 +255,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ $t("NumberBook") }}
+          {{ t("NumberBook") }}
         </div>
         <input
           v-model="archive.number"
@@ -264,7 +267,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ $t("FileBook") }}
+          {{ t("FileBook") }}
         </div>
         <input
           @change="onFileChange"
@@ -280,7 +283,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ $t("Description") }}
+          {{ t("Description") }}
         </div>
         <quill-editor
           v-model:content="archive.description"
@@ -321,31 +324,40 @@ onMounted(async () => {
             @click="store()"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
           >
-            {{ $t("Create") }}
+            {{ t("Create") }}
           </button>
           <button
             v-else
             @click="update()"
             class="bg-update hover:bg-updateHover duration-500 h-10 w-32 rounded-lg text-white"
           >
-            {{ $t("Update") }}
+            {{ t("Update") }}
           </button>
           <button
             v-if="archive.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 w-32 rounded-lg text-white ml-2"
           >
-            {{ $t("Delete") }}
+            {{ t("Delete") }}
           </button>
         </div>
       </div>
+    </div>
+
+    <div>
+      <button
+        @click="changeLanguages()"
+        class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
+      >
+        Change to {{ t("Language") }}
+      </button>
     </div>
     <div class="backBtn z-10 fixed bottom-2 ml-3 print:hidden">
       <button
         @click="back()"
         class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
       >
-        {{ $t("Back") }}
+        {{ t("Back") }} vvv
       </button>
     </div>
     <!-- end bottom tool -->

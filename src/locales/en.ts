@@ -3,6 +3,7 @@ export default {
   NumberBook: "Number Book",
   FileBook: "Upload File",
   TypeBook: "Type Book",
+  Language: "English",
   Name: "Name",
   Stats: "Stats",
   Action: "Action",

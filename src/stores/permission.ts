@@ -24,10 +24,6 @@ export const usePermissionStore = defineStore("PermissionStore", () => {
   const setPermissions = (_permission: string[]) => {
     permissions.value = _permission;
   };
-  onMounted(() => {
-    // console.log("usePermissionStore");
-    // permissions.value = authStore.user.permissions;
-  });
   return {
     permissions,
     can,

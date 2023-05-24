@@ -6,14 +6,14 @@ const files = ref([]);
 const onChange = () => {
   files.value = [...files.value];
 };
-const dragover = (e) => {
+const dragover = (e: any) => {
   e.preventDefault();
   isDragging.value = true;
 };
 const dragleave = () => {
   isDragging.value = false;
 };
-const drop = (e) => {
+const drop = (e: any) => {
   e.preventDefault();
   files.value = e.dataTransfer.files;
   onChange();
