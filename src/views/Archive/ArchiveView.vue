@@ -7,8 +7,11 @@ import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
-import useLanguage from "@/stores/i18n/languageStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
+import FilePreview from "@/components/FilePreview.vue";
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t, setLocale, currentLocale } = useI18n();
+
 const namePage = ref("Archive Add");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -16,32 +19,37 @@ const isIn = ref(false);
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 
-const { t } = useLanguage();
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
-// const {  } = featureStore;
+
 const router = useRouter();
-const errors = ref(null);
-const file1 = ref("");
-const onFileChange = (e) => {
-  file1.value = e.target.files[0];
+const errors = ref<String | null>();
+
+const fileInput = ref();
+const onFileChange = (e: any) => {
+  // file1.value = e.target.files[0];
+  // files.value = e.target.files;
+  // console.log(files.value);
 };
 const store = () => {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
-  const formdata = new FormData();
-  formdata.append("id", archive.value.id.toString());
-  formdata.append("title", archive.value.title.toString());
-  formdata.append("description", archive.value.description.toString());
-  formdata.append("file1", file1.value);
-  formdata.append("issueDate", archive.value.issueDate.toString());
-  formdata.append("number", archive.value.number.toString());
-  formdata.append("way", archive.value.way.toString());
-  formdata.append("sectionId", archive.value.sectionId.toString());
-  formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
-  formdata.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+  const formData = new FormData();
+  formData.append("id", archive.value.id.toString());
+  formData.append("title", archive.value.title.toString());
+  formData.append("description", archive.value.description.toString());
+  formData.append("issueDate", archive.value.issueDate.toString());
+  formData.append("number", archive.value.number.toString());
+  formData.append("way", archive.value.way.toString());
+  formData.append("sectionId", archive.value.sectionId.toString());
+  formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
+  formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+  const files = fileInput.value.files;
+  for (let i = 0; i < files.length; i++) {
+    formData.append("files[]", files[i]);
+  }
   archiveStore
-    .store(formdata)
+    .store(formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -67,21 +75,33 @@ const store = () => {
 };
 function update() {
   errors.value = null;
-  // saleCustomer.custom_group_bill_sale_id = props.idBill;
   archive.value.isIn = isIn.value ? 1 : 0;
-  console.log(archive.value);
+  const formData = new FormData();
+  formData.append("id", archive.value.id.toString());
+  formData.append("title", archive.value.title.toString());
+  formData.append("description", archive.value.description.toString());
+  formData.append("issueDate", archive.value.issueDate.toString());
+  formData.append("number", archive.value.number.toString());
+  formData.append("way", archive.value.way.toString());
+  formData.append("sectionId", archive.value.sectionId.toString());
+  formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
+  formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+  const files = fileInput.value.files;
+  for (let i = 0; i < files.length; i++) {
+    formData.append("files[]", files[i]);
+  }
   archiveStore
-    .update(archive.value)
+    .update(archive.value.id, formData)
     .then((response) => {
-      console.log(response.data.data);
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Your Archive has been updated",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      router.go(-2);
+      if (fileInput.value != null)
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your Archive has been updated",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      router.go(-1);
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
@@ -139,6 +159,7 @@ const showData = async () => {
         archive.value.sectionId = response.data.data.sectionId;
         archive.value.archiveTypeId = response.data.data.archiveTypeId;
         archive.value.isIn = response.data.data.isIn;
+        archive.value.files = response.data.data.files;
         isIn.value = response.data.data.isIn == 0 ? false : true;
         archive.value.isInWord = response.data.data.isInWord;
       }
@@ -156,10 +177,27 @@ const showData = async () => {
       });
     });
 };
+const updateList = () => {
+  showData();
+  // archiveStore
+  //   .getDocuments(archive.value.id)
+  //   .then(async (response) => {
+  //     console.log(response.data.data);
+  //     archive.value.files = [];
+  //     archive.value.files = response.data.data;
+  //   })
+  //   .catch((error) => {
+  //     //errors.value = Object.values(error.response.data.errors).flat().join();
+  //     errors.value = archiveStore.getError(error);
+  //   });
+};
 const back = () => {
   router.push({
     name: "archiveIndex",
   });
+};
+const changeLanguages = () => {
+  setLocale(currentLocale.value == "en" ? "ar" : "en");
 };
 
 onMounted(async () => {
@@ -193,7 +231,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("isIn") }}{{ isIn }}
+          {{ t("TypeBook") }} : {{ isIn ? "صادر" : "وارد" }}
         </div>
         <input
           v-model="isIn"
@@ -217,10 +255,27 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("File1") }}
+          {{ t("NumberBook") }}
         </div>
-        <input @change="onFileChange" ref="file" type="file" />
-        <img :src="file1" alt="file1" />
+        <input
+          v-model="archive.number"
+          type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
+      </div>
+      <div class="w-1/3 mx-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("FileBook") }}
+        </div>
+        <input
+          @change="onFileChange"
+          ref="fileInput"
+          multiple
+          type="file"
+          accept=".pdf,.jpg,.jpeg,.png"
+        />
       </div>
     </div>
     <div class="mt-10">
@@ -234,11 +289,26 @@ onMounted(async () => {
           v-model:content="archive.description"
           contentType="html"
           theme="snow"
-          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-96"
+          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60"
         ></quill-editor>
       </div>
     </div>
-
+    <div class="mt-10">
+      <div id="showFiles" class="image-list flex">
+        <div
+          class="preview-card flex-none w-64"
+          v-for="document in archive.files"
+          :key="document.name"
+        >
+          <FilePreview
+            :file="document"
+            @updateList="updateList"
+            class="preview-card"
+          ></FilePreview>
+        </div>
+      </div>
+      <div id="DropZone"></div>
+    </div>
     <!-- bottom tool bar -->
     <div
       :class="{
@@ -273,14 +343,88 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <div>
+      <button
+        @click="changeLanguages()"
+        class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
+      >
+        Change to {{ t("Language") }}
+      </button>
+    </div>
     <div class="backBtn z-10 fixed bottom-2 ml-3 print:hidden">
       <button
         @click="back()"
         class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
       >
-        {{ t("Back") }}
+        {{ t("Back") }} vvv
       </button>
     </div>
     <!-- end bottom tool -->
   </div>
 </template>
+<style scoped>
+.drop-area {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 50px;
+  background: rgba(255, 255, 255, 0.333);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: 0.2s ease;
+}
+.drop-area[data-active="true"] {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.8);
+}
+label {
+  font-size: 36px;
+  cursor: pointer;
+  display: block;
+}
+label span {
+  display: block;
+}
+label input[type="file"]:not(:focus-visible) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+label .smaller {
+  font-size: 16px;
+}
+.image-list {
+  display: flex;
+  list-style: none;
+  flex-wrap: wrap;
+  padding: 0;
+}
+.preview-card {
+  display: flex;
+  border: 1px solid #a2a2a2;
+  padding: 5px;
+  margin-left: 5px;
+}
+.upload-button {
+  display: block;
+  appearance: none;
+  border: 0;
+  border-radius: 50px;
+  padding: 0.75rem 3rem;
+  margin: 1rem auto;
+  font-size: 1.25rem;
+  font-weight: bold;
+  background: #369;
+  color: #fff;
+  text-transform: uppercase;
+}
+button {
+  cursor: pointer;
+}
+</style>

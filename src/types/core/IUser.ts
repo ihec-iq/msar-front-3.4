@@ -1,4 +1,5 @@
-import type IPermission from "@/types/role/role";
+import type IRole from "@/types/role/IRole";
+import type IPermission from "@/types/role/IRole";
 export default interface IUser {
   name: string;
   email: string;
@@ -7,8 +8,8 @@ export default interface IUser {
   password_confirmation?: string;
   any_device: number;
   active: number;
-  roles: Array<IPermission>;
-  permissions: Array<string>;
+  roles: Array<IRole>;
+  permissions: Array<IPermission>;
   // roles: {
   //   id: number;
   //   name: string;

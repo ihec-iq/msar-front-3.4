@@ -1,7 +1,7 @@
-import { useRouter } from "vue-router";
+import type { Router } from "vue-router";
 
 export function openBills(
-  router: object,
+  router: Router,
   type: string,
   id: number,
   isShow: boolean = true

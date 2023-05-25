@@ -59,7 +59,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
     Api.defaults.headers.common["Authorization"] = "";
-    //window.location.href = "/login";
+    window.location.href = "/login";
   };
   onMounted(async () => {
     isAuthenticated.value =

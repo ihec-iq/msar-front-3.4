@@ -11,7 +11,8 @@ const rtlStore = useRtlStore();
 const { isClose, is } = storeToRefs(rtlStore);
 const st = i18nRepository.getState();
 const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
+  const re = st.langTextRepo[st.info.lang][text] || text;
+  return re;
 };
 const show = ref(false);
 document.onkeydown = function (e) {
@@ -40,7 +41,7 @@ onMounted(() => {
   htmlEl?.setAttribute("dir", dir);
   localStorage.getItem("isLtr");
   // lang
-  let lang: string | any = "en";
+  let lang: string | any = "ar";
   lang = localStorage.getItem("lang");
   htmlEl?.setAttribute("lang", lang);
 });
@@ -62,9 +63,9 @@ const logo = ref("@assets/logo.svg");
     <div
       :class="{
         'lg:ltr:ml-[80px] lg:rtl:mr-[80px] xs:ltr:ml-[84px]': isClose,
-        'lg:rtl:mr-[304px] lg:ltr:ml-[304px] xs:ltr:ml-[390px]': !isClose,
-        'lg:ltr:ml-[0px] lg:rtl:mr-[0px] xs:ltr:ml-[0px]': is,
-        'lg:rtl:mr-[80px] lg:ltr:ml-[80px] xs:ltr:ml-[84px]': !is,
+        'lg:rtl:mr-[304.2px] lg:ltr:ml-[304.01px] xs:ltr:ml-[390px]': !isClose,
+        'lg:ltr:ml-[0.1px] lg:rtl:mr-[0.001px] xs:ltr:ml-[0.1px]': is,
+        'lg:rtl:mr-[80px] lg:ltr:ml-[80.1px] xs:ltr:ml-[84px]': !is,
       }"
       class="flex-1 overflow-hidden image-bg dark:bg-content flex flex-col min-h-screen h-full"
     >

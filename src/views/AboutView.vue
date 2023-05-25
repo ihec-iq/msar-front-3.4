@@ -3,7 +3,7 @@
     <section class="text-white md:bg-black">
       <div class="vi-bg">
         <video
-          src="@/assets/world.mp4"
+          src="@/assets/world1.mp4"
           autoplay
           loop
           muted
@@ -22,7 +22,7 @@
           <h1
             class="text-3xl animate-pulse font-extrabold text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-[white] via-[black] to-[white]"
           >
-            HelpDesk.
+            Archive.
 
             <span class="sm:block"> </span>
           </h1>
@@ -30,7 +30,7 @@
           <p
             class="max-w-xl mx-auto mt-4 text-gray-500 sm:leading-relaxed sm:text-xl"
           >
-            Welcome to best solution to accounting and manage your .
+            Welcome to best solution to manage your work.
           </p>
 
           <div class="flex flex-wrap justify-center mt-8 gap-4">

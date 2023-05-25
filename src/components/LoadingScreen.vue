@@ -2,7 +2,7 @@
   <div :class="{ loader: true, fadeout: !isLoading }">Loading ...</div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "LoadingScreen",
   props: ["isLoading"],

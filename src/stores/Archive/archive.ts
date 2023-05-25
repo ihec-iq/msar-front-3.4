@@ -9,7 +9,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     id: 0,
     title: "",
     issueDate: new Date().toISOString().split("T")[0],
-    files: undefined,
+    files: [],
     description: "",
     way: "way",
     number: "123",
@@ -19,20 +19,32 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     sectionId: 1,
   });
 
-  const pathUrl = "/archiveSys/archive";
+  const pathBase = "/archiveSys";
+  const pathUrl = `${pathBase}/archive`;
   async function get(page: number = 1) {
     console.log(`page : ${page}`);
     return await Api.get(`${pathUrl}?page=${page}`);
   }
   async function get_filter(params: IArchiveFilter, page: number) {
-    console.log(params);
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);
   }
-  async function update(prams: object) {
-    return await Api.put(`${pathUrl}/update/${archive.id}`, prams);
+  async function addDocument(archive_id: number, prams: object) {
+    return await Api.post(`${pathUrl}/document/add`, prams);
+  }
+  async function addDocumentMulti(archive_id: number, prams: object) {
+    return await Api.post(
+      `${pathUrl}/${archive_id}/document/store_multi`,
+      prams
+    );
+  }
+  async function getDocuments(archive_id: number) {
+    return await Api.get(`${pathUrl}/${archive_id}/documents`);
+  }
+  async function update(archive_id: number, prams: object) {
+    return await Api.post(`${pathUrl}/update/${archive_id}`, prams);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
@@ -40,7 +52,10 @@ export const useArchiveStore = defineStore("archiveStore", () => {
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
-
+  async function _deleteDocument(id: number) {
+    const path = `${pathBase}/document/delete/${id}`;
+    return await Api.delete(path);
+  }
   return {
     archive,
     get,
@@ -48,7 +63,11 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     show,
     store,
     update,
-    _delete,
     getError,
+    _delete,
+    addDocument,
+    addDocumentMulti,
+    getDocuments,
+    _deleteDocument,
   };
 });

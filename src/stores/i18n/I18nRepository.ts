@@ -28,7 +28,7 @@ class I18nRepository extends ReactiveRepository<I18nInformation> {
     return new I18nInformationImpl("", {});
   }
   public getState(): I18nInformation {
-    if (!this.state.info.lang) this.setLanguage("en");
+    if (!this.state.info.lang) this.setLanguage("ar");
     return readonly(this.state) as I18nInformation;
   }
 
@@ -39,7 +39,7 @@ class I18nRepository extends ReactiveRepository<I18nInformation> {
     if (!this.state.langTextRepo[lang]) {
       //const that = this;
       axios
-        .get<Record<string, string>>(`/src/locales/${lan}.json`)
+        .get<Record<string, string>>(`/src/locales/${lan}`)
         .then((r) => {
           this.state.langTextRepo[lang] = r.data as Record<string, string>;
           this.state.info.lang = lang;

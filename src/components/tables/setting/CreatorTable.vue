@@ -13,7 +13,7 @@ const t = (text: string) => {
 const router = useRouter();
 const isLoading = ref(false);
 const data = ref<Array<ICreator>>([]);
-const { get, _delete } = useCreatorStore();
+const { get } = useCreatorStore();
 const { creator } = storeToRefs(useCreatorStore());
 const getData = async () => {
   await get().then((response) => {
