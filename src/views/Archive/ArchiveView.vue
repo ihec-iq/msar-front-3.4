@@ -23,7 +23,7 @@ const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
 
 const router = useRouter();
-const errors = ref(null);
+const errors = ref<String | null>();
 
 const fileInput = ref();
 const onFileChange = (e: any) => {

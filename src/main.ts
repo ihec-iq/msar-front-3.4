@@ -19,12 +19,13 @@ app.use(router);
 //#region Permission
 import { useAuthStore } from "@/stores/auth";
 import { usePermissionStore } from "@/stores/permission";
+import type IPermission from "./types/role/IPermission";
 const { getUser } = useAuthStore();
 const { setPermissions } = usePermissionStore();
 
 //#region Permission Globally
-const defaultPermissions: Array<string> = [""];
-setPermissions(defaultPermissions.concat(getUser().permissions));
+const defaultPermissions: Array<IPermission> = [];
+setPermissions(defaultPermissions.concat(getUser().Permissions));
 // console.log(can("admin"));
 //#endregion
 //#endregion

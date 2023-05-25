@@ -1,4 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import start from "@/views/AboutView.vue";
 import LoginView from "@/views/auth/LoginView.vue";
@@ -16,7 +20,6 @@ import NProgress from "nprogress";
 //#endregion
 //#region Middleware
 import auth from "./middleware/auth";
-import VueRouteMiddleware from "vue-route-middleware";
 //#endregion
 
 const router = createRouter({
@@ -69,20 +72,10 @@ const router = createRouter({
     },
   ],
 });
-// router.beforeResolve((to, from, next) => {
-// If this isn't an initial page load.
-// if (to.name) {
-// Start the route progress bar.
-//   NProgress.start();
-// }
-// console.log(to.meta.nav?.toString())
-// console.log("pervuse view :" + from.name?.toString())
-// console.log("current view :" +to.name?.toString())
-//   next();
-// });
-// router.beforeEach(VueRouteMiddleware({ auth }));
-// router.afterEach(() => {
-//   NProgress.done();
-// });
-
+router.beforeEach((to, from) => {
+  // ...
+  // explicitly return false to cancel the navigation
+  console.log("from : " + from.fullPath);
+  console.log("to : " + to.fullPath);
+});
 export default router;

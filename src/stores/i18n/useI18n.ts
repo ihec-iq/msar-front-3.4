@@ -22,19 +22,18 @@ const i18n = createI18n({
 
 // Define the composition function
 export function useI18n() {
-  const currentLocale = ref("");
+  const currentLocale = ref("ar");
 
   // Retrieve the locale from localStorage, or use the default locale
   const savedLocale = localStorage.getItem("locale");
-  if (savedLocale == null || savedLocale == undefined) {
-    currentLocale.value = "ar";
-  } else currentLocale.value = savedLocale;
-  i18n.global.locale = currentLocale.value;
+  if (savedLocale != null && savedLocale != undefined)
+    currentLocale.value = savedLocale;
+  i18n.global.locale = currentLocale.value as "ar" | "en";
   // Set the locale and store it in localStorage
-  function setLocale(locale: string) {
+  function setLocale(locale: "ar" | "en") {
     currentLocale.value = locale;
     localStorage.setItem("locale", locale);
-    i18n.global.locale = currentLocale.value;
+    i18n.global.locale = currentLocale.value as "ar" | "en";
   }
 
   provide("i18n", i18n);
