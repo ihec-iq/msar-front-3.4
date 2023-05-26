@@ -4,16 +4,11 @@ import { ref, onMounted } from "vue";
 import Toolbar from "./components/fixed/toolbar.vue";
 import navbar from "./components/fixed/navbar.vue";
 import { storeToRefs } from "pinia";
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-
+import { useAuthStore } from "./stores/auth";
+const { CheckAuth } = useAuthStore();
 const rtlStore = useRtlStore();
 const { isClose, is } = storeToRefs(rtlStore);
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  const re = st.langTextRepo[st.info.lang][text] || text;
-  return re;
-};
 const show = ref(false);
 document.onkeydown = function (e) {
   if (
@@ -34,6 +29,7 @@ document.onkeydown = function (s) {
 // let htmlEl = document.querySelector("html");
 // htmlEl?.setAttribute("data-theme", "cupcake");
 onMounted(() => {
+  CheckAuth();
   let htmlEl = document.querySelector("html");
   let dir: string | any = "ltr";
   if (localStorage.getItem("dir")?.toString() != undefined)
@@ -46,19 +42,11 @@ onMounted(() => {
   htmlEl?.setAttribute("lang", lang);
 });
 
-const logo = ref("@assets/logo.svg");
+//const logo = ref("@assets/logo.svg");
 </script>
 
 <template>
   <div class="flex">
-    <vueSplash
-      show="true"
-      :logo="logo"
-      title="Your App Name"
-      color="#00bfa5"
-      :size="180"
-      :fixed="true"
-    />
     <navbar />
     <div
       :class="{

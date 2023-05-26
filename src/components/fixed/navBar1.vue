@@ -67,38 +67,6 @@ const logout = () => {
   console.log("Log out");
   authStore.logout();
 };
-//#region "reports"
-const billsStatement = () => {
-  router.push({
-    name: "billsStatement",
-  });
-};
-//#endregion
-const accountIndex = () => {
-  router.push({
-    name: "accountIndex",
-  });
-};
-const agentIndex = () => {
-  router.push({
-    name: "agentIndex",
-  });
-};
-const supplierIndex = () => {
-  router.push({
-    name: "supplierIndex",
-  });
-};
-const creatorIndex = () => {
-  router.push({
-    name: "creatorIndex",
-  });
-};
-const packageIndex = () => {
-  router.push({
-    name: "packageIndex",
-  });
-};
 const userIndex = () => {
   router.push({
     name: "userIndex",
@@ -177,7 +145,7 @@ onMounted(() => {
           <router-link
             :to="{ name: 'archiveIndex' }"
             @click.prevent="tab = 'Feature Admin'"
-          >{{ is }}
+            >{{ is }}
             <a
               title="Feature"
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
@@ -487,7 +455,7 @@ onMounted(() => {
                     class="h-full w-[130px] p-2"
                     v-if="settingMenu === 'account'"
                   > -->
-                    <!-- <div
+                  <!-- <div
                       @click="userIndex()"
                       class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
                     >
@@ -511,7 +479,7 @@ onMounted(() => {
                     >
                       {{ t("Supplier") }}
                     </div>-->
-                    <!-- <div
+                  <!-- <div
                       @click="creatorIndex()"
                       class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
                     >

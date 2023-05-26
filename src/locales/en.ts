@@ -1,9 +1,10 @@
 export default {
-  Title: "title",
+  Title: "Title",
   NumberBook: "Number Book",
   FileBook: "Upload File",
   TypeBook: "Type Book",
   Language: "English",
+  Description: "Description",
   Name: "Name",
   Stats: "Stats",
   Action: "Action",

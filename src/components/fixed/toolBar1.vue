@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t, setLocale, Languages } = useI18n();
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
+
 const colorMode = useColorMode({
   modes: {
     red: "red",
@@ -19,20 +21,10 @@ const colorMode = useColorMode({
 const change = () => {
   ChangeDirection();
 };
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
-const chgLang = (lang: "en" | "ar") => {
+
+const chgLang = () => {
   let htmlEl = document.querySelector("html");
-  if (st.info.lang === "en") {
-    htmlEl?.setAttribute("lang", "en");
-    localStorage.setItem("lang", "en");
-  } else if (st.info.lang === "ar") {
-    htmlEl?.setAttribute("lang", "ar");
-    localStorage.setItem("lang", "ar");
-  }
-  i18nRepository.setLanguage(lang);
+  htmlEl?.setAttribute("lang", "ar");
 };
 const showPop = ref(false);
 const showPopup = () => {
@@ -212,121 +204,17 @@ onMounted(() => {
           <div class="flex items-center">
             <div class="dropdown dropdown-bottom ltr:ml-5 rtl:mr-3">
               <button href="#" class="items-center flex" tabindex="0">
-                <h2 v-if="st.info.lang === 'en'">En</h2>
-                <svg
-                  v-if="st.info.lang === 'en'"
-                  width="42.67"
-                  height="20"
-                  viewBox="0 0 640 480"
-                >
-                  <path fill="#012169" d="M0 0h640v480H0z" />
-                  <path
-                    fill="#FFF"
-                    d="m75 0l244 181L562 0h78v62L400 241l240 178v61h-80L320 301L81 480H0v-60l239-178L0 64V0h75z"
-                  />
-                  <path
-                    fill="#C8102E"
-                    d="m424 281l216 159v40L369 281h55zm-184 20l6 35L54 480H0l240-179zM640 0v3L391 191l2-44L590 0h50zM0 0l239 176h-60L0 42V0z"
-                  />
-                  <path
-                    fill="#FFF"
-                    d="M241 0v480h160V0H241zM0 160v160h640V160H0z"
-                  />
-                  <path
-                    fill="#C8102E"
-                    d="M0 193v96h640v-96H0zM273 0v480h96V0h-96z"
-                  />
-                </svg>
-                <h2 v-if="st.info.lang === 'ar'">Ar</h2>
-
-                <svg
-                  v-if="st.info.lang === 'ar'"
-                  width="42.67"
-                  height="20"
-                  viewBox="0 0 640 480"
-                >
-                  <path fill="#fff" d="M0 160h640v160H0z" />
-                  <path fill="#ce1126" d="M0 0h640v160H0z" />
-                  <path d="M0 320h640v160H0z" />
-                  <g
-                    fill="#007a3d"
-                    transform="translate(-179.3 -92.8) scale(1.75182)"
-                  >
-                    <path
-                      d="M325.5 173.2a5 5 0 0 1-1.4-1c-.3-.5-.1-.5 1.2-.2c2.3.7 3.8.4 5.3-.8l1.3-1.1l1.5.7c.9.5 1.8.8 2 .7c.7-.2 2.1-2 2-2.6c0-.7.6-.5 1 .3c.6 1.6-.3 3.5-2 3.9c-.7.2-1.4.1-2.6-.3c-1.4-.5-1.7-.5-2.4 0a5.4 5.4 0 0 1-5.9.4zm5.8-5.3a8 8 0 0 1-1-4c.1-.6.3-.8.8-.6c1 .3 1.2 1 1 3c0 1.8-.3 2.3-.8 1.6zm-67.6-1.9c-.1 1.3 2.4 4.6 3.5 5.2c-.8.3-1.7.2-2.4.5c-4 4-18.4 18-21 21.4c7.8.2 16.4-.1 23.7-.4c0-5.3 5-5.6 8.4-7.5c1.7 2.7 6 2.5 6.6 6.6v17.6H216a9.7 9.7 0 0 1-12.3 7.5c2-2 5.4-2.8 6.6-5.7c1-6.4-2-10.3-4-14a24 24 0 0 0 7-3.6c-2.3 7 6.2 6.3 12.4 6.1c.2-2.4.1-5.2-1.7-5.6c2.3-.9 2.7-1.2 6.6-4.4v9.6l46.1-.1c0-3 .8-7.9-1.6-7.9c-2.2 0 0 6.2-1.8 6.2h-35.7v-6c1.5-1.6 1.3-1.5 11.6-11.8c1-1 8.3-7.6 14.6-13.7zm89.1-.3c2.5 1.4 4.5 3.2 7.5 4c-.3 1.3-1.5 1.8-1.8 3.1v27c3.4.7 4.2-1.3 5.8-2.3c.4 4.3 3.2 8.5 3 12h-14.5v-43.7zm-19.4 14.5s5.3-4.5 5.3-4.7V199h3.8l-.1-26.3c1.5-1.6 4.6-3.8 5.3-5.4v42h-33.4c-.5-8.7-.6-17.7 9.6-15.8V190c-.3-.6-.9.1-1-.7c1.6-1.6 2.1-2 6.5-5.8l.1 15.5h3.9v-18.8zm-12.6 18.6c.7 1 3.2 1 3-.8c-.3-1.5-3.5-1-3 .8z"
-                    />
-                    <circle cx="224" cy="214.4" r="2" />
-                    <path
-                      d="M287 165.8c2.5 1.3 4.5 3.2 7.6 4c-.4 1.2-1.5 1.7-1.8 3v27c3.4.7 4.1-1.2 5.7-2.3c.5 4.3 3.2 8.6 3.1 12H287v-43.7z"
-                    />
-                  </g>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-6 h-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-
+                Languages
                 <ul
                   tabindex="0"
                   class="dropdown-content ltr:right-0 rtl:left-0 menu p-2 shadow bg-settingLight dark:bg-setting text-text dark:text-textLight rounded-box mt-5"
                 >
-                  <li>
-                    <button @click="chgLang('ar')" class="flex justify-between">
-                      العربية
-                      <svg width="42.67" height="20" viewBox="0 0 640 480">
-                        <path fill="#fff" d="M0 160h640v160H0z" />
-                        <path fill="#ce1126" d="M0 0h640v160H0z" />
-                        <path d="M0 320h640v160H0z" />
-                        <g
-                          fill="#007a3d"
-                          transform="translate(-179.3 -92.8) scale(1.75182)"
-                        >
-                          <path
-                            d="M325.5 173.2a5 5 0 0 1-1.4-1c-.3-.5-.1-.5 1.2-.2c2.3.7 3.8.4 5.3-.8l1.3-1.1l1.5.7c.9.5 1.8.8 2 .7c.7-.2 2.1-2 2-2.6c0-.7.6-.5 1 .3c.6 1.6-.3 3.5-2 3.9c-.7.2-1.4.1-2.6-.3c-1.4-.5-1.7-.5-2.4 0a5.4 5.4 0 0 1-5.9.4zm5.8-5.3a8 8 0 0 1-1-4c.1-.6.3-.8.8-.6c1 .3 1.2 1 1 3c0 1.8-.3 2.3-.8 1.6zm-67.6-1.9c-.1 1.3 2.4 4.6 3.5 5.2c-.8.3-1.7.2-2.4.5c-4 4-18.4 18-21 21.4c7.8.2 16.4-.1 23.7-.4c0-5.3 5-5.6 8.4-7.5c1.7 2.7 6 2.5 6.6 6.6v17.6H216a9.7 9.7 0 0 1-12.3 7.5c2-2 5.4-2.8 6.6-5.7c1-6.4-2-10.3-4-14a24 24 0 0 0 7-3.6c-2.3 7 6.2 6.3 12.4 6.1c.2-2.4.1-5.2-1.7-5.6c2.3-.9 2.7-1.2 6.6-4.4v9.6l46.1-.1c0-3 .8-7.9-1.6-7.9c-2.2 0 0 6.2-1.8 6.2h-35.7v-6c1.5-1.6 1.3-1.5 11.6-11.8c1-1 8.3-7.6 14.6-13.7zm89.1-.3c2.5 1.4 4.5 3.2 7.5 4c-.3 1.3-1.5 1.8-1.8 3.1v27c3.4.7 4.2-1.3 5.8-2.3c.4 4.3 3.2 8.5 3 12h-14.5v-43.7zm-19.4 14.5s5.3-4.5 5.3-4.7V199h3.8l-.1-26.3c1.5-1.6 4.6-3.8 5.3-5.4v42h-33.4c-.5-8.7-.6-17.7 9.6-15.8V190c-.3-.6-.9.1-1-.7c1.6-1.6 2.1-2 6.5-5.8l.1 15.5h3.9v-18.8zm-12.6 18.6c.7 1 3.2 1 3-.8c-.3-1.5-3.5-1-3 .8z"
-                          />
-                          <circle cx="224" cy="214.4" r="2" />
-                          <path
-                            d="M287 165.8c2.5 1.3 4.5 3.2 7.6 4c-.4 1.2-1.5 1.7-1.8 3v27c3.4.7 4.1-1.2 5.7-2.3c.5 4.3 3.2 8.6 3.1 12H287v-43.7z"
-                          />
-                        </g>
-                      </svg>
-                    </button>
-                  </li>
-                  <li>
-                    <button @click="chgLang('en')" class="flex justify-between">
-                      English<svg
-                        width="42.67"
-                        height="20"
-                        viewBox="0 0 640 480"
-                      >
-                        <path fill="#012169" d="M0 0h640v480H0z" />
-                        <path
-                          fill="#FFF"
-                          d="m75 0l244 181L562 0h78v62L400 241l240 178v61h-80L320 301L81 480H0v-60l239-178L0 64V0h75z"
-                        />
-                        <path
-                          fill="#C8102E"
-                          d="m424 281l216 159v40L369 281h55zm-184 20l6 35L54 480H0l240-179zM640 0v3L391 191l2-44L590 0h50zM0 0l239 176h-60L0 42V0z"
-                        />
-                        <path
-                          fill="#FFF"
-                          d="M241 0v480h160V0H241zM0 160v160h640V160H0z"
-                        />
-                        <path
-                          fill="#C8102E"
-                          d="M0 193v96h640v-96H0zM273 0v480h96V0h-96z"
-                        />
-                      </svg>
+                  <li v-for="language in Languages" :key="language.code">
+                    <button
+                      @click="setLocale(language)"
+                      class="flex justify-between"
+                    >
+                      {{ language.name }}
                     </button>
                   </li>
                 </ul>

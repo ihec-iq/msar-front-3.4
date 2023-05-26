@@ -10,7 +10,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import FilePreview from "@/components/FilePreview.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
-const { t, setLocale, currentLocale } = useI18n();
+const { t } = useI18n();
 
 const namePage = ref("Archive Add");
 const route = useRoute();
@@ -92,7 +92,7 @@ function update() {
   }
   archiveStore
     .update(archive.value.id, formData)
-    .then((response) => {
+    .then(() => {
       if (fileInput.value != null)
         Swal.fire({
           position: "top-end",
@@ -196,10 +196,6 @@ const back = () => {
     name: "archiveIndex",
   });
 };
-const changeLanguages = () => {
-  setLocale(currentLocale.value == "en" ? "ar" : "en");
-};
-
 onMounted(async () => {
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "Archive Add";
@@ -342,15 +338,6 @@ onMounted(async () => {
           </button>
         </div>
       </div>
-    </div>
-
-    <div>
-      <button
-        @click="changeLanguages()"
-        class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
-      >
-        Change to {{ t("Language") }}
-      </button>
     </div>
     <div class="backBtn z-10 fixed bottom-2 ml-3 print:hidden">
       <button
