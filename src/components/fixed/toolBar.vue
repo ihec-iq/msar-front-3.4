@@ -22,10 +22,6 @@ const change = () => {
   ChangeDirection();
 };
 
-const chgLang = () => {
-  let htmlEl = document.querySelector("html");
-  htmlEl?.setAttribute("lang", "ar");
-};
 const showPop = ref(false);
 const showPopup = () => {
   showPop.value = true;

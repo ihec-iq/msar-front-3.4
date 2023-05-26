@@ -74,6 +74,8 @@ export function useI18n() {
     currentLocale.value = locale;
     localStorage.setItem("locale", JSON.stringify(locale));
     i18n.global.locale = currentLocale.value.code as "ar" | "en";
+    const htmlEl = document.querySelector("html");
+    htmlEl?.setAttribute("lang", currentLocale.value.code);
   }
   provide("i18n", i18n);
   provide("currentLocale", currentLocale);
