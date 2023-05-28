@@ -89,7 +89,7 @@ onMounted(() => {});
 
 <style scoped>
 .file-preview {
-  width: 20%;
+  /* width: 20%; */
   margin: 1rem 2.5%;
   position: relative;
   aspect-ratio: 1/1;

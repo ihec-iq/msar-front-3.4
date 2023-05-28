@@ -21,6 +21,7 @@ const { isClose } = storeToRefs(rtlStore);
 
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
+const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<String | null>();
@@ -146,6 +147,8 @@ const Delete = async () => {
     });
 };
 const showData = async () => {
+  Loading.value = true;
+  archive.value.files = [];
   await archiveStore
     .show(id.value)
     .then((response) => {
@@ -176,6 +179,7 @@ const showData = async () => {
         router.go(-1);
       });
     });
+  Loading.value = false;
 };
 const updateList = () => {
   showData();
@@ -291,15 +295,26 @@ onMounted(async () => {
     </div>
     <div class="mt-10">
       <div id="showFiles" class="image-list flex">
+        <div class="w-64 content-center" v-if="Loading">
+          <div
+            class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span
+              class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+              >Loading...</span
+            >
+          </div>
+        </div>
         <div
-          class="preview-card flex-none w-64"
+          class="flex-none w-64 hover:ease-in"
           v-for="document in archive.files"
           :key="document.name"
         >
           <FilePreview
             :file="document"
             @updateList="updateList"
-            class="preview-card"
+            class="preview-card cursor-pointer"
           ></FilePreview>
         </div>
       </div>
@@ -344,7 +359,7 @@ onMounted(async () => {
         @click="back()"
         class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
       >
-        {{ t("Back") }} vvv
+        {{ t("Back") }}
       </button>
     </div>
     <!-- end bottom tool -->
@@ -391,12 +406,13 @@ label .smaller {
   list-style: none;
   flex-wrap: wrap;
   padding: 0;
+  margin-bottom: 35px;
 }
 .preview-card {
   display: flex;
   border: 1px solid #a2a2a2;
   padding: 5px;
-  margin-left: 5px;
+  margin: 5px;
 }
 .upload-button {
   display: block;

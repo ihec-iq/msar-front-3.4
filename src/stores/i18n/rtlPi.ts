@@ -16,18 +16,18 @@ export const useRtlStore = defineStore("rtlStore", () => {
       //localStorage.setItem("isRtl", "false");
       localStorage.setItem("dir", "ltr");
     }
-    let htmlEl = document.querySelector("html");
+    const htmlEl = document.querySelector("html");
     // let dir: string | any = "ltr";
     // if (localStorage.getItem("dir")?.toString() != undefined)
     //   dir = localStorage.getItem("dir")?.toString();
     htmlEl?.setAttribute("dir", isRtl.value ? "rtl" : "ltr");
   };
   onMounted(() => {
-    let dir: string | any = "ltr";
+    let dir: string | any = "rtl";
     if (localStorage.getItem("dir")?.toString() != undefined)
       dir = localStorage.getItem("dir")?.toString();
     isRtl.value = dir == "ltr" ? false : true;
-    let htmlEl = document.querySelector("html");
+    const htmlEl = document.querySelector("html");
     htmlEl?.setAttribute("dir", isRtl.value ? "rtl" : "ltr");
   });
   return { isRtl, isClose, ChangeDirection, is };

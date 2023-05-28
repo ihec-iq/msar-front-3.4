@@ -4,11 +4,12 @@ import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import { usePermissionStore } from "./permission";
 import type IUser from "@/types/core/IUser";
+import { useRouter } from "vue-router";
 export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);
   const token = ref<string | any>("");
   const user = ref<IUser>();
-
+  const router = useRouter();
   const login = async (payload: { email: string; password: string }) => {
     return await new Promise((resolve, reject) => {
       Api.post("/login", payload)
@@ -59,7 +60,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
     Api.defaults.headers.common["Authorization"] = "";
-    window.location.href = "/login";
+    console.log("logout");
+    router.push("/login");
   };
   const CheckAuth = async () => {
     isAuthenticated.value =

@@ -5,6 +5,7 @@ export default (
   from: RouteLocationNormalized,
   next: Function
 ) => {
+  console.log("Auth")
   const isAuthenticated =
     localStorage.getItem("isAuthenticated") == "1" ? true : false;
   if (!isAuthenticated) {

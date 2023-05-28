@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import { ref, onMounted } from "vue";
-import Toolbar from "./components/fixed/toolbar.vue";
-import navbar from "./components/fixed/navbar.vue";
+import Toolbar from "@/components/fixed/toolBar.vue";
+import navbar from "@/components/fixed/navBar.vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "./stores/auth";
@@ -31,7 +31,7 @@ document.onkeydown = function (s) {
 onMounted(() => {
   CheckAuth();
   let htmlEl = document.querySelector("html");
-  let dir: string | any = "ltr";
+  let dir: string | any = "rtl";
   if (localStorage.getItem("dir")?.toString() != undefined)
     dir = localStorage.getItem("dir")?.toString();
   htmlEl?.setAttribute("dir", dir);

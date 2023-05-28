@@ -35,12 +35,13 @@ export function useI18n() {
   ];
   // Retrieve the locale from localStorage, or use the default locale
   const stringLocale = localStorage.getItem("locale")?.toString() || "{}";
-  const savedLocale: ILanguage = JSON.parse(stringLocale);
   if (
     stringLocale != null &&
     stringLocale != undefined &&
-    stringLocale != "{}"
+    stringLocale != "{}" &&
+    stringLocale.length > 2
   ) {
+    const savedLocale: ILanguage = JSON.parse(stringLocale);
     currentLocale.value = savedLocale;
     setLocale(currentLocale.value);
   }

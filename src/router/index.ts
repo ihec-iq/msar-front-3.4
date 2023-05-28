@@ -23,7 +23,9 @@ import auth from "./middleware/auth";
 //#endregion
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL), //import.meta.env.BASE_URL
+  history: createWebHistory(
+    process.env.NODE_ENV === "production" ? "/10/" : "/"
+  ), //import.meta.env.BASE_URL
   linkExactActiveClass: "linkExactActiveClass",
   routes: [
     ...archive,
@@ -75,7 +77,8 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   // ...
   // explicitly return false to cancel the navigation
-  console.log("from : " + from.fullPath);
+  console.log("from  ");
+  console.log(from);
   console.log("to : " + to.fullPath);
 });
 export default router;
