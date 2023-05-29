@@ -196,7 +196,7 @@ const back = () => {
 };
 onMounted(async () => {
   //console.log(can("show archives1"));
-  checkPermissionAccessArray(["show archives", "show archives"]);
+  checkPermissionAccessArray(["show archives1", "show archives1"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "Archive Add";
     archive.value.id = 0;

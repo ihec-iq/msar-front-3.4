@@ -16,11 +16,9 @@ export const usePermissionStore = defineStore("PermissionStore", () => {
     router.push("/unauthorized");
   };
   const checkPermissionAccessArray = (names: string[]) => {
-    //if (permissions.value?.length == 0) router.push("/unauthorized");
-    console.log(names);
-    console.log(permissions.value);
+    if (permissions.value?.length == 0) router.push("/unauthorized");
     if (names.some((item) => permissions.value?.includes(item))) return 1;
-    //router.push("/unauthorized");
+    router.push("/unauthorized");
   };
   const canRedirect = (name: string) => {
     if (permissions.value?.length == 0) router.push("/unauthorized");
