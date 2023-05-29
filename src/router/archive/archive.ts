@@ -2,7 +2,7 @@
 import archiveIndex from "@/views/Archive/ArchiveIndexView.vue";
 import archiveAdd from "@/views/Archive/ArchiveView.vue";
 import archiveUpdate from "@/views/Archive/ArchiveView.vue";
-import auth from "../middleware/auth";
+import authMiddleware from "../middleware/authMiddleware";
 
 export default [
   {
@@ -10,7 +10,7 @@ export default [
     name: "archiveIndex",
     component: archiveIndex,
     meta: {
-      middleware: [auth],
+      middleware: [authMiddleware],
     },
   },
   {
@@ -18,7 +18,7 @@ export default [
     name: "archiveAdd",
     component: archiveAdd,
     meta: {
-      middleware: [auth],
+      middleware: [authMiddleware],
     },
   },
   {
@@ -26,7 +26,7 @@ export default [
     name: "archiveUpdate",
     component: archiveUpdate,
     meta: {
-      middleware: [auth],
+      middleware: [authMiddleware],
     },
   },
 ];

@@ -19,7 +19,7 @@ import NProgress from "nprogress";
 // import role from "./role/index";
 //#endregion
 //#region Middleware
-import auth from "./middleware/auth";
+import authMiddleware from "./middleware/authMiddleware";
 //#endregion
 
 const router = createRouter({
@@ -44,7 +44,7 @@ const router = createRouter({
       name: "Unauthorized",
       component: Unauthorized,
       meta: {
-        middleware: [auth],
+        middleware: [authMiddleware],
       },
     },
     {
@@ -52,7 +52,7 @@ const router = createRouter({
       name: "notification",
       component: notification,
       meta: {
-        middleware: [auth],
+        middleware: [authMiddleware],
       },
     },
     // {
@@ -69,16 +69,26 @@ const router = createRouter({
       name: "NotFound",
       component: _404,
       meta: {
-        middleware: [auth],
+        middleware: [authMiddleware],
       },
     },
   ],
 });
+router.beforeResolve(async (to, from, next) => {
+  const middlewares: unknown = to.meta.middleware;
+  if (middlewares) {
+    // If middlewares are defined for the route
+    for (const middleware of middlewares as Function[]) {
+      await middleware(to, from, next);
+    }
+  }
+  next();
+});
 router.beforeEach((to, from) => {
   // ...
   // explicitly return false to cancel the navigation
-  console.log("from  ");
-  console.log(from);
-  console.log("to : " + to.fullPath);
+  // console.log("from  ");
+  // console.log(from);
+  // console.log("to : " + to.fullPath);
 });
 export default router;
