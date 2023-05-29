@@ -9,9 +9,14 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import FilePreview from "@/components/FilePreview.vue";
+import { usePermissionStore } from "@/stores/permission";
+import { useAuthStore } from "@/stores/auth";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 
+const { can, checkPermissionAccess, checkPermissionAccessArray } =
+  usePermissionStore();
+const permission = usePermissionStore();
 const namePage = ref("Archive Add");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -183,17 +188,6 @@ const showData = async () => {
 };
 const updateList = () => {
   showData();
-  // archiveStore
-  //   .getDocuments(archive.value.id)
-  //   .then(async (response) => {
-  //     console.log(response.data.data);
-  //     archive.value.files = [];
-  //     archive.value.files = response.data.data;
-  //   })
-  //   .catch((error) => {
-  //     //errors.value = Object.values(error.response.data.errors).flat().join();
-  //     errors.value = archiveStore.getError(error);
-  //   });
 };
 const back = () => {
   router.push({
@@ -201,6 +195,8 @@ const back = () => {
   });
 };
 onMounted(async () => {
+  //console.log(can("show archives1"));
+  checkPermissionAccessArray(["show archives", "show archives"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "Archive Add";
     archive.value.id = 0;

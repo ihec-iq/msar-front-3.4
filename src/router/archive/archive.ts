@@ -1,4 +1,3 @@
-// import auth from "@/router/middleware/auth";
 import archiveIndex from "@/views/Archive/ArchiveIndexView.vue";
 import archiveAdd from "@/views/Archive/ArchiveView.vue";
 import archiveUpdate from "@/views/Archive/ArchiveView.vue";

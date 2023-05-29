@@ -55,15 +55,6 @@ const router = createRouter({
         middleware: [authMiddleware],
       },
     },
-    // {
-    //   path: "/completed",
-    //   name: "completed",
-    //   component: completed,
-    //   // meta: {
-    //   //   middleware: [auth],
-    //   // },
-    // },
-    // ...role,
     {
       path: "/:pathMatch(.*)*",
       name: "NotFound",

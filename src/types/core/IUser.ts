@@ -9,7 +9,7 @@ export default interface IUser {
   any_device: number;
   active: number;
   roles: Array<IRole>;
-  permissions: Array<IPermission>;
+  permissions: Array<string>;
   // roles: {
   //   id: number;
   //   name: string;

@@ -49,8 +49,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         logout();
       });
   };
-  const getUser = () => {
-    return JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+  const getUser = async () => {
+    return await JSON.parse(localStorage.getItem("user")?.toString() || "{}");
   };
   const logout = async () => {
     isAuthenticated.value = false;

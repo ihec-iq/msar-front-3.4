@@ -5,7 +5,7 @@ import Toolbar from "@/components/fixed/toolBar.vue";
 import navbar from "@/components/fixed/navBar.vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { useAuthStore } from "./stores/auth";
+import { useAuthStore } from "@/stores/auth";
 const { CheckAuth } = useAuthStore();
 const rtlStore = useRtlStore();
 const { isClose, is } = storeToRefs(rtlStore);
