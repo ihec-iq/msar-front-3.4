@@ -6,7 +6,11 @@ import navbar from "@/components/fixed/navBar.vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/auth";
+import { usePermissionStore } from "@/stores/permission";
+const { getUser } = useAuthStore();
+const { setPermissions } = usePermissionStore();
 const { CheckAuth } = useAuthStore();
+
 const rtlStore = useRtlStore();
 const { isClose, is } = storeToRefs(rtlStore);
 const show = ref(false);
@@ -28,8 +32,11 @@ document.onkeydown = function (s) {
 };
 // let htmlEl = document.querySelector("html");
 // htmlEl?.setAttribute("data-theme", "cupcake");
-onMounted(() => {
+onMounted(async () => {
   CheckAuth();
+  const user = await getUser();
+  setPermissions(user.permissions);
+
   let htmlEl = document.querySelector("html");
   let dir: string | any = "rtl";
   if (localStorage.getItem("dir")?.toString() != undefined)

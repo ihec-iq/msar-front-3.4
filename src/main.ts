@@ -16,15 +16,11 @@ app.use(createPinia());
 app.use(MotionPlugin);
 app.use(router);
 //#region Permission
-import { useAuthStore } from "@/stores/auth";
-import { usePermissionStore } from "@/stores/permission";
-const { getUser } = useAuthStore();
-const { setPermissions } = usePermissionStore();
+
 app.config.globalProperties.$baseURL =
   process.env.NODE_ENV === "production" ? "/10/" : "/";
 //#region Permission Globally
-const user = await getUser();
-setPermissions(user.permissions);
+
 // console.log(can("admin"));
 //#endregion
 //#endregion

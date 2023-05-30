@@ -10,14 +10,11 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import FilePreview from "@/components/FilePreview.vue";
 import { usePermissionStore } from "@/stores/permission";
-import { useAuthStore } from "@/stores/auth";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 
-const { can, checkPermissionAccess, checkPermissionAccessArray } =
-  usePermissionStore();
-const permission = usePermissionStore();
-const namePage = ref("Archive Add");
+const { checkPermissionAccessArray } = usePermissionStore();
+const namePage = ref(".....");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isIn = ref(false);
@@ -189,6 +186,7 @@ const showData = async () => {
 const updateList = () => {
   showData();
 };
+
 const back = () => {
   router.push({
     name: "archiveIndex",
@@ -196,14 +194,14 @@ const back = () => {
 };
 onMounted(async () => {
   //console.log(can("show archives1"));
-  checkPermissionAccessArray(["show archives1", "show archives1"]);
+  checkPermissionAccessArray(["show archives"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "Archive Add";
+    namePage.value = t("Archive Add");
     archive.value.id = 0;
   } else {
     await showData();
     archive.value.id = id.value;
-    namePage.value = "Archive Update";
+    namePage.value = t("Archive Update");
   }
 });
 </script>
@@ -224,16 +222,21 @@ onMounted(async () => {
         />
       </div>
       <div class="w-1/3 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("TypeBook") }} : {{ isIn ? "صادر" : "وارد" }}
+        <div class="form-control w-52">
+          <label class="cursor-pointer label">
+            <span
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("TypeBook") }} : {{ isIn ? "صادر" : "وارد" }}</span
+            >
+            <input
+              type="checkbox"
+              v-model="isIn"
+              class="toggle toggle-secondary"
+              checked
+            />
+          </label>
         </div>
-        <input
-          v-model="isIn"
-          type="checkbox"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
       </div>
       <div class="w-1/3 mx-2">
         <div
@@ -311,7 +314,8 @@ onMounted(async () => {
             :file="document"
             @updateList="updateList"
             class="preview-card cursor-pointer"
-          ></FilePreview>
+          >
+          </FilePreview>
         </div>
       </div>
       <div id="DropZone"></div>

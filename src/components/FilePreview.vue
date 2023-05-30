@@ -1,17 +1,25 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useArchiveStore } from "@/stores/Archive/archive";
-import useLanguage from "@/stores/i18n/languageStore";
 import Swal from "sweetalert2";
-const { t } = useLanguage();
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t } = useI18n();
+
 const { _deleteDocument } = useArchiveStore();
 const props = defineProps({
   file: { type: Object, required: true },
   tag: { type: String, default: "li" },
 });
 const document = ref(props.file);
-const generateURL = (path: string) => {
-  return new URL(path, import.meta.url);
+const generateURL = (
+  path: string | undefined = "",
+  extension: string | undefined = ""
+) => {
+  if (extension == "png" || extension == "jpg")
+    return new URL(path, import.meta.url);
+  else if (extension == "pdf")
+    return new URL("@/assets/image/pdf.png", import.meta.url);
+  return new URL("@/assets/image/undefined.png", import.meta.url);
 };
 const emits = defineEmits<{
   //(e: "change", id: number): void;
@@ -54,19 +62,31 @@ const removeFile = async (id: number) => {
     });
 };
 onMounted(() => {});
+const openFile = (path: string) => {
+  const fileUrl = path; // Replace with your file URL
+  window.open(fileUrl, "_blank");
+};
 </script>
 <template>
-  <component :is="tag" class="file-preview">
+  <component :is="tag" class="file-preview" style="display: block">
     <button @click="removeFile(document.id)" class="close-icon">&times;</button>
     <img
-      class="object-cover h-48 w-96"
-      :src="generateURL(document.path).toString()"
+      @click="openFile(document.path)"
+      class="object-cover h-36 w-36 m-2 ml-auto mr-auto"
+      :src="generateURL(document.path, document.extension).toString()"
       :alt="document.name"
       :title="document.name"
     />
     <span style="color: darkkhaki" class="info">
-      {{ document.name }} -
-      {{ Math.round(document.size) + "kb" }}
+      {{ document.extension }}
+      {{ document.size }}
+
+      <!-- <button
+        class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+        @click="openFile(document.path)"
+      >
+        {{ t("Open") }}
+      </button> -->
     </span>
 
     <span
@@ -99,8 +119,8 @@ onMounted(() => {});
   border: #040 2px solid;
 }
 .file-preview img {
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
   display: block;
   object-fit: cover;
 }

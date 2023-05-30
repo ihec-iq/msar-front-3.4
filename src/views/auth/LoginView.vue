@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 // import Footer from "@/components/login/footer.vue";
 import { Form } from "vee-validate";
 import * as Yup from "yup";
@@ -55,6 +55,9 @@ const Login = async () => {
       errors.value = getError(error.response);
     });
 };
+onMounted(() => {
+  if (authStore.isAuthenticated) router.push({ name: "archiveIndex" });
+});
 </script>
 <template>
   <!-- <div

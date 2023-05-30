@@ -3,14 +3,6 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
-import start from "@/views/AboutView.vue";
-import LoginView from "@/views/auth/LoginView.vue";
-import _404 from "@/views/404.vue";
-import Unauthorized from "@/views/Unauthorized.vue";
-// import featureIndex from "@/views/user/";
-// import completed from "@/views/user/CompletedIndexView.vue";
-// admin
 import notification from "@/views/NotificationView.vue";
 import archive from "./archive/archive";
 //#region for split routes in many files
@@ -32,17 +24,25 @@ const router = createRouter({
     {
       path: "/login",
       name: "Login",
-      component: LoginView,
+      component: () => import("@/views/auth/LoginView.vue"),
+    },
+    {
+      path: "/dashboard",
+      name: "Dashboard",
+      component: () => import("@/views/HomeView.vue"),
+      meta: {
+        middleware: [authMiddleware],
+      },
     },
     {
       path: "/",
       name: "start",
-      component: start,
+      component: () => import("@/views/AboutView.vue"),
     },
     {
       path: "/unauthorized",
       name: "Unauthorized",
-      component: Unauthorized,
+      component: () => import("@/views/Unauthorized.vue"),
       meta: {
         middleware: [authMiddleware],
       },
@@ -58,7 +58,7 @@ const router = createRouter({
     {
       path: "/:pathMatch(.*)*",
       name: "NotFound",
-      component: _404,
+      component: () => import("@/views/404.vue"),
       meta: {
         middleware: [authMiddleware],
       },
@@ -75,11 +75,11 @@ router.beforeResolve(async (to, from, next) => {
   }
   next();
 });
-router.beforeEach((to, from) => {
-  // ...
-  // explicitly return false to cancel the navigation
-  // console.log("from  ");
-  // console.log(from);
-  // console.log("to : " + to.fullPath);
-});
+// router.beforeEach((to, from) => {
+//   // ...
+//   // explicitly return false to cancel the navigation
+//   console.log("from  ");
+//   console.log(from);
+//   console.log("to : " + to.fullPath);
+// });
 export default router;

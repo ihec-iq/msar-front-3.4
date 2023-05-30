@@ -27,7 +27,6 @@ export const usePermissionStore = defineStore("PermissionStore", () => {
   };
   const setPermissions = (_permission: string[]) => {
     permissions.value = _permission;
-    console.log(permissions.value);
   };
   return {
     permissions,

@@ -3,14 +3,15 @@ import { onMounted, ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/Archive/archive";
 import PageTitle from "@/components/general/namePage.vue";
-import useLanguage from "@/stores/i18n/languageStore";
 import type {
   IArchive,
   IArchiveFilter,
   IDocument,
 } from "@/types/Archive/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
-const { t } = useLanguage();
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t } = useI18n();
+
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
 const dataPage = ref();
@@ -19,10 +20,10 @@ const { archive } = useArchiveStore();
 const { get_filter } = useArchiveStore();
 
 const limits = reactive([
-  { name: "6 items", val: 6, selected: true },
-  { name: "12 items", val: 12, selected: false },
-  { name: "24 items", val: 24, selected: false },
-  { name: "50 items", val: 50, selected: false },
+  { name: "6", val: 6, selected: true },
+  { name: "12", val: 12, selected: false },
+  { name: "24", val: 24, selected: false },
+  { name: "50", val: 50, selected: false },
   { name: "All", val: 999999999 },
 ]);
 
@@ -106,7 +107,13 @@ const getPath = (files: Array<IDocument>) => {
   else {
     if (files[0].extension == "png" || files[0].extension == "jpg")
       return String(files[0].path);
-    else return "https://picsum.photos/100/150/?random";
+    else if (files[0].extension == "pdf")
+      return new URL("@/assets/image/pdf.png", import.meta.url);
+    else if (files[0].extension == "doc" || files[0].extension == "docx")
+      return new URL("@/assets/image/word.png", import.meta.url);
+    else if (files[0].extension == "xls" || files[0].extension == "xlsx")
+      return new URL("@/assets/image/excel.png", import.meta.url);
+    else return new URL("@/assets/image/undefined.png", import.meta.url);
   }
 };
 onMounted(async () => {
@@ -236,8 +243,9 @@ onMounted(async () => {
                     >
                       <div class="w-1/4">
                         <img
+                          @click="update(item.id)"
                           class="rounded-lg cursor-pointer"
-                          :src="getPath(item.files)"
+                          :src="getPath(item.files).toString()"
                           alt=""
                         />
                       </div>
@@ -248,10 +256,10 @@ onMounted(async () => {
                           <div
                             class="text-2xl text-text dark:text-textLight mb-2"
                           >
-                            {{ t("Title") }}: {{ item.title }}
+                            {{ item.title }}
                           </div>
                           <div class="text-text dark:text-textGray mb-2">
-                            {{ t("Date") }}: {{ item.issueDate }}
+                            {{ t("Date") }}: {{ item.issueDate.split(" ")[0] }}
                           </div>
                           <div class="flex justify-betweens">
                             <div
