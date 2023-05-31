@@ -1,18 +1,12 @@
-<script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useArchiveStore } from "@/stores/Archive/archive";
-import Swal from "sweetalert2";
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+<script lang="ts" setup>
+import { ref } from "vue";
 
-const { _deleteDocument } = useArchiveStore();
 const props = defineProps({
   file: { type: Object, required: true },
-  tag: { type: String, default: "li" },
 });
 const document = ref(props.file);
 const generateURL = (
-  path: string | undefined = "",
+  path: any | undefined,
   extension: string | undefined = ""
 ): string => {
   console.log(extension);
@@ -22,7 +16,7 @@ const generateURL = (
     extension == "image/png" ||
     extension == "image/jpeg"
   )
-    return new URL(path).toString();
+    return new URL(URL.createObjectURL(path)).toString();
   //return new URL(path, import.meta.url);
   else if (extension == "pdf" || extension == "application/pdf")
     return new URL("@/assets/image/pdf.png", import.meta.url).toString();
@@ -36,90 +30,28 @@ const generateURL = (
   else
     return new URL("@/assets/image/undefined.png", import.meta.url).toString();
 };
-const emits = defineEmits<{
-  //(e: "change", id: number): void;
-  (e: "updateList"): void;
-}>();
-
-const removeFile = async (id: number) => {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn m-2 bg-red-700",
-      cancelButton: "btn bg-grey-400",
-    },
-    buttonsStyling: false,
-  });
-  swalWithBootstrapButtons
-    .fire({
-      title: t("Are You Sure?"),
-      text: t("You Won't Be Able To Revert This!"),
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: t("Yes, delete it!"),
-      cancelButtonText: t("No, cancel!"),
-      reverseButtons: true,
-    })
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        await _deleteDocument(id)
-          .then(() => {
-            swalWithBootstrapButtons.fire(
-              t("Deleted!"),
-              t("Deleted successfully ."),
-              "success"
-            );
-            emits("updateList");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    });
-};
-onMounted(() => {});
-const openFile = (path: string) => {
-  const fileUrl = path; // Replace with your file URL
-  window.open(fileUrl, "_blank");
+const CheckFileType = (type: string): string => {
+  if (
+    document.value.type ==
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  )
+    return "xlsx";
+  return type;
 };
 </script>
 <template>
-  <component :is="tag" class="file-preview" style="display: block">
-    <button @click="removeFile(document.id)" class="close-icon">&times;</button>
+  <div class="file-preview w-200px bg-black-200/10 ma-2 pa-6">
     <img
-      @click="openFile(document.path)"
       class="object-cover h-36 w-36 m-2 ml-auto mr-auto"
-      :src="generateURL(document.path, document.extension)"
+      :src="generateURL(document, document.type)"
       :alt="document.name"
       :title="document.name"
     />
-    <span style="color: darkkhaki" class="info">
-      {{ document.extension }}
-      {{ document.size }}
-
-      <!-- <button
-        class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
-        @click="openFile(document.path)"
-      >
-        {{ t("Open") }}
-      </button> -->
-    </span>
-
-    <span
-      class="status-indicator loading-indicator"
-      v-show="document.status == 'loading'"
-      >In Progress</span
-    >
-    <span
-      class="status-indicator success-indicator"
-      v-show="document.status == true"
-      >Uploaded</span
-    >
-    <span
-      class="status-indicator failure-indicator"
-      v-show="document.status == false"
-      >Error</span
-    >
-  </component>
+    <p>Name: {{ document.name }}</p>
+    <p>Size: {{ document.size }}</p>
+    <p>Type: {{ CheckFileType(document.type) }}</p>
+    <p>Last modified: {{ document.lastModified }}</p>
+  </div>
 </template>
 
 <style scoped>
@@ -131,7 +63,7 @@ const openFile = (path: string) => {
   overflow: hidden;
   padding: 1px;
   border-radius: 5%;
-  border: #040 2px solid;
+  border: #888 1px solid;
 }
 .file-preview img {
   /* width: 100%;

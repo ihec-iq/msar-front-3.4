@@ -10,9 +10,32 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import FilePreview from "@/components/FilePreview.vue";
 import { usePermissionStore } from "@/stores/permission";
+import DragDrop from "@/components/DragDrop.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 
+//region"Drag and Drop"
+
+const filesData = ref<File[]>([]);
+function addFiles(newFiles: File[]) {
+  let newUploadableFiles = [...newFiles]
+    .map((file) => file)
+    .filter((file) => !fileExists(file));
+  filesData.value = filesData.value.concat(newUploadableFiles);
+}
+
+function fileExists(file: File) {
+  return filesData.value.some(
+    ({ lastModified, name, size, type }) =>
+      lastModified === file.lastModified &&
+      name === file.name &&
+      size === file.size &&
+      type === file.type
+  );
+}
+//#endregion
+
+//#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref(".....");
 const route = useRoute();
@@ -27,13 +50,8 @@ const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<String | null>();
-
-const fileInput = ref();
-const onFileChange = (e: any) => {
-  // file1.value = e.target.files[0];
-  // files.value = e.target.files;
-  // console.log(files.value);
-};
+//#endregion
+//#region CURD
 const store = () => {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
@@ -47,7 +65,7 @@ const store = () => {
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
-  const files = fileInput.value.files;
+  const files = filesData.value;
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
@@ -62,6 +80,7 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        filesData.value = [];
         router.go(-1);
       }
     })
@@ -89,14 +108,14 @@ function update() {
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
-  const files = fileInput.value.files;
+  const files = filesData.value;
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
   archiveStore
     .update(archive.value.id, formData)
-    .then(() => {
-      if (fileInput.value != null)
+    .then((response) => {
+      if (response.status === 200) {
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -104,14 +123,16 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
-      router.go(-1);
+        filesData.value = [];
+        showData();
+      }
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
       errors.value = archiveStore.getError(error);
       Swal.fire({
         icon: "error",
-        title: "create new data fails!!!",
+        title: "updating data fails!!!",
         text: error.response.data.message,
         footer: "",
       });
@@ -186,7 +207,7 @@ const showData = async () => {
 const updateList = () => {
   showData();
 };
-
+//#endregion
 const back = () => {
   router.push({
     name: "archiveIndex",
@@ -262,21 +283,8 @@ onMounted(async () => {
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-      <div class="w-1/3 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("FileBook") }}
-        </div>
-        <input
-          @change="onFileChange"
-          ref="fileInput"
-          multiple
-          type="file"
-          accept=".pdf,.jpg,.jpeg,.png"
-        />
-      </div>
     </div>
+    <DragDrop :flag="archive.number" @setFiles="addFiles"></DragDrop>
     <div class="mt-10">
       <div class="w-full mx-2">
         <div
@@ -366,6 +374,18 @@ onMounted(async () => {
   </div>
 </template>
 <style scoped>
+.file-upload-container {
+  @apply inline-block relative;
+}
+
+.file-upload-label {
+  @apply block cursor-pointer;
+  /* Add your custom styles for the label */
+}
+
+.file-upload-label div {
+  /* Add your custom styles for the label content */
+}
 .drop-area {
   width: 100%;
   max-width: 800px;

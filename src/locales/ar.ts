@@ -14,6 +14,7 @@ export default {
   "Archive Add": "اضافة الارشيف",
   "Archive Update": "تحديث الارشيف",
   "Search for Archive": "ابحث عن رقم كتاب او عنوان",
+  "Drop files": "افلت الملفات هنا !!!",
   Seats: "المقاعد",
   Stats: "الحالة",
   Action: "المزيد",

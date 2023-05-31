@@ -12,6 +12,8 @@ export default {
   DateFrom: "Date From",
   "Archive Add": "Archive Add",
   "Archive Update": "Archive Update",
+  "Drop files": "Drop files here !!!",
+
   Name: "Name",
   Stats: "Stats",
   Action: "Action",
