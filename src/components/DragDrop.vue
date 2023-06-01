@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref, toRef, watch } from "vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useDropZone } from "@vueuse/core";
 import DragDropFilePreview from "@/components/DragDropFilePreview.vue";
@@ -31,13 +31,6 @@ function addFilesInput(newFiles: File[]) {
   filesDataInput.value = filesDataInput.value.concat(newUploadableFiles);
   emits("setFiles", filesDataInput.value);
 }
-const resetFiles = computed(() => {
-  if (props.filesCount == 0) {
-    filesDataInput.value = [];
-    return 1;
-  }
-  return 0;
-});
 
 function fileExists(file: File) {
   return filesDataInput.value.some(
@@ -49,6 +42,11 @@ function fileExists(file: File) {
   );
 }
 //#endregion
+const _filesCount = toRef(props, "filesCount");
+watch(_filesCount, (newValue) => {
+  console.log(newValue);
+  if (newValue == 0) filesDataInput.value = [];
+});
 </script>
 <template>
   <div class="w-full p-6">
@@ -59,7 +57,6 @@ function fileExists(file: File) {
         >
           {{ t("FileBook") }} : {{ t("Drop files") }}
         </div>
-
         <div
           ref="dropZoneRef"
           class="flex flex-col w-full min-h-200px h-auto bg-gray-400/10 justify-center items-center mt-6"

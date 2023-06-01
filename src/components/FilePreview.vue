@@ -15,7 +15,6 @@ const generateURL = (
   path: string | undefined = "",
   extension: string | undefined = ""
 ): string => {
-  console.log(extension);
   if (
     extension == "png" ||
     extension == "jpg" ||

@@ -284,7 +284,7 @@ onMounted(async () => {
         />
       </div>
     </div>
-    <DragDrop :flag="archive.number" @setFiles="addFiles"></DragDrop>
+    <DragDrop :filesCount="filesData.length" @setFiles="addFiles"></DragDrop>
     <div class="mt-10">
       <div class="w-full mx-2">
         <div
@@ -374,18 +374,6 @@ onMounted(async () => {
   </div>
 </template>
 <style scoped>
-.file-upload-container {
-  @apply inline-block relative;
-}
-
-.file-upload-label {
-  @apply block cursor-pointer;
-  /* Add your custom styles for the label */
-}
-
-.file-upload-label div {
-  /* Add your custom styles for the label content */
-}
 .drop-area {
   width: 100%;
   max-width: 800px;
