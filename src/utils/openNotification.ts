@@ -1,4 +1,5 @@
-export function openNotification(router: object, type: string, id: number) {
+import type { Router } from "vue-router";
+export function openNotification(router: Router, type: string, id: number) {
   let path = "";
   if (type == "bug") {
     path = "allBugs";
