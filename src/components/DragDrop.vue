@@ -1,52 +1,24 @@
 <script setup lang="ts">
-import { ref, toRef, watch } from "vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { useDropZone } from "@vueuse/core";
 import DragDropFilePreview from "@/components/DragDropFilePreview.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
-const emits = defineEmits<{
-  (e: "setFiles", files: File[]): void;
-}>();
-const props = defineProps({
-  filesCount: { type: Number, required: true },
-});
-//region"Drag and Drop"
+import { storeToRefs } from "pinia";
+import { useDragDropStore } from "@/compositions/dragDrop";
+import { ref } from "vue";
+import { useDropZone } from "@vueuse/core";
+
 const dropZoneRef = ref<HTMLDivElement>();
-const filesDataInput = ref<File[]>([]);
+const { isOverDropZone } = useDropZone(dropZoneRef, onDropFile);
 function onDropFile(files: File[] | null) {
   if (files) {
     addFilesInput(files);
   }
 }
-const { isOverDropZone } = useDropZone(dropZoneRef, onDropFile);
-function onInputChange(e: any) {
-  addFilesInput(e.target.files);
-  e.target.value = null; // reset so that selecting the same file again will still cause it to fire this change
-}
-function addFilesInput(newFiles: File[]) {
-  let newUploadableFiles = [...newFiles]
-    .map((file) => file)
-    .filter((file) => !fileExists(file));
-  filesDataInput.value = filesDataInput.value.concat(newUploadableFiles);
-  emits("setFiles", filesDataInput.value);
-}
 
-function fileExists(file: File) {
-  return filesDataInput.value.some(
-    ({ lastModified, name, size, type }) =>
-      lastModified === file.lastModified &&
-      name === file.name &&
-      size === file.size &&
-      type === file.type
-  );
-}
-//#endregion
-const _filesCount = toRef(props, "filesCount");
-watch(_filesCount, (newValue) => {
-  console.log(newValue);
-  if (newValue == 0) filesDataInput.value = [];
-});
+const { onInputChange, addFilesInput } = useDragDropStore();
+const { filesDataInput } = storeToRefs(useDragDropStore());
+
+const { t } = useI18n();
 </script>
 <template>
   <div class="w-full p-6">
@@ -55,27 +27,25 @@ watch(_filesCount, (newValue) => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("FileBook") }} : {{ t("Drop files") }}
+          {{ t("FileBook") }} : {{ t("DropFiles") }}
         </div>
         <div
           ref="dropZoneRef"
+          style="border: 2px gray dotted; padding: 5px"
           class="flex flex-col w-full min-h-200px h-auto bg-gray-400/10 justify-center items-center mt-6"
         >
           <div class="file-upload-container">
             <input
+              id="dropZoneRef"
               multiple
               type="file"
               accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,xls,.xlsx"
-              class="hiddens"
+              class="hidden"
               @change="onInputChange"
             />
             <label for="dropZoneRef">
-              <div v-if="isOverDropZone">Release to drop files here.</div>
-              <div v-else>
-                Drop files here or
-                <u>click here </u>
-                to upload.
-              </div>
+              <div v-if="isOverDropZone" v-html="t('DropFiles')"></div>
+              <div v-else v-html="t('ReleaseFiles')"></div>
             </label>
           </div>
           <div class="flex flex-wrap justify-center items-center">

@@ -2,7 +2,7 @@ import authMiddleware from "../middleware/authMiddleware";
 
 export default [
   {
-    path: "/archives",
+    path: "/archives/:search?",
     name: "archiveIndex",
     component: () => import("@/views/Archive/ArchiveIndexView.vue"),
     meta: {

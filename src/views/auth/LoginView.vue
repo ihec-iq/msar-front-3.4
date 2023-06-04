@@ -5,13 +5,10 @@ import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { getError } from "@/utils/helpers";
 import TextInput from "@/components/general/TextInput.vue";
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t } = useI18n();
 interface ILogin {
   email: string;
   password: string;
@@ -36,14 +33,14 @@ function onInvalidSubmit() {
 }
 const schema = Yup.object().shape({
   email: Yup.string().required(),
-  password: Yup.string().min(8).required(),
+  password: Yup.string().min(2).required(),
 });
 
-const errors = ref();
+const errs = ref("");
 const authStore = useAuthStore();
 const router = useRouter();
 const Login = async () => {
-  errors.value = "";
+  errs.value = "";
   await authStore
     .login(loginForm)
     .then(() => {
@@ -52,11 +49,11 @@ const Login = async () => {
       });
     })
     .catch((error) => {
-      errors.value = getError(error.response);
+      errs.value = getError(error.response);
     });
 };
 onMounted(() => {
-  if (authStore.isAuthenticated) router.push({ name: "archiveIndex" });
+  if (authStore.isAuthenticated) router.push({ name: "Dashboard" });
 });
 </script>
 <template>
@@ -122,8 +119,8 @@ onMounted(() => {
               />
             </div>
             <div class="flex items-center justify-between">
-              <div class="mb-3 text-red-600 text-lg" v-if="errors != ''">
-                {{ t(errors) }}
+              <div class="mb-3 text-red-600 text-lg" v-if="errs != ''">
+                {{ errs }}
               </div>
             </div>
             <!-- <div class="flex items-center justify-between">
@@ -208,7 +205,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <h1>{{ errors }}</h1>
+  <h1>{{ errs }}</h1>
   <!-- <Footer class="bg-transparent absolute w-full bottom-0 left-0 z-30">
     <div class="container p-5 mx-auto flex items-center justify-between"></div>
   </Footer> -->

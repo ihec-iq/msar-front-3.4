@@ -1,6 +1,6 @@
 export default {
   Archive: "Archive",
-  "All Archives": "All Archive",
+  AllArchives: "All Archives",
   Title: "Title",
   NumberBook: "Number Book",
   FileBook: "Upload File",
@@ -10,10 +10,11 @@ export default {
   Open: "Open",
   DateTo: "Date To",
   DateFrom: "Date From",
-  "Archive Add": "Archive Add",
-  "Archive Update": "Archive Update",
-  "Drop files": "Drop files here !!!",
-
+  ArchiveAdd: "Archive Add",
+  ArchiveUpdate: "Archive Update",
+  DropFiles: "Drop files here !!!",
+  SearchForArchive: "Search in Document Number to Title",
+  ReleaseFiles: "Drop files here or <u>click here </u> to upload.",
   Name: "Name",
   Stats: "Stats",
   Action: "Action",

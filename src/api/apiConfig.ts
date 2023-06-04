@@ -1,6 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
+import { useAuthStore } from "@/stores/auth";
 const Api = axios.create({
   //baseURL: "http://10.9.8.7/workflow_ihec/public/api",
   baseURL: "http://10.10.10.10/workflow_ihec/public/api",
@@ -28,6 +29,7 @@ const errorComposer = (error: any) => {
   // request not Found
   if (statusCode === 404) {
     console.log("The requested resource does not exist or has been deleted");
+    router.back();
   }
   // request unAuthorize
   if (statusCode === 401) {
@@ -39,13 +41,16 @@ const errorComposer = (error: any) => {
       showConfirmButton: false,
       timer: 2500,
     }).then(() => {
+      useAuthStore().logout();
       router.push("/login");
     });
   }
   // ERR_NETWORK == server not work
   else if (error.code == "ERR_NETWORK") {
+    useAuthStore().logout();
     router.push("/login");
   } else if (error.code == "ERR_CONNECTION_REFUSED") {
+    useAuthStore().logout();
     router.push("/login");
   }
 };

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, toRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/Archive/archive";
 import Swal from "sweetalert2";
@@ -11,28 +11,15 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import FilePreview from "@/components/FilePreview.vue";
 import { usePermissionStore } from "@/stores/permission";
 import DragDrop from "@/components/DragDrop.vue";
+import { useDragDropStore } from "@/compositions/dragDrop";
+
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 
 //region"Drag and Drop"
 
-const filesData = ref<File[]>([]);
-function addFiles(newFiles: File[]) {
-  let newUploadableFiles = [...newFiles]
-    .map((file) => file)
-    .filter((file) => !fileExists(file));
-  filesData.value = filesData.value.concat(newUploadableFiles);
-}
+const { filesDataInput } = storeToRefs(useDragDropStore());
 
-function fileExists(file: File) {
-  return filesData.value.some(
-    ({ lastModified, name, size, type }) =>
-      lastModified === file.lastModified &&
-      name === file.name &&
-      size === file.size &&
-      type === file.type
-  );
-}
 //#endregion
 
 //#region Vars
@@ -65,7 +52,7 @@ const store = () => {
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
-  const files = filesData.value;
+  const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
@@ -80,7 +67,7 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        filesData.value = [];
+        filesDataInput.value = [];
         router.go(-1);
       }
     })
@@ -108,7 +95,7 @@ function update() {
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
-  const files = filesData.value;
+  const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
@@ -123,7 +110,7 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
-        filesData.value = [];
+        filesDataInput.value = [];
         showData();
       }
     })
@@ -217,13 +204,14 @@ onMounted(async () => {
   //console.log(can("show archives1"));
   checkPermissionAccessArray(["show archives"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("Archive Add");
+    namePage.value = t("ArchiveAdd");
     archive.value.id = 0;
   } else {
     await showData();
     archive.value.id = id.value;
-    namePage.value = t("Archive Update");
+    namePage.value = t("ArchiveUpdate");
   }
+  filesDataInput.value = [];
 });
 </script>
 <template>
@@ -284,7 +272,7 @@ onMounted(async () => {
         />
       </div>
     </div>
-    <DragDrop :filesCount="filesData.length" @setFiles="addFiles"></DragDrop>
+    <DragDrop></DragDrop>
     <div class="mt-10">
       <div class="w-full mx-2">
         <div

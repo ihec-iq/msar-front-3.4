@@ -16,7 +16,6 @@ declare module '@vue/runtime-core' {
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DragDrop: typeof import('./src/components/DragDrop.vue')['default']
     DragDropFilePreview: typeof import('./src/components/DragDropFilePreview.vue')['default']
-    DragDrpp: typeof import('./src/components/DragDrpp.vue')['default']
     DuplicateButton: typeof import('./src/components/dropDown/DuplicateButton.vue')['default']
     EditButton: typeof import('./src/components/dropDown/EditButton.vue')['default']
     FilePreview: typeof import('./src/components/FilePreview.vue')['default']

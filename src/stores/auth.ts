@@ -60,7 +60,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
     Api.defaults.headers.common["Authorization"] = "";
-    console.log("logout");
     router.push("/login");
   };
   const CheckAuth = async () => {

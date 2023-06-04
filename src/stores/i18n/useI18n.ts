@@ -17,6 +17,7 @@ const i18n = createI18n({
   locale: "ar",
   fallbackLocale: "ar",
   messages,
+  warnHtmlInMessage: "off",
   //   legacy: true,
   //   globalInjection: true,
   //   global: true,

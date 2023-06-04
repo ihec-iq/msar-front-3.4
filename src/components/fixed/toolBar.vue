@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
+import { useAuthStore } from "@/stores/auth";
 import { useI18n } from "@/stores/i18n/useI18n";
+import router from "@/router";
+import { useRoute } from "vue-router";
 const { t, setLocale, Languages } = useI18n();
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
-
+const route = useRoute();
 const colorMode = useColorMode({
   modes: {
     red: "red",
@@ -48,8 +51,33 @@ document.onkeydown = function (e) {
     document.getElementById("inputValue")?.focus();
   }
 };
+const valSearch = ref("");
+const Search = (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    // Enter key is pressed
+    // Perform your desired action here
+    console.log("Enter key is pressed");
+    console.log(valSearch.value);
+    if (route.name == "archiveIndex") {
+      router.push({ params: { search: valSearch.value } });
+    } else {
+      router.push({
+        name: "archiveIndex",
+        params: { search: valSearch.value },
+      });
+    }
+  }
+};
+
+// watch((valSearch)=>(old,new)=>{
+const inputRefSearch = ref<HTMLInputElement | null>(null);
+const user = useAuthStore();
+// });
 onMounted(() => {
   themeDark.value = isDark.value;
+  if (inputRefSearch.value) {
+    inputRefSearch.value.addEventListener("keydown", Search);
+  }
 });
 </script>
 <template>
@@ -63,6 +91,7 @@ onMounted(() => {
         <div class="text-gray-500 text-2xl">#</div>
         <div class="ml-2 text-sm text-text dark:text-textLight">
           {{ t("General") }}
+          المفوضية العليا المستقلة للانتخابات - {{ user.user?.name }}
         </div>
         <!-- <div
           class="border-l flex-grow xs:hidden sm:hidden lg:block pl-3 ml-3 border-gray-600 text-xs text-gray-400"
@@ -86,6 +115,8 @@ onMounted(() => {
         <input
           type="text"
           id="inputValue"
+          v-model="valSearch"
+          ref="inputRefSearch"
           :placeholder="t('Search')"
           @focus="searchInput = true"
           @blur="searchInput = false"
@@ -117,7 +148,6 @@ onMounted(() => {
           is-link
           @click="showPopup"
           class="dark:text-textGray z-50 mx-2 dark:hover:text-iconHover dark:bg-sideNavSetting bg-transparent hover:bg-transparent text-iconLight hover:text-iconHoverLight inline-flex justify-center rounded-md smooth-hover"
-          href="#"
         >
           <svg
             class="w-7 h-7"

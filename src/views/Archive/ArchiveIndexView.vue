@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, ref, reactive, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/Archive/archive";
 import PageTitle from "@/components/general/namePage.vue";
 import type {
@@ -11,7 +11,6 @@ import type {
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
 const dataPage = ref();
@@ -27,7 +26,15 @@ const limits = reactive([
   { name: "All", val: 999999999 },
 ]);
 
+const route = useRoute();
 const router = useRouter();
+watch(
+  () => route.params.search,
+  async (newValue) => {
+    fastSearch.value = newValue.toString() || "";
+    await getFilterData(1);
+  }
+);
 const addArchive = () => {
   archive.id = 0;
   archive.title = "";
@@ -78,6 +85,7 @@ const searchFilter = ref<IArchiveFilter>({
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
+  searchFilter.value.number = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -117,6 +125,7 @@ const getPath = (files: Array<IDocument>) => {
   }
 };
 onMounted(async () => {
+  fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
 });
 </script>
@@ -153,7 +162,7 @@ onMounted(async () => {
             v-model="fastSearch"
             @input="makeFastSearch()"
             class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('Search for Archive')"
+            :placeholder="t('SearchForArchive')"
           />
         </div>
         <div class="flex mb-2">
