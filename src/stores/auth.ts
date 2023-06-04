@@ -1,14 +1,15 @@
-import { ref, onMounted, reactive } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import { usePermissionStore } from "./permission";
 import type IUser from "@/types/core/IUser";
+import { useRouter } from "vue-router";
 export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);
   const token = ref<string | any>("");
-  let user = reactive<object | any>(null);
-
+  const user = ref<IUser>();
+  const router = useRouter();
   const login = async (payload: { email: string; password: string }) => {
     return await new Promise((resolve, reject) => {
       Api.post("/login", payload)
@@ -32,7 +33,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
   const PermissionStore = usePermissionStore();
   const setUser = (_user: IUser) => {
-    user = _user;
+    user.value = _user;
     localStorage.setItem("user", JSON.stringify(_user));
     PermissionStore.permissions = _user.permissions;
   };
@@ -48,24 +49,33 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         logout();
       });
   };
-  const getUser = () => {
-    return JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+  const getUser = async () => {
+    return await JSON.parse(localStorage.getItem("user")?.toString() || "{}");
   };
   const logout = async () => {
     isAuthenticated.value = false;
     token.value = "";
-    user = {};
+    user.value = undefined;
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
     Api.defaults.headers.common["Authorization"] = "";
-    //window.location.href = "/login";
+    router.push("/login");
   };
-  onMounted(async () => {
+  const CheckAuth = async () => {
     isAuthenticated.value =
       (await localStorage.getItem("isAuthenticated")) == "1" ? true : false;
     token.value = await localStorage.getItem("token")?.toString();
-    user = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
-  });
-  return { isAuthenticated, token, login, logout, getError, user, getUser };
+    user.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+  };
+  return {
+    isAuthenticated,
+    token,
+    login,
+    logout,
+    getError,
+    user,
+    getUser,
+    CheckAuth,
+  };
 });

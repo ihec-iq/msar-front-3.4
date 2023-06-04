@@ -1,4 +1,4 @@
-import useLanguage from "@/stores/i18n/languageStore.ts";
+import useLanguage from "@/stores/i18n/languageStore";
 const { t } = useLanguage();
 export const getError = (error: {
   response: {

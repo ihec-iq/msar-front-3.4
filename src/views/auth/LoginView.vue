@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 // import Footer from "@/components/login/footer.vue";
 import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { getError } from "@/utils/helpers";
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
+import TextInput from "@/components/general/TextInput.vue";
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t } = useI18n();
 interface ILogin {
   email: string;
   password: string;
@@ -35,15 +33,14 @@ function onInvalidSubmit() {
 }
 const schema = Yup.object().shape({
   email: Yup.string().required(),
-  password: Yup.string().min(8).required(),
+  password: Yup.string().min(2).required(),
 });
 
-
-const errors = ref();
+const errs = ref("");
 const authStore = useAuthStore();
 const router = useRouter();
 const Login = async () => {
-  errors.value = "";
+  errs.value = "";
   await authStore
     .login(loginForm)
     .then(() => {
@@ -52,26 +49,29 @@ const Login = async () => {
       });
     })
     .catch((error) => {
-      errors.value = getError(error.response);
+      errs.value = getError(error.response);
     });
 };
+onMounted(() => {
+  if (authStore.isAuthenticated) router.push({ name: "Dashboard" });
+});
 </script>
 <template>
-  <div
+  <!-- <div
     class="bg-purple-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-[#0051ff] bottom-0 leading-5 h-full w-full overflow-hidden"
-  ></div>
+  ></div> -->
   <div
     class="relative z-30 overflow-y-hidden sm:flex sm:flex-row justify-evenly bg-transparent rounded-3xl"
   >
     <div
-      class="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10"
+      class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10"
     >
       <div class="self-start hidden lg:flex flex-col text-gray-300">
         <img src="@/assets/image/avatar-3.png" alt="" />
-        <section>
+        <section class="flex justify-center mt-5">
           <div class="content">
-            <h2>Archive</h2>
-            <h2>Archive</h2>
+            <h2>WorkFlow</h2>
+            <h2>WorkFlow</h2>
           </div>
         </section>
         <!-- <p class="pr-3 text-sm opacity-75">
@@ -80,7 +80,7 @@ const Login = async () => {
         </p> -->
       </div>
     </div>
-    <div class="flex justify-center self-center z-10">
+    <div class="flex justify-center z-10">
       <div class="p-12 bg-white mx-auto rounded-3xl w-96">
         <div class="mb-7">
           <h3 class="font-semibold text-2xl text-gray-800">
@@ -119,8 +119,8 @@ const Login = async () => {
               />
             </div>
             <div class="flex items-center justify-between">
-              <div class="mb-3 text-red-600 text-lg" v-if="errors != ''">
-                {{ t(errors) }}
+              <div class="mb-3 text-red-600 text-lg" v-if="errs != ''">
+                {{ errs }}
               </div>
             </div>
             <!-- <div class="flex items-center justify-between">
@@ -205,7 +205,7 @@ const Login = async () => {
       </div>
     </div>
   </div>
-  <h1>{{ errors }}</h1>
+  <h1>{{ errs }}</h1>
   <!-- <Footer class="bg-transparent absolute w-full bottom-0 left-0 z-30">
     <div class="container p-5 mx-auto flex items-center justify-between"></div>
   </Footer> -->

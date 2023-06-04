@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import router from "@/router";
 export default function usePermissions() {
   const permissions = ref<string[]>([]);
   const set = (_permission: string[]) => {
@@ -10,9 +11,9 @@ export default function usePermissions() {
     return 0;
   };
   const canRedirect = (name: string) => {
-    if (permissions.value.length == 0) window.location.href = "/unauthorized";
+    if (permissions.value.length == 0) router.push("/unauthorized");
     if (permissions.value.includes(name)) return 1;
-    window.location.href = "/unauthorized";
+    router.push("/unauthorized");
   };
   return { permissions, set, canRedirect, can };
 }

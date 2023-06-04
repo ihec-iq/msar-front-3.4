@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, toRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/Archive/archive";
 import Swal from "sweetalert2";
@@ -7,41 +7,57 @@ import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
-import useLanguage from "@/stores/i18n/languageStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-const namePage = ref("Archive Add");
+import FilePreview from "@/components/FilePreview.vue";
+import { usePermissionStore } from "@/stores/permission";
+import DragDrop from "@/components/DragDrop.vue";
+import { useDragDropStore } from "@/compositions/dragDrop";
+
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t } = useI18n();
+
+//region"Drag and Drop"
+
+const { filesDataInput } = storeToRefs(useDragDropStore());
+
+//#endregion
+
+//#region Vars
+const { checkPermissionAccessArray } = usePermissionStore();
+const namePage = ref(".....");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isIn = ref(false);
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 
-const { t } = useLanguage();
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
-// const {  } = featureStore;
+const Loading = ref(false);
+
 const router = useRouter();
-const errors = ref(null);
-const file1 = ref("");
-const onFileChange = (e) => {
-  file1.value = e.target.files[0];
-};
+const errors = ref<String | null>();
+//#endregion
+//#region CURD
 const store = () => {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
-  const formdata = new FormData();
-  formdata.append("id", archive.value.id.toString());
-  formdata.append("title", archive.value.title.toString());
-  formdata.append("description", archive.value.description.toString());
-  formdata.append("file1", file1.value);
-  formdata.append("issueDate", archive.value.issueDate.toString());
-  formdata.append("number", archive.value.number.toString());
-  formdata.append("way", archive.value.way.toString());
-  formdata.append("sectionId", archive.value.sectionId.toString());
-  formdata.append("archiveTypeId", archive.value.archiveTypeId.toString());
-  formdata.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+  const formData = new FormData();
+  formData.append("id", archive.value.id.toString());
+  formData.append("title", archive.value.title.toString());
+  formData.append("description", archive.value.description.toString());
+  formData.append("issueDate", archive.value.issueDate.toString());
+  formData.append("number", archive.value.number.toString());
+  formData.append("way", archive.value.way.toString());
+  formData.append("sectionId", archive.value.sectionId.toString());
+  formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
+  formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    formData.append("files[]", files[i]);
+  }
   archiveStore
-    .store(formdata)
+    .store(formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -51,6 +67,7 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        filesDataInput.value = [];
         router.go(-1);
       }
     })
@@ -67,28 +84,42 @@ const store = () => {
 };
 function update() {
   errors.value = null;
-  // saleCustomer.custom_group_bill_sale_id = props.idBill;
   archive.value.isIn = isIn.value ? 1 : 0;
-  console.log(archive.value);
+  const formData = new FormData();
+  formData.append("id", archive.value.id.toString());
+  formData.append("title", archive.value.title.toString());
+  formData.append("description", archive.value.description.toString());
+  formData.append("issueDate", archive.value.issueDate.toString());
+  formData.append("number", archive.value.number.toString());
+  formData.append("way", archive.value.way.toString());
+  formData.append("sectionId", archive.value.sectionId.toString());
+  formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
+  formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    formData.append("files[]", files[i]);
+  }
   archiveStore
-    .update(archive.value)
+    .update(archive.value.id, formData)
     .then((response) => {
-      console.log(response.data.data);
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Your Archive has been updated",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      router.go(-2);
+      if (response.status === 200) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your Archive has been updated",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        filesDataInput.value = [];
+        showData();
+      }
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
       errors.value = archiveStore.getError(error);
       Swal.fire({
         icon: "error",
-        title: "create new data fails!!!",
+        title: "updating data fails!!!",
         text: error.response.data.message,
         footer: "",
       });
@@ -126,6 +157,8 @@ const Delete = async () => {
     });
 };
 const showData = async () => {
+  Loading.value = true;
+  archive.value.files = [];
   await archiveStore
     .show(id.value)
     .then((response) => {
@@ -139,6 +172,7 @@ const showData = async () => {
         archive.value.sectionId = response.data.data.sectionId;
         archive.value.archiveTypeId = response.data.data.archiveTypeId;
         archive.value.isIn = response.data.data.isIn;
+        archive.value.files = response.data.data.files;
         isIn.value = response.data.data.isIn == 0 ? false : true;
         archive.value.isInWord = response.data.data.isInWord;
       }
@@ -155,22 +189,29 @@ const showData = async () => {
         router.go(-1);
       });
     });
+  Loading.value = false;
 };
+const updateList = () => {
+  showData();
+};
+//#endregion
 const back = () => {
   router.push({
     name: "archiveIndex",
   });
 };
-
 onMounted(async () => {
+  //console.log(can("show archives1"));
+  checkPermissionAccessArray(["show archives"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "Archive Add";
+    namePage.value = t("ArchiveAdd");
     archive.value.id = 0;
   } else {
     await showData();
     archive.value.id = id.value;
-    namePage.value = "Archive Update";
+    namePage.value = t("ArchiveUpdate");
   }
+  filesDataInput.value = [];
 });
 </script>
 <template>
@@ -190,16 +231,21 @@ onMounted(async () => {
         />
       </div>
       <div class="w-1/3 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("isIn") }}{{ isIn }}
+        <div class="form-control w-52">
+          <label class="cursor-pointer label">
+            <span
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("TypeBook") }} : {{ isIn ? "صادر" : "وارد" }}</span
+            >
+            <input
+              type="checkbox"
+              v-model="isIn"
+              class="toggle toggle-secondary"
+              checked
+            />
+          </label>
         </div>
-        <input
-          v-model="isIn"
-          type="checkbox"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
       </div>
       <div class="w-1/3 mx-2">
         <div
@@ -217,12 +263,16 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("File1") }}
+          {{ t("NumberBook") }}
         </div>
-        <input @change="onFileChange" ref="file" type="file" />
-        <img :src="file1" alt="file1" />
+        <input
+          v-model="archive.number"
+          type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
       </div>
     </div>
+    <DragDrop></DragDrop>
     <div class="mt-10">
       <div class="w-full mx-2">
         <div
@@ -234,11 +284,38 @@ onMounted(async () => {
           v-model:content="archive.description"
           contentType="html"
           theme="snow"
-          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-96"
+          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60"
         ></quill-editor>
       </div>
     </div>
-
+    <div class="mt-10">
+      <div id="showFiles" class="image-list flex">
+        <div class="w-64 content-center" v-if="Loading">
+          <div
+            class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span
+              class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+              >Loading...</span
+            >
+          </div>
+        </div>
+        <div
+          class="flex-none w-64 hover:ease-in"
+          v-for="document in archive.files"
+          :key="document.name"
+        >
+          <FilePreview
+            :file="document"
+            @updateList="updateList"
+            class="preview-card cursor-pointer"
+          >
+          </FilePreview>
+        </div>
+      </div>
+      <div id="DropZone"></div>
+    </div>
     <!-- bottom tool bar -->
     <div
       :class="{
@@ -284,3 +361,69 @@ onMounted(async () => {
     <!-- end bottom tool -->
   </div>
 </template>
+<style scoped>
+.drop-area {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 50px;
+  background: rgba(255, 255, 255, 0.333);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: 0.2s ease;
+}
+.drop-area[data-active="true"] {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.8);
+}
+label {
+  font-size: 36px;
+  cursor: pointer;
+  display: block;
+}
+label span {
+  display: block;
+}
+label input[type="file"]:not(:focus-visible) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+label .smaller {
+  font-size: 16px;
+}
+.image-list {
+  display: flex;
+  list-style: none;
+  flex-wrap: wrap;
+  padding: 0;
+  margin-bottom: 35px;
+}
+.preview-card {
+  display: flex;
+  border: 1px solid #a2a2a2;
+  padding: 5px;
+  margin: 5px;
+}
+.upload-button {
+  display: block;
+  appearance: none;
+  border: 0;
+  border-radius: 50px;
+  padding: 0.75rem 3rem;
+  margin: 1rem auto;
+  font-size: 1.25rem;
+  font-weight: bold;
+  background: #369;
+  color: #fff;
+  text-transform: uppercase;
+}
+button {
+  cursor: pointer;
+}
+</style>

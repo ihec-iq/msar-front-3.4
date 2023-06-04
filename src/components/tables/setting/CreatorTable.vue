@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCreatorStore } from "@/stores/setting/creator";
 import type ICreator from "@/types/setting/ICreator";
-import { ref, onMounted, onBeforeMount, reactive } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
@@ -13,7 +13,7 @@ const t = (text: string) => {
 const router = useRouter();
 const isLoading = ref(false);
 const data = ref<Array<ICreator>>([]);
-const { get, _delete } = useCreatorStore();
+const { get } = useCreatorStore();
 const { creator } = storeToRefs(useCreatorStore());
 const getData = async () => {
   await get().then((response) => {
