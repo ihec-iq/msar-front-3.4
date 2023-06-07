@@ -125,7 +125,9 @@ const getPath = (files: Array<IDocument>) => {
   }
 };
 onMounted(async () => {
-  fastSearch.value = route.params.search.toString() || "";
+  if (route.params.search != undefined)
+    fastSearch.value = route.params.search.toString() || "";
+
   await getFilterData(1);
 });
 </script>
