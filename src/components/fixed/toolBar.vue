@@ -175,7 +175,7 @@ onMounted(() => {
     </div>
   </div>
   <van-popup
-    class="bg-customer xl:ltr:left-[1723px] h-screen z-[999999] xl:w-[20%] xs:w-full dark:bg-content flex"
+    class="bg-customer lg:ltr:left-[1723px] lg:rtl:right-[1344px] h-screen z-[999999] lg:w-[20%] xs:w-full dark:bg-content flex"
     v-model:show="showPop"
     round
     ><div class="dark:text-textLight w-full">
@@ -307,7 +307,7 @@ onMounted(() => {
   </van-popup>
 </template>
 
-<!-- /* it's better to use a dark grey color instead of pure black */ -->
+<!--  /* it's better to use a dark grey color instead of pure black */ -->
 <style scoped>
 :is.red {
   background: rgb(239 68 68);

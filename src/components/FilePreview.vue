@@ -86,7 +86,7 @@ const openFile = (path: string) => {
     <button @click="removeFile(document.id)" class="close-icon">&times;</button>
     <img
       @click="openFile(document.path)"
-      class="object-cover h-36 w-36 m-2 ml-auto mr-auto"
+      class="object-cover lg:h-36 lg:w-36 md:w-20 md:h-20 xs:w-12 xs:h-12 m-2 ml-auto mr-auto"
       :src="generateURL(document.path, document.extension)"
       :alt="document.name"
       :title="document.name"
