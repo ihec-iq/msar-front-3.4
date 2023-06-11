@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, toRef } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/Archive/archive";
 import Swal from "sweetalert2";
@@ -29,7 +29,7 @@ const route = useRoute();
 const id = ref(Number(route.params.id));
 const isIn = ref(false);
 const rtlStore = useRtlStore();
-const { isClose } = storeToRefs(rtlStore);
+const { is } = storeToRefs(rtlStore);
 
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
@@ -216,9 +216,9 @@ onMounted(async () => {
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
-  <div class="w-full p-6">
-    <div class="w-full flex">
-      <div class="w-1/3 mr-2">
+  <div class="w-full">
+    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
+      <div class="w-11/12 mr-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
@@ -230,7 +230,7 @@ onMounted(async () => {
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-      <div class="w-1/3 mr-2">
+      <div class="w-11/12 mr-2">
         <div class="form-control w-52">
           <label class="cursor-pointer label">
             <span
@@ -247,7 +247,7 @@ onMounted(async () => {
           </label>
         </div>
       </div>
-      <div class="w-1/3 mx-2">
+      <div class="w-11/12 mx-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
@@ -259,7 +259,7 @@ onMounted(async () => {
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-      <div class="w-1/3 mx-2">
+      <div class="w-11/12 mx-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
@@ -273,7 +273,7 @@ onMounted(async () => {
       </div>
     </div>
     <DragDrop></DragDrop>
-    <div class="mt-10">
+    <div class="mt-10 p-6">
       <div class="w-full mx-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -288,8 +288,8 @@ onMounted(async () => {
         ></quill-editor>
       </div>
     </div>
-    <div class="mt-10">
-      <div id="showFiles" class="image-list flex">
+    <div class="mt-10 p-6">
+      <div id="showFiles" class="p-0 flex flex-col w-full mb-9 list-none">
         <div class="w-64 content-center" v-if="Loading">
           <div
             class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
@@ -301,17 +301,21 @@ onMounted(async () => {
             >
           </div>
         </div>
-        <div
-          class="flex-none w-64 hover:ease-in"
-          v-for="document in archive.files"
-          :key="document.name"
-        >
-          <FilePreview
-            :file="document"
-            @updateList="updateList"
-            class="preview-card cursor-pointer"
-          >
-          </FilePreview>
+        <div class="">
+          <div class="grid lg:grid-cols-6 md:grid-cols-4 xs:grid-cols-2 gap-10">
+            <div
+              class="flex-none hover:ease-in"
+              v-for="document in archive.files"
+              :key="document.name"
+            >
+              <FilePreview
+                :file="document"
+                @updateList="updateList"
+                class="preview-card cursor-pointer"
+              >
+              </FilePreview>
+            </div>
+          </div>
         </div>
       </div>
       <div id="DropZone"></div>
@@ -319,41 +323,48 @@ onMounted(async () => {
     <!-- bottom tool bar -->
     <div
       :class="{
-        'w-[95%] bottom': isClose,
-        'w-10/12 bottom': !isClose,
+        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+          !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >
-      <div class="flex mr-8">
+      <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
             v-if="archive.id == 0"
             @click="store()"
-            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
             {{ t("Create") }}
           </button>
           <button
             v-else
             @click="update()"
-            class="bg-update hover:bg-updateHover duration-500 h-10 w-32 rounded-lg text-white"
+            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
             {{ t("Update") }}
           </button>
           <button
             v-if="archive.id != 0"
             @click="Delete()"
-            class="bg-delete hover:bg-deleteHover duration-500 h-10 w-32 rounded-lg text-white ml-2"
+            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
           >
             {{ t("Delete") }}
           </button>
         </div>
       </div>
     </div>
-    <div class="backBtn z-10 fixed bottom-2 ml-3 print:hidden">
+    <div
+      :class="{
+        'ltr:left-4 rtl:right-4': is,
+        'ltr:left-28 rtl:right-28': !is,
+      }"
+      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
+    >
       <button
         @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
+        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
       >
         {{ t("Back") }}
       </button>

@@ -31,7 +31,8 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -125,8 +126,9 @@ const getPath = (files: Array<IDocument>) => {
   }
 };
 onMounted(async () => {
-  if (route.params.search.length > 0)
+  if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+
   await getFilterData(1);
 });
 </script>

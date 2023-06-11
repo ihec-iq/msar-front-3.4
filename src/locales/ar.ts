@@ -19,6 +19,8 @@ export default {
     "قم بسحب البيانات الى هنا  <u> او قم بالنقر هنا </u> لتحميل البيانات.",
   "Your password": "Your password",
   "Your Email Address": "Your Email Address",
+  Item: "مادة",
+  Items: "مواد",
   Seats: "المقاعد",
   Stats: "الحالة",
   Action: "المزيد",
