@@ -22,6 +22,8 @@ export default {
   Item: "مادة",
   Items: "مواد",
   ItemCode: "كود المادة",
+  ItemUnit: "الوحدة",
+  ItemCategory: "صنف المادة",
   SearchForItem: "ابحث عن اسم او وصف المادة",
   ItemUpdate: "تحديث المادة",
 

@@ -18,6 +18,9 @@ export default {
   Item: "Item",
   Items: "Items",
   ItemCode: "Item Code",
+  ItemUnit: "Unit Item",
+  ItemCategory: "Category Item",
+
   SearchForItem: "Search by name or description",
   ItemUpdate: "Update Item",
 

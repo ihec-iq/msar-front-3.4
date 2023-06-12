@@ -5,16 +5,24 @@ export interface IItem {
   name: string;
   code: String;
   description: string;
-  item_category: ICategoryItem;
-  measuring_unit: string;
+  itemCategory: ICategoryItem;
+  measuringUnit: string;
   itemCategoryId?: number;
 }
 export interface IItemFilter {
   name: string;
   code?: string;
   description?: string;
-  measuring_unit?: string;
-  item_category_id?: number;
-  item_category_name?: string;
+  measuringUnit?: string;
+  itemCategoryId?: number;
+  itemCategoryName?: string;
+  limit: number;
+}
+export interface IItemCategory {
+  id: number;
+  name: string;
+}
+export interface IItemCategoryFilter {
+  name: string;
   limit: number;
 }

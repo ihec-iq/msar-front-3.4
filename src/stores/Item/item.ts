@@ -10,15 +10,14 @@ export const useItemStore = defineStore("itemStore", () => {
     name: "",
     description: "",
     code: "",
-    item_category: { name: "", id: 0 },
-    measuring_unit: "",
+    itemCategory: { name: "", id: 0 },
+    measuringUnit: "",
     itemCategoryId: 0,
   });
 
   const pathBase = "/storageSys";
   const pathUrl = `${pathBase}/item`;
   async function get(page: number = 1) {
-    console.log(`page : ${page}`);
     return await Api.get(`${pathUrl}?page=${page}`);
   }
   async function get_filter(params: IItemFilter, page: number) {
@@ -27,8 +26,8 @@ export const useItemStore = defineStore("itemStore", () => {
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);
   }
-  async function update(item_id: number, prams: object) {
-    return await Api.put(`${pathUrl}/update/${item_id}`, prams);
+  async function update(item_id: number, params: object) {
+    return await Api.post(`${pathUrl}/update/${item_id}`, params);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);

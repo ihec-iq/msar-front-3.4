@@ -13,7 +13,6 @@ declare module '@vue/runtime-core' {
     BlockButton: typeof import('./src/components/dropDown/BlockButton.vue')['default']
     BottomToolBarView: typeof import('./src/components/general/BottomToolBarView.vue')['default']
     CardSkeleton: typeof import('./src/components/general/CardSkeleton.vue')['default']
-    copy: typeof import("./src/components/general/loading copy.vue")["default"]
     CreatorTable: typeof import('./src/components/tables/setting/CreatorTable.vue')['default']
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DragDrop: typeof import('./src/components/DragDrop.vue')['default']
