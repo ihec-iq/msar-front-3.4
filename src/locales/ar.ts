@@ -21,6 +21,10 @@ export default {
   "Your Email Address": "Your Email Address",
   Item: "مادة",
   Items: "مواد",
+  ItemCode: "كود المادة",
+  SearchForItem: "ابحث عن اسم او وصف المادة",
+  ItemUpdate: "تحديث المادة",
+
   Seats: "المقاعد",
   Stats: "الحالة",
   Action: "المزيد",

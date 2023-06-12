@@ -5,8 +5,9 @@ export interface IItem {
   name: string;
   code: String;
   description: string;
-  item_category: Array<ICategoryItem>;
+  item_category: ICategoryItem;
   measuring_unit: string;
+  itemCategoryId?: number;
 }
 export interface IItemFilter {
   name: string;

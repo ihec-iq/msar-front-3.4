@@ -17,6 +17,10 @@ export default {
   ReleaseFiles: "Drop files here or <u>click here </u> to upload.",
   Item: "Item",
   Items: "Items",
+  ItemCode: "Item Code",
+  SearchForItem: "Search by name or description",
+  ItemUpdate: "Update Item",
+
   Name: "Name",
   Stats: "Stats",
   Action: "Action",

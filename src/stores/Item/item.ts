@@ -10,8 +10,9 @@ export const useItemStore = defineStore("itemStore", () => {
     name: "",
     description: "",
     code: "",
-    item_category: [],
+    item_category: { name: "", id: 0 },
     measuring_unit: "",
+    itemCategoryId: 0,
   });
 
   const pathBase = "/storageSys";
@@ -27,7 +28,7 @@ export const useItemStore = defineStore("itemStore", () => {
     return await Api.post(`${pathUrl}/store`, prams);
   }
   async function update(item_id: number, prams: object) {
-    return await Api.post(`${pathUrl}/update/${item_id}`, prams);
+    return await Api.put(`${pathUrl}/update/${item_id}`, prams);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
