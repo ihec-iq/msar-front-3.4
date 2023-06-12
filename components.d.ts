@@ -33,6 +33,7 @@ declare module '@vue/runtime-core' {
     ShowInputNumber: typeof import('./src/components/inputs/ShowInputNumber.vue')['default']
     ShowInputText: typeof import('./src/components/inputs/ShowInputText.vue')['default']
     SideBar: typeof import('./src/components/fixed/sideBar.vue')['default']
+    SimpleLoading: typeof import('./src/components/general/SimpleLoading.vue')['default']
     SkeletonTable: typeof import('./src/components/general/SkeletonTable.vue')['default']
     TableAll: typeof import('./src/components/general/TableAll.vue')['default']
     TextInput: typeof import('./src/components/general/TextInput.vue')['default']

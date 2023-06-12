@@ -12,6 +12,8 @@ import NProgress from "nprogress";
 //#endregion
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
+import item from "./item/item";
+import itemCategory from "./item/itemCategory";
 //#endregion
 
 const router = createRouter({
@@ -21,6 +23,8 @@ const router = createRouter({
   linkExactActiveClass: "linkExactActiveClass",
   routes: [
     ...archive,
+    ...item,
+    ...itemCategory,
     {
       path: "/login",
       name: "Login",
@@ -75,11 +79,4 @@ router.beforeResolve(async (to, from, next) => {
   }
   next();
 });
-// router.beforeEach((to, from) => {
-//   // ...
-//   // explicitly return false to cancel the navigation
-//   console.log("from  ");
-//   console.log(from);
-//   console.log("to : " + to.fullPath);
-// });
 export default router;
