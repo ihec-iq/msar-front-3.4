@@ -15,7 +15,7 @@ export const useItemStore = defineStore("itemStore", () => {
     itemCategoryId: 0,
   });
 
-  const pathBase = "/storageSys";
+  const pathBase = "/stockSys";
   const pathUrl = `${pathBase}/item`;
   async function get(page: number = 1) {
     return await Api.get(`${pathUrl}?page=${page}`);

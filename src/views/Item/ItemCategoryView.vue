@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/Item/item";
 import { useItemCategoryStore } from "@/stores/Item/itemCategory";
 import Swal from "sweetalert2";
 import { QuillEditor } from "@vueup/vue-quill";
@@ -26,10 +25,8 @@ const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
-const itemStore = useItemStore();
-const { item } = storeToRefs(useItemStore());
+const { category } = storeToRefs(useItemCategoryStore());
 const itemCategoryStore = useItemCategoryStore();
-const { categories } = storeToRefs(useItemCategoryStore());
 
 const Loading = ref(false);
 
@@ -40,13 +37,11 @@ const errors = ref<String | null>();
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("id", item.value.id.toString());
-  formData.append("name", item.value.name.toString());
-  formData.append("description", item.value.description.toString());
-  formData.append("code", item.value.code.toString());
-  formData.append("measuringUnit", item.value.measuringUnit.toString());
-  formData.append("itemCategoryId", String(item.value.itemCategoryId));
-  itemStore
+  formData.append("id", category.value.id.toString());
+  formData.append("name", category.value.name.toString());
+  formData.append("description", String(category.value.description));
+
+  itemCategoryStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -62,7 +57,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemStore.getError(error);
+      errors.value = itemCategoryStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -74,19 +69,16 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("name", item.value.name.toString());
-  formData.append("description", item.value.description.toString());
-  formData.append("code", item.value.code.toString());
-  formData.append("measuringUnit", item.value.measuringUnit.toString());
-  formData.append("itemCategoryId", String(item.value.itemCategoryId));
-  itemStore
-    .update(item.value.id, formData)
+  formData.append("name", category.value.name.toString());
+  formData.append("description", String(category.value.description));
+  itemCategoryStore
+    .update(category.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your Item has been updated",
+          title: "Your Category has been updated",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -95,7 +87,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemStore.getError(error);
+      errors.value = itemCategoryStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -124,7 +116,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemStore._delete(item.value.id).then(() => {
+        await itemCategoryStore._delete(category.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -137,17 +129,13 @@ const Delete = async () => {
 };
 const showData = async () => {
   Loading.value = true;
-  await itemStore
+  await itemCategoryStore
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        item.value.id = response.data.data.id;
-        item.value.name = response.data.data.name;
-        item.value.description = response.data.data.description;
-        item.value.code = response.data.data.code;
-        item.value.itemCategory = response.data.data.itemCategory;
-        item.value.itemCategoryId = response.data.data.itemCategoryId;
-        item.value.measuringUnit = response.data.data.measuringUnit;
+        category.value.id = response.data.data.id;
+        category.value.name = response.data.data.name;
+        category.value.description = response.data.data.description;
       }
     })
     .catch((errors) => {
@@ -176,10 +164,10 @@ onMounted(async () => {
   await itemCategoryStore.getFast();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("ItemAdd");
-    item.value.id = 0;
+    category.value.id = 0;
   } else {
     await showData();
-    item.value.id = id.value;
+    category.value.id = id.value;
     namePage.value = t("ItemUpdate");
   }
 });
@@ -195,47 +183,7 @@ onMounted(async () => {
           {{ t("Name") }}
         </div>
         <input
-          v-model="item.name"
-          type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("ItemCategory") }}
-        </div>
-        <select v-model="item.itemCategoryId" class="p-2">
-          <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category.id"
-          >
-            {{ category.name }}
-          </option>
-        </select>
-      </div>
-      <div class="w-11/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("ItemCode") }}
-        </div>
-        <input
-          v-model="item.code"
-          type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("ItemUnit") }}
-        </div>
-        <input
-          v-model="item.measuringUnit"
+          v-model="category.name"
           type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
@@ -249,7 +197,7 @@ onMounted(async () => {
           {{ t("Description") }}
         </div>
         <quill-editor
-          v-model:content="item.description"
+          v-model:content="category.description"
           contentType="html"
           theme="snow"
           class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60"
@@ -268,7 +216,7 @@ onMounted(async () => {
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
-            v-if="item.id == 0"
+            v-if="category.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
@@ -282,7 +230,7 @@ onMounted(async () => {
             {{ t("Update") }}
           </button>
           <button
-            v-if="item.id != 0"
+            v-if="category.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
           >
