@@ -1,4 +1,4 @@
-import auth from "@/router/middleware/auth";
+import authMiddleware from "@/router/middleware/authMiddleware";
 import role from "@/views/role/RoleIndex.vue";
 import permission from "@/views/role/permission/PermissionView.vue";
 export default [
@@ -7,7 +7,7 @@ export default [
     name: "role",
     component: role,
     meta: {
-      middleware: [auth],
+      middleware: [authMiddleware],
     },
   },
   {
@@ -15,7 +15,7 @@ export default [
     name: "permission",
     component: permission,
     meta: {
-      middleware: [auth],
+      middleware: [authMiddleware],
     },
   },
 ];

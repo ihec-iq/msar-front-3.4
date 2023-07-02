@@ -37,7 +37,7 @@ const getData = async () => {
     }
   });
 };
-const errors = ref(null);
+const errors = ref<String | null>();
 const store = (id: number) => {
   notification.is_read = 1;
   errors.value = null;

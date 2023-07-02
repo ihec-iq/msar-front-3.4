@@ -1,9 +1,8 @@
-import { useAuthStore } from "@/stores/auth";
-import { ref, computed, onMounted } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
+import router from "@/router";
 
 export const usePermissionStore = defineStore("PermissionStore", () => {
-  const authStore = useAuthStore();
   const permissions = ref<string[]>([]);
   //const doubleCount = computed(() => count.value * 2);
   const can = (name: string) => {
@@ -12,27 +11,34 @@ export const usePermissionStore = defineStore("PermissionStore", () => {
     return 0;
   };
   const checkPermissionAccess = (name: string) => {
-    if (permissions.value?.length == 0) window.location.href = "/unauthorized";
+    if (permissions.value?.length == 0) router.push("/unauthorized");
     if (permissions.value?.includes(name)) return 1;
-    window.location.href = "/unauthorized";
+    router.push("/unauthorized");
   };
+  const checkPermissionAccessArray = (names: string[]) => {
+    if (permissions.value?.length == 0) router.push("/unauthorized");
+    if (hasCommonItems(names, permissions.value)) return true;
+    router.push("/unauthorized");
+  };
+  function hasCommonItems(subArray: string[], array: string[]): boolean {
+    return subArray.some((subItem) =>
+      array.some((item) => item.toLowerCase() === subItem.toLowerCase())
+    );
+  }
   const canRedirect = (name: string) => {
-    if (permissions.value?.length == 0) window.location.href = "/unauthorized";
+    if (permissions.value?.length == 0) router.push("/unauthorized");
     if (permissions.value?.includes(name)) return 1;
-    window.location.href = "/unauthorized";
+    router.push("/unauthorized");
   };
   const setPermissions = (_permission: string[]) => {
     permissions.value = _permission;
   };
-  onMounted(() => {
-    // console.log("usePermissionStore");
-    // permissions.value = authStore.user.permissions;
-  });
   return {
     permissions,
     can,
     canRedirect,
     checkPermissionAccess,
+    checkPermissionAccessArray,
     setPermissions,
   };
 });

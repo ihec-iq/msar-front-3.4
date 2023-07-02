@@ -1,13 +1,13 @@
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type IRole from "@/types/role/role";
+import type IRole from "@/types/role/IRole";
 export const useRoleStore = defineStore("roleStore", () => {
   const role = ref<IRole>({
     id: 0,
     name: "",
-    permission: [],
+    permissions: [],
   });
   async function get() {
     return await Api.get(`/ho/role`);

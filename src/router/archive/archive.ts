@@ -1,31 +1,28 @@
-// import auth from "@/router/middleware/auth";
-import archiveIndex from "@/views/Archive/ArchiveIndexView.vue";
-import archiveAdd from "@/views/Archive/ArchiveView.vue";
-import archiveUpdate from "@/views/Archive/ArchiveView.vue";
+import authMiddleware from "../middleware/authMiddleware";
 
 export default [
   {
-    path: "/archive/all",
+    path: "/archives/:search?",
     name: "archiveIndex",
-    component: archiveIndex,
-    // meta: {
-    //   middleware: [auth],
-    // },
+    component: () => import("@/views/Archive/ArchiveIndexView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
   },
   {
     path: "/archive",
     name: "archiveAdd",
-    component: archiveAdd,
-    // meta: {
-    //   middleware: [auth],
-    // },
+    component: () => import("@/views/Archive/ArchiveView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
   },
   {
     path: "/archive/:id",
     name: "archiveUpdate",
-    component: archiveUpdate,
-    // meta: {
-    //   middleware: [auth],
-    // },
+    component: () => import("@/views/Archive/ArchiveView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
   },
 ];

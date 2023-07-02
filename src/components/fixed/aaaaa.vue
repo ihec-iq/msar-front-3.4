@@ -3,9 +3,10 @@ import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { usePermissionStore } from "@/stores/permission";
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t } = useI18n();
 // import { useUserStore } from "@/stores/accounting/accounts/user";
 // import type IUser from "@/types/accounting/accounts/IUser";
 // const { get } = useUserStore();
@@ -34,10 +35,6 @@ const closePopup = () => {
 };
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
 //#region authorization
 const { can } = usePermissionStore();
 //#endregion
@@ -64,46 +61,15 @@ const { is } = storeToRefs(rtlStore);
 const showPopover = ref(false);
 const authStore = useAuthStore();
 const logout = () => {
-  console.log("Log out");
   authStore.logout();
-};
-//#region "reports"
-const billsStatement = () => {
-  router.push({
-    name: "billsStatement",
-  });
-};
-//#endregion
-const accountIndex = () => {
-  router.push({
-    name: "accountIndex",
-  });
-};
-const agentIndex = () => {
-  router.push({
-    name: "agentIndex",
-  });
-};
-const supplierIndex = () => {
-  router.push({
-    name: "supplierIndex",
-  });
-};
-const creatorIndex = () => {
-  router.push({
-    name: "creatorIndex",
-  });
-};
-const packageIndex = () => {
-  router.push({
-    name: "packageIndex",
-  });
 };
 const userIndex = () => {
   router.push({
     name: "userIndex",
   });
 };
+const settingPop = ref<boolean>(false);
+
 const setting = () => {
   router.push({
     name: "setting",
@@ -128,7 +94,7 @@ onMounted(() => {
         class="sideNav bg-[#0099ff] dark:bg-sideNav h-full md:min-h-screen md:h-screen px-4 py-10 sm:rounded-xl flex flex-col justify-between"
       >
         <nav class="flex items-center space-x-0 flex-col space-y-2">
-          <button
+          <!-- <button
             v-if="!is"
             @click="isClose = !isClose"
             class="cursor-pointer lg:block xs:hidden fixed border border-gray-500 rounded-full p-2 top-2 ltr:left-14 rtl:right-14"
@@ -148,7 +114,7 @@ onMounted(() => {
                 d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
               />
             </svg>
-          </button>
+          </button> -->
           <button
             @click="is = !is"
             :class="{ 'ltr:left-2 rtl:right-2': is }"
@@ -175,10 +141,10 @@ onMounted(() => {
           <!-- Reports -->
           <!--  -->
           <router-link
-            :to="{ name: 'archiveIndex' }"
+            :to="{ name: 'Dashboard' }"
             @click.prevent="tab = 'Feature Admin'"
-          >{{ is }}
-            <a
+          >
+            <button
               title="Feature"
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
@@ -193,8 +159,30 @@ onMounted(() => {
                   d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
                 />
               </svg>
-            </a>
-            {{ isClose }}
+            </button>
+          </router-link>
+          <router-link
+            :to="{ name: 'archiveIndex' }"
+            @click.prevent="tab = 'Feature Admin'"
+          >
+            <button
+              title="Feature"
+              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
+              href="#"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+              >
+                <path
+                  fill="currentColor"
+                  d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
+                ></path>
+              </svg>
+            </button>
           </router-link>
 
           <!-- <router-link
@@ -320,243 +308,27 @@ onMounted(() => {
           </router-link> -->
         </nav>
         <!-- setting and log out -->
-        <div
-          class="flex items-center space-x-2 lg:space-x-0 flex-col space-y-2"
-        >
-          <a
-            is-link
-            @click="showPopup"
-            class="dark:text-textGray z-50 dark:hover:text-iconHover dark:bg-sideNavSetting bg-transparent hover:bg-transparent text-iconLight hover:text-iconHoverLight p-4 inline-flex justify-center rounded-md smooth-hover"
-            href="#"
+        <div class="">
+          <!-- #region setting icon -->
+          {{ settingPop }}
+          <button
+            @click="settingPop = !settingPop"
+            class="dark:text-textGray border-none dark:hover:text-iconHover bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
+              class="h-5 w-5 sm:h-6 sm:w-6"
+              viewBox="0 0 20 20"
+              fill="currentColor"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+                fill-rule="evenodd"
+                d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                clip-rule="evenodd"
               />
             </svg>
-          </a>
-          <div class="dropdown relative">
-            <!-- start fly setting -->
-            <label
-              class="btn dark:text-textGray border-none dark:hover:text-iconHover bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
-              tabindex="0"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </label>
-
-            <div
-              tabindex="0"
-              class="dropdown-content menu p-2 rounded-box w-52 bottom-2"
-            >
-              <div
-                class="border-none fixed xs:bottom-4 min-w-max w-[300px] text-base h-[500px] z-[10000] float-left py-2 list-none text-left rounded-lg mt-1 m-0 bg-clip-padding"
-              >
-                <div
-                  class="rounded-lg h-full shadow-lg w-full bg-settingLight dark:bg-setting flex z-[10000] ring-1 ring-black ring-opacity-5 overflow-hidden"
-                >
-                  <!-- main setting -->
-                  <div
-                    class="relative flex flex-col justify-between border-r border-gray-900 w-[160px] gap-6 bg-settingLight dark:bg-setting z-[10000] pl-2 pr-1 py-6"
-                  >
-                    <!-- main up setting -->
-                    <div>
-                      <!-- <div
-                        @click.prevent="settingMenu = 'account'"
-                        class="-mr-3 mb-9 h-14 p-3 w-full z-[100000] cursor-pointer dropdown-item flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
-                        :class="{
-                          ' text-white  border-l-2 border-blue-500 ':
-                            settingMenu === 'account',
-                        }"
-                      >
-                        <img
-                          src="@/assets/image/accounts.svg"
-                          class="h-6 w-6"
-                          alt=""
-                        />
-                        <div class="ml-4">
-                          <p
-                            class="text-base font-medium text-text dark:text-textLight"
-                          >
-                            {{ t("Accounts") }}
-                          </p>
-                        </div>
-                      </div> -->
-                      <!-- <div
-                        @click.prevent="settingMenu = 'hotel'"
-                        class="-mr-3 mb-9 h-14 p-3 w-full cursor-pointer dropdown-item z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
-                        :class="{
-                          ' text-white border-l-2 border-blue-500 ':
-                            settingMenu === 'hotel',
-                        }"
-                      >
-                        <img
-                          src="@/assets/image/hotelSetting.svg"
-                          class="h-6 w-6"
-                          alt=""
-                        />
-                        <div class="ml-4">
-                          <p
-                            class="text-base font-medium text-text dark:text-textLight"
-                          >
-                            {{ t("Hotel") }}
-                          </p>
-                        </div>
-                      </div> -->
-                      <div
-                        @click.prevent="settingMenu = 'MainSetting'"
-                        class="-mr-3 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
-                        :class="{
-                          ' text-white  border-l-2 border-blue-500 ':
-                            settingMenu === 'MainSetting',
-                        }"
-                      >
-                        <!-- Heroicon name: outline/shield-check -->
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="w-6 h-6 text-[#0099ff]"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
-                          />
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-
-                        <div class="ml-4">
-                          <p
-                            class="text-base font-medium text-text dark:text-textLight"
-                          >
-                            {{ t("Setting") }}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- log out -->
-                    <div>
-                      <div
-                        @click="logout()"
-                        class="p-2 cursor-pointer font-bold text-delete hover:text-text dark:hover:text-textLight flex rounded-lg duration-300 hover:bg-deleteHover mb-2"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5 sm:h-6 sm:w-6 mr-2"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        {{ t("Log Out") }}
-                      </div>
-                    </div>
-                  </div>
-                  <!-- side setting -->
-                  <!-- <div
-                    class="h-full w-[130px] p-2"
-                    v-if="settingMenu === 'account'"
-                  > -->
-                    <!-- <div
-                      @click="userIndex()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("User") }}
-                    </div>
-                    <div
-                      @click="accountIndex()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Account") }}
-                    </div>
-                    <div
-                      @click="agentIndex()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Agent") }}
-                    </div>
-                    <div
-                      @click="supplierIndex()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Supplier") }}
-                    </div>-->
-                    <!-- <div
-                      @click="creatorIndex()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Creator") }}
-                    </div>
-                    <div
-                      @click="packageIndex()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Packages") }}
-                    </div> -->
-                  <!-- </div> -->
-                  <div
-                    class="h-full w-[130px] p-2"
-                    v-if="settingMenu === 'MainSetting'"
-                  >
-                    <div
-                      @click="setting()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Setting") }}
-                    </div>
-                    <!-- <div
-                      @click="logout()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight flex rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5 sm:h-6 sm:w-6 mr-2"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                      {{ t("Log Out") }}
-                    </div> -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          </button>
+          <!-- #endregion -->
         </div>
       </div>
     </div>
@@ -624,7 +396,7 @@ onMounted(() => {
                   d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
                 />
               </svg>
-              <span class="ml-2">{{ t("All Archives") }}</span>
+              <span class="ml-2">{{ t("AllArchives") }}</span>
             </router-link>
           </li>
         </ul>
@@ -1105,6 +877,7 @@ onMounted(() => {
 
     <!-- end EXPLORER -->
   </div>
+  <!--! #region user info -->
   <van-popup
     class="bg-customer ltr:left-[9.5rem] rtl:-right-[8.5rem] h-screen z-[999999] lg:w-[15%] xs:w-[78%] dark:bg-content flex"
     v-model:show="showPop"
@@ -1144,6 +917,15 @@ onMounted(() => {
       </div>
     </div>
   </van-popup>
+  <!--? #endregion -->
+  <!--! #region setting pop -->
+  <div
+    v-if="settingPop == true"
+    class="bg-red-900 fixed rtl:right-14 ltr:left-14 rtl:bottom-10 h-[350px] w-[300px] rounded-xl z-50"
+  >
+    blabla
+  </div>
+  <!--? #endregion -->
 </template>
 
 <style scoped>

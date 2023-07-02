@@ -1,42 +1,129 @@
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+import { useArchiveStore } from "@/stores/Archive/archive";
+import Swal from "sweetalert2";
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t } = useI18n();
+
+const { _deleteDocument } = useArchiveStore();
+const props = defineProps({
+  file: { type: Object, required: true },
+  tag: { type: String, default: "li" },
+});
+const document = ref(props.file);
+const generateURL = (
+  path: string | undefined = "",
+  extension: string | undefined = ""
+): string => {
+  if (
+    extension == "png" ||
+    extension == "jpg" ||
+    extension == "image/png" ||
+    extension == "image/jpeg"
+  )
+    return new URL(path).toString();
+  //return new URL(path, import.meta.url);
+  else if (extension == "pdf" || extension == "application/pdf")
+    return new URL("@/assets/image/pdf.png", import.meta.url).toString();
+  else if (
+    extension ==
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    extension == "xls" ||
+    extension == "xlsx"
+  )
+    return new URL("@/assets/image/excel.png", import.meta.url).toString();
+  else
+    return new URL("@/assets/image/undefined.png", import.meta.url).toString();
+};
+const emits = defineEmits<{
+  //(e: "change", id: number): void;
+  (e: "updateList"): void;
+}>();
+
+const removeFile = async (id: number) => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn m-2 bg-red-700",
+      cancelButton: "btn bg-grey-400",
+    },
+    buttonsStyling: false,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      title: t("Are You Sure?"),
+      text: t("You Won't Be Able To Revert This!"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: t("Yes, delete it!"),
+      cancelButtonText: t("No, cancel!"),
+      reverseButtons: true,
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        await _deleteDocument(id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            emits("updateList");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
+};
+onMounted(() => {});
+const openFile = (path: string) => {
+  const fileUrl = path; // Replace with your file URL
+  window.open(fileUrl, "_blank");
+};
+</script>
 <template>
-  <component :is="tag" class="file-preview">
-    <button @click="$emit('remove', file)" class="close-icon">&times;</button>
-    <img :src="file.url" :alt="file.file.name" :title="file.file.name" />
+  <component :is="tag" class="file-preview" style="display: block">
+    <button @click="removeFile(document.id)" class="close-icon">&times;</button>
+    <img
+      @click="openFile(document.path)"
+      class="object-cover lg:h-36 lg:w-36 md:w-20 md:h-20 xs:w-12 xs:h-12 m-2 ml-auto mr-auto"
+      :src="generateURL(document.path, document.extension)"
+      :alt="document.name"
+      :title="document.name"
+    />
     <span style="color: darkkhaki" class="info">
-      {{ file.file.name }} -
-      {{ Math.round(file.file.size / 1000) + "kb" }}
+      {{ document.extension }}
+      {{ document.size }}
+
+      <!-- <button
+        class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+        @click="openFile(document.path)"
+      >
+        {{ t("Open") }}
+      </button> -->
     </span>
 
     <span
       class="status-indicator loading-indicator"
-      v-show="file.status == 'loading'"
+      v-show="document.status == 'loading'"
       >In Progress</span
     >
     <span
       class="status-indicator success-indicator"
-      v-show="file.status == true"
+      v-show="document.status == true"
       >Uploaded</span
     >
     <span
       class="status-indicator failure-indicator"
-      v-show="file.status == false"
+      v-show="document.status == false"
       >Error</span
     >
   </component>
 </template>
 
-<script setup lang="ts">
-defineProps({
-  file: { type: Object, required: true },
-  tag: { type: String, default: "li" },
-});
-
-defineEmits(["remove"]);
-</script>
-
 <style scoped>
 .file-preview {
-  width: 20%;
+  /* width: 20%; */
   margin: 1rem 2.5%;
   position: relative;
   aspect-ratio: 1/1;
@@ -46,8 +133,8 @@ defineEmits(["remove"]);
   border: #040 2px solid;
 }
 .file-preview img {
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
   display: block;
   object-fit: cover;
 }

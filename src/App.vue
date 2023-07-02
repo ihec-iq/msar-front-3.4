@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import { ref, onMounted } from "vue";
-import Toolbar from "./components/fixed/toolbar.vue";
-import navbar from "./components/fixed/navbar.vue";
+import Toolbar from "@/components/fixed/toolBar.vue";
+import navbar from "@/components/fixed/navBar.vue";
 import { storeToRefs } from "pinia";
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
+import { useAuthStore } from "@/stores/auth";
+import { usePermissionStore } from "@/stores/permission";
+const { getUser } = useAuthStore();
+const { setPermissions } = usePermissionStore();
+const { CheckAuth } = useAuthStore();
 
 const rtlStore = useRtlStore();
 const { isClose, is } = storeToRefs(rtlStore);
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
 const show = ref(false);
 document.onkeydown = function (e) {
   if (
@@ -32,41 +32,32 @@ document.onkeydown = function (s) {
 };
 // let htmlEl = document.querySelector("html");
 // htmlEl?.setAttribute("data-theme", "cupcake");
-onMounted(() => {
+onMounted(async () => {
+  CheckAuth();
+  const user = await getUser();
+  setPermissions(user.permissions);
+
   let htmlEl = document.querySelector("html");
-  let dir: string | any = "ltr";
+  let dir: string | any = "rtl";
   if (localStorage.getItem("dir")?.toString() != undefined)
     dir = localStorage.getItem("dir")?.toString();
   htmlEl?.setAttribute("dir", dir);
   localStorage.getItem("isLtr");
   // lang
-  let lang: string | any = "en";
+  let lang: string | any = "ar";
   lang = localStorage.getItem("lang");
   htmlEl?.setAttribute("lang", lang);
 });
 
-const logo = ref("@assets/logo.svg");
+//const logo = ref("@assets/logo.svg");
 </script>
 
 <template>
-  <div class="flex">
-    <vueSplash
-      show="true"
-      :logo="logo"
-      title="Your App Name"
-      color="#00bfa5"
-      :size="180"
-      :fixed="true"
-    />
+  <div class="flex duration-300">
     <navbar />
     <div
-      :class="{
-        'lg:ltr:ml-[80px] lg:rtl:mr-[80px] xs:ltr:ml-[84px]': isClose,
-        'lg:rtl:mr-[304.2px] lg:ltr:ml-[304.01px] xs:ltr:ml-[390px]': !isClose,
-        'lg:ltr:ml-[0.1px] lg:rtl:mr-[0.001px] xs:ltr:ml-[0.1px]': is,
-        'lg:rtl:mr-[80px] lg:ltr:ml-[80.1px] xs:ltr:ml-[84px]': !is,
-      }"
-      class="flex-1 overflow-hidden image-bg dark:bg-content flex flex-col min-h-screen h-full"
+      :class="{ 'ltr:ml-0 rtl:mr-0': is, 'ltr:ml-[80px] rtl:mr-[80px]': !is }"
+      class="flex-1 overflow-hidden duration-300 image-bg dark:bg-content flex flex-col min-h-screen h-full"
     >
       <Toolbar />
       <RouterView />
