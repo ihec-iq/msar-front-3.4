@@ -53,16 +53,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex duration-300">
     <navbar />
     <div
-      :class="{
-        'lg:ltr:ml-[80px] lg:rtl:mr-[80px] xs:ltr:ml-[84px]': isClose,
-        'lg:rtl:mr-[304.2px] lg:ltr:ml-[304.01px] xs:ltr:ml-[390px]': !isClose,
-        'lg:ltr:ml-[0.1px] lg:rtl:mr-[0.001px] xs:ltr:ml-[0.1px]': is,
-        'lg:rtl:mr-[80px] lg:ltr:ml-[80.1px] xs:ltr:ml-[84px]': !is,
-      }"
-      class="flex-1 overflow-hidden image-bg dark:bg-content flex flex-col min-h-screen h-full"
+      :class="{ 'ltr:ml-0 rtl:mr-0': is, 'ltr:ml-[80px] rtl:mr-[80px]': !is }"
+      class="flex-1 overflow-hidden duration-300 image-bg dark:bg-content flex flex-col min-h-screen h-full"
     >
       <Toolbar />
       <RouterView />
