@@ -203,6 +203,12 @@ onMounted(async () => {
                             {{ item.name }}
                           </div>
                         </div>
+                        <div class="flex justify-betweens">
+                          <div
+                            class="text-text dark:text-textGray"
+                            v-html="item.description"
+                          ></div>
+                        </div>
                       </div>
 
                       <div class="dropdown">

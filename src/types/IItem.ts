@@ -21,8 +21,10 @@ export interface IItemFilter {
 export interface IItemCategory {
   id: number;
   name: string;
+  description?: string;
 }
 export interface IItemCategoryFilter {
   name: string;
   limit: number;
+  description?: string;
 }
