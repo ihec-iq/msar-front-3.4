@@ -26,7 +26,7 @@ export default {
   ItemCategory: "صنف المادة",
   SearchForItem: "ابحث عن اسم او وصف المادة",
   ItemUpdate: "تحديث المادة",
-
+  InputVoucher: "ادخال مخزني",
   Seats: "المقاعد",
   Stats: "الحالة",
   Action: "المزيد",

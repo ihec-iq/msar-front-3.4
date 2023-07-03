@@ -13,6 +13,7 @@ import NProgress from "nprogress";
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
 import item from "./item/item";
+import inputVoucher from "./itemVoucher/inputVoucher";
 import itemCategory from "./item/itemCategory";
 //#endregion
 
@@ -25,6 +26,7 @@ const router = createRouter({
     ...archive,
     ...item,
     ...itemCategory,
+    ...inputVoucher,
     {
       path: "/login",
       name: "Login",

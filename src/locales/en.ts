@@ -20,6 +20,7 @@ export default {
   ItemCode: "Item Code",
   ItemUnit: "Unit Item",
   ItemCategory: "Category Item",
+  InputVoucher: "Input Voucher",
 
   SearchForItem: "Search by name or description",
   ItemUpdate: "Update Item",

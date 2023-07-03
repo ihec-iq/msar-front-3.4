@@ -8,10 +8,32 @@ import vSelect from "vue-select";
 import "nprogress/nprogress.css";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { MotionPlugin } from "@vueuse/motion";
+import { QuillEditor } from "@vueup/vue-quill";
+const globalOptions = {
+  modules: {
+    toolbar: [
+      "bold",
+      "italic",
+      "underline",
+      { align: "right" },
+      { direction: "rtl" },
+      "blockquote",
+      "code-block",
+      { list: "ordered" },
+      { list: "bullet" },
+    ],
+  },
+  placeholder: "Compose an epic...",
+  readOnly: false,
+  theme: "snow",
+};
+// set default globalOptions prop
+QuillEditor.props.globalOptions.default = () => globalOptions;
+// register QuillEditor component
 
 const app = createApp(App);
 app.component("vSelect", vSelect);
-app.component("QuillEditor");
+app.component("QuillEditor", QuillEditor);
 app.use(createPinia());
 app.use(MotionPlugin);
 app.use(router);
