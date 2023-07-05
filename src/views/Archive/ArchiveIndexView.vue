@@ -10,6 +10,7 @@ import type {
 } from "@/types/Archive/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
+import SimpleLoading from "@/components/general/loading.vue";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
@@ -31,7 +32,8 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -361,6 +363,7 @@ onMounted(async () => {
                 </div>
               </div>
             </div>
+            <SimpleLoading v-if="isLoading"></SimpleLoading>
             <!-- end card -->
           </div>
         </div>

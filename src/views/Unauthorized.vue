@@ -1,3 +1,26 @@
+<script setup lang="ts">
+import { ref, watch, onMounted } from "vue";
+import { useRouter } from "vue-router";
+const countdown = ref<number>(5);
+// Function to decrease countdown every second
+const decreaseCountdown = () => {
+  countdown.value--;
+};
+const router = useRouter();
+// Watch countdown for changes
+watch(countdown, (newValue) => {
+  if (newValue === 0) {
+    // Countdown is over, perform any action here
+    console.log("Redirect to Home Page");
+    router.push({ name: "Dashboard" });
+  }
+});
+
+// Start the countdown when the component is mounted
+onMounted(() => {
+  setInterval(decreaseCountdown, 1000);
+});
+</script>
 <template>
   <figure>
     <img
@@ -7,6 +30,9 @@
 
     <figcaption><pre class="text-gray-300">Unauthorized</pre></figcaption>
   </figure>
+  <div class="contet-center">
+    after {{ countdown }} second will redirect back
+  </div>
 </template>
 <style scoped>
 body {

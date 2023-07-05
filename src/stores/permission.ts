@@ -17,9 +17,14 @@ export const usePermissionStore = defineStore("PermissionStore", () => {
   };
   const checkPermissionAccessArray = (names: string[]) => {
     if (permissions.value?.length == 0) router.push("/unauthorized");
-    if (names.some((item) => permissions.value?.includes(item))) return 1;
+    if (hasCommonItems(names, permissions.value)) return true;
     router.push("/unauthorized");
   };
+  function hasCommonItems(subArray: string[], array: string[]): boolean {
+    return subArray.some((subItem) =>
+      array.some((item) => item.toLowerCase() === subItem.toLowerCase())
+    );
+  }
   const canRedirect = (name: string) => {
     if (permissions.value?.length == 0) router.push("/unauthorized");
     if (permissions.value?.includes(name)) return 1;
