@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
 import PageTitle from "@/components/general/namePage.vue";
-import type { IItemCategory, IItemCategoryFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
+import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
+import { useInputVoucherStore } from "@/stores/Voucher/inputVoucher";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IItemCategory>>([]);
+const data = ref<Array<IInputVoucher>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IItemCategory>>([]);
-const { category } = useItemCategoryStore();
-const itemCategoryStore = useItemCategoryStore();
+const dataBase = ref<Array<IInputVoucher>>([]);
+const { inputVoucher, get_filter } = useInputVoucherStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -34,17 +33,28 @@ watch(
   }
 );
 const addItem = () => {
-  category.id = 0;
-  category.name = "";
+  inputVoucher.id = 0;
+  inputVoucher.number = "";
+  inputVoucher.date = "";
+  inputVoucher.notes = "";
+  inputVoucher.state = { name: "", id: 0 };
+  inputVoucher.items = [];
+  inputVoucher.signaturePerson = "";
+  inputVoucher.employeeRequestId = 0;
+  inputVoucher.employeeRequest = "";
+  inputVoucher.inputVoucherStateId = 0;
   router.push({
-    name: "itemCategoryAdd",
+    name: "inputVoucherAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IItemCategory) => {
-  if (item.name.includes(fastSearch.value)) {
+const filterByIDName = (item: IInputVoucher) => {
+  if (
+    item.number.includes(fastSearch.value) ||
+    item.notes.includes(fastSearch.value)
+  ) {
     return true;
   } else return false;
 };
@@ -57,20 +67,21 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IItemCategoryFilter>({
+const searchFilter = ref<IInputVoucherFilter>({
   name: "",
   limit: 6,
+  description: "",
 });
-const getFilterData = async (page: number = 1) => {
+const getFilterData = async (page = 1) => {
   isLoading.value = true;
   searchFilter.value.name = fastSearch.value;
-  await itemCategoryStore
-    .get_filter(searchFilter.value, page)
+  await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
+        console.log(dataBase.value);
       }
     })
     .catch((error) => {
@@ -81,7 +92,7 @@ const getFilterData = async (page: number = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "itemCategoryUpdate",
+    name: "inputVoucherUpdate",
     params: { id: id },
   });
 };
@@ -97,7 +108,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("ItemCategory") }} </PageTitle>
+    <PageTitle> {{ t("InputVoucher") }} </PageTitle>
   </div>
 
   <div class="flex">
@@ -146,7 +157,7 @@ onMounted(async () => {
               aria-label="select"
               v-model="searchFilter.limit"
               class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData(1)"
+              @change="getFilterData()"
             >
               <option
                 v-for="limit in limits"
@@ -162,7 +173,7 @@ onMounted(async () => {
         </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
           <button
-            @click="getFilterData(1)"
+            @click="getFilterData()"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
           >
             {{ t("Search") }}
@@ -200,14 +211,34 @@ onMounted(async () => {
                           <div
                             class="text-2xl text-text dark:text-textLight mb-2"
                           >
-                            {{ item.name }}
+                            {{ item.number }}
                           </div>
-                        </div>
-                        <div class="flex justify-betweens">
                           <div
-                            class="text-text dark:text-textGray"
-                            v-html="item.description"
-                          ></div>
+                            class="text-text dark:text-textGray mb-2 justify-between"
+                          >
+                            <span>{{ t("Date") }}: {{ item.date }}</span>
+                            <span class="float-left flex" title="Items count">
+                              {{ item.itemsCount }}
+                              <svg
+                                title="Items count"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6 4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6 4h4v-4h-4M4 8h4V4H4v4Z"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                          <div class="flex justify-betweens">
+                            <div
+                              class="text-text dark:text-textGray"
+                              v-html="item.notes"
+                            ></div>
+                          </div>
                         </div>
                       </div>
 

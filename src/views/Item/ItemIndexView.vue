@@ -35,7 +35,7 @@ watch(
 const addItem = () => {
   item.id = 0;
   item.name = "";
-  item.item_category = { name: "", id: 0 };
+  item.itemCategory = { name: "", id: 0 };
   item.code = "";
   item.description = "";
   router.push({

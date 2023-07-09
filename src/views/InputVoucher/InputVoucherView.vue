@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
+import { useInputVoucherStore } from "@/stores/Voucher/inputVoucher";
 import Swal from "sweetalert2";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -25,8 +25,10 @@ const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
-const { category } = storeToRefs(useItemCategoryStore());
-const itemCategoryStore = useItemCategoryStore();
+const inputVoucherStore = useInputVoucherStore();
+const { inputVoucher, inputVoucherStates, inputVoucherEmployees } = storeToRefs(
+  useInputVoucherStore()
+);
 
 const Loading = ref(false);
 
@@ -37,11 +39,22 @@ const errors = ref<String | null>();
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("id", category.value.id.toString());
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
-
-  itemCategoryStore
+  formData.append("number", inputVoucher.value.number.toString());
+  formData.append("notes", inputVoucher.value.notes.toString());
+  formData.append("date", inputVoucher.value.date.toString());
+  formData.append(
+    "inputVoucherStateId",
+    inputVoucher.value.inputVoucherStateId.toString()
+  );
+  formData.append(
+    "employeeRequestId",
+    inputVoucher.value.employeeRequestId.toString()
+  );
+  formData.append(
+    "signaturePerson",
+    String(inputVoucher.value.signaturePerson)
+  );
+  inputVoucherStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -57,7 +70,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemCategoryStore.getError(error);
+      errors.value = inputVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -69,16 +82,29 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
-  itemCategoryStore
-    .update(category.value.id, formData)
+  formData.append("number", inputVoucher.value.number.toString());
+  formData.append("notes", inputVoucher.value.notes.toString());
+  formData.append("date", inputVoucher.value.date.toString());
+  formData.append(
+    "inputVoucherStateId",
+    inputVoucher.value.inputVoucherStateId.toString()
+  );
+  formData.append(
+    "employeeRequestId",
+    inputVoucher.value.employeeRequestId.toString()
+  );
+  formData.append(
+    "signaturePerson",
+    String(inputVoucher.value.signaturePerson)
+  );
+  inputVoucherStore
+    .update(inputVoucher.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your Category has been updated",
+          title: "Your Item has been updated",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -87,7 +113,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemCategoryStore.getError(error);
+      errors.value = inputVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -116,7 +142,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemCategoryStore._delete(category.value.id).then(() => {
+        await inputVoucherStore._delete(inputVoucher.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -129,13 +155,21 @@ const Delete = async () => {
 };
 const showData = async () => {
   Loading.value = true;
-  await itemCategoryStore
+  await inputVoucherStore
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        category.value.id = response.data.data.id;
-        category.value.name = response.data.data.name;
-        category.value.description = response.data.data.description;
+        console.log(response.data.data);
+        inputVoucher.value.id = response.data.data.id;
+        inputVoucher.value.date = response.data.data.date;
+        inputVoucher.value.number = response.data.data.number;
+        inputVoucher.value.notes = response.data.data.notes;
+        inputVoucher.value.items = response.data.data.items;
+        inputVoucher.value.employeeRequest = response.data.data.employeeRequest;
+        inputVoucher.value.employeeRequestId =
+          response.data.data.employeeRequestId;
+        inputVoucher.value.signaturePerson = response.data.data.signaturePerson;
+        inputVoucher.value.inputVoucherStateId = response.data.data.state.id;
       }
     })
     .catch((errors) => {
@@ -155,19 +189,20 @@ const showData = async () => {
 //#endregion
 const back = () => {
   router.push({
-    name: "itemIndex",
+    name: "inputVoucherIndex",
   });
 };
 onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray(["show Item"]);
-  await itemCategoryStore.getFast();
+  await inputVoucherStore.getState();
+  await inputVoucherStore.getEmployees();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("ItemAdd");
-    category.value.id = 0;
+    inputVoucher.value.id = 0;
   } else {
+    inputVoucher.value.id = id.value;
     await showData();
-    category.value.id = id.value;
     namePage.value = t("ItemUpdate");
   }
 });
@@ -180,10 +215,66 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("Name") }}
+          {{ t("Number") }}
         </div>
         <input
-          v-model="category.name"
+          v-model="inputVoucher.number"
+          type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("Date") }}
+        </div>
+        <input
+          v-model="inputVoucher.date"
+          type="date"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("ItemCategory") }}
+        </div>
+        <select v-model="inputVoucher.inputVoucherStateId" class="p-2">
+          <option
+            v-for="state in inputVoucherStates"
+            :key="state.id"
+            :value="state.id"
+          >
+            {{ state.name }}
+          </option>
+        </select>
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("employeeRequest") }}
+        </div>
+        <select v-model="inputVoucher.employeeRequestId" class="p-2">
+          <option
+            v-for="employee in inputVoucherEmployees"
+            :key="employee.id"
+            :value="employee.id"
+          >
+            {{ employee.name }}
+          </option>
+        </select>
+      </div>
+      <div class="w-11/12 mx-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("signaturePerson") }}
+        </div>
+        <input
+          v-model="inputVoucher.signaturePerson"
           type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
@@ -197,10 +288,9 @@ onMounted(async () => {
           {{ t("Description") }}
         </div>
         <quill-editor
-          v-model:content="category.description"
+          v-model:content="inputVoucher.notes"
           contentType="html"
-          theme="snow"
-          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60"
+          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60 custom-quill"
         ></quill-editor>
       </div>
     </div>
@@ -216,7 +306,7 @@ onMounted(async () => {
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
-            v-if="category.id == 0"
+            v-if="inputVoucher.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
@@ -230,7 +320,7 @@ onMounted(async () => {
             {{ t("Update") }}
           </button>
           <button
-            v-if="category.id != 0"
+            v-if="inputVoucher.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
           >
@@ -320,5 +410,9 @@ label .smaller {
 }
 button {
   cursor: pointer;
+}
+.custom-quill .ql-editor {
+  direction: rtl !important;
+  text-align: right !important;
 }
 </style>

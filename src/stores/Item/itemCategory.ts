@@ -11,7 +11,7 @@ export const useItemCategoryStore = defineStore("itemCategoryStore", () => {
   });
   const categories = ref<IItemCategory[]>([]);
 
-  const pathBase = "/storageSys";
+  const pathBase = "/stockSys";
   const pathUrl = `${pathBase}/itemCategory`;
   async function get() {
     return await Api.get(`${pathUrl}`);
@@ -34,7 +34,6 @@ export const useItemCategoryStore = defineStore("itemCategoryStore", () => {
     return await Api.post(`${pathUrl}/store`, prams);
   }
   async function update(item_id: number, prams: object) {
-    console.log(prams);
     return await Api.post(`${pathUrl}/update/${item_id}`, prams);
   }
   async function show(id: number) {
