@@ -27,6 +27,10 @@ export default {
   SearchForItem: "ابحث عن اسم او وصف المادة",
   ItemUpdate: "تحديث المادة",
   InputVoucher: "ادخال مخزني",
+  InputVoucherNumber: "رقم العام",
+  InputVoucherEmployeeRequest: "طلب من",
+  InputVoucherSignaturePerson: "توقيع الموظف",
+
   Seats: "المقاعد",
   Stats: "الحالة",
   Action: "المزيد",

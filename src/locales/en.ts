@@ -21,6 +21,9 @@ export default {
   ItemUnit: "Unit Item",
   ItemCategory: "Category Item",
   InputVoucher: "Input Voucher",
+  InputVoucherNumber: "Number",
+  InputVoucherEmployeeRequest: "Employee Request",
+  InputVoucherSignaturePerson: "Signature Person",
 
   SearchForItem: "Search by name or description",
   ItemUpdate: "Update Item",

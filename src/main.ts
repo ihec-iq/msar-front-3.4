@@ -30,7 +30,6 @@ const globalOptions = {
 // set default globalOptions prop
 QuillEditor.props.globalOptions.default = () => globalOptions;
 // register QuillEditor component
-
 const app = createApp(App);
 app.component("vSelect", vSelect);
 app.component("QuillEditor", QuillEditor);
