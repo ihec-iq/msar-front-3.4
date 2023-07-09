@@ -41,7 +41,6 @@ const addItem = () => {
   inputVoucher.items = [];
   inputVoucher.signaturePerson = "";
   inputVoucher.employeeRequestId = 0;
-  inputVoucher.employeeRequest = "";
   inputVoucher.inputVoucherStateId = 0;
   router.push({
     name: "inputVoucherAdd",

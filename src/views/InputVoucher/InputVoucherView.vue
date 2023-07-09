@@ -198,13 +198,15 @@ onMounted(async () => {
   await inputVoucherStore.getState();
   await inputVoucherStore.getEmployees();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("ItemAdd");
+    namePage.value = t("InputVoucher");
     inputVoucher.value.id = 0;
   } else {
     inputVoucher.value.id = id.value;
     await showData();
-    namePage.value = t("ItemUpdate");
+    namePage.value = t("InputVoucher");
   }
+  // QuillEditor.formatText(0, 5, "bold", true);
+  // QuillEditor.setText("Hello\nWorld!\n");
 });
 </script>
 <template>
@@ -215,7 +217,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("Number") }}
+          {{ t("InputVoucherNumber") }}
         </div>
         <input
           v-model="inputVoucher.number"
@@ -255,7 +257,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("employeeRequest") }}
+          {{ t("InputVoucherEmployeeRequest") }}
         </div>
         <select v-model="inputVoucher.employeeRequestId" class="p-2">
           <option
@@ -271,7 +273,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("signaturePerson") }}
+          {{ t("InputVoucherSignaturePerson") }}
         </div>
         <input
           v-model="inputVoucher.signaturePerson"
