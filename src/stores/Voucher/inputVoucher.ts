@@ -6,6 +6,7 @@ import type {
   IInputVoucher,
   IInputVoucherEmployee,
   IInputVoucherFilter,
+  IInputVoucherItem,
   IInputVoucherState,
 } from "@/types/IInputVoucher";
 
@@ -22,13 +23,13 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     employeeRequest: { name: "", id: 0 },
     inputVoucherStateId: 0,
   });
-
+  const inputVouchers = ref<IInputVoucher[]>([]);
   const inputVoucherStates = ref<IInputVoucherState[]>([]);
   const inputVoucherEmployees = ref<IInputVoucherEmployee[]>([]);
   const pathBase = "/stockSys";
   const pathUrl = `${pathBase}/inputVoucher`;
-  async function get(page: number = 1) {
-    return await Api.get(`${pathUrl}?page=${page}`);
+  async function get() {
+    inputVouchers.value = await Api.get(`${pathUrl}`);
   }
   async function get_filter(params: IInputVoucherFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
@@ -67,10 +68,31 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         console.log("in get Employees : " + errors);
       });
   }
+  function addItem(item: IInputVoucherItem) {
+    inputVoucher.items?.push(item);
+  }
+  function removeItem(index: number) {
+    inputVoucher.items?.splice(index, 1);
+  }
+  function resetData() {
+    inputVoucher.id = 0;
+    inputVoucher.number = "";
+    inputVoucher.date = "";
+    inputVoucher.notes = "";
+    inputVoucher.state = { name: "", id: 0 };
+    inputVoucher.items = [];
+    inputVoucher.signaturePerson = "";
+    inputVoucher.employeeRequestId = 0;
+    inputVoucher.employeeRequest = { name: "", id: 0 };
+    inputVoucher.inputVoucherStateId = 0;
+  }
   return {
     inputVoucher,
+    inputVouchers,
     inputVoucherStates,
     inputVoucherEmployees,
+    addItem,
+    removeItem,
     get,
     get_filter,
     getState,
@@ -80,5 +102,6 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     update,
     getError,
     _delete,
+    resetData,
   };
 });
