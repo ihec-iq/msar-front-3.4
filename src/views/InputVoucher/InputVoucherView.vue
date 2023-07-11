@@ -62,6 +62,10 @@ const VoucherItem = ref<IInputVoucherItem>({
 });
 const AddPopup = () => {
   showPop.value = true;
+  resetVoucherItem();
+};
+const resetVoucherItem = () => {
+  indexSelectedVoucherItem.value = 0;
   VoucherItem.value = {
     id: 0,
     input_voucher_id: 0,
@@ -81,36 +85,36 @@ const AddPopup = () => {
     notes: "",
   };
 };
-const ItemTemp = ref<IItem>({
-  id: 0,
-  name: "",
-  code: "",
-  description: "",
-  itemCategory: { id: 0, name: "" },
-  measuringUnit: "",
-});
-const deleteItem = (index: number) => {
-  //showPop.value = true;
-  inputVoucherStore.removeItem(index);
+//#region Item Row
+const deleteItem = (item: IInputVoucherItem) => {
+  inputVoucherStore.removeItem(item);
 };
-const updatePopup = (item: IInputVoucherItem) => {
+const updatePopup = (index: number, item: IInputVoucherItem) => {
   showPop.value = true;
+  console.log(item);
+  indexSelectedVoucherItem.value = index;
   VoucherItem.value = item;
 };
 const AddItem = () => {
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  //VoucherItem.value.item = ItemTemp.value;
   console.log(VoucherItem.value.item);
   inputVoucherStore.addItem(VoucherItem.value);
+  resetVoucherItem();
+  showPop.value = false;
+};
+const indexSelectedVoucherItem = ref(0);
+const EditItem = () => {
+  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
+  inputVoucherStore.editItem(indexSelectedVoucherItem.value, VoucherItem.value);
+  resetVoucherItem();
   showPop.value = false;
 };
 //#endregion
 
 const Loading = ref(false);
-
 const router = useRouter();
 const errors = ref<String | null>();
-//#endregion
+
 //#region CURD
 const store = () => {
   errors.value = null;
@@ -414,12 +418,12 @@ onMounted(async () => {
               :key="row.id"
               class="border-b border-black h-14 text-gray-100"
             >
-              <th>{{ row.id }}</th>
+              <th>{{ row.id }}/{{ index }}</th>
               <th>{{ row.item.name }}</th>
               <th>{{ row.serialNumber }}</th>
               <th>{{ row.count }}</th>
               <th>{{ row.price }}</th>
-              <th>{{ row.value }}</th>
+              <th>{{ row.count * row.price }}</th>
               <th>{{ row.stock.name }}</th>
               <th>{{ row.notes }}</th>
               <th>
@@ -427,7 +431,7 @@ onMounted(async () => {
                   class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
                   type="secondary"
                   is-link
-                  @click="AddPopup()"
+                  @click="updatePopup(index, row)"
                   >Edit
                 </van-button>
                 |
@@ -435,7 +439,7 @@ onMounted(async () => {
                   class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
                   type="secondary"
                   is-link
-                  @click="deleteItem(index)"
+                  @click="deleteItem(row)"
                   >Delete
                 </van-button>
               </th>
@@ -480,11 +484,11 @@ onMounted(async () => {
                   >
                     Code
                   </div>
-                  <input
-                    v-model="VoucherItem.item.code"
-                    type="text"
+                  <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                  />
+                  >
+                    {{ VoucherItem.item.code.toString() }}
+                  </div>
                 </div>
                 <div class="w-1/5">
                   <div
@@ -492,11 +496,11 @@ onMounted(async () => {
                   >
                     Category
                   </div>
-                  <input
-                    v-model="VoucherItem.item.itemCategory.name"
-                    type="text"
+                  <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                  />
+                  >
+                    {{ VoucherItem.item.itemCategory.name.toString() }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -569,31 +573,33 @@ onMounted(async () => {
           </div>
           <!-- add close form -->
           <div
-            class="w-full p-2 rounded-lg flex justify-between items-center fixed bottom-1 right-3"
+            class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3"
           >
-            <van-button
-              class="ml-4 border-none bg-back duration-500 h-10 w-32 text-gray-300 hover:bg-backHover rounded-lg"
-              type="primary"
-              is-link
-              @click="showPop = false"
-              >Close</van-button
-            >
-            <div class="flex">
+            <div class="flex justify-between">
               <div class="items-center ml-2">
                 <button
+                  v-if="VoucherItem.id == 0"
                   @click="AddItem()"
                   class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-gray-300"
                 >
                   Add
                 </button>
                 <button
-                  @click="console.log('update')"
+                  v-else
+                  @click="EditItem()"
                   class="bg-update hover:bg-updateHover ml-2 duration-500 h-10 w-32 rounded-lg text-gray-300"
                   is-link
                 >
                   Update
                 </button>
               </div>
+              <van-button
+                class="ml-4 border-none left-0 bg-back duration-500 h-10 w-32 text-gray-300 hover:bg-backHover rounded-lg"
+                type="primary"
+                is-link
+                @click="showPop = false"
+                >Close</van-button
+              >
             </div>
           </div>
 

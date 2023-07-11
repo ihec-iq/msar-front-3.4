@@ -69,9 +69,14 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       });
   }
   function addItem(item: IInputVoucherItem) {
-    inputVoucher.items?.push(item);
+    inputVoucher.items.push(item);
   }
-  function removeItem(index: number) {
+  function editItem(index: number, item: IInputVoucherItem) {
+    inputVoucher.items[index] = item;
+  }
+  function removeItem(item: IInputVoucherItem) {
+    const index = inputVoucher.items?.findIndex((d) => d.id === item.id); //find index in your array
+    console.log(inputVoucher.items[index]);
     inputVoucher.items?.splice(index, 1);
   }
   function resetData() {
@@ -92,6 +97,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucherStates,
     inputVoucherEmployees,
     addItem,
+    editItem,
     removeItem,
     get,
     get_filter,

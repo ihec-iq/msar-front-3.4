@@ -7,7 +7,7 @@ export interface IInputVoucher {
   date: String;
   notes: string;
   state: IInputVoucherState;
-  items?: Array<IInputVoucherItem>;
+  items: Array<IInputVoucherItem>;
   signaturePerson: String;
   employeeRequestId: number;
   employeeRequest: IInputVoucherEmployee;
