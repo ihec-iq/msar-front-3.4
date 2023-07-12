@@ -56,6 +56,7 @@ const store = () => {
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
+  console.log([...formData]);
   archiveStore
     .store(formData)
     .then((response) => {

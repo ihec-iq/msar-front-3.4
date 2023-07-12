@@ -53,7 +53,6 @@
         IDK
       </button>
     </div>
-
   </div>
 </template>
 <script setup lang="ts">

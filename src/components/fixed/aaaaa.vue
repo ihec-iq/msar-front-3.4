@@ -177,7 +177,7 @@ onMounted(() => {
           <router-link
             :to="{ name: 'archiveIndex' }"
             @click.prevent="tab = 'Feature Admin'"
-          >{{ is }}
+            >{{ is }}
             <a
               title="Feature"
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
