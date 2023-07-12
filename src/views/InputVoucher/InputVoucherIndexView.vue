@@ -41,7 +41,6 @@ const addItem = () => {
   inputVoucher.items = [];
   inputVoucher.signaturePerson = "";
   inputVoucher.employeeRequestId = 0;
-  inputVoucher.employeeRequest = "";
   inputVoucher.inputVoucherStateId = 0;
   router.push({
     name: "inputVoucherAdd",
@@ -102,7 +101,6 @@ const update = (id: number) => {
 onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-
   await getFilterData(1);
 });
 </script>
@@ -110,7 +108,6 @@ onMounted(async () => {
   <div class="justify-between flex">
     <PageTitle> {{ t("InputVoucher") }} </PageTitle>
   </div>
-
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
