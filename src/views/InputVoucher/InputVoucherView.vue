@@ -20,6 +20,7 @@ import type {
 } from "@/types/IInputVoucher";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IItem } from "@/types/IItem";
+import AddItemPopup from "@/components/AddItemPopup.vue";
 const { t } = useI18n();
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
@@ -77,7 +78,7 @@ const resetVoucherItem = () => {
       itemCategory: { id: 0, name: "" },
       measuringUnit: "",
     },
-    stock: { name: "", id: 0 },
+    stock: { name: "", id: 1 },
     serialNumber: "",
     count: 0,
     price: 0,
@@ -86,8 +87,29 @@ const resetVoucherItem = () => {
   };
 };
 //#region Item Row
-const deleteItem = (item: IInputVoucherItem) => {
-  inputVoucherStore.removeItem(item);
+const deleteItem = (index: number) => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn m-2 bg-red-700",
+      cancelButton: "btn bg-grey-400",
+    },
+    buttonsStyling: false,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      title: t("Are You Sure?"),
+      text: t("You Won't Be Able To Revert This!"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: t("Yes, delete it!"),
+      cancelButtonText: t("No, cancel!"),
+      reverseButtons: true,
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        inputVoucherStore.removeItem(index);
+      }
+    });
 };
 const updatePopup = (index: number, item: IInputVoucherItem) => {
   showPop.value = true;
@@ -101,6 +123,9 @@ const AddItem = () => {
   inputVoucherStore.addItem(VoucherItem.value);
   resetVoucherItem();
   showPop.value = false;
+};
+const ChangeValueTotal = () => {
+  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
 };
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
@@ -122,6 +147,7 @@ const store = () => {
   formData.append("number", inputVoucher.value.number.toString());
   formData.append("notes", inputVoucher.value.notes.toString());
   formData.append("date", inputVoucher.value.date.toString());
+  formData.append("items", JSON.stringify(inputVoucher.value.items));
   formData.append(
     "inputVoucherStateId",
     inputVoucher.value.inputVoucherStateId.toString()
@@ -165,6 +191,7 @@ function update() {
   formData.append("number", inputVoucher.value.number.toString());
   formData.append("notes", inputVoucher.value.notes.toString());
   formData.append("date", inputVoucher.value.date.toString());
+  formData.append("items", JSON.stringify(inputVoucher.value.items));
   formData.append(
     "inputVoucherStateId",
     inputVoucher.value.inputVoucherStateId.toString()
@@ -239,7 +266,6 @@ const showData = async (id: number) => {
     .show(id)
     .then((response) => {
       if (response.status == 200) {
-        console.log(response.data.data);
         inputVoucher.value.id = response.data.data.id;
         inputVoucher.value.date = response.data.data.date;
         inputVoucher.value.number = response.data.data.number;
@@ -288,6 +314,30 @@ onMounted(async () => {
   await useStockStore().get_stocks();
   await useItemStore().get_items();
 });
+const handlers = (map: any, vm: { search: string | any[] }) => ({
+  ...map,
+  // 50: (e: { preventDefault: () => void; key: string }) => {
+  //   e.preventDefault();
+  //   console.log(vm.search);
+  //   if (e.key === "@" && vm.search.length > 0) {
+  //     vm.search = `${vm.search}@gmail.com`;
+  //   }
+  // },
+  13: (e: { preventDefault: () => void; key: string }) => {
+    e.preventDefault();
+    console.log(vm.search);
+
+    let btn = document.getElementById("my_modal_7");
+    btn?.click();
+  },
+});
+// const onEnterKey = (event: KeyboardEvent) => {
+//   if (event.key === "Enter") {
+//     // Handle Enter key press event here
+//     console.log("Enter key pressed");
+//     // Access the selected option using this.selectedOption
+//   }
+// };
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
@@ -414,11 +464,11 @@ onMounted(async () => {
           </thead>
           <tbody class="bg-[#1f2937]">
             <tr
-              v-for="(row, index) in inputVoucher.items?.slice().reverse()"
+              v-for="(row, index) in inputVoucher.items"
               :key="row.id"
               class="border-b border-black h-14 text-gray-100"
             >
-              <th>{{ row.id }}/{{ index }}</th>
+              <th>{{ row.id }}</th>
               <th>{{ row.item.name }}</th>
               <th>{{ row.serialNumber }}</th>
               <th>{{ row.count }}</th>
@@ -439,7 +489,7 @@ onMounted(async () => {
                   class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
                   type="secondary"
                   is-link
-                  @click="deleteItem(row)"
+                  @click="deleteItem(index)"
                   >Delete
                 </van-button>
               </th>
@@ -448,6 +498,7 @@ onMounted(async () => {
         </table>
       </div>
     </div>
+
     <div class="mt-10 p-6">
       <div class="w-full mx-2">
         <van-popup
@@ -471,11 +522,38 @@ onMounted(async () => {
                 <vSelect
                   class="capitalize mx-2 rounded-md h-10 w-56 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
                   v-model="VoucherItem.item"
-                  label="name"
                   :options="items"
                   :reduce="(item: IItem) => item"
+                  :get-option-label="(item: IItem) => item.name"
+                  :map-keydown="handlers"
                 >
+                  <template #option="{ code, itemCategory, description, name }">
+                    <div
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold"
+                    >
+                      {{ name }}
+                    </div>
+                    <cite>
+                      <div
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                      >
+                        Code: {{ code }}
+                      </div>
+                      <div
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                      >
+                        Category: {{ itemCategory.name.toString() }}
+                      </div>
+                    </cite>
+                    <br />
+                    <cite>
+                      {{ description }}
+                    </cite>
+                  </template>
                 </vSelect>
+                <!-- Put this part before </body> tag -->
+                ssss
+                <AddItemPopup></AddItemPopup>
               </div>
               <div class="w-4/5 rounded-md border-2 border-gray-600 flex">
                 <div class="w-1/5">
@@ -485,7 +563,7 @@ onMounted(async () => {
                     Code
                   </div>
                   <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
                     {{ VoucherItem.item.code.toString() }}
                   </div>
@@ -497,9 +575,21 @@ onMounted(async () => {
                     Category
                   </div>
                   <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
                     {{ VoucherItem.item.itemCategory.name.toString() }}
+                  </div>
+                </div>
+                <div class="w-2/5">
+                  <div
+                    class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                  >
+                    Description
+                  </div>
+                  <div
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
+                  >
+                    {{ VoucherItem.item.description }}
                   </div>
                 </div>
               </div>
@@ -540,6 +630,7 @@ onMounted(async () => {
                   Count
                 </div>
                 <input
+                  @input="ChangeValueTotal()"
                   v-model="VoucherItem.count"
                   type="number"
                   class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
@@ -552,6 +643,7 @@ onMounted(async () => {
                   Price
                 </div>
                 <input
+                  @input="ChangeValueTotal()"
                   v-model="VoucherItem.price"
                   type="number"
                   class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
@@ -716,18 +808,22 @@ onMounted(async () => {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   transition: 0.2s ease;
 }
+
 .drop-area[data-active="true"] {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   background: rgba(255, 255, 255, 0.8);
 }
+
 label {
   font-size: 36px;
   cursor: pointer;
   display: block;
 }
+
 label span {
   display: block;
 }
+
 label input[type="file"]:not(:focus-visible) {
   position: absolute !important;
   width: 1px !important;
@@ -739,9 +835,11 @@ label input[type="file"]:not(:focus-visible) {
   white-space: nowrap !important;
   border: 0 !important;
 }
+
 label .smaller {
   font-size: 16px;
 }
+
 .image-list {
   display: flex;
   list-style: none;
@@ -749,12 +847,14 @@ label .smaller {
   padding: 0;
   margin-bottom: 35px;
 }
+
 .preview-card {
   display: flex;
   border: 1px solid #a2a2a2;
   padding: 5px;
   margin: 5px;
 }
+
 .upload-button {
   display: block;
   appearance: none;
@@ -768,9 +868,11 @@ label .smaller {
   color: #fff;
   text-transform: uppercase;
 }
+
 button {
   cursor: pointer;
 }
+
 .custom-quill .ql-editor {
   direction: rtl !important;
   text-align: right !important;

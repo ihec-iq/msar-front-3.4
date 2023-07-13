@@ -69,14 +69,12 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       });
   }
   function addItem(item: IInputVoucherItem) {
-    inputVoucher.items.push(item);
+    inputVoucher.items = [item].concat(inputVoucher.items);
   }
   function editItem(index: number, item: IInputVoucherItem) {
     inputVoucher.items[index] = item;
   }
-  function removeItem(item: IInputVoucherItem) {
-    const index = inputVoucher.items?.findIndex((d) => d.id === item.id); //find index in your array
-    console.log(inputVoucher.items[index]);
+  function removeItem(index: number) {
     inputVoucher.items?.splice(index, 1);
   }
   function resetData() {

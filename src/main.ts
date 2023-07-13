@@ -38,8 +38,8 @@ app.use(MotionPlugin);
 app.use(router);
 //#region Permission
 
-app.config.globalProperties.$baseURL =
-  process.env.NODE_ENV === "production" ? "/10/" : "/";
+// app.config.globalProperties.$baseURL =
+//   process.env.NODE_ENV === "production" ? "/10/" : "/";
 //#region Permission Globally
 
 // console.log(can("admin"));
