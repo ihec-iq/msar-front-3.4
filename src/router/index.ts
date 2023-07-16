@@ -41,6 +41,14 @@ const router = createRouter({
       },
     },
     {
+      path: "/test",
+      name: "Test",
+      component: () => import("@/views/TestView.vue"),
+      meta: {
+        middleware: [authMiddleware],
+      },
+    },
+    {
       path: "/",
       name: "start",
       component: () => import("@/views/AboutView.vue"),

@@ -24,7 +24,7 @@ import AddItemPopup from "@/components/AddItemPopup.vue";
 const { t } = useI18n();
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
-
+const { item } = storeToRefs(useItemStore());
 //region"Drag and Drop"
 
 //#endregion
@@ -323,14 +323,74 @@ const handlers = (map: any, vm: { search: string | any[] }) => ({
   //     vm.search = `${vm.search}@gmail.com`;
   //   }
   // },
-  13: (e: { preventDefault: () => void; key: string }) => {
-    e.preventDefault();
-    console.log(vm.search);
+  13: (e: { preventDefault: () => void; key: string; open: any }) => {
+    if (VoucherItem.value.item.id == 0) {
+      console.log(vm.search);
 
-    let btn = document.getElementById("my_modal_7");
-    btn?.click();
+      let btn = document.getElementById("my_modal_7");
+      btn?.click();
+      item.value.name = vm.search.toString();
+    }
+    e.preventDefault();
+    e.open;
   },
 });
+
+const handleEnter = (event: KeyboardEvent) => {
+  const enteredValue = (event.target as HTMLInputElement).value;
+  const matchingOption = items.value.find(
+    (option: IItem) => option.name === enteredValue
+  );
+  if (matchingOption === undefined && enteredValue.length > 0) {
+    let btn = document.getElementById("my_modal_7");
+    item.value.name = enteredValue;
+    btn?.click();
+    AddItemPopup.setFocus();
+  }
+};
+function clearSelected(event: { target: { value: string } }) {
+  if (event.target.value === "") {
+    VoucherItem.value = {
+      id: 0,
+      input_voucher_id: 0,
+      item: {
+        name: "",
+        id: 0,
+        code: "",
+        description: "",
+        itemCategory: { id: 0, name: "" },
+        measuringUnit: "",
+      },
+      stock: { name: "", id: 0 },
+      serialNumber: "",
+      count: 0,
+      price: 0,
+      value: 0,
+      notes: "",
+    };
+  }
+}
+const onSearch = (query: string) => {
+  // if (query == "")
+  //   VoucherItem.value = {
+  //     id: 0,
+  //     input_voucher_id: 0,
+  //     item: {
+  //       name: "",
+  //       id: 0,
+  //       code: "",
+  //       description: "",
+  //       itemCategory: { id: 0, name: "" },
+  //       measuringUnit: "",
+  //     },
+  //     stock: { name: "", id: 0 },
+  //     serialNumber: "",
+  //     count: 0,
+  //     price: 0,
+  //     value: 0,
+  //     notes: "",
+  //   };
+};
 // const onEnterKey = (event: KeyboardEvent) => {
 //   if (event.key === "Enter") {
 //     // Handle Enter key press event here
@@ -523,9 +583,29 @@ const handlers = (map: any, vm: { search: string | any[] }) => ({
                   class="capitalize mx-2 rounded-md h-10 w-56 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
                   v-model="VoucherItem.item"
                   :options="items"
-                  :reduce="(item: IItem) => item"
-                  :get-option-label="(item: IItem) => item.name"
-                  :map-keydown="handlers"
+                  :reduce="(_item: IItem) => _item"
+                  :get-option-label="(_item: IItem) => _item.name"
+                  @keydown.enter="handleEnter"
+                  @input="clearSelected"
+                  :create-option="
+                    (_item : IItem) => ({ 
+                      input_voucher_id: 0,
+                      item: {
+                        name: '',
+                        id: 0,
+                        code: 0,
+                        description: 0,
+                        itemCategory: { id: 0, name: ''},
+                        measuringUnit: '',
+                      },
+                      stock: { name: '', id: 0 },
+                      serialNumber: '',
+                      count: 0,
+                      price: 0,
+                      value: 0,
+                      notes: '',
+                    })
+                  "
                 >
                   <template #option="{ code, itemCategory, description, name }">
                     <div

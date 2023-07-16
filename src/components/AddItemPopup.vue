@@ -12,7 +12,9 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 
 import { useI18n } from "@/stores/i18n/useI18n";
+import { pop } from "@vueuse/motion";
 const { t } = useI18n();
+const ItemName = ref<HTMLInputElement | null>(null);
 
 //region"Drag and Drop"
 
@@ -45,13 +47,8 @@ const store = () => {
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Your item has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        let popClose = document.getElementById("closePop");
+        popClose?.click;
       }
     })
     .catch((error) => {
@@ -66,6 +63,11 @@ const store = () => {
     });
 };
 //#endregion
+const setFocus = () => {
+  if (ItemName.value) {
+    ItemName.value.focus();
+  }
+};
 onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray(["show Item"]);
@@ -77,9 +79,9 @@ onMounted(async () => {
 <template>
   <input type="checkbox" id="my_modal_7" class="modal-toggle" />
   <div class="modal w-full">
-    <div class="modal-box">
+    <div class="modal-box w-11/12 max-w-5xl">
       <div class="w-full p-4 grid lg:grid-cols-2 xs:grid-cols-2">
-        <div class="w-11/12 mr-2">
+        <div class="w-12/12 mx-2">
           <div
             class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
           >
@@ -87,6 +89,7 @@ onMounted(async () => {
           </div>
           <input
             v-model="item.name"
+            ref="ItemName"
             type="text"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />
@@ -135,7 +138,7 @@ onMounted(async () => {
           />
         </div>
       </div>
-      <div class="w-full p-4 grid lg:grid-cols-1 xs:grid-cols-2 mt-2">
+      <div class="w-full p-4 lg:grid-cols-1 xs:grid-cols-1 mt-2">
         <div class="w-full mx-2">
           <div
             class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -146,20 +149,20 @@ onMounted(async () => {
             v-model:content="item.description"
             contentType="html"
             theme="snow"
-            class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60"
+            class="text-text dark:text-textLight bg-lightInput dark:bg-input"
           ></quill-editor>
         </div>
       </div>
       <!-- bottom tool bar -->
       <div
-        class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end print:hidden"
+        class="dark:bg-bottomTool duration-700 mt-5 bg-ideNavLight p-2 rounded-lg flex items-center justify-end print:hidden"
       >
         <div class="flex ltr:ml-8 rtl:mr-8">
           <div class="items-center m-3">
             <button
               v-if="item.id == 0"
               @click="store()"
-              class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+              class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-30 sm:w-30 md:w-30 rounded-lg text-white"
             >
               {{ t("Create") }}
             </button>
@@ -167,7 +170,7 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <label class="modal-backdrop" for="my_modal_7">Close</label>
+    <label class="modal-backdrop" for="my_modal_7" id="closePop">Close</label>
   </div>
 </template>
 <style scoped>
