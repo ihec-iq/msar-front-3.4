@@ -23,9 +23,8 @@ const globalOptions = {
       { list: "bullet" },
     ],
   },
-  placeholder: "Compose an epic...",
+  placeholder: "قم بملئ الملاحظات",
   readOnly: false,
-  theme: "snow",
 };
 // set default globalOptions prop
 QuillEditor.props.globalOptions.default = () => globalOptions;
