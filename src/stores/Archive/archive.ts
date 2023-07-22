@@ -1,8 +1,12 @@
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IArchive, IArchiveFilter } from "@/types/Archive/IArchive";
+import type {
+  IArchive,
+  IArchiveFilter,
+  IArchiveType,
+} from "@/types/Archive/IArchive";
 
 export const useArchiveStore = defineStore("archiveStore", () => {
   const archive = reactive<IArchive>({
@@ -15,9 +19,11 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     number: "123",
     isIn: 0,
     isInWord: "",
+    archiveType: { id: 0, name: "" },
     archiveTypeId: 1,
     sectionId: 1,
   });
+  const archiveTypes = ref<IArchiveType[]>([]);
 
   const pathBase = "/archiveSys";
   const pathUrl = `${pathBase}/archive`;
@@ -56,10 +62,24 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     const path = `${pathBase}/document/delete/${id}`;
     return await Api.delete(path);
   }
+  async function getArchiveTypes() {
+    return await Api.get(`${pathBase}/archiveType`)
+      .then((response) => {
+        if (response.status == 200) {
+          archiveTypes.value = response.data.data;
+        }
+      })
+      .catch((errors) => {
+        console.log("in get Categories : " + errors);
+      });
+  }
+
   return {
     archive,
+    archiveTypes,
     get,
     get_filter,
+    getArchiveTypes,
     show,
     store,
     update,

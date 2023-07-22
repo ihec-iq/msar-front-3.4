@@ -9,9 +9,14 @@ export interface IArchive {
   isIn: number;
   isInWord?: string;
   archiveTypeId: number;
-  archiveType?: number;
+  archiveType?: IArchiveType;
   sectionId: number;
   section?: number;
+}
+export interface IArchiveType {
+  id: number;
+  name: string;
+  archives?: number;
 }
 export interface IDocument {
   id: number;

@@ -14,7 +14,7 @@ export const useItemStore = defineStore("itemStore", () => {
     measuringUnit: "",
     itemCategoryId: 0,
   });
-  const items = ref<IItem[]>([]);
+  const items = ref<Array<IItem>>([]);
   const pathBase = "/stockSys";
   const pathUrl = `${pathBase}/item`;
   async function get() {
