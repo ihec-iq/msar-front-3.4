@@ -8,6 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Aaaaa: typeof import('./src/components/fixed/aaaaa.vue')['default']
+    AddItemPopup: typeof import('./src/components/AddItemPopup.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
     BlockButton: typeof import('./src/components/dropDown/BlockButton.vue')['default']
