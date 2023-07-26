@@ -15,6 +15,7 @@ import authMiddleware from "./middleware/authMiddleware";
 import item from "./item/item";
 import inputVoucher from "./itemVoucher/inputVoucher";
 import itemCategory from "./item/itemCategory";
+import store from "./store/store";
 //#endregion
 
 const router = createRouter({
@@ -27,6 +28,7 @@ const router = createRouter({
     ...item,
     ...itemCategory,
     ...inputVoucher,
+    ...store,
     {
       path: "/login",
       name: "Login",
@@ -44,6 +46,14 @@ const router = createRouter({
       path: "/test",
       name: "Test",
       component: () => import("@/views/TestView.vue"),
+      meta: {
+        middleware: [authMiddleware],
+      },
+    },
+    {
+      path: "/config",
+      name: "Config",
+      component: () => import("@/views/ConnectionSettingView.vue"),
       meta: {
         middleware: [authMiddleware],
       },

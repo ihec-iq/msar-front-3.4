@@ -30,7 +30,8 @@ export default {
   InputVoucherNumber: "رقم العام",
   InputVoucherEmployeeRequest: "طلب من",
   InputVoucherSignaturePerson: "توقيع الموظف",
-
+  StoreIndex: "المخزنية",
+  ItemAdd: "اضافة مادة",
   Seats: "المقاعد",
   Stats: "الحالة",
   Action: "المزيد",
@@ -39,7 +40,6 @@ export default {
   Show: "عرض",
   Update: "تعديل",
   Add: "اضافة",
-  "Sale Trip": " بيع الرحلة",
   Delete: "حذف",
   Back: "رجوع",
   Edit: "تعديل",

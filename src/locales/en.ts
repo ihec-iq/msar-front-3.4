@@ -21,13 +21,13 @@ export default {
   ItemUnit: "Unit Item",
   ItemCategory: "Category Item",
   InputVoucher: "Input Voucher",
+  ItemAdd: "Add Item",
   InputVoucherNumber: "Number",
   InputVoucherEmployeeRequest: "Employee Request",
   InputVoucherSignaturePerson: "Signature Person",
-
+  StoreIndex: "Store",
   SearchForItem: "Search by name or description",
   ItemUpdate: "Update Item",
-
   Name: "Name",
   Stats: "Stats",
   Action: "Action",

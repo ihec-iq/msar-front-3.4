@@ -7,6 +7,11 @@ import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/auth";
 import { usePermissionStore } from "@/stores/permission";
+import Api from "./api/apiConfig";
+import { useConfigStore } from "@/stores/config";
+
+const { ConnectionString } = storeToRefs(useConfigStore());
+
 const { getUser } = useAuthStore();
 const { setPermissions } = usePermissionStore();
 const { CheckAuth } = useAuthStore();
@@ -33,6 +38,9 @@ document.onkeydown = function (s) {
 // let htmlEl = document.querySelector("html");
 // htmlEl?.setAttribute("data-theme", "cupcake");
 onMounted(async () => {
+  await useConfigStore().load();
+  Api.defaults.baseURL = String(ConnectionString.value);
+
   CheckAuth();
   const user = await getUser();
   setPermissions(user.permissions);

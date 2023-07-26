@@ -37,7 +37,7 @@ watch(
   async (newValue) => {
     if (route.params.search != undefined)
       fastSearch.value = newValue.toString() || "";
-    await getFilterData(1);
+    await getFilterData(1, -1);
   }
 );
 const addArchive = () => {
@@ -88,21 +88,34 @@ const searchFilter = ref<IArchiveFilter>({
   sectionId: -1,
   archiveTypeId: -1,
 });
+const scrollPageTo = (navEl: string) => {
+  let element = document.getElementById(navEl);
+  //element?.scrollIntoView({ behavior: "smooth" });
+  // console.log(navEl);
+  // console.log(element?.offsetTop);
+  window.scrollTo({
+    top: Number(element?.offsetTop) + 1200,
+    left: Number(element?.offsetLeft),
+    behavior: "smooth",
+  });
+};
 const getFilterData = async (page = 1, archiveType: number = 0) => {
   isLoading.value = true;
   searchFilter.value.number = fastSearch.value;
   if (archiveType != 0) {
     searchFilter.value.archiveTypeId = archiveType;
-  } else {
-    searchFilter.value.archiveTypeId = -1;
   }
-  console.log(searchFilter.value);
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
+        if (searchFilter.value.limit == 6) {
+          scrollPageTo("PageDataEnd");
+        } else {
+          scrollPageTo("PageDataStart");
+        }
       }
     })
     .catch((error) => {
@@ -139,7 +152,7 @@ onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
 
-  await getFilterData(1);
+  await getFilterData(1, -1);
   await useArchiveStore().getArchiveTypes();
 });
 </script>
@@ -262,13 +275,43 @@ onMounted(async () => {
                     <!-- card -->
                     <div
                       class="bg-cardLight btn dark:bg-card flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                      v-for="archiveType in archiveTypes"
-                      :key="archiveType.id"
                     >
                       <div class="w-4/4 overflow-hidden">
                         <button
-                          @click="getFilterData(1, archiveType.id)"
+                          @click="getFilterData(1, -1)"
                           class="ltr:ml-2 rtl:mr-2 text-2xl h-full text-text justify-between dark:text-textLight mb-2"
+                        >
+                          <span class="float-right flex"> عرض الجميع </span>
+                          <span
+                            class="float-left text-sm mr-8 flex dark:text-textGray"
+                          >
+                            0
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
+                              ></path>
+                            </svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      v-for="archiveType in archiveTypes"
+                      :key="archiveType.id"
+                    >
+                      <div
+                        class="w-4/4 overflow-hidden border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600 bg-cardLight btn dark:bg-card flex w-full p-1 rounded-lg"
+                      >
+                        <button
+                          @click="getFilterData(1, archiveType.id)"
+                          class="ltr:ml-2 rtl:mr-2 text-2xl h-full w-full p-15 text-text justify-between dark:text-textLight mb-2"
                         >
                           <span class="float-right flex">
                             {{ archiveType.name }}
@@ -306,7 +349,7 @@ onMounted(async () => {
       <hr />
       <div class="w-full">
         <div class="flex flex-col">
-          <div class="py-4 inline-block min-w-full lg:px-8">
+          <div class="py-4 inline-block min-w-full lg:px-8" id="PageDataStart">
             <!-- card -->
 
             <div class="rounded-xl" v-if="isLoading == false">
@@ -437,11 +480,12 @@ onMounted(async () => {
                 </div>
               </div>
             </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
+            <SimpleLoading v-if="isLoading">.</SimpleLoading>
             <!-- end card -->
           </div>
         </div>
       </div>
+      <div id="PageDataEnd"></div>
     </div>
   </div>
 

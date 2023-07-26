@@ -61,8 +61,11 @@ const VoucherItem = ref<IInputVoucherItem>({
   value: 0,
   notes: "",
 });
+const AddPopupRef = ref<HTMLInputElement>();
+
 const AddPopup = () => {
   showPop.value = true;
+  AddPopupRef.value?.focus();
   resetVoucherItem();
 };
 const resetVoucherItem = () => {
@@ -298,6 +301,7 @@ const back = () => {
     name: "inputVoucherIndex",
   });
 };
+
 onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray(["show Item"]);
@@ -345,7 +349,6 @@ const handleEnter = (event: KeyboardEvent) => {
     let btn = document.getElementById("my_modal_7");
     item.value.name = enteredValue;
     btn?.click();
-    AddItemPopup.setFocus();
   }
 };
 function clearSelected(event: { target: { value: string } }) {
@@ -398,6 +401,9 @@ const onSearch = (query: string) => {
 //     // Access the selected option using this.selectedOption
 //   }
 // };
+const setItemFromChild = (_item: IItem) => {
+  VoucherItem.value.item = _item;
+};
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
@@ -434,7 +440,10 @@ const onSearch = (query: string) => {
         >
           {{ t("ItemCategory") }}
         </div>
-        <select v-model="inputVoucher.inputVoucherStateId" class="p-2">
+        <select
+          v-model="inputVoucher.inputVoucherStateId"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        >
           <option
             v-for="state in inputVoucherStates"
             :key="state.id"
@@ -450,11 +459,15 @@ const onSearch = (query: string) => {
         >
           {{ t("InputVoucherEmployeeRequest") }}
         </div>
-        <select v-model="inputVoucher.employeeRequestId" class="p-2">
+        <select
+          v-model="inputVoucher.employeeRequestId"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        >
           <option
             v-for="employee in inputVoucherEmployees"
             :key="employee.id"
             :value="employee.id"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           >
             {{ employee.name }}
           </option>
@@ -558,7 +571,6 @@ const onSearch = (query: string) => {
         </table>
       </div>
     </div>
-
     <div class="mt-10 p-6">
       <div class="w-full mx-2">
         <van-popup
@@ -580,6 +592,7 @@ const onSearch = (query: string) => {
                   Item
                 </div>
                 <vSelect
+                  ref="AddPopupRef"
                   class="capitalize mx-2 rounded-md h-10 w-56 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
                   v-model="VoucherItem.item"
                   :options="items"
@@ -632,11 +645,13 @@ const onSearch = (query: string) => {
                   </template>
                 </vSelect>
                 <!-- Put this part before </body> tag -->
-                ssss
-                <AddItemPopup></AddItemPopup>
+                <AddItemPopup :setItem="setItemFromChild"></AddItemPopup>
               </div>
-              <div class="w-4/5 rounded-md border-2 border-gray-600 flex">
-                <div class="w-1/5">
+              <div
+                class="w-4/5 rounded-md border-2 border-gray-600 flex"
+                v-if="VoucherItem.item"
+              >
+                <div class="w-1/5" v-if="VoucherItem.item.code">
                   <div
                     class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
                   >
@@ -660,7 +675,7 @@ const onSearch = (query: string) => {
                     {{ VoucherItem.item.itemCategory.name.toString() }}
                   </div>
                 </div>
-                <div class="w-2/5">
+                <div class="w-2/5" v-if="VoucherItem.item.description">
                   <div
                     class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
                   >
@@ -681,11 +696,15 @@ const onSearch = (query: string) => {
                 >
                   Stock
                 </div>
-                <select v-model="VoucherItem.stock" class="p-2">
+                <select
+                  v-model="VoucherItem.stock"
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                >
                   <option
                     v-for="stock in stocks"
                     :key="stock.id"
                     :value="stock"
+                    class="bg-lightInput dark:bg-input text-text dark:text-textLight"
                   >
                     {{ stock.name }}
                   </option>
@@ -825,7 +844,6 @@ const onSearch = (query: string) => {
         </van-popup>
       </div>
     </div>
-
     <!-- bottom tool bar -->
     <div
       :class="{

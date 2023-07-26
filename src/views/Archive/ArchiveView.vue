@@ -11,6 +11,7 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import FilePreview from "@/components/FilePreview.vue";
 import { usePermissionStore } from "@/stores/permission";
 import DragDrop from "@/components/DragDrop.vue";
+
 import { useDragDropStore } from "@/compositions/dragDrop";
 const { archiveTypes } = storeToRefs(useArchiveStore());
 
@@ -214,7 +215,6 @@ onMounted(async () => {
   }
   filesDataInput.value = [];
   await useArchiveStore().getArchiveTypes();
-
 });
 </script>
 <template>
@@ -294,6 +294,7 @@ onMounted(async () => {
         />
       </div>
     </div>
+    <ScannerComponent></ScannerComponent>
     <DragDrop></DragDrop>
     <div class="mt-10 p-6">
       <div class="w-full mx-2">
