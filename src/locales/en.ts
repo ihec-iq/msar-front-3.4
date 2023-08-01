@@ -44,6 +44,7 @@ export default {
   Amount: "Amount",
   Date: "Date",
   Currency: "Currency",
+  setting: "Setting",
   "Box Account": "Box Account",
   Note: "Note",
   User: "User",

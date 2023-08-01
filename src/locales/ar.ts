@@ -48,6 +48,7 @@ export default {
   Hotel: "فندق",
   Expense: "مصاريف",
   Account: "الحساب",
+  setting: "الاعدادات",
   "Account Name": "اسم الحساب",
   "Account Type": "نوع الحساب",
   Amount: "المبلغ",

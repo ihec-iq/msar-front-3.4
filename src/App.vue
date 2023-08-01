@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
+import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
-import Toolbar from "@/components/fixed/toolBar.vue";
-import navbar from "@/components/fixed/navBar.vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/auth";
 import { usePermissionStore } from "@/stores/permission";
 import Api from "./api/apiConfig";
 import { useConfigStore } from "@/stores/config";
-
+import DefaultLayout from "@/views/layouts/MainView.vue";
 const { ConnectionString } = storeToRefs(useConfigStore());
 
 const { getUser } = useAuthStore();
@@ -18,6 +16,7 @@ const { CheckAuth } = useAuthStore();
 
 const rtlStore = useRtlStore();
 const { isClose, is } = storeToRefs(rtlStore);
+//#region  Code
 const show = ref(false);
 document.onkeydown = function (e) {
   if (
@@ -37,6 +36,7 @@ document.onkeydown = function (s) {
 };
 // let htmlEl = document.querySelector("html");
 // htmlEl?.setAttribute("data-theme", "cupcake");
+const route = useRoute();
 onMounted(async () => {
   await useConfigStore().load();
   Api.defaults.baseURL = String(ConnectionString.value);
@@ -56,22 +56,11 @@ onMounted(async () => {
   lang = localStorage.getItem("lang");
   htmlEl?.setAttribute("lang", lang);
 });
-
-//const logo = ref("@assets/logo.svg");
+//#endregion
 </script>
 
 <template>
-  <div class="flex duration-300">
-    <navbar />
-    <div
-      :class="{ 'ltr:ml-0 rtl:mr-0': is, 'ltr:ml-[80px] rtl:mr-[80px]': !is }"
-      class="flex-1 overflow-hidden duration-300 image-bg dark:bg-content flex flex-col min-h-screen h-full"
-    >
-      <Toolbar />
-      <RouterView />
-    </div>
-  </div>
-  <!-- <component :is="$route.meta.layout || 'div'"></component> -->
+  <component :is="route.meta.layout || DefaultLayout"></component>
 </template>
 <style scoped>
 .dark .image-bg {
