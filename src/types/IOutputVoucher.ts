@@ -1,4 +1,4 @@
-import type { IItem } from "./IItem";
+import type { IInputVoucherItem } from "./IInputVoucher";
 import type { IStock } from "./IStock";
 
 export interface IOutputVoucher {
@@ -17,11 +17,8 @@ export interface IOutputVoucher {
 export interface IOutputVoucherItem {
   id?: number;
   output_voucher_id?: number;
-  item: IItem;
-  itemId?: number;
-  stock: IStock;
-  stockId?: number;
-  serialNumber: String;
+  input_voucher_item_id: number;
+  input_voucher_item: IInputVoucherItem;
   count: number;
   price: number;
   value: number;

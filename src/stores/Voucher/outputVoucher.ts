@@ -47,7 +47,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
   async function getState() {
-    return await Api.get(`${pathBase}/outputVoucherState`)
+    return await Api.get(`${pathBase}/inputVoucherState`)
       .then((response) => {
         if (response.status == 200) {
           outputVoucherStates.value = response.data.data;

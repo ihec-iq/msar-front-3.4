@@ -9,7 +9,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 import { useStockStore } from "@/stores/Voucher/stock";
-import { useOutputVoucherStore } from "@/stores/Voucher/inputVoucher";
+import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 import { useItemStore } from "@/stores/Item/item";
 import type {
   IOutputVoucher,
@@ -37,15 +37,14 @@ const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
-const inputVoucherStore = useOutputVoucherStore();
-const { inputVoucher, inputVoucherStates, inputVoucherEmployees } = storeToRefs(
-  useOutputVoucherStore()
-);
+const outputVoucherStore = useOutputVoucherStore();
+const { outputVoucher, outputVoucherStates, outputVoucherEmployees } =
+  storeToRefs(useOutputVoucherStore());
 //#region popUp
 const showPop = ref(false);
 const VoucherItem = ref<IOutputVoucherItem>({
   id: 0,
-  input_voucher_id: 0,
+  output_voucher_id: 0,
   item: {
     name: "",
     id: 0,
@@ -72,7 +71,7 @@ const resetVoucherItem = () => {
   indexSelectedVoucherItem.value = 0;
   VoucherItem.value = {
     id: 0,
-    input_voucher_id: 0,
+    output_voucher_id: 0,
     item: {
       name: "",
       id: 0,
@@ -110,7 +109,7 @@ const deleteItem = (index: number) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        inputVoucherStore.removeItem(index);
+        outputVoucherStore.removeItem(index);
       }
     });
 };
@@ -123,7 +122,7 @@ const updatePopup = (index: number, item: IOutputVoucherItem) => {
 const AddItem = () => {
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
   console.log(VoucherItem.value.item);
-  inputVoucherStore.addItem(VoucherItem.value);
+  outputVoucherStore.addItem(VoucherItem.value);
   resetVoucherItem();
   showPop.value = false;
 };
@@ -133,7 +132,10 @@ const ChangeValueTotal = () => {
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  inputVoucherStore.editItem(indexSelectedVoucherItem.value, VoucherItem.value);
+  outputVoucherStore.editItem(
+    indexSelectedVoucherItem.value,
+    VoucherItem.value
+  );
   resetVoucherItem();
   showPop.value = false;
 };
@@ -147,23 +149,23 @@ const errors = ref<String | null>();
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("number", inputVoucher.value.number.toString());
-  formData.append("notes", inputVoucher.value.notes.toString());
-  formData.append("date", inputVoucher.value.date.toString());
-  formData.append("items", JSON.stringify(inputVoucher.value.items));
+  formData.append("number", outputVoucher.value.number.toString());
+  formData.append("notes", outputVoucher.value.notes.toString());
+  formData.append("date", outputVoucher.value.date.toString());
+  formData.append("items", JSON.stringify(outputVoucher.value.items));
   formData.append(
-    "inputVoucherStateId",
-    inputVoucher.value.inputVoucherStateId.toString()
+    "outputVoucherStateId",
+    outputVoucher.value.outputVoucherStateId.toString()
   );
   formData.append(
     "employeeRequestId",
-    inputVoucher.value.employeeRequestId.toString()
+    outputVoucher.value.employeeRequestId.toString()
   );
   formData.append(
     "signaturePerson",
-    String(inputVoucher.value.signaturePerson)
+    String(outputVoucher.value.signaturePerson)
   );
-  inputVoucherStore
+  outputVoucherStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -179,7 +181,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = inputVoucherStore.getError(error);
+      errors.value = outputVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -191,24 +193,24 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("number", inputVoucher.value.number.toString());
-  formData.append("notes", inputVoucher.value.notes.toString());
-  formData.append("date", inputVoucher.value.date.toString());
-  formData.append("items", JSON.stringify(inputVoucher.value.items));
+  formData.append("number", outputVoucher.value.number.toString());
+  formData.append("notes", outputVoucher.value.notes.toString());
+  formData.append("date", outputVoucher.value.date.toString());
+  formData.append("items", JSON.stringify(outputVoucher.value.items));
   formData.append(
-    "inputVoucherStateId",
-    inputVoucher.value.inputVoucherStateId.toString()
+    "outputVoucherStateId",
+    outputVoucher.value.outputVoucherStateId.toString()
   );
   formData.append(
     "employeeRequestId",
-    inputVoucher.value.employeeRequestId.toString()
+    outputVoucher.value.employeeRequestId.toString()
   );
   formData.append(
     "signaturePerson",
-    String(inputVoucher.value.signaturePerson)
+    String(outputVoucher.value.signaturePerson)
   );
-  inputVoucherStore
-    .update(inputVoucher.value.id, formData)
+  outputVoucherStore
+    .update(outputVoucher.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -218,12 +220,12 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
-        showData(inputVoucher.value.id);
+        showData(outputVoucher.value.id);
       }
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = inputVoucherStore.getError(error);
+      errors.value = outputVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -252,7 +254,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await inputVoucherStore._delete(inputVoucher.value.id).then(() => {
+        await outputVoucherStore._delete(outputVoucher.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -265,20 +267,22 @@ const Delete = async () => {
 };
 const showData = async (id: number) => {
   Loading.value = true;
-  await inputVoucherStore
+  await outputVoucherStore
     .show(id)
     .then((response) => {
       if (response.status == 200) {
-        inputVoucher.value.id = response.data.data.id;
-        inputVoucher.value.date = response.data.data.date;
-        inputVoucher.value.number = response.data.data.number;
-        inputVoucher.value.notes = response.data.data.notes;
-        inputVoucher.value.items = response.data.data.items;
-        inputVoucher.value.employeeRequest = response.data.data.employeeRequest;
-        inputVoucher.value.employeeRequestId =
+        outputVoucher.value.id = response.data.data.id;
+        outputVoucher.value.date = response.data.data.date;
+        outputVoucher.value.number = response.data.data.number;
+        outputVoucher.value.notes = response.data.data.notes;
+        outputVoucher.value.items = response.data.data.items;
+        outputVoucher.value.employeeRequest =
+          response.data.data.employeeRequest;
+        outputVoucher.value.employeeRequestId =
           response.data.data.employeeRequestId;
-        inputVoucher.value.signaturePerson = response.data.data.signaturePerson;
-        inputVoucher.value.inputVoucherStateId = response.data.data.state.id;
+        outputVoucher.value.signaturePerson =
+          response.data.data.signaturePerson;
+        outputVoucher.value.outputVoucherStateId = response.data.data.state.id;
       }
     })
     .catch((errors) => {
@@ -298,48 +302,27 @@ const showData = async (id: number) => {
 //#endregion
 const back = () => {
   router.push({
-    name: "inputVoucherIndex",
+    name: "outputVoucherIndex",
   });
 };
 
 onMounted(async () => {
+  console.log("OutputVoucher");
   //console.log(can("show items1"));
   checkPermissionAccessArray(["show Item"]);
-  await inputVoucherStore.getState();
-  await inputVoucherStore.getEmployees();
+  await outputVoucherStore.getState();
+  await outputVoucherStore.getEmployees();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
-    inputVoucher.value.id = 0;
+    outputVoucher.value.id = 0;
   } else {
-    inputVoucher.value.id = id.value;
+    outputVoucher.value.id = id.value;
     await showData(id.value);
     namePage.value = t("OutputVoucher");
   }
   await useStockStore().get_stocks();
   await useItemStore().get_items();
 });
-const handlers = (map: any, vm: { search: string | any[] }) => ({
-  ...map,
-  // 50: (e: { preventDefault: () => void; key: string }) => {
-  //   e.preventDefault();
-  //   console.log(vm.search);
-  //   if (e.key === "@" && vm.search.length > 0) {
-  //     vm.search = `${vm.search}@gmail.com`;
-  //   }
-  // },
-  13: (e: { preventDefault: () => void; key: string; open: any }) => {
-    if (VoucherItem.value.item.id == 0) {
-      console.log(vm.search);
-
-      let btn = document.getElementById("my_modal_7");
-      btn?.click();
-      item.value.name = vm.search.toString();
-    }
-    e.preventDefault();
-    e.open;
-  },
-});
-
 const handleEnter = (event: KeyboardEvent) => {
   const enteredValue = (event.target as HTMLOutputElement).value;
   const matchingOption = items.value.find(
@@ -355,7 +338,7 @@ function clearSelected(event: { target: { value: string } }) {
   if (event.target.value === "") {
     VoucherItem.value = {
       id: 0,
-      input_voucher_id: 0,
+      output_voucher_id: 0,
       item: {
         name: "",
         id: 0,
@@ -373,34 +356,6 @@ function clearSelected(event: { target: { value: string } }) {
     };
   }
 }
-const onSearch = (query: string) => {
-  // if (query == "")
-  //   VoucherItem.value = {
-  //     id: 0,
-  //     input_voucher_id: 0,
-  //     item: {
-  //       name: "",
-  //       id: 0,
-  //       code: "",
-  //       description: "",
-  //       itemCategory: { id: 0, name: "" },
-  //       measuringUnit: "",
-  //     },
-  //     stock: { name: "", id: 0 },
-  //     serialNumber: "",
-  //     count: 0,
-  //     price: 0,
-  //     value: 0,
-  //     notes: "",
-  //   };
-};
-// const onEnterKey = (event: KeyboardEvent) => {
-//   if (event.key === "Enter") {
-//     // Handle Enter key press event here
-//     console.log("Enter key pressed");
-//     // Access the selected option using this.selectedOption
-//   }
-// };
 const setItemFromChild = (_item: IItem) => {
   VoucherItem.value.item = _item;
 };
@@ -417,7 +372,7 @@ const setItemFromChild = (_item: IItem) => {
           {{ t("OutputVoucherNumber") }}
         </div>
         <input
-          v-model="inputVoucher.number"
+          v-model="outputVoucher.number"
           type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         />
@@ -429,7 +384,7 @@ const setItemFromChild = (_item: IItem) => {
           {{ t("Date") }}
         </div>
         <input
-          v-model="inputVoucher.date"
+          v-model="outputVoucher.date"
           type="date"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         />
@@ -441,11 +396,11 @@ const setItemFromChild = (_item: IItem) => {
           {{ t("ItemCategory") }}
         </div>
         <select
-          v-model="inputVoucher.inputVoucherStateId"
+          v-model="outputVoucher.outputVoucherStateId"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         >
           <option
-            v-for="state in inputVoucherStates"
+            v-for="state in outputVoucherStates"
             :key="state.id"
             :value="state.id"
           >
@@ -460,11 +415,11 @@ const setItemFromChild = (_item: IItem) => {
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
         <select
-          v-model="inputVoucher.employeeRequestId"
+          v-model="outputVoucher.employeeRequestId"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         >
           <option
-            v-for="employee in inputVoucherEmployees"
+            v-for="employee in outputVoucherEmployees"
             :key="employee.id"
             :value="employee.id"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
@@ -480,7 +435,7 @@ const setItemFromChild = (_item: IItem) => {
           {{ t("OutputVoucherSignaturePerson") }}
         </div>
         <input
-          v-model="inputVoucher.signaturePerson"
+          v-model="outputVoucher.signaturePerson"
           type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         />
@@ -494,7 +449,7 @@ const setItemFromChild = (_item: IItem) => {
           {{ t("Description") }}
         </div>
         <quill-editor
-          v-model:content="inputVoucher.notes"
+          v-model:content="outputVoucher.notes"
           contentType="html"
           class="text-text dark:text-textLight bg-lightOutput dark:bg-input h-60 custom-quill"
         ></quill-editor>
@@ -537,7 +492,7 @@ const setItemFromChild = (_item: IItem) => {
           </thead>
           <tbody class="bg-[#1f2937]">
             <tr
-              v-for="(row, index) in inputVoucher.items"
+              v-for="(row, index) in outputVoucher.items"
               :key="row.id"
               class="border-b border-black h-14 text-gray-100"
             >
@@ -602,7 +557,7 @@ const setItemFromChild = (_item: IItem) => {
                   @input="clearSelected"
                   :create-option="
                     (_item : IItem) => ({ 
-                      input_voucher_id: 0,
+                      output_voucher_id: 0,
                       item: {
                         name: '',
                         id: 0,
@@ -856,7 +811,7 @@ const setItemFromChild = (_item: IItem) => {
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
-            v-if="inputVoucher.id == 0"
+            v-if="outputVoucher.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
@@ -870,7 +825,7 @@ const setItemFromChild = (_item: IItem) => {
             {{ t("Update") }}
           </button>
           <button
-            v-if="inputVoucher.id != 0"
+            v-if="outputVoucher.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
           >
@@ -976,4 +931,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher/stock@/stores/voucher/inputVoucher
+@/stores/voucher/stock@/stores/voucher/outputVoucher
