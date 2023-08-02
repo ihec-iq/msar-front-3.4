@@ -9,15 +9,15 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 import { useStockStore } from "@/stores/Voucher/stock";
-import { useInputVoucherStore } from "@/stores/Voucher/inputVoucher";
+import { useOutputVoucherStore } from "@/stores/Voucher/inputVoucher";
 import { useItemStore } from "@/stores/Item/item";
 import type {
-  IInputVoucher,
-  IInputVoucherEmployee,
-  IInputVoucherFilter,
-  IInputVoucherItem,
-  IInputVoucherState,
-} from "@/types/IInputVoucher";
+  IOutputVoucher,
+  IOutputVoucherEmployee,
+  IOutputVoucherFilter,
+  IOutputVoucherItem,
+  IOutputVoucherState,
+} from "@/types/IOutputVoucher";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IItem } from "@/types/IItem";
 import AddItemPopup from "@/components/AddItemPopup.vue";
@@ -37,13 +37,13 @@ const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
-const inputVoucherStore = useInputVoucherStore();
+const inputVoucherStore = useOutputVoucherStore();
 const { inputVoucher, inputVoucherStates, inputVoucherEmployees } = storeToRefs(
-  useInputVoucherStore()
+  useOutputVoucherStore()
 );
 //#region popUp
 const showPop = ref(false);
-const VoucherItem = ref<IInputVoucherItem>({
+const VoucherItem = ref<IOutputVoucherItem>({
   id: 0,
   input_voucher_id: 0,
   item: {
@@ -61,7 +61,7 @@ const VoucherItem = ref<IInputVoucherItem>({
   value: 0,
   notes: "",
 });
-const AddPopupRef = ref<HTMLInputElement>();
+const AddPopupRef = ref<HTMLOutputElement>();
 
 const AddPopup = () => {
   showPop.value = true;
@@ -114,7 +114,7 @@ const deleteItem = (index: number) => {
       }
     });
 };
-const updatePopup = (index: number, item: IInputVoucherItem) => {
+const updatePopup = (index: number, item: IOutputVoucherItem) => {
   showPop.value = true;
   console.log(item);
   indexSelectedVoucherItem.value = index;
@@ -308,12 +308,12 @@ onMounted(async () => {
   await inputVoucherStore.getState();
   await inputVoucherStore.getEmployees();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("InputVoucher");
+    namePage.value = t("OutputVoucher");
     inputVoucher.value.id = 0;
   } else {
     inputVoucher.value.id = id.value;
     await showData(id.value);
-    namePage.value = t("InputVoucher");
+    namePage.value = t("OutputVoucher");
   }
   await useStockStore().get_stocks();
   await useItemStore().get_items();
@@ -341,7 +341,7 @@ const handlers = (map: any, vm: { search: string | any[] }) => ({
 });
 
 const handleEnter = (event: KeyboardEvent) => {
-  const enteredValue = (event.target as HTMLInputElement).value;
+  const enteredValue = (event.target as HTMLOutputElement).value;
   const matchingOption = items.value.find(
     (option: IItem) => option.name === enteredValue
   );
@@ -414,12 +414,12 @@ const setItemFromChild = (_item: IItem) => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("InputVoucherNumber") }}
+          {{ t("OutputVoucherNumber") }}
         </div>
         <input
           v-model="inputVoucher.number"
           type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         />
       </div>
       <div class="w-11/12 mr-2">
@@ -431,7 +431,7 @@ const setItemFromChild = (_item: IItem) => {
         <input
           v-model="inputVoucher.date"
           type="date"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         />
       </div>
       <div class="w-11/12 mr-2">
@@ -442,7 +442,7 @@ const setItemFromChild = (_item: IItem) => {
         </div>
         <select
           v-model="inputVoucher.inputVoucherStateId"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         >
           <option
             v-for="state in inputVoucherStates"
@@ -457,17 +457,17 @@ const setItemFromChild = (_item: IItem) => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("InputVoucherEmployeeRequest") }}
+          {{ t("OutputVoucherEmployeeRequest") }}
         </div>
         <select
           v-model="inputVoucher.employeeRequestId"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         >
           <option
             v-for="employee in inputVoucherEmployees"
             :key="employee.id"
             :value="employee.id"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
           >
             {{ employee.name }}
           </option>
@@ -477,12 +477,12 @@ const setItemFromChild = (_item: IItem) => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("InputVoucherSignaturePerson") }}
+          {{ t("OutputVoucherSignaturePerson") }}
         </div>
         <input
           v-model="inputVoucher.signaturePerson"
           type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         />
       </div>
     </div>
@@ -496,7 +496,7 @@ const setItemFromChild = (_item: IItem) => {
         <quill-editor
           v-model:content="inputVoucher.notes"
           contentType="html"
-          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60 custom-quill"
+          class="text-text dark:text-textLight bg-lightOutput dark:bg-input h-60 custom-quill"
         ></quill-editor>
       </div>
     </div>
@@ -698,13 +698,13 @@ const setItemFromChild = (_item: IItem) => {
                 </div>
                 <select
                   v-model="VoucherItem.stock"
-                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                 >
                   <option
                     v-for="stock in stocks"
                     :key="stock.id"
                     :value="stock"
-                    class="bg-lightInput dark:bg-input text-text dark:text-textLight"
+                    class="bg-lightOutput dark:bg-input text-text dark:text-textLight"
                   >
                     {{ stock.name }}
                   </option>
