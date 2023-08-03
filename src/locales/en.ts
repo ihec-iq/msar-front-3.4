@@ -25,6 +25,11 @@ export default {
   InputVoucherNumber: "Number",
   InputVoucherEmployeeRequest: "Employee Request",
   InputVoucherSignaturePerson: "Signature Person",
+  OutputVoucher: "Output Voucher",
+  OutputVoucherSignaturePerson: "Signature Person",
+  OutputVoucherNumber: "Voucher Number",
+  OutputVoucherEmployeeRequest: "Employee Request",
+
   StoreIndex: "Store",
   SearchForItem: "Search by name or description",
   ItemUpdate: "Update Item",

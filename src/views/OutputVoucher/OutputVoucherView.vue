@@ -2,29 +2,19 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 import { useStockStore } from "@/stores/Voucher/stock";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
-import { useItemStore } from "@/stores/Item/item";
-import type {
-  IOutputVoucher,
-  IOutputVoucherEmployee,
-  IOutputVoucherFilter,
-  IOutputVoucherItem,
-  IOutputVoucherState,
-} from "@/types/IOutputVoucher";
+import { useInputVoucherStore } from "@/stores/Voucher/inputVoucher";
+import type { IOutputVoucherItem } from "@/types/IOutputVoucher";
 import { useI18n } from "@/stores/i18n/useI18n";
-import type { IItem } from "@/types/IItem";
-import AddItemPopup from "@/components/AddItemPopup.vue";
+import type { IInputVoucherItem } from "@/types/IInputVoucher";
 const { t } = useI18n();
 const { stocks } = storeToRefs(useStockStore());
-const { items } = storeToRefs(useItemStore());
-const { item } = storeToRefs(useItemStore());
+const { inputVoucherItems } = storeToRefs(useInputVoucherStore());
 //region"Drag and Drop"
 
 //#endregion
@@ -38,23 +28,36 @@ const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
 const outputVoucherStore = useOutputVoucherStore();
-const { outputVoucher, outputVoucherStates, outputVoucherEmployees } =
-  storeToRefs(useOutputVoucherStore());
+const { outputVoucher, outputVoucherEmployees } = storeToRefs(
+  useOutputVoucherStore()
+);
 //#region popUp
 const showPop = ref(false);
 const VoucherItem = ref<IOutputVoucherItem>({
   id: 0,
   output_voucher_id: 0,
-  item: {
-    name: "",
-    id: 0,
-    code: "",
-    description: "",
-    itemCategory: { id: 0, name: "" },
-    measuringUnit: "",
+  input_voucher_item_id: 0,
+  input_voucher_item: {
+    item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      itemCategory: {
+        id: 0,
+        name: "",
+      },
+      measuringUnit: "",
+    },
+    stock: {
+      id: 0,
+      name: "",
+    },
+    serialNumber: "",
+    count: 0,
+    price: 0,
+    value: 0,
   },
-  stock: { name: "", id: 0 },
-  serialNumber: "",
   count: 0,
   price: 0,
   value: 0,
@@ -72,16 +75,28 @@ const resetVoucherItem = () => {
   VoucherItem.value = {
     id: 0,
     output_voucher_id: 0,
-    item: {
-      name: "",
-      id: 0,
-      code: "",
-      description: "",
-      itemCategory: { id: 0, name: "" },
-      measuringUnit: "",
+    input_voucher_item_id: 0,
+    input_voucher_item: {
+      item: {
+        id: 0,
+        name: "",
+        code: "",
+        description: "",
+        itemCategory: {
+          id: 0,
+          name: "",
+        },
+        measuringUnit: "",
+      },
+      stock: {
+        id: 0,
+        name: "",
+      },
+      serialNumber: "",
+      count: 0,
+      price: 0,
+      value: 0,
     },
-    stock: { name: "", id: 1 },
-    serialNumber: "",
     count: 0,
     price: 0,
     value: 0,
@@ -121,7 +136,7 @@ const updatePopup = (index: number, item: IOutputVoucherItem) => {
 };
 const AddItem = () => {
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  console.log(VoucherItem.value.item);
+  console.log(VoucherItem.value.input_voucher_item);
   outputVoucherStore.addItem(VoucherItem.value);
   resetVoucherItem();
   showPop.value = false;
@@ -153,10 +168,6 @@ const store = () => {
   formData.append("notes", outputVoucher.value.notes.toString());
   formData.append("date", outputVoucher.value.date.toString());
   formData.append("items", JSON.stringify(outputVoucher.value.items));
-  formData.append(
-    "outputVoucherStateId",
-    outputVoucher.value.outputVoucherStateId.toString()
-  );
   formData.append(
     "employeeRequestId",
     outputVoucher.value.employeeRequestId.toString()
@@ -197,10 +208,6 @@ function update() {
   formData.append("notes", outputVoucher.value.notes.toString());
   formData.append("date", outputVoucher.value.date.toString());
   formData.append("items", JSON.stringify(outputVoucher.value.items));
-  formData.append(
-    "outputVoucherStateId",
-    outputVoucher.value.outputVoucherStateId.toString()
-  );
   formData.append(
     "employeeRequestId",
     outputVoucher.value.employeeRequestId.toString()
@@ -282,7 +289,6 @@ const showData = async (id: number) => {
           response.data.data.employeeRequestId;
         outputVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
-        outputVoucher.value.outputVoucherStateId = response.data.data.state.id;
       }
     })
     .catch((errors) => {
@@ -307,10 +313,7 @@ const back = () => {
 };
 
 onMounted(async () => {
-  console.log("OutputVoucher");
-  //console.log(can("show items1"));
   checkPermissionAccessArray(["show Item"]);
-  await outputVoucherStore.getState();
   await outputVoucherStore.getEmployees();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
@@ -321,34 +324,35 @@ onMounted(async () => {
     namePage.value = t("OutputVoucher");
   }
   await useStockStore().get_stocks();
-  await useItemStore().get_items();
+  await useInputVoucherStore().getItems();
 });
-const handleEnter = (event: KeyboardEvent) => {
-  const enteredValue = (event.target as HTMLOutputElement).value;
-  const matchingOption = items.value.find(
-    (option: IItem) => option.name === enteredValue
-  );
-  if (matchingOption === undefined && enteredValue.length > 0) {
-    let btn = document.getElementById("my_modal_7");
-    item.value.name = enteredValue;
-    btn?.click();
-  }
-};
 function clearSelected(event: { target: { value: string } }) {
   if (event.target.value === "") {
     VoucherItem.value = {
       id: 0,
       output_voucher_id: 0,
-      item: {
-        name: "",
-        id: 0,
-        code: "",
-        description: "",
-        itemCategory: { id: 0, name: "" },
-        measuringUnit: "",
+      input_voucher_item_id: 0,
+      input_voucher_item: {
+        item: {
+          id: 0,
+          name: "",
+          code: "",
+          description: "",
+          itemCategory: {
+            id: 0,
+            name: "",
+          },
+          measuringUnit: "",
+        },
+        stock: {
+          id: 0,
+          name: "",
+        },
+        serialNumber: "",
+        count: 0,
+        price: 0,
+        value: 0,
       },
-      stock: { name: "", id: 0 },
-      serialNumber: "",
       count: 0,
       price: 0,
       value: 0,
@@ -356,13 +360,9 @@ function clearSelected(event: { target: { value: string } }) {
     };
   }
 }
-const setItemFromChild = (_item: IItem) => {
-  VoucherItem.value.item = _item;
-};
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
-
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
       <div class="w-11/12 mr-2">
@@ -388,25 +388,6 @@ const setItemFromChild = (_item: IItem) => {
           type="date"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("ItemCategory") }}
-        </div>
-        <select
-          v-model="outputVoucher.outputVoucherStateId"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-        >
-          <option
-            v-for="state in outputVoucherStates"
-            :key="state.id"
-            :value="state.id"
-          >
-            {{ state.name }}
-          </option>
-        </select>
       </div>
       <div class="w-11/12 mr-2">
         <div
@@ -497,12 +478,12 @@ const setItemFromChild = (_item: IItem) => {
               class="border-b border-black h-14 text-gray-100"
             >
               <th>{{ row.id }}</th>
-              <th>{{ row.item.name }}</th>
-              <th>{{ row.serialNumber }}</th>
+              <th>{{ row.input_voucher_item.item.name }}</th>
+              <th>{{ row.input_voucher_item.serialNumber }}</th>
               <th>{{ row.count }}</th>
               <th>{{ row.price }}</th>
               <th>{{ row.count * row.price }}</th>
-              <th>{{ row.stock.name }}</th>
+              <th>{{ row.input_voucher_item.stock.name }}</th>
               <th>{{ row.notes }}</th>
               <th>
                 <van-button
@@ -549,64 +530,45 @@ const setItemFromChild = (_item: IItem) => {
                 <vSelect
                   ref="AddPopupRef"
                   class="capitalize mx-2 rounded-md h-10 w-56 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                  v-model="VoucherItem.item"
-                  :options="items"
-                  :reduce="(_item: IItem) => _item"
-                  :get-option-label="(_item: IItem) => _item.name"
-                  @keydown.enter="handleEnter"
+                  v-model="VoucherItem.input_voucher_item"
+                  :options="inputVoucherItems"
+                  :reduce="(_item: IInputVoucherItem) => _item"
+                  :get-option-label="(_item: IInputVoucherItem) => _item.item.name"
                   @input="clearSelected"
-                  :create-option="
-                    (_item : IItem) => ({ 
-                      output_voucher_id: 0,
-                      item: {
-                        name: '',
-                        id: 0,
-                        code: 0,
-                        description: 0,
-                        itemCategory: { id: 0, name: ''},
-                        measuringUnit: '',
-                      },
-                      stock: { name: '', id: 0 },
-                      serialNumber: '',
-                      count: 0,
-                      price: 0,
-                      value: 0,
-                      notes: '',
-                    })
-                  "
                 >
-                  <template #option="{ code, itemCategory, description, name }">
+                  <template #option="{ item }">
                     <div
                       class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold"
                     >
-                      {{ name }}
+                      {{ item.name }}
                     </div>
                     <cite>
                       <div
                         class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                       >
-                        Code: {{ code }}
+                        Code: {{ item.code }}
                       </div>
                       <div
                         class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                       >
-                        Category: {{ itemCategory.name.toString() }}
+                        Category: {{ item.itemCategory.name.toString() }}
                       </div>
                     </cite>
                     <br />
                     <cite>
-                      {{ description }}
+                      {{ item.description }}
                     </cite>
                   </template>
                 </vSelect>
-                <!-- Put this part before </body> tag -->
-                <AddItemPopup :setItem="setItemFromChild"></AddItemPopup>
               </div>
               <div
                 class="w-4/5 rounded-md border-2 border-gray-600 flex"
-                v-if="VoucherItem.item"
+                v-if="VoucherItem.input_voucher_item.item"
               >
-                <div class="w-1/5" v-if="VoucherItem.item.code">
+                <div
+                  class="w-1/5"
+                  v-if="VoucherItem.input_voucher_item.item.code"
+                >
                   <div
                     class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
                   >
@@ -615,7 +577,7 @@ const setItemFromChild = (_item: IItem) => {
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
-                    {{ VoucherItem.item.code.toString() }}
+                    {{ VoucherItem.input_voucher_item.item.code.toString() }}
                   </div>
                 </div>
                 <div class="w-1/5">
@@ -627,10 +589,15 @@ const setItemFromChild = (_item: IItem) => {
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
-                    {{ VoucherItem.item.itemCategory.name.toString() }}
+                    {{
+                      VoucherItem.input_voucher_item.item.itemCategory.name.toString()
+                    }}
                   </div>
                 </div>
-                <div class="w-2/5" v-if="VoucherItem.item.description">
+                <div
+                  class="w-2/5"
+                  v-if="VoucherItem.input_voucher_item.item.description"
+                >
                   <div
                     class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
                   >
@@ -639,7 +606,7 @@ const setItemFromChild = (_item: IItem) => {
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
-                    {{ VoucherItem.item.description }}
+                    {{ VoucherItem.input_voucher_item.item.description }}
                   </div>
                 </div>
               </div>
@@ -652,7 +619,7 @@ const setItemFromChild = (_item: IItem) => {
                   Stock
                 </div>
                 <select
-                  v-model="VoucherItem.stock"
+                  v-model="VoucherItem.input_voucher_item.stock"
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                 >
                   <option
@@ -672,7 +639,7 @@ const setItemFromChild = (_item: IItem) => {
                   Serial Number
                 </div>
                 <input
-                  v-model="VoucherItem.serialNumber"
+                  v-model="VoucherItem.input_voucher_item.serialNumber"
                   type="text"
                   class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
@@ -931,4 +898,3 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher/stock@/stores/voucher/outputVoucher

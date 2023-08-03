@@ -6,12 +6,10 @@ export interface IOutputVoucher {
   number: string;
   date: String;
   notes: string;
-  state: IOutputVoucherState;
   items: Array<IOutputVoucherItem>;
   signaturePerson: String;
   employeeRequestId: number;
   employeeRequest: IOutputVoucherEmployee;
-  outputVoucherStateId: number;
   itemsCount?: number;
 }
 export interface IOutputVoucherItem {

@@ -24,6 +24,33 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucherStateId: 0,
   });
   const inputVouchers = ref<IInputVoucher[]>([]);
+  const inputVoucherItem = ref<IInputVoucherItem>({
+    id: 0,
+    input_voucher_id: 0,
+    item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      itemCategory: {
+        id: 0,
+        name: "",
+      },
+      measuringUnit: "",
+    },
+    itemId: 0,
+    stock: {
+      id: 0,
+      name: "",
+    },
+    stockId: 0,
+    serialNumber: "",
+    count: 0,
+    price: 0,
+    value: 0,
+    notes: "",
+  });
+  const inputVoucherItems = ref<IInputVoucherItem[]>([]);
   const inputVoucherStates = ref<IInputVoucherState[]>([]);
   const inputVoucherEmployees = ref<IInputVoucherEmployee[]>([]);
   const pathBase = "/stockSys";
@@ -55,6 +82,17 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       })
       .catch((errors) => {
         console.log("in get Categories : " + errors);
+      });
+  }
+  async function getItems() {
+    return await Api.get(`${pathBase}/inputVoucherItem`)
+      .then((response) => {
+        if (response.status == 200) {
+          inputVoucherItems.value = response.data.data;
+        }
+      })
+      .catch((errors) => {
+        console.log("in get input Voucher Items : " + errors);
       });
   }
   async function getEmployees() {
@@ -92,6 +130,8 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   return {
     inputVoucher,
     inputVouchers,
+    inputVoucherItem,
+    inputVoucherItems,
     inputVoucherStates,
     inputVoucherEmployees,
     addItem,
@@ -100,6 +140,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     get,
     get_filter,
     getState,
+    getItems,
     getEmployees,
     show,
     store,

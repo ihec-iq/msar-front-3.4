@@ -16,12 +16,10 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     number: "",
     date: "",
     notes: "",
-    state: { name: "", id: 0 },
     items: [],
     signaturePerson: "",
     employeeRequestId: 0,
     employeeRequest: { name: "", id: 0 },
-    outputVoucherStateId: 0,
   });
   const outputVouchers = ref<IOutputVoucher[]>([]);
   const outputVoucherStates = ref<IOutputVoucherState[]>([]);
@@ -82,12 +80,10 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     outputVoucher.number = "";
     outputVoucher.date = "";
     outputVoucher.notes = "";
-    outputVoucher.state = { name: "", id: 0 };
     outputVoucher.items = [];
     outputVoucher.signaturePerson = "";
     outputVoucher.employeeRequestId = 0;
     outputVoucher.employeeRequest = { name: "", id: 0 };
-    outputVoucher.outputVoucherStateId = 0;
   }
   return {
     outputVoucher,
