@@ -6,9 +6,9 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
-import { useStockStore } from "@/stores/Voucher/stock";
+import { useStockStore } from "@/stores/voucher/stock";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
-import { useInputVoucherStore } from "@/stores/Voucher/inputVoucher";
+import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 import type { IOutputVoucherItem } from "@/types/IOutputVoucher";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IInputVoucherItem } from "@/types/IInputVoucher";
@@ -35,9 +35,7 @@ const { outputVoucher, outputVoucherEmployees } = storeToRefs(
 const showPop = ref(false);
 const VoucherItem = ref<IOutputVoucherItem>({
   id: 0,
-  output_voucher_id: 0,
-  input_voucher_item_id: 0,
-  input_voucher_item: {
+  inputVoucherItem: {
     item: {
       id: 0,
       name: "",
@@ -67,16 +65,14 @@ const AddPopupRef = ref<HTMLOutputElement>();
 
 const AddPopup = () => {
   showPop.value = true;
-  AddPopupRef.value?.focus();
   resetVoucherItem();
 };
 const resetVoucherItem = () => {
   indexSelectedVoucherItem.value = 0;
   VoucherItem.value = {
     id: 0,
-    output_voucher_id: 0,
-    input_voucher_item_id: 0,
-    input_voucher_item: {
+    outputVoucherId: 0,
+    inputVoucherItem: {
       item: {
         id: 0,
         name: "",
@@ -136,7 +132,7 @@ const updatePopup = (index: number, item: IOutputVoucherItem) => {
 };
 const AddItem = () => {
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  console.log(VoucherItem.value.input_voucher_item);
+  console.log(VoucherItem.value.inputVoucherItem);
   outputVoucherStore.addItem(VoucherItem.value);
   resetVoucherItem();
   showPop.value = false;
@@ -170,7 +166,7 @@ const store = () => {
   formData.append("items", JSON.stringify(outputVoucher.value.items));
   formData.append(
     "employeeRequestId",
-    outputVoucher.value.employeeRequestId.toString()
+    outputVoucher.value.employeeRequest.id.toString()
   );
   formData.append(
     "signaturePerson",
@@ -210,7 +206,7 @@ function update() {
   formData.append("items", JSON.stringify(outputVoucher.value.items));
   formData.append(
     "employeeRequestId",
-    outputVoucher.value.employeeRequestId.toString()
+    outputVoucher.value.employeeRequest.id.toString()
   );
   formData.append(
     "signaturePerson",
@@ -285,8 +281,6 @@ const showData = async (id: number) => {
         outputVoucher.value.items = response.data.data.items;
         outputVoucher.value.employeeRequest =
           response.data.data.employeeRequest;
-        outputVoucher.value.employeeRequestId =
-          response.data.data.employeeRequestId;
         outputVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
       }
@@ -330,9 +324,8 @@ function clearSelected(event: { target: { value: string } }) {
   if (event.target.value === "") {
     VoucherItem.value = {
       id: 0,
-      output_voucher_id: 0,
-      input_voucher_item_id: 0,
-      input_voucher_item: {
+      outputVoucherId: 0,
+      inputVoucherItem: {
         item: {
           id: 0,
           name: "",
@@ -396,13 +389,13 @@ function clearSelected(event: { target: { value: string } }) {
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
         <select
-          v-model="outputVoucher.employeeRequestId"
+          v-model="outputVoucher.employeeRequest"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         >
           <option
             v-for="employee in outputVoucherEmployees"
             :key="employee.id"
-            :value="employee.id"
+            :value="employee"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
           >
             {{ employee.name }}
@@ -478,12 +471,12 @@ function clearSelected(event: { target: { value: string } }) {
               class="border-b border-black h-14 text-gray-100"
             >
               <th>{{ row.id }}</th>
-              <th>{{ row.input_voucher_item.item.name }}</th>
-              <th>{{ row.input_voucher_item.serialNumber }}</th>
+              <th>{{ row.inputVoucherItem.item.name }}</th>
+              <th>{{ row.inputVoucherItem.serialNumber }}</th>
               <th>{{ row.count }}</th>
               <th>{{ row.price }}</th>
               <th>{{ row.count * row.price }}</th>
-              <th>{{ row.input_voucher_item.stock.name }}</th>
+              <th>{{ row.inputVoucherItem.stock.name }}</th>
               <th>{{ row.notes }}</th>
               <th>
                 <van-button
@@ -529,8 +522,8 @@ function clearSelected(event: { target: { value: string } }) {
                 </div>
                 <vSelect
                   ref="AddPopupRef"
-                  class="capitalize mx-2 rounded-md h-10 w-56 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                  v-model="VoucherItem.input_voucher_item"
+                  class="capitalize mx-2 rounded-md h-10 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
+                  v-model="VoucherItem.inputVoucherItem"
                   :options="inputVoucherItems"
                   :reduce="(_item: IInputVoucherItem) => _item"
                   :get-option-label="(_item: IInputVoucherItem) => _item.item.name"
@@ -563,11 +556,11 @@ function clearSelected(event: { target: { value: string } }) {
               </div>
               <div
                 class="w-4/5 rounded-md border-2 border-gray-600 flex"
-                v-if="VoucherItem.input_voucher_item.item"
+                v-if="VoucherItem.inputVoucherItem.item"
               >
                 <div
                   class="w-1/5"
-                  v-if="VoucherItem.input_voucher_item.item.code"
+                  v-if="VoucherItem.inputVoucherItem.item.code"
                 >
                   <div
                     class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
@@ -577,7 +570,7 @@ function clearSelected(event: { target: { value: string } }) {
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
-                    {{ VoucherItem.input_voucher_item.item.code.toString() }}
+                    {{ VoucherItem.inputVoucherItem.item.code.toString() }}
                   </div>
                 </div>
                 <div class="w-1/5">
@@ -590,13 +583,13 @@ function clearSelected(event: { target: { value: string } }) {
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
                     {{
-                      VoucherItem.input_voucher_item.item.itemCategory.name.toString()
+                      VoucherItem.inputVoucherItem.item.itemCategory.name.toString()
                     }}
                   </div>
                 </div>
                 <div
                   class="w-2/5"
-                  v-if="VoucherItem.input_voucher_item.item.description"
+                  v-if="VoucherItem.inputVoucherItem.item.description"
                 >
                   <div
                     class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
@@ -606,7 +599,7 @@ function clearSelected(event: { target: { value: string } }) {
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
-                    {{ VoucherItem.input_voucher_item.item.description }}
+                    {{ VoucherItem.inputVoucherItem.item.description }}
                   </div>
                 </div>
               </div>
@@ -619,7 +612,7 @@ function clearSelected(event: { target: { value: string } }) {
                   Stock
                 </div>
                 <select
-                  v-model="VoucherItem.input_voucher_item.stock"
+                  v-model="VoucherItem.inputVoucherItem.stock"
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                 >
                   <option
@@ -639,7 +632,7 @@ function clearSelected(event: { target: { value: string } }) {
                   Serial Number
                 </div>
                 <input
-                  v-model="VoucherItem.input_voucher_item.serialNumber"
+                  v-model="VoucherItem.inputVoucherItem.serialNumber"
                   type="text"
                   class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
@@ -681,6 +674,23 @@ function clearSelected(event: { target: { value: string } }) {
                   type="number"
                   class="rounded-md disabled focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
+              </div>
+            </div>
+            <div class="flex justify-around w-full mt-4 ml-6">
+              <div class="w-full">
+                <div
+                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                >
+                  Notes
+                </div>
+                <div
+                  class="rounded-md w-full focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
+                >
+                  <textarea
+                    v-model="VoucherItem.notes"
+                    class="rounded-md w-full focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                  ></textarea>
+                </div>
               </div>
             </div>
           </div>

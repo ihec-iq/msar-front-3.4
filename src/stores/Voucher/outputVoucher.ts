@@ -14,11 +14,10 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
   const outputVoucher = reactive<IOutputVoucher>({
     id: 0,
     number: "",
-    date: "",
+    date: new Date().toISOString().split("T")[0],
     notes: "",
     items: [],
     signaturePerson: "",
-    employeeRequestId: 0,
     employeeRequest: { name: "", id: 0 },
   });
   const outputVouchers = ref<IOutputVoucher[]>([]);
@@ -72,8 +71,20 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
   function editItem(index: number, item: IOutputVoucherItem) {
     outputVoucher.items[index] = item;
   }
-  function removeItem(index: number) {
-    outputVoucher.items?.splice(index, 1);
+
+  async function removeItem(index: number) {
+    return await Api.delete(
+      `${pathBase}/outputVoucherItem/delete/` +
+        String(outputVoucher.items[index]?.id)
+    )
+      .then((response) => {
+        if (response.status == 200) {
+          outputVoucher.items?.splice(index, 1);
+        }
+      })
+      .catch((errors) => {
+        console.log("in removeItem outputVoucher : " + errors);
+      });
   }
   function resetData() {
     outputVoucher.id = 0;
@@ -82,7 +93,6 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     outputVoucher.notes = "";
     outputVoucher.items = [];
     outputVoucher.signaturePerson = "";
-    outputVoucher.employeeRequestId = 0;
     outputVoucher.employeeRequest = { name: "", id: 0 };
   }
   return {

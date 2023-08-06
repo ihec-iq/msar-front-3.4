@@ -14,7 +14,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   const inputVoucher = reactive<IInputVoucher>({
     id: 0,
     number: "",
-    date: "",
+    date: new Date().toISOString().split("T")[0],
     notes: "",
     state: { name: "", id: 0 },
     items: [],
@@ -112,8 +112,19 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   function editItem(index: number, item: IInputVoucherItem) {
     inputVoucher.items[index] = item;
   }
-  function removeItem(index: number) {
-    inputVoucher.items?.splice(index, 1);
+  async function removeItem(index: number) {
+    return await Api.delete(
+      `${pathBase}/inputVoucherItem/delete/` +
+        String(inputVoucher.items[index]?.id)
+    )
+      .then((response) => {
+        if (response.status == 200) {
+          inputVoucher.items?.splice(index, 1);
+        }
+      })
+      .catch((errors) => {
+        console.log("in removeItem inputVoucherItem : " + errors);
+      });
   }
   function resetData() {
     inputVoucher.id = 0;

@@ -6,7 +6,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
-import { useInputVoucherStore } from "@/stores/Voucher/inputVoucher";
+import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IInputVoucher>>([]);
@@ -309,4 +309,3 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher/inputVoucher

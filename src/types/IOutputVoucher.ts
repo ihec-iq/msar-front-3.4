@@ -1,5 +1,4 @@
 import type { IInputVoucherItem } from "./IInputVoucher";
-import type { IStock } from "./IStock";
 
 export interface IOutputVoucher {
   id: number;
@@ -8,19 +7,18 @@ export interface IOutputVoucher {
   notes: string;
   items: Array<IOutputVoucherItem>;
   signaturePerson: String;
-  employeeRequestId: number;
   employeeRequest: IOutputVoucherEmployee;
   itemsCount?: number;
 }
 export interface IOutputVoucherItem {
   id?: number;
-  output_voucher_id?: number;
-  input_voucher_item_id: number;
-  input_voucher_item: IInputVoucherItem;
+  outputVoucherId?: number;
+  inputVoucherItem: IInputVoucherItem;
   count: number;
+  countWord?: string;
   price: number;
   value: number;
-  notes?: String;
+  notes: string;
 }
 export interface IOutputVoucherEmployee {
   id: number;
