@@ -35,6 +35,7 @@ export default {
   OutputVoucherNumber: " رقم السند",
   OutputVoucherEmployeeRequest: "طلبت من",
   StoreIndex: "المخزنية",
+  StoreTypeReport: "نوع التقرير",
   ItemAdd: "اضافة مادة",
   Seats: "المقاعد",
   Stats: "الحالة",

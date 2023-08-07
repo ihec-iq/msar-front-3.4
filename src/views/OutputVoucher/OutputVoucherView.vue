@@ -456,7 +456,7 @@ function clearSelected(event: { target: { value: string } }) {
               <th scope="col" class="text-sm font-medium px-6 py-4">
                 Serial Number
               </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">count</th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">Count</th>
               <th scope="col" class="text-sm font-medium px-6 py-4">Price</th>
               <th scope="col" class="text-sm font-medium px-6 py-4">Total</th>
               <th scope="col" class="text-sm font-medium px-6 py-4">Stock</th>

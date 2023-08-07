@@ -13,7 +13,7 @@ const data = ref<Array<IStore>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IStore>>([]);
 
-const { get_filter } = useStoringStore();
+const { get_filter, get_summation } = useStoringStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -37,7 +37,7 @@ watch(
 const fastSearch = ref("");
 const filterByIDName = (item: IStore) => {
   if (
-    item.item.includes(fastSearch.value) ||
+    item.itemName.includes(fastSearch.value) ||
     item.serialNumber.includes(fastSearch.value)
   ) {
     return true;
@@ -56,22 +56,42 @@ const searchFilter = ref<IStoreFilter>({
   item: "",
   limit: 6,
   serialNumber: "",
+  summation: true,
 });
 const getFilterData = async (page = 1) => {
+  dataPage.value = [];
+  data.value = [];
+  dataBase.value = [];
   isLoading.value = true;
   searchFilter.value.item = fastSearch.value;
   searchFilter.value.serialNumber = fastSearch.value;
-  await get_filter(searchFilter.value, page)
-    .then((response) => {
-      if (response.status == 200) {
-        dataPage.value = response.data.data;
-        data.value = response.data.data.data;
-        dataBase.value = response.data.data.data;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+  if (searchFilter.value.summation == true) {
+    await get_summation(searchFilter.value, page)
+      .then((response) => {
+        if (response.status == 200) {
+          dataPage.value = response.data.data;
+          data.value = dataPage.value.data;
+          dataBase.value = dataPage.value.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
+    await get_filter(searchFilter.value, page)
+      .then((response) => {
+        if (response.status == 200) {
+          dataPage.value = response.data.data;
+          data.value = dataPage.value.data;
+          dataBase.value = dataPage.value.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   isLoading.value = false;
 };
 //#endregion
@@ -154,6 +174,23 @@ onMounted(async () => {
           </div>
         </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
+          <label class="cursor-pointer label">
+            <span
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("StoreTypeReport") }} :
+              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</span
+            >
+            <input
+              type="checkbox"
+              v-model="searchFilter.summation"
+              class="toggle toggle-secondary"
+              checked
+              @change="getFilterData()"
+            />
+          </label>
+        </div>
+        <div class="ml-4 lg:mt-0 xs:mt-2">
           <button
             @click="getFilterData()"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
@@ -184,9 +221,6 @@ onMounted(async () => {
                     <table class="min-w-full text-center">
                       <thead class="border-b bg-[#0003] text-gray-300">
                         <tr>
-                          <th scope="col" class="text-sm font-medium px-2 py-2">
-                            ID
-                          </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             item
                           </th>
@@ -210,21 +244,20 @@ onMounted(async () => {
                       <tbody class="bg-[#1f2937]">
                         <tr
                           v-for="row in data"
-                          :key="row.id"
+                          :key="row.itemName"
                           class="border-b border-black h-14 text-gray-100"
                         >
-                          <th>{{ row.id }}</th>
-                          <th>{{ row.item }}</th>
+                          <th>{{ row.itemName }}</th>
                           <th>{{ row.serialNumber }}</th>
                           <th>{{ row.count }}</th>
                           <th>{{ row.price }}</th>
-                          <th>{{ row.stock }}</th>
+                          <th>{{ row.stockName }}</th>
                           <th>
                             <van-button
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
                               type="secondary"
                               is-link
-                              @click="openItem(row.id)"
+                              @click="openItem(1)"
                               >Open
                             </van-button>
                           </th>

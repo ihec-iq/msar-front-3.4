@@ -31,6 +31,7 @@ export default {
   OutputVoucherEmployeeRequest: "Employee Request",
 
   StoreIndex: "Store",
+  StoreTypeReport: "Type Report",
   SearchForItem: "Search by name or description",
   ItemUpdate: "Update Item",
   Name: "Name",

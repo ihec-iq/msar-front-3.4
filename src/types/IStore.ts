@@ -1,7 +1,6 @@
 export interface IStore {
-  id: number;
-  item: string;
-  stock: String;
+  itemName: string;
+  stockName: String;
   serialNumber: string;
   price?: number;
   count: number;
@@ -11,4 +10,5 @@ export interface IStoreFilter {
   item?: string;
   serialNumber?: string;
   limit: number;
+  summation?: boolean;
 }
