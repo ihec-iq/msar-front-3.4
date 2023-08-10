@@ -11,7 +11,9 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import FilePreview from "@/components/FilePreview.vue";
 import { usePermissionStore } from "@/stores/permission";
 import DragDrop from "@/components/DragDrop.vue";
+
 import { useDragDropStore } from "@/compositions/dragDrop";
+const { archiveTypes } = storeToRefs(useArchiveStore());
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
@@ -212,6 +214,7 @@ onMounted(async () => {
     namePage.value = t("ArchiveUpdate");
   }
   filesDataInput.value = [];
+  await useArchiveStore().getArchiveTypes();
 });
 </script>
 <template>
@@ -236,7 +239,7 @@ onMounted(async () => {
             <span
               class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
             >
-              {{ t("TypeBook") }} : {{ isIn ? "صادر" : "وارد" }}</span
+              {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}</span
             >
             <input
               type="checkbox"
@@ -246,6 +249,25 @@ onMounted(async () => {
             />
           </label>
         </div>
+      </div>
+      <div class="w-11/12 mx-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("Type") }}
+        </div>
+        <select
+          v-model="archive.archiveTypeId"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        >
+          <option
+            v-for="archiveType in archiveTypes"
+            :key="archiveType.id"
+            :value="archiveType.id"
+          >
+            {{ archiveType.name }}
+          </option>
+        </select>
       </div>
       <div class="w-11/12 mx-2">
         <div
@@ -272,6 +294,7 @@ onMounted(async () => {
         />
       </div>
     </div>
+    <ScannerComponent></ScannerComponent>
     <DragDrop></DragDrop>
     <div class="mt-10 p-6">
       <div class="w-full mx-2">

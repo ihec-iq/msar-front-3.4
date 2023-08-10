@@ -8,17 +8,37 @@ import vSelect from "vue-select";
 import "nprogress/nprogress.css";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { MotionPlugin } from "@vueuse/motion";
-
+import { QuillEditor } from "@vueup/vue-quill";
+const globalOptions = {
+  modules: {
+    toolbar: [
+      "bold",
+      "italic",
+      "underline",
+      { align: "right" },
+      { direction: "rtl" },
+      "blockquote",
+      "code-block",
+      { list: "ordered" },
+      { list: "bullet" },
+    ],
+  },
+  placeholder: "قم بملئ الملاحظات",
+  readOnly: false,
+};
+// set default globalOptions prop
+QuillEditor.props.globalOptions.default = () => globalOptions;
+// register QuillEditor component
 const app = createApp(App);
 app.component("vSelect", vSelect);
-app.component("QuillEditor");
+app.component("QuillEditor", QuillEditor);
 app.use(createPinia());
 app.use(MotionPlugin);
 app.use(router);
 //#region Permission
 
-app.config.globalProperties.$baseURL =
-  process.env.NODE_ENV === "production" ? "/10/" : "/";
+// app.config.globalProperties.$baseURL =
+//   process.env.NODE_ENV === "production" ? "/10/" : "/";
 //#region Permission Globally
 
 // console.log(can("admin"));

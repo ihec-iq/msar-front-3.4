@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const role = () => {
+  router.push({
+    name: "role",
+  });
+};
+</script>
 <template>
   <div class="w-full items-center">
     <div class="flex justify-around w-full my-4">
@@ -53,17 +64,5 @@
         IDK
       </button>
     </div>
-
   </div>
 </template>
-<script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-const role = () => {
-  router.push({
-    name: "role",
-  });
-};
-</script>

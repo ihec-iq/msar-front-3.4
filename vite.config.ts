@@ -26,10 +26,4 @@ export default defineConfig({
     "process.env": process.env,
   },
   base: process.env.NODE_ENV === "production" ? "/10/" : "/",
-  // Replace 'subdomain' with your actual subdomain
-  // build: {
-  //   outDir: resolve(__dirname, `dist/${subdomain}`),
-  //   assetsDir: `${subdomain}/assets/`,
-  //   manifest: true,
-  // },
 });
