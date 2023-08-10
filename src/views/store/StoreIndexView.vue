@@ -7,6 +7,7 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStore, IStoreFilter } from "@/types/IStore";
 import { useStoringStore } from "@/stores/storing";
+import ToolTipComponent from "@/components/ToolTipComponent.vue";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IStore>>([]);
@@ -228,7 +229,7 @@ onMounted(async () => {
                             Serial Number
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            count
+                            Available in Stock
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             Price
@@ -249,7 +250,20 @@ onMounted(async () => {
                         >
                           <th>{{ row.itemName }}</th>
                           <th>{{ row.serialNumber }}</th>
-                          <th>{{ row.count }}</th>
+                          <th>
+                            <span
+                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+                            >
+                              {{ row.count }}
+                            </span>
+
+                            <span
+                              data-tooltip-target="tooltip-dark"
+                              id="my-button"
+                              class="bg-blue-100 vertical-align: super; text-blue-800 text-10 font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
+                              >(↑{{ row.out }})(↓{{ row.in }})
+                            </span>
+                          </th>
                           <th>{{ row.price }}</th>
                           <th>{{ row.stockName }}</th>
                           <th>
@@ -265,6 +279,7 @@ onMounted(async () => {
                       </tbody>
                     </table>
                   </div>
+
                   <TailwindPagination
                     class="flex justify-center mt-10"
                     :data="dataPage"
@@ -282,3 +297,4 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+<style></style>

@@ -4,6 +4,8 @@ export interface IStore {
   serialNumber: string;
   price?: number;
   count: number;
+  in?: number;
+  out?: number;
 }
 export interface IStoreFilter {
   stock?: string;

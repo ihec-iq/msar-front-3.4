@@ -20,9 +20,11 @@ export const useStoringStore = defineStore("StoringStore", () => {
       });
   }
   async function get_filter(params: IStoreFilter, page: number) {
+    console.log(`${pathUrl}/filter?page=${page}`);
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function get_summation(params: IStoreFilter, page: number) {
+    console.log(`${pathUrl}/summation?page=${page}`);
     return await Api.get(`${pathUrl}/summation?page=${page}`, {
       params: params,
     });

@@ -26,6 +26,20 @@ export interface IInputVoucherItem {
   price: number;
   value: number;
   notes?: String;
+  inValue?: number;
+  outValue?: number;
+}
+export interface IInputVoucherItemVSelect {
+  id?: number;
+  itemName: string;
+  stockName?: string;
+  serialNumber?: String;
+  code?: string;
+  itemCategory?: string;
+  inValue: number;
+  outValue: number;
+  price?: number;
+  notes?: String;
 }
 export interface IInputVoucherEmployee {
   id: number;
