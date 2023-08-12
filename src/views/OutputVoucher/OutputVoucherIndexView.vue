@@ -5,14 +5,17 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
-import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
+import type {
+  IOutputVoucher,
+  IOutputVoucherFilter,
+} from "@/types/IOutputVoucher";
+import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IInputVoucher>>([]);
+const data = ref<Array<IOutputVoucher>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IInputVoucher>>([]);
-const { inputVoucher, get_filter } = useInputVoucherStore();
+const dataBase = ref<Array<IOutputVoucher>>([]);
+const { outputVoucher, get_filter } = useOutputVoucherStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -33,23 +36,23 @@ watch(
   }
 );
 const addItem = () => {
-  inputVoucher.id = 0;
-  inputVoucher.number = "";
-  inputVoucher.date = "";
-  inputVoucher.notes = "";
-  inputVoucher.state = { name: "", id: 0 };
-  inputVoucher.items = [];
-  inputVoucher.signaturePerson = "";
-  inputVoucher.employeeRequestId = 0;
-  inputVoucher.inputVoucherStateId = 0;
+  outputVoucher.id = 0;
+  outputVoucher.number = "";
+  outputVoucher.date = "";
+  outputVoucher.notes = "";
+  outputVoucher.state = { name: "", id: 0 };
+  outputVoucher.items = [];
+  outputVoucher.signaturePerson = "";
+  outputVoucher.employeeRequestId = 0;
+  outputVoucher.outputVoucherStateId = 0;
   router.push({
-    name: "inputVoucherAdd",
+    name: "outputVoucherAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IInputVoucher) => {
+const filterByIDName = (item: IOutputVoucher) => {
   if (
     item.number.includes(fastSearch.value) ||
     item.notes.includes(fastSearch.value)
@@ -66,7 +69,7 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IInputVoucherFilter>({
+const searchFilter = ref<IOutputVoucherFilter>({
   name: "",
   limit: 6,
   description: "",
@@ -90,7 +93,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "inputVoucherUpdate",
+    name: "outputVoucherUpdate",
     params: { id: id },
   });
 };
@@ -105,7 +108,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("InputVoucher") }} </PageTitle>
+    <PageTitle> {{ t("OutputVoucher") }} </PageTitle>
   </div>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
@@ -309,3 +312,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/voucher/outputVoucher

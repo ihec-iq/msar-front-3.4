@@ -6,14 +6,16 @@ import type {
   IInputVoucher,
   IInputVoucherEmployee,
   IInputVoucherFilter,
+  IInputVoucherItem,
   IInputVoucherState,
+  IInputVoucherItemVSelect,
 } from "@/types/IInputVoucher";
 
 export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   const inputVoucher = reactive<IInputVoucher>({
     id: 0,
     number: "",
-    date: "",
+    date: new Date().toISOString().split("T")[0],
     notes: "",
     state: { name: "", id: 0 },
     items: [],
@@ -22,13 +24,41 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     employeeRequest: { name: "", id: 0 },
     inputVoucherStateId: 0,
   });
-
+  const inputVouchers = ref<IInputVoucher[]>([]);
+  const inputVoucherItem = ref<IInputVoucherItem>({
+    id: 0,
+    input_voucher_id: 0,
+    item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      itemCategory: {
+        id: 0,
+        name: "",
+      },
+      measuringUnit: "",
+    },
+    itemId: 0,
+    stock: {
+      id: 0,
+      name: "",
+    },
+    stockId: 0,
+    serialNumber: "",
+    count: 0,
+    price: 0,
+    value: 0,
+    notes: "",
+  });
+  const inputVoucherItems = ref<IInputVoucherItem[]>([]);
+  const inputVoucherItemsVSelect = ref<IInputVoucherItem[]>([]);
   const inputVoucherStates = ref<IInputVoucherState[]>([]);
   const inputVoucherEmployees = ref<IInputVoucherEmployee[]>([]);
   const pathBase = "/stockSys";
   const pathUrl = `${pathBase}/inputVoucher`;
-  async function get(page: number = 1) {
-    return await Api.get(`${pathUrl}?page=${page}`);
+  async function get() {
+    inputVouchers.value = await Api.get(`${pathUrl}`);
   }
   async function get_filter(params: IInputVoucherFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
@@ -56,6 +86,30 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         console.log("in get Categories : " + errors);
       });
   }
+  async function getItems() {
+    inputVoucherItems.value = [];
+    return await Api.get(`${pathBase}/inputVoucherItem`)
+      .then((response) => {
+        if (response.status == 200) {
+          inputVoucherItems.value = response.data.data;
+        }
+      })
+      .catch((errors) => {
+        console.log("in get input Voucher Items : " + errors);
+      });
+  }
+  async function getItemsVSelect() {
+    inputVoucherItemsVSelect.value = [];
+    return await Api.get(`${pathBase}/inputVoucherItem/getItemsForVSelect`)
+      .then((response) => {
+        if (response.status == 200) {
+          inputVoucherItemsVSelect.value = response.data.data;
+        }
+      })
+      .catch((errors) => {
+        console.log("in get input get Items For VSelect : " + errors);
+      });
+  }
   async function getEmployees() {
     return await Api.get(`${pathBase}/employee`)
       .then((response) => {
@@ -67,18 +121,61 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         console.log("in get Employees : " + errors);
       });
   }
+  function addItem(item: IInputVoucherItem) {
+    inputVoucher.items = [item].concat(inputVoucher.items);
+  }
+  function editItem(index: number, item: IInputVoucherItem) {
+    inputVoucher.items[index] = item;
+  }
+  async function removeItem(index: number) {
+    return await Api.delete(
+      `${pathBase}/inputVoucherItem/delete/` +
+        String(inputVoucher.items[index]?.id)
+    )
+      .then((response) => {
+        if (response.status == 200) {
+          inputVoucher.items?.splice(index, 1);
+        }
+      })
+      .catch((errors) => {
+        console.log("in removeItem inputVoucherItem : " + errors);
+      });
+  }
+  function resetData() {
+    inputVoucher.id = 0;
+    inputVoucher.number = "";
+    inputVoucher.date = "";
+    inputVoucher.notes = "";
+    inputVoucher.state = { name: "", id: 0 };
+    inputVoucher.items = [];
+    inputVoucher.signaturePerson = "";
+    inputVoucher.employeeRequestId = 0;
+    inputVoucher.employeeRequest = { name: "", id: 0 };
+    inputVoucher.inputVoucherStateId = 0;
+  }
   return {
     inputVoucher,
+    inputVouchers,
+    inputVoucherItem,
+    inputVoucherItems,
     inputVoucherStates,
     inputVoucherEmployees,
+    inputVoucherItemsVSelect,
+
+    addItem,
+    editItem,
+    removeItem,
     get,
     get_filter,
     getState,
+    getItems,
     getEmployees,
+    getItemsVSelect,
     show,
     store,
     update,
     getError,
     _delete,
+    resetData,
   };
 });

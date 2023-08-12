@@ -291,6 +291,15 @@ onMounted(() => {
         </div>
       </div>
       <div
+        @click="
+          $router.push('/config');
+          closePopup();
+        "
+        class="w-[350px] bg-amber-900 text-textLight mx-4 p-2 text-xl rounded-lg absolute bottom-14 cursor-pointer"
+      >
+        {{ t("Setting") }}
+      </div>
+      <div
         @click="closePopup()"
         class="bg-back w-[350px] text-textLight mx-4 p-2 text-xl rounded-lg absolute bottom-2 cursor-pointer"
         :class="{

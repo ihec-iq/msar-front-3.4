@@ -218,14 +218,60 @@ onMounted(() => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+                width="32"
+                height="32"
                 viewBox="0 0 24 24"
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
               >
                 <path
                   fill="currentColor"
-                  d="M12 11.18c3.3-3 5-4.54 5-6.49C17 3.19 15.75 2 14.25 2c-.86 0-1.68.36-2.25 1c-.57-.64-1.39-1-2.31-1C8.19 2 7 3.25 7 4.75c0 1.89 1.7 3.43 5 6.43m-.82.82c-3-3.3-4.54-5-6.49-5C3.19 7 2 8.25 2 9.75c0 .86.36 1.68 1 2.25c-.64.57-1 1.39-1 2.31C2 15.81 3.25 17 4.75 17c1.89 0 3.43-1.7 6.43-5m1.65 0c2.99 3.3 4.53 5 6.48 5c1.5 0 2.69-1.25 2.69-2.75c0-.86-.36-1.68-1-2.25c.64-.57 1-1.39 1-2.31C22 8.19 20.75 7 19.25 7c-1.89 0-3.43 1.7-6.42 5m-.83.82c-3.3 3-5 4.54-5 6.49C7 20.81 8.25 22 9.75 22c.86 0 1.68-.36 2.25-1c.57.64 1.39 1 2.31 1c1.5 0 2.69-1.25 2.69-2.75c0-1.89-1.7-3.43-5-6.43Z"
+                  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"
+                />
+              </svg>
+            </button>
+          </router-link>
+          <router-link
+            :to="{ name: 'storeIndex' }"
+            @click.prevent="tab = 'Feature Admin'"
+          >
+            <button
+              title="Store Voucher"
+              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
+              href="#"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+              >
+                <path
+                  fill="currentColor"
+                  d="M11 23a2 2 0 0 1-2-2v-2h6v2a2 2 0 0 1-2 2h-2m1-22c.71 0 1.39.09 2.05.26C15.22 2.83 16 5.71 16 9c0 2.28-.38 4.37-1 7a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2c-.62-2.63-1-4.72-1-7c0-3.29.78-6.17 1.95-7.74C10.61 1.09 11.29 1 12 1m8 7c0 3.18-1.85 7.92-4.54 9.21C16.41 15.39 17 11.83 17 9c0-2.83-.59-5.39-1.54-7.21C18.15 3.08 20 4.82 20 8M4 8c0-3.18 1.85-4.92 4.54-6.21C7.59 3.61 7 6.17 7 9s.59 6.39 1.54 8.21C5.85 15.92 4 11.18 4 8Z"
+                />
+              </svg>
+            </button>
+          </router-link>
+          <router-link
+            :to="{ name: 'outputVoucherIndex' }"
+            @click.prevent="tab = 'Feature Admin'"
+          >
+            <button
+              title="output Voucher"
+              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
+              href="#"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+              >
+                <path
+                  fill="currentColor"
+                  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"
                 />
               </svg>
             </button>
