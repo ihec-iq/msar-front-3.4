@@ -68,7 +68,8 @@ const router = createRouter({
     {
       path: "/",
       name: "start",
-      component: () => import("@/views/AboutView.vue"),
+      redirect: "/login",
+      /* component: () => import("@/views/AboutView.vue"), */
     },
     {
       path: "/unauthorized",
