@@ -51,7 +51,7 @@ const addItem = () => {
 const fastSearch = ref("");
 const filterByIDName = (item: IInputVoucher) => {
   if (
-    item.number.includes(fastSearch.value) ||
+    item.number.toString().includes(fastSearch.value) ||
     item.notes.includes(fastSearch.value)
   ) {
     return true;
@@ -73,7 +73,8 @@ const searchFilter = ref<IInputVoucherFilter>({
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
-  searchFilter.value.name = fastSearch.value;
+  searchFilter.value.name = "";
+  if (fastSearch.value != "") searchFilter.value.name = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {

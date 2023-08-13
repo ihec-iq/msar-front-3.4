@@ -6,7 +6,6 @@ import {
 import notification from "@/views/NotificationView.vue";
 import archive from "./archive/archive";
 //#region for split routes in many files
-import NProgress from "nprogress";
 // import reports from "./reports/index";
 // import role from "./role/index";
 //#endregion

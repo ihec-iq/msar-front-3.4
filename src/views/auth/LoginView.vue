@@ -103,22 +103,16 @@ onMounted(async () => {
     class="relative z-30 overflow-y-hidden sm:flex sm:flex-row justify-evenly bg-transparent rounded-3xl"
   >
     <div
-      class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10"
+      class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md"
     >
       <div class="self-start hidden lg:flex flex-col text-gray-300">
-        <img src="@/assets/image/avatar-3.png" alt="" />
-        <section class="flex justify-center mt-5">
-          <div class="content">
-            <h2>WorkFlow</h2>
-          </div>
-        </section>
         <!-- <p class="pr-3 text-sm opacity-75">
           Lorem ipsum is placeholder text commonly used in the graphic, print,
           and publishing industries for previewing layouts and visual mockups
         </p> -->
       </div>
     </div>
-    <div class="flex justify-center z-10">
+    <div class="flex justify-center">
       <div class="p-12 bg-white mx-auto rounded-3xl w-96">
         <div class="mb-7">
           <h3 class="font-semibold text-2xl text-gray-800">
@@ -241,6 +235,9 @@ onMounted(async () => {
             </button>
           </div> -->
         </div>
+        <section class="flex justify-center mt-5">
+          <img src="@/assets/image/avatar-3.png" alt="" />
+        </section>
         <div class="mt-7 text-center text-gray-300 text-xs"></div>
       </div>
     </div>
