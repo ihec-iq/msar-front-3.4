@@ -306,10 +306,11 @@ const back = () => {
 
 onMounted(async () => {
   checkPermissionAccessArray(["show Item"]);
-  await outputVoucherStore.getEmployees();
+  await outputVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
     outputVoucher.value.id = 0;
+    outputVoucher.value.date = new Date().toISOString().split("T")[0];
   } else {
     outputVoucher.value.id = id.value;
     await showData(id.value);

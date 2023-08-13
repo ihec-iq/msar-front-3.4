@@ -8,6 +8,12 @@ import { useRouter } from "vue-router";
 import { getError } from "@/utils/helpers";
 import TextInput from "@/components/general/TextInput.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
+import { useConfigStore } from "@/stores/config";
+import { storeToRefs } from "pinia";
+import Swal from "sweetalert2";
+import SimpleLoading from "@/components/general/SimpleLoading.vue";
+
+const { ConnectionString } = storeToRefs(useConfigStore());
 const { t } = useI18n();
 interface ILogin {
   email: string;
@@ -37,9 +43,11 @@ const schema = Yup.object().shape({
 });
 
 const errs = ref("");
+const isLoading = ref(false);
 const authStore = useAuthStore();
 const router = useRouter();
 const Login = async () => {
+  isLoading.value = true;
   errs.value = "";
   await authStore
     .login(loginForm)
@@ -51,9 +59,40 @@ const Login = async () => {
     .catch((error) => {
       errs.value = getError(error.response);
     });
+  isLoading.value = false;
 };
-onMounted(() => {
+onMounted(async () => {
   if (authStore.isAuthenticated) router.push({ name: "Dashboard" });
+  await useConfigStore()
+    .load()
+    .then(() => {
+      if (ConnectionString.value == null || ConnectionString.value == "") {
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: "btn m-2 bg-red-700",
+            cancelButton: "btn bg-grey-400",
+          },
+          buttonsStyling: false,
+        });
+        swalWithBootstrapButtons
+          .fire({
+            title: t("Are You Sure?"),
+            text: t(
+              "Your Server is down ,You want to open Connection Setting ?"
+            ),
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: t("Yes, open it!"),
+            cancelButtonText: t("No, cancel!"),
+            reverseButtons: true,
+          })
+          .then(async (result) => {
+            if (result.isConfirmed) {
+              router.push({ name: "Config" });
+            }
+          });
+      }
+    });
 });
 </script>
 <template>
@@ -70,7 +109,6 @@ onMounted(() => {
         <img src="@/assets/image/avatar-3.png" alt="" />
         <section class="flex justify-center mt-5">
           <div class="content">
-            <h2>WorkFlow</h2>
             <h2>WorkFlow</h2>
           </div>
         </section>
@@ -95,6 +133,7 @@ onMounted(() => {
         </div>
         <div class="space-y-6">
           <Form
+            v-if="isLoading == false"
             :initial-values="loginForm"
             @submit="onSubmit"
             :validation-schema="schema"
@@ -139,6 +178,7 @@ onMounted(() => {
               </button>
             </div>
           </Form>
+          <SimpleLoading v-else></SimpleLoading>
           <!-- <div class="flex items-center justify-center space-x-2 my-5">
             <span class="h-px w-16 bg-gray-100"></span>
             <span class="text-gray-700 font-normal">or</span>

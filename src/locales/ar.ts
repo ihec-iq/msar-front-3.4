@@ -36,6 +36,8 @@ export default {
   OutputVoucherEmployeeRequest: "طلبت من",
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",
+  ConfigServer: "اعدادات الاتصال بالسيرفر",
+  ConnectionString: "عنوان السيرفر",
   ItemAdd: "اضافة مادة",
   Seats: "المقاعد",
   Stats: "الحالة",

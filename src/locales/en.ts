@@ -33,6 +33,8 @@ export default {
   StoreIndex: "Store",
   StoreTypeReport: "Type Report",
   SearchForItem: "Search by name or description",
+  ConfigServer: "Server Configuration",
+  ConnectionString: "Connection String Server",
   ItemUpdate: "Update Item",
   Name: "Name",
   Stats: "Stats",

@@ -61,9 +61,6 @@ const router = createRouter({
       path: "/config",
       name: "Config",
       component: () => import("@/views/ConnectionSettingView.vue"),
-      meta: {
-        middleware: [authMiddleware],
-      },
     },
     {
       path: "/",
