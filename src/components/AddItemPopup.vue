@@ -241,3 +241,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/item/item@/stores/item/itemCategory

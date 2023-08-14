@@ -299,9 +299,7 @@ const showData = async (id: number) => {
 };
 //#endregion
 const back = () => {
-  router.push({
-    name: "outputVoucherIndex",
-  });
+  router.back();
 };
 
 onMounted(async () => {

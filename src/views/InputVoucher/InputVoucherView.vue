@@ -292,9 +292,7 @@ const showData = async (id: number) => {
 };
 //#endregion
 const back = () => {
-  router.push({
-    name: "inputVoucherIndex",
-  });
+  router.back();
 };
 
 onMounted(async () => {
@@ -972,3 +970,4 @@ button {
 }
 </style>
 @/stores/voucher/stock@/stores/voucher/inputVoucher
+@/stores/item/item

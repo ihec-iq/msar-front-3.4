@@ -35,6 +35,8 @@ export default {
   SearchForItem: "Search by name or description",
   ConfigServer: "Server Configuration",
   ConnectionString: "Connection String Server",
+  EmployeeAdd: "Add new employee",
+  EmployeeUpdate: "update employee",
   ItemUpdate: "Update Item",
   Name: "Name",
   Stats: "Stats",

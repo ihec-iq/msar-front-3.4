@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
+import { useEmployeeStore } from "@/stores/employee";
+import { useSectionStore } from "@/stores/section";
 import Swal from "sweetalert2";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -24,9 +25,12 @@ const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
+const isIn = ref(false);
 
-const { category } = storeToRefs(useItemCategoryStore());
-const itemCategoryStore = useItemCategoryStore();
+const employeeStore = useEmployeeStore();
+const { employee } = storeToRefs(useEmployeeStore());
+const sectionStore = useSectionStore();
+const { sections } = storeToRefs(useSectionStore());
 
 const Loading = ref(false);
 
@@ -37,18 +41,20 @@ const errors = ref<String | null>();
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("id", category.value.id.toString());
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
+  employee.value.isPerson = isIn.value ? 1 : 0;
+  formData.append("id", employee.value.id.toString());
+  formData.append("name", employee.value.name.toString());
+  formData.append("isPerson", employee.value.isPerson.toString());
+  formData.append("sectionId", employee.value.section.id.toString());
 
-  itemCategoryStore
+  employeeStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your item has been saved",
+          title: "Your employee has been saved",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -57,7 +63,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemCategoryStore.getError(error);
+      errors.value = employeeStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -69,16 +75,19 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
-  itemCategoryStore
-    .update(category.value.id, formData)
+  employee.value.isPerson = isIn.value ? 1 : 0;
+  formData.append("name", employee.value.name.toString());
+  formData.append("isPerson", employee.value.isPerson.toString());
+  formData.append("sectionId", employee.value.section.id.toString());
+
+  employeeStore
+    .update(employee.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your Category has been updated",
+          title: "Your employee has been updated",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -87,7 +96,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemCategoryStore.getError(error);
+      errors.value = employeeStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -116,7 +125,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemCategoryStore._delete(category.value.id).then(() => {
+        await employeeStore._delete(employee.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -129,13 +138,15 @@ const Delete = async () => {
 };
 const showData = async () => {
   Loading.value = true;
-  await itemCategoryStore
+  await employeeStore
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        category.value.id = response.data.data.id;
-        category.value.name = response.data.data.name;
-        category.value.description = response.data.data.description;
+        employee.value.id = response.data.data.id;
+        employee.value.name = response.data.data.name;
+        employee.value.section.id = response.data.data.section.id;
+        employee.value.section.name = response.data.data.section.name;
+        employee.value.isPerson = response.data.data.isPerson;
       }
     })
     .catch((errors) => {
@@ -143,7 +154,7 @@ const showData = async () => {
       Swal.fire({
         position: "top-end",
         icon: "warning",
-        title: "Your Item file not exist !!!",
+        title: "Your employee file not exist !!!",
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
@@ -155,20 +166,20 @@ const showData = async () => {
 //#endregion
 const back = () => {
   router.push({
-    name: "itemIndex",
+    name: "employeeIndex",
   });
 };
 onMounted(async () => {
-  //console.log(can("show items1"));
+  //console.log(can("show employees1"));
   checkPermissionAccessArray(["show Item"]);
-  await itemCategoryStore.getFast();
+  await sectionStore.get_sections();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("ItemAdd");
-    category.value.id = 0;
+    namePage.value = t("EmployeeAdd");
+    employee.value.id = 0;
   } else {
     await showData();
-    category.value.id = id.value;
-    namePage.value = t("ItemUpdate");
+    employee.value.id = id.value;
+    namePage.value = t("EmployeeUpdate");
   }
 });
 </script>
@@ -183,25 +194,43 @@ onMounted(async () => {
           {{ t("Name") }}
         </div>
         <input
-          v-model="category.name"
+          v-model="employee.name"
           type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-    </div>
-    <div class="mt-10 p-6">
-      <div class="w-full mx-2">
+      <div class="w-11/12 mr-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("Description") }}
+          {{ t("ItemCategory") }}
         </div>
-        <quill-editor
-          v-model:content="category.description"
-          contentType="html"
-          theme="snow"
-          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60"
-        ></quill-editor>
+        <select v-model="employee.section.id" class="p-2">
+          <option
+            v-for="section in sections"
+            :key="section.id"
+            :value="section.id"
+          >
+            {{ section.name }}
+          </option>
+        </select>
+      </div>
+      <div class="w-11/12 mr-2">
+        <div class="form-control w-52">
+          <label class="cursor-pointer label">
+            <span
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}</span
+            >
+            <input
+              type="checkbox"
+              v-model="isIn"
+              class="toggle toggle-secondary"
+              checked
+            />
+          </label>
+        </div>
       </div>
     </div>
     <!-- bottom tool bar -->
@@ -216,7 +245,7 @@ onMounted(async () => {
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
-            v-if="category.id == 0"
+            v-if="employee.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
@@ -230,7 +259,7 @@ onMounted(async () => {
             {{ t("Update") }}
           </button>
           <button
-            v-if="category.id != 0"
+            v-if="employee.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
           >
@@ -322,4 +351,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/item/itemCategory

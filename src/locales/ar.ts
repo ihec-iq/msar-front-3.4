@@ -38,6 +38,8 @@ export default {
   StoreTypeReport: "نوع التقرير",
   ConfigServer: "اعدادات الاتصال بالسيرفر",
   ConnectionString: "عنوان السيرفر",
+  EmployeeAdd: "اضافة بيانات موظف",
+  EmployeeUpdate: "تعديل بيانات موظف",
   ItemAdd: "اضافة مادة",
   Seats: "المقاعد",
   Stats: "الحالة",

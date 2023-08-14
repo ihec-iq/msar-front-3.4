@@ -40,11 +40,8 @@ const addItem = () => {
   outputVoucher.number = "";
   outputVoucher.date = "";
   outputVoucher.notes = "";
-  outputVoucher.state = { name: "", id: 0 };
   outputVoucher.items = [];
   outputVoucher.signaturePerson = "";
-  outputVoucher.employeeRequestId = 0;
-  outputVoucher.outputVoucherStateId = 0;
   router.push({
     name: "outputVoucherAdd",
   });
