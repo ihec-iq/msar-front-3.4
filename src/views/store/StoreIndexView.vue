@@ -5,14 +5,15 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
-import { useInputVoucherStore } from "@/stores/Voucher/inputVoucher";
+import type { IStore, IStoreFilter } from "@/types/IStore";
+import { useStoringStore } from "@/stores/storing";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IInputVoucher>>([]);
+const data = ref<Array<IStore>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IInputVoucher>>([]);
-const { inputVoucher, get_filter } = useInputVoucherStore();
+const dataBase = ref<Array<IStore>>([]);
+
+const { get_filter } = useStoringStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -32,27 +33,12 @@ watch(
     await getFilterData(1);
   }
 );
-const addItem = () => {
-  inputVoucher.id = 0;
-  inputVoucher.number = "";
-  inputVoucher.date = "";
-  inputVoucher.notes = "";
-  inputVoucher.state = { name: "", id: 0 };
-  inputVoucher.items = [];
-  inputVoucher.signaturePerson = "";
-  inputVoucher.employeeRequestId = 0;
-  inputVoucher.inputVoucherStateId = 0;
-  router.push({
-    name: "inputVoucherAdd",
-  });
-};
-
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IInputVoucher) => {
+const filterByIDName = (item: IStore) => {
   if (
-    item.number.includes(fastSearch.value) ||
-    item.notes.includes(fastSearch.value)
+    item.item.includes(fastSearch.value) ||
+    item.serialNumber.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -66,14 +52,15 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IInputVoucherFilter>({
-  name: "",
+const searchFilter = ref<IStoreFilter>({
+  item: "",
   limit: 6,
-  description: "",
+  serialNumber: "",
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
-  searchFilter.value.name = fastSearch.value;
+  searchFilter.value.item = fastSearch.value;
+  searchFilter.value.serialNumber = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -88,13 +75,12 @@ const getFilterData = async (page = 1) => {
   isLoading.value = false;
 };
 //#endregion
-const update = (id: number) => {
+const openItem = (id: number) => {
   router.push({
     name: "inputVoucherUpdate",
     params: { id: id },
   });
 };
-
 //#region Pagination
 //#endregion
 onMounted(async () => {
@@ -105,7 +91,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("InputVoucher") }} </PageTitle>
+    <PageTitle> {{ t("StoreIndex") }} </PageTitle>
   </div>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
@@ -190,84 +176,61 @@ onMounted(async () => {
                 :delay="200"
                 v-if="data.length > 0"
               >
-                <div class="max-w-full relative">
-                  <div
-                    class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
-                  >
-                    <!-- card -->
+                <div class="mt-10 p-6">
+                  <div class="w-12/12 mx-2">
                     <div
-                      class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                      v-for="item in data"
-                      :key="item.id"
-                    >
-                      <div class="w-3/4 overflow-hidden">
-                        <div
-                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
+                      class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                    ></div>
+                    <table class="min-w-full text-center">
+                      <thead class="border-b bg-[#0003] text-gray-300">
+                        <tr>
+                          <th scope="col" class="text-sm font-medium px-2 py-2">
+                            ID
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            item
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Serial Number
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            count
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Price
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Stock
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="bg-[#1f2937]">
+                        <tr
+                          v-for="row in data"
+                          :key="row.id"
+                          class="border-b border-black h-14 text-gray-100"
                         >
-                          <div
-                            class="text-2xl text-text dark:text-textLight mb-2"
-                          >
-                            {{ item.number }}
-                          </div>
-                          <div
-                            class="text-text dark:text-textGray mb-2 justify-between"
-                          >
-                            <span>{{ t("Date") }}: {{ item.date }}</span>
-                            <span class="float-left flex" title="Items count">
-                              {{ item.itemsCount }}
-                              <svg
-                                title="Items count"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  fill="currentColor"
-                                  d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6 4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6 4h4v-4h-4M4 8h4V4H4v4Z"
-                                />
-                              </svg>
-                            </span>
-                          </div>
-                          <div class="flex justify-betweens">
-                            <div
-                              class="text-text dark:text-textGray"
-                              v-html="item.notes"
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="dropdown">
-                        <button
-                          class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                          type="button"
-                          id="dropdownMenuButton2"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <img
-                            src="https://img.icons8.com/office/344/menu--v1.png "
-                            class="w-8 float-left"
-                            alt=""
-                          />
-                        </button>
-
-                        <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-gray-800"
-                          aria-labelledby="dropdownMenuButton2"
-                        >
-                          <li>
-                            <EditButton @click="update(item.id)" />
-                          </li>
-                          <!-- <li>
-                            <ShowButton @click="show(item.id)" />
-                          </li> -->
-                          <!-- <li><BlockButton /></li> -->
-                        </ul>
-                      </div>
-                    </div>
-                    <!-- end card -->
+                          <th>{{ row.id }}</th>
+                          <th>{{ row.item }}</th>
+                          <th>{{ row.serialNumber }}</th>
+                          <th>{{ row.count }}</th>
+                          <th>{{ row.price }}</th>
+                          <th>{{ row.stock }}</th>
+                          <th>
+                            <van-button
+                              class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
+                              type="secondary"
+                              is-link
+                              @click="openItem(row.id)"
+                              >Open
+                            </van-button>
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                   <TailwindPagination
                     class="flex justify-center mt-10"
@@ -285,28 +248,4 @@ onMounted(async () => {
       </div>
     </div>
   </div>
-
-  <!-- bottom tool bar -->
-  <div class="m-5 fixed bottom-0 ltr:right-0 rtl:left-0">
-    <button
-      @click="addItem()"
-      class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-0 transition-all duration-300 text-white"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="w-6 h-6"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    </button>
-  </div>
 </template>
-@/stores/voucher/inputVoucher

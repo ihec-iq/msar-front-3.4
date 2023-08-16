@@ -13,8 +13,12 @@ import NProgress from "nprogress";
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
 import item from "./item/item";
-import inputVoucher from "./itemVoucher/inputVoucher";
+import inputVoucher from "./voucher/inputVoucher";
+import outputVoucher from "./voucher/outputVoucher";
 import itemCategory from "./item/itemCategory";
+import store from "./store/store";
+import blank from "@/views/layouts/BlankView.vue";
+
 //#endregion
 
 const router = createRouter({
@@ -27,10 +31,15 @@ const router = createRouter({
     ...item,
     ...itemCategory,
     ...inputVoucher,
+    ...outputVoucher,
+    ...store,
     {
       path: "/login",
       name: "Login",
       component: () => import("@/views/auth/LoginView.vue"),
+      meta: {
+        layout: blank,
+      },
     },
     {
       path: "/dashboard",
@@ -47,6 +56,11 @@ const router = createRouter({
       meta: {
         middleware: [authMiddleware],
       },
+    },
+    {
+      path: "/config",
+      name: "Config",
+      component: () => import("@/views/ConnectionSettingView.vue"),
     },
     {
       path: "/",

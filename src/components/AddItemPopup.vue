@@ -1,30 +1,23 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import { useItemStore } from "@/stores/Item/item";
 import { useItemCategoryStore } from "@/stores/Item/itemCategory";
-import Swal from "sweetalert2";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 
 import { useI18n } from "@/stores/i18n/useI18n";
-import { pop } from "@vueuse/motion";
 const { t } = useI18n();
-const ItemName = ref<HTMLInputElement | null>(null);
-
-//region"Drag and Drop"
+const ItemName = ref<HTMLInputElement>();
+const emit = defineEmits(["setItem"]);
+//region"Props"
 
 //#endregion
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
+const namePage = ref(t("ItemAdd"));
 
 const itemStore = useItemStore();
 const { item } = storeToRefs(useItemStore());
@@ -45,34 +38,40 @@ const store = () => {
   formData.append("itemCategoryId", String(item.value.itemCategoryId));
   itemStore
     .store(formData)
-    .then((response) => {
+    .then(async (response) => {
       if (response.status === 200) {
-        let popClose = document.getElementById("closePop");
-        popClose?.click;
+        console.log("Save Item pop");
+        emit("setItem", response.data.data);
+        await useItemStore().get_items();
+        reset();
+        let popClose = document.getElementById("closePopItem");
+        popClose?.click();
       }
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
       errors.value = itemStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "create new data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
     });
 };
 //#endregion
 const setFocus = () => {
+  alert(1);
   if (ItemName.value) {
     ItemName.value.focus();
   }
+};
+const reset = () => {
+  item.value.id = 0;
+  item.value.name = "";
+  item.value.description = "";
+  item.value.code = "";
+  item.value.measuringUnit = "";
+  item.value.itemCategoryId = 0;
 };
 onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray(["show Item"]);
   await itemCategoryStore.getFast();
-  namePage.value = t("ItemAdd");
   item.value.id = 0;
 });
 </script>
@@ -169,8 +168,11 @@ onMounted(async () => {
           </div>
         </div>
       </div>
+      <div class="border-red-800 border-[1px]" v-if="errors">{{ errors }}</div>
     </div>
-    <label class="modal-backdrop" for="my_modal_7" id="closePop">Close</label>
+    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem"
+      >Close</label
+    >
   </div>
 </template>
 <style scoped>
