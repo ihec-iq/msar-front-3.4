@@ -40,6 +40,10 @@ export default {
   ConnectionString: "عنوان السيرفر",
   EmployeeAdd: "اضافة بيانات موظف",
   EmployeeUpdate: "تعديل بيانات موظف",
+  EmployeeIndex: "بيانات الموظفين",
+  EmployeeIsPerson: "نوع البيانات",
+  EmployeeSection: "شعبة الموظف",
+
   ItemAdd: "اضافة مادة",
   Seats: "المقاعد",
   Stats: "الحالة",

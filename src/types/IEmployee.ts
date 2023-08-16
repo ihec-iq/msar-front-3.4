@@ -8,6 +8,6 @@ export interface IEmployee {
 }
 export interface IEmployeeFilter {
   name: string;
-  code?: string;
+  sectionId?: number;
   limit: number;
 }

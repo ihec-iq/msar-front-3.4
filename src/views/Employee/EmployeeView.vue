@@ -4,8 +4,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "@/stores/employee";
 import { useSectionStore } from "@/stores/section";
 import Swal from "sweetalert2";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
@@ -147,6 +145,7 @@ const showData = async () => {
         employee.value.section.id = response.data.data.section.id;
         employee.value.section.name = response.data.data.section.name;
         employee.value.isPerson = response.data.data.isPerson;
+        isIn.value = response.data.data.isPerson == 0 ? false : true;
       }
     })
     .catch((errors) => {
@@ -203,7 +202,7 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("ItemCategory") }}
+          {{ t("EmployeeSection") }}
         </div>
         <select v-model="employee.section.id" class="p-2">
           <option
@@ -221,7 +220,7 @@ onMounted(async () => {
             <span
               class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
             >
-              {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}</span
+              {{ t("EmployeeIsPerson") }} : {{ isIn ? "شخص" : "شعبة" }}</span
             >
             <input
               type="checkbox"

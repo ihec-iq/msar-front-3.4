@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useArchiveStore } from "@/stores/Archive/archive";
+import { useArchiveStore } from "@/stores/archives/archive";
 import { storeToRefs } from "pinia";
 
 import PageTitle from "@/components/general/namePage.vue";
@@ -9,7 +9,7 @@ import type {
   IArchive,
   IArchiveFilter,
   IDocument,
-} from "@/types/Archive/IArchive";
+} from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
@@ -512,4 +512,3 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/archive/archive

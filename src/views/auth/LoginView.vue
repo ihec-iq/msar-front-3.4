@@ -53,7 +53,7 @@ const Login = async () => {
     .login(loginForm)
     .then(() => {
       router.push({
-        name: "archiveIndex",
+        name: "Dashboard",
       });
     })
     .catch((error) => {

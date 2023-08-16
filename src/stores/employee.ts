@@ -9,7 +9,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     id: 0,
     name: "",
     section: { name: "", id: 0 },
-    is_person: true,
+    isPerson: 1,
   });
   const employees = ref<Array<IEmployee>>([]);
   const pathBase = "/stockSys";

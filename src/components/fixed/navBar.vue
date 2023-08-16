@@ -276,6 +276,29 @@ onMounted(() => {
               </svg>
             </button>
           </router-link>
+          <router-link
+            :to="{ name: 'employeeIndex' }"
+            @click.prevent="tab = 'Feature Admin'"
+          >
+            <button
+              title="Employees"
+              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
+              href="#"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+              >
+                <path
+                  fill="currentColor"
+                  d="M15 14c-2.67 0-8 1.33-8 4v2h16v-2c0-2.67-5.33-4-8-4m0-2a4 4 0 0 0 4-4a4 4 0 0 0-4-4a4 4 0 0 0-4 4a4 4 0 0 0 4 4M5 13.28l2.45 1.49l-.65-2.81L9 10.08l-2.89-.25L5 7.19L3.87 9.83L1 10.08l2.18 1.88l-.68 2.81L5 13.28Z"
+                />
+              </svg>
+            </button>
+          </router-link>
           <!-- <router-link
             :to="{ name: 'companyIndex' }"
             @click.prevent="tab = 'Company'"

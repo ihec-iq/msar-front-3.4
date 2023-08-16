@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/Item/item";
+import { useEmployeeStore } from "@/stores/employee";
+import { useSectionStore } from "@/stores/section";
+
+import { storeToRefs } from "pinia";
+
 import PageTitle from "@/components/general/namePage.vue";
-import type { IItem, IItemFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
+import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IItem>>([]);
+const employeeStore = useEmployeeStore();
+const { employees, employee } = storeToRefs(useEmployeeStore());
+const { sections } = storeToRefs(useSectionStore());
+const namePage = ref(t("EmployeeIndex"));
+
+const data = ref<Array<IEmployee>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IItem>>([]);
-const { item, get_filter } = useItemStore();
+const dataBase = ref<Array<IEmployee>>([]);
+const { get_filter } = useEmployeeStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -32,24 +41,20 @@ watch(
     await getFilterData(1);
   }
 );
-const addItem = () => {
-  item.id = 0;
-  item.name = "";
-  item.itemCategory = { name: "", id: 0 };
-  item.code = "";
-  item.description = "";
+const addEmployee = () => {
+  employee.value.id = 0;
+  employee.value.name = "";
+  employee.value.section = { name: "", id: 0 };
+  employee.value.isPerson = 0;
   router.push({
-    name: "itemAdd",
+    name: "employeeAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IItem) => {
-  if (
-    item.name.includes(fastSearch.value) ||
-    item.code.includes(fastSearch.value)
-  ) {
+const filterByIDName = (employee: IEmployee) => {
+  if (employee.name.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -62,10 +67,10 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IItemFilter>({
+const searchFilter = ref<IEmployeeFilter>({
   name: "",
+  sectionId: 0,
   limit: 6,
-  description: "",
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
@@ -86,7 +91,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "itemUpdate",
+    name: "employeeUpdate",
     params: { id: id },
   });
 };
@@ -96,13 +101,14 @@ const update = (id: number) => {
 onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+  await useSectionStore().get_sections();
 
   await getFilterData(1);
 });
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("Item") }} </PageTitle>
+    <PageTitle> {{ namePage }} </PageTitle>
     <RouterLink :to="{ name: 'itemCategoryIndex' }" class="float-left flex m-5">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -179,6 +185,31 @@ onMounted(async () => {
             </select>
           </div>
         </div>
+        <div
+          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[15%] xs:w-[81.5%]"
+        >
+          <div
+            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+          >
+            <p>{{ t("EmployeeSection") }}:</p>
+            <select
+              aria-label="select"
+              v-model="searchFilter.sectionId"
+              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1 font-medium"
+              @change="getFilterData()"
+            >
+              <option
+                v-for="section in sections"
+                :key="section.id"
+                :value="section.id"
+                :selected="section.id == 2"
+                class="text-sm text-indigo-800 font-bold"
+              >
+                {{ section.name }}
+              </option>
+            </select>
+          </div>
+        </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
           <button
             @click="getFilterData()"
@@ -224,9 +255,12 @@ onMounted(async () => {
                           <div
                             class="text-text dark:text-textGray mb-2 justify-between"
                           >
-                            <span>{{ t("ItemCode") }}: {{ item.code }}</span>
+                            <span
+                              >{{ t("EmployeeSection") }}:
+                              {{ item.section.name }}</span
+                            >
                             <span class="float-left flex">
-                              {{ item.itemCategory.name }}
+                              {{ item.section.name }}
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -251,15 +285,8 @@ onMounted(async () => {
                               </svg>
                             </span>
                           </div>
-                          <div class="flex justify-betweens">
-                            <div
-                              class="text-text dark:text-textGray"
-                              v-html="item.description"
-                            ></div>
-                          </div>
                         </div>
                       </div>
-
                       <div class="dropdown">
                         <button
                           class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
@@ -311,7 +338,7 @@ onMounted(async () => {
   <!-- bottom tool bar -->
   <div class="m-5 fixed bottom-0 ltr:right-0 rtl:left-0">
     <button
-      @click="addItem()"
+      @click="addEmployee()"
       class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-0 transition-all duration-300 text-white"
     >
       <svg

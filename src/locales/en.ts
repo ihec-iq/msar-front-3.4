@@ -37,6 +37,11 @@ export default {
   ConnectionString: "Connection String Server",
   EmployeeAdd: "Add new employee",
   EmployeeUpdate: "update employee",
+  EmployeeIndex: "Employees",
+  EmployeeIsPerson: "Type Info",
+
+  EmployeeSection: "Section Employee",
+
   ItemUpdate: "Update Item",
   Name: "Name",
   Stats: "Stats",
