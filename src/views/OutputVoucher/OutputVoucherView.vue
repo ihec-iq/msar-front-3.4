@@ -14,7 +14,7 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import type { IInputVoucherItem } from "@/types/IInputVoucher";
 const { t } = useI18n();
 const { stocks } = storeToRefs(useStockStore());
-const { inputVoucherItems } = storeToRefs(useInputVoucherStore());
+const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 //region"Drag and Drop"
 
 //#endregion
@@ -61,8 +61,6 @@ const VoucherItem = ref<IOutputVoucherItem>({
   value: 0,
   notes: "",
 });
-const AddPopupRef = ref<HTMLOutputElement>();
-
 const AddPopup = () => {
   showPop.value = true;
   resetVoucherItem();
@@ -201,9 +199,8 @@ function update() {
   errors.value = null;
   const formData = new FormData();
   formData.append("number", outputVoucher.value.number.toString());
-  formData.append("notes", outputVoucher.value.notes.toString());
+  formData.append("notes", String(outputVoucher.value.notes));
   formData.append("date", outputVoucher.value.date.toString());
-  formData.append("items", JSON.stringify(outputVoucher.value.items));
   formData.append(
     "employeeRequestId",
     outputVoucher.value.employeeRequest.id.toString()
@@ -212,6 +209,7 @@ function update() {
     "signaturePerson",
     String(outputVoucher.value.signaturePerson)
   );
+  formData.append("items", JSON.stringify(outputVoucher.value.items));
   outputVoucherStore
     .update(outputVoucher.value.id, formData)
     .then((response) => {
@@ -301,58 +299,86 @@ const showData = async (id: number) => {
 };
 //#endregion
 const back = () => {
-  router.push({
-    name: "outputVoucherIndex",
-  });
+  router.back();
 };
 
 onMounted(async () => {
   checkPermissionAccessArray(["show Item"]);
-  await outputVoucherStore.getEmployees();
+  await outputVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
     outputVoucher.value.id = 0;
+    outputVoucher.value.date = new Date().toISOString().split("T")[0];
   } else {
     outputVoucher.value.id = id.value;
     await showData(id.value);
     namePage.value = t("OutputVoucher");
   }
   await useStockStore().get_stocks();
-  await useInputVoucherStore().getItems();
+  await useInputVoucherStore().getItemsVSelect();
 });
-function clearSelected(event: { target: { value: string } }) {
-  if (event.target.value === "") {
-    VoucherItem.value = {
-      id: 0,
-      outputVoucherId: 0,
-      inputVoucherItem: {
-        item: {
-          id: 0,
-          name: "",
-          code: "",
-          description: "",
-          itemCategory: {
-            id: 0,
-            name: "",
-          },
-          measuringUnit: "",
-        },
-        stock: {
-          id: 0,
-          name: "",
-        },
-        serialNumber: "",
-        count: 0,
-        price: 0,
-        value: 0,
-      },
-      count: 0,
-      price: 0,
-      value: 0,
-      notes: "",
-    };
-  }
-}
+
+//#region // selectInputItem2
+// const vSelectValue = ref<IInputVoucherItem>({
+//   item: {
+//     id: 0,
+//     name: "",
+//     code: "",
+//     description: "",
+//     itemCategory: {
+//       id: 0,
+//       name: "",
+//     },
+//     measuringUnit: "",
+//   },
+//   stock: {
+//     id: 0,
+//     name: "",
+//   },
+//   serialNumber: "",
+//   count: 0,
+//   price: 0,
+//   value: 0,
+// });
+// function selectInputItem2() {
+//   console.log(vSelectValue.value);
+//   VoucherItem.value.inputVoucherItem = {
+//     id: vSelectValue.value.id,
+//     input_voucher_id: 0,
+//     item: {
+//       id: 0,
+//       name: vSelectValue.value.itemName,
+//       code: String(vSelectValue.value.code),
+//       description: String(vSelectValue.value.notes),
+//       itemCategory: {
+//         id: 0,
+//         name: String(vSelectValue.value.itemCategory),
+//       },
+//       measuringUnit: "",
+//       itemCategoryId: 0,
+//     },
+//     itemId: 0,
+//     stock: {
+//       id: 0,
+//       name: String(vSelectValue.value.stockName),
+//     },
+//     stockId: 0,
+//     serialNumber: String(vSelectValue.value.serialNumber),
+//     count:
+//       Number(vSelectValue.value.inValue) - Number(vSelectValue.value.outValue),
+//     price: Number(vSelectValue.value.price),
+//     value: Number(vSelectValue.value.price),
+//     notes: String(vSelectValue.value.notes),
+//   };
+// }
+
+// watch(
+//   () => vSelectValue.value,
+//   () => {
+//     selectInputItem2();
+//   }
+// );
+//#endregion
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
@@ -520,36 +546,41 @@ function clearSelected(event: { target: { value: string } }) {
                 >
                   Item
                 </div>
+                <!-- v-model="VoucherItem.inputVoucherItem" -->
                 <vSelect
-                  ref="AddPopupRef"
-                  class="capitalize mx-2 rounded-md h-10 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                  v-model="VoucherItem.inputVoucherItem"
-                  :options="inputVoucherItems"
+                  class="capitalize dir-rtl mx-2 rounded-md h-10 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
+                  :options="inputVoucherItemsVSelect"
                   :reduce="(_item: IInputVoucherItem) => _item"
                   :get-option-label="(_item: IInputVoucherItem) => _item.item.name"
-                  @input="clearSelected"
+                  :create-option="(_item: IInputVoucherItem) => _item"
+                  v-model="VoucherItem.inputVoucherItem"
                 >
-                  <template #option="{ item }">
+                  <template #option="_item">
                     <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold"
+                      class="rounded-md text-right focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold"
                     >
-                      {{ item.name }}
+                      {{ _item.item.name.toString() }}
                     </div>
-                    <cite>
+                    <cite class="text-right">
                       <div
                         class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                       >
-                        Code: {{ item.code }}
+                        {{ t("ItemCode") }}: {{ _item.item.code.toString() }}
                       </div>
                       <div
                         class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                       >
-                        Category: {{ item.itemCategory.name.toString() }}
+                        Category: {{ _item.item.itemCategory.name.toString() }}
                       </div>
-                    </cite>
-                    <br />
-                    <cite>
-                      {{ item.description }}
+                      <div
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                      >
+                        Available:
+                        {{ Number(_item.inValue) - Number(_item.outValue) }}
+                      </div>
+                      <cite class="flex flex-wrap text-right w-fit">
+                        {{ _item.notes }}
+                      </cite>
                     </cite>
                   </template>
                 </vSelect>

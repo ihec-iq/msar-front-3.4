@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IStore, IStoreFilter } from "@/types/IStore";
+import type { IStore, IStoreFilter, IStoreItemFilter } from "@/types/IStore";
 
 export const useStoringStore = defineStore("StoringStore", () => {
   const stores = ref<IStore[]>([]);
@@ -27,11 +27,19 @@ export const useStoringStore = defineStore("StoringStore", () => {
       params: params,
     });
   }
-
+  async function get_item(params: IStoreItemFilter, page: number) {
+    return await Api.get(
+      `${pathUrl}/item/history/${params.itemId}?page=${page}`,
+      {
+        params: params,
+      }
+    );
+  }
   return {
     stores,
     get_store,
     get_filter,
+    get_item,
     get_summation,
     getError,
   };

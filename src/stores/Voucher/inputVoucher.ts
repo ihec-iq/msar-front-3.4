@@ -8,6 +8,7 @@ import type {
   IInputVoucherFilter,
   IInputVoucherItem,
   IInputVoucherState,
+  IInputVoucherItemVSelect,
 } from "@/types/IInputVoucher";
 
 export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
@@ -51,6 +52,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     notes: "",
   });
   const inputVoucherItems = ref<IInputVoucherItem[]>([]);
+  const inputVoucherItemsVSelect = ref<IInputVoucherItem[]>([]);
   const inputVoucherStates = ref<IInputVoucherState[]>([]);
   const inputVoucherEmployees = ref<IInputVoucherEmployee[]>([]);
   const pathBase = "/stockSys";
@@ -85,6 +87,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       });
   }
   async function getItems() {
+    inputVoucherItems.value = [];
     return await Api.get(`${pathBase}/inputVoucherItem`)
       .then((response) => {
         if (response.status == 200) {
@@ -93,6 +96,18 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       })
       .catch((errors) => {
         console.log("in get input Voucher Items : " + errors);
+      });
+  }
+  async function getItemsVSelect() {
+    inputVoucherItemsVSelect.value = [];
+    return await Api.get(`${pathBase}/inputVoucherItem/getItemsForVSelect`)
+      .then((response) => {
+        if (response.status == 200) {
+          inputVoucherItemsVSelect.value = response.data.data;
+        }
+      })
+      .catch((errors) => {
+        console.log("in get input get Items For VSelect : " + errors);
       });
   }
   async function getEmployees() {
@@ -145,6 +160,8 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucherItems,
     inputVoucherStates,
     inputVoucherEmployees,
+    inputVoucherItemsVSelect,
+
     addItem,
     editItem,
     removeItem,
@@ -153,6 +170,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     getState,
     getItems,
     getEmployees,
+    getItemsVSelect,
     show,
     store,
     update,

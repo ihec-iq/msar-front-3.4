@@ -9,4 +9,12 @@ export default [
       middleware: [authMiddleware],
     },
   },
+  {
+    path: "/storeItemHistory/:id",
+    name: "storeItemHistory",
+    component: () => import("@/views/store/StoreItemHistoryView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
 ];
