@@ -248,7 +248,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <div class="mt-10 flex item-center justify-between mx-6">
+        <!-- <div class="mt-10 flex item-center justify-between mx-6">
           <div class="text-text dark:text-textLight font-bold text-lg">
             {{ t("Change Color") }}
           </div>
@@ -288,7 +288,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div
         @click="
