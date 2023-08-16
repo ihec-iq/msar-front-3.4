@@ -8,19 +8,14 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
-import { useStockStore } from "@/stores/Voucher/stock";
-import { useInputVoucherStore } from "@/stores/Voucher/inputVoucher";
+import { useStockStore } from "@/stores/voucher/stock";
+import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 import { useItemStore } from "@/stores/Item/item";
-import type {
-  IInputVoucher,
-  IInputVoucherEmployee,
-  IInputVoucherFilter,
-  IInputVoucherItem,
-  IInputVoucherState,
-} from "@/types/IInputVoucher";
+import type { IInputVoucherItem } from "@/types/IInputVoucher";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IItem } from "@/types/IItem";
 import AddItemPopup from "@/components/AddItemPopup.vue";
+
 const { t } = useI18n();
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
@@ -110,7 +105,7 @@ const deleteItem = (index: number) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        inputVoucherStore.removeItem(index);
+        await inputVoucherStore.removeItem(index);
       }
     });
 };
@@ -297,9 +292,7 @@ const showData = async (id: number) => {
 };
 //#endregion
 const back = () => {
-  router.push({
-    name: "inputVoucherIndex",
-  });
+  router.back();
 };
 
 onMounted(async () => {
@@ -976,3 +969,5 @@ button {
   text-align: right !important;
 }
 </style>
+<!-- @/stores/voucher/stock@/stores/voucher/inputVoucher
+@/stores/item/item -->

@@ -41,6 +41,7 @@ declare module '@vue/runtime-core' {
     TableAll: typeof import('./src/components/general/TableAll.vue')['default']
     TextInput: typeof import('./src/components/general/TextInput.vue')['default']
     ToolBar: typeof import('./src/components/fixed/toolBar.vue')['default']
+    ToolTipComponent: typeof import('./src/components/ToolTipComponent.vue')['default']
     TstView1: typeof import('./src/components/tstView1.vue')['default']
     ValidateInput: typeof import('./src/components/general/ValidateInput.vue')['default']
     VanButton: typeof import('vant/es')['Button']

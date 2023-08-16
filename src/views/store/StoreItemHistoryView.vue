@@ -5,16 +5,15 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IStore, IStoreFilter } from "@/types/IStore";
+import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
 import { useStoringStore } from "@/stores/storing";
-import ToolTipComponent from "@/components/ToolTipComponent.vue";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IStore>>([]);
+const data = ref<Array<IStoreItemHistory>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IStore>>([]);
+const dataBase = ref<Array<IStoreItemHistory>>([]);
 
-const { get_filter, get_summation } = useStoringStore();
+const { get_item } = useStoringStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -36,7 +35,7 @@ watch(
 );
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IStore) => {
+const filterByIDName = (item: IStoreItemHistory) => {
   if (
     item.itemName.includes(fastSearch.value) ||
     item.serialNumber.includes(fastSearch.value)
@@ -53,8 +52,8 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IStoreFilter>({
-  item: "",
+const searchFilter = ref<IStoreItemFilter>({
+  itemId: "0",
   limit: 6,
   serialNumber: "",
   summation: true,
@@ -64,49 +63,41 @@ const getFilterData = async (page = 1) => {
   data.value = [];
   dataBase.value = [];
   isLoading.value = true;
-  searchFilter.value.item = fastSearch.value;
   searchFilter.value.serialNumber = fastSearch.value;
-
-  if (searchFilter.value.summation == true) {
-    await get_summation(searchFilter.value, page)
-      .then((response) => {
-        if (response.status == 200) {
-          dataPage.value = response.data.data;
-          data.value = dataPage.value.data;
-          dataBase.value = dataPage.value.data;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } else {
-    await get_filter(searchFilter.value, page)
-      .then((response) => {
-        if (response.status == 200) {
-          dataPage.value = response.data.data;
-          data.value = dataPage.value.data;
-          dataBase.value = dataPage.value.data;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  searchFilter.value.itemId = route.params.id.toString();
+  await get_item(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataPage.value = response.data.data;
+        data.value = dataPage.value.data;
+        dataBase.value = dataPage.value.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   isLoading.value = false;
 };
 //#endregion
-const openItem = (id: number) => {
-  router.push({
-    name: "storeItemHistory",
-    params: { id: id },
-  });
+const openItem = (id: number, billType: string) => {
+  if (billType == "in") {
+    router.push({
+      name: "inputVoucherUpdate",
+      params: { id: id },
+    });
+  } else {
+    router.push({
+      name: "outputVoucherUpdate",
+      params: { id: id },
+    });
+  }
 };
 //#region Pagination
 //#endregion
 onMounted(async () => {
   if (route.params.search != undefined)
-    fastSearch.value = route.params.search.toString() || "";
+    fastSearch.value = route.params.id.toString() || "";
   await getFilterData(1);
 });
 </script>
@@ -229,13 +220,10 @@ onMounted(async () => {
                             Serial Number
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Bill Type
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
                             Available in Stock
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Out
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            IN
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             Price
@@ -256,25 +244,17 @@ onMounted(async () => {
                         >
                           <th>{{ row.itemName }}</th>
                           <th>{{ row.serialNumber }}</th>
+                          <th>{{ row.billType }}</th>
                           <th>
                             <span
-                              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
-                            >
-                              {{ row.count }}
-                            </span>
-                          </th>
-                          <th>
-                            <span
-                              v-if="Number(row.out) > 0"
-                              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-                              >↑{{ row.out }}</span
-                            >
-                          </th>
-                          <th>
-                            <span
-                              v-if="Number(row.in) > 0"
+                              v-if="row.count > 0"
                               class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-                              >↓{{ row.in }}</span
+                              >↑{{ row.count }}</span
+                            >
+                            <span
+                              v-else
+                              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
+                              >↓{{ row.count }}</span
                             >
                           </th>
                           <th>{{ row.price }}</th>
@@ -284,7 +264,7 @@ onMounted(async () => {
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
                               type="secondary"
                               is-link
-                              @click="openItem(row.itemId)"
+                              @click="openItem(row.itemId, row.billType)"
                               >Open
                             </van-button>
                           </th>

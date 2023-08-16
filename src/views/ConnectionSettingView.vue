@@ -21,7 +21,7 @@ const { is } = storeToRefs(rtlStore);
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref(t("ConfigServer"));
 const route = useRoute();
 const Loading = ref(false);
 const router = useRouter();
@@ -32,19 +32,36 @@ const back = () => {
   });
 };
 const store = async () => {
-  await useConfigStore().store(String(ConnectionString.value));
+  await useConfigStore()
+    .store(String(ConnectionString.value))
+    .then(() => {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your configuration has been updated",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
 };
+//http://10.10.10.10/workflow_ihec/public/api
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show Item"]);
-  await useConfigStore().load();
+  //checkPermissionAccessArray(["show Item"]);
+  await useConfigStore()
+    .load()
+    .then(() => {
+      if (ConnectionString.value == null || ConnectionString.value == "") {
+        ConnectionString.value = "http://10.10.10.10/workflow_ihec/public/api";
+      }
+    });
 });
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
 
   <div class="w-full">
-    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
+    <div class="w-full p-6 grid lg:grid-cols-1 xs:grid-cols-1">
       <div class="w-11/12 mr-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -54,7 +71,7 @@ onMounted(async () => {
         <input
           v-model="ConnectionString"
           type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
     </div>

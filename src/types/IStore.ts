@@ -1,9 +1,20 @@
 export interface IStore {
-  id: number;
-  item: string;
-  stock: String;
+  itemId: number;
+  itemName: string;
+  stockName: String;
   serialNumber: string;
   price?: number;
+  count: number;
+  in?: number;
+  out?: number;
+}
+export interface IStoreItemHistory {
+  itemId: number;
+  itemName: string;
+  stockName: String;
+  serialNumber: string;
+  price?: number;
+  billType: string;
   count: number;
 }
 export interface IStoreFilter {
@@ -11,4 +22,12 @@ export interface IStoreFilter {
   item?: string;
   serialNumber?: string;
   limit: number;
+  summation?: boolean;
+}
+export interface IStoreItemFilter {
+  stock?: string;
+  itemId?: string;
+  serialNumber?: string;
+  limit: number;
+  summation?: boolean;
 }

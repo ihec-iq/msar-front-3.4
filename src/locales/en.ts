@@ -25,8 +25,23 @@ export default {
   InputVoucherNumber: "Number",
   InputVoucherEmployeeRequest: "Employee Request",
   InputVoucherSignaturePerson: "Signature Person",
+  OutputVoucher: "Output Voucher",
+  OutputVoucherSignaturePerson: "Signature Person",
+  OutputVoucherNumber: "Voucher Number",
+  OutputVoucherEmployeeRequest: "Employee Request",
+
   StoreIndex: "Store",
+  StoreTypeReport: "Type Report",
   SearchForItem: "Search by name or description",
+  ConfigServer: "Server Configuration",
+  ConnectionString: "Connection String Server",
+  EmployeeAdd: "Add new employee",
+  EmployeeUpdate: "update employee",
+  EmployeeIndex: "Employees",
+  EmployeeIsPerson: "Type Info",
+
+  EmployeeSection: "Section Employee",
+
   ItemUpdate: "Update Item",
   Name: "Name",
   Stats: "Stats",
