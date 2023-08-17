@@ -969,5 +969,5 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher/stock@/stores/voucher/inputVoucher
-@/stores/item/item
+<!-- @/stores/voucher/stock@/stores/voucher/inputVoucher
+@/stores/item/item -->

@@ -8,8 +8,8 @@ import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import FilePreview from "@/components/FilePreview.vue";
 import { usePermissionStore } from "@/stores/permission";
+import FilePreview from "@/components/FilePreview.vue";
 import DragDrop from "@/components/DragDrop.vue";
 
 import { useDragDropStore } from "@/compositions/dragDrop";
@@ -58,6 +58,7 @@ const store = () => {
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
+  console.log([...formData]);
   archiveStore
     .store(formData)
     .then((response) => {

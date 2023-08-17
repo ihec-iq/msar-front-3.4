@@ -2,8 +2,10 @@ import { onMounted, ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useRtlStore = defineStore("rtlStore", () => {
-  const isRtl = ref(false);
-  const isClose = ref(true);
+  const isRtl = ref<boolean>(false);
+  const isClose = ref<boolean>(true);
+  const isCloseStick = ref<boolean>(false);
+
   const is = ref(false);
   const ChangeDirection = () => {
     // console.log("old RTL : " + isRtl.value);
@@ -30,5 +32,5 @@ export const useRtlStore = defineStore("rtlStore", () => {
     const htmlEl = document.querySelector("html");
     htmlEl?.setAttribute("dir", isRtl.value ? "rtl" : "ltr");
   });
-  return { isRtl, isClose, ChangeDirection, is };
+  return { isRtl, isClose, isCloseStick, ChangeDirection, is };
 });
