@@ -11,6 +11,9 @@ const { isClose } = storeToRefs(rtlStore);
   <div class="flex duration-300">
     <navbar />
     <div
+      class="hidden print:visible print:block h-full w-full bg-white fixed"
+    ></div>
+    <div
       :class="{
         'ltr:ml-[80px] rtl:mr-[80px]': isClose,
         'rtl:mr-[304px] ltr:ml-[304px]': !isClose,

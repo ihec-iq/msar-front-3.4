@@ -190,6 +190,8 @@ module.exports = {
         lightContent: "#ebf0ff",
         thLight: "#6b7280",
         bgLeftNavLight: "#fff",
+        tableNew: "#2f3349",
+
         //#endregion
       },
       // dark: {

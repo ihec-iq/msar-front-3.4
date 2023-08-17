@@ -340,178 +340,26 @@ onMounted(() => {
           </button>
         </nav>
         <!-- setting and log out -->
-        <div
-          class="flex items-center space-x-2 lg:space-x-0 flex-col space-y-2"
-        >
+        <div class="">
+          <!-- #region setting icon -->
           <button
-            is-link
-            @click="showPopup"
-            class="dark:text-textGray z-50 dark:hover:text-iconHover dark:bg-sideNavSetting bg-transparent hover:bg-transparent text-iconLight hover:text-iconHoverLight p-4 inline-flex justify-center rounded-md smooth-hover"
-            href="#"
+            @click="settingPop = !settingPop"
+            class="dark:text-textGray border-none dark:hover:text-iconHover bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
+              class="h-5 w-5 sm:h-6 sm:w-6"
+              viewBox="0 0 20 20"
+              fill="currentColor"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+                fill-rule="evenodd"
+                d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                clip-rule="evenodd"
               />
             </svg>
           </button>
-          <div class="dropdown relative">
-            <!-- start fly setting -->
-            <label
-              class="btn dark:text-textGray border-none dark:hover:text-iconHover bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
-              tabindex="0"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </label>
-
-            <div
-              tabindex="0"
-              class="dropdown-content menu p-2 rounded-box w-52 bottom-2"
-            >
-              <div
-                class="border-none fixed xs:bottom-4 min-w-max w-[300px] text-base h-[500px] z-[10000] float-left py-2 list-none text-left rounded-lg mt-1 m-0 bg-clip-padding"
-              >
-                <div
-                  class="rounded-lg h-full shadow-lg w-full bg-settingLight dark:bg-setting flex z-[10000] ring-1 ring-black ring-opacity-5 overflow-hidden"
-                >
-                  <!-- main setting -->
-                  <div
-                    class="relative flex flex-col justify-between border-r border-gray-900 w-[160px] gap-6 bg-settingLight dark:bg-setting z-[10000] pl-2 pr-1 py-6"
-                  >
-                    <!-- main up setting -->
-                    <div>
-                      <div
-                        @click.prevent="settingMenu = 'account'"
-                        class="-mr-3 mb-9 h-14 p-3 w-full z-[100000] cursor-pointer dropdown-item flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
-                        :class="{
-                          ' text-white  border-l-2 border-blue-500 ':
-                            settingMenu === 'account',
-                        }"
-                      >
-                        <img
-                          src="@/assets/image/accounts.svg"
-                          class="h-6 w-6"
-                          alt=""
-                        />
-                        <div class="ml-4">
-                          <p
-                            class="text-base font-medium text-text dark:text-textLight"
-                          >
-                            {{ t("Accounts") }}
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        @click.prevent="settingMenu = 'MainSetting'"
-                        class="-mr-3 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
-                        :class="{
-                          ' text-white  border-l-2 border-blue-500 ':
-                            settingMenu === 'MainSetting',
-                        }"
-                      >
-                        <!-- Heroicon name: outline/shield-check -->
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="w-6 h-6 text-[#0099ff]"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
-                          />
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-
-                        <div class="ml-4">
-                          <p
-                            class="text-base font-medium text-text dark:text-textLight"
-                          >
-                            {{ t("Setting") }}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- log out -->
-                    <div>
-                      <div
-                        @click="logout()"
-                        class="p-2 cursor-pointer font-bold text-delete hover:text-text dark:hover:text-textLight flex rounded-lg duration-300 hover:bg-deleteHover mb-2"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5 sm:h-6 sm:w-6 mr-2"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        {{ t("Log Out") }}
-                      </div>
-                    </div>
-                  </div>
-                  <!-- side setting -->
-                  <div
-                    class="h-full w-[130px] p-2"
-                    v-if="settingMenu === 'account'"
-                  >
-                    <div
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Creator") }}
-                    </div>
-                    <div
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Packages") }}
-                    </div>
-                  </div>
-                  <div
-                    class="h-full w-[130px] p-2"
-                    v-if="settingMenu === 'MainSetting'"
-                  >
-                    <div
-                      @click="setting()"
-                      class="p-2 cursor-pointer text-text dark:text-textLight rounded-lg duration-300 dark:hover:bg-sideNavHover hover:bg-sideNavLightHover mb-2"
-                    >
-                      {{ t("Setting") }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- #endregion -->
         </div>
       </div>
     </div>
@@ -520,7 +368,7 @@ onMounted(() => {
       :class="[
         isClose ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]' : 'transOn',
       ]"
-      class="bg-sideNavLight mt-4 dark:bg-nav lg:w-56 flex-none lg:flex flex-col justify-between `hidden`"
+      class="shadow-md shadow-slate-500 bg-white mt-4 dark:bg-nav w-56 flex-none lg:flex flex-col justify-between duration-500"
     >
       <!-- Feature Admin icon -->
       <div
@@ -600,88 +448,19 @@ onMounted(() => {
             class="text-text dark:text-textLight mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
           >
             <van-collapse v-model="activeNames">
-              <van-collapse-item :title="t('Companies')" name="3">
+              <van-collapse-item :title="t('Here')" name="3">
                 <ul class="px-2 py-3 pt-2">
                   <li
                     class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
                   >
-                    <router-link
-                      :to="{ name: 'companyIndex' }"
-                      @click.prevent="secondTab === 'Companies'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                        />
-                      </svg>
-                      <span class="ml-2">{{ t("Companies") }}</span>
-                    </router-link>
+                    Here
                   </li>
                   <li
                     class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    <router-link
-                      :to="{ name: 'companyAccess' }"
-                      @click.prevent="secondTab === 'company access'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                        />
-                      </svg>
-                      <span class="ml-2">{{ t("Companies By Access") }}</span>
-                    </router-link>
-                  </li>
+                  ></li>
                   <li
                     class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    <router-link
-                      :to="{ name: 'companyExpire' }"
-                      @click.prevent="secondTab === 'company expire'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6 6h.008v.008H6V6z"
-                        />
-                      </svg>
-                      <span class="ml-1">{{ t("Companies By Expire") }}</span>
-                    </router-link>
-                  </li>
+                  ></li>
                 </ul>
               </van-collapse-item>
             </van-collapse>
@@ -717,54 +496,10 @@ onMounted(() => {
         <ul class="px-2 py-3 pt-2">
           <li
             class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          >
-            <router-link
-              :to="{ name: 'computerCardIndex' }"
-              @click.prevent="secondTab === 'Companies'"
-              class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                />
-              </svg>
-              <span class="ml-2">{{ t("Card Computer") }}</span>
-            </router-link>
-          </li>
+          ></li>
           <li
             class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          >
-            <router-link
-              :to="{ name: 'computerIndex' }"
-              @click.prevent="secondTab === 'Companies'"
-              class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                />
-              </svg>
-              <span class="ml-2">{{ t("Table Computer") }}</span>
-            </router-link>
-          </li>
+          ></li>
         </ul>
       </div>
 
@@ -1101,7 +836,7 @@ onMounted(() => {
   <!--! #region setting pop -->
   <div
     v-if="settingPop == true"
-    class="bg-settingLight dark:bg-setting fixed rtl:right-14 ltr:left-14 rtl:bottom-10 h-[350px] w-[300px] rounded-xl z-50 flex overflow-hidden"
+    class="bg-settingLight dark:bg-setting fixed rtl:right-14 ltr:left-14 bottom-10 h-[350px] w-[300px] rounded-xl z-50 flex overflow-hidden"
   >
     <!-- main setting -->
     <div
@@ -1185,16 +920,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.transOff {
-  transform: translateX(-400px);
-}
-.transOn {
-  transform: translateX(1);
-}
-:root {
-  --primary-color: #92b8ff;
-  --secondary-color: #e6eef9;
-}
 .transOff {
   transform: translateX(-400px);
 }
