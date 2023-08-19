@@ -2,7 +2,6 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
-import { usePermissionStore } from "@/stores/permission";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { useI18n } from "@/stores/i18n/useI18n";
@@ -11,21 +10,19 @@ const { t } = useI18n();
 // import type IUser from "@/types/accounting/accounts/IUser";
 // const { get } = useUserStore();
 const data = ref<any>({});
-// data.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
-// const filter = reactive({
-//   name: "",
-//   email: "",
-//   limit: 50,
-// });
-// const getData = async () => {
-//   await get(filter).then((response) => {
-//     data.value = response.data.data.data;
-//   });
-// };
-// const getUser = () => {
-//   data.value = localStorage.getItem("user");
-// };
-// console.log(data.value);
+const changeStackSideBar = () => {
+  isCloseStick.value = !isCloseStick.value;
+};
+
+const handleMouseEnter = () => {
+  if (isCloseStick.value) return;
+  isClose.value = false;
+};
+
+const handleMouseLeave = () => {
+  if (isCloseStick.value) return;
+  isClose.value = true;
+};
 const showPop = ref(false);
 const showPopup = () => {
   showPop.value = true;
@@ -34,22 +31,14 @@ const closePopup = () => {
   showPop.value = false;
 };
 const rtlStore = useRtlStore();
-const { isClose } = storeToRefs(rtlStore);
+const { isClose, isCloseStick } = storeToRefs(rtlStore);
 //#region authorization
-const { can } = usePermissionStore();
 //#endregion
-const block = false;
 const tab = ref<string>("Feature Admin");
 const settingMenu = ref<string>("MainSetting");
 const secondTab = ref("2");
-const secondTab1 = ref("1");
 const router = useRouter();
 const activeNames = ref(["1"]);
-const isSidebarOpen = false;
-const currentSidebarTab = null;
-const isSettingsPanelOpen = false;
-const isSubHeaderOpen = false;
-const { is } = storeToRefs(rtlStore);
 
 //const route = useRoute()
 // const nav = computed(()=> route.meta.nav?.toString())
@@ -58,15 +47,9 @@ const { is } = storeToRefs(rtlStore);
 //     tab.value=nav.value?.toString()
 //   }
 // } )
-const showPopover = ref(false);
 const authStore = useAuthStore();
 const logout = () => {
   authStore.logout();
-};
-const userIndex = () => {
-  router.push({
-    name: "userIndex",
-  });
 };
 const settingPop = ref<boolean>(false);
 
@@ -83,63 +66,57 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="flex fixed h-full bg-bgLeftNavLight dark:bg-bgLeftNav">
+  <div
+    class="flex fixed h-full bg-bgLeftNavLight dark:bg-bgLeftNav nav print:hidden duration-500"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+  >
     <div
-      :class="[
-        is ? ' duration-0 ltr:-ml-[80px] rtl:-mr-[80px]' : ' duration-0',
-      ]"
       class="LeftNav bg-bgLeftNavLight ltr:pl-2 rtl:pr-2 z-50 dark:bg-bgLeftNav w-20 flex-none flex flex-col h-full py-2"
     >
       <div
-        class="sideNav bg-[#0099ff] dark:bg-sideNav h-full md:min-h-screen md:h-screen px-4 py-10 sm:rounded-xl flex flex-col justify-between"
+        class="shadow-md shadow-slate-500 bg-white dark:bg-sideNav h-full md:min-h-screen md:h-screen px-4 py-10 sm:rounded-xl flex flex-col justify-between"
       >
-        <nav class="flex items-center space-x-0 flex-col space-y-2">
-          <!-- <button
-            v-if="!is"
-            @click="isClose = !isClose"
-            class="cursor-pointer lg:block xs:hidden fixed border border-gray-500 rounded-full p-2 top-2 ltr:left-14 rtl:right-14"
-          >
+        <div
+          v-motion
+          :initial="{ opacity: 0, x: -85 }"
+          :enter="{ opacity: 1, x: 0 }"
+          :variants="{ custom: { scale: 2 } }"
+          :delay="300"
+          v-if="!isClose"
+          class="fixed ltr:left-[275px] rtl:right-[275px] top-4 text-white"
+        >
+          <button @click="changeStackSideBar()" v-if="isCloseStick">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-4 h-4 text-textLight duration-700 b-t1"
-              :class="{ 'rotate-180': isClose }"
+              class="text-textLight"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
-              />
-            </svg>
-          </button> -->
-          <button
-            @click="is = !is"
-            :class="{ 'ltr:left-2 rtl:right-2': is }"
-            class="cursor-pointer fixed border border-gray-500 rounded-full p-2 top-500 ltr:left-14 rtl:right-14"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-4 h-4 text-textLight duration-700 b-t1"
-              :class="{ 'rotate-180': is }"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
+                fill="currentColor"
+                d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 2a8 8 0 0 1 8 8a8 8 0 0 1-8 8a8 8 0 0 1-8-8a8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6a6 6 0 0 0 6 6a6 6 0 0 0 6-6a6 6 0 0 0-6-6m0 2a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4Z"
               />
             </svg>
           </button>
-          <!-- Active: bg-gray-800 text-white, Not active: text-white/50 -->
-          <!--  -->
-          <!-- Reports -->
-          <!--  -->
+          <button @click="changeStackSideBar()" v-if="!isCloseStick">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              class="text-textLight"
+            >
+              <path
+                fill="currentColor"
+                d="M12 20a8 8 0 0 1-8-8a8 8 0 0 1 8-8a8 8 0 0 1 8 8a8 8 0 0 1-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2Z"
+              />
+            </svg>
+          </button>
+        </div>
+        <nav class="flex items-center space-x-0 flex-col space-y-2">
+          <!-- feature -->
           <router-link
             :to="{ name: 'Dashboard' }"
             @click.prevent="tab = 'Feature Admin'"
@@ -161,126 +138,12 @@ onMounted(() => {
               </svg>
             </button>
           </router-link>
+          <!-- Company -->
           <router-link
             :to="{ name: 'archiveIndex' }"
-            @click.prevent="tab = 'Feature Admin'"
-          >
-            <button
-              title="Feature"
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 20 20"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
-                ></path>
-              </svg>
-            </button>
-          </router-link>
-          <router-link
-            :to="{ name: 'itemIndex' }"
-            @click.prevent="tab = 'Feature Admin'"
-          >
-            <button
-              title="Feature"
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 20 20"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="M3 21V3h18v18H3Zm2-2h14V5H5v14Zm2-2h2v-5H7v5Zm8 0h2V7h-2v10Zm-4 0h2v-3h-2v3Zm0-5h2v-2h-2v2Zm-6 7V5v14Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <router-link
-            :to="{ name: 'inputVoucherIndex' }"
-            @click.prevent="tab = 'Feature Admin'"
-          >
-            <button
-              title="Input Voucher"
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <router-link
-            :to="{ name: 'storeIndex' }"
-            @click.prevent="tab = 'Feature Admin'"
-          >
-            <button
-              title="Store Voucher"
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="M11 23a2 2 0 0 1-2-2v-2h6v2a2 2 0 0 1-2 2h-2m1-22c.71 0 1.39.09 2.05.26C15.22 2.83 16 5.71 16 9c0 2.28-.38 4.37-1 7a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2c-.62-2.63-1-4.72-1-7c0-3.29.78-6.17 1.95-7.74C10.61 1.09 11.29 1 12 1m8 7c0 3.18-1.85 7.92-4.54 9.21C16.41 15.39 17 11.83 17 9c0-2.83-.59-5.39-1.54-7.21C18.15 3.08 20 4.82 20 8M4 8c0-3.18 1.85-4.92 4.54-6.21C7.59 3.61 7 6.17 7 9s.59 6.39 1.54 8.21C5.85 15.92 4 11.18 4 8Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <router-link
-            :to="{ name: 'outputVoucherIndex' }"
-            @click.prevent="tab = 'Feature Admin'"
-          >
-            <button
-              title="output Voucher"
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- <router-link
-            :to="{ name: 'companyIndex' }"
             @click.prevent="tab = 'Company'"
           >
-            <a
+            <button
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
             >
@@ -298,14 +161,15 @@ onMounted(() => {
                   d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
                 />
               </svg>
-            </a>
+            </button>
           </router-link>
-
+          <!--  -->
+          <!-- Computer -->
           <router-link
-            :to="{ name: 'computerCardIndex' }"
+            :to="{ name: 'itemIndex' }"
             @click.prevent="tab = 'Computer'"
           >
-            <a
+            <button
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
             >
@@ -323,14 +187,14 @@ onMounted(() => {
                   d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z"
                 />
               </svg>
-            </a>
+            </button>
           </router-link>
-
+          <!-- Active -->
           <router-link
-            :to="{ name: 'activeIndex' }"
+            :to="{ name: 'inputVoucherIndex' }"
             @click.prevent="tab = 'Active'"
           >
-            <a
+            <button
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
             >
@@ -348,11 +212,14 @@ onMounted(() => {
                   d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
                 />
               </svg>
-            </a>
+            </button>
           </router-link>
-
-          <router-link :to="{ name: 'news' }" @click.prevent="tab = 'User'">
-            <a
+          <!-- news -->
+          <router-link
+            :to="{ name: 'storeIndex' }"
+            @click.prevent="tab = 'News'"
+          >
+            <button
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
             >
@@ -370,14 +237,14 @@ onMounted(() => {
                   d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"
                 />
               </svg>
-            </a>
+            </button>
           </router-link>
-
+          <!-- general -->
           <router-link
-            :to="{ name: 'generalIndex' }"
+            :to="{ name: 'outputVoucherIndex' }"
             @click.prevent="tab = 'general'"
           >
-            <a
+            <button
               class="text-iconLight dark:text-icon p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
             >
@@ -395,13 +262,86 @@ onMounted(() => {
                   d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
                 />
               </svg>
-            </a>
-          </router-link> -->
+            </button>
+          </router-link>
+          <!-- general -->
+          <router-link
+            :to="{ name: 'employeeIndex' }"
+            @click.prevent="tab = 'general1'"
+          >
+            <button
+              class="text-iconLight dark:text-icon p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
+              href="#"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+                />
+              </svg>
+            </button>
+          </router-link>
+          <!-- searcg -->
+          <button
+            class="text-white/50 p-4 inline-flex justify-center rounded-md text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:bg-sideNavHover dark:hover:text-iconHover smooth-hover"
+            :class="{
+              'bg-gray-800 text-white  border-l-2 border-red-300 ':
+                tab === 'search',
+            }"
+            href="#"
+          >
+            <div class="input-group relative flex mt-4">
+              <button
+                class="inline-block text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:bg-sideNavHover dark:hover:text-iconHover font-medium text-xs leading-tight uppercase rounded transition duration-150 ease-in-out mr-1.5"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasRight1"
+                aria-controls="offcanvasRight"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <!-- <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
+            </svg> -->
+          </button>
         </nav>
         <!-- setting and log out -->
         <div class="">
           <!-- #region setting icon -->
-          {{ settingPop }}
           <button
             @click="settingPop = !settingPop"
             class="dark:text-textGray border-none dark:hover:text-iconHover bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
@@ -426,12 +366,9 @@ onMounted(() => {
     <!-- EXPLORER -->
     <div
       :class="[
-        isClose
-          ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]'
-          : 'transOn xs:w-full',
-        is ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]' : 'transOn',
+        isClose ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]' : 'transOn',
       ]"
-      class="bg-sideNavLight mt-4 dark:bg-nav lg:w-56 flex-none lg:flex flex-col justify-between `hidden`"
+      class="shadow-md shadow-slate-500 bg-white mt-4 dark:bg-nav w-56 flex-none lg:flex flex-col justify-between duration-500"
     >
       <!-- Feature Admin icon -->
       <div
@@ -511,88 +448,19 @@ onMounted(() => {
             class="text-text dark:text-textLight mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
           >
             <van-collapse v-model="activeNames">
-              <van-collapse-item :title="t('Companies')" name="3">
+              <van-collapse-item :title="t('Here')" name="3">
                 <ul class="px-2 py-3 pt-2">
                   <li
                     class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
                   >
-                    <router-link
-                      :to="{ name: 'companyIndex' }"
-                      @click.prevent="secondTab === 'Companies'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                        />
-                      </svg>
-                      <span class="ml-2">{{ t("Companies") }}</span>
-                    </router-link>
+                    Here
                   </li>
                   <li
                     class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    <router-link
-                      :to="{ name: 'companyAccess' }"
-                      @click.prevent="secondTab === 'company access'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                        />
-                      </svg>
-                      <span class="ml-2">{{ t("Companies By Access") }}</span>
-                    </router-link>
-                  </li>
+                  ></li>
                   <li
                     class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    <router-link
-                      :to="{ name: 'companyExpire' }"
-                      @click.prevent="secondTab === 'company expire'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6 6h.008v.008H6V6z"
-                        />
-                      </svg>
-                      <span class="ml-1">{{ t("Companies By Expire") }}</span>
-                    </router-link>
-                  </li>
+                  ></li>
                 </ul>
               </van-collapse-item>
             </van-collapse>
@@ -628,54 +496,10 @@ onMounted(() => {
         <ul class="px-2 py-3 pt-2">
           <li
             class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          >
-            <router-link
-              :to="{ name: 'computerCardIndex' }"
-              @click.prevent="secondTab === 'Companies'"
-              class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                />
-              </svg>
-              <span class="ml-2">{{ t("Card Computer") }}</span>
-            </router-link>
-          </li>
+          ></li>
           <li
             class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          >
-            <router-link
-              :to="{ name: 'computerIndex' }"
-              @click.prevent="secondTab === 'Companies'"
-              class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                />
-              </svg>
-              <span class="ml-2">{{ t("Table Computer") }}</span>
-            </router-link>
-          </li>
+          ></li>
         </ul>
       </div>
 
@@ -904,8 +728,8 @@ onMounted(() => {
               class="w-8 h-8 rounded-full"
           /></a>
           <div class="text-xs ml-1 mb-4">
-            <div class="text-text dark:text-textLight">{{ t("Support") }}</div>
-            <div class="text-textGray text-xs w-full mr-1">0772 572 6027</div>
+            <div class="text-text dark:text-textLight">{{ t("Help") }}</div>
+            <!-- <div class="text-textGray text-xs w-full mr-1">0772 572 6027</div> -->
           </div>
         </div>
         <div class="flex items-center text-iconLight dark:text-icon">
@@ -1012,7 +836,7 @@ onMounted(() => {
   <!--! #region setting pop -->
   <div
     v-if="settingPop == true"
-    class="bg-settingLight dark:bg-setting fixed rtl:right-14 ltr:left-14 rtl:bottom-10 h-[350px] w-[300px] rounded-xl z-50 flex overflow-hidden"
+    class="bg-settingLight dark:bg-setting fixed rtl:right-14 ltr:left-14 bottom-10 h-[350px] w-[300px] rounded-xl z-50 flex overflow-hidden"
   >
     <!-- main setting -->
     <div
@@ -1096,10 +920,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-:root {
-  --primary-color: #92b8ff;
-  --secondary-color: #e6eef9;
-}
 .transOff {
   transform: translateX(-400px);
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useArchiveStore } from "@/stores/Archive/archive";
+import { useArchiveStore } from "@/stores/archives/archive";
 import { storeToRefs } from "pinia";
 
 import PageTitle from "@/components/general/namePage.vue";
@@ -9,7 +9,7 @@ import type {
   IArchive,
   IArchiveFilter,
   IDocument,
-} from "@/types/Archive/IArchive";
+} from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
@@ -274,7 +274,7 @@ onMounted(async () => {
                   >
                     <!-- card -->
                     <div
-                      class="bg-cardLight btn dark:bg-card flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                      class="bg-cardLight btn dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
                     >
                       <div class="w-4/4 overflow-hidden">
                         <button
@@ -307,7 +307,7 @@ onMounted(async () => {
                       :key="archiveType.id"
                     >
                       <div
-                        class="w-4/4 overflow-hidden border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600 bg-cardLight btn dark:bg-card flex w-full p-1 rounded-lg"
+                        class="bg-cardLight btn dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-600 dark:shadow-gray-900 duration-500 hover:border hover:border-gray-600 dark:hover:shadow-md hover:shadow-gray-400"
                       >
                         <button
                           @click="getFilterData(1, archiveType.id)"

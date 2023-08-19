@@ -60,7 +60,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <component :is="route.meta.layout || DefaultLayout"></component>
+  <RouterView></RouterView>
 </template>
 <style scoped>
 .dark .image-bg {

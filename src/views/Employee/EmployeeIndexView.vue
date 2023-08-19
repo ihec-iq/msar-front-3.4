@@ -1,19 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useEmployeeStore } from "@/stores/employee";
+import { useSectionStore } from "@/stores/section";
+
+import { storeToRefs } from "pinia";
+
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
-import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
-import EditButton from "@/components/dropDown/EditButton.vue";
+import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IInputVoucher>>([]);
+const employeeStore = useEmployeeStore();
+const { employees, employee } = storeToRefs(useEmployeeStore());
+const { sections } = storeToRefs(useSectionStore());
+const namePage = ref(t("EmployeeIndex"));
+
+const data = ref<Array<IEmployee>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IInputVoucher>>([]);
-const { inputVoucher, get_filter } = useInputVoucherStore();
+const dataBase = ref<Array<IEmployee>>([]);
+const { get_filter } = useEmployeeStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -33,28 +41,20 @@ watch(
     await getFilterData(1);
   }
 );
-const addItem = () => {
-  inputVoucher.id = 0;
-  inputVoucher.number = "";
-  inputVoucher.date = "";
-  inputVoucher.notes = "";
-  inputVoucher.state = { name: "", id: 0 };
-  inputVoucher.items = [];
-  inputVoucher.signaturePerson = "";
-  inputVoucher.employeeRequestId = 0;
-  inputVoucher.inputVoucherStateId = 0;
+const addEmployee = () => {
+  employee.value.id = 0;
+  employee.value.name = "";
+  employee.value.section = { name: "", id: 0 };
+  employee.value.isPerson = 0;
   router.push({
-    name: "inputVoucherAdd",
+    name: "employeeAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IInputVoucher) => {
-  if (
-    item.number.toString().includes(fastSearch.value) ||
-    item.notes.includes(fastSearch.value)
-  ) {
+const filterByIDName = (employee: IEmployee) => {
+  if (employee.name.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -67,15 +67,14 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IInputVoucherFilter>({
+const searchFilter = ref<IEmployeeFilter>({
   name: "",
+  sectionId: 0,
   limit: 6,
-  description: "",
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
-  searchFilter.value.name = "";
-  if (fastSearch.value != "") searchFilter.value.name = fastSearch.value;
+  searchFilter.value.name = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -92,7 +91,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "inputVoucherUpdate",
+    name: "employeeUpdate",
     params: { id: id },
   });
 };
@@ -102,13 +101,30 @@ const update = (id: number) => {
 onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+  await useSectionStore().get_sections();
+
   await getFilterData(1);
 });
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("InputVoucher") }} </PageTitle>
+    <PageTitle> {{ namePage }} </PageTitle>
+    <RouterLink :to="{ name: 'itemCategoryIndex' }" class="float-left flex m-5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="currentColor"
+          d="M4 2a2 2 0 0 0-2 2v10h2V4h10V2H4m4 4a2 2 0 0 0-2 2v10h2V8h10V6H8m12 6v8h-8v-8h8m0-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2Z"
+        />
+      </svg>
+      {{ t("ItemCategory") }}</RouterLink
+    >
   </div>
+
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
@@ -169,6 +185,31 @@ onMounted(async () => {
             </select>
           </div>
         </div>
+        <div
+          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[15%] xs:w-[81.5%]"
+        >
+          <div
+            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+          >
+            <p>{{ t("EmployeeSection") }}:</p>
+            <select
+              aria-label="select"
+              v-model="searchFilter.sectionId"
+              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1 font-medium"
+              @change="getFilterData()"
+            >
+              <option
+                v-for="section in sections"
+                :key="section.id"
+                :value="section.id"
+                :selected="section.id == 2"
+                class="text-sm text-indigo-800 font-bold"
+              >
+                {{ section.name }}
+              </option>
+            </select>
+          </div>
+        </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
           <button
             @click="getFilterData()"
@@ -209,37 +250,43 @@ onMounted(async () => {
                           <div
                             class="text-2xl text-text dark:text-textLight mb-2"
                           >
-                            {{ item.number }}
+                            {{ item.name }}
                           </div>
                           <div
                             class="text-text dark:text-textGray mb-2 justify-between"
                           >
-                            <span>{{ t("Date") }}: {{ item.date }}</span>
-                            <span class="float-left flex" title="Items count">
-                              {{ item.itemsCount }}
+                            <span
+                              >{{ t("EmployeeSection") }}:
+                              {{ item.section.name }}</span
+                            >
+                            <span class="float-left flex">
+                              {{ item.section.name }}
                               <svg
-                                title="Items count"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
                                 height="20"
                                 viewBox="0 0 24 24"
                               >
-                                <path
-                                  fill="currentColor"
-                                  d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6 4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6 4h4v-4h-4M4 8h4V4H4v4Z"
-                                />
+                                <g id="evaCameraOutline0" fill="#7f7e7e">
+                                  <g id="evaCameraOutline1">
+                                    <g
+                                      id="evaCameraOutline2"
+                                      fill="currentColor"
+                                    >
+                                      <path
+                                        d="M19 7h-3V5.5A2.5 2.5 0 0 0 13.5 3h-3A2.5 2.5 0 0 0 8 5.5V7H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3Zm-9-1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V7h-4ZM20 18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1Z"
+                                      />
+                                      <path
+                                        d="M12 10.5a3.5 3.5 0 1 0 3.5 3.5a3.5 3.5 0 0 0-3.5-3.5Zm0 5a1.5 1.5 0 1 1 1.5-1.5a1.5 1.5 0 0 1-1.5 1.5Z"
+                                      />
+                                    </g>
+                                  </g>
+                                </g>
                               </svg>
                             </span>
                           </div>
-                          <div class="flex justify-betweens">
-                            <div
-                              class="text-text dark:text-textGray"
-                              v-html="item.notes"
-                            ></div>
-                          </div>
                         </div>
                       </div>
-
                       <div class="dropdown">
                         <button
                           class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
@@ -256,7 +303,7 @@ onMounted(async () => {
                         </button>
 
                         <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
+                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-gray-800"
                           aria-labelledby="dropdownMenuButton2"
                         >
                           <li>
@@ -291,7 +338,7 @@ onMounted(async () => {
   <!-- bottom tool bar -->
   <div class="m-5 fixed bottom-0 ltr:right-0 rtl:left-0">
     <button
-      @click="addItem()"
+      @click="addEmployee()"
       class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-0 transition-all duration-300 text-white"
     >
       <svg
@@ -311,3 +358,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/item/item

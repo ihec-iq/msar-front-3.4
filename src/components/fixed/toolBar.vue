@@ -82,7 +82,7 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-sideNavLight dark:bg-toolBar h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-1 rtl:mr-1"
+    class="print:hidden flex text-white bg-bgLeftNavLight dark:bg-bgLeftNav shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-1 rtl:mr-1"
   >
     <div
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4 xs:w-full"
@@ -248,7 +248,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <div class="mt-10 flex item-center justify-between mx-6">
+        <!-- <div class="mt-10 flex item-center justify-between mx-6">
           <div class="text-text dark:text-textLight font-bold text-lg">
             {{ t("Change Color") }}
           </div>
@@ -288,7 +288,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div
         @click="

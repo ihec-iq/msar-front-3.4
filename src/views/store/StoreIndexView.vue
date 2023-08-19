@@ -98,7 +98,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const openItem = (id: number) => {
   router.push({
-    name: "inputVoucherUpdate",
+    name: "storeItemHistory",
     params: { id: id },
   });
 };
@@ -219,8 +219,12 @@ onMounted(async () => {
                     <div
                       class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                     ></div>
-                    <table class="min-w-full text-center">
-                      <thead class="border-b bg-[#0003] text-gray-300">
+                    <table
+                      class="min-w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
+                    >
+                      <thead
+                        class="sticky top-0 font-semibold dark:bg-tableNew bg-white"
+                      >
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             item
@@ -230,6 +234,12 @@ onMounted(async () => {
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             Available in Stock
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Out
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            IN
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             Price
@@ -242,38 +252,47 @@ onMounted(async () => {
                           </th>
                         </tr>
                       </thead>
-                      <tbody class="bg-[#1f2937]">
+                      <tbody
+                        class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
+                      >
                         <tr
                           v-for="row in data"
                           :key="row.itemName"
-                          class="border-b border-black h-14 text-gray-100"
+                          class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                         >
                           <th>{{ row.itemName }}</th>
                           <th>{{ row.serialNumber }}</th>
                           <th>
                             <span
-                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+                              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
                             >
                               {{ row.count }}
                             </span>
-
+                          </th>
+                          <th>
                             <span
-                              data-tooltip-target="tooltip-dark"
-                              id="my-button"
-                              class="bg-blue-100 vertical-align: super; text-blue-800 text-10 font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
-                              >(↑{{ row.out }})(↓{{ row.in }})
-                            </span>
+                              v-if="Number(row.out) > 0"
+                              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
+                              >↑{{ row.out }}</span
+                            >
+                          </th>
+                          <th>
+                            <span
+                              v-if="Number(row.in) > 0"
+                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+                              >↓{{ row.in }}</span
+                            >
                           </th>
                           <th>{{ row.price }}</th>
                           <th>{{ row.stockName }}</th>
                           <th>
-                            <van-button
-                              class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                              type="secondary"
+                            <button
+                              class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
                               is-link
-                              @click="openItem(1)"
-                              >Open
-                            </van-button>
+                              @click="openItem(row.itemId)"
+                            >
+                              Open
+                            </button>
                           </th>
                         </tr>
                       </tbody>
