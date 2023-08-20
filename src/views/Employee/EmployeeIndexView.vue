@@ -24,8 +24,8 @@ const dataBase = ref<Array<IEmployee>>([]);
 const { get_filter } = useEmployeeStore();
 
 const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
+  { name: "6", val: 6, selected: false },
+  { name: "12", val: 12, selected: true },
   { name: "24", val: 24, selected: false },
   { name: "50", val: 50, selected: false },
   { name: "All", val: 999999999 },
@@ -95,10 +95,16 @@ const update = (id: number) => {
     params: { id: id },
   });
 };
-
+const history = (id: number) => {
+  router.push({
+    name: "employeeHistory",
+    params: { id: id },
+  });
+};
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  searchFilter.value.limit = 12;
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await useSectionStore().get_sections();
@@ -109,20 +115,6 @@ onMounted(async () => {
 <template>
   <div class="justify-between flex">
     <PageTitle> {{ namePage }} </PageTitle>
-    <RouterLink :to="{ name: 'itemCategoryIndex' }" class="float-left flex m-5">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="currentColor"
-          d="M4 2a2 2 0 0 0-2 2v10h2V4h10V2H4m4 4a2 2 0 0 0-2 2v10h2V8h10V6H8m12 6v8h-8v-8h8m0-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2Z"
-        />
-      </svg>
-      {{ t("ItemCategory") }}</RouterLink
-    >
   </div>
 
   <div class="flex">
@@ -177,7 +169,7 @@ onMounted(async () => {
                 v-for="limit in limits"
                 :key="limit.val"
                 :value="limit.val"
-                :selected="limit.selected == true"
+                :selected="limit.selected"
                 class="text-sm text-indigo-800"
               >
                 {{ limit.name }}
@@ -307,7 +299,16 @@ onMounted(async () => {
                           aria-labelledby="dropdownMenuButton2"
                         >
                           <li>
-                            <EditButton @click="update(item.id)" />
+                            <EditButton
+                              @click="update(item.id)"
+                              :title="t('Edit')"
+                            />
+                          </li>
+                          <li>
+                            <EditButton
+                              @click="history(item.id)"
+                              :title="t('EmployeeStore')"
+                            />
                           </li>
                           <!-- <li>
                             <ShowButton @click="show(item.id)" />
@@ -358,4 +359,3 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/item/item

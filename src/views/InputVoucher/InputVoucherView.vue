@@ -40,7 +40,7 @@ const { inputVoucher, inputVoucherStates, inputVoucherEmployees } = storeToRefs(
 const showPop = ref(false);
 const VoucherItem = ref<IInputVoucherItem>({
   id: 0,
-  input_voucher_id: 0,
+  inputVoucherId: 0,
   item: {
     name: "",
     id: 0,
@@ -55,6 +55,7 @@ const VoucherItem = ref<IInputVoucherItem>({
   price: 0,
   value: 0,
   notes: "",
+  employeeRequest: { id: 0, name: "" },
 });
 const AddPopupRef = ref<HTMLInputElement>();
 
@@ -67,7 +68,7 @@ const resetVoucherItem = () => {
   indexSelectedVoucherItem.value = 0;
   VoucherItem.value = {
     id: 0,
-    input_voucher_id: 0,
+    inputVoucherId: 0,
     item: {
       name: "",
       id: 0,
@@ -82,6 +83,7 @@ const resetVoucherItem = () => {
     price: 0,
     value: 0,
     notes: "",
+    employeeRequest: { id: 0, name: "" },
   };
 };
 //#region Item Row
@@ -348,7 +350,7 @@ function clearSelected(event: { target: { value: string } }) {
   if (event.target.value === "") {
     VoucherItem.value = {
       id: 0,
-      input_voucher_id: 0,
+      inputVoucherId: 0,
       item: {
         name: "",
         id: 0,
@@ -363,6 +365,7 @@ function clearSelected(event: { target: { value: string } }) {
       price: 0,
       value: 0,
       notes: "",
+      employeeRequest: { id: 0, name: "" },
     };
   }
 }

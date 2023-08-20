@@ -14,6 +14,7 @@ export interface IOutputVoucherItem {
   id?: number;
   outputVoucherId?: number;
   inputVoucherItem: IInputVoucherItem;
+  employeeRequest: IOutputVoucherEmployee;
   count: number;
   countWord?: string;
   price: number;

@@ -1,4 +1,5 @@
 import type { IItem } from "./IItem";
+import type { ISection } from "./ISection";
 import type { IStock } from "./IStock";
 
 export interface IInputVoucher {
@@ -16,7 +17,8 @@ export interface IInputVoucher {
 }
 export interface IInputVoucherItem {
   id?: number;
-  input_voucher_id?: number;
+  inputVoucherId?: number;
+  employeeRequest: IInputVoucherEmployee;
   item: IItem;
   itemId?: number;
   stock: IStock;
@@ -44,6 +46,7 @@ export interface IInputVoucherItemVSelect {
 export interface IInputVoucherEmployee {
   id: number;
   name: string;
+  section?: ISection;
 }
 export interface IInputVoucherState {
   id: number;

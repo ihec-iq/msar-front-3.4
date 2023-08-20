@@ -55,11 +55,13 @@ const VoucherItem = ref<IOutputVoucherItem>({
     count: 0,
     price: 0,
     value: 0,
+    employeeRequest: { id: 0, name: "" },
   },
   count: 0,
   price: 0,
   value: 0,
   notes: "",
+  employeeRequest: { id: 0, name: "" },
 });
 const AddPopup = () => {
   showPop.value = true;
@@ -90,11 +92,13 @@ const resetVoucherItem = () => {
       count: 0,
       price: 0,
       value: 0,
+      employeeRequest: { id: 0, name: "" },
     },
     count: 0,
     price: 0,
     value: 0,
     notes: "",
+    employeeRequest: { id: 0, name: "" },
   };
 };
 //#region Item Row

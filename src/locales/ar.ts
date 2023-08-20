@@ -34,16 +34,21 @@ export default {
   OutputVoucherSignaturePerson: "توقيع الموظف",
   OutputVoucherNumber: " رقم السند",
   OutputVoucherEmployeeRequest: "طلبت من",
+
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",
   ConfigServer: "اعدادات الاتصال بالسيرفر",
+
   ConnectionString: "عنوان السيرفر",
   EmployeeAdd: "اضافة بيانات موظف",
   EmployeeUpdate: "تعديل بيانات موظف",
   EmployeeIndex: "بيانات الموظفين",
   EmployeeIsPerson: "نوع البيانات",
   EmployeeSection: "شعبة الموظف",
+  EmployeeStore: "المخزنية",
+  Employee: "الموظف",
 
+  Help: "مساعدة",
   ItemAdd: "اضافة مادة",
   Seats: "المقاعد",
   Stats: "الحالة",

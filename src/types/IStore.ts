@@ -1,3 +1,5 @@
+import type { IEmployee } from "./IEmployee";
+
 export interface IStore {
   itemId: number;
   itemName: string;
@@ -13,6 +15,7 @@ export interface IStoreItemHistory {
   itemName: string;
   stockName: String;
   serialNumber: string;
+  employee: IEmployee;
   price?: number;
   billType: string;
   count: number;
@@ -30,4 +33,6 @@ export interface IStoreItemFilter {
   serialNumber?: string;
   limit: number;
   summation?: boolean;
+  isEmployee: boolean;
+  employeeId?: number;
 }

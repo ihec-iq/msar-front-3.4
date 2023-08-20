@@ -25,4 +25,12 @@ export default [
       middleware: [authMiddleware],
     },
   },
+  {
+    path: "/employee/:id/history",
+    name: "employeeHistory",
+    component: () => import("@/views/Employee/EmployeeHistoryView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
 ];

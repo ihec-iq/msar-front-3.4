@@ -39,8 +39,10 @@ export default {
   EmployeeUpdate: "update employee",
   EmployeeIndex: "Employees",
   EmployeeIsPerson: "Type Info",
-
   EmployeeSection: "Section Employee",
+  EmployeeStore: "Employee Store",
+  Employee: "Employee",
+  Help: "Help",
 
   ItemUpdate: "Update Item",
   Name: "Name",

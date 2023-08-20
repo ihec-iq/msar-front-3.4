@@ -7,10 +7,15 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
 import { useStoringStore } from "@/stores/storing";
+import { useEmployeeStore } from "@/stores/employee";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 import { storeToRefs } from "pinia";
+import { useRtlStore } from "@/stores/i18n/rtlPi";
 const outputVoucherStore = useOutputVoucherStore();
 const { outputVoucherEmployees } = storeToRefs(useOutputVoucherStore());
+
+const rtlStore = useRtlStore();
+const { is } = storeToRefs(rtlStore);
 
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -38,6 +43,9 @@ watch(
     await getFilterData(1);
   }
 );
+const back = () => {
+  router.back();
+};
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (item: IStoreItemHistory) => {
@@ -72,12 +80,14 @@ const getFilterData = async (page = 1) => {
   isLoading.value = true;
   searchFilter.value.serialNumber = fastSearch.value;
   searchFilter.value.itemId = route.params.id.toString();
-  await get_item(searchFilter.value, page)
+  await useEmployeeStore()
+    .getItemHistory(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
         dataBase.value = dataPage.value.data;
+        console.log(response.data.data.data);
       }
     })
     .catch((error) => {
@@ -321,6 +331,20 @@ onMounted(async () => {
           </div>
         </div>
       </div>
+    </div>
+    <div
+      :class="{
+        'ltr:left-4 rtl:right-4': is,
+        'ltr:left-28 rtl:right-28': !is,
+      }"
+      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
+    >
+      <button
+        @click="back()"
+        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
+      >
+        {{ t("Back") }}
+      </button>
     </div>
   </div>
 </template>

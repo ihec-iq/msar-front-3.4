@@ -7,14 +7,12 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Aaaaa: typeof import('./src/components/fixed/aaaaa.vue')['default']
     AddItemPopup: typeof import('./src/components/AddItemPopup.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
     BlockButton: typeof import('./src/components/dropDown/BlockButton.vue')['default']
     BottomToolBarView: typeof import('./src/components/general/BottomToolBarView.vue')['default']
     CardSkeleton: typeof import('./src/components/general/CardSkeleton.vue')['default']
-    CreatorTable: typeof import("./src/components/tables/setting/CreatorTable.vue")["default"]
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DragDrop: typeof import('./src/components/DragDrop.vue')['default']
     DragDropFilePreview: typeof import('./src/components/DragDropFilePreview.vue')['default']
@@ -30,7 +28,6 @@ declare module '@vue/runtime-core' {
     NavBar: typeof import('./src/components/fixed/navBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Scanner: typeof import('./src/components/Scanner.vue')['default']
     ScannerComponent: typeof import('./src/components/ScannerComponent.vue')['default']
     ShowButton: typeof import('./src/components/dropDown/ShowButton.vue')['default']
     ShowInputNumber: typeof import('./src/components/inputs/ShowInputNumber.vue')['default']
