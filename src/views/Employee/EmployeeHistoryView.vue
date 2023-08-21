@@ -5,25 +5,22 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
-import { useStoringStore } from "@/stores/storing";
+import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
+
 import { useEmployeeStore } from "@/stores/employee";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 const outputVoucherStore = useOutputVoucherStore();
-const { outputVoucherEmployees } = storeToRefs(useOutputVoucherStore());
 
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IStoreItemHistory>>([]);
+const data = ref<Array<IEmployeeHistory>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IStoreItemHistory>>([]);
-
-const { get_item } = useStoringStore();
+const dataBase = ref<Array<IEmployeeHistory>>([]);
 
 const limits = reactive([
   { name: "6", val: 6, selected: false },
@@ -48,10 +45,10 @@ const back = () => {
 };
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IStoreItemHistory) => {
+const filterByIDName = (item: IEmployeeHistory) => {
   if (
-    item.itemName.includes(fastSearch.value) ||
-    item.serialNumber.includes(fastSearch.value)
+    item.voucher.itemName.includes(fastSearch.value) ||
+    item.voucher.serialNumber.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -65,12 +62,10 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IStoreItemFilter>({
-  itemId: "0",
+const searchFilter = ref<IEmployeeFilter>({
   limit: 6,
-  serialNumber: "",
-  summation: true,
-  isEmployee: false,
+  checked: true,
+  name: "",
   employeeId: 0,
 });
 const getFilterData = async (page = 1) => {
@@ -78,8 +73,8 @@ const getFilterData = async (page = 1) => {
   data.value = [];
   dataBase.value = [];
   isLoading.value = true;
-  searchFilter.value.serialNumber = fastSearch.value;
-  searchFilter.value.itemId = route.params.id.toString();
+  searchFilter.value.name = fastSearch.value;
+  searchFilter.value.employeeId = Number(route.params.id);
   await useEmployeeStore()
     .getItemHistory(searchFilter.value, page)
     .then((response) => {
@@ -87,18 +82,16 @@ const getFilterData = async (page = 1) => {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
         dataBase.value = dataPage.value.data;
-        console.log(response.data.data.data);
       }
     })
     .catch((error) => {
       console.log(error);
     });
-
   isLoading.value = false;
 };
 //#endregion
 const openItem = (id: number, billType: string) => {
-  if (billType == "in") {
+  if (billType == "In") {
     router.push({
       name: "inputVoucherUpdate",
       params: { id: id },
@@ -116,7 +109,6 @@ onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
   await outputVoucherStore.getEmployees().then(() => {});
-
   await getFilterData(1);
 });
 </script>
@@ -184,42 +176,17 @@ onMounted(async () => {
             </select>
           </div>
         </div>
-        <div
-          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-          >
-            <p>{{ t("Employee") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.employeeId"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData()"
-            >
-              <option
-                v-for="employee in outputVoucherEmployees"
-                :key="employee.id"
-                :value="employee.id"
-                :selected="employee.id == 1"
-                class="text-sm text-indigo-800"
-              >
-                {{ employee.name }}
-              </option>
-            </select>
-          </div>
-        </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
           <label class="cursor-pointer label">
             <span
               class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
             >
               {{ t("StoreTypeReport") }} :
-              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</span
+              {{ searchFilter.checked ? " تجميعي " : " مفصل " }}</span
             >
             <input
               type="checkbox"
-              v-model="searchFilter.summation"
+              v-model="searchFilter.checked"
               class="toggle toggle-secondary"
               checked
               @change="getFilterData()"
@@ -258,7 +225,13 @@ onMounted(async () => {
                       <thead class="border-b bg-[#0003] text-gray-300">
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            item
+                            Voucher
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Item
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Date
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             Serial Number
@@ -283,12 +256,14 @@ onMounted(async () => {
                       <tbody class="bg-[#1f2937]">
                         <tr
                           v-for="row in data"
-                          :key="row.itemName"
+                          :key="row.id"
                           class="border-b border-black h-14 text-gray-100"
                         >
-                          <th>{{ row.itemName }}</th>
-                          <th>{{ row.serialNumber }}</th>
-                          <th>{{ row.billType }}</th>
+                          <th>{{ row.voucher.idVoucher }}</th>
+                          <th>{{ row.voucher.itemName }}</th>
+                          <th>{{ row.voucher.date }}</th>
+                          <th>{{ row.voucher.serialNumber }}</th>
+                          <th>{{ row.type }}</th>
                           <th>
                             <span
                               v-if="row.count > 0"
@@ -301,14 +276,14 @@ onMounted(async () => {
                               >↓{{ row.count }}</span
                             >
                           </th>
-                          <th>{{ row.price }}</th>
-                          <th>{{ row.stockName }}</th>
+                          <th>{{ row.price.toLocaleString() }}</th>
+                          <th>{{ row.voucher.stockName }}</th>
                           <th>
                             <van-button
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
                               type="secondary"
                               is-link
-                              @click="openItem(row.itemId, row.billType)"
+                              @click="openItem(row.voucher.idVoucher, row.type)"
                               >Open
                             </van-button>
                           </th>
@@ -321,7 +296,7 @@ onMounted(async () => {
                     class="flex justify-center mt-10"
                     :data="dataPage"
                     @pagination-change-page="getFilterData"
-                    :limit="10"
+                    :limit="searchFilter.limit"
                   />
                 </div>
               </div>
