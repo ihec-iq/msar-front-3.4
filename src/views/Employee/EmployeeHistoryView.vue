@@ -106,6 +106,7 @@ const openItem = (id: number, billType: string) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  searchFilter.value.limit = 24;
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
   await outputVoucherStore.getEmployees().then(() => {});
