@@ -9,9 +9,12 @@ import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
 
 import { useEmployeeStore } from "@/stores/employee";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
+import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
+import MovingList from "@/components/MovingList.vue";
 const outputVoucherStore = useOutputVoucherStore();
+const corruptedVoucherStore = useCorruptedVoucherStore();
 
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
@@ -61,6 +64,7 @@ const makeFastSearch = () => {
   }
 };
 //#endregion
+const { SelectedOutItemCorrupted } = storeToRefs(corruptedVoucherStore);
 //#region Search
 const searchFilter = ref<IEmployeeFilter>({
   limit: 6,
@@ -103,8 +107,15 @@ const openItem = (id: number, billType: string) => {
     });
   }
 };
+const deleteItem = (index: number) => {
+  SelectedOutItemCorrupted.value.slice(index, 1);
+};
 //#region Pagination
+const createCorruptedVoucher = () => {
+  alert(SelectedOutItemCorrupted.value);
+};
 //#endregion
+
 onMounted(async () => {
   searchFilter.value.limit = 24;
   if (route.params.search != undefined)
@@ -203,6 +214,57 @@ onMounted(async () => {
           </button>
         </div>
       </div>
+
+      <MovingList class="col-11" v-if="SelectedOutItemCorrupted.length > 0">
+        <template v-slot:header>
+          <div class="w-full h-10 bg-slate-600"></div>
+        </template>
+        <template v-slot:main>
+          <table class="min-w-full text-center">
+            <thead class="border-b bg-[#0003] text-gray-300">
+              <tr>
+                <th scope="col" class="text-sm font-medium px-6 py-4">Item</th>
+                <th scope="col" class="text-sm font-medium px-6 py-4">
+                  Serial Number
+                </th>
+                <th scope="col" class="text-sm font-medium px-6 py-4">Count</th>
+              </tr>
+            </thead>
+            <tbody class="bg-[#1f2937]">
+              <tr
+                v-for="(row, index) in SelectedOutItemCorrupted"
+                :key="row.id"
+                class="border-b border-black h-14 text-gray-100"
+              >
+                <th>{{ row.voucher.itemName }}</th>
+                <th>{{ row.voucher.serialNumber }}</th>
+                <th>{{ row.count }}</th>
+                <th>
+                  <van-button
+                    class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
+                    type="secondary"
+                    is-link
+                    @click="deleteItem(index)"
+                    >Open
+                  </van-button>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </template>
+        <template v-slot:footer>
+          <div class="w-full h-10 bg-slate-600">
+            <van-button
+              class="border-none border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-create hover:bg-createHover"
+              type="secondary"
+              is-link
+              @click="createCorruptedVoucher()"
+              >انشاء سند شطب
+            </van-button>
+          </div>
+        </template>
+      </MovingList>
+
       <div class="w-full">
         <div class="flex flex-col">
           <div class="py-4 inline-block min-w-full lg:px-8">
@@ -260,7 +322,14 @@ onMounted(async () => {
                           :key="row.id"
                           class="border-b border-black h-14 text-gray-100"
                         >
-                          <th>{{ row.voucher.idVoucher }}</th>
+                          <th>
+                            {{ row.voucher.idVoucher }}
+                            <input
+                              type="checkbox"
+                              v-model="SelectedOutItemCorrupted"
+                              :value="row"
+                            />
+                          </th>
                           <th>{{ row.voucher.itemName }}</th>
                           <th>{{ row.voucher.date }}</th>
                           <th>{{ row.voucher.serialNumber }}</th>
