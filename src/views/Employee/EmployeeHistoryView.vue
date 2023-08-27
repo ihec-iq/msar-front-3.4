@@ -21,6 +21,7 @@ const { is } = storeToRefs(rtlStore);
 
 const { t } = useI18n();
 const isLoading = ref(false);
+const IsShowCorrupted = ref(false);
 const data = ref<Array<IEmployeeHistory>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IEmployeeHistory>>([]);
@@ -108,7 +109,7 @@ const openItem = (id: number, billType: string) => {
   }
 };
 const deleteItem = (index: number) => {
-  SelectedOutItemCorrupted.value.slice(index, 1);
+  SelectedOutItemCorrupted.value.splice(index, 1);
 };
 //#region Pagination
 const createCorruptedVoucher = () => {
@@ -215,9 +216,16 @@ onMounted(async () => {
         </div>
       </div>
 
-      <MovingList class="col-11" v-if="SelectedOutItemCorrupted.length > 0">
+      <MovingList
+        class="col-11 shadow-lg rounded-2xl border-red-700"
+        v-if="SelectedOutItemCorrupted.length > 0"
+      >
         <template v-slot:header>
-          <div class="w-full h-10 bg-slate-600"></div>
+          <div
+            class="w-full h-10 bg-indigo-700 hover:bg-createHover font-bold text-base text-text dark:text-textLight"
+          >
+            انشاء سند شطب
+          </div>
         </template>
         <template v-slot:main>
           <table class="min-w-full text-center">
@@ -238,14 +246,20 @@ onMounted(async () => {
               >
                 <th>{{ row.voucher.itemName }}</th>
                 <th>{{ row.voucher.serialNumber }}</th>
-                <th>{{ row.count }}</th>
+                <th>
+                  <input
+                    type="number"
+                    @keyup="console.log(1)"
+                    :value="row.count"
+                  />
+                </th>
                 <th>
                   <van-button
-                    class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
+                    class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
                     type="secondary"
                     is-link
                     @click="deleteItem(index)"
-                    >Open
+                    >Remove
                   </van-button>
                 </th>
               </tr>
@@ -253,9 +267,9 @@ onMounted(async () => {
           </table>
         </template>
         <template v-slot:footer>
-          <div class="w-full h-10 bg-slate-600">
+          <div class="w-full bg-slate-600 p-2 h-14">
             <van-button
-              class="border-none border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-create hover:bg-createHover"
+              class="border-1 border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-indigo-700 hover:bg-createHover"
               type="secondary"
               is-link
               @click="createCorruptedVoucher()"
@@ -283,7 +297,10 @@ onMounted(async () => {
                   <div class="w-12/12 mx-2">
                     <div
                       class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-                    ></div>
+                    >
+                      <input type="checkbox" v-model="IsShowCorrupted" />
+                      تفعيل سند اتلاف
+                    </div>
                     <table class="min-w-full text-center">
                       <thead class="border-b bg-[#0003] text-gray-300">
                         <tr>
@@ -323,12 +340,13 @@ onMounted(async () => {
                           class="border-b border-black h-14 text-gray-100"
                         >
                           <th>
-                            {{ row.voucher.idVoucher }}
                             <input
+                              v-if="IsShowCorrupted"
                               type="checkbox"
                               v-model="SelectedOutItemCorrupted"
                               :value="row"
                             />
+                            {{ row.voucher.idVoucher }}
                           </th>
                           <th>{{ row.voucher.itemName }}</th>
                           <th>{{ row.voucher.date }}</th>

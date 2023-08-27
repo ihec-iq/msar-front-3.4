@@ -38,8 +38,16 @@ const closeDragElement = () => {
 </script>
 
 <template>
-  <div ref="draggableContainer" id="draggable-container">
-    <div id="draggable-header" @mousedown="dragMouseDown">
+  <div
+    ref="draggableContainer"
+    id="draggable-container"
+    class="shadow-lg rounded-2xl border-red-700"
+  >
+    <div
+      id="draggable-header"
+      class="hover:cursor-move"
+      @mousedown="dragMouseDown"
+    >
       <slot name="header"></slot>
     </div>
     <div id="draggable-header" @mousedown="dragMouseDown">
