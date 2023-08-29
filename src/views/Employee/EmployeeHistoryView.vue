@@ -13,6 +13,7 @@ import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import MovingList from "@/components/MovingList.vue";
+import WindowsDesign from "@/components/general/WindowsDesign.vue";
 const outputVoucherStore = useOutputVoucherStore();
 const corruptedVoucherStore = useCorruptedVoucherStore();
 
@@ -215,61 +216,68 @@ onMounted(async () => {
           </button>
         </div>
       </div>
-
-      <MovingList
+      <WindowsDesign
+        :width="250"
         class="col-11 shadow-lg rounded-2xl border-red-700"
         v-if="SelectedOutItemCorrupted.length > 0"
       >
         <template v-slot:header>
-          <div
-            class="w-full h-10 bg-indigo-700 hover:bg-createHover font-bold text-base text-text dark:text-textLight"
-          >
-            انشاء سند شطب
-          </div>
+          <div>انشاء سند شطب</div>
         </template>
         <template v-slot:main>
-          <table class="min-w-full text-center">
-            <thead class="border-b bg-[#0003] text-gray-300">
-              <tr>
-                <th scope="col" class="text-sm font-medium px-6 py-4">Item</th>
-                <th scope="col" class="text-sm font-medium px-6 py-4">
-                  Serial Number
-                </th>
-                <th scope="col" class="text-sm font-medium px-6 py-4">Count</th>
-              </tr>
-            </thead>
-            <tbody class="bg-[#1f2937]">
-              <tr
-                v-for="(row, index) in SelectedOutItemCorrupted"
-                :key="row.id"
-                class="border-b border-black h-14 text-gray-100"
-              >
-                <th>{{ row.voucher.itemName }}</th>
-                <th>{{ row.voucher.serialNumber }}</th>
-                <th>
-                  <input
-                    type="number"
-                    @keyup="console.log(1)"
-                    :value="row.count"
-                  />
-                </th>
-                <th>
-                  <van-button
-                    class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
-                    type="secondary"
-                    is-link
-                    @click="deleteItem(index)"
-                    >Remove
-                  </van-button>
-                </th>
-              </tr>
-            </tbody>
-          </table>
+          <p class="p-[5px] text-right text-lg">
+            تستطيع التعديل على كمية المواد من خلال تغير قيمة العدد.
+          </p>
+          <div>
+            <table class="min-w-full text-center">
+              <thead class="border-b bg-[#0003] text-gray-300">
+                <tr class="bg-[#1f2937]">
+                  <th scope="col" class="text-sm font-medium px-6 py-4">
+                    {{ t("Item") }}
+                  </th>
+                  <th scope="col" class="text-sm font-medium px-6 py-4">
+                    {{ t("SerialNumber") }}
+                  </th>
+                  <th scope="col" class="text-sm font-medium px-6 py-4">
+                    {{ t("Count") }}
+                  </th>
+                  <th scope="col" class="text-sm font-medium px-6 py-4"></th>
+                </tr>
+              </thead>
+              <tbody class="bg-[#1f2937]">
+                <tr
+                  v-for="(row, index) in SelectedOutItemCorrupted"
+                  :key="row.id"
+                  class="border-b border-black h-14 text-gray-100"
+                >
+                  <th>{{ row.voucher.itemName }}</th>
+                  <th>{{ row.voucher.serialNumber }}</th>
+                  <th>
+                    <input
+                      class="w-[50px]"
+                      type="number"
+                      @click="console.log(1)"
+                      :value="row.count"
+                    />
+                  </th>
+                  <th>
+                    <button
+                      class="border-none duration-900 h-[40px] p-[5px] m-[5px] rounded-sm bg-delete hover:bg-deleteHover"
+                      is-link
+                      @click="deleteItem(index)"
+                    >
+                      Remove
+                    </button>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </template>
         <template v-slot:footer>
           <div class="w-full bg-slate-600 p-2 h-14">
             <van-button
-              class="border-1 border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-indigo-700 hover:bg-createHover"
+              class="border-1 border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-amber-600 font-bold hover:bg-createHover"
               type="secondary"
               is-link
               @click="createCorruptedVoucher()"
@@ -277,8 +285,7 @@ onMounted(async () => {
             </van-button>
           </div>
         </template>
-      </MovingList>
-
+      </WindowsDesign>
       <div class="w-full">
         <div class="flex flex-col">
           <div class="py-4 inline-block min-w-full lg:px-8">
@@ -304,32 +311,36 @@ onMounted(async () => {
                     <table class="min-w-full text-center">
                       <thead class="border-b bg-[#0003] text-gray-300">
                         <tr>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Voucher
+                          <th
+                            scope="col"
+                            class="text-sm font-medium px-6 py-4"
+                            v-if="IsShowCorrupted"
+                          >
+                            {{ t("Selected") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Item
+                            {{ t("Item") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Date
+                            {{ t("Date") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Serial Number
+                            {{ t("SerialNumber") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Bill Type
+                            {{ t("BillType") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Available in Stock
+                            {{ t("Available") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Price
+                            {{ t("Price") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Stock
+                            {{ t("Stock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Actions
+                            {{ t("Actions") }}
                           </th>
                         </tr>
                       </thead>
@@ -338,15 +349,17 @@ onMounted(async () => {
                           v-for="row in data"
                           :key="row.id"
                           class="border-b border-black h-14 text-gray-100"
+                          :class="{
+                            'bg-[#19472a26]': row.count > 0,
+                            'bg-[#d7000017]': row.count < 0,
+                          }"
                         >
-                          <th>
+                          <th v-if="IsShowCorrupted">
                             <input
-                              v-if="IsShowCorrupted"
                               type="checkbox"
                               v-model="SelectedOutItemCorrupted"
                               :value="row"
                             />
-                            {{ row.voucher.idVoucher }}
                           </th>
                           <th>{{ row.voucher.itemName }}</th>
                           <th>{{ row.voucher.date }}</th>

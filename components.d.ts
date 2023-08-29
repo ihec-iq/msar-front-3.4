@@ -46,5 +46,7 @@ declare module '@vue/runtime-core' {
     VanCollapse: typeof import('vant/es')['Collapse']
     VanCollapseItem: typeof import('vant/es')['CollapseItem']
     VanPopup: typeof import('vant/es')['Popup']
+    WindowsDesign: typeof import('./src/components/general/WindowsDesign.vue')['default']
+    WindowsDesign2: typeof import('./src/components/general/WindowsDesign2.vue')['default']
   }
 }

@@ -17,7 +17,8 @@ const dragMouseDown = (event: MouseEvent) => {
   document.onmouseup = closeDragElement;
 };
 
-const draggableContainer = ref<HTMLDivElement>();
+//const draggableContainer = ref<HTMLDivElement>();
+const draggableContainer = ref();
 
 const elementDrag = (event: MouseEvent) => {
   event.preventDefault();
@@ -50,7 +51,7 @@ const closeDragElement = () => {
     >
       <slot name="header"></slot>
     </div>
-    <div id="draggable-header" @mousedown="dragMouseDown">
+    <div id="draggable-header">
       <slot name="main"></slot>
     </div>
     <div id="draggable-header" @mousedown="dragMouseDown">
