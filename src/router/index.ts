@@ -14,6 +14,7 @@ import authMiddleware from "./middleware/authMiddleware";
 import item from "./item/item";
 import inputVoucher from "./voucher/inputVoucher";
 import outputVoucher from "./voucher/outputVoucher";
+import corruptedVoucher from "./voucher/corruptedVoucher";
 import itemCategory from "./item/itemCategory";
 import store from "./store/store";
 import DefaultLayout from "@/views/layouts/MainView.vue";
@@ -48,6 +49,7 @@ const router = createRouter({
         ...itemCategory,
         ...inputVoucher,
         ...outputVoucher,
+        ...corruptedVoucher,
         ...store,
         ...employee,
         {

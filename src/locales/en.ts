@@ -36,6 +36,7 @@ export default {
   OutputVoucherSignaturePerson: "Signature Person",
   OutputVoucherNumber: "Voucher Number",
   OutputVoucherEmployeeRequest: "Employee Request",
+  NumberVoucher: "Number Voucher",
 
   StoreIndex: "Store",
   StoreTypeReport: "Type Report",

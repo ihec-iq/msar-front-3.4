@@ -6,6 +6,8 @@ const props = defineProps({
   isMaximized: { type: Number, default: 0 },
   isMinimized: { type: Number, default: 0 },
   isActive: { type: Number, default: 1 },
+  headerLock: { type: Boolean, default: true },
+  footerLock: { type: Boolean, default: true },
 });
 const isMaximized = ref(props.isMaximized);
 const isMinimized = ref(props.isMinimized);
@@ -69,7 +71,7 @@ onMounted(() => {
   <div
     ref="draggableContainer"
     id="draggable-container"
-    class="window flex flex-col overflow-hidden shadow-lg bg-transparent"
+    class="window flex flex-col overflow-hidden shadow-lg bg-transparent1"
     :class="{
       minimized1: isMinimized,
       'rounded-md': !isMaximized,

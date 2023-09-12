@@ -6,17 +6,16 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
-
 import { useEmployeeStore } from "@/stores/employee";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import MovingList from "@/components/MovingList.vue";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
 const outputVoucherStore = useOutputVoucherStore();
 const corruptedVoucherStore = useCorruptedVoucherStore();
 
+const { employees } = storeToRefs(useEmployeeStore());
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
@@ -34,6 +33,19 @@ const limits = reactive([
   { name: "50", val: 50, selected: false },
   { name: "All", val: 999999999 },
 ]);
+
+const CorruptedVoucher = ref<{
+  number: string;
+  date: string;
+  signaturePerson: string;
+  requestEmployeeId: string;
+  items?: Array<IEmployeeHistory>;
+}>({
+  number: "",
+  date: new Date().toISOString().split("T")[0],
+  signaturePerson: "",
+  requestEmployeeId: "1",
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -93,6 +105,7 @@ const getFilterData = async (page = 1) => {
     .catch((error) => {
       console.log(error);
     });
+  await useEmployeeStore().get_employees();
   isLoading.value = false;
 };
 //#endregion
@@ -114,7 +127,22 @@ const deleteItem = (index: number) => {
 };
 //#region Pagination
 const createCorruptedVoucher = () => {
-  alert(SelectedOutItemCorrupted.value);
+  //router.push({ name: "corruptedVoucherAdd" });
+
+  CorruptedVoucher.value.items = SelectedOutItemCorrupted.value;
+  console.log(CorruptedVoucher.value);
+
+  corruptedVoucherStore
+    .store(CorruptedVoucher)
+    .then(async (response) => {
+      if (response.status == 200) {
+        alert("Operation successful");
+        await getFilterData(1);
+      }
+    })
+    .catch((error) => {
+      alert("Errors : " + error);
+    });
 };
 //#endregion
 
@@ -222,24 +250,27 @@ onMounted(async () => {
         v-if="SelectedOutItemCorrupted.length > 0"
       >
         <template v-slot:header>
-          <div>انشاء سند شطب</div>
+          <div class="">انشاء سند شطب</div>
         </template>
         <template v-slot:main>
-          <p class="p-[5px] text-right text-lg">
-            تستطيع التعديل على كمية المواد من خلال تغير قيمة العدد.
-          </p>
           <div>
+            <p class="p-[5px] text-right text-lg bg-[#1f2937]">
+              تستطيع التعديل على كمية المواد من خلال تغير قيمة العدد.
+            </p>
             <table class="min-w-full text-center">
               <thead class="border-b bg-[#0003] text-gray-300">
                 <tr class="bg-[#1f2937]">
-                  <th scope="col" class="text-sm font-medium px-6 py-4">
+                  <th scope="col" class="text-sm font-large px-6 py-4">
                     {{ t("Item") }}
                   </th>
-                  <th scope="col" class="text-sm font-medium px-6 py-4">
+                  <th scope="col" class="text-sm font-large px-6 py-4">
                     {{ t("SerialNumber") }}
                   </th>
-                  <th scope="col" class="text-sm font-medium px-6 py-4">
+                  <th scope="col" class="text-sm font-large px-6 py-4">
                     {{ t("Count") }}
+                  </th>
+                  <th scope="col" class="text-sm font-large px-6 py-4">
+                    {{ t("Note") }}
                   </th>
                   <th scope="col" class="text-sm font-medium px-6 py-4"></th>
                 </tr>
@@ -254,10 +285,18 @@ onMounted(async () => {
                   <th>{{ row.voucher.serialNumber }}</th>
                   <th>
                     <input
-                      class="w-[50px]"
+                      class="w-[50px] p-2"
                       type="number"
-                      @click="console.log(1)"
                       :value="row.count"
+                      min="1"
+                      :max="row.count"
+                    />
+                  </th>
+                  <th>
+                    <input
+                      class="w-[450px] p-2"
+                      type="text"
+                      :value="row.notes"
                     />
                   </th>
                   <th>
@@ -272,10 +311,69 @@ onMounted(async () => {
                 </tr>
               </tbody>
             </table>
+            <div class="flex bg-[#1f2937]">
+              <div class="w-4/12 mr-2">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
+                  {{ t("NumberVoucher") }}
+                  <input
+                    v-model="CorruptedVoucher.number"
+                    type="text"
+                    class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+                  />
+                </div>
+              </div>
+              <div class="w-4/12 mr-2 flex">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
+                  {{ t("Date") }}
+                  <input
+                    v-model="CorruptedVoucher.date"
+                    type="date"
+                    class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+                  />
+                </div>
+              </div>
+              <div class="w-4/12 mr-2 flex">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
+                  {{ t("InputVoucherSignaturePerson") }}
+                  <input
+                    v-model="CorruptedVoucher.signaturePerson"
+                    type="text"
+                    class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+                  />
+                </div>
+              </div>
+              <div class="w-4/12 mr-2 flex">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
+                  {{ t("InputVoucherEmployeeRequest") }}
+
+                  <select
+                    v-model="CorruptedVoucher.requestEmployeeId"
+                    class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+                  >
+                    <option
+                      v-for="employee in employees"
+                      :key="employee.id"
+                      :value="employee.id"
+                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                    >
+                      {{ employee.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
         </template>
         <template v-slot:footer>
-          <div class="w-full bg-slate-600 p-2 h-14">
+          <div class="w-full bg-slate-600 p-2 flex">
             <van-button
               class="border-1 border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-amber-600 font-bold hover:bg-createHover"
               type="secondary"

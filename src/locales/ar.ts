@@ -41,6 +41,7 @@ export default {
   OutputVoucherSignaturePerson: "توقيع الموظف",
   OutputVoucherNumber: " رقم السند",
   OutputVoucherEmployeeRequest: "طلبت من",
+  NumberVoucher: "رقم المستند",
 
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",

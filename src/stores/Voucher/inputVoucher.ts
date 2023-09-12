@@ -27,7 +27,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   const inputVouchers = ref<IInputVoucher[]>([]);
   const inputVoucherItem = ref<IInputVoucherItem>({
     id: 0,
-    input_voucher_id: 0,
+    inputVoucherId: 0,
     item: {
       id: 0,
       name: "",
@@ -50,6 +50,10 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     price: 0,
     value: 0,
     notes: "",
+    employeeRequest: {
+      id: 0,
+      name: "",
+    },
   });
   const inputVoucherItems = ref<IInputVoucherItem[]>([]);
   const inputVoucherItemsVSelect = ref<IInputVoucherItem[]>([]);
