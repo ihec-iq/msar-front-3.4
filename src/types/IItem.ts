@@ -5,7 +5,7 @@ export interface IItem {
   name: string;
   code: String;
   description: string;
-  itemCategory: ICategoryItem;
+  Category: ICategoryItem;
   measuringUnit: string;
   itemCategoryId?: number;
 }

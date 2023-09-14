@@ -55,7 +55,6 @@ const VoucherItem = ref<IInputVoucherItem>({
   price: 0,
   value: 0,
   notes: "",
-  employeeRequest: { id: 0, name: "" },
 });
 const AddPopupRef = ref<HTMLInputElement>();
 
@@ -83,7 +82,6 @@ const resetVoucherItem = () => {
     price: 0,
     value: 0,
     notes: "",
-    employeeRequest: { id: 0, name: "" },
   };
 };
 //#region Item Row
@@ -152,10 +150,7 @@ const store = () => {
     "inputVoucherStateId",
     inputVoucher.value.inputVoucherStateId.toString()
   );
-  formData.append(
-    "employeeRequestId",
-    inputVoucher.value.employeeRequestId.toString()
-  );
+  formData.append("requestedBy", inputVoucher.value.requestedBy.toString());
   formData.append(
     "signaturePerson",
     String(inputVoucher.value.signaturePerson)
@@ -196,10 +191,7 @@ function update() {
     "inputVoucherStateId",
     inputVoucher.value.inputVoucherStateId.toString()
   );
-  formData.append(
-    "employeeRequestId",
-    inputVoucher.value.employeeRequestId.toString()
-  );
+  formData.append("requestedBy", inputVoucher.value.requestedBy.toString());
   formData.append(
     "signaturePerson",
     String(inputVoucher.value.signaturePerson)
@@ -271,9 +263,7 @@ const showData = async (id: number) => {
         inputVoucher.value.number = response.data.data.number;
         inputVoucher.value.notes = response.data.data.notes;
         inputVoucher.value.items = response.data.data.items;
-        inputVoucher.value.employeeRequest = response.data.data.employeeRequest;
-        inputVoucher.value.employeeRequestId =
-          response.data.data.employeeRequestId;
+        inputVoucher.value.requestedBy = response.data.data.requestedBy;
         inputVoucher.value.signaturePerson = response.data.data.signaturePerson;
         inputVoucher.value.inputVoucherStateId = response.data.data.state.id;
       }
@@ -365,7 +355,6 @@ function clearSelected(event: { target: { value: string } }) {
       price: 0,
       value: 0,
       notes: "",
-      employeeRequest: { id: 0, name: "" },
     };
   }
 }
@@ -455,19 +444,11 @@ const setItemFromChild = (_item: IItem) => {
         >
           {{ t("InputVoucherEmployeeRequest") }}
         </div>
-        <select
-          v-model="inputVoucher.employeeRequestId"
+        <input
+          v-model="inputVoucher.requestedBy"
+          type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        >
-          <option
-            v-for="employee in inputVoucherEmployees"
-            :key="employee.id"
-            :value="employee.id"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          >
-            {{ employee.name }}
-          </option>
-        </select>
+        />
       </div>
       <div class="w-11/12 mx-2">
         <div
@@ -972,5 +953,3 @@ button {
   text-align: right !important;
 }
 </style>
-<!-- @/stores/voucher/stock@/stores/voucher/inputVoucher
-@/stores/item/item -->

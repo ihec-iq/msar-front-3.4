@@ -13,8 +13,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
 const { t } = useI18n();
 const isLoading = ref(false);
-const employeeStore = useEmployeeStore();
-const { employees, employee } = storeToRefs(useEmployeeStore());
+const { employee } = storeToRefs(useEmployeeStore());
 const { sections } = storeToRefs(useSectionStore());
 const namePage = ref(t("EmployeeIndex"));
 

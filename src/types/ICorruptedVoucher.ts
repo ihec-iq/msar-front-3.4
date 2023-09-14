@@ -1,3 +1,4 @@
+import type { IItem } from "./IItem";
 import type { IOutputVoucherItem } from "./IOutputVoucher";
 
 export interface ICorruptedVoucher {
@@ -13,7 +14,7 @@ export interface ICorruptedVoucher {
 export interface ICorruptedVoucherItem {
   id?: number;
   outputVoucherId?: number;
-  outputVoucherItem: IOutputVoucherItem;
+  item: IItem;
   employeeRequest: ICorruptedVoucherEmployee;
   count: number;
   countWord?: string;

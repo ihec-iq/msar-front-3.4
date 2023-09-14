@@ -20,8 +20,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     state: { name: "", id: 0 },
     items: [],
     signaturePerson: "",
-    employeeRequestId: 0,
-    employeeRequest: { name: "", id: 0 },
+    requestedBy: "",
     inputVoucherStateId: 0,
   });
   const inputVouchers = ref<IInputVoucher[]>([]);
@@ -50,10 +49,6 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     price: 0,
     value: 0,
     notes: "",
-    employeeRequest: {
-      id: 0,
-      name: "",
-    },
   });
   const inputVoucherItems = ref<IInputVoucherItem[]>([]);
   const inputVoucherItemsVSelect = ref<IInputVoucherItem[]>([]);
@@ -153,8 +148,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucher.state = { name: "", id: 0 };
     inputVoucher.items = [];
     inputVoucher.signaturePerson = "";
-    inputVoucher.employeeRequestId = 0;
-    inputVoucher.employeeRequest = { name: "", id: 0 };
+    inputVoucher.requestedBy = "";
     inputVoucher.inputVoucherStateId = 0;
   }
   return {

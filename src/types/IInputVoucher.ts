@@ -10,15 +10,13 @@ export interface IInputVoucher {
   state: IInputVoucherState;
   items: Array<IInputVoucherItem>;
   signaturePerson: String;
-  employeeRequestId: number;
-  employeeRequest: IInputVoucherEmployee;
+  requestedBy: String;
   inputVoucherStateId: number;
   itemsCount?: number;
 }
 export interface IInputVoucherItem {
   id?: number;
   inputVoucherId?: number;
-  employeeRequest: IInputVoucherEmployee;
   item: IItem;
   itemId?: number;
   stock: IStock;

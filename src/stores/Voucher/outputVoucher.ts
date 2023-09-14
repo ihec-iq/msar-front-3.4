@@ -75,18 +75,21 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
   async function removeItem(index: number) {
     console.log(index);
     console.log(outputVoucher.items[index]?.id);
-    return await Api.delete(
-      `${pathBase}/outputVoucherItem/delete/` +
-        String(outputVoucher.items[index]?.id)
-    )
-      .then((response) => {
-        if (response.status == 200) {
-          outputVoucher.items?.splice(index, 1);
-        }
-      })
-      .catch((errors) => {
-        console.log("in removeItem outputVoucher : " + errors);
-      });
+    if (Number(outputVoucher.items[index]?.id) > 0) {
+      return await Api.delete(
+        `${pathBase}/outputVoucherItem/delete/` +
+          String(outputVoucher.items[index]?.id)
+      )
+        .then((response) => {
+          if (response.status == 200) {
+            /* empty */
+          }
+        })
+        .catch((errors) => {
+          console.log("in removeItem outputVoucher : " + errors);
+        });
+    }
+    outputVoucher.items?.splice(index, 1);
   }
   function resetData() {
     outputVoucher.id = 0;
