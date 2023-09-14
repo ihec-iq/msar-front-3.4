@@ -133,7 +133,7 @@ const createCorruptedVoucher = () => {
   console.log(CorruptedVoucher.value);
 
   corruptedVoucherStore
-    .store(CorruptedVoucher)
+    .store(CorruptedVoucher.value)
     .then(async (response) => {
       if (response.status == 200) {
         alert("Operation successful");
