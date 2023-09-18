@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/Item/item";
+import { useItemStore } from "@/stores/item/item";
 import PageTitle from "@/components/general/namePage.vue";
 import type { IItem, IItemFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
@@ -36,7 +36,7 @@ watch(
 const addItem = () => {
   item.id = 0;
   item.name = "";
-  item.itemCategory = { name: "", id: 0 };
+  item.Category = { name: "", id: 0 };
   item.code = "";
   item.description = "";
   router.push({
@@ -227,7 +227,7 @@ onMounted(async () => {
                           >
                             <span>{{ t("ItemCode") }}: {{ item.code }}</span>
                             <span class="float-left flex">
-                              {{ item.itemCategory.name }}
+                              {{ item.Category.name }}
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -332,4 +332,3 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-<!-- @/stores/item/item -->

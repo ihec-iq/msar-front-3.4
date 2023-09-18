@@ -9,17 +9,17 @@ export interface IOutputVoucher {
   notes: string;
   items: Array<IOutputVoucherItem>;
   signaturePerson: string;
-  employeeRequest: IOutputVoucherEmployee;
+  Employee: IOutputVoucherEmployee;
   itemsCount?: number;
 }
 export interface IOutputVoucherItem {
   id?: number;
   outputVoucherId?: number;
-  item?: IItem;
+  Item?: IItem;
   inputVoucherItemId: number;
   inputVoucherItem?: IInputVoucherItem;
-  employeeRequest: IOutputVoucherEmployee;
-  stock: IStock;
+  Employee: IOutputVoucherEmployee;
+  Stock: IStock;
   serialNumber: string;
   count: number;
   countWord?: string;

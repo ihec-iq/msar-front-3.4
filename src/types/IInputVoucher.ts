@@ -5,27 +5,24 @@ import type { IStock } from "./IStock";
 export interface IInputVoucher {
   id: number;
   number: string;
-  date: String;
+  date: string;
   notes: string;
-  state: IInputVoucherState;
+  State: IInputVoucherState;
   items: Array<IInputVoucherItem>;
-  signaturePerson: String;
-  requestedBy: String;
-  inputVoucherStateId: number;
+  signaturePerson: string;
+  requestedBy: string;
   itemsCount?: number;
 }
 export interface IInputVoucherItem {
   id?: number;
   inputVoucherId?: number;
-  item: IItem;
-  itemId?: number;
-  stock: IStock;
-  stockId?: number;
-  serialNumber: String;
+  Item: IItem;
+  Stock: IStock;
+  serialNumber: string;
   count: number;
   price: number;
   value: number;
-  notes?: String;
+  notes?: string;
   inValue?: number;
   outValue?: number;
 }
@@ -33,13 +30,13 @@ export interface IInputVoucherItemVSelect {
   id?: number;
   itemName: string;
   stockName?: string;
-  serialNumber?: String;
+  serialNumber?: string;
   code?: string;
   itemCategory?: string;
   inValue: number;
   outValue: number;
   price?: number;
-  notes?: String;
+  notes?: string;
 }
 export interface IInputVoucherEmployee {
   id: number;
@@ -54,5 +51,5 @@ export interface IInputVoucherFilter {
   id?: number;
   name: string;
   limit: number;
-  description?: String;
+  description?: string;
 }

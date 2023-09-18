@@ -100,7 +100,6 @@ const getFilterData = async (page = 1) => {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
         dataBase.value = dataPage.value.data;
-        console.log(dataPage.value)
       }
     })
     .catch((error) => {
@@ -129,7 +128,6 @@ const deleteItem = (index: number) => {
 //#region Pagination
 const createCorruptedVoucher = () => {
   //router.push({ name: "corruptedVoucherAdd" });
-
   CorruptedVoucher.value.items = SelectedOutItemCorrupted.value;
   console.log(CorruptedVoucher.value);
 

@@ -34,7 +34,7 @@ const { outputVoucher, outputVoucherEmployees } = storeToRefs(
 const showPop = ref(false);
 const VoucherItem = ref<IOutputVoucherItem>({
   id: 0,
-  item: {
+  Item: {
     id: 0,
     name: "",
     code: "",
@@ -45,7 +45,7 @@ const VoucherItem = ref<IOutputVoucherItem>({
     },
     measuringUnit: "",
   },
-  stock: {
+  Stock: {
     id: 0,
     name: "",
   },
@@ -54,7 +54,7 @@ const VoucherItem = ref<IOutputVoucherItem>({
   price: 0,
   value: 0,
   notes: "",
-  employeeRequest: { id: 0, name: "" },
+  Employee: { id: 0, name: "" },
   inputVoucherItemId: 0,
 });
 const AddPopup = () => {
@@ -124,8 +124,8 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   console.log(VoucherItem.value);
 };
 const AddItem = () => {
-  VoucherItem.value.item = VoucherItem.value.inputVoucherItem?.item;
-  VoucherItem.value.stock = VoucherItem.value.inputVoucherItem?.stock || {
+  VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
+  VoucherItem.value.Stock = VoucherItem.value.inputVoucherItem?.Stock || {
     id: 0,
     name: "",
   };

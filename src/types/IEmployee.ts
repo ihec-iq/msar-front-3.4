@@ -40,6 +40,7 @@ export interface IEmployeeHistory {
   voucher: {
     idVoucher: number;
     date: string;
+    itemId: string;
     itemName: string;
     stockName: string;
     serialNumber: string;

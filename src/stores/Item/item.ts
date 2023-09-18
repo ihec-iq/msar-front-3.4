@@ -10,7 +10,7 @@ export const useItemStore = defineStore("itemStore", () => {
     name: "",
     description: "",
     code: "",
-    itemCategory: { name: "", id: 0 },
+    Category: { name: "", id: 0 },
     measuringUnit: "",
     itemCategoryId: 0,
   });

@@ -17,33 +17,30 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     number: "",
     date: new Date().toISOString().split("T")[0],
     notes: "",
-    state: { name: "", id: 0 },
+    State: { name: "", id: 1 },
     items: [],
     signaturePerson: "",
     requestedBy: "",
-    inputVoucherStateId: 0,
   });
   const inputVouchers = ref<IInputVoucher[]>([]);
   const inputVoucherItem = ref<IInputVoucherItem>({
     id: 0,
     inputVoucherId: 0,
-    item: {
+    Item: {
       id: 0,
       name: "",
       code: "",
       description: "",
-      itemCategory: {
+      Category: {
         id: 0,
         name: "",
       },
       measuringUnit: "",
     },
-    itemId: 0,
-    stock: {
+    Stock: {
       id: 0,
       name: "",
     },
-    stockId: 0,
     serialNumber: "",
     count: 0,
     price: 0,
@@ -127,6 +124,14 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucher.items[index] = item;
   }
   async function removeItem(index: number) {
+    if (
+      String(inputVoucher.items[index]?.id) == undefined ||
+      inputVoucher.items[index]?.id === undefined ||
+      inputVoucher.items[index].id === undefined
+    ) {
+      inputVoucher.items?.splice(index, 1);
+      return false;
+    }
     return await Api.delete(
       `${pathBase}/inputVoucherItem/delete/` +
         String(inputVoucher.items[index]?.id)
@@ -134,6 +139,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       .then((response) => {
         if (response.status == 200) {
           inputVoucher.items?.splice(index, 1);
+          return true;
         }
       })
       .catch((errors) => {
@@ -145,11 +151,10 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucher.number = "";
     inputVoucher.date = "";
     inputVoucher.notes = "";
-    inputVoucher.state = { name: "", id: 0 };
+    inputVoucher.State = { name: "", id: 1 };
     inputVoucher.items = [];
     inputVoucher.signaturePerson = "";
     inputVoucher.requestedBy = "";
-    inputVoucher.inputVoucherStateId = 0;
   }
   return {
     inputVoucher,
