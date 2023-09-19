@@ -64,8 +64,8 @@ const back = () => {
 const fastSearch = ref("");
 const filterByIDName = (item: IEmployeeHistory) => {
   if (
-    item.voucher.itemName.includes(fastSearch.value) ||
-    item.voucher.serialNumber.includes(fastSearch.value)
+    item.Voucher.Item.name.includes(fastSearch.value) ||
+    item.Voucher.serialNumber.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -280,8 +280,8 @@ onMounted(async () => {
                   :key="row.id"
                   class="border-b border-black h-14 text-gray-100"
                 >
-                  <th>{{ row.voucher.itemName }}</th>
-                  <th>{{ row.voucher.serialNumber }}</th>
+                  <th>{{ row.Voucher.Item.name }}</th>
+                  <th>{{ row.Voucher.serialNumber }}</th>
                   <th>
                     <input
                       class="w-[50px] p-2"
@@ -458,9 +458,9 @@ onMounted(async () => {
                               :value="row"
                             />
                           </th>
-                          <th>{{ row.voucher.itemName }}</th>
-                          <th>{{ row.voucher.date }}</th>
-                          <th>{{ row.voucher.serialNumber }}</th>
+                          <th>{{ row.Voucher.Item.name }}</th>
+                          <th>{{ row.Voucher.date }}</th>
+                          <th>{{ row.Voucher.serialNumber }}</th>
                           <th>{{ row.type }}</th>
                           <th>
                             <span
@@ -475,13 +475,13 @@ onMounted(async () => {
                             >
                           </th>
                           <th>{{ row.price.toLocaleString() }}</th>
-                          <th>{{ row.voucher.stockName }}</th>
+                          <th>{{ row.Voucher.Stock.name }}</th>
                           <th>
                             <van-button
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
                               type="secondary"
                               is-link
-                              @click="openItem(row.voucher.idVoucher, row.type)"
+                              @click="openItem(row.Voucher.idVoucher, row.type)"
                               >Open
                             </van-button>
                           </th>

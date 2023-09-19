@@ -1,4 +1,6 @@
+import type { IItem } from "./IItem";
 import type { ISection } from "./ISection";
+import type { IStock } from "./IStock";
 
 export interface IEmployee {
   id: number;
@@ -36,13 +38,12 @@ export interface IEmployeeHistory {
   price: number;
   count: number;
   notes: string;
-  employee: IEmployee;
-  voucher: {
+  Employee: IEmployee;
+  Voucher: {
     idVoucher: number;
     date: string;
-    itemId: string;
-    itemName: string;
-    stockName: string;
+    Item: IItem;
+    Stock: IStock;
     serialNumber: string;
   };
 }

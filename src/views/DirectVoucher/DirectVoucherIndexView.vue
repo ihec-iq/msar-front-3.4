@@ -8,7 +8,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import type {
   IOutputVoucher,
   IOutputVoucherFilter,
-} from "@/types/IOutputVoucher";
+} from "@/types/IDirectVoucher";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 const { t } = useI18n();
 const isLoading = ref(false);

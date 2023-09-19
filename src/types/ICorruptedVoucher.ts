@@ -4,10 +4,10 @@ import type { IOutputVoucherItem } from "./IOutputVoucher";
 export interface ICorruptedVoucher {
   id: number;
   number: string;
-  date: String;
+  date: string;
   notes: string;
   items: Array<ICorruptedVoucherItem>;
-  signaturePerson: String;
+  signaturePerson: string;
   employeeRequest: ICorruptedVoucherEmployee;
   itemsCount?: number;
 }
@@ -44,5 +44,5 @@ export interface ICorruptedVoucherFilter {
   id?: number;
   name: string;
   limit: number;
-  description?: String;
+  description?: string;
 }

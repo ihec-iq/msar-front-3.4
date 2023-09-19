@@ -3,15 +3,15 @@ import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import type {
-  IOutputVoucher,
-  IOutputVoucherEmployee,
-  IOutputVoucherFilter,
-  IOutputVoucherItem,
-  IOutputVoucherState,
-} from "@/types/IOutputVoucher";
+  IDirectVoucher,
+  IDirectVoucherEmployee,
+  IDirectVoucherFilter,
+  IDirectVoucherItem,
+  IDirectVoucherState,
+} from "@/types/IDirectVoucher";
 
-export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
-  const outputVoucher = reactive<IOutputVoucher>({
+export const useDirectVoucherStore = defineStore("DirectVoucherStore", () => {
+  const directVoucher = reactive<IDirectVoucher>({
     id: 0,
     number: "",
     date: new Date().toISOString().split("T")[0],
@@ -20,22 +20,22 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     signaturePerson: "",
     Employee: { name: "", id: 0 },
   });
-  const outputVouchers = ref<IOutputVoucher[]>([]);
-  const outputVoucherStates = ref<IOutputVoucherState[]>([]);
-  const outputVoucherEmployees = ref<IOutputVoucherEmployee[]>([]);
+  const directVouchers = ref<IDirectVoucher[]>([]);
+  const directVoucherStates = ref<IDirectVoucherState[]>([]);
+  const directVoucherEmployees = ref<IDirectVoucherEmployee[]>([]);
   const pathBase = "/stockSys";
-  const pathUrl = `${pathBase}/outputVoucher`;
+  const pathUrl = `${pathBase}/directVoucher`;
   async function get() {
-    outputVouchers.value = await Api.get(`${pathUrl}`);
+    directVouchers.value = await Api.get(`${pathUrl}`);
   }
-  async function get_filter(params: IOutputVoucherFilter, page: number) {
+  async function get_filter(params: IDirectVoucherFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);
   }
-  async function update(outputVoucher_id: number, params: object) {
-    return await Api.post(`${pathUrl}/update/${outputVoucher_id}`, params);
+  async function update(directVoucher_id: number, params: object) {
+    return await Api.post(`${pathUrl}/update/${directVoucher_id}`, params);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
@@ -47,7 +47,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     return await Api.get(`${pathBase}/inputVoucherState`)
       .then((response) => {
         if (response.status == 200) {
-          outputVoucherStates.value = response.data.data;
+          directVoucherStates.value = response.data.data;
         }
       })
       .catch((errors) => {
@@ -58,27 +58,27 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     return await Api.get(`${pathBase}/employee`)
       .then((response) => {
         if (response.status == 200) {
-          outputVoucherEmployees.value = response.data.data;
+          directVoucherEmployees.value = response.data.data;
         }
       })
       .catch((errors) => {
         console.log("in get Employees : " + errors);
       });
   }
-  function addItem(item: IOutputVoucherItem) {
-    outputVoucher.items = [item].concat(outputVoucher.items);
+  function addItem(item: IDirectVoucherItem) {
+    directVoucher.items = [item].concat(directVoucher.items);
   }
-  function editItem(index: number, item: IOutputVoucherItem) {
-    outputVoucher.items[index] = item;
+  function editItem(index: number, item: IDirectVoucherItem) {
+    directVoucher.items[index] = item;
   }
 
   async function removeItem(index: number) {
     console.log(index);
-    console.log(outputVoucher.items[index]?.id);
-    if (Number(outputVoucher.items[index]?.id) > 0) {
+    console.log(directVoucher.items[index]?.id);
+    if (Number(directVoucher.items[index]?.id) > 0) {
       return await Api.delete(
-        `${pathBase}/outputVoucherItem/delete/` +
-          String(outputVoucher.items[index]?.id)
+        `${pathBase}/directVoucherItem/delete/` +
+          String(directVoucher.items[index]?.id)
       )
         .then((response) => {
           if (response.status == 200) {
@@ -86,25 +86,25 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
           }
         })
         .catch((errors) => {
-          console.log("in removeItem outputVoucher : " + errors);
+          console.log("in removeItem directVoucher : " + errors);
         });
     }
-    outputVoucher.items?.splice(index, 1);
+    directVoucher.items?.splice(index, 1);
   }
   function resetData() {
-    outputVoucher.id = 0;
-    outputVoucher.number = "";
-    outputVoucher.date = "";
-    outputVoucher.notes = "";
-    outputVoucher.items = [];
-    outputVoucher.signaturePerson = "";
-    outputVoucher.Employee = { name: "", id: 0 };
+    directVoucher.id = 0;
+    directVoucher.number = "";
+    directVoucher.date = "";
+    directVoucher.notes = "";
+    directVoucher.items = [];
+    directVoucher.signaturePerson = "";
+    directVoucher.Employee = { name: "", id: 0 };
   }
   return {
-    outputVoucher,
-    outputVouchers,
-    outputVoucherStates,
-    outputVoucherEmployees,
+    directVoucher,
+    directVouchers,
+    directVoucherStates,
+    directVoucherEmployees,
     addItem,
     editItem,
     removeItem,

@@ -122,13 +122,13 @@ onMounted(() => {
             @click.prevent="tab = 'Feature Admin'"
           >
             <button
-              title="Feature"
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
+              title="الواجهة الاساسية"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -146,19 +146,19 @@ onMounted(() => {
             <button
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
+              title="الارشيف"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
+                width="32"
+                height="32"
+                viewBox="0 0 20 20"
                 stroke-width="1.5"
-                stroke="currentColor"
                 class="w-6 h-6 text-gray-700"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+                  fill="currentColor"
+                  d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
                 />
               </svg>
             </button>
@@ -172,19 +172,19 @@ onMounted(() => {
             <button
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
+              title="المواد"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
+                width="32"
+                height="32"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
                 stroke="currentColor"
                 class="w-6 h-6 text-gray-700"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z"
+                  fill="currentColor"
+                  d="M4 2a2 2 0 0 0-2 2v10h2V4h10V2H4m4 4a2 2 0 0 0-2 2v10h2V8h10V6H8m12 6v8h-8v-8h8m0-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2Z"
                 />
               </svg>
             </button>
@@ -197,19 +197,19 @@ onMounted(() => {
             <button
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
+              title="الادخال المخزني"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
+                width="32"
+                height="32"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
                 stroke="currentColor"
                 class="w-6 h-6 text-gray-700"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
+                  fill="currentColor"
+                  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"
                 />
               </svg>
             </button>
@@ -222,19 +222,18 @@ onMounted(() => {
             <button
               class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
+              title="المخزنية"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
+                width="32"
+                height="32"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-700"
+                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"
+                  fill="currentColor"
+                  d="M8 11.5V10h8v1.5H8Zm1 3V13h6v1.5H9ZM1 20V4h22v16H1Zm5-2h12V6H6v12Z"
                 />
               </svg>
             </button>
@@ -247,19 +246,19 @@ onMounted(() => {
             <button
               class="text-iconLight dark:text-icon p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
               href="#"
+              title="الاخراج المخزني"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
+                width="32"
+                height="32"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
                 stroke="currentColor"
                 class="w-6 h-6 text-gray-700"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+                  fill="currentColor"
+                  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"
                 />
               </svg>
             </button>
