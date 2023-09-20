@@ -3,7 +3,7 @@ export interface IDirectVoucher {
   number: string;
   date: string;
   notes: string;
-  items: Array<IDirectVoucherItem>;
+  Items: Array<IDirectVoucherItem>;
   signaturePerson: string;
   Employee: IDirectVoucherEmployee;
   itemsCount?: number;
@@ -11,7 +11,7 @@ export interface IDirectVoucher {
 export interface IDirectVoucherItem {
   id?: number;
   outputVoucherId?: number;
-  Item?: string;
+  item?: string;
   Employee: IDirectVoucherEmployee;
   serialNumber: string;
   count: number;

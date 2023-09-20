@@ -42,6 +42,7 @@ export default {
   OutputVoucherNumber: " رقم السند",
   OutputVoucherEmployeeRequest: "طلبت من",
   NumberVoucher: "رقم المستند",
+  DirectVoucher: "سند صرف مباشر",
 
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",

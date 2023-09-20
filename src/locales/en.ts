@@ -37,6 +37,7 @@ export default {
   OutputVoucherNumber: "Voucher Number",
   OutputVoucherEmployeeRequest: "Employee Request",
   NumberVoucher: "Number Voucher",
+  DirectVoucher: "Direct Voucher",
 
   StoreIndex: "Store",
   StoreTypeReport: "Type Report",

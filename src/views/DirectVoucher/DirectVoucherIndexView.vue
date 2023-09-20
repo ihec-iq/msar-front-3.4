@@ -6,16 +6,16 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type {
-  IOutputVoucher,
-  IOutputVoucherFilter,
+  IDirectVoucher,
+  IDirectVoucherFilter,
 } from "@/types/IDirectVoucher";
-import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
+import { useDirectVoucherStore } from "@/stores/voucher/directVoucher";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IOutputVoucher>>([]);
+const data = ref<Array<IDirectVoucher>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IOutputVoucher>>([]);
-const { outputVoucher, get_filter } = useOutputVoucherStore();
+const dataBase = ref<Array<IDirectVoucher>>([]);
+const { directVoucher, get_filter } = useDirectVoucherStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -36,20 +36,20 @@ watch(
   }
 );
 const addItem = () => {
-  outputVoucher.id = 0;
-  outputVoucher.number = "";
-  outputVoucher.date = "";
-  outputVoucher.notes = "";
-  outputVoucher.items = [];
-  outputVoucher.signaturePerson = "";
+  directVoucher.id = 0;
+  directVoucher.number = "";
+  directVoucher.date = "";
+  directVoucher.notes = "";
+  directVoucher.Items = [];
+  directVoucher.signaturePerson = "";
   router.push({
-    name: "outputVoucherAdd",
+    name: "directVoucherAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IOutputVoucher) => {
+const filterByIDName = (item: IDirectVoucher) => {
   if (
     item.number.includes(fastSearch.value) ||
     item.notes.includes(fastSearch.value)
@@ -66,7 +66,7 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IOutputVoucherFilter>({
+const searchFilter = ref<IDirectVoucherFilter>({
   name: "",
   limit: 6,
   description: "",
@@ -90,7 +90,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "outputVoucherUpdate",
+    name: "directVoucherUpdate",
     params: { id: id },
   });
 };
@@ -105,7 +105,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("OutputVoucher") }} </PageTitle>
+    <PageTitle> {{ t("DirectVoucher") }} </PageTitle>
   </div>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
@@ -232,6 +232,7 @@ onMounted(async () => {
                           <div class="flex justify-betweens">
                             <div
                               class="text-text dark:text-textGray"
+                              v-if="item.notes"
                               v-html="item.notes"
                             ></div>
                           </div>

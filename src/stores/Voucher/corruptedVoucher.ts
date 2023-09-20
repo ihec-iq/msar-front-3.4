@@ -61,7 +61,7 @@ export const useCorruptedVoucherStore = defineStore(
         });
     }
     async function getEmployees() {
-      return await Api.get(`${pathBase}/employee`)
+      return await Api.get(`${pathBase}/employee/lite`)
         .then((response) => {
           if (response.status == 200) {
             corruptedVoucherEmployees.value = response.data.data;
