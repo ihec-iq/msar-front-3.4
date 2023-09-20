@@ -98,7 +98,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const openItem = (id: number) => {
   router.push({
-    name: "storeItemHistory",
+    name: "ItemHistory",
     params: { id: id },
   });
 };

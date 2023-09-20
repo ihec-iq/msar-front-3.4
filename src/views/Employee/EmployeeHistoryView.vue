@@ -112,12 +112,12 @@ const getFilterData = async (page = 1) => {
 const openItem = (id: number, billType: string) => {
   if (billType == "In") {
     router.push({
-      name: "inputVoucherUpdate",
+      name: "outputVoucherUpdate",
       params: { id: id },
     });
   } else {
     router.push({
-      name: "outputVoucherUpdate",
+      name: "inputVoucherUpdate",
       params: { id: id },
     });
   }

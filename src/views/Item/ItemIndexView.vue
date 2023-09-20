@@ -104,7 +104,10 @@ onMounted(async () => {
 <template>
   <div class="justify-between flex">
     <PageTitle> {{ t("Item") }} </PageTitle>
-    <RouterLink :to="{ name: 'itemCategoryIndex' }" class="float-left flex m-5">
+    <RouterLink
+      :to="{ name: 'itemCategoryIndex' }"
+      class="float-left flex m-5 btn-outline btn"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="32"

@@ -93,7 +93,7 @@ const openItem = (id: number, billType: string) => {
       name: "inputVoucherUpdate",
       params: { id: id },
     });
-  } else {
+  } else if (billType == "out") {
     router.push({
       name: "outputVoucherUpdate",
       params: { id: id },
@@ -266,6 +266,9 @@ onMounted(async () => {
                             Stock
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
+                            Employee
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
                             Actions
                           </th>
                         </tr>
@@ -283,22 +286,23 @@ onMounted(async () => {
                             <span
                               v-if="row.count > 0"
                               class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-                              >↑{{ row.count }}</span
+                              >↓{{ row.count }}</span
                             >
                             <span
                               v-else
                               class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-                              >↓{{ row.count }}</span
+                              >↑{{ row.count }}</span
                             >
                           </th>
                           <th>{{ row.price }}</th>
                           <th>{{ row.stockName }}</th>
+                          <th>{{ row.Employee.name }}</th>
                           <th>
                             <van-button
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
                               type="secondary"
                               is-link
-                              @click="openItem(row.itemId, row.billType)"
+                              @click="openItem(row.voucherId, row.billType)"
                               >Open
                             </van-button>
                           </th>

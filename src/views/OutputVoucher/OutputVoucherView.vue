@@ -206,7 +206,7 @@ function update() {
   formData.append("number", outputVoucher.value.number.toString());
   formData.append("notes", String(outputVoucher.value.notes));
   formData.append("date", outputVoucher.value.date.toString());
-  formData.append("items", JSON.stringify(outputVoucher.value.items));
+  formData.append("items", JSON.stringify(outputVoucher.value.Items));
   formData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -276,12 +276,12 @@ const showData = async (id: number) => {
   await outputVoucherStore
     .show(id)
     .then((response) => {
-      if (response.status == 200) {
+      if (response.status == 200) {console.log(response.data.data)
         outputVoucher.value.id = response.data.data.id;
         outputVoucher.value.date = response.data.data.date;
         outputVoucher.value.number = response.data.data.number;
         outputVoucher.value.notes = response.data.data.notes;
-        outputVoucher.value.items = response.data.data.items;
+        outputVoucher.value.Items = response.data.data.Items;
         outputVoucher.value.Employee = response.data.data.Employee;
         outputVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
@@ -496,7 +496,7 @@ onMounted(async () => {
           </thead>
           <tbody class="bg-[#1f2937]">
             <tr
-              v-for="(row, index) in outputVoucher.items"
+              v-for="(row, index) in outputVoucher.Items"
               :key="row.id"
               class="border-b border-black h-14 text-gray-100"
             >

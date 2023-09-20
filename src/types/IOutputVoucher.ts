@@ -7,7 +7,7 @@ export interface IOutputVoucher {
   number: string;
   date: string;
   notes: string;
-  items: Array<IOutputVoucherItem>;
+  Items: Array<IOutputVoucherItem>;
   signaturePerson: string;
   Employee: IOutputVoucherEmployee;
   itemsCount?: number;

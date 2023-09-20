@@ -11,11 +11,12 @@ export interface IStore {
   out?: number;
 }
 export interface IStoreItemHistory {
+  voucherId: number;
   itemId: number;
   itemName: string;
   stockName: String;
   serialNumber: string;
-  employee: IEmployee;
+  Employee: IEmployee;
   price?: number;
   billType: string;
   count: number;
@@ -24,6 +25,7 @@ export interface IStoreFilter {
   stock?: string;
   item?: string;
   serialNumber?: string;
+  employeeName?: string;
   limit: number;
   summation?: boolean;
 }
