@@ -40,7 +40,7 @@ const addItem = () => {
   outputVoucher.number = "";
   outputVoucher.date = "";
   outputVoucher.notes = "";
-  outputVoucher.items = [];
+  outputVoucher.Items = [];
   outputVoucher.signaturePerson = "";
   router.push({
     name: "outputVoucherAdd",

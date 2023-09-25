@@ -16,7 +16,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     number: "",
     date: new Date().toISOString().split("T")[0],
     notes: "",
-    items: [],
+    Items: [],
     signaturePerson: "",
     Employee: { name: "", id: 0 },
   });
@@ -66,19 +66,19 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
       });
   }
   function addItem(item: IOutputVoucherItem) {
-    outputVoucher.items = [item].concat(outputVoucher.items);
+    outputVoucher.Items = [item].concat(outputVoucher.Items);
   }
   function editItem(index: number, item: IOutputVoucherItem) {
-    outputVoucher.items[index] = item;
+    outputVoucher.Items[index] = item;
   }
 
   async function removeItem(index: number) {
     console.log(index);
-    console.log(outputVoucher.items[index]?.id);
-    if (Number(outputVoucher.items[index]?.id) > 0) {
+    console.log(outputVoucher.Items[index]?.id);
+    if (Number(outputVoucher.Items[index]?.id) > 0) {
       return await Api.delete(
         `${pathBase}/outputVoucherItem/delete/` +
-          String(outputVoucher.items[index]?.id)
+          String(outputVoucher.Items[index]?.id)
       )
         .then((response) => {
           if (response.status == 200) {
@@ -89,14 +89,14 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
           console.log("in removeItem outputVoucher : " + errors);
         });
     }
-    outputVoucher.items?.splice(index, 1);
+    outputVoucher.Items?.splice(index, 1);
   }
   function resetData() {
     outputVoucher.id = 0;
     outputVoucher.number = "";
     outputVoucher.date = "";
     outputVoucher.notes = "";
-    outputVoucher.items = [];
+    outputVoucher.Items = [];
     outputVoucher.signaturePerson = "";
     outputVoucher.Employee = { name: "", id: 0 };
   }

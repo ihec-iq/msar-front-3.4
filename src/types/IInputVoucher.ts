@@ -8,7 +8,7 @@ export interface IInputVoucher {
   date: string;
   notes: string;
   State: IInputVoucherState;
-  items: Array<IInputVoucherItem>;
+  Items: Array<IInputVoucherItem>;
   signaturePerson: string;
   requestedBy: string;
   itemsCount?: number;

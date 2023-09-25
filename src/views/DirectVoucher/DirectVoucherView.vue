@@ -114,10 +114,10 @@ const EditItem = () => {
   showPop.value = false;
 };
 
-const handleEnter = (event: KeyboardEvent) => {
-  const enteredValue = (event.target as HTMLInputElement).value;
-  VoucherItem.value.item = enteredValue;
-};
+// const handleEnter = (event: KeyboardEvent) => {
+//   const enteredValue = (event.target as HTMLInputElement).value;
+//   VoucherItem.value.item = enteredValue;
+// };
 
 //#region CURD
 const store = () => {
@@ -379,16 +379,30 @@ onMounted(async () => {
         <table class="min-w-full text-center">
           <thead class="border-b bg-[#0003] text-gray-300">
             <tr>
-              <th scope="col" class="text-sm font-medium px-2 py-2">ID</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">item</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                Serial Number
+              <th scope="col" class="text-sm font-medium px-2 py-2">
+                {{ t("ID") }}
               </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Count</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Price</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Total</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Notes</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Actions</th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Item") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("SerialNumber") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Count") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Price") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Total") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Notes") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Actions") }}
+              </th>
             </tr>
           </thead>
           <tbody class="bg-[#1f2937]">

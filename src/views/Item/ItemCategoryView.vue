@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
+import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import Swal from "sweetalert2";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -322,4 +322,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/item/itemCategory

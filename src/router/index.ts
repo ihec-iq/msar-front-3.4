@@ -1,8 +1,4 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import notification from "@/views/NotificationView.vue";
 import archive from "./archives/archive";
 //#region for split routes in many files

@@ -11,7 +11,7 @@ import { usePermissionStore } from "@/stores/permission";
 import { useStockStore } from "@/stores/voucher/stock";
 import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 import { useItemStore } from "@/stores/item/item";
-import type { IInputVoucher, IInputVoucherItem } from "@/types/IInputVoucher";
+import type { IInputVoucherItem } from "@/types/IInputVoucher";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IItem } from "@/types/IItem";
 import AddItemPopup from "@/components/AddItemPopup.vue";
@@ -33,7 +33,7 @@ const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
 const inputVoucherStore = useInputVoucherStore();
-const { inputVoucher, inputVoucherStates, inputVoucherEmployees } = storeToRefs(
+const { inputVoucher, inputVoucherStates } = storeToRefs(
   useInputVoucherStore()
 );
 //#region popUp
@@ -148,7 +148,7 @@ const store = () => {
   formData.append("number", inputVoucher.value.number);
   formData.append("notes", inputVoucher.value.notes);
   formData.append("date", inputVoucher.value.date);
-  formData.append("items", JSON.stringify(inputVoucher.value.items));
+  formData.append("items", JSON.stringify(inputVoucher.value.Items));
   formData.append("State", JSON.stringify(inputVoucher.value.State));
   formData.append("requestedBy", inputVoucher.value.requestedBy);
   formData.append(
@@ -186,7 +186,7 @@ function update() {
   formData.append("number", inputVoucher.value.number);
   formData.append("notes", inputVoucher.value.notes);
   formData.append("date", inputVoucher.value.date);
-  formData.append("items", JSON.stringify(inputVoucher.value.items));
+  formData.append("items", JSON.stringify(inputVoucher.value.Items));
   formData.append("State", JSON.stringify(inputVoucher.value.State));
   formData.append("requestedBy", inputVoucher.value.requestedBy);
   formData.append(
@@ -259,7 +259,7 @@ const showData = async (id: number) => {
         inputVoucher.value.date = response.data.data.date;
         inputVoucher.value.number = response.data.data.number;
         inputVoucher.value.notes = response.data.data.notes;
-        inputVoucher.value.items = response.data.data.items;
+        inputVoucher.value.Items = response.data.data.items;
         inputVoucher.value.requestedBy = response.data.data.requestedBy;
         inputVoucher.value.signaturePerson = response.data.data.signaturePerson;
         inputVoucher.value.State = response.data.data.State;
@@ -300,27 +300,27 @@ onMounted(async () => {
   await useStockStore().get_stocks();
   await useItemStore().get_items();
 });
-const handlers = (map: any, vm: { search: string | any[] }) => ({
-  ...map,
-  // 50: (e: { preventDefault: () => void; key: string }) => {
-  //   e.preventDefault();
-  //   console.log(vm.search);
-  //   if (e.key === "@" && vm.search.length > 0) {
-  //     vm.search = `${vm.search}@gmail.com`;
-  //   }
-  // },
-  13: (e: { preventDefault: () => void; key: string; open: any }) => {
-    if (VoucherItemTemp.value.Item.id == 0) {
-      console.log(vm.search);
+// const handlers = (map: any, vm: { search: string | any[] }) => ({
+//   ...map,
+//   // 50: (e: { preventDefault: () => void; key: string }) => {
+//   //   e.preventDefault();
+//   //   console.log(vm.search);
+//   //   if (e.key === "@" && vm.search.length > 0) {
+//   //     vm.search = `${vm.search}@gmail.com`;
+//   //   }
+//   // },
+//   13: (e: { preventDefault: () => void; key: string; open: any }) => {
+//     if (VoucherItemTemp.value.Item.id == 0) {
+//       console.log(vm.search);
 
-      let btn = document.getElementById("my_modal_7");
-      btn?.click();
-      item.value.name = vm.search.toString();
-    }
-    e.preventDefault();
-    e.open;
-  },
-});
+//       let btn = document.getElementById("my_modal_7");
+//       btn?.click();
+//       item.value.name = vm.search.toString();
+//     }
+//     e.preventDefault();
+//     e.open;
+//   },
+// });
 
 const handleEnter = (event: KeyboardEvent) => {
   const enteredValue = (event.target as HTMLInputElement).value;
@@ -355,27 +355,27 @@ function clearSelected(event: { target: { value: string } }) {
     };
   }
 }
-const onSearch = (query: string) => {
-  // if (query == "")
-  //   VoucherItem.value = {
-  //     id: 0,
-  //     input_voucher_id: 0,
-  //     item: {
-  //       name: "",
-  //       id: 0,
-  //       code: "",
-  //       description: "",
-  //       Category: { id: 0, name: "" },
-  //       measuringUnit: "",
-  //     },
-  //     stock: { name: "", id: 0 },
-  //     serialNumber: "",
-  //     count: 0,
-  //     price: 0,
-  //     value: 0,
-  //     notes: "",
-  //   };
-};
+// const onSearch = (query: string) => {
+//   // if (query == "")
+//   //   VoucherItem.value = {
+//   //     id: 0,
+//   //     input_voucher_id: 0,
+//   //     item: {
+//   //       name: "",
+//   //       id: 0,
+//   //       code: "",
+//   //       description: "",
+//   //       Category: { id: 0, name: "" },
+//   //       measuringUnit: "",
+//   //     },
+//   //     stock: { name: "", id: 0 },
+//   //     serialNumber: "",
+//   //     count: 0,
+//   //     price: 0,
+//   //     value: 0,
+//   //     notes: "",
+//   //   };
+// };
 // const onEnterKey = (event: KeyboardEvent) => {
 //   if (event.key === "Enter") {
 //     // Handle Enter key press event here
@@ -496,22 +496,38 @@ const setItemFromChild = (_item: IItem) => {
         <table class="min-w-full text-center">
           <thead class="border-b bg-[#0003] text-gray-300">
             <tr>
-              <th scope="col" class="text-sm font-medium px-2 py-2">ID</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">item</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                Serial Number
+              <th scope="col" class="text-sm font-medium px-2 py-2">
+                {{ t("ID") }}
               </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">count</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Price</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Total</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Stock</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Notes</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Actions</th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Item") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("SerialNumber") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Count") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Price") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Total") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Stock") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Notes") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Actions") }}
+              </th>
             </tr>
           </thead>
           <tbody class="bg-[#1f2937]">
             <tr
-              v-for="(row, index) in inputVoucher.items"
+              v-for="(row, index) in inputVoucher.Items"
               :key="row.id"
               class="border-b border-black h-14 text-gray-100"
             >

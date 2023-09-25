@@ -60,7 +60,8 @@ const fastSearch = ref("");
 const filterByIDName = (item: IArchive) => {
   if (
     item.title.includes(fastSearch.value) ||
-    item.way.includes(fastSearch.value)
+    item.way.includes(fastSearch.value) ||
+    item.number.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -270,7 +271,7 @@ onMounted(async () => {
               >
                 <div class="max-w-full relative">
                   <div
-                    class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
+                    class="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
                   >
                     <!-- card -->
                     <div
@@ -279,7 +280,7 @@ onMounted(async () => {
                       <div class="w-4/4 overflow-hidden">
                         <button
                           @click="getFilterData(1, -1)"
-                          class="ltr:ml-2 rtl:mr-2 text-2xl h-full text-text justify-between dark:text-textLight mb-2"
+                          class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-2xl xs:text-2xl h-full text-text justify-between dark:text-textLight mb-2"
                         >
                           <span class="float-right flex"> عرض الجميع </span>
                           <span
@@ -311,7 +312,7 @@ onMounted(async () => {
                       >
                         <button
                           @click="getFilterData(1, archiveType.id)"
-                          class="ltr:ml-2 rtl:mr-2 text-2xl h-full w-full p-15 text-text justify-between dark:text-textLight mb-2"
+                          class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-2xl xs:text-2xl h-full w-full p-15 text-text justify-between dark:text-textLight mb-2"
                         >
                           <span class="float-right flex">
                             {{ archiveType.name }}
@@ -387,6 +388,13 @@ onMounted(async () => {
                             class="text-2xl text-text dark:text-textLight mb-2"
                           >
                             {{ item.title }}
+                          </div>
+                          <div
+                            class="text-text dark:text-textGray mb-2 justify-between"
+                          >
+                            <span
+                              >{{ t("NumberBook") }}: {{ item.number }}</span
+                            >
                           </div>
                           <div
                             class="text-text dark:text-textGray mb-2 justify-between"

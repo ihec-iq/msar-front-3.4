@@ -166,7 +166,7 @@ const store = () => {
   formData.append("number", outputVoucher.value.number.toString());
   formData.append("notes", outputVoucher.value.notes.toString());
   formData.append("date", outputVoucher.value.date.toString());
-  formData.append("items", JSON.stringify(outputVoucher.value.items));
+  formData.append("items", JSON.stringify(outputVoucher.value.Items));
   formData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -276,7 +276,7 @@ const showData = async (id: number) => {
   await outputVoucherStore
     .show(id)
     .then((response) => {
-      if (response.status == 200) {console.log(response.data.data)
+      if (response.status == 200) {
         outputVoucher.value.id = response.data.data.id;
         outputVoucher.value.date = response.data.data.date;
         outputVoucher.value.number = response.data.data.number;
@@ -481,17 +481,33 @@ onMounted(async () => {
         <table class="min-w-full text-center">
           <thead class="border-b bg-[#0003] text-gray-300">
             <tr>
-              <th scope="col" class="text-sm font-medium px-2 py-2">ID</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">item</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                Serial Number
+              <th scope="col" class="text-sm font-medium px-2 py-2">
+                {{ t("ID") }}
               </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Count</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Price</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Total</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Stock</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Notes</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Actions</th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Item") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("SerialNumber") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Count") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Price") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Total") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Stock") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Notes") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Actions") }}
+              </th>
             </tr>
           </thead>
           <tbody class="bg-[#1f2937]">

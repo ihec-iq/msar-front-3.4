@@ -248,28 +248,28 @@ onMounted(async () => {
                       <thead class="border-b bg-[#0003] text-gray-300">
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            item
+                            {{ t("Item") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Serial Number
+                            {{ t("SerialNumber") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Bill Type
+                            {{ t("BillType") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Available in Stock
+                            {{ t("AvailableInStock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Price
+                            {{ t("Price") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Stock
+                            {{ t("Stock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Employee
+                            {{ t("Employee") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Actions
+                            {{ t("Actions") }}
                           </th>
                         </tr>
                       </thead>

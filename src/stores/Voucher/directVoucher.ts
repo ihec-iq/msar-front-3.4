@@ -7,7 +7,6 @@ import type {
   IDirectVoucherEmployee,
   IDirectVoucherFilter,
   IDirectVoucherItem,
-  IDirectVoucherState,
 } from "@/types/IDirectVoucher";
 
 export const useDirectVoucherStore = defineStore("DirectVoucherStore", () => {

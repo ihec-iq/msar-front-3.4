@@ -29,7 +29,6 @@ declare module '@vue/runtime-core' {
     NavBar: typeof import('./src/components/fixed/navBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ScannerComponent: typeof import('./src/components/ScannerComponent.vue')['default']
     ShowButton: typeof import('./src/components/dropDown/ShowButton.vue')['default']
     ShowInputNumber: typeof import('./src/components/inputs/ShowInputNumber.vue')['default']
     ShowInputText: typeof import('./src/components/inputs/ShowInputText.vue')['default']
