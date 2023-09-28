@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { useI18n } from "@/stores/i18n/useI18n";
+import { Links } from "./FixedMenu";
 const { t } = useI18n();
 // import { useUserStore } from "@/stores/accounting/accounts/user";
 // import type IUser from "@/types/accounting/accounts/IUser";
@@ -72,10 +73,10 @@ onMounted(() => {
     @mouseleave="handleMouseLeave"
   >
     <div
-      class="LeftNav bg-bgLeftNavLight ltr:pl-2 rtl:pr-2 z-50 dark:bg-bgLeftNav w-20 flex-none flex flex-col h-full py-2"
+      class="LeftNav bg-bgLeftNavLight ltr:pl-2 rtl:pr-2 z-50 dark:bg-bgLeftNav w-20 flex-none flex flex-col h-full"
     >
       <div
-        class="shadow-md shadow-slate-500 bg-white dark:bg-sideNav h-full md:min-h-screen md:h-screen px-4 py-10 sm:rounded-xl flex flex-col justify-between"
+        class="shadow-sm shadow-slate-100 bg-white dark:bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between"
       >
         <div
           v-motion
@@ -118,205 +119,23 @@ onMounted(() => {
         <nav class="flex items-center space-x-0 flex-col space-y-2">
           <!-- feature -->
           <router-link
-            :to="{ name: 'Dashboard' }"
-            @click.prevent="tab = 'Feature Admin'"
+            v-for="Link in Links"
+            :key="Link.routerName"
+            :to="{ name: Link.routerName }"
+            @click.prevent="tab = Link.tab"
           >
             <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
+              class="dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark hover:text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
               href="#"
-              title="الواجهة الاساسية"
+              :title="Link.title"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
-                />
-              </svg>
+              <span v-html="Link.icon"></span>
             </button>
           </router-link>
-          <!-- Company -->
-          <router-link
-            :to="{ name: 'archiveIndex' }"
-            @click.prevent="tab = 'Company'"
-          >
-            <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-              title="الارشيف"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 20 20"
-                stroke-width="1.5"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!--  -->
-          <!-- Computer -->
-          <router-link
-            :to="{ name: 'itemIndex' }"
-            @click.prevent="tab = 'Computer'"
-          >
-            <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-              title="المواد"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="M4 2a2 2 0 0 0-2 2v10h2V4h10V2H4m4 4a2 2 0 0 0-2 2v10h2V8h10V6H8m12 6v8h-8v-8h8m0-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- Active -->
-          <router-link
-            :to="{ name: 'inputVoucherIndex' }"
-            @click.prevent="tab = 'Active'"
-          >
-            <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-              title="الادخال المخزني"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- news -->
-          <router-link
-            :to="{ name: 'storeIndex' }"
-            @click.prevent="tab = 'News'"
-          >
-            <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-              title="المخزنية"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-600"
-              >
-                <path
-                  fill="currentColor"
-                  d="M8 11.5V10h8v1.5H8Zm1 3V13h6v1.5H9ZM1 20V4h22v16H1Zm5-2h12V6H6v12Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- general -->
-          <router-link
-            :to="{ name: 'outputVoucherIndex' }"
-            @click.prevent="tab = 'general'"
-          >
-            <button
-              class="text-iconLight dark:text-icon p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-              title="الاخراج المخزني"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- general -->
-          <router-link
-            :to="{ name: 'directVoucherIndex' }"
-            @click.prevent="tab = 'general'"
-          >
-            <button
-              class="text-iconLight dark:text-icon p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-              title="الصرف المباشر- اضرب واهرب"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  fill="currentColor"
-                  d="M18.75 8.65q-.675.675-1.55 1.025t-1.75.35q-.875 0-1.725-.338T12.2 8.65l-1.875-1.875q-.375-.375-.85-.563T8.5 6.026q-.5 0-.975.188t-.85.562L4.8 8.65L3.375 7.225L5.25 5.35q.675-.675 1.525-1.012T8.5 4q.875 0 1.713.338t1.512 1.012L13.6 7.225q.4.4.875.588T15.45 8q.5 0 .988-.188t.887-.587L19.2 5.35l1.425 1.425L18.75 8.65Zm0 5q-.675.675-1.538 1.012T15.475 15q-.875 0-1.737-.338T12.2 13.65l-1.875-1.875q-.375-.375-.85-.563t-.975-.187q-.5 0-.975.188t-.85.562L4.8 13.65l-1.425-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 9q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.875.588t.975.187q.5 0 .988-.187t.887-.588L19.2 10.35l1.425 1.425l-1.875 1.875Zm-.025 5q-.675.675-1.525 1.012T15.475 20q-.875 0-1.737-.338T12.2 18.65l-1.9-1.875q-.375-.375-.85-.562t-.975-.188q-.5 0-.975.188t-.85.562L4.775 18.65l-1.4-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 14q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.888.588t.987.187q.5 0 .975-.188t.875-.587L19.2 15.35l1.4 1.425l-1.875 1.875Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- general -->
-          <router-link
-            :to="{ name: 'employeeIndex' }"
-            @click.prevent="tab = 'general1'"
-          >
-            <button
-              class="text-iconLight dark:text-icon p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-              title="الموظفين ولد الحلال"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                stroke-width="1.5"
-                stroke="currentColor"
-                viewBox="0 0 256 256"
-                class="w-6 h-6 text-gray-700"
-                fill="none"
-              >
-                <path
-                  fill="currentColor"
-                  d="M128 18a94.11 94.11 0 0 0-94 94c0 23.6 12.41 54.2 33.21 81.83C83.27 215.18 107.68 238 128 238s44.73-22.82 60.79-44.17C209.59 166.2 222 135.6 222 112a94.11 94.11 0 0 0-94-94Zm51.21 168.62C161.48 210.17 140.91 226 128 226s-33.48-15.83-51.21-39.38C57.8 161.37 46 132.78 46 112a82 82 0 0 1 164 0c0 20.78-11.8 49.37-30.79 74.62ZM118 136a38 38 0 0 0-38-38a14 14 0 0 0-14 14a38 38 0 0 0 38 38a14 14 0 0 0 14-14Zm-14 2a26 26 0 0 1-26-26a2 2 0 0 1 2-2a26 26 0 0 1 26 26a2 2 0 0 1-2 2Zm72-40a38 38 0 0 0-38 38a14 14 0 0 0 14 14a38 38 0 0 0 38-38a14 14 0 0 0-14-14Zm-24 40a2 2 0 0 1-2-2a26 26 0 0 1 26-26a2 2 0 0 1 2 2a26 26 0 0 1-26 26Zm-2 46a6 6 0 0 1-6 6h-32a6 6 0 0 1 0-12h32a6 6 0 0 1 6 6Z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- searcg -->
+
+          <!-- Search -->
           <button
-            class="text-white/50 p-4 inline-flex justify-center rounded-md text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:bg-sideNavHover dark:hover:text-iconHover smooth-hover"
+            class="dark:text-navIconColoDark p-4 inline-flex justify-center rounded-md hover:text-iconHoverLight dark:hover:text-navIconColorHoverDark dark:hover:bg-sideNavHover smooth-hover"
             :class="{
               'bg-gray-800 text-white  border-l-2 border-red-300 ':
                 tab === 'search',
@@ -325,7 +144,7 @@ onMounted(() => {
           >
             <div class="input-group relative flex mt-4">
               <button
-                class="inline-block text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:bg-sideNavHover dark:hover:text-iconHover font-medium text-xs leading-tight uppercase rounded transition duration-150 ease-in-out mr-1.5"
+                class="inline-block text-iconLight hover:text-iconHoverLight dark:text-navIconColoDark dark:hover:bg-sideNavHover dark:hover:text-navIconColorHoverDark font-medium text-xs leading-tight uppercase rounded transition duration-150 ease-in-out mr-1.5"
                 type="button"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasRight1"
@@ -369,7 +188,7 @@ onMounted(() => {
           <!-- #region setting icon -->
           <button
             @click="settingPop = !settingPop"
-            class="dark:text-textGray border-none dark:hover:text-iconHover bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
+            class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -393,7 +212,7 @@ onMounted(() => {
       :class="[
         isClose ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]' : 'transOn',
       ]"
-      class="shadow-md shadow-slate-500 bg-white mt-4 dark:bg-nav w-56 flex-none lg:flex flex-col justify-between duration-500"
+      class="shadow-md shadow-slate-500 bg-white mt-4 dark:bg-bgLeftNav w-56 flex-none lg:flex flex-col justify-between duration-500"
     >
       <!-- Feature Admin icon -->
       <div
@@ -402,7 +221,7 @@ onMounted(() => {
       >
         <ul class="px-2 py-3">
           <li
-            class="text-text dark:text-textLight px-2 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
+            class="text-text dark:text-textLight px-2 mt-3 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
           >
             <a href="#" class="flex items-center justify-between">
               <span class="ml-2">{{ t("EXPLORER") }}</span>
@@ -757,7 +576,7 @@ onMounted(() => {
             <!-- <div class="text-textGray text-xs w-full mr-1">0772 572 6027</div> -->
           </div>
         </div>
-        <div class="flex items-center text-iconLight dark:text-icon">
+        <div class="flex items-center text-iconLight dark:text-navIconColoDark">
           <a
             href="#"
             class="dark:hover:text-iconHover hover:text-iconHoverLight"

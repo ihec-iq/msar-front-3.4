@@ -46,7 +46,7 @@ export default {
   Out: "خارج",
   In: "داخل",
   AvailableInStock: "المتوفر",
-  
+
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",
   ConfigServer: "اعدادات الاتصال بالسيرفر",
