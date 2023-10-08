@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     Loading: typeof import('./src/components/general/loading.vue')['default']
     LoadingFull: typeof import('./src/components/general/loadingFull.vue')['default']
     LoadingScreen: typeof import('./src/components/LoadingScreen.vue')['default']
+    MovingList: typeof import('./src/components/MovingList.vue')['default']
     NamePage: typeof import('./src/components/general/namePage.vue')['default']
     NavBar: typeof import('./src/components/fixed/navBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -45,5 +46,7 @@ declare module '@vue/runtime-core' {
     VanCollapse: typeof import('vant/es')['Collapse']
     VanCollapseItem: typeof import('vant/es')['CollapseItem']
     VanPopup: typeof import('vant/es')['Popup']
+    WindowsDesign: typeof import('./src/components/general/WindowsDesign.vue')['default']
+    WindowsDesign2: typeof import('./src/components/general/WindowsDesign2.vue')['default']
   }
 }
