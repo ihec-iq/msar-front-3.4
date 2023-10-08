@@ -1,46 +1,53 @@
 <script setup lang="ts">
+import { Links } from "@/components/fixed/FixedMenu";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 </script>
 <template>
-  <div>
-    <router-link :to="{ name: 'archiveIndex' }">
-      <div
-        title="Feature"
-        class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover w-48 h-48"
-      >
-        {{ t("Archive") }}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          viewBox="0 0 24 24"
+  <div class="flex text-center self-center mt-3">
+    <router-link
+      v-for="Link in Links"
+      :key="Link.routerName"
+      :to="{ name: Link.routerName }"
+    >
+      <span href="" class="group relative block h-64 sm:h-50 lg:h-60">
+        <span
+          class="absolute inset-0 border-2 border-dashed border-black"
+        ></span>
+
+        <div
+          class="relative flex h-full transform items-end border-2 border-black bg-white transition-transform group-hover:-translate-x-2 group-hover:-translate-y-2"
         >
-          <path
-            fill="currentColor"
-            d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
-          ></path>
-        </svg>
-      </div>
-    </router-link>
-    <router-link :to="{ name: 'itemIndex' }">
-      <div
-        title="Feature"
-        class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover w-48"
-      >
-        {{ t("Item") }}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M3 21V3h18v18H3Zm2-2h14V5H5v14Zm2-2h2v-5H7v5Zm8 0h2V7h-2v10Zm-4 0h2v-3h-2v3Zm0-5h2v-2h-2v2Zm-6 7V5v14Z"
-          />
-        </svg>
-      </div>
+          <div
+            class="p-4 !pt-0 transition-opacity group-hover:absolute group-hover:opacity-0 sm:p-6 lg:p-8"
+          >
+            <div
+              title="Feature"
+              class="dark:text-navIconColorHoverDark dark:hover:text-navIconColoDark hover:text-navIconColoDark text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
+            >
+              <span v-html="Link.iconX"></span>
+            </div>
+
+            <h2 class="mt-4 text-xl font-medium sm:text-2xl">
+              {{ Link.title }}
+            </h2>
+          </div>
+
+          <div
+            class="absolute p-4 opacity-0 transition-opacity group-hover:relative group-hover:opacity-100 sm:p-6 lg:p-8"
+          >
+            <h3 class="mt-4 text-xl font-medium sm:text-2xl">
+              {{ Link.title }}
+            </h3>
+
+            <p class="mt-4 text-sm sm:text-base">
+              {{ Link.description }}
+            </p>
+
+            <p class="mt-8 font-bold">Read more</p>
+          </div>
+        </div>
+      </span>
     </router-link>
   </div>
 </template>
