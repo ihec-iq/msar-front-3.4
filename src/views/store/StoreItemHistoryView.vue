@@ -201,12 +201,12 @@ onMounted(async () => {
         </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
           <label class="cursor-pointer label">
-            <span
+            <div
               class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
             >
               {{ t("StoreTypeReport") }} :
-              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</span
-            >
+              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}
+            </div>
             <input
               type="checkbox"
               v-model="searchFilter.summation"
