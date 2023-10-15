@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/Item/item";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
+import { useItemStore } from "@/stores/item/item";
+import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import Swal from "sweetalert2";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -12,6 +12,7 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 
 import { useI18n } from "@/stores/i18n/useI18n";
+import type { IItem } from "@/types/IItem";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -40,12 +41,12 @@ const errors = ref<String | null>();
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("id", item.value.id.toString());
-  formData.append("name", item.value.name.toString());
-  formData.append("description", item.value.description.toString());
-  formData.append("code", item.value.code.toString());
-  formData.append("measuringUnit", item.value.measuringUnit.toString());
-  formData.append("itemCategoryId", String(item.value.itemCategoryId));
+  formData.append("id", String(item.value.id));
+  formData.append("name", item.value.name);
+  formData.append("description", item.value.description);
+  formData.append("code", item.value.code);
+  formData.append("measuringUnit", item.value.measuringUnit);
+  formData.append("Category", JSON.stringify(item.value.Category));
   itemStore
     .store(formData)
     .then((response) => {
@@ -78,7 +79,7 @@ function update() {
   formData.append("description", item.value.description.toString());
   formData.append("code", item.value.code.toString());
   formData.append("measuringUnit", item.value.measuringUnit.toString());
-  formData.append("itemCategoryId", String(item.value.itemCategoryId));
+  formData.append("Category", JSON.stringify(item.value.Category));
   itemStore
     .update(item.value.id, formData)
     .then((response) => {
@@ -141,13 +142,8 @@ const showData = async () => {
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        item.value.id = response.data.data.id;
         item.value.name = response.data.data.name;
-        item.value.description = response.data.data.description;
-        item.value.code = response.data.data.code;
-        item.value.itemCategory = response.data.data.itemCategory;
-        item.value.itemCategoryId = response.data.data.itemCategoryId;
-        item.value.measuringUnit = response.data.data.measuringUnit;
+        item.value = response.data.data as IItem;
       }
     })
     .catch((errors) => {
@@ -206,7 +202,7 @@ onMounted(async () => {
         >
           {{ t("ItemCategory") }}
         </div>
-        <select v-model="item.itemCategoryId" class="p-2">
+        <select v-model="item.Category.id" class="p-2">
           <option
             v-for="category in categories"
             :key="category.id"
@@ -374,4 +370,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/item/item@/stores/item/itemCategory

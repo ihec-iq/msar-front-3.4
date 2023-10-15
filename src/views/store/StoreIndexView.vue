@@ -7,7 +7,6 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStore, IStoreFilter } from "@/types/IStore";
 import { useStoringStore } from "@/stores/storing";
-import ToolTipComponent from "@/components/ToolTipComponent.vue";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IStore>>([]);
@@ -98,7 +97,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const openItem = (id: number) => {
   router.push({
-    name: "storeItemHistory",
+    name: "ItemHistory",
     params: { id: id },
   });
 };
@@ -227,28 +226,28 @@ onMounted(async () => {
                       >
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            item
+                            {{ t("Item") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Serial Number
+                            {{ t("SerialNumber") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Available in Stock
+                            {{ t("AvailableInStock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Out
+                            {{ t("Out") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            IN
+                            {{ t("In") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Price
+                            {{ t("Stock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Stock
+                            {{ t("Employee") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Actions
+                            {{ t("Actions") }}
                           </th>
                         </tr>
                       </thead>

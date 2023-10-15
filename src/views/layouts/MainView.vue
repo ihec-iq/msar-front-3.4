@@ -18,7 +18,7 @@ const { isClose } = storeToRefs(rtlStore);
         'ltr:ml-[80px] rtl:mr-[80px]': isClose,
         'rtl:mr-[304px] ltr:ml-[304px]': !isClose,
       }"
-      class="flex-1 bg-[#f8f7fa] overflow-hidden dark:bg-content flex flex-col min-h-screen h-full print:ltr:ml-0 print:rtl:mr-0 duration-500"
+      class="flex-1 bg-mainBG overflow-hidden dark:bg-[#18191D] flex flex-col min-h-screen h-full print:ltr:ml-0 print:rtl:mr-0 duration-500"
     >
       <Toolbar />
       <RouterView />

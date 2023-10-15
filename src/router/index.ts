@@ -1,8 +1,4 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import notification from "@/views/NotificationView.vue";
 import archive from "./archives/archive";
 //#region for split routes in many files
@@ -15,6 +11,7 @@ import item from "./item/item";
 import inputVoucher from "./voucher/inputVoucher";
 import outputVoucher from "./voucher/outputVoucher";
 import corruptedVoucher from "./voucher/corruptedVoucher";
+import directVoucher from "./voucher/directVoucher";
 import itemCategory from "./item/itemCategory";
 import store from "./store/store";
 import DefaultLayout from "@/views/layouts/MainView.vue";
@@ -50,6 +47,7 @@ const router = createRouter({
         ...inputVoucher,
         ...outputVoucher,
         ...corruptedVoucher,
+        ...directVoucher,
         ...store,
         ...employee,
         {

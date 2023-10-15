@@ -60,7 +60,8 @@ const fastSearch = ref("");
 const filterByIDName = (item: IArchive) => {
   if (
     item.title.includes(fastSearch.value) ||
-    item.way.includes(fastSearch.value)
+    item.way.includes(fastSearch.value) ||
+    item.number.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -270,7 +271,7 @@ onMounted(async () => {
               >
                 <div class="max-w-full relative">
                   <div
-                    class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
+                    class="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
                   >
                     <!-- card -->
                     <div
@@ -279,7 +280,7 @@ onMounted(async () => {
                       <div class="w-4/4 overflow-hidden">
                         <button
                           @click="getFilterData(1, -1)"
-                          class="ltr:ml-2 rtl:mr-2 text-2xl h-full text-text justify-between dark:text-textLight mb-2"
+                          class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-2xl xs:text-2xl h-full text-text justify-between dark:text-textLight mb-2"
                         >
                           <span class="float-right flex"> عرض الجميع </span>
                           <span
@@ -307,11 +308,11 @@ onMounted(async () => {
                       :key="archiveType.id"
                     >
                       <div
-                        class="bg-cardLight btn dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-600 dark:shadow-gray-900 duration-500 hover:border hover:border-gray-600 dark:hover:shadow-md hover:shadow-gray-400"
+                        class="bg-cardLight btn dark:bg-[#33393F] hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-600 dark:shadow-gray-900 duration-500 hover:border hover:border-gray-600 dark:hover:shadow-md hover:shadow-gray-400"
                       >
                         <button
                           @click="getFilterData(1, archiveType.id)"
-                          class="ltr:ml-2 rtl:mr-2 text-2xl h-full w-full p-15 text-text justify-between dark:text-textLight mb-2"
+                          class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-2xl xs:text-2xl h-full w-full p-15 text-text justify-between dark:text-textLight mb-2"
                         >
                           <span class="float-right flex">
                             {{ archiveType.name }}
@@ -367,7 +368,7 @@ onMounted(async () => {
                   >
                     <!-- card -->
                     <div
-                      class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                      class="bg-cardLight dark:bg-[#22262A] flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
                       v-for="item in data"
                       :key="item.id"
                     >
@@ -387,6 +388,13 @@ onMounted(async () => {
                             class="text-2xl text-text dark:text-textLight mb-2"
                           >
                             {{ item.title }}
+                          </div>
+                          <div
+                            class="text-text dark:text-textGray mb-2 justify-between"
+                          >
+                            <span
+                              >{{ t("NumberBook") }}: {{ item.number }}</span
+                            >
                           </div>
                           <div
                             class="text-text dark:text-textGray mb-2 justify-between"

@@ -1,20 +1,26 @@
 import type { IInputVoucherItem } from "./IInputVoucher";
+import type { IItem } from "./IItem";
+import type { IStock } from "./IStock";
 
 export interface IOutputVoucher {
   id: number;
   number: string;
-  date: String;
+  date: string;
   notes: string;
-  items: Array<IOutputVoucherItem>;
-  signaturePerson: String;
-  employeeRequest: IOutputVoucherEmployee;
+  Items: Array<IOutputVoucherItem>;
+  signaturePerson: string;
+  Employee: IOutputVoucherEmployee;
   itemsCount?: number;
 }
 export interface IOutputVoucherItem {
   id?: number;
   outputVoucherId?: number;
-  inputVoucherItem: IInputVoucherItem;
-  employeeRequest: IOutputVoucherEmployee;
+  Item?: IItem;
+  inputVoucherItemId: number;
+  inputVoucherItem?: IInputVoucherItem;
+  Employee: IOutputVoucherEmployee;
+  Stock: IStock;
+  serialNumber: string;
   count: number;
   countWord?: string;
   price: number;
@@ -43,5 +49,5 @@ export interface IOutputVoucherFilter {
   id?: number;
   name: string;
   limit: number;
-  description?: String;
+  description?: string;
 }

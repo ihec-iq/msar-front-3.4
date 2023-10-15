@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/item/item";
 import PageTitle from "@/components/general/namePage.vue";
-import type { IItem, IItemFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import EditButton from "@/components/dropDown/EditButton.vue";
+import type {
+  IDirectVoucher,
+  IDirectVoucherFilter,
+} from "@/types/IDirectVoucher";
+import { useDirectVoucherStore } from "@/stores/voucher/directVoucher";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IItem>>([]);
+const data = ref<Array<IDirectVoucher>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IItem>>([]);
-const { item, get_filter } = useItemStore();
+const dataBase = ref<Array<IDirectVoucher>>([]);
+const { directVoucher, get_filter } = useDirectVoucherStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -34,22 +36,23 @@ watch(
   }
 );
 const addItem = () => {
-  item.id = 0;
-  item.name = "";
-  item.Category = { name: "", id: 0 };
-  item.code = "";
-  item.description = "";
+  directVoucher.id = 0;
+  directVoucher.number = "";
+  directVoucher.date = "";
+  directVoucher.notes = "";
+  directVoucher.Items = [];
+  directVoucher.signaturePerson = "";
   router.push({
-    name: "itemAdd",
+    name: "directVoucherAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IItem) => {
+const filterByIDName = (item: IDirectVoucher) => {
   if (
-    item.name.includes(fastSearch.value) ||
-    item.code.includes(fastSearch.value)
+    item.number.includes(fastSearch.value) ||
+    item.notes.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -63,7 +66,7 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IItemFilter>({
+const searchFilter = ref<IDirectVoucherFilter>({
   name: "",
   limit: 6,
   description: "",
@@ -87,7 +90,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "itemUpdate",
+    name: "directVoucherUpdate",
     params: { id: id },
   });
 };
@@ -97,32 +100,13 @@ const update = (id: number) => {
 onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-
   await getFilterData(1);
 });
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("Item") }} </PageTitle>
-    <RouterLink
-      :to="{ name: 'itemCategoryIndex' }"
-      class="float-left flex m-5 btn-outline btn"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="currentColor"
-          d="M4 2a2 2 0 0 0-2 2v10h2V4h10V2H4m4 4a2 2 0 0 0-2 2v10h2V8h10V6H8m12 6v8h-8v-8h8m0-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2Z"
-        />
-      </svg>
-      {{ t("ItemCategory") }}</RouterLink
-    >
+    <PageTitle> {{ t("DirectVoucher") }} </PageTitle>
   </div>
-
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
@@ -223,42 +207,33 @@ onMounted(async () => {
                           <div
                             class="text-2xl text-text dark:text-textLight mb-2"
                           >
-                            {{ item.name }}
+                            {{ item.number }}
                           </div>
                           <div
                             class="text-text dark:text-textGray mb-2 justify-between"
                           >
-                            <span>{{ t("ItemCode") }}: {{ item.code }}</span>
-                            <span class="float-left flex">
-                              {{ item.Category.name }}
+                            <span>{{ t("Date") }}: {{ item.date }}</span>
+                            <span class="float-left flex" title="Items count">
+                              {{ item.itemsCount }}
                               <svg
+                                title="Items count"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
                                 height="20"
                                 viewBox="0 0 24 24"
                               >
-                                <g id="evaCameraOutline0" fill="#7f7e7e">
-                                  <g id="evaCameraOutline1">
-                                    <g
-                                      id="evaCameraOutline2"
-                                      fill="currentColor"
-                                    >
-                                      <path
-                                        d="M19 7h-3V5.5A2.5 2.5 0 0 0 13.5 3h-3A2.5 2.5 0 0 0 8 5.5V7H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3Zm-9-1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V7h-4ZM20 18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1Z"
-                                      />
-                                      <path
-                                        d="M12 10.5a3.5 3.5 0 1 0 3.5 3.5a3.5 3.5 0 0 0-3.5-3.5Zm0 5a1.5 1.5 0 1 1 1.5-1.5a1.5 1.5 0 0 1-1.5 1.5Z"
-                                      />
-                                    </g>
-                                  </g>
-                                </g>
+                                <path
+                                  fill="currentColor"
+                                  d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6 4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6 4h4v-4h-4M4 8h4V4H4v4Z"
+                                />
                               </svg>
                             </span>
                           </div>
                           <div class="flex justify-betweens">
                             <div
                               class="text-text dark:text-textGray"
-                              v-html="item.description"
+                              v-if="item.notes"
+                              v-html="item.notes"
                             ></div>
                           </div>
                         </div>
@@ -280,7 +255,7 @@ onMounted(async () => {
                         </button>
 
                         <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
+                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-gray-800"
                           aria-labelledby="dropdownMenuButton2"
                         >
                           <li>

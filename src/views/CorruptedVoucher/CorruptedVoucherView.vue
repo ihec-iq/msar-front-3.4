@@ -92,13 +92,21 @@ onMounted(async () => {
           <thead class="border-b bg-[#0003] text-gray-300">
             <tr>
               <th scope="col" class="text-sm font-medium px-2 py-2">ID</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">item</th>
               <th scope="col" class="text-sm font-medium px-6 py-4">
-                Serial Number
+                {{ t("Item") }}
               </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Count</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Notes</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Actions</th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("SerialNumber") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Count") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Notes") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Actions") }}
+              </th>
             </tr>
           </thead>
           <tbody class="bg-[#1f2937]">
@@ -108,8 +116,8 @@ onMounted(async () => {
               class="border-b border-black h-14 text-gray-100"
             >
               <th>{{ row.id }}</th>
-              <th>{{ row.voucher.itemName }}</th>
-              <th>{{ row.voucher.serialNumber }}</th>
+              <th>{{ row.Voucher.Item.name }}</th>
+              <th>{{ row.Voucher.serialNumber }}</th>
               <th>
                 <input class="w-[50px]" type="number" :value="row.count" />
               </th>
@@ -121,7 +129,7 @@ onMounted(async () => {
                   class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
                   type="secondary"
                   is-link
-                  @click="console.log('delete')"
+                  @click="console.log('delete' + index)"
                   >Delete
                 </van-button>
               </th>

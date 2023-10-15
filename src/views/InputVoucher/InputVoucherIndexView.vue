@@ -38,11 +38,10 @@ const addItem = () => {
   inputVoucher.number = "";
   inputVoucher.date = "";
   inputVoucher.notes = "";
-  inputVoucher.state = { name: "", id: 0 };
-  inputVoucher.items = [];
+  inputVoucher.State = { name: "", id: 0 };
+  inputVoucher.Items = [];
   inputVoucher.signaturePerson = "";
-  inputVoucher.employeeRequestId = 0;
-  inputVoucher.inputVoucherStateId = 0;
+  inputVoucher.requestedBy = "";
   router.push({
     name: "inputVoucherAdd",
   });

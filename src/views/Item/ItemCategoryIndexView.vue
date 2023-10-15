@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
+import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import PageTitle from "@/components/general/namePage.vue";
 import type { IItemCategory, IItemCategoryFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
