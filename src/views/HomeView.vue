@@ -4,7 +4,7 @@ import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 </script>
 <template>
-  <div class="flex text-center self-center mt-3">
+  <div class="flex text-center self-center mt-3 col-span-3">
     <router-link
       v-for="Link in Links"
       :key="Link.routerName"
