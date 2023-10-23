@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
+import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
 import type {
-  IVacationDaily,
-  IVacationDailyFilter,
-} from "@/types/vacation/IVacationDaily";
+  IVacationTime,
+  IVacationTimeFilter,
+} from "@/types/vacation/IVacationTime";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IVacationDaily>>([]);
+const data = ref<Array<IVacationTime>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IVacationDaily>>([]);
-const { vacationDaily } = useVacationDailyStore();
+const dataBase = ref<Array<IVacationTime>>([]);
+const { vacationTime } = useVacationTimeStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -37,16 +37,16 @@ watch(
   }
 );
 const addItem = () => {
-  useVacationDailyStore().reset();
+  useVacationTimeStore().reset();
   router.push({
-    name: "vacationDailyAdd",
+    name: "vacationTimeAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (_vacationDaily: IVacationDailyFilter) => {
-  if (_vacationDaily.dayFrom?.toString().includes(fastSearch.value)) {
+const filterByIDName = (_vacationTime: IVacationTimeFilter) => {
+  if (_vacationTime.dayFrom?.toString().includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -59,7 +59,7 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IVacationDailyFilter>({
+const searchFilter = ref<IVacationTimeFilter>({
   dayFrom: "",
   limit: 6,
 });
@@ -67,7 +67,7 @@ const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.limit = 0;
   searchFilter.value.record = Number(fastSearch.value);
-  await useVacationDailyStore()
+  await useVacationTimeStore()
     .get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -84,7 +84,7 @@ const getFilterData = async (page: number = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "vacationDailyUpdate",
+    name: "vacationTimeUpdate",
     params: { id: id },
   });
 };
@@ -100,7 +100,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("VacationDailyUpdate") }} </PageTitle>
+    <PageTitle> {{ t("VacationTime") }} </PageTitle>
   </div>
 
   <div class="flex">

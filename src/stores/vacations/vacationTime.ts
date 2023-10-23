@@ -3,26 +3,28 @@ import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import type {
-  IVacationDaily,
-  IVacationDailyFilter,
-} from "@/types/vacation/IVacationDaily";
+  IVacationTime,
+  IVacationTimeFilter,
+} from "@/types/vacation/IVacationTime";
 
-export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
-  const vacationDaily = reactive<IVacationDaily>({
+export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
+  const vacationTime = reactive<IVacationTime>({
     id: 0,
+    date: new Date().toISOString().split("T")[0],
     dayFrom: new Date().toISOString().split("T")[0],
     dayTo: new Date().toISOString().split("T")[0],
     Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
     record: 0,
   });
   function reset() {
-    vacationDaily.id = 0;
-    vacationDaily.record = 1;
-    vacationDaily.dayFrom = new Date().toISOString().split("T")[0];
-    const d = new Date(vacationDaily.dayFrom);
-    d.setDate(d.getDate() + vacationDaily.record);
-    vacationDaily.dayTo = d.toISOString().split("T")[0];
-    vacationDaily.Employee = {
+    vacationTime.id = 0;
+    vacationTime.record = 1;
+    vacationTime.date = new Date().toISOString().split("T")[0];
+    vacationTime.dayFrom = new Date().toISOString().split("T")[0];
+    const d = new Date(vacationTime.dayFrom);
+    d.setDate(d.getDate() + vacationTime.record);
+    vacationTime.dayTo = d.toISOString().split("T")[0];
+    vacationTime.Employee = {
       id: 0,
       name: "",
       section: { id: 0, name: "" },
@@ -30,12 +32,12 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     };
   }
   const pathBase = "/vacationSys";
-  const pathUrl = `${pathBase}/vacationDaily`;
+  const pathUrl = `${pathBase}/vacationTime`;
   async function get(page: number = 1) {
     console.log(`page : ${page}`);
     return await Api.get(`${pathUrl}?page=${page}`);
   }
-  async function get_filter(params: IVacationDailyFilter, page: number) {
+  async function get_filter(params: IVacationTimeFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function store(prams: object) {
@@ -53,7 +55,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
   }
 
   return {
-    vacationDaily,
+    vacationTime,
     reset,
     get,
     get_filter,

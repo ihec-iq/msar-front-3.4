@@ -3,12 +3,12 @@ import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import type {
-  IVacationDaily,
-  IVacationDailyFilter,
-} from "@/types/vacation/IVacationDaily";
+  IVacationSick,
+  IVacationSickFilter,
+} from "@/types/vacation/IVacationSick";
 
-export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
-  const vacationDaily = reactive<IVacationDaily>({
+export const useVacationSickStore = defineStore("vacationSickStore", () => {
+  const vacationSick = reactive<IVacationSick>({
     id: 0,
     dayFrom: new Date().toISOString().split("T")[0],
     dayTo: new Date().toISOString().split("T")[0],
@@ -16,13 +16,13 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     record: 0,
   });
   function reset() {
-    vacationDaily.id = 0;
-    vacationDaily.record = 1;
-    vacationDaily.dayFrom = new Date().toISOString().split("T")[0];
-    const d = new Date(vacationDaily.dayFrom);
-    d.setDate(d.getDate() + vacationDaily.record);
-    vacationDaily.dayTo = d.toISOString().split("T")[0];
-    vacationDaily.Employee = {
+    vacationSick.id = 0;
+    vacationSick.record = 1;
+    vacationSick.dayFrom = new Date().toISOString().split("T")[0];
+    const d = new Date(vacationSick.dayFrom);
+    d.setDate(d.getDate() + vacationSick.record);
+    vacationSick.dayTo = d.toISOString().split("T")[0];
+    vacationSick.Employee = {
       id: 0,
       name: "",
       section: { id: 0, name: "" },
@@ -30,12 +30,12 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     };
   }
   const pathBase = "/vacationSys";
-  const pathUrl = `${pathBase}/vacationDaily`;
+  const pathUrl = `${pathBase}/vacationSick`;
   async function get(page: number = 1) {
     console.log(`page : ${page}`);
     return await Api.get(`${pathUrl}?page=${page}`);
   }
-  async function get_filter(params: IVacationDailyFilter, page: number) {
+  async function get_filter(params: IVacationSickFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function store(prams: object) {
@@ -53,7 +53,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
   }
 
   return {
-    vacationDaily,
+    vacationSick,
     reset,
     get,
     get_filter,

@@ -46,6 +46,19 @@ export default {
   Out: "خارج",
   In: "داخل",
   AvailableInStock: "المتوفر",
+  RecordDaily: "عدد الايام",
+  RecordSick: "عدد الساعات",
+
+  VacationDailyAdd: "اضافة اجازة اعتيادية",
+  VacationDailyUpdate: "تعديل اجازة اعتيادية",
+  VacationTimeAdd: "اضافة اجازة زمنية",
+  VacationTimeUpdate: "تعديل اجازة زمنية",
+  VacationSickAdd: "اضافة اجازة مرضية",
+  VacationSickUpdate: "تعديل اجازة مرضية",
+  VacationIndex: "نظام الاجازات",
+
+  VacationTime: "اجازة زمنية",
+  VacationSick: "اجازة مرضية",
 
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",
