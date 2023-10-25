@@ -1,16 +1,12 @@
-import type { IEmployee } from "../IEmployee";
+import type { IVacation } from "./IVacation";
 
 export interface IVacationTime {
   id: number;
   date: string;
-  dayFrom: string;
-  dayTo: string;
+  timeFrom: string;
+  timeTo: string;
   record: number;
-  Employee: IEmployee;
-}
-export interface IVacationType {
-  id: number;
-  name: string;
+  Vacation: IVacation;
 }
 
 export interface IVacationTimeFilter {

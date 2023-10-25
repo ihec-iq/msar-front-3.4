@@ -11,7 +11,8 @@ import { usePermissionStore } from "@/stores/permission";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IVacationSick } from "@/types/vacation/IVacationSick";
 import { useVacationSickStore } from "@/stores/vacations/vacationSick";
-import { useEmployeeStore } from "@/stores/employee";
+import { useVacationStore } from "@/stores/vacations/vacation";
+
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -28,7 +29,7 @@ const { is } = storeToRefs(rtlStore);
 
 const itemStore = useVacationSickStore();
 const { vacationSick } = storeToRefs(useVacationSickStore());
-const { employees } = storeToRefs(useEmployeeStore());
+const { vacations } = storeToRefs(useVacationStore());
 const Loading = ref(false);
 
 const router = useRouter();
@@ -41,7 +42,7 @@ const store = () => {
   formData.append("dayFrom", vacationSick.value.dayFrom);
   formData.append("dayTo", vacationSick.value.dayTo);
   formData.append("record", vacationSick.value.record.toString());
-  formData.append("Employee", JSON.stringify(vacationSick.value.Employee));
+  formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
   itemStore
     .store(formData)
     .then((response) => {
@@ -73,7 +74,7 @@ function update() {
   formData.append("dayFrom", vacationSick.value.dayFrom);
   formData.append("dayTo", vacationSick.value.dayTo);
   formData.append("record", vacationSick.value.record.toString());
-  formData.append("Employee", JSON.stringify(vacationSick.value.Employee));
+  formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
   itemStore
     .update(vacationSick.value.id, formData)
     .then((response) => {
@@ -139,7 +140,7 @@ const showData = async () => {
         vacationSick.value.dayFrom = response.data.data.dayFrom;
         vacationSick.value.dayTo = response.data.data.dayTo;
         vacationSick.value.record = response.data.data.record;
-        vacationSick.value.Employee = response.data.data.Employee;
+        vacationSick.value.Vacation = response.data.data.Vacation;
         vacationSick.value = response.data.data as IVacationSick;
       }
     })
@@ -174,7 +175,7 @@ onMounted(async () => {
     vacationSick.value.id = id.value;
     namePage.value = t("VacationSickUpdate");
   }
-  await useEmployeeStore().get_employees();
+  await useVacationStore().get_vacations();
 });
 const ChangeDate = () => {
   if (vacationSick.value.dayFrom >= vacationSick.value.dayTo) {
@@ -247,16 +248,16 @@ const ChangeDateRecord = () => {
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
         <select
-          v-model="vacationSick.Employee"
+          v-model="vacationSick.Vacation"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         >
           <option
-            v-for="employee in employees"
-            :key="employee.id"
-            :value="employee"
+            v-for="vacation in vacations"
+            :key="vacation.id"
+            :value="vacation"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
           >
-            {{ employee.name }}
+            {{ vacation.Employee.name }}
           </option>
         </select>
       </div>

@@ -1,11 +1,11 @@
-import type { IEmployee } from "../IEmployee";
+import type { IVacation } from "./IVacation";
 
 export interface IVacationDaily {
   id: number;
   dayFrom: string;
   dayTo: string;
   record: number;
-  Employee: IEmployee;
+  Vacation: IVacation;
 }
 export interface IVacationType {
   id: number;

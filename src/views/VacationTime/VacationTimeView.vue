@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -11,7 +11,7 @@ import { usePermissionStore } from "@/stores/permission";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IVacationTime } from "@/types/vacation/IVacationTime";
 import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
-import { useEmployeeStore } from "@/stores/employee";
+import { useVacationStore } from "@/stores/vacations/vacation";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -28,21 +28,27 @@ const { is } = storeToRefs(rtlStore);
 
 const itemStore = useVacationTimeStore();
 const { vacationTime } = storeToRefs(useVacationTimeStore());
-const { employees } = storeToRefs(useEmployeeStore());
+const { vacations } = storeToRefs(useVacationStore());
 const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<String | null>();
+const times = reactive([
+  { display: "نصف ساعة", value: 0.5, selected: true },
+  { display: "1 ساعة", value: 1, selected: false },
+  { display: "2 ساعة", value: 1, selected: false },
+  { display: "3 ساعة", value: 1, selected: false },
+]);
 //#endregion
 //#region CURD
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("dayFrom", vacationTime.value.dayFrom);
   formData.append("date", vacationTime.value.date);
-  formData.append("dayTo", vacationTime.value.dayTo);
+  formData.append("timeFrom", vacationTime.value.timeTo);
+  formData.append("timeTo", vacationTime.value.timeTo);
   formData.append("record", vacationTime.value.record.toString());
-  formData.append("Employee", JSON.stringify(vacationTime.value.Employee));
+  formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
   itemStore
     .store(formData)
     .then((response) => {
@@ -72,10 +78,10 @@ function update() {
   errors.value = null;
   const formData = new FormData();
   formData.append("date", vacationTime.value.date);
-  formData.append("dayFrom", vacationTime.value.dayFrom);
-  formData.append("dayTo", vacationTime.value.dayTo);
+  formData.append("timeFrom", vacationTime.value.timeFrom);
+  formData.append("timeTo", vacationTime.value.timeTo);
   formData.append("record", vacationTime.value.record.toString());
-  formData.append("Employee", JSON.stringify(vacationTime.value.Employee));
+  formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
   itemStore
     .update(vacationTime.value.id, formData)
     .then((response) => {
@@ -138,10 +144,10 @@ const showData = async () => {
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        vacationTime.value.dayFrom = response.data.data.dayFrom;
-        vacationTime.value.dayTo = response.data.data.dayTo;
+        vacationTime.value.timeFrom = response.data.data.timeFrom;
+        vacationTime.value.timeTo = response.data.data.timeTo;
         vacationTime.value.record = response.data.data.record;
-        vacationTime.value.Employee = response.data.data.Employee;
+        vacationTime.value.Vacation = response.data.data.Vacation;
         vacationTime.value = response.data.data as IVacationTime;
       }
     })
@@ -176,26 +182,26 @@ onMounted(async () => {
     vacationTime.value.id = id.value;
     namePage.value = t("VacationTimeUpdate");
   }
-  await useEmployeeStore().get_employees();
+  await useVacationStore().get_vacations();
 });
 const ChangeDate = () => {
-  if (vacationTime.value.dayFrom >= vacationTime.value.dayTo) {
+  if (vacationTime.value.timeFrom >= vacationTime.value.timeTo) {
     vacationTime.value.record = 1;
     ChangeDateRecord();
     return;
   }
   const oneDay = 24 * 60 * 60 * 1000;
   const days = Math.round(
-    (new Date(vacationTime.value.dayTo).valueOf() -
-      new Date(vacationTime.value.dayFrom).valueOf()) /
+    (new Date(vacationTime.value.timeTo).valueOf() -
+      new Date(vacationTime.value.timeFrom).valueOf()) /
       oneDay
   );
   vacationTime.value.record = days;
 };
 const ChangeDateRecord = () => {
-  let d = new Date(vacationTime.value.dayFrom);
+  let d = new Date(vacationTime.value.timeFrom);
   d.setDate(d.getDate() + vacationTime.value.record);
-  vacationTime.value.dayTo = d.toISOString().split("T")[0];
+  vacationTime.value.timeTo = d.toISOString().split("T")[0];
 };
 </script>
 <template>
@@ -221,8 +227,8 @@ const ChangeDateRecord = () => {
           {{ t("DateFrom") }}
         </div>
         <input
-          v-model="vacationTime.dayFrom"
-          type="date"
+          v-model="vacationTime.timeFrom"
+          type="time"
           @change="ChangeDate()"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
@@ -234,8 +240,8 @@ const ChangeDateRecord = () => {
           {{ t("DateTo") }}
         </div>
         <input
-          v-model="vacationTime.dayTo"
-          type="date"
+          v-model="vacationTime.timeTo"
+          type="time"
           @change="ChangeDate()"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
@@ -261,16 +267,16 @@ const ChangeDateRecord = () => {
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
         <select
-          v-model="vacationTime.Employee"
+          v-model="vacationTime.Vacation"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         >
           <option
-            v-for="employee in employees"
-            :key="employee.id"
-            :value="employee"
+            v-for="vacation in vacations"
+            :key="vacation.id"
+            :value="vacation"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
           >
-            {{ employee.name }}
+            {{ vacation.Employee.name }}
           </option>
         </select>
       </div>

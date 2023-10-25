@@ -11,24 +11,43 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
   const vacationTime = reactive<IVacationTime>({
     id: 0,
     date: new Date().toISOString().split("T")[0],
-    dayFrom: new Date().toISOString().split("T")[0],
-    dayTo: new Date().toISOString().split("T")[0],
-    Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+    timeFrom: new Date().toISOString().split("T")[0],
+    timeTo: new Date().toISOString().split("T")[0],
+    Vacation: {
+      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      record: 0,
+      newRecord: 0,
+      oldRecord: 0,
+      id: 0,
+      sumDaily: 0,
+      sumTime: 0,
+      sumSick: 0,
+    },
     record: 0,
   });
   function reset() {
+    const currentdate = new Date();
+    const datetime =
+      currentdate.getHours() +
+      ":" +
+      currentdate.getMinutes() +
+      ":" +
+      currentdate.getSeconds();
+
     vacationTime.id = 0;
-    vacationTime.record = 1;
+    vacationTime.record = 0;
     vacationTime.date = new Date().toISOString().split("T")[0];
-    vacationTime.dayFrom = new Date().toISOString().split("T")[0];
-    const d = new Date(vacationTime.dayFrom);
-    d.setDate(d.getDate() + vacationTime.record);
-    vacationTime.dayTo = d.toISOString().split("T")[0];
-    vacationTime.Employee = {
+    vacationTime.timeFrom = datetime;
+    vacationTime.timeTo = datetime;
+    vacationTime.Vacation = {
+      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      record: 0,
+      newRecord: 0,
+      oldRecord: 0,
       id: 0,
-      name: "",
-      section: { id: 0, name: "" },
-      isPerson: 1,
+      sumDaily: 0,
+      sumTime: 0,
+      sumSick: 0,
     };
   }
   const pathBase = "/vacationSys";

@@ -5,15 +5,16 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IStore, IStoreFilter } from "@/types/IStore";
-import { useStoringStore } from "@/stores/storing";
+import { useVacationStore } from "@/stores/vacations/vacation";
+import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
+
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IStore>>([]);
+const data = ref<Array<IVacation>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IStore>>([]);
+const dataBase = ref<Array<IVacation>>([]);
 
-const { get_filter, get_summation } = useStoringStore();
+const { get_filter } = useVacationStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -35,11 +36,8 @@ watch(
 );
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IStore) => {
-  if (
-    item.itemName.includes(fastSearch.value) ||
-    item.serialNumber.includes(fastSearch.value)
-  ) {
+const filterByIDName = (vacation: IVacation) => {
+  if (vacation.Employee.name.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -52,45 +50,27 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IStoreFilter>({
-  item: "",
+const searchFilter = ref<IVacationFilter>({
   limit: 6,
-  serialNumber: "",
-  summation: true,
+  employeeName: "",
 });
 const getFilterData = async (page = 1) => {
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
   isLoading.value = true;
-  searchFilter.value.item = fastSearch.value;
-  searchFilter.value.serialNumber = fastSearch.value;
-
-  if (searchFilter.value.summation == true) {
-    await get_summation(searchFilter.value, page)
-      .then((response) => {
-        if (response.status == 200) {
-          dataPage.value = response.data.data;
-          data.value = dataPage.value.data;
-          dataBase.value = dataPage.value.data;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } else {
-    await get_filter(searchFilter.value, page)
-      .then((response) => {
-        if (response.status == 200) {
-          dataPage.value = response.data.data;
-          data.value = dataPage.value.data;
-          dataBase.value = dataPage.value.data;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  searchFilter.value.employeeName = fastSearch.value;
+  await get_filter(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataPage.value = response.data.data;
+        data.value = dataPage.value.data;
+        dataBase.value = dataPage.value.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   isLoading.value = false;
 };
@@ -174,23 +154,6 @@ onMounted(async () => {
           </div>
         </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
-          <label class="cursor-pointer label">
-            <span
-              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-            >
-              {{ t("StoreTypeReport") }} :
-              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</span
-            >
-            <input
-              type="checkbox"
-              v-model="searchFilter.summation"
-              class="toggle toggle-secondary"
-              checked
-              @change="getFilterData()"
-            />
-          </label>
-        </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
           <button
             @click="getFilterData()"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
@@ -226,28 +189,25 @@ onMounted(async () => {
                       >
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Item") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("SerialNumber") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("AvailableInStock") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Out") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("In") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Stock") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("Employee") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Actions") }}
+                            {{ t("RecordReport") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            {{ t("OldRecordReport") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            {{ t("SumTimeReport") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            {{ t("SumDailyReport") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            {{ t("SumSickReport") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            {{ t("Details") }}
                           </th>
                         </tr>
                       </thead>
@@ -256,39 +216,23 @@ onMounted(async () => {
                       >
                         <tr
                           v-for="row in data"
-                          :key="row.itemName"
+                          :key="row.id"
                           class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                         >
-                          <th>{{ row.itemName }}</th>
-                          <th>{{ row.serialNumber }}</th>
+                          <th>{{ row.Employee.name }}</th>
                           <th>
-                            <span
-                              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
-                            >
-                              {{ row.count }}
-                            </span>
+                            {{ Number(row.sumTime) + Number(row.sumDaily) }}
                           </th>
-                          <th>
-                            <span
-                              v-if="Number(row.out) > 0"
-                              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-                              >↑{{ row.out }}</span
-                            >
-                          </th>
-                          <th>
-                            <span
-                              v-if="Number(row.in) > 0"
-                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-                              >↓{{ row.in }}</span
-                            >
-                          </th>
-                          <th>{{ row.price }}</th>
-                          <th>{{ row.stockName }}</th>
+                          <th>{{ row.oldRecord }}</th>
+                          <th>{{ row.sumTime }}</th>
+                          <th>{{ row.sumDaily }}</th>
+                          <th>{{ row.sumSick }}</th>
+
                           <th>
                             <button
                               class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
                               is-link
-                              @click="openItem(row.itemId)"
+                              @click="openItem(row.id)"
                             >
                               Open
                             </button>

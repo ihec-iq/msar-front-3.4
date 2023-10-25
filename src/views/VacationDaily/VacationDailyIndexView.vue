@@ -203,7 +203,7 @@ onMounted(async () => {
                           <div
                             class="text-2xl text-text dark:text-textLight mb-2"
                           >
-                            {{ vacation.Employee.name }}
+                            {{ vacation.Vacation.Employee.name }}
                           </div>
                         </div>
                         <div class="flex justify-betweens">

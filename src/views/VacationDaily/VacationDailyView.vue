@@ -7,12 +7,10 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
-
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IVacationDaily } from "@/types/vacation/IVacationDaily";
 import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import { useEmployeeStore } from "@/stores/employee";
-import type { IEmployee } from "@/types/IEmployee";
+import { useVacationStore } from "@/stores/vacations/vacation";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -29,7 +27,7 @@ const { is } = storeToRefs(rtlStore);
 
 const itemStore = useVacationDailyStore();
 const { vacationDaily } = storeToRefs(useVacationDailyStore());
-const { employees } = storeToRefs(useEmployeeStore());
+const { vacations } = storeToRefs(useVacationStore());
 const Loading = ref(false);
 
 const router = useRouter();
@@ -42,7 +40,7 @@ const store = () => {
   formData.append("dayFrom", vacationDaily.value.dayFrom);
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
-  formData.append("Employee", JSON.stringify(vacationDaily.value.Employee));
+  formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
   itemStore
     .store(formData)
     .then((response) => {
@@ -74,7 +72,7 @@ function update() {
   formData.append("dayFrom", vacationDaily.value.dayFrom);
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
-  formData.append("Employee", JSON.stringify(vacationDaily.value.Employee));
+  formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
   itemStore
     .update(vacationDaily.value.id, formData)
     .then((response) => {
@@ -140,7 +138,7 @@ const showData = async () => {
         vacationDaily.value.dayFrom = response.data.data.dayFrom;
         vacationDaily.value.dayTo = response.data.data.dayTo;
         vacationDaily.value.record = response.data.data.record;
-        vacationDaily.value.Employee = response.data.data.Employee;
+        vacationDaily.value.Vacation = response.data.data.Vacation;
         vacationDaily.value = response.data.data as IVacationDaily;
       }
     })
@@ -175,7 +173,7 @@ onMounted(async () => {
     vacationDaily.value.id = id.value;
     namePage.value = t("VacationDailyUpdate");
   }
-  await useEmployeeStore().get_employees();
+  await useVacationStore().get_vacations();
 });
 const ChangeDate = () => {
   if (vacationDaily.value.dayFrom >= vacationDaily.value.dayTo) {
@@ -248,16 +246,16 @@ const ChangeDateRecord = () => {
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
         <select
-          v-model="vacationDaily.Employee"
+          v-model="vacationDaily.Vacation"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         >
           <option
-            v-for="employee in employees"
-            :key="employee.id"
-            :value="employee"
+            v-for="vacation in vacations"
+            :key="vacation.id"
+            :value="vacation"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
           >
-            {{ employee.name }}
+            {{ vacation.Employee.name }}
           </option>
         </select>
       </div>

@@ -12,7 +12,16 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     id: 0,
     dayFrom: new Date().toISOString().split("T")[0],
     dayTo: new Date().toISOString().split("T")[0],
-    Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+    Vacation: {
+      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      record: 0,
+      newRecord: 0,
+      oldRecord: 0,
+      id: 0,
+      sumDaily: 0,
+      sumTime: 0,
+      sumSick: 0,
+    },
     record: 0,
   });
   function reset() {
@@ -22,11 +31,15 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     const d = new Date(vacationDaily.dayFrom);
     d.setDate(d.getDate() + vacationDaily.record);
     vacationDaily.dayTo = d.toISOString().split("T")[0];
-    vacationDaily.Employee = {
+    vacationDaily.Vacation = {
+      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      record: 0,
+      newRecord: 0,
+      oldRecord: 0,
       id: 0,
-      name: "",
-      section: { id: 0, name: "" },
-      isPerson: 1,
+      sumDaily: 0,
+      sumTime: 0,
+      sumSick: 0,
     };
   }
   const pathBase = "/vacationSys";

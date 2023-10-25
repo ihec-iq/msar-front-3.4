@@ -1,16 +1,12 @@
-import type { IEmployee } from "../IEmployee";
+import type { IVacation } from "./IVacation";
 
 export interface IVacationSick {
   id: number;
   dayFrom: string;
   dayTo: string;
   record: number;
-  Employee: IEmployee;
-}
-export interface IVacationType {
-  id: number;
-  name: string;
-}
+  Vacation: IVacation;
+} 
 
 export interface IVacationSickFilter {
   limit: number;
