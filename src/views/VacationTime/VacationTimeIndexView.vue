@@ -203,7 +203,7 @@ onMounted(async () => {
                           <div
                             class="text-2xl text-text dark:text-textLight mb-2"
                           >
-                            {{ vacation.Employee.name }}
+                            {{ vacation.Vacation.Employee.name }}
                           </div>
                         </div>
                         <div class="flex justify-betweens">
@@ -215,12 +215,12 @@ onMounted(async () => {
                           يوم من تاريخ
                           <div
                             class="text-text dark:text-textGray"
-                            v-html="vacation.dayFrom"
+                            v-html="vacation.timeFrom"
                           ></div>
                           الى
                           <div
                             class="text-text dark:text-textGray"
-                            v-html="vacation.dayTo"
+                            v-html="vacation.timeTo"
                           ></div>
                         </div>
                       </div>

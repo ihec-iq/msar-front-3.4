@@ -7,11 +7,13 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
+import moment from "moment";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IVacationTime } from "@/types/vacation/IVacationTime";
 import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
 import { useVacationStore } from "@/stores/vacations/vacation";
+import { now } from "@vueuse/core";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -186,7 +188,7 @@ onMounted(async () => {
 });
 const ChangeDate = () => {
   if (vacationTime.value.timeFrom >= vacationTime.value.timeTo) {
-    vacationTime.value.record = 1;
+    vacationTime.value.record = 0.5;
     ChangeDateRecord();
     return;
   }
@@ -199,13 +201,21 @@ const ChangeDate = () => {
   vacationTime.value.record = days;
 };
 const ChangeDateRecord = () => {
-  let d = new Date(vacationTime.value.timeFrom);
-  d.setDate(d.getDate() + vacationTime.value.record);
-  vacationTime.value.timeTo = d.toISOString().split("T")[0];
+  // const currentdate = new Date(now());
+
+  // const recordValue = vacationTime.value.record * 60;
+  // currentdate.setDate(new Date().getTime() + recordValue);
+
+  // vacationTime.value.timeTo =
+  //   currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + "00";
+  // console.log(moment(now()).add(30, "m").format("mm"));
 };
 </script>
 <template>
-  <PageTitle> {{ namePage }}</PageTitle>
+  <PageTitle>
+    {{ namePage }}
+    <span>{{ moment(now()).format("dddd") }}</span></PageTitle
+  >
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
       <div class="w-11/12 mr-2">
@@ -219,6 +229,29 @@ const ChangeDateRecord = () => {
           type="date"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
+      </div>
+
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("VacationTimeRecord") }}
+        </div>
+        <select
+          v-model="vacationTime.record"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        >
+          <option
+            v-for="time in times"
+            :key="time.value"
+            :value="time.value"
+            :selected="time.selected == true"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+            @input="ChangeDateRecord()"
+          >
+            {{ time.display }}
+          </option>
+        </select>
       </div>
       <div class="w-11/12 mr-2">
         <div
@@ -243,20 +276,6 @@ const ChangeDateRecord = () => {
           v-model="vacationTime.timeTo"
           type="time"
           @change="ChangeDate()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("RecordTime") }}
-        </div>
-        <input
-          v-model="vacationTime.record"
-          type="number"
-          @input="ChangeDateRecord()"
-          min="1"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>

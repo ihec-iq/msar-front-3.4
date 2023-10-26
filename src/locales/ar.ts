@@ -51,14 +51,19 @@ export default {
 
   VacationDailyAdd: "اضافة اجازة اعتيادية",
   VacationDailyUpdate: "تعديل اجازة اعتيادية",
+  VacationTime: "اجازة زمنية",
+  VacationTimeRecord: "مدة الاجازة",
   VacationTimeAdd: "اضافة اجازة زمنية",
   VacationTimeUpdate: "تعديل اجازة زمنية",
+  VacationSick: "اجازة مرضية",
   VacationSickAdd: "اضافة اجازة مرضية",
   VacationSickUpdate: "تعديل اجازة مرضية",
   VacationIndex: "نظام الاجازات",
-
-  VacationTime: "اجازة زمنية",
-  VacationSick: "اجازة مرضية",
+  VacationRecordReport: "رصيد الاجازات",
+  VacationOldRecordReport: "الرصيد السابق",
+  VacationSumTimeReport: "مجموع الزمنيات",
+  VacationSumDailyReport: "مجموع الايام",
+  VacationSumSickReport: "الاجازات المرضية",
 
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",

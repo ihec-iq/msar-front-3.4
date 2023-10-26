@@ -23,22 +23,23 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       sumTime: 0,
       sumSick: 0,
     },
-    record: 0,
+    record: 0.5,
   });
   function reset() {
     const currentdate = new Date();
     const datetime =
-      currentdate.getHours() +
-      ":" +
-      currentdate.getMinutes() +
-      ":" +
-      currentdate.getSeconds();
+      currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + "00";
+    vacationTime.timeFrom = datetime;
 
     vacationTime.id = 0;
-    vacationTime.record = 0;
+    vacationTime.record = 0.5;
     vacationTime.date = new Date().toISOString().split("T")[0];
-    vacationTime.timeFrom = datetime;
-    vacationTime.timeTo = datetime;
+
+    const recordValue = 0.5 * 60;
+    currentdate.setDate(new Date().getTime() + recordValue);
+
+    vacationTime.timeTo =
+      currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + "00";
     vacationTime.Vacation = {
       Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
       record: 0,

@@ -1,27 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { onMounted } from "vue";
 import PageTitle from "@/components/general/namePage.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-import { VacationLinks } from "./VacationLinks.ts";
+import { VacationLinks } from "./VacationLinks";
 
-const route = useRoute();
-const router = useRouter();
-
-//#region Search
-
-//#endregion
-const openReport = () => {
-  router.push({
-    name: "vacationReport",
-  });
-};
-const openDaily = () => {
-  router.push({
-    name: "vacationDaily",
-  });
-};
 //#region Pagination
 //#endregion
 onMounted(async () => {});
@@ -75,7 +58,7 @@ onMounted(async () => {});
                       {{ Link.description }}
                     </p>
 
-                    <p class="mt-8 font-bold">Read more</p>
+                    <p class="mt-8 font-bold">Move on</p>
                   </div>
                 </div>
               </span>

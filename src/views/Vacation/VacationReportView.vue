@@ -192,19 +192,19 @@ onMounted(async () => {
                             {{ t("Employee") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("RecordReport") }}
+                            {{ t("VacationRecordReport") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("OldRecordReport") }}
+                            {{ t("VacationOldRecordReport") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("SumTimeReport") }}
+                            {{ t("VacationSumTimeReport") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("SumDailyReport") }}
+                            {{ t("VacationSumDailyReport") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("SumSickReport") }}
+                            {{ t("VacationSumSickReport") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("Details") }}
