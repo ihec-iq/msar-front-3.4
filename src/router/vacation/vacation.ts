@@ -18,6 +18,14 @@ export default [
     },
   },
   {
+    path: "/vacation/report/:id",
+    name: "vacationReportEmployee",
+    component: () => import("@/views/Vacation/VacationReportEmployee.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
     path: "/vacation/time/:search?",
     name: "vacationTimeIndex",
     component: () => import("@/views/VacationTime/VacationTimeIndexView.vue"),

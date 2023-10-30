@@ -77,16 +77,31 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const openItem = (id: number) => {
   router.push({
-    name: "ItemHistory",
+    name: "vacationReportEmployee",
     params: { id: id },
   });
 };
 //#region Pagination
+function round(num: number, fractionDigits: number = 3): number {
+  return Number(num.toFixed(fractionDigits));
+}
+//#endregion
+//#region Search by Enter Key
+
+const inputRefSearch = ref<HTMLInputElement | null>(null);
+const Search = async (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    await getFilterData(1);
+  }
+};
 //#endregion
 onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
+  if (inputRefSearch.value) {
+    inputRefSearch.value.addEventListener("keydown", Search);
+  }
 });
 </script>
 <template>
@@ -121,6 +136,7 @@ onMounted(async () => {
           <input
             type="text"
             id="table-search"
+            ref="inputRefSearch"
             v-model="fastSearch"
             @input="makeFastSearch()"
             class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -221,10 +237,12 @@ onMounted(async () => {
                         >
                           <th>{{ row.Employee.name }}</th>
                           <th>
-                            {{ Number(row.sumTime) + Number(row.sumDaily) }}
+                            {{ round(row.sumTime / 6 + row.sumDaily, 3) }}
                           </th>
                           <th>{{ row.oldRecord }}</th>
-                          <th>{{ row.sumTime }}</th>
+                          <th>
+                            {{ round(Number(row.sumTime), 3) }}
+                          </th>
                           <th>{{ row.sumDaily }}</th>
                           <th>{{ row.sumSick }}</th>
 

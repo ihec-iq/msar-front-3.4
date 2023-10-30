@@ -11,8 +11,8 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
   const vacationTime = reactive<IVacationTime>({
     id: 0,
     date: new Date().toISOString().split("T")[0],
-    timeFrom: new Date().toISOString().split("T")[0],
-    timeTo: new Date().toISOString().split("T")[0],
+    timeFrom: new Date().toLocaleTimeString(),
+    timeTo: new Date().toLocaleTimeString(),
     Vacation: {
       Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
       record: 0,
@@ -25,21 +25,31 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
     },
     record: 0.5,
   });
+  const addHours = (Hour: number = 0, _date: string = "") => {
+    if (_date == "")
+      _date = new Date().toISOString().split("T")[0] + " 08:00:00";
+    const currentDate = new Date(_date);
+    currentDate.setTime(currentDate.getTime() + Hour * 60 * 60 * 1000);
+    const dateTimeTo =
+      ("0" + currentDate.getHours()).slice(-2) +
+      ":" +
+      ("0" + currentDate.getMinutes()).slice(-2) +
+      ":" +
+      "00";
+    return dateTimeTo;
+  };
   function reset() {
-    const currentdate = new Date();
-    const datetime =
-      currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + "00";
-    vacationTime.timeFrom = datetime;
+    vacationTime.timeFrom = addHours();
+    vacationTime.record = 0.5;
+    vacationTime.timeTo = addHours(vacationTime.record);
+
+    // console.log("timeFrom : " + vacationTime.timeFrom);
+    // console.log("timeTo : " + vacationTime.timeTo);
+    //currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + "00";
 
     vacationTime.id = 0;
-    vacationTime.record = 0.5;
+
     vacationTime.date = new Date().toISOString().split("T")[0];
-
-    const recordValue = 0.5 * 60;
-    currentdate.setDate(new Date().getTime() + recordValue);
-
-    vacationTime.timeTo =
-      currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + "00";
     vacationTime.Vacation = {
       Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
       record: 0,
@@ -50,6 +60,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       sumTime: 0,
       sumSick: 0,
     };
+    console.log(vacationTime);
   }
   const pathBase = "/vacationSys";
   const pathUrl = `${pathBase}/vacationTime`;
@@ -84,5 +95,6 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
     update,
     getError,
     _delete,
+    addHours,
   };
 });

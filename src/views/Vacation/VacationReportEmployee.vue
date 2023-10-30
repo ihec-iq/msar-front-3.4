@@ -1,19 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useEmployeeStore } from "@/stores/employee";
+import { useSectionStore } from "@/stores/section";
 import Swal from "sweetalert2";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
-import moment from "moment";
 
 import { useI18n } from "@/stores/i18n/useI18n";
-import type { IVacationTime } from "@/types/vacation/IVacationTime";
-import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
-import { useVacationStore } from "@/stores/vacations/vacation";
-import { now } from "@vueuse/core";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -27,40 +23,36 @@ const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
+const isIn = ref(false);
 
-const vacationTimeStore = useVacationTimeStore();
-const { vacationTime } = storeToRefs(useVacationTimeStore());
-const { vacations } = storeToRefs(useVacationStore());
-const { addHours } = useVacationTimeStore();
+const employeeStore = useEmployeeStore();
+const { employee } = storeToRefs(useEmployeeStore());
+const sectionStore = useSectionStore();
+const { sections } = storeToRefs(useSectionStore());
+
 const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<String | null>();
-const times = reactive([
-  { display: "نصف ساعة", value: 0.5, selected: true },
-  { display: "1 ساعة", value: 1, selected: false },
-  { display: "2 ساعة", value: 2, selected: false },
-  { display: "3 ساعة", value: 3, selected: false },
-]);
 //#endregion
 //#region CURD
 const store = () => {
-  console.log(vacationTime.value);
   errors.value = null;
   const formData = new FormData();
-  formData.append("date", vacationTime.value.date);
-  formData.append("timeFrom", vacationTime.value.timeFrom);
-  formData.append("timeTo", vacationTime.value.timeTo);
-  formData.append("record", vacationTime.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
-  vacationTimeStore
+  employee.value.isPerson = isIn.value ? 1 : 0;
+  formData.append("id", employee.value.id.toString());
+  formData.append("name", employee.value.name.toString());
+  formData.append("isPerson", employee.value.isPerson.toString());
+  formData.append("sectionId", employee.value.section.id.toString());
+
+  employeeStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your item has been saved",
+          title: "Your employee has been saved",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -69,7 +61,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = vacationTimeStore.getError(error);
+      errors.value = employeeStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -81,19 +73,19 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("date", vacationTime.value.date);
-  formData.append("timeFrom", vacationTime.value.timeFrom);
-  formData.append("timeTo", vacationTime.value.timeTo);
-  formData.append("record", vacationTime.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
-  vacationTimeStore
-    .update(vacationTime.value.id, formData)
+  employee.value.isPerson = isIn.value ? 1 : 0;
+  formData.append("name", employee.value.name.toString());
+  formData.append("isPerson", employee.value.isPerson.toString());
+  formData.append("sectionId", employee.value.section.id.toString());
+
+  employeeStore
+    .update(employee.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your Item has been updated",
+          title: "Your employee has been updated",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -102,7 +94,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = vacationTimeStore.getError(error);
+      errors.value = employeeStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -131,7 +123,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await vacationTimeStore._delete(vacationTime.value.id).then(() => {
+        await employeeStore._delete(employee.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -144,16 +136,16 @@ const Delete = async () => {
 };
 const showData = async () => {
   Loading.value = true;
-  await useVacationTimeStore()
+  await employeeStore
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        console.log(response.data.data);
-        vacationTime.value.timeFrom = response.data.data.timeFrom;
-        vacationTime.value.timeTo = response.data.data.timeTo;
-        vacationTime.value.record = response.data.data.record;
-        vacationTime.value.Vacation = response.data.data.Vacation;
-        //vacationTime.value = response.data.data as IVacationTime;
+        employee.value.id = response.data.data.id;
+        employee.value.name = response.data.data.name;
+        employee.value.section.id = response.data.data.section.id;
+        employee.value.section.name = response.data.data.section.name;
+        employee.value.isPerson = response.data.data.isPerson;
+        isIn.value = response.data.data.isPerson == 0 ? false : true;
       }
     })
     .catch((errors) => {
@@ -161,7 +153,7 @@ const showData = async () => {
       Swal.fire({
         position: "top-end",
         icon: "warning",
-        title: "Your Item file not exist !!!",
+        title: "Your employee file not exist !!!",
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
@@ -173,147 +165,71 @@ const showData = async () => {
 //#endregion
 const back = () => {
   router.push({
-    name: "vacationTimeIndex",
+    name: "employeeIndex",
   });
 };
 onMounted(async () => {
-  //console.log(can("show items1"));
+  //console.log(can("show employees1"));
   checkPermissionAccessArray(["show Item"]);
+  await sectionStore.get_sections();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("VacationTimeAdd");
-    vacationTime.value.id = 0;
+    namePage.value = t("EmployeeAdd");
+    employee.value.id = 0;
   } else {
     await showData();
-    vacationTime.value.id = id.value;
-    namePage.value = t("VacationTimeUpdate");
+    employee.value.id = id.value;
+    namePage.value = t("EmployeeUpdate");
   }
-  await useVacationStore().get_vacations();
 });
-const ChangeDate = () => {
-  //console.log("ChangeDate");
-  if (vacationTime.value.timeFrom.length == 5)
-    vacationTime.value.timeFrom = vacationTime.value.timeFrom + ":00";
-  if (vacationTime.value.timeTo.length == 5)
-    vacationTime.value.timeTo = vacationTime.value.timeTo + ":00";
-
-  const currentDate = new Date(now());
-  const timeFrom =
-    currentDate.getFullYear() +
-    "-" +
-    currentDate.getMonth() +
-    "-" +
-    currentDate.getDay() +
-    " " +
-    vacationTime.value.timeFrom;
-  vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
-  console.log(vacationTime.value.timeTo);
-  // if (vacationTime.value.timeFrom >= vacationTime.value.timeTo) {
-  //   vacationTime.value.record = 0.5;
-  //   ChangeDateRecord();
-  //   return;
-  // }
-  // const oneDay = 24 * 60 * 60 * 1000;
-  // const days = Math.round(
-  //   (new Date(vacationTime.value.timeTo).valueOf() -
-  //     new Date(vacationTime.value.timeFrom).valueOf()) /
-  //     oneDay
-  // );
-  // vacationTime.value.record = days;
-};
-const ChangeDateRecord = () => {
-  console.log("ChangeDateRecord");
-  const timeFrom =
-    new Date().toISOString().split("T")[0] + " " + vacationTime.value.timeFrom;
-  vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
-  console.log(vacationTime.value.timeTo);
-};
 </script>
 <template>
-  <PageTitle>
-    {{ namePage }}
-    <span>{{ moment(now()).format("dddd") }}</span></PageTitle
-  >
+  <PageTitle> {{ namePage }}</PageTitle>
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
       <div class="w-11/12 mr-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("Date") }}
+          {{ t("Name") }}
         </div>
         <input
-          v-model="vacationTime.date"
-          type="date"
+          v-model="employee.name"
+          type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
-
       <div class="w-11/12 mr-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("VacationTimeRecord") }}
+          {{ t("EmployeeSection") }}
         </div>
-        <select
-          v-model="vacationTime.record"
-          @change="ChangeDateRecord()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        >
+        <select v-model="employee.section.id" class="p-2">
           <option
-            v-for="time in times"
-            :key="time.value"
-            :value="time.value"
-            :selected="time.selected == true"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+            v-for="section in sections"
+            :key="section.id"
+            :value="section.id"
           >
-            {{ time.display }}
+            {{ section.name }}
           </option>
         </select>
       </div>
       <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("DateFrom") }}
+        <div class="form-control w-52">
+          <label class="cursor-pointer label">
+            <span
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("EmployeeIsPerson") }} : {{ isIn ? "شخص" : "شعبة" }}</span
+            >
+            <input
+              type="checkbox"
+              v-model="isIn"
+              class="toggle toggle-secondary"
+              checked
+            />
+          </label>
         </div>
-        <input
-          v-model="vacationTime.timeFrom"
-          type="time"
-          @input="ChangeDate()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("DateTo") }}
-        </div>
-        <input
-          v-model="vacationTime.timeTo"
-          type="time"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("OutputVoucherEmployeeRequest") }}
-        </div>
-        <select
-          v-model="vacationTime.Vacation"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        >
-          <option
-            v-for="vacation in vacations"
-            :key="vacation.id"
-            :value="vacation"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-          >
-            {{ vacation.Employee.name }}
-          </option>
-        </select>
       </div>
     </div>
     <!-- bottom tool bar -->
@@ -328,7 +244,7 @@ const ChangeDateRecord = () => {
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
-            v-if="vacationTime.id == 0"
+            v-if="employee.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
@@ -342,7 +258,7 @@ const ChangeDateRecord = () => {
             {{ t("Update") }}
           </button>
           <button
-            v-if="vacationTime.id != 0"
+            v-if="employee.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
           >
@@ -365,8 +281,8 @@ const ChangeDateRecord = () => {
         {{ t("Back") }}
       </button>
     </div>
+    <!-- end bottom tool -->
   </div>
-  <!-- end bottom tool -->
 </template>
 <style scoped>
 .drop-area {
