@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "@/stores/employee";
 import { useSectionStore } from "@/stores/section";
@@ -10,7 +10,61 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 
 import { useI18n } from "@/stores/i18n/useI18n";
+
+import type {
+  IVacationTime,
+  IVacationTimeFilter,
+} from "@/types/vacation/IVacationTime";
+import type { IVacationDaily } from "@/types/vacation/IVacationDaily";
+import type { IVacationSick } from "@/types/vacation/IVacationSick";
+
 const { t } = useI18n();
+//#region Stores
+import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
+import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
+import { useVacationSickStore } from "@/stores/vacations/vacationSick";
+
+//endregion
+
+//#region Data
+const limits = reactive([
+  { name: "6", val: 6, selected: true },
+  { name: "12", val: 12, selected: false },
+  { name: "24", val: 24, selected: false },
+  { name: "50", val: 50, selected: false },
+  { name: "All", val: 999999999 },
+]);
+const limit = ref(6);
+const dataVacationTime = ref<Array<IVacationTime>>([]);
+const dataPageVacationTime = ref();
+const dataVacationDaily = ref<Array<IVacationDaily>>([]);
+const dataVacationSick = ref<Array<IVacationSick>>([]);
+const isLoadingTime = ref(false);
+
+//#endregion
+//#region Functions
+const getFilterData = async (page: number = 1) => {
+  await getDataTime();
+};
+const getDataTime = async (page: number = 1) => {
+  isLoadingTime.value = true;
+  const searchFilter = ref<IVacationTimeFilter>({
+    limit: limit.value,
+    employeeId: employee.value.id,
+  });
+  await useVacationTimeStore()
+    .get_filter(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataPageVacationTime.value = response.data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoadingTime.value = false;
+};
+//#endregion
 
 //region"Drag and Drop"
 
@@ -36,104 +90,6 @@ const router = useRouter();
 const errors = ref<String | null>();
 //#endregion
 //#region CURD
-const store = () => {
-  errors.value = null;
-  const formData = new FormData();
-  employee.value.isPerson = isIn.value ? 1 : 0;
-  formData.append("id", employee.value.id.toString());
-  formData.append("name", employee.value.name.toString());
-  formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("sectionId", employee.value.section.id.toString());
-
-  employeeStore
-    .store(formData)
-    .then((response) => {
-      if (response.status === 200) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Your employee has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        router.go(-1);
-      }
-    })
-    .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = employeeStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "create new data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
-    });
-};
-function update() {
-  errors.value = null;
-  const formData = new FormData();
-  employee.value.isPerson = isIn.value ? 1 : 0;
-  formData.append("name", employee.value.name.toString());
-  formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("sectionId", employee.value.section.id.toString());
-
-  employeeStore
-    .update(employee.value.id, formData)
-    .then((response) => {
-      if (response.status === 200) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Your employee has been updated",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        showData();
-      }
-    })
-    .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = employeeStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "updating data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
-    });
-}
-const Delete = async () => {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn m-2 bg-red-700",
-      cancelButton: "btn bg-grey-400",
-    },
-    buttonsStyling: false,
-  });
-  swalWithBootstrapButtons
-    .fire({
-      title: t("Are You Sure?"),
-      text: t("You Won't Be Able To Revert This!"),
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: t("Yes, delete it!"),
-      cancelButtonText: t("No, cancel!"),
-      reverseButtons: true,
-    })
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        await employeeStore._delete(employee.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        });
-      }
-    });
-};
 const showData = async () => {
   Loading.value = true;
   await employeeStore
@@ -232,6 +188,140 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
+      <!-- limit -->
+      <div
+        class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+      >
+        <div
+          class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+        >
+          <p>{{ t("Sort By") }}:</p>
+          <select
+            aria-label="select"
+            v-model="limit"
+            class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
+            @change="getFilterData(1)"
+          >
+            <option
+              v-for="limit in limits"
+              :key="limit.val"
+              :value="limit.val"
+              :selected="limit.selected == true"
+              class="text-sm text-indigo-800"
+            >
+              {{ limit.name }}
+            </option>
+          </select>
+        </div>
+        <div class="ml-4 lg:mt-0 xs:mt-2">
+          <button
+            @click="getFilterData(1)"
+            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+          >
+            {{ t("Search") }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="w-full">
+      <div class="flex flex-col">
+        <div class="py-4 inline-block min-w-full lg:px-8">
+          <!-- card -->
+
+          <div class="rounded-xl" v-if="isLoading == false">
+            <div
+              v-motion
+              :initial="{ opacity: 0, y: -15 }"
+              :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }"
+              :delay="200"
+              v-if="data.length > 0"
+            >
+              <div class="max-w-full relative">
+                <div
+                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
+                >
+                  <!-- card -->
+                  <div
+                    class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                    v-for="vacation in data"
+                    :key="vacation.id"
+                  >
+                    <div class="w-3/4 overflow-hidden">
+                      <div
+                        class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
+                      >
+                        <div
+                          class="text-2xl text-text dark:text-textLight mb-2"
+                        >
+                          {{ vacation.Vacation.Employee.name }}
+                        </div>
+                      </div>
+                      <div class="flex justify-betweens">
+                        اجازة لمدة
+                        <div
+                          class="text-text dark:text-textGray"
+                          v-html="vacation.record"
+                        ></div>
+                        يوم من تاريخ
+                        <div
+                          class="text-text dark:text-textGray"
+                          v-html="vacation.timeFrom"
+                        ></div>
+                        الى
+                        <div
+                          class="text-text dark:text-textGray"
+                          v-html="vacation.timeTo"
+                        ></div>
+                      </div>
+                    </div>
+
+                    <div class="dropdown">
+                      <button
+                        class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
+                        type="button"
+                        id="dropdownMenuButton2"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <img
+                          src="https://img.icons8.com/office/344/menu--v1.png "
+                          class="w-8 float-left"
+                          alt=""
+                        />
+                      </button>
+
+                      <ul
+                        class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
+                        aria-labelledby="dropdownMenuButton2"
+                      >
+                        <li>
+                          <EditButton @click="OpenVactionTime(vacation.id)" />
+                        </li>
+                        <!-- <li>
+                            <ShowButton @click="show(vacation.id)" />
+                          </li> -->
+                        <!-- <li><BlockButton /></li> -->
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- end card -->
+                </div>
+                <TailwindPagination
+                  class="flex justify-center mt-10"
+                  :data="dataPageVacationTime"
+                  @pagination-change-page="getDataTime"
+                  :limit="10"
+                />
+              </div>
+            </div>
+          </div>
+          <SimpleLoading v-if="isLoading"></SimpleLoading>
+          <!-- end card -->
+        </div>
+      </div>
+    </div>
     <!-- bottom tool bar -->
     <div
       :class="{
@@ -242,29 +332,7 @@ onMounted(async () => {
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >
       <div class="flex ltr:ml-8 rtl:mr-8">
-        <div class="items-center mr-3">
-          <button
-            v-if="employee.id == 0"
-            @click="store()"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Create") }}
-          </button>
-          <button
-            v-else
-            @click="update()"
-            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Update") }}
-          </button>
-          <button
-            v-if="employee.id != 0"
-            @click="Delete()"
-            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
-          >
-            {{ t("Delete") }}
-          </button>
-        </div>
+        <div class="items-center mr-3"></div>
       </div>
     </div>
     <div
