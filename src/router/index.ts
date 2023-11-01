@@ -13,6 +13,7 @@ import outputVoucher from "./voucher/outputVoucher";
 import corruptedVoucher from "./voucher/corruptedVoucher";
 import directVoucher from "./voucher/directVoucher";
 import itemCategory from "./item/itemCategory";
+import vacation from "./vacation/vacation";
 import store from "./store/store";
 import DefaultLayout from "@/views/layouts/MainView.vue";
 
@@ -48,6 +49,7 @@ const router = createRouter({
         ...outputVoucher,
         ...corruptedVoucher,
         ...directVoucher,
+        ...vacation,
         ...store,
         ...employee,
         {
