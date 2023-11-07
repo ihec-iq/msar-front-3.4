@@ -3,7 +3,8 @@ import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/archives/archive";
 import { storeToRefs } from "pinia";
-
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 import PageTitle from "@/components/general/namePage.vue";
 import type {
   IArchive,
@@ -150,6 +151,8 @@ const getPath = (files: Array<IDocument>) => {
   }
 };
 onMounted(async () => {
+  checkPermissionAccessArray(["show archives"]);
+
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
 

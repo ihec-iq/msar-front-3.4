@@ -286,7 +286,7 @@ const back = () => {
 
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["show inputVouchers"]);
   await inputVoucherStore.getState();
   await inputVoucherStore.getEmployees();
   if (Number.isNaN(id.value) || id.value === undefined) {

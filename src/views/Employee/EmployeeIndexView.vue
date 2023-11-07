@@ -11,6 +11,8 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 const { t } = useI18n();
 const isLoading = ref(false);
 const { employee } = storeToRefs(useEmployeeStore());
@@ -103,6 +105,8 @@ const history = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show employees"]);
+
   searchFilter.value.limit = 12;
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";

@@ -8,6 +8,8 @@ import SimpleLoading from "@/components/general/loading.vue";
 import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
 import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 import EditButton from "@/components/dropDown/EditButton.vue";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IInputVoucher>>([]);
@@ -99,6 +101,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show inputVouchers"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);

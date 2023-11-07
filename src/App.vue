@@ -4,15 +4,15 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/auth";
-import { usePermissionStore } from "@/stores/permission";
+//import { usePermissionStore } from "@/stores/permission";
 import Api from "./api/apiConfig";
 import { useConfigStore } from "@/stores/config";
 import DefaultLayout from "@/views/layouts/MainView.vue";
 const { ConnectionString } = storeToRefs(useConfigStore());
 
-const { getUser } = useAuthStore();
-const { setPermissions } = usePermissionStore();
-const { CheckAuth } = useAuthStore();
+// const { getUser } = useAuthStore();
+// const { setPermissions } = usePermissionStore();
+// const { CheckAuth } = useAuthStore();
 
 const rtlStore = useRtlStore();
 const { isClose, is } = storeToRefs(rtlStore);
@@ -41,9 +41,9 @@ onMounted(async () => {
   await useConfigStore().load();
   Api.defaults.baseURL = String(ConnectionString.value);
 
-  CheckAuth();
-  const user = await getUser();
-  setPermissions(user.permissions);
+  useAuthStore().CheckAuth();
+  //const user = await getUser();
+  //setPermissions(user.permissions);
 
   let htmlEl = document.querySelector("html");
   let dir: string | any = "rtl";

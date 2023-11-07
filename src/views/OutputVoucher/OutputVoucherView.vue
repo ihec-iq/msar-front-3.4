@@ -307,7 +307,7 @@ const back = () => {
 };
 
 onMounted(async () => {
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["show outputVouchers"]);
   await outputVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");

@@ -7,6 +7,8 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "@/stores/vacations/vacation";
 import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -96,6 +98,7 @@ const Search = async (event: KeyboardEvent) => {
 };
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["vacation Report"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -106,7 +109,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("StoreIndex") }} </PageTitle>
+    <PageTitle> {{ t("VacationIndex") }} </PageTitle>
   </div>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
@@ -252,7 +255,7 @@ onMounted(async () => {
                               is-link
                               @click="openItem(row.id)"
                             >
-                              Open
+                              {{ t("Details") }}
                             </button>
                           </th>
                         </tr>
