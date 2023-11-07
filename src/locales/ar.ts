@@ -61,8 +61,8 @@ export default {
   VacationIndex: "نظام الاجازات",
   VacationRecordReport: "رصيد الاجازات",
   VacationOldRecordReport: "الرصيد السابق",
-  VacationSumTimeReport: "مجموع الزمنيات",
-  VacationSumDailyReport: "مجموع الايام",
+  VacationSumTimeReport: "الاجزات الزمنية",
+  VacationSumDailyReport: "الاجازات الاعتيادية",
   VacationSumSickReport: "الاجازات المرضية",
 
   StoreIndex: "المخزنية",

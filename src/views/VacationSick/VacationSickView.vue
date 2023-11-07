@@ -12,6 +12,7 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import type { IVacationSick } from "@/types/vacation/IVacationSick";
 import { useVacationSickStore } from "@/stores/vacations/vacationSick";
 import { useVacationStore } from "@/stores/vacations/vacation";
+import type { IVacation } from "@/types/vacation/IVacation";
 
 const { t } = useI18n();
 
@@ -166,7 +167,7 @@ const back = () => {
 };
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["show vacations sick"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("VacationSickAdd");
     vacationSick.value.id = 0;
@@ -247,19 +248,20 @@ const ChangeDateRecord = () => {
         >
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
-        <select
-          v-model="vacationSick.Vacation"
+        <vSelect
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          v-model="vacationSick.Vacation"
+          :options="vacations"
+          :reduce="(vacation: IVacation) => vacation"
+          label="name"
+          :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
         >
-          <option
-            v-for="vacation in vacations"
-            :key="vacation.id"
-            :value="vacation"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-          >
-            {{ vacation.Employee.name }}
-          </option>
-        </select>
+          <template #option="{ Employee }">
+            <div>
+              <span>{{ Employee.name }}</span>
+            </div>
+          </template>
+        </vSelect>
       </div>
     </div>
     <!-- bottom tool bar -->

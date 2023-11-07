@@ -9,6 +9,9 @@ import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
 import { useStoringStore } from "@/stores/storing";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 import { storeToRefs } from "pinia";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
+
 const outputVoucherStore = useOutputVoucherStore();
 const { outputVoucherEmployees } = storeToRefs(useOutputVoucherStore());
 
@@ -103,6 +106,7 @@ const openItem = (id: number, billType: string) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show storage"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
   await outputVoucherStore.getEmployees().then(() => {});

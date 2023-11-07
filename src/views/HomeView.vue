@@ -1,12 +1,32 @@
 <script setup lang="ts">
 import { Links } from "@/components/fixed/FixedMenu";
 import { useI18n } from "@/stores/i18n/useI18n";
+import { usePermissionStore } from "@/stores/permission";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
 const { t } = useI18n();
+//#region nav menu
+const { permissions } = storeToRefs(usePermissionStore());
+const filteredLinks = computed(() =>
+  Links.filter((link) => {
+    // Check if any of the link's permissions are included in userPermissions
+    return link.permissions.some((permission) =>
+      permissions.value.includes(permission)
+    );
+  })
+);
+// watch(nav, newSearchQuery => {
+//   if(nav.value != "undefined" || nav.value != undefined ){
+//     tab.value=nav.value?.toString()
+//   }
+// } )
+
+//#endregion
 </script>
 <template>
   <div class="flex text-center self-center mt-3 col-span-3">
     <router-link
-      v-for="Link in Links"
+      v-for="Link in filteredLinks"
       :key="Link.routerName"
       :to="{ name: Link.routerName }"
     >

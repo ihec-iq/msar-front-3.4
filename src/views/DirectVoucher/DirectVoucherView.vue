@@ -268,7 +268,7 @@ const back = () => {
 };
 
 onMounted(async () => {
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["show directVouchers"]);
   await directVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("DirectVoucher");

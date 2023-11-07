@@ -15,7 +15,10 @@ import type {
   IVacationTime,
   IVacationTimeFilter,
 } from "@/types/vacation/IVacationTime";
-import type { IVacationDaily } from "@/types/vacation/IVacationDaily";
+import type {
+  IVacationDaily,
+  IVacationDailyFilter,
+} from "@/types/vacation/IVacationDaily";
 import type { IVacationSick } from "@/types/vacation/IVacationSick";
 
 const { t } = useI18n();
@@ -36,15 +39,21 @@ const limits = reactive([
 ]);
 const limit = ref(6);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
-const dataPageVacationTime = ref();
 const dataVacationDaily = ref<Array<IVacationDaily>>([]);
 const dataVacationSick = ref<Array<IVacationSick>>([]);
+const dataPageVacationTime = ref();
+const dataPageVacationDaily = ref();
+const dataPageVacationSick = ref();
+
 const isLoadingTime = ref(false);
+const isLoadingDaily = ref(false);
+const isLoadingSick = ref(false);
 
 //#endregion
 //#region Functions
 const getFilterData = async (page: number = 1) => {
   await getDataTime();
+  await getDataDaily();
 };
 const getDataTime = async (page: number = 1) => {
   isLoadingTime.value = true;
@@ -57,6 +66,28 @@ const getDataTime = async (page: number = 1) => {
     .then((response) => {
       if (response.status == 200) {
         dataPageVacationTime.value = response.data.data;
+        dataVacationTime.value = response.data.data.data;
+        console.log(dataPageVacationTime);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoadingTime.value = false;
+};
+const getDataDaily = async (page: number = 1) => {
+  isLoadingTime.value = true;
+  const searchFilter = ref<IVacationDailyFilter>({
+    limit: limit.value,
+    employeeId: employee.value.id,
+  });
+  await useVacationDailyStore()
+    .get_filter(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataPageVacationDaily.value = response.data.data;
+        dataVacationDaily.value = response.data.data.data;
+        console.log(dataPageVacationDaily);
       }
     })
     .catch((error) => {
@@ -120,26 +151,37 @@ const showData = async () => {
 };
 //#endregion
 const back = () => {
+  router.back();
+};
+const OpenVacationTime = (id: number) => {
   router.push({
-    name: "employeeIndex",
+    name: "vacationTimeUpdate",
+    params: { id: id },
+  });
+};
+const OpenVacationDaily = (id: number) => {
+  router.push({
+    name: "vacationDailyUpdate",
+    params: { id: id },
   });
 };
 onMounted(async () => {
   //console.log(can("show employees1"));
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["vacation Report"]);
   await sectionStore.get_sections();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("EmployeeAdd");
     employee.value.id = 0;
   } else {
     await showData();
+    await getFilterData();
     employee.value.id = id.value;
     namePage.value = t("EmployeeUpdate");
   }
 });
 </script>
 <template>
-  <PageTitle> {{ namePage }}</PageTitle>
+  <PageTitle>{{ namePage }}</PageTitle>
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
       <div class="w-11/12 mr-2">
@@ -160,31 +202,22 @@ onMounted(async () => {
         >
           {{ t("EmployeeSection") }}
         </div>
-        <select v-model="employee.section.id" class="p-2">
-          <option
-            v-for="section in sections"
-            :key="section.id"
-            :value="section.id"
-          >
-            {{ section.name }}
-          </option>
-        </select>
+        <input
+          v-model="employee.section.name"
+          type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
       </div>
       <div class="w-11/12 mr-2">
-        <div class="form-control w-52">
-          <label class="cursor-pointer label">
-            <span
-              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-            >
-              {{ t("EmployeeIsPerson") }} : {{ isIn ? "شخص" : "شعبة" }}</span
-            >
-            <input
-              type="checkbox"
-              v-model="isIn"
-              class="toggle toggle-secondary"
-              checked
-            />
-          </label>
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("EmployeeIsPerson") }}
+        </div>
+        <div
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        >
+          {{ isIn ? "شخص" : "شعبة" }}
         </div>
       </div>
     </div>
@@ -194,7 +227,7 @@ onMounted(async () => {
         class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
       >
         <div
-          class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+          class="py-3 px-4 flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
         >
           <p>{{ t("Sort By") }}:</p>
           <select
@@ -214,7 +247,7 @@ onMounted(async () => {
             </option>
           </select>
         </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
+        <div class="ml-4 lg:mt-0 xs:mt-2 left-1">
           <button
             @click="getFilterData(1)"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
@@ -224,87 +257,68 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+    <!-- For Time Report -->
     <div class="w-full">
       <div class="flex flex-col">
         <div class="py-4 inline-block min-w-full lg:px-8">
           <!-- card -->
 
-          <div class="rounded-xl" v-if="isLoading == false">
+          <div class="rounded-xl" v-if="isLoadingTime == false">
             <div
               v-motion
               :initial="{ opacity: 0, y: -15 }"
               :enter="{ opacity: 1, y: 0 }"
               :variants="{ custom: { scale: 2 } }"
               :delay="200"
-              v-if="data.length > 0"
+              v-if="dataVacationTime.length > 0"
             >
               <div class="max-w-full relative">
+                <div
+                  class="w-full outline-none font-bold h-10 px-3 py-2 mb-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                >
+                  الاجازات الزمنية
+                </div>
                 <div
                   class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
                 >
                   <!-- card -->
                   <div
                     class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                    v-for="vacation in data"
+                    v-for="vacation in dataVacationTime"
                     :key="vacation.id"
                   >
                     <div class="w-3/4 overflow-hidden">
-                      <div
-                        class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                      >
-                        <div
-                          class="text-2xl text-text dark:text-textLight mb-2"
-                        >
-                          {{ vacation.Vacation.Employee.name }}
-                        </div>
-                      </div>
                       <div class="flex justify-betweens">
                         اجازة لمدة
                         <div
-                          class="text-text dark:text-textGray"
+                          class="text-text dark:text-textGray pr-2 pl-2"
                           v-html="vacation.record"
-                        ></div>
-                        يوم من تاريخ
+                        />
+                        ساعة من
                         <div
-                          class="text-text dark:text-textGray"
+                          class="text-text dark:text-textGray pr-2 pl-2"
                           v-html="vacation.timeFrom"
-                        ></div>
+                        />
                         الى
                         <div
-                          class="text-text dark:text-textGray"
+                          class="text-text dark:text-textGray pr-2 pl-2"
                           v-html="vacation.timeTo"
-                        ></div>
+                        />
+                        بتاريخ
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.date"
+                        />
                       </div>
                     </div>
 
-                    <div class="dropdown">
-                      <button
-                        class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                        type="button"
-                        id="dropdownMenuButton2"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <img
-                          src="https://img.icons8.com/office/344/menu--v1.png "
-                          class="w-8 float-left"
-                          alt=""
-                        />
-                      </button>
-
-                      <ul
-                        class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
-                        aria-labelledby="dropdownMenuButton2"
-                      >
-                        <li>
-                          <EditButton @click="OpenVactionTime(vacation.id)" />
-                        </li>
-                        <!-- <li>
-                            <ShowButton @click="show(vacation.id)" />
-                          </li> -->
-                        <!-- <li><BlockButton /></li> -->
-                      </ul>
-                    </div>
+                    <button
+                      class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
+                      is-link
+                      @click="OpenVacationTime(vacation.id)"
+                    >
+                      Open
+                    </button>
                   </div>
                   <!-- end card -->
                 </div>
@@ -317,7 +331,81 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          <SimpleLoading v-if="isLoading"></SimpleLoading>
+          <SimpleLoading v-if="isLoadingTime"></SimpleLoading>
+          <!-- end card -->
+        </div>
+      </div>
+    </div>
+    <!-- For Daily Report -->
+    <div class="w-full">
+      <div class="flex flex-col">
+        <div class="py-4 inline-block min-w-full lg:px-8">
+          <!-- card -->
+
+          <div class="rounded-xl" v-if="isLoadingDaily == false">
+            <div
+              v-motion
+              :initial="{ opacity: 0, y: -15 }"
+              :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }"
+              :delay="200"
+              v-if="dataVacationTime.length > 0"
+            >
+              <div class="max-w-full relative">
+                <div
+                  class="w-full outline-none font-bold h-10 px-3 py-2 mb-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                >
+                  الاجازات الاعتيادية
+                </div>
+                <div
+                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
+                >
+                  <!-- card -->
+                  <div
+                    class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                    v-for="vacation in dataVacationDaily"
+                    :key="vacation.id"
+                  >
+                    <div class="w-3/4 overflow-hidden">
+                      <div class="flex justify-betweens">
+                        اجازة لمدة
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.record"
+                        />
+                        يوم من
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.dayFrom"
+                        />
+                        الى
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.dayTo"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
+                      is-link
+                      @click="OpenVacationDaily(vacation.id)"
+                    >
+                      Open
+                    </button>
+                  </div>
+                  <!-- end card -->
+                </div>
+                <TailwindPagination
+                  class="flex justify-center mt-10"
+                  :data="dataPageVacationDaily"
+                  @pagination-change-page="getDataDaily"
+                  :limit="10"
+                />
+              </div>
+            </div>
+          </div>
+          <SimpleLoading v-if="isLoadingDaily"></SimpleLoading>
           <!-- end card -->
         </div>
       </div>

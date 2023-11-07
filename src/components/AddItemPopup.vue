@@ -9,7 +9,6 @@ import { usePermissionStore } from "@/stores/permission";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-const ItemName = ref<HTMLInputElement>();
 const emit = defineEmits(["setItem"]);
 //region"Props"
 
@@ -40,7 +39,6 @@ const store = () => {
     .store(formData)
     .then(async (response) => {
       if (response.status === 200) {
-        console.log("Save Item pop");
         emit("setItem", response.data.data);
         await useItemStore().get_items();
         reset();
@@ -54,12 +52,6 @@ const store = () => {
     });
 };
 //#endregion
-const setFocus = () => {
-  alert(1);
-  if (ItemName.value) {
-    ItemName.value.focus();
-  }
-};
 const reset = () => {
   item.value.id = 0;
   item.value.name = "";
@@ -88,7 +80,6 @@ onMounted(async () => {
           </div>
           <input
             v-model="item.name"
-            ref="ItemName"
             type="text"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />

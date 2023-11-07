@@ -12,6 +12,9 @@ import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
+
 const outputVoucherStore = useOutputVoucherStore();
 const corruptedVoucherStore = useCorruptedVoucherStore();
 
@@ -146,6 +149,7 @@ const createCorruptedVoucher = () => {
 //#endregion
 
 onMounted(async () => {
+  checkPermissionAccessArray(["show employees"]);
   searchFilter.value.limit = 24;
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";

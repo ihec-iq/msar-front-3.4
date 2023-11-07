@@ -160,7 +160,7 @@ const back = () => {
 };
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["show categories item"]);
   await itemCategoryStore.getFast();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("ItemAdd");

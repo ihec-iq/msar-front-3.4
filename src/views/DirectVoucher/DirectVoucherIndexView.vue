@@ -5,6 +5,8 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 import type {
   IDirectVoucher,
   IDirectVoucherFilter,
@@ -98,6 +100,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show directVouchers"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);

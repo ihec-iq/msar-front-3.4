@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { useI18n } from "@/stores/i18n/useI18n";
 import { Links } from "./FixedMenu";
+import { usePermissionStore } from "@/stores/permission";
+
 const { t } = useI18n();
 // import { useUserStore } from "@/stores/accounting/accounts/user";
 // import type IUser from "@/types/accounting/accounts/IUser";
 // const { get } = useUserStore();
-const data = ref<any>({});
+
+const userData = ref<any>({});
 const changeStackSideBar = () => {
   isCloseStick.value = !isCloseStick.value;
 };
@@ -48,6 +51,25 @@ const activeNames = ref(["1"]);
 //     tab.value=nav.value?.toString()
 //   }
 // } )
+
+//#region nav menu
+const { permissions } = storeToRefs(usePermissionStore());
+const filteredLinks = computed(() =>
+  Links.filter((link) => {
+    // Check if any of the link's permissions are included in userPermissions
+    return link.permissions.some((permission) =>
+      permissions.value.includes(permission)
+    );
+  })
+);
+// watch(nav, newSearchQuery => {
+//   if(nav.value != "undefined" || nav.value != undefined ){
+//     tab.value=nav.value?.toString()
+//   }
+// } )
+
+//#endregion
+
 const authStore = useAuthStore();
 const logout = () => {
   authStore.logout();
@@ -59,11 +81,8 @@ const setting = () => {
     name: "setting",
   });
 };
-// const data = ref<any>();
 onMounted(() => {
-  data.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
-  //   // getData();
-  //   data.value = localStorage.getItem("user");
+  userData.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
 });
 </script>
 <template>
@@ -119,7 +138,7 @@ onMounted(() => {
         <nav class="flex items-center space-x-0 flex-col space-y-2">
           <!-- feature -->
           <router-link
-            v-for="Link in Links"
+            v-for="Link in filteredLinks"
             :key="Link.routerName"
             :to="{ name: Link.routerName }"
             @click.prevent="tab = Link.tab"
@@ -655,7 +674,7 @@ onMounted(() => {
         <div class="flex justify-between mx-8 mt-5">
           <div class="flex items-center">
             <div class="text-xl font-bold">{{ t("Name") }}:</div>
-            <div class="ltr:ml-1 text-lg rtl:mr-1">{{ data.name }}</div>
+            <div class="ltr:ml-1 text-lg rtl:mr-1">{{ userData.name }}</div>
           </div>
           <div class="avatar online">
             <div class="w-20 rounded-full">
@@ -665,7 +684,7 @@ onMounted(() => {
         </div>
         <div class="flex justify-end mx-8 mt-5">
           <div class="text-xl font-bold">{{ t("Email") }}:</div>
-          <div class="ltr:ml-1 text-lg rtl:mr-1">{{ data.email }}</div>
+          <div class="ltr:ml-1 text-lg rtl:mr-1">{{ userData.email }}</div>
         </div>
       </div>
       <div

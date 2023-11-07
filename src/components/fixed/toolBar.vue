@@ -21,10 +21,8 @@ const colorMode = useColorMode({
     amber: "amber",
   },
 });
-const change = () => {
-  ChangeDirection();
-};
 
+//#region Pops
 const showPop = ref(false);
 const showPopup = () => {
   showPop.value = true;
@@ -32,6 +30,8 @@ const showPopup = () => {
 const closePopup = () => {
   showPop.value = false;
 };
+//#endregion
+//#region Theme Setting
 let isDark = useDark();
 let themeDark = ref(false);
 const loadRtl = ref(localStorage.getItem("isLtr"));
@@ -40,6 +40,13 @@ const changeDark = () => {
   themeDark.value = !themeDark.value;
   toggleDark(themeDark.value);
 };
+const user = useAuthStore();
+const change = () => {
+  ChangeDirection();
+};
+
+//#endregion
+//#region Search
 const searchInput = ref(false);
 document.onkeydown = function (e) {
   if (
@@ -71,8 +78,9 @@ const Search = (event: KeyboardEvent) => {
 
 // watch((valSearch)=>(old,new)=>{
 const inputRefSearch = ref<HTMLInputElement | null>(null);
-const user = useAuthStore();
-// });
+
+//#endregion
+
 onMounted(() => {
   themeDark.value = isDark.value;
   if (inputRefSearch.value) {

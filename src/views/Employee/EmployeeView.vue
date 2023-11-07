@@ -170,7 +170,7 @@ const back = () => {
 };
 onMounted(async () => {
   //console.log(can("show employees1"));
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["show employees"]);
   await sectionStore.get_sections();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("EmployeeAdd");

@@ -14,6 +14,7 @@ import type { IVacationTime } from "@/types/vacation/IVacationTime";
 import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
 import { useVacationStore } from "@/stores/vacations/vacation";
 import { now } from "@vueuse/core";
+import type { IVacation } from "@/types/vacation/IVacation";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -178,7 +179,7 @@ const back = () => {
 };
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["show vacations time"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("VacationTimeAdd");
     vacationTime.value.id = 0;
@@ -301,7 +302,7 @@ const ChangeDateRecord = () => {
         >
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
-        <select
+        <!-- <select
           v-model="vacationTime.Vacation"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         >
@@ -313,7 +314,21 @@ const ChangeDateRecord = () => {
           >
             {{ vacation.Employee.name }}
           </option>
-        </select>
+        </select> -->
+        <vSelect
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          v-model="vacationTime.Vacation"
+          :options="vacations"
+          :reduce="(vacation: IVacation) => vacation"
+          label="name"
+          :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
+        >
+          <template #option="{ Employee }">
+            <div>
+              <span>{{ Employee.name }}</span>
+            </div>
+          </template>
+        </vSelect>
       </div>
     </div>
     <!-- bottom tool bar -->

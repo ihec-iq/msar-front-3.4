@@ -8,6 +8,8 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IItemCategory>>([]);
@@ -90,6 +92,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show categories item"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
 

@@ -1,23 +1,24 @@
 import { createRouter, createWebHistory } from "vue-router";
 import notification from "@/views/NotificationView.vue";
-import archive from "./archives/archive";
+import archive from "./archives/archiveRoute";
 //#region for split routes in many files
 // import reports from "./reports/index";
 // import role from "./role/index";
 //#endregion
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
-import item from "./item/item";
-import inputVoucher from "./voucher/inputVoucher";
-import outputVoucher from "./voucher/outputVoucher";
-import corruptedVoucher from "./voucher/corruptedVoucher";
-import directVoucher from "./voucher/directVoucher";
-import itemCategory from "./item/itemCategory";
-import vacation from "./vacation/vacation";
-import store from "./store/store";
+import item from "./item/itemRoute";
+import inputVoucher from "./voucher/inputVoucherRoute";
+import outputVoucher from "./voucher/outputVoucherRoute";
+import corruptedVoucher from "./voucher/corruptedVoucherRoute";
+import directVoucher from "./voucher/directVoucherRoute";
+import itemCategory from "./item/itemCategoryRoute";
+import vacation from "./vacation/vacationRoute";
+import userRoute from "./user/userRoute";
+import store from "./store/storeRoute";
 import DefaultLayout from "@/views/layouts/MainView.vue";
 
-import employee from "./user/employee";
+import employee from "./user/employeeRoute";
 
 //#endregion
 
@@ -50,6 +51,7 @@ const router = createRouter({
         ...corruptedVoucher,
         ...directVoucher,
         ...vacation,
+        ...userRoute,
         ...store,
         ...employee,
         {

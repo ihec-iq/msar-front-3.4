@@ -11,6 +11,8 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 const { t } = useI18n();
 const isLoading = ref(false);
 const { employee } = storeToRefs(useEmployeeStore());
@@ -103,6 +105,8 @@ const history = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show employees"]);
+
   searchFilter.value.limit = 12;
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
@@ -294,7 +298,7 @@ onMounted(async () => {
                         </button>
 
                         <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-gray-800"
+                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
                           aria-labelledby="dropdownMenuButton2"
                         >
                           <li>

@@ -10,6 +10,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const token = ref<string | any>("");
   const user = ref<IUser>();
   const router = useRouter();
+  const { setPermissions } = usePermissionStore();
   const login = async (payload: { email: string; password: string }) => {
     return await new Promise((resolve, reject) => {
       Api.post("/login", payload)
@@ -35,7 +36,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const setUser = (_user: IUser) => {
     user.value = _user;
     localStorage.setItem("user", JSON.stringify(_user));
-    PermissionStore.permissions = _user.permissions;
+    //PermissionStore.permissions = _user.permissions;
+    setPermissions(user.value.permissions);
   };
   const checkToken = async (_token: string) => {
     if (_token) setToken(_token);
@@ -66,7 +68,10 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     isAuthenticated.value =
       (await localStorage.getItem("isAuthenticated")) == "1" ? true : false;
     token.value = await localStorage.getItem("token")?.toString();
-    user.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+    user.value = JSON.parse(
+      (await localStorage.getItem("user")?.toString()) || "{}"
+    );
+    if (user.value) setPermissions(user.value.permissions);
   };
   return {
     isAuthenticated,
