@@ -4,11 +4,19 @@ import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import type IRole from "@/types/role/IRole";
 export const useRoleStore = defineStore("roleStore", () => {
+  const roles = ref([]);
   const role = ref<IRole>({
     id: 0,
     name: "",
     permissions: [],
   });
+  async function getRole() {
+    if (roles.value.length < 1) {
+      await Api.get("/role").then((response) => {
+        roles.value = response.data.data;
+      });
+    }
+  }
   async function get() {
     return await Api.get(`/role`);
   }
@@ -24,5 +32,5 @@ export const useRoleStore = defineStore("roleStore", () => {
   async function _delete(id: number) {
     return await Api.delete(`/role/${id}`);
   }
-  return { role, get, store, update, _delete, show, getError };
+  return { role, roles, getRole, get, store, update, _delete, show, getError };
 });

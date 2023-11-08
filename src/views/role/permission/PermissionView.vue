@@ -2,10 +2,10 @@
 import { reactive, ref, onMounted } from "vue";
 import { Form } from "vee-validate";
 import * as Yup from "yup";
-import { useRoleStore } from "@/stores/roles/role";
+import { useRoleStore } from "@/stores/roles/roleStore";
 import Swal from "sweetalert2";
 import type IRole from "@/types/role/IRole.js";
-import { usePermissionsStore } from "@/stores/roles/permission";
+import { usePermissionsStore } from "@/stores/roles/permissionStore";
 import type IPermission from "@/types/role/IPermission";
 import { useRoute, useRouter } from "vue-router";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useRoleStore } from "@/stores/roles/role";
-import type IRole from "@/types/role/IRole.js";
+import { useRoleStore } from "@/stores/roles/roleStore";
+import type IRole from "@/types/role/IRole";
 import Swal from "sweetalert2";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
+import SimpleLoading from "@/components/general/loading.vue";
+
 import EditButton from "@/components/dropDown/EditButton.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
 import DeleteButton from "@/components/dropDown/DeleteButton.vue";
@@ -20,9 +22,9 @@ const t = (text: string) => {
   return st.langTextRepo[st.info.lang][text] || text;
 };
 const router = useRouter();
-const data = ref<Array<IRole>>([]);
-const isLoading = ref(false);
-const { get, _delete } = useRoleStore();
+const roleData = ref<Array<IRole>>([]);
+const isLoadingData = ref(false);
+const { _delete } = useRoleStore();
 const permissions = () => {
   router.push({
     name: "permissions",
@@ -57,12 +59,18 @@ const show = (idRole: number) => {
 //   });
 // };
 const getData = async () => {
-  await get().then((response) => {
-    if (response.status == 200) {
-      data.value = response.data.data;
-    }
-  });
-  isLoading.value = false;
+  isLoadingData.value = true;
+  await useRoleStore()
+    .get()
+    .then((response) => {
+      if (response.status == 200) {
+        roleData.value = response.data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoadingData.value = false;
 };
 
 const Delete = async (id: number) => {
@@ -84,29 +92,31 @@ const Delete = async (id: number) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await _delete(id).then((response) => {
+        await _delete(id).then(async (response) => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
             "success"
           );
-          getData();
+          await getData();
         });
       }
     });
 };
 onMounted(async () => {
-  getData();
+  await getData();
 });
 </script>
 <template>
   <div class="w-full mb-12">
     <PageTitle> {{ t("Role") }}</PageTitle>
-
     <div class="max-w-full px-8 ro">
-      <div class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10">
+      <div
+        v-if="isLoadingData == false && roleData.length > 0"
+        class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10"
+      >
         <div
-          v-for="role in data"
+          v-for="role in roleData"
           :key="role.id"
           class="bg-cardLight role dark:bg-card flex w-full p-5 rounded-lg border border-gray-700 shadow-md shadow-gray-900 duration-300 hover:border hover:border-gray-600 hover:shadow-lg hover:shadow-gray-800"
         >
@@ -118,7 +128,8 @@ onMounted(async () => {
               <div
                 class="transition-all m-auto justify-center rounded-md p-2 text-text dark:text-textLight"
               >
-                {{ t("Permissions Count") }}: {{ role.permissions.length }}
+                {{ t("Permissions Count") }}:
+                {{ role.permissions.length }}
               </div>
               <div class="text-text dark:text-textLight flex">
                 <div
@@ -162,6 +173,7 @@ onMounted(async () => {
           </div>
         </div>
       </div>
+      <SimpleLoading v-else></SimpleLoading>
     </div>
   </div>
 
