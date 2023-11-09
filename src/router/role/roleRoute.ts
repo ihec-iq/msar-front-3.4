@@ -6,7 +6,7 @@ import roleShow from "@/views/role/RoleShowView.vue";
 export default [
   {
     path: "/setting/role",
-    name: "role",
+    name: "roleIndex",
     component: role,
     meta: {
       middleware: [authMiddleware],

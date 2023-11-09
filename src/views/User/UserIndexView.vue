@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UserTable from "@/components/tables/UserTable.vue";
+import UserTable from "./UserTable.vue";
 import { useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { useI18n } from "@/stores/i18n/useI18n";

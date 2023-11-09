@@ -1,6 +1,14 @@
 import authMiddleware from "../middleware/authMiddleware";
 export default [
   {
+    path: "/core/user/portal",
+    name: "userPortal",
+    component: () => import("@/views/User/UserPortalView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
     path: "/core/user",
     name: "userIndex",
     component: () => import("@/views/User/UserIndexView.vue"),

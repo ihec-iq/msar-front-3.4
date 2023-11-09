@@ -35,10 +35,10 @@ const back = () => {
 const schema = Yup.object().shape({
   name: Yup.string().required(),
   email: Yup.string().email().required(),
-  password: Yup.string().min(8).required(),
-  password_confirmation: Yup.string()
-    .required()
-    .oneOf([Yup.ref("password")], "Passwords do not match"),
+  // password: Yup.string().min(4).required(),
+  // password_confirmation: Yup.string()
+  //   .required()
+  //   .oneOf([Yup.ref("password")], "Passwords do not match"),
 });
 
 const onSubmit = (values: any) => {
@@ -50,7 +50,10 @@ const onSubmit = (values: any) => {
   else update();
 };
 
-function onInvalidSubmit() {
+function onInvalidSubmit(error: any) {
+  console.log("onInvalidSubmit: ");
+  console.log(error);
+  console.log(user);
   const submitBtn = document.querySelector(".submit-btn");
   submitBtn?.classList.add("invalid");
   setTimeout(() => {
@@ -112,8 +115,8 @@ const store = () => {
 };
 function update() {
   errors.value = null;
-  if ((user.password = random)) user.password = "";
-  if ((user.password_confirmation = random)) user.password_confirmation = "";
+  if (user.password == random) user.password = "";
+  if (user.password_confirmation == random) user.password_confirmation = "";
   userStore
     .update(user, id)
     .then(() => {
@@ -124,7 +127,7 @@ function update() {
         showConfirmButton: false,
         timer: 1500,
       });
-      router.go(-2);
+      router.go(-1);
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
@@ -192,9 +195,9 @@ onMounted(async () => {
             <div class="w-1/5">
               <InputText
                 v-model="user.password"
+                type="password"
                 name="password"
                 :label="t('Password')"
-                type="password"
               />
             </div>
           </div>
@@ -212,9 +215,9 @@ onMounted(async () => {
             <div class="w-1/5">
               <InputText
                 v-model="user.password_confirmation"
-                type="password"
                 name="password_confirmation"
                 :label="t('Rewrite Password')"
+                type="password"
               />
             </div>
           </div>
