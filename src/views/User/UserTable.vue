@@ -288,13 +288,24 @@ onBeforeMount(() => {
                           aria-labelledby="dropdownMenuButton2"
                         >
                           <li>
-                            <ShowButton @click="userShow(user.id)" />
+                            <EditButton
+                              @click="userShow(user.id)"
+                              :title="t('show')"
+                              :showIcon="true"
+                            />
                           </li>
                           <li>
-                            <EditButton @click="userUpdate(user.id)" />
+                            <EditButton
+                              @click="userUpdate(user.id)"
+                              :title="t('edit')"
+                            />
                           </li>
                           <li>
-                            <DeleteButton @click="Delete(user.id)" />
+                            <EditButton
+                              @click="Delete(user.id)"
+                              :title="t('delete')"
+                              :deleteIcon="true"
+                            />
                           </li>
                         </ul>
                       </div>

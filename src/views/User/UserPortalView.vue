@@ -10,7 +10,7 @@ const { checkPermissionAccessArray } = usePermissionStore();
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["vacation Report"]);
+  checkPermissionAccessArray(["show users"]);
 });
 </script>
 <template>

@@ -7,7 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AccountTableSkeleton: typeof import('./src/components/tables/AccountTableSkeleton.vue')['default']
     AddItemPopup: typeof import('./src/components/AddItemPopup.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
@@ -41,7 +40,6 @@ declare module '@vue/runtime-core' {
     ToolBar: typeof import('./src/components/fixed/toolBar.vue')['default']
     ToolTipComponent: typeof import('./src/components/ToolTipComponent.vue')['default']
     TstView1: typeof import('./src/components/tstView1.vue')['default']
-    UserTable: typeof import('./src/components/tables/UserTable.vue')['default']
     ValidateInput: typeof import('./src/components/general/ValidateInput.vue')['default']
     VanCollapse: typeof import('vant/es')['Collapse']
     VanCollapseItem: typeof import('vant/es')['CollapseItem']
