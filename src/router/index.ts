@@ -15,6 +15,7 @@ import directVoucher from "./voucher/directVoucherRoute";
 import itemCategory from "./item/itemCategoryRoute";
 import vacation from "./vacation/vacationRoute";
 import userRoute from "./user/userRoute";
+import roleRoute from "./role/roleRoute";
 import store from "./store/storeRoute";
 import DefaultLayout from "@/views/layouts/MainView.vue";
 
@@ -52,6 +53,7 @@ const router = createRouter({
         ...directVoucher,
         ...vacation,
         ...userRoute,
+        ...roleRoute,
         ...store,
         ...employee,
         {
