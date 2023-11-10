@@ -11,9 +11,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import SimpleLoading from "@/components/general/loading.vue";
 
 import EditButton from "@/components/dropDown/EditButton.vue";
-import ShowButton from "@/components/dropDown/ShowButton.vue";
 import DeleteButton from "@/components/dropDown/DeleteButton.vue";
-import DuplicateButton from "@/components/dropDown/DuplicateButton.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 
@@ -43,12 +41,6 @@ const back = () => {
 const update = (idRole: number) => {
   router.push({
     name: "roleUpdate",
-    params: { id: idRole },
-  });
-};
-const show = (idRole: number) => {
-  router.push({
-    name: "roleShow",
     params: { id: idRole },
   });
 };
@@ -92,7 +84,7 @@ const Delete = async (id: number) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await _delete(id).then(async (response) => {
+        await _delete(id).then(async () => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),

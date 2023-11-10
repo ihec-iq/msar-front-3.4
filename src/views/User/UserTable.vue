@@ -6,8 +6,6 @@ import { onBeforeMount, onMounted, ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import SkeletonLoading from "./AccountTableSkeleton.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import ShowButton from "@/components/dropDown/ShowButton.vue";
-import DeleteButton from "@/components/dropDown/DeleteButton.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type IUser from "@/types/core/IUser";
 import { useUserStore } from "@/stores/userStore";

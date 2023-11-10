@@ -2,10 +2,7 @@
 import { reactive, ref, onMounted } from "vue";
 import backVue from "@/components/general/back.vue";
 import { useRoleStore } from "@/stores/roles/roleStore";
-import Swal from "sweetalert2";
 import type IRole from "@/types/role/IRole.js";
-import { useRouter } from "vue-router";
-import { usePermissionsStore } from "@/stores/roles/permissionStore";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
@@ -17,16 +14,7 @@ const st = i18nRepository.getState();
 const t = (text: string) => {
   return st.langTextRepo[st.info.lang][text] || text;
 };
-const permissionsStore = usePermissionsStore();
 const namePage = ref("Add Role");
-// const { permissions } = permissionsStore;
-//#region todo permission
-// function removePermission(index: any) {
-//   permissionsStore.permissions.id.splice(index, 1);
-// saveData();
-// }
-const checkedPermission = ref<Array<number>>([]);
-const CheckAll = ref(false);
 
 const role = reactive<IRole>({
   id: 0,
@@ -34,66 +22,15 @@ const role = reactive<IRole>({
   checkedPermission: [],
   permissions: [],
 });
-const errors = ref(null);
-const roleStore = useRoleStore();
-// const { role } = roleStore;
 
-const router = useRouter();
 const data = ref<Array<IRole>>([]);
 const isLoading = ref(false);
-const { get, _delete } = useRoleStore();
-const permissions = () => {
-  router.push({
-    name: "permissions",
-  });
-};
-const showRole = () => {
-  router.push({
-    name: "showRole",
-  });
-};
-const update = (id: number) => {
-  router.push({
-    name: "roleUpdate",
-    params: { id: id },
-  });
-};
+const { get } = useRoleStore();
 const getData = async () => {
   await get().then((response) => {
     if (response.status == 200) data.value = response.data.data;
   });
   isLoading.value = false;
-};
-const Delete = async (id: number) => {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn m-2 bg-red-700",
-      cancelButton: "btn bg-grey-400",
-    },
-    buttonsStyling: false,
-  });
-  swalWithBootstrapButtons
-    .fire({
-      title: t("Are You Sure?"),
-      text: t("You Won't Be Able To Revert This!"),
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: t("Yes, delete it!"),
-      cancelButtonText: t("No, cancel!"),
-      reverseButtons: true,
-    })
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        await _delete(id).then((response) => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          getData();
-        });
-      }
-    });
 };
 onMounted(async () => {
   getData();

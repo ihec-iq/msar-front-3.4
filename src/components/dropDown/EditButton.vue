@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { useI18n } from "@/stores/i18n/useI18n";
 import { onMounted, ref } from "vue";
-const { t } = useI18n();
 const props = defineProps({
   title: { type: String, default: "تعديل" },
   editIcon: { type: Boolean, default: true },

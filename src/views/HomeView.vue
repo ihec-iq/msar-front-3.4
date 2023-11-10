@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { Links } from "@/components/fixed/FixedMenu";
-import { useI18n } from "@/stores/i18n/useI18n";
 import { usePermissionStore } from "@/stores/permission";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-const { t } = useI18n();
 //#region nav menu
 const { permissions } = storeToRefs(usePermissionStore());
 const filteredLinks = computed(() =>
@@ -24,13 +22,13 @@ const filteredLinks = computed(() =>
 //#endregion
 </script>
 <template>
-  <div class="flex text-center self-center mt-3 col-span-3">
+  <div class="grid grid-cols-5 gap-4 text-center self-center mt-3">
     <router-link
       v-for="Link in filteredLinks"
       :key="Link.routerName"
       :to="{ name: Link.routerName }"
     >
-      <span href="" class="group relative block h-64 sm:h-50 lg:h-60">
+      <span class="group relative block h-64 sm:h-50 lg:h-60">
         <span
           class="absolute inset-0 border-2 border-dashed border-black"
         ></span>
@@ -60,7 +58,7 @@ const filteredLinks = computed(() =>
               {{ Link.title }}
             </h3>
 
-            <p class="mt-4 text-sm sm:text-base">
+            <p class="mt-4 text-sm w-8/12 break-words">
               {{ Link.description }}
             </p>
 

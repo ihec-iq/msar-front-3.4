@@ -202,6 +202,18 @@ onMounted(() => {
           </div>
         </div>
       </div>
+
+      <div class="flex mt-2">
+        <input
+          type="checkbox"
+          v-model="CheckAll"
+          @change="toggleCheck"
+          class="checkbox checkbox-md ml-4 checkbox-success"
+        />
+        <label class="dark:text-gray-300 text-gray-800 mb-2 ml-1 mr-4">
+          {{ CheckAll ? t("Un Check") : t("Check All") }}
+        </label>
+      </div>
       <div>
         <h2
           class="text-text dark:text-textLight font-semibold text-xl ltr:text-left rtl:text-right ltr:pl-8 rtl:pr-8"
@@ -210,7 +222,7 @@ onMounted(() => {
         </h2>
       </div>
       <div
-        class="text-text dark:text-textLight font-black p-2 leading-8 ltr:text-left rtl:text-right px-4"
+        class="grid grid-cols-12 gap-4 text-text dark:text-textLight font-black p-2 leading-8 ltr:text-left rtl:text-right px-4"
       >
         <span
           v-for="permission in checkedPermission"
@@ -254,19 +266,6 @@ onMounted(() => {
             :placeholder="t('Search For Permission')"
           />
         </div>
-      </div>
-      <div class="flex">
-        <!-- {{ checkedPermission }}
-<br/> -->
-        <input
-          type="checkbox"
-          v-model="CheckAll"
-          @change="toggleCheck"
-          class="checkbox checkbox-md ml-4 checkbox-success"
-        />
-        <label class="text-gray-300 mb-2 ml-1 mr-4">
-          {{ CheckAll ? t("Un Check") : t("Check All") }}
-        </label>
       </div>
       <div class="mb-10 flex w-full flex-wrap p-4">
         <div
