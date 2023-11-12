@@ -5,6 +5,8 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 import type {
   IOutputVoucher,
   IOutputVoucherFilter,
@@ -40,7 +42,7 @@ const addItem = () => {
   outputVoucher.number = "";
   outputVoucher.date = "";
   outputVoucher.notes = "";
-  outputVoucher.items = [];
+  outputVoucher.Items = [];
   outputVoucher.signaturePerson = "";
   router.push({
     name: "outputVoucherAdd",
@@ -98,6 +100,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show outputVouchers"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -309,4 +312,3 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher/outputVoucher

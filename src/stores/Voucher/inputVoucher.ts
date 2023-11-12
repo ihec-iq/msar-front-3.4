@@ -17,34 +17,30 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     number: "",
     date: new Date().toISOString().split("T")[0],
     notes: "",
-    state: { name: "", id: 0 },
-    items: [],
+    State: { name: "", id: 1 },
+    Items: [],
     signaturePerson: "",
-    employeeRequestId: 0,
-    employeeRequest: { name: "", id: 0 },
-    inputVoucherStateId: 0,
+    requestedBy: "",
   });
   const inputVouchers = ref<IInputVoucher[]>([]);
   const inputVoucherItem = ref<IInputVoucherItem>({
     id: 0,
-    input_voucher_id: 0,
-    item: {
+    inputVoucherId: 0,
+    Item: {
       id: 0,
       name: "",
       code: "",
       description: "",
-      itemCategory: {
+      Category: {
         id: 0,
         name: "",
       },
       measuringUnit: "",
     },
-    itemId: 0,
-    stock: {
+    Stock: {
       id: 0,
       name: "",
     },
-    stockId: 0,
     serialNumber: "",
     count: 0,
     price: 0,
@@ -111,7 +107,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       });
   }
   async function getEmployees() {
-    return await Api.get(`${pathBase}/employee`)
+    return await Api.get(`${pathBase}/employee/lite`)
       .then((response) => {
         if (response.status == 200) {
           inputVoucherEmployees.value = response.data.data;
@@ -122,19 +118,28 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       });
   }
   function addItem(item: IInputVoucherItem) {
-    inputVoucher.items = [item].concat(inputVoucher.items);
+    inputVoucher.Items = [item].concat(inputVoucher.Items);
   }
   function editItem(index: number, item: IInputVoucherItem) {
-    inputVoucher.items[index] = item;
+    inputVoucher.Items[index] = item;
   }
   async function removeItem(index: number) {
+    if (
+      String(inputVoucher.Items[index]?.id) == undefined ||
+      inputVoucher.Items[index]?.id === undefined ||
+      inputVoucher.Items[index].id === undefined
+    ) {
+      inputVoucher.Items?.splice(index, 1);
+      return false;
+    }
     return await Api.delete(
       `${pathBase}/inputVoucherItem/delete/` +
-        String(inputVoucher.items[index]?.id)
+        String(inputVoucher.Items[index]?.id)
     )
       .then((response) => {
         if (response.status == 200) {
-          inputVoucher.items?.splice(index, 1);
+          inputVoucher.Items?.splice(index, 1);
+          return true;
         }
       })
       .catch((errors) => {
@@ -146,12 +151,10 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucher.number = "";
     inputVoucher.date = "";
     inputVoucher.notes = "";
-    inputVoucher.state = { name: "", id: 0 };
-    inputVoucher.items = [];
+    inputVoucher.State = { name: "", id: 1 };
+    inputVoucher.Items = [];
     inputVoucher.signaturePerson = "";
-    inputVoucher.employeeRequestId = 0;
-    inputVoucher.employeeRequest = { name: "", id: 0 };
-    inputVoucher.inputVoucherStateId = 0;
+    inputVoucher.requestedBy = "";
   }
   return {
     inputVoucher,

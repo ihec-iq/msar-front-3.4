@@ -1,31 +1,28 @@
 import type { IItem } from "./IItem";
+import type { ISection } from "./ISection";
 import type { IStock } from "./IStock";
 
 export interface IInputVoucher {
   id: number;
   number: string;
-  date: String;
+  date: string;
   notes: string;
-  state: IInputVoucherState;
-  items: Array<IInputVoucherItem>;
-  signaturePerson: String;
-  employeeRequestId: number;
-  employeeRequest: IInputVoucherEmployee;
-  inputVoucherStateId: number;
+  State: IInputVoucherState;
+  Items: Array<IInputVoucherItem>;
+  signaturePerson: string;
+  requestedBy: string;
   itemsCount?: number;
 }
 export interface IInputVoucherItem {
   id?: number;
-  input_voucher_id?: number;
-  item: IItem;
-  itemId?: number;
-  stock: IStock;
-  stockId?: number;
-  serialNumber: String;
+  inputVoucherId?: number;
+  Item: IItem;
+  Stock: IStock;
+  serialNumber: string;
   count: number;
   price: number;
   value: number;
-  notes?: String;
+  notes?: string;
   inValue?: number;
   outValue?: number;
 }
@@ -33,17 +30,18 @@ export interface IInputVoucherItemVSelect {
   id?: number;
   itemName: string;
   stockName?: string;
-  serialNumber?: String;
+  serialNumber?: string;
   code?: string;
   itemCategory?: string;
   inValue: number;
   outValue: number;
   price?: number;
-  notes?: String;
+  notes?: string;
 }
 export interface IInputVoucherEmployee {
   id: number;
   name: string;
+  section?: ISection;
 }
 export interface IInputVoucherState {
   id: number;
@@ -53,5 +51,5 @@ export interface IInputVoucherFilter {
   id?: number;
   name: string;
   limit: number;
-  description?: String;
+  description?: string;
 }

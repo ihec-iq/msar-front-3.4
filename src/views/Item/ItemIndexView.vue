@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/Item/item";
+import { useItemStore } from "@/stores/item/item";
 import PageTitle from "@/components/general/namePage.vue";
 import type { IItem, IItemFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
+
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IItem>>([]);
@@ -36,7 +39,7 @@ watch(
 const addItem = () => {
   item.id = 0;
   item.name = "";
-  item.itemCategory = { name: "", id: 0 };
+  item.Category = { name: "", id: 0 };
   item.code = "";
   item.description = "";
   router.push({
@@ -95,6 +98,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show items"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
 
@@ -104,7 +108,10 @@ onMounted(async () => {
 <template>
   <div class="justify-between flex">
     <PageTitle> {{ t("Item") }} </PageTitle>
-    <RouterLink :to="{ name: 'itemCategoryIndex' }" class="float-left flex m-5">
+    <RouterLink
+      :to="{ name: 'itemCategoryIndex' }"
+      class="float-left flex m-5 btn-outline btn"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="32"
@@ -227,7 +234,7 @@ onMounted(async () => {
                           >
                             <span>{{ t("ItemCode") }}: {{ item.code }}</span>
                             <span class="float-left flex">
-                              {{ item.itemCategory.name }}
+                              {{ item.Category.name }}
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -332,4 +339,3 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-<!-- @/stores/item/item -->

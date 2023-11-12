@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
+import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import PageTitle from "@/components/general/namePage.vue";
 import type { IItemCategory, IItemCategoryFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IItemCategory>>([]);
@@ -90,6 +92,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show categories item"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
 

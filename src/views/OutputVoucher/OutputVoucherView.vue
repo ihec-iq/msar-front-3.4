@@ -13,7 +13,6 @@ import type { IOutputVoucherItem } from "@/types/IOutputVoucher";
 import { useI18n } from "@/stores/i18n/useI18n";
 import type { IInputVoucherItem } from "@/types/IInputVoucher";
 const { t } = useI18n();
-const { stocks } = storeToRefs(useStockStore());
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 //region"Drag and Drop"
 
@@ -35,31 +34,28 @@ const { outputVoucher, outputVoucherEmployees } = storeToRefs(
 const showPop = ref(false);
 const VoucherItem = ref<IOutputVoucherItem>({
   id: 0,
-  inputVoucherItem: {
-    item: {
-      id: 0,
-      name: "",
-      code: "",
-      description: "",
-      itemCategory: {
-        id: 0,
-        name: "",
-      },
-      measuringUnit: "",
-    },
-    stock: {
-      id: 0,
+  Item: {
+    id: 1,
+    name: "",
+    code: "",
+    description: "",
+    Category: {
+      id: 1,
       name: "",
     },
-    serialNumber: "",
-    count: 0,
-    price: 0,
-    value: 0,
+    measuringUnit: "",
   },
-  count: 0,
+  Stock: {
+    id: 1,
+    name: "",
+  },
+  serialNumber: "",
+  count: 1,
   price: 0,
   value: 0,
   notes: "",
+  Employee: { id: 1, name: "" },
+  inputVoucherItemId: 0,
 });
 const AddPopup = () => {
   showPop.value = true;
@@ -69,32 +65,28 @@ const resetVoucherItem = () => {
   indexSelectedVoucherItem.value = 0;
   VoucherItem.value = {
     id: 0,
-    outputVoucherId: 0,
-    inputVoucherItem: {
-      item: {
-        id: 0,
-        name: "",
-        code: "",
-        description: "",
-        itemCategory: {
-          id: 0,
-          name: "",
-        },
-        measuringUnit: "",
-      },
-      stock: {
-        id: 0,
+    Item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      Category: {
+        id: 1,
         name: "",
       },
-      serialNumber: "",
-      count: 0,
-      price: 0,
-      value: 0,
+      measuringUnit: "",
     },
-    count: 0,
+    Stock: {
+      id: 1,
+      name: "",
+    },
+    serialNumber: "",
+    count: 1,
     price: 0,
     value: 0,
     notes: "",
+    Employee: { id: 1, name: "" },
+    inputVoucherItemId: 0,
   };
 };
 //#region Item Row
@@ -122,24 +114,37 @@ const deleteItem = (index: number) => {
       }
     });
 };
-const updatePopup = (index: number, item: IOutputVoucherItem) => {
+const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   showPop.value = true;
-  console.log(item);
+  console.log("updatePopup");
+  console.log(itemX);
+  console.log(VoucherItem.value);
   indexSelectedVoucherItem.value = index;
-  VoucherItem.value = item;
+  VoucherItem.value = itemX;
+  console.log(VoucherItem.value);
 };
 const AddItem = () => {
+  VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
+  VoucherItem.value.Stock = VoucherItem.value.inputVoucherItem?.Stock || {
+    id: 1,
+    name: "",
+  };
+  VoucherItem.value.serialNumber = String(
+    VoucherItem.value.inputVoucherItem?.serialNumber
+  );
+  VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  console.log(VoucherItem.value.inputVoucherItem);
   outputVoucherStore.addItem(VoucherItem.value);
   resetVoucherItem();
   showPop.value = false;
 };
 const ChangeValueTotal = () => {
-  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
+  VoucherItem.value.value =
+    VoucherItem.value.count * Number(VoucherItem.value.inputVoucherItem?.price);
 };
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
+  console.log(VoucherItem.value);
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
   outputVoucherStore.editItem(
     indexSelectedVoucherItem.value,
@@ -161,10 +166,10 @@ const store = () => {
   formData.append("number", outputVoucher.value.number.toString());
   formData.append("notes", outputVoucher.value.notes.toString());
   formData.append("date", outputVoucher.value.date.toString());
-  formData.append("items", JSON.stringify(outputVoucher.value.items));
+  formData.append("items", JSON.stringify(outputVoucher.value.Items));
   formData.append(
     "employeeRequestId",
-    outputVoucher.value.employeeRequest.id.toString()
+    outputVoucher.value.Employee.id.toString()
   );
   formData.append(
     "signaturePerson",
@@ -201,15 +206,15 @@ function update() {
   formData.append("number", outputVoucher.value.number.toString());
   formData.append("notes", String(outputVoucher.value.notes));
   formData.append("date", outputVoucher.value.date.toString());
+  formData.append("items", JSON.stringify(outputVoucher.value.Items));
   formData.append(
     "employeeRequestId",
-    outputVoucher.value.employeeRequest.id.toString()
+    outputVoucher.value.Employee.id.toString()
   );
   formData.append(
     "signaturePerson",
     String(outputVoucher.value.signaturePerson)
   );
-  formData.append("items", JSON.stringify(outputVoucher.value.items));
   outputVoucherStore
     .update(outputVoucher.value.id, formData)
     .then((response) => {
@@ -276,9 +281,8 @@ const showData = async (id: number) => {
         outputVoucher.value.date = response.data.data.date;
         outputVoucher.value.number = response.data.data.number;
         outputVoucher.value.notes = response.data.data.notes;
-        outputVoucher.value.items = response.data.data.items;
-        outputVoucher.value.employeeRequest =
-          response.data.data.employeeRequest;
+        outputVoucher.value.Items = response.data.data.Items;
+        outputVoucher.value.Employee = response.data.data.Employee;
         outputVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
       }
@@ -303,7 +307,7 @@ const back = () => {
 };
 
 onMounted(async () => {
-  checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray(["show outputVouchers"]);
   await outputVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
@@ -415,13 +419,13 @@ onMounted(async () => {
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
         <select
-          v-model="outputVoucher.employeeRequest"
+          v-model="outputVoucher.Employee.id"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
         >
           <option
             v-for="employee in outputVoucherEmployees"
             :key="employee.id"
-            :value="employee"
+            :value="employee.id"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
           >
             {{ employee.name }}
@@ -477,32 +481,48 @@ onMounted(async () => {
         <table class="min-w-full text-center">
           <thead class="border-b bg-[#0003] text-gray-300">
             <tr>
-              <th scope="col" class="text-sm font-medium px-2 py-2">ID</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">item</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                Serial Number
+              <th scope="col" class="text-sm font-medium px-2 py-2">
+                {{ t("ID") }}
               </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Count</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Price</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Total</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Stock</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Notes</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">Actions</th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Item") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("SerialNumber") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Count") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Price") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Total") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Stock") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Notes") }}
+              </th>
+              <th scope="col" class="text-sm font-medium px-6 py-4">
+                {{ t("Actions") }}
+              </th>
             </tr>
           </thead>
           <tbody class="bg-[#1f2937]">
             <tr
-              v-for="(row, index) in outputVoucher.items"
+              v-for="(row, index) in outputVoucher.Items"
               :key="row.id"
               class="border-b border-black h-14 text-gray-100"
             >
               <th>{{ row.id }}</th>
-              <th>{{ row.inputVoucherItem.item.name }}</th>
-              <th>{{ row.inputVoucherItem.serialNumber }}</th>
+              <th>{{ row.Item?.name }}</th>
+              <th>{{ row.serialNumber }}</th>
               <th>{{ row.count }}</th>
-              <th>{{ row.price }}</th>
-              <th>{{ row.count * row.price }}</th>
-              <th>{{ row.inputVoucherItem.stock.name }}</th>
+              <th>{{ row.price.toLocaleString() }}</th>
+              <th>{{ (row.count * row.price).toLocaleString() }}</th>
+              <th>{{ row.Stock.name }}</th>
               <th>{{ row.notes }}</th>
               <th>
                 <van-button
@@ -551,7 +571,7 @@ onMounted(async () => {
                   class="capitalize dir-rtl mx-2 rounded-md h-10 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
                   :options="inputVoucherItemsVSelect"
                   :reduce="(_item: IInputVoucherItem) => _item"
-                  :get-option-label="(_item: IInputVoucherItem) => _item.item.name"
+                  :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
                   :create-option="(_item: IInputVoucherItem) => _item"
                   v-model="VoucherItem.inputVoucherItem"
                 >
@@ -559,26 +579,34 @@ onMounted(async () => {
                     <div
                       class="rounded-md text-right focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold"
                     >
-                      {{ _item.item.name.toString() }}
+                      {{ _item.Item.name.toString() }}
                     </div>
                     <cite class="text-right">
                       <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-600 bg-gray-700 text-gray-200 p-1 mb-1"
                       >
-                        {{ t("ItemCode") }}: {{ _item.item.code.toString() }}
+                        {{ t("ItemCode") }}: {{ _item.Item.code.toString() }}
                       </div>
                       <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-600 bg-gray-700 text-gray-200 p-1 mb-1"
                       >
-                        Category: {{ _item.item.itemCategory.name.toString() }}
+                        {{ t("ItemCategory") }}:
+                        {{ _item.Item.Category.name.toString() }}
                       </div>
                       <div
+                        v-if="_item.serialNumber"
                         class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                       >
-                        Available:
+                        {{ t("SerialNumber") }}:
+                        {{ _item.serialNumber.toString() }}
+                      </div>
+                      <div
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
+                      >
+                        {{ t("Available") }}:
                         {{ Number(_item.inValue) - Number(_item.outValue) }}
                       </div>
-                      <cite class="flex flex-wrap text-right w-fit">
+                      <cite class="flex flex-wrap text-left text-xs w-fit">
                         {{ _item.notes }}
                       </cite>
                     </cite>
@@ -587,12 +615,9 @@ onMounted(async () => {
               </div>
               <div
                 class="w-4/5 rounded-md border-2 border-gray-600 flex"
-                v-if="VoucherItem.inputVoucherItem.item"
+                v-if="String(VoucherItem.Item?.name).length > 0"
               >
-                <div
-                  class="w-1/5"
-                  v-if="VoucherItem.inputVoucherItem.item.code"
-                >
+                <div class="w-1/5" v-if="VoucherItem.Item?.code">
                   <div
                     class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
                   >
@@ -601,7 +626,7 @@ onMounted(async () => {
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
-                    {{ VoucherItem.inputVoucherItem.item.code.toString() }}
+                    {{ VoucherItem.Item.code.toString() }}
                   </div>
                 </div>
                 <div class="w-1/5">
@@ -613,15 +638,10 @@ onMounted(async () => {
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
-                    {{
-                      VoucherItem.inputVoucherItem.item.itemCategory.name.toString()
-                    }}
+                    {{ String(VoucherItem.Item?.Category.name) }}
                   </div>
                 </div>
-                <div
-                  class="w-2/5"
-                  v-if="VoucherItem.inputVoucherItem.item.description"
-                >
+                <div class="w-2/5" v-if="VoucherItem.Item?.description">
                   <div
                     class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
                   >
@@ -630,7 +650,7 @@ onMounted(async () => {
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
                   >
-                    {{ VoucherItem.inputVoucherItem.item.description }}
+                    {{ VoucherItem.Item?.description }}
                   </div>
                 </div>
               </div>
@@ -642,19 +662,11 @@ onMounted(async () => {
                 >
                   Stock
                 </div>
-                <select
-                  v-model="VoucherItem.inputVoucherItem.stock"
-                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-                >
-                  <option
-                    v-for="stock in stocks"
-                    :key="stock.id"
-                    :value="stock"
-                    class="bg-lightOutput dark:bg-input text-text dark:text-textLight"
-                  >
-                    {{ stock.name }}
-                  </option>
-                </select>
+                <input
+                  :value="VoucherItem.inputVoucherItem?.Stock.name"
+                  type="text"
+                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                />
               </div>
               <div class="w-1/5">
                 <div
@@ -663,9 +675,9 @@ onMounted(async () => {
                   Serial Number
                 </div>
                 <input
-                  v-model="VoucherItem.inputVoucherItem.serialNumber"
+                  :value="VoucherItem.inputVoucherItem?.serialNumber"
                   type="text"
-                  class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
               </div>
               <div class="w-1/5">
@@ -677,6 +689,11 @@ onMounted(async () => {
                 <input
                   @input="ChangeValueTotal()"
                   v-model="VoucherItem.count"
+                  :max="
+                    Number(VoucherItem.inputVoucherItem?.inValue) -
+                    Number(VoucherItem.inputVoucherItem?.outValue)
+                  "
+                  min="1"
                   type="number"
                   class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
@@ -689,9 +706,9 @@ onMounted(async () => {
                 </div>
                 <input
                   @input="ChangeValueTotal()"
-                  v-model="VoucherItem.price"
+                  :value="VoucherItem.inputVoucherItem?.price"
                   type="number"
-                  class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
               </div>
               <div class="w-1/5">
@@ -701,7 +718,7 @@ onMounted(async () => {
                   Total
                 </div>
                 <input
-                  v-model="VoucherItem.value"
+                  :value="VoucherItem.value"
                   type="number"
                   class="rounded-md disabled focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />

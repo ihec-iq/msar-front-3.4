@@ -10,8 +10,8 @@ export default [
     },
   },
   {
-    path: "/storeItemHistory/:id",
-    name: "storeItemHistory",
+    path: "/ItemHistory/:id",
+    name: "ItemHistory",
     component: () => import("@/views/store/StoreItemHistoryView.vue"),
     meta: {
       middleware: [authMiddleware],

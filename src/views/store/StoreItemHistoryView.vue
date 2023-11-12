@@ -7,6 +7,14 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
 import { useStoringStore } from "@/stores/storing";
+import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
+import { storeToRefs } from "pinia";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
+
+const outputVoucherStore = useOutputVoucherStore();
+const { outputVoucherEmployees } = storeToRefs(useOutputVoucherStore());
+
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IStoreItemHistory>>([]);
@@ -16,8 +24,8 @@ const dataBase = ref<Array<IStoreItemHistory>>([]);
 const { get_item } = useStoringStore();
 
 const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
+  { name: "6", val: 6, selected: false },
+  { name: "12", val: 12, selected: true },
   { name: "24", val: 24, selected: false },
   { name: "50", val: 50, selected: false },
   { name: "All", val: 999999999 },
@@ -57,6 +65,8 @@ const searchFilter = ref<IStoreItemFilter>({
   limit: 6,
   serialNumber: "",
   summation: true,
+  isEmployee: false,
+  employeeId: 0,
 });
 const getFilterData = async (page = 1) => {
   dataPage.value = [];
@@ -86,7 +96,7 @@ const openItem = (id: number, billType: string) => {
       name: "inputVoucherUpdate",
       params: { id: id },
     });
-  } else {
+  } else if (billType == "out") {
     router.push({
       name: "outputVoucherUpdate",
       params: { id: id },
@@ -96,8 +106,12 @@ const openItem = (id: number, billType: string) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  checkPermissionAccessArray(["show storage"]);
+
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
+  await outputVoucherStore.getEmployees().then(() => {});
+
   await getFilterData(1);
 });
 </script>
@@ -165,6 +179,31 @@ onMounted(async () => {
             </select>
           </div>
         </div>
+        <div
+          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+        >
+          <div
+            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+          >
+            <p>{{ t("Employee") }}:</p>
+            <select
+              aria-label="select"
+              v-model="searchFilter.employeeId"
+              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
+              @change="getFilterData()"
+            >
+              <option
+                v-for="employee in outputVoucherEmployees"
+                :key="employee.id"
+                :value="employee.id"
+                :selected="employee.id == 1"
+                class="text-sm text-indigo-800"
+              >
+                {{ employee.name }}
+              </option>
+            </select>
+          </div>
+        </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
           <label class="cursor-pointer label">
             <span
@@ -214,25 +253,28 @@ onMounted(async () => {
                       <thead class="border-b bg-[#0003] text-gray-300">
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            item
+                            {{ t("Item") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Serial Number
+                            {{ t("SerialNumber") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Bill Type
+                            {{ t("BillType") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Available in Stock
+                            {{ t("AvailableInStock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Price
+                            {{ t("Price") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Stock
+                            {{ t("Stock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            Actions
+                            {{ t("Employee") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            {{ t("Actions") }}
                           </th>
                         </tr>
                       </thead>
@@ -249,22 +291,23 @@ onMounted(async () => {
                             <span
                               v-if="row.count > 0"
                               class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-                              >↑{{ row.count }}</span
+                              >↓{{ row.count }}</span
                             >
                             <span
                               v-else
                               class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-                              >↓{{ row.count }}</span
+                              >↑{{ row.count }}</span
                             >
                           </th>
                           <th>{{ row.price }}</th>
                           <th>{{ row.stockName }}</th>
+                          <th>{{ row.Employee.name }}</th>
                           <th>
                             <van-button
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
                               type="secondary"
                               is-link
-                              @click="openItem(row.itemId, row.billType)"
+                              @click="openItem(row.voucherId, row.billType)"
                               >Open
                             </van-button>
                           </th>

@@ -21,10 +21,8 @@ const colorMode = useColorMode({
     amber: "amber",
   },
 });
-const change = () => {
-  ChangeDirection();
-};
 
+//#region Pops
 const showPop = ref(false);
 const showPopup = () => {
   showPop.value = true;
@@ -32,6 +30,8 @@ const showPopup = () => {
 const closePopup = () => {
   showPop.value = false;
 };
+//#endregion
+//#region Theme Setting
 let isDark = useDark();
 let themeDark = ref(false);
 const loadRtl = ref(localStorage.getItem("isLtr"));
@@ -40,6 +40,13 @@ const changeDark = () => {
   themeDark.value = !themeDark.value;
   toggleDark(themeDark.value);
 };
+const user = useAuthStore();
+const change = () => {
+  ChangeDirection();
+};
+
+//#endregion
+//#region Search
 const searchInput = ref(false);
 document.onkeydown = function (e) {
   if (
@@ -71,8 +78,9 @@ const Search = (event: KeyboardEvent) => {
 
 // watch((valSearch)=>(old,new)=>{
 const inputRefSearch = ref<HTMLInputElement | null>(null);
-const user = useAuthStore();
-// });
+
+//#endregion
+
 onMounted(() => {
   themeDark.value = isDark.value;
   if (inputRefSearch.value) {
@@ -82,7 +90,7 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-bgLeftNavLight dark:bg-bgLeftNav shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-1 rtl:mr-1"
+    class="print:hidden flex text-white bg-bgLeftNavLight dark:bg-[#22262A] shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-2 rtl:mr-2"
   >
     <div
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4 xs:w-full"
@@ -120,7 +128,7 @@ onMounted(() => {
           :placeholder="t('Search')"
           @focus="searchInput = true"
           @blur="searchInput = false"
-          class="rounded w-full dark:bg-designTableHead bg-LightTableHead text-gray-200 px-2 py-1 duration-300"
+          class="rounded w-full border-[1px] dark:border-[#505051] dark:hover:border-[#686869] dark:bg-[#3C3C3D] dark:hover:bg-[#424243] bg-LightTableHead text-gray-200 px-2 py-1 duration-300"
           :class="{
             'lg:py-2 xs:py-1 placeholder:text-sm text-lg': searchInput,
           }"
@@ -175,7 +183,7 @@ onMounted(() => {
     </div>
   </div>
   <van-popup
-    class="bg-customer lg:ltr:left-[1723px] lg:rtl:right-[1344px] h-screen z-[999999] lg:w-[20%] xs:w-full dark:bg-content flex"
+    class="bg-customer h-screen z-[999999] lg:w-[30%] md:w-full xs:w-full dark:bg-content flex"
     v-model:show="showPop"
     round
     ><div class="dark:text-textLight w-full">
@@ -189,7 +197,7 @@ onMounted(() => {
         :variants="{ custom: { scale: 2 } }"
         :delay="200"
       >
-        <div class="flex items-center justify-between mx-6">
+        <div class="flex items-center justify-around mx-6 w-full">
           <div class="text-text dark:text-textLight font-bold text-lg">
             {{ t("Change Theme") }}
           </div>
@@ -204,7 +212,7 @@ onMounted(() => {
             </label>
           </div>
         </div>
-        <div class="flex items-center justify-between mx-6">
+        <div class="flex items-center justify-around mx-6 w-full">
           <div class="text-text dark:text-textLight font-bold text-lg">
             {{ t("Change Direction") }}
           </div>
@@ -223,12 +231,14 @@ onMounted(() => {
             />
           </div>
         </div>
-        <div class="flex items-center justify-between mx-6">
+        <div class="flex items-center justify-around mx-6 w-full">
           <div class="text-text dark:text-textLight font-bold text-lg">
             {{ t("Change Language") }}
           </div>
           <div class="flex items-center">
-            <div class="dropdown dropdown-bottom ltr:ml-5 rtl:mr-3">
+            <div
+              class="dropdown dropdown-bottom ltr:ml-5 rtl:mr-3 border-2 rounded border-[#3ABFF8] p-2"
+            >
               <button href="#" class="items-center flex" tabindex="0">
                 Languages
                 <ul
@@ -290,27 +300,29 @@ onMounted(() => {
           </div>
         </div> -->
       </div>
-      <div
-        @click="
-          $router.push('/config');
-          closePopup();
-        "
-        class="w-[350px] bg-amber-900 text-textLight mx-4 p-2 text-xl rounded-lg absolute bottom-14 cursor-pointer"
-      >
-        {{ t("Setting") }}
-      </div>
-      <div
-        @click="closePopup()"
-        class="bg-back w-[350px] text-textLight mx-4 p-2 text-xl rounded-lg absolute bottom-2 cursor-pointer"
-        :class="{
-          'bg-red-500': colorMode == 'red',
-          'bg-green-500': colorMode == 'green',
-          'bg-blue-500': colorMode == 'blue',
-          'bg-yellow-500': colorMode == 'yellow',
-          'bg-amber-900': colorMode == 'amber',
-        }"
-      >
-        {{ t("Close") }}
+      <div class="flex absolute bottom-14 w-full">
+        <div
+          @click="
+            $router.push('/config');
+            closePopup();
+          "
+          class="flex-auto sm:w-[95%] md:w-2/4 bg-amber-900 text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer"
+        >
+          {{ t("Setting") }}
+        </div>
+        <div
+          @click="closePopup()"
+          class="flex-auto sm:w-[95%] md:w-2/4 bg-back text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer"
+          :class="{
+            'bg-red-500': colorMode == 'red',
+            'bg-green-500': colorMode == 'green',
+            'bg-blue-500': colorMode == 'blue',
+            'bg-yellow-500': colorMode == 'yellow',
+            'bg-amber-900': colorMode == 'amber',
+          }"
+        >
+          {{ t("Close") }}
+        </div>
       </div>
     </div>
   </van-popup>
@@ -397,7 +409,7 @@ onMounted(() => {
 .switch4,
 .switch input {
   width: min-content;
-  padding: 50px;
+  padding: 5px;
   /*flex*/
   display: flex;
   justify-content: center;

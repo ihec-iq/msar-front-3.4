@@ -46,16 +46,23 @@ module.exports = {
         xs: "350px",
       },
       colors: {
+        mainBG: "#e8f6fd",
         // dark
-        sideNav: "#111827",
-        sideNavHover: "#111827",
+        sideNav: "#333333",
+        sideNavHover: "#252526",
+        nav: "#333333",
+        bgLeftNav: "#252526",
+        sideNavSetting: "#111827",
+        sideNavActive: "#1f2937",
+        navIconColoDark: "#858585",
+        navIconColorHoverDark: "#FEFEFE",
+
         hoverButton: "#111827",
         title: "#111827",
         designTable: "#111827",
         reportCheck: "#111827",
         designTableTr: "#111827",
         popUp: "#111827",
-        sideNavSetting: "#111827",
         tableHead: "#111827",
         //
         input: "#1f2937",
@@ -64,13 +71,12 @@ module.exports = {
         voucherFilter: "#1f2937",
         voucherTitlesHover: "#1f2937",
         text: "#1f2937",
-        sideNavActive: "#1f2937",
         tableBody: "#1f2937",
         dropDown: "#1f2937",
         select: "#1f2937",
         textAria: "#1f2937",
         //
-        nav: "#141c2a",
+
         bottomTool: "#141c2a",
         toolBar: "#141c2a",
         button: "#141c2a",
@@ -83,7 +89,6 @@ module.exports = {
         tripCount: "#374151",
         th: "#374151",
         //
-        bgLeftNav: "#1b2432",
         content: "#1b2432",
         //
         icon: "#6b7280",

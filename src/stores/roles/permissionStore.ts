@@ -7,7 +7,7 @@ export const usePermissionsStore = defineStore("permissionStore", () => {
   const permissions = ref<Array<IPermission>>([]);
   async function get() {
     if (permissions.value.length < 1) {
-      await Api.get("/ho/permission").then((response) => {
+      await Api.get("/permission").then((response) => {
         permissions.value = response.data.data;
         permissionsBase.value = response.data.data;
       });

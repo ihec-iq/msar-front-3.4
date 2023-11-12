@@ -7,14 +7,13 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Aaaaa: typeof import('./src/components/fixed/aaaaa.vue')['default']
+    AccountTableSkeleton: typeof import('./src/components/tables/AccountTableSkeleton.vue')['default']
     AddItemPopup: typeof import('./src/components/AddItemPopup.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
     BlockButton: typeof import('./src/components/dropDown/BlockButton.vue')['default']
     BottomToolBarView: typeof import('./src/components/general/BottomToolBarView.vue')['default']
     CardSkeleton: typeof import('./src/components/general/CardSkeleton.vue')['default']
-    CreatorTable: typeof import("./src/components/tables/setting/CreatorTable.vue")["default"]
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DragDrop: typeof import('./src/components/DragDrop.vue')['default']
     DragDropFilePreview: typeof import('./src/components/DragDropFilePreview.vue')['default']
@@ -26,12 +25,11 @@ declare module '@vue/runtime-core' {
     Loading: typeof import('./src/components/general/loading.vue')['default']
     LoadingFull: typeof import('./src/components/general/loadingFull.vue')['default']
     LoadingScreen: typeof import('./src/components/LoadingScreen.vue')['default']
+    MovingList: typeof import('./src/components/MovingList.vue')['default']
     NamePage: typeof import('./src/components/general/namePage.vue')['default']
     NavBar: typeof import('./src/components/fixed/navBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Scanner: typeof import('./src/components/Scanner.vue')['default']
-    ScannerComponent: typeof import('./src/components/ScannerComponent.vue')['default']
     ShowButton: typeof import('./src/components/dropDown/ShowButton.vue')['default']
     ShowInputNumber: typeof import('./src/components/inputs/ShowInputNumber.vue')['default']
     ShowInputText: typeof import('./src/components/inputs/ShowInputText.vue')['default']
@@ -43,10 +41,13 @@ declare module '@vue/runtime-core' {
     ToolBar: typeof import('./src/components/fixed/toolBar.vue')['default']
     ToolTipComponent: typeof import('./src/components/ToolTipComponent.vue')['default']
     TstView1: typeof import('./src/components/tstView1.vue')['default']
+    UserTable: typeof import('./src/components/tables/UserTable.vue')['default']
     ValidateInput: typeof import('./src/components/general/ValidateInput.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCollapse: typeof import('vant/es')['Collapse']
     VanCollapseItem: typeof import('vant/es')['CollapseItem']
     VanPopup: typeof import('vant/es')['Popup']
+    WindowsDesign: typeof import('./src/components/general/WindowsDesign.vue')['default']
+    WindowsDesign2: typeof import('./src/components/general/WindowsDesign2.vue')['default']
   }
 }

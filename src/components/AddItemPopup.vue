@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useItemStore } from "@/stores/Item/item";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
+import { useItemStore } from "@/stores/item/item";
+import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
@@ -9,7 +9,6 @@ import { usePermissionStore } from "@/stores/permission";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-const ItemName = ref<HTMLInputElement>();
 const emit = defineEmits(["setItem"]);
 //region"Props"
 
@@ -35,12 +34,11 @@ const store = () => {
   formData.append("description", item.value.description.toString());
   formData.append("code", item.value.code.toString());
   formData.append("measuringUnit", item.value.measuringUnit.toString());
-  formData.append("itemCategoryId", String(item.value.itemCategoryId));
+  formData.append("Category", JSON.stringify(item.value.Category));
   itemStore
     .store(formData)
     .then(async (response) => {
       if (response.status === 200) {
-        console.log("Save Item pop");
         emit("setItem", response.data.data);
         await useItemStore().get_items();
         reset();
@@ -54,19 +52,13 @@ const store = () => {
     });
 };
 //#endregion
-const setFocus = () => {
-  alert(1);
-  if (ItemName.value) {
-    ItemName.value.focus();
-  }
-};
 const reset = () => {
   item.value.id = 0;
   item.value.name = "";
   item.value.description = "";
   item.value.code = "";
   item.value.measuringUnit = "";
-  item.value.itemCategoryId = 0;
+  item.value.Category.id = 1;
 };
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -88,7 +80,6 @@ onMounted(async () => {
           </div>
           <input
             v-model="item.name"
-            ref="ItemName"
             type="text"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />
@@ -100,7 +91,7 @@ onMounted(async () => {
             {{ t("ItemCategory") }}
           </div>
           <select
-            v-model="item.itemCategoryId"
+            v-model="item.Category.id"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           >
             <option
@@ -241,4 +232,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/item/item@/stores/item/itemCategory

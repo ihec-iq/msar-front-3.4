@@ -31,6 +31,11 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   async function get_filter(params: IEmployeeFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
+  async function getItemHistory(params: IEmployeeFilter, page: number) {
+    return await Api.get(`${pathBase}/voucherItemHistory/filter?page=${page}`, {
+      params: params,
+    });
+  }
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);
   }
@@ -48,6 +53,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     employees,
     get,
     get_filter,
+    getItemHistory,
     get_employees,
     show,
     store,

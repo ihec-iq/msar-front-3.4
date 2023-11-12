@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useArchiveStore } from "@/stores/Archive/archive";
+import { useArchiveStore } from "@/stores/archives/archive";
 import Swal from "sweetalert2";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
@@ -227,4 +227,3 @@ const openFile = (path: string) => {
   }
 }
 </style>
-@/stores/archive/archive@/stores/archives/archive

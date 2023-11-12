@@ -16,9 +16,9 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     number: "",
     date: new Date().toISOString().split("T")[0],
     notes: "",
-    items: [],
+    Items: [],
     signaturePerson: "",
-    employeeRequest: { name: "", id: 0 },
+    Employee: { name: "", id: 0 },
   });
   const outputVouchers = ref<IOutputVoucher[]>([]);
   const outputVoucherStates = ref<IOutputVoucherState[]>([]);
@@ -55,7 +55,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
       });
   }
   async function getEmployees() {
-    return await Api.get(`${pathBase}/employee`)
+    return await Api.get(`${pathBase}/employee/lite`)
       .then((response) => {
         if (response.status == 200) {
           outputVoucherEmployees.value = response.data.data;
@@ -66,34 +66,39 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
       });
   }
   function addItem(item: IOutputVoucherItem) {
-    outputVoucher.items = [item].concat(outputVoucher.items);
+    outputVoucher.Items = [item].concat(outputVoucher.Items);
   }
   function editItem(index: number, item: IOutputVoucherItem) {
-    outputVoucher.items[index] = item;
+    outputVoucher.Items[index] = item;
   }
 
   async function removeItem(index: number) {
-    return await Api.delete(
-      `${pathBase}/outputVoucherItem/delete/` +
-        String(outputVoucher.items[index]?.id)
-    )
-      .then((response) => {
-        if (response.status == 200) {
-          outputVoucher.items?.splice(index, 1);
-        }
-      })
-      .catch((errors) => {
-        console.log("in removeItem outputVoucher : " + errors);
-      });
+    console.log(index);
+    console.log(outputVoucher.Items[index]?.id);
+    if (Number(outputVoucher.Items[index]?.id) > 0) {
+      return await Api.delete(
+        `${pathBase}/outputVoucherItem/delete/` +
+          String(outputVoucher.Items[index]?.id)
+      )
+        .then((response) => {
+          if (response.status == 200) {
+            /* empty */
+          }
+        })
+        .catch((errors) => {
+          console.log("in removeItem outputVoucher : " + errors);
+        });
+    }
+    outputVoucher.Items?.splice(index, 1);
   }
   function resetData() {
     outputVoucher.id = 0;
     outputVoucher.number = "";
     outputVoucher.date = "";
     outputVoucher.notes = "";
-    outputVoucher.items = [];
+    outputVoucher.Items = [];
     outputVoucher.signaturePerson = "";
-    outputVoucher.employeeRequest = { name: "", id: 0 };
+    outputVoucher.Employee = { name: "", id: 0 };
   }
   return {
     outputVoucher,
