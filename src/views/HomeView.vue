@@ -45,7 +45,7 @@ const filteredLinks = computed(() =>
               title="Feature"
               class="dark:text-navIconColorHoverDark dark:hover:text-navIconColoDark hover:text-navIconColoDark text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
             >
-              <span v-html="Link.iconX"></span>
+              <span v-html="Link.iconX" class="dark:text-content"></span>
             </div>
 
             <h2 class="mt-4 text-xl font-medium sm:text-2xl">

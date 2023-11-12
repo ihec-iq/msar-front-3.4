@@ -13,6 +13,8 @@ export const useVacationStore = defineStore("vacationStore", () => {
     Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
     record: 0,
     sumDaily: 0,
+    sumTime: 0,
+    sumSick: 0,
   });
   function reset() {
     vacation.id = 0;

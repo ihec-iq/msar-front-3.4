@@ -28,7 +28,7 @@ const CheckAll = ref(false);
 const toggleCheck = () => {
   if (CheckAll.value) {
     checkedPermission.value = [];
-    permissionsStore.permissionsBase.forEach((element: IPermission) => {
+    permissionsStore.permissions.forEach((element: IPermission) => {
       checkedPermission.value.push(element.name);
     });
     console.log(checkedPermission.value);

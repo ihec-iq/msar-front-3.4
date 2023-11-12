@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     localStorage.setItem("token", _token);
     Api.defaults.headers.common["Authorization"] = `Bearer ${_token}`;
   };
-  const PermissionStore = usePermissionStore();
+  //const PermissionStore = usePermissionStore();
   const setUser = (_user: IUser) => {
     user.value = _user;
     localStorage.setItem("user", JSON.stringify(_user));
