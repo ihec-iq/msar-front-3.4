@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
@@ -7,7 +6,6 @@ import { useAuthStore } from "@/stores/auth";
 //import { usePermissionStore } from "@/stores/permission";
 import Api from "./api/apiConfig";
 import { useConfigStore } from "@/stores/config";
-import DefaultLayout from "@/views/layouts/MainView.vue";
 const { ConnectionString } = storeToRefs(useConfigStore());
 
 // const { getUser } = useAuthStore();
@@ -36,7 +34,6 @@ document.onkeydown = function (s) {
 };
 // let htmlEl = document.querySelector("html");
 // htmlEl?.setAttribute("data-theme", "cupcake");
-const route = useRoute();
 onMounted(async () => {
   await useConfigStore().load();
   Api.defaults.baseURL = String(ConnectionString.value);
