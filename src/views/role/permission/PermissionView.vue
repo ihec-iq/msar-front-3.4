@@ -2,38 +2,36 @@
 import { reactive, ref, onMounted } from "vue";
 import { Form } from "vee-validate";
 import * as Yup from "yup";
-import { useRoleStore } from "@/stores/roles/role";
+import { useRoleStore } from "@/stores/roles/roleStore";
 import Swal from "sweetalert2";
 import type IRole from "@/types/role/IRole.js";
-import { usePermissionsStore } from "@/stores/roles/permission";
+import { usePermissionsStore } from "@/stores/roles/permissionStore";
 import type IPermission from "@/types/role/IPermission";
 import { useRoute, useRouter } from "vue-router";
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
+import { useI18n } from "@/stores/i18n/useI18n";
 
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
+const { t } = useI18n();
+
 const permissionsStore = usePermissionsStore();
 const namePage = ref("Add Role");
 const router = useRouter();
 const back = () => {
   router.go(-1);
 };
-const { permissions } = permissionsStore;
-console.log(permissions);
-const checkedPermission = ref<Array<IPermission>>([]);
+const checkedPermission = ref<Array<string>>([]);
 const CheckAll = ref(false);
 const toggleCheck = () => {
   if (CheckAll.value) {
-    permissions.forEach((element: IPermission) => {
-      checkedPermission.value.push(element);
+    checkedPermission.value = [];
+    permissionsStore.permissions.forEach((element: IPermission) => {
+      checkedPermission.value.push(element.name);
     });
+    console.log(checkedPermission.value);
   } else {
     checkedPermission.value = [];
   }
@@ -81,7 +79,7 @@ const onSubmit = (values: any) => {
 const errors = ref<String | null>();
 const roleStore = useRoleStore();
 const store = () => {
-  role.permissions = checkedPermission.value;
+  role.checkedPermission = checkedPermission.value;
   errors.value = null;
   roleStore
     .store(role)
@@ -110,7 +108,8 @@ const store = () => {
 };
 const update = () => {
   errors.value = null;
-  role.permissions = checkedPermission.value;
+  //role.permissions = checkedPermission.value;
+  role.checkedPermission = checkedPermission.value;
   roleStore
     .update(role, role.id)
     .then((response) => {
@@ -149,6 +148,7 @@ onMounted(() => {
         role.id = response.data.data.id;
         role.name = response.data.data.name;
         role.permissions = response.data.data.permissions;
+        //checkedPermission.value = response.data.data.permissions;
         response.data.data.permissions.forEach((element: any) => {
           checkedPermission.value.push(element.name);
         });
@@ -170,20 +170,19 @@ onMounted(() => {
       <div class="px-4">
         <div
           class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"
-        >
-          {{ t("Role Name") }}
-        </div>
+        ></div>
         <div class="flex">
-          <TextInputDark
-            :value="role.name"
-            name="name"
-            label=""
-            placeholder=""
-            type="text"
-            class="rounded-md w-full focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-white mb-10 font-bold"
-          />
+          <div class="w-1/3">
+            <InputText
+              v-model="role.name"
+              type="text"
+              name="name"
+              :label="t('Role Name')"
+            />
+          </div>
+
           <!--  -->
-          <div class="w-1/3 flex justify-center">
+          <div class="w-1/3 flex justify-end">
             <button
               v-if="role.id == 0"
               type="submit"
@@ -212,7 +211,13 @@ onMounted(() => {
       <div
         class="text-text dark:text-textLight font-black p-2 leading-8 ltr:text-left rtl:text-right px-4"
       >
-        {{ checkedPermission.join(", ") }}
+        <span
+          v-for="permission in checkedPermission"
+          :key="permission"
+          class="relative z-10 w-28 text-center p-2 m-2 text-xs rounded-md leading-none text-white whitespace-no-wrap bg-green-600 shadow-lg"
+        >
+          {{ permission }}
+        </span>
       </div>
       <div class="flex justify-between">
         <div

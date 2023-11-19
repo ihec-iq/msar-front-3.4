@@ -1,19 +1,26 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import notification from "@/views/NotificationView.vue";
-import archive from "./archive/archive";
+import archive from "./archives/archiveRoute";
 //#region for split routes in many files
-import NProgress from "nprogress";
 // import reports from "./reports/index";
 // import role from "./role/index";
 //#endregion
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
-import item from "./item/item";
-import itemCategory from "./item/itemCategory";
+import item from "./item/itemRoute";
+import inputVoucher from "./voucher/inputVoucherRoute";
+import outputVoucher from "./voucher/outputVoucherRoute";
+import corruptedVoucher from "./voucher/corruptedVoucherRoute";
+import directVoucher from "./voucher/directVoucherRoute";
+import itemCategory from "./item/itemCategoryRoute";
+import vacation from "./vacation/vacationRoute";
+import userRoute from "./user/userRoute";
+import roleRoute from "./role/roleRoute";
+import store from "./store/storeRoute";
+import DefaultLayout from "@/views/layouts/MainView.vue";
+
+import employee from "./user/employeeRoute";
+
 //#endregion
 
 const router = createRouter({
@@ -22,43 +29,78 @@ const router = createRouter({
   ), //import.meta.env.BASE_URL
   linkExactActiveClass: "linkExactActiveClass",
   routes: [
-    ...archive,
-    ...item,
-    ...itemCategory,
     {
       path: "/login",
-      name: "Login",
-      component: () => import("@/views/auth/LoginView.vue"),
-    },
-    {
-      path: "/dashboard",
-      name: "Dashboard",
-      component: () => import("@/views/HomeView.vue"),
-      meta: {
-        middleware: [authMiddleware],
-      },
+      children: [
+        {
+          name: "login",
+          path: "",
+          component: () => import("@/views/auth/LoginView.vue"),
+        },
+      ],
     },
     {
       path: "/",
-      name: "start",
-      component: () => import("@/views/AboutView.vue"),
+      name: "main",
+      component: DefaultLayout,
+      children: [
+        ...archive,
+        ...item,
+        ...itemCategory,
+        ...inputVoucher,
+        ...outputVoucher,
+        ...corruptedVoucher,
+        ...directVoucher,
+        ...vacation,
+        ...userRoute,
+        ...roleRoute,
+        ...store,
+        ...employee,
+        {
+          path: "/dashboard",
+          name: "Dashboard",
+          component: () => import("@/views/HomeView.vue"),
+          meta: {
+            middleware: [authMiddleware],
+          },
+        },
+        {
+          path: "/test",
+          name: "Test",
+          component: () => import("@/views/TestView.vue"),
+          meta: {
+            middleware: [authMiddleware],
+          },
+        },
+        {
+          path: "/config",
+          name: "Config",
+          component: () => import("@/views/ConnectionSettingView.vue"),
+        },
+        {
+          path: "/",
+          name: "start",
+          component: () => import("@/views/AboutView.vue"),
+        },
+        {
+          path: "/unauthorized",
+          name: "Unauthorized",
+          component: () => import("@/views/UnauthorizedView.vue"),
+          meta: {
+            middleware: [authMiddleware],
+          },
+        },
+        {
+          path: "/notification",
+          name: "notification",
+          component: notification,
+          meta: {
+            middleware: [authMiddleware],
+          },
+        },
+      ],
     },
-    {
-      path: "/unauthorized",
-      name: "Unauthorized",
-      component: () => import("@/views/Unauthorized.vue"),
-      meta: {
-        middleware: [authMiddleware],
-      },
-    },
-    {
-      path: "/notification",
-      name: "notification",
-      component: notification,
-      meta: {
-        middleware: [authMiddleware],
-      },
-    },
+
     {
       path: "/:pathMatch(.*)*",
       name: "NotFound",

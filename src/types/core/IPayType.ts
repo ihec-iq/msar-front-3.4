@@ -1,4 +1,4 @@
-export default interface IPayType{
-    id?:number,
-    name?:string
+export default interface IPayType {
+  id?: number;
+  name?: string;
 }
