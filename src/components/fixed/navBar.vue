@@ -57,6 +57,7 @@ const { permissions } = storeToRefs(usePermissionStore());
 const filteredLinks = computed(() =>
   Links.filter((link) => {
     // Check if any of the link's permissions are included in userPermissions
+    if (permissions.value == undefined) return;
     return link.permissions.some((permission) =>
       permissions.value.includes(permission)
     );
