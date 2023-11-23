@@ -23,6 +23,9 @@ export const useUserStore = defineStore("userStore", () => {
   async function show(id: number) {
     return await Api.get(`/user/${id}`);
   }
+  async function profile() {
+    return await Api.get(`/user/profile`);
+  }
   async function store(prams: object) {
     return await Api.post(`/user`, prams);
   }
@@ -32,5 +35,5 @@ export const useUserStore = defineStore("userStore", () => {
   async function _delete(id: number) {
     return await Api.delete(`/user/delete/${id}`);
   }
-  return { user, get, _delete, store, update, show, getError };
+  return { user, get, _delete, store, update, show, getError, profile };
 });
