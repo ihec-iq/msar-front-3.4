@@ -1,8 +1,5 @@
 import type IRole from "@/types/role/IRole";
-import type { IVacationDaily } from "../vacation/IVacationDaily";
-import type { IVacationTime } from "../vacation/IVacationTime";
-import type { IVacationSick } from "../vacation/IVacationSick";
-import type { ISection } from "../ISection";
+import type { IEmployee } from "../IEmployee";
 export interface IUser {
   name: string;
   email: string;
@@ -12,15 +9,8 @@ export interface IUser {
   any_device: number;
   active: number;
   roles: Array<IRole>;
-  profile?: IUserProfile;
+  employee?: IEmployee;
   permissions: Array<string>;
   id: number;
 }
-export interface IUserProfile {
-  id: number;
-  name: string;
-  section: ISection;
-  vacationDaily?: Array<IVacationDaily>;
-  vacationSick?: Array<IVacationSick>;
-  vacationTime?: Array<IVacationTime>;
-}
+export interface IUserProfile {}

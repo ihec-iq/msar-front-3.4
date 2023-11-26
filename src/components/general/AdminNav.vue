@@ -336,3 +336,4 @@ li:hover > button svg {
             </van-collapse>
           </li> -->
 <!-- end vant -->
+@/stores/authStore

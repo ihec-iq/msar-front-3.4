@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref } from "vue";
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
-import type IUser from "@/types/core/IUser";
+import type { IUser } from "@/types/core/IUser";
 import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { useRoleStore } from "@/stores/roles/roleStore";
@@ -13,7 +13,7 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import InputText from "@/components/inputs/InputText.vue";
 import { useUserStore } from "@/stores/userStore";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore";
 const user = useAuthStore();
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
@@ -41,6 +41,7 @@ const route = useRoute();
 const id = ref(0);
 const errors = ref<any>(null);
 const userStore = useUserStore();
+const authStore = useAuthStore();
 const isLoading = ref(false);
 const namePage = ref("Add New User");
 const userInfo = reactive<IUser>({
@@ -58,25 +59,14 @@ const userInfo = reactive<IUser>({
 const random = Math.floor(Math.random() * 10)
   .toString()
   .repeat(8);
-
 onMounted(async () => {
   isLoading.value = true;
-  id.value = Number(user.user?.id);
-  if (Number.isNaN(id.value) || id.value == 0) {
-    router.push({ name: "Dashboard" });
-  } else {
-    namePage.value = "Profile";
-    userInfo.id = id.value;
-    userStore.show(userInfo.id).then((response) => {
-      if (response.status == 200) {
-        userInfo.name = response.data.data.name;
-        userInfo.email = response.data.data.email;
-        userInfo.roles = response.data.data.roles;
-        check_any_device.value = userInfo.any_device == 1 ? true : false;
-        check_active.value = userInfo.active == 1 ? true : false;
-      }
-    });
-  }
+  //router.push({ name: "Dashboard" });
+  namePage.value = "Profile";
+  userInfo.id = id.value;
+  authStore.get_profile().then(() => {
+    userInfo.value = authStore.user;
+  });
   isLoading.value = false;
   await roleStore.getRole();
 });
@@ -300,3 +290,4 @@ onMounted(async () => {
   }
 }
 </style>
+@/stores/authStore

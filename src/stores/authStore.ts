@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import { usePermissionStore } from "./permission";
-import type IUser from "@/types/core/IUser";
+import type { IUser } from "@/types/core/IUser";
 import { useRouter } from "vue-router";
 export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);
@@ -25,6 +25,17 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         });
     });
   };
+  async function get_profile() {
+    await Api.get(`/profile`)
+      .then((response) => {
+        if (response.status == 200) {
+          setUser(response.data.data);
+        }
+      })
+      .catch((errors) => {
+        console.log("in get employee : " + errors);
+      });
+  }
   const setToken = (_token: string) => {
     if (!_token || _token == "") return logout();
     token.value = _token;
@@ -82,5 +93,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     user,
     getUser,
     CheckAuth,
+    get_profile,
   };
 });
