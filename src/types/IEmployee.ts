@@ -10,6 +10,13 @@ export interface IEmployee {
   name: string;
   section: ISection;
   isPerson: number;
+  dateWork: string;
+  number: string;
+  idCard: string;
+  initVacation: number;
+  takeVacation: number;
+  initVacationSick: number;
+  takeVacationSick: number;
   vacationDaily?: Array<IVacationDaily>;
   vacationSick?: Array<IVacationSick>;
   vacationTime?: Array<IVacationTime>;

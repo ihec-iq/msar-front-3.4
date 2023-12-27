@@ -16,11 +16,10 @@ import DeleteButton from "@/components/dropDown/DeleteButton.vue";
 import DuplicateButton from "@/components/dropDown/DuplicateButton.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
+import { useI18n } from "@/stores/i18n/useI18n";
 
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
+const { t } = useI18n();
+
 const router = useRouter();
 const roleData = ref<Array<IRole>>([]);
 const isLoadingData = ref(false);
@@ -109,7 +108,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="w-full mb-12">
-    <PageTitle> {{ t("Role") }}</PageTitle>
+    <PageTitle> {{ t("Role") }} </PageTitle>
 
     <div class="w-full">
       <div class="flex flex-col">

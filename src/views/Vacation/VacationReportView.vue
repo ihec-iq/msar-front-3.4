@@ -68,6 +68,7 @@ const getFilterData = async (page = 1) => {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
         dataBase.value = dataPage.value.data;
+        console.log(data.value);
       }
     })
     .catch((error) => {
@@ -211,10 +212,16 @@ onMounted(async () => {
                             {{ t("Employee") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("VacationRecordReport") }}
+                            <!-- {{ t("VacationRecordReport") }} -->
+                            الرصيد السابق
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("VacationOldRecordReport") }}
+                            <!-- {{ t("VacationOldRecordReport") }} -->
+                            مجموع المستنفذ
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            <!-- {{ t("VacationOldRecordReport") }} -->
+                            الاجازات المتبقية
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("VacationSumTimeReport") }}
@@ -240,9 +247,19 @@ onMounted(async () => {
                         >
                           <th>{{ row.Employee.name }}</th>
                           <th>
+                            {{ round(row.record, 3) }}
+                          </th>
+                          <th>
                             {{ round(row.sumTime / 6 + row.sumDaily, 3) }}
                           </th>
-                          <th>{{ row.oldRecord }}</th>
+                          <th>
+                            {{
+                              round(
+                                row.record - (row.sumTime / 6 + row.sumDaily),
+                                3
+                              )
+                            }}
+                          </th>
                           <th>
                             {{ round(Number(row.sumTime), 3) }}
                           </th>

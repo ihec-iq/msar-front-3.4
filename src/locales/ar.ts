@@ -1,4 +1,5 @@
 export default {
+  Profile: "الملف الشخصي",
   Archive: "الارشيف",
   AllArchives: "الارشيف الكامل",
   Name: "اسم",
@@ -484,4 +485,5 @@ export default {
   "Bug Status": "حالة المشكلة",
   Resolved: "مكتمل",
   "Not Resolved": "غير مكتمل",
+  "Change Password": "تغيير الرقم السري",
 };

@@ -41,6 +41,8 @@ const store = async () => {
         title: "Your configuration has been updated",
         showConfirmButton: false,
         timer: 1500,
+      }).then(() => {
+        router.back();
       });
     });
 };

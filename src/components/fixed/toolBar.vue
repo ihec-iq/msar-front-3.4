@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore";
 import { useI18n } from "@/stores/i18n/useI18n";
 import router from "@/router";
 import { useRoute } from "vue-router";
@@ -477,4 +477,3 @@ input:checked + .slider::before {
   color: yellow;
 }
 </style>
-@/stores/authStore

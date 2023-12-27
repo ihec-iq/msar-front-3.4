@@ -31,7 +31,7 @@ const toggleCheck = () => {
     permissionsStore.permissions.forEach((element: IPermission) => {
       checkedPermission.value.push(element.name);
     });
-    console.log(checkedPermission.value);
+    //console.log(checkedPermission.value);
   } else {
     checkedPermission.value = [];
   }
@@ -225,7 +225,9 @@ onMounted(() => {
         >
           {{ t("Set Permissions") }}
         </div>
-        <label for="table-search" class="sr-only">{{ t("Search F") }}</label>
+        <label for="table-search" class="sr-only">{{
+          t("Search For Permission")
+        }}</label>
         <div class="relative ltr:pr-4 rtl:pl-4">
           <div
             class="flex absolute bottom-8 ltr:left-0 rtl:right-0 items-center pl-3 pointer-events-none"

@@ -64,21 +64,40 @@ onMounted(async () => {
   //router.push({ name: "Dashboard" });
   namePage.value = "Profile";
   userInfo.id = id.value;
-  authStore.get_profile().then(() => {
-    userInfo.value = authStore.user;
+  authStore.get_profile().then(async () => {
+    console.log(authStore.user);
+    if (authStore.user) {
+      userInfo.name = authStore.user.name.toString();
+      userInfo.email = authStore.user.email.toString();
+      userInfo.password = authStore.user.password;
+      userInfo.password_confirmation = authStore.user.password_confirmation;
+      userInfo.any_device = authStore.user.any_device;
+      userInfo.roles = authStore.user.roles;
+      userInfo.permissions = authStore.user.permissions;
+      userInfo.active = authStore.user.active;
+    }
+    isLoading.value = false;
+    await roleStore.getRole();
   });
-  isLoading.value = false;
-  await roleStore.getRole();
 });
+const onSubmit = (values: any) => {};
+const schema = Yup.object().shape({
+  name: Yup.string().min(3).max(50).required(),
+});
+function onInvalidSubmit(error: any) {
+  console.log("onInvalidSubmit: ");
+  console.log(error);
+  console.log(user);
+  const submitBtn = document.querySelector(".submit-btn");
+  submitBtn?.classList.add("invalid");
+  setTimeout(() => {
+    submitBtn?.classList.remove("invalid");
+  }, 1000);
+}
 </script>
 <template>
   <div class="sun">
-    <Form
-      :initial-values="user"
-      @submit="onSubmit"
-      :validation-schema="schema"
-      @invalid-submit="onInvalidSubmit"
-    >
+    <Form :initial-values="userInfo">
       <div>
         <loadingFull v-if="isLoading == true" />
 
@@ -93,37 +112,20 @@ onMounted(async () => {
                 type="text"
                 name="name"
                 :label="t('User Name')"
+                :disabled="true"
               />
             </div>
-            <div class="w-1/5">
-              <InputText
-                v-model="userInfo.password"
-                type="password"
-                name="password"
-                :label="t('Password')"
-              />
-            </div>
-          </div>
-
-          <!-- Row.2 -->
-          <div class="row2 w-full mb-10 flex justify-around">
-            <div class="w-1/5">
+            <div class="w-1/5" disabled>
               <InputText
                 v-model="userInfo.email"
                 name="email"
                 :label="t('Email')"
                 type="text"
-              />
-            </div>
-            <div class="w-1/5">
-              <InputText
-                v-model="userInfo.password_confirmation"
-                name="password_confirmation"
-                :label="t('Rewrite Password')"
-                type="password"
+                :disabled="true"
               />
             </div>
           </div>
+
           <!-- row 3 -->
           <div class="row3 flex justify-around">
             <div class="w-1/5">
@@ -133,6 +135,7 @@ onMounted(async () => {
                 {{ t("Role") }}
               </div>
               <vSelect
+                disabled
                 multiple
                 class="w-full h-10 rounded-sm text-text dark:text-textLight bg-selectLight dark:bg-select"
                 v-model="userInfo.roles"
@@ -198,46 +201,81 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      <!-- <div class="text-white">{{ t("error.user_failed") }}</div> -->
-      <!-- error  -->
-      <div class="flex justify-center mb-12" v-if="errors != null">
-        <div
-          class="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700"
-          role="alert"
-        >
-          {{ t(errors) }}
-        </div>
-      </div>
+    </Form>
 
-      <!-- bottom tool bar -->
-      <div
-        :class="{
-          'w-[95%] bottom': isClose,
-          'w-10/12 bottom': !isClose,
-        }"
-        class="dark:bg-bottomTool duration-700 bg-sideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0"
-      >
-        <!-- create -->
-        <div class="flex">
-          <div class="items-center ml-2">
-            <button
-              type="submit"
-              v-if="userInfo.id == 0"
-              class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
-            >
-              {{ t("Create") }}
-            </button>
-            <button
-              v-if="userInfo.id != 0"
-              type="submit"
-              class="bg-update hover:bg-updateHover duration-500 h-12 w-32 rounded-lg text-white"
-            >
-              {{ t("Update") }}
-            </button>
+    <Form
+      :initial-values="userInfo"
+      @submit="onSubmit"
+      :validation-schema="schema"
+      @invalid-submit="onInvalidSubmit"
+    >
+      <div>
+        <loadingFull v-if="isLoading == true" />
+
+        <PageTitle> {{ t("Change Password") }} </PageTitle>
+
+        <div class="moon">
+          <!-- Row.1 -->
+          <div class="row2 w-full mb-10 flex justify-around">
+            <div class="w-1/5">
+              <InputText
+                v-model="userInfo.password"
+                type="password"
+                name="password"
+                :label="t('Password')"
+              />
+            </div>
+            <div class="w-1/5">
+              <InputText
+                v-model="userInfo.password_confirmation"
+                name="password_confirmation"
+                :label="t('Rewrite Password')"
+                type="password"
+              />
+            </div>
           </div>
         </div>
       </div>
     </Form>
+    <!-- <div class="text-white">{{ t("error.user_failed") }}</div> -->
+    <!-- error  -->
+    <div class="flex justify-center mb-12" v-if="errors != null">
+      <div
+        class="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700"
+        role="alert"
+      >
+        {{ t(errors) }}
+      </div>
+    </div>
+
+    <!-- bottom tool bar -->
+    <div
+      :class="{
+        'w-[95%] bottom': isClose,
+        'w-10/12 bottom': !isClose,
+      }"
+      class="dark:bg-bottomTool duration-700 bg-sideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0"
+    >
+      <!-- create -->
+      <div class="flex">
+        <div class="items-center ml-2">
+          <button
+            type="submit"
+            v-if="userInfo.id == 0"
+            class="bg-create submit-btn hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+          >
+            {{ t("Create") }}
+          </button>
+          <button
+            v-if="userInfo.id != 0"
+            type="submit"
+            class="bg-update submit-btn hover:bg-updateHover duration-500 h-12 w-32 rounded-lg text-white"
+          >
+            {{ t("Update") }}
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- backBtn -->
     <div class="backBtn z-10 fixed bottom-2 ml-3">
@@ -290,4 +328,3 @@ onMounted(async () => {
   }
 }
 </style>
-@/stores/authStore

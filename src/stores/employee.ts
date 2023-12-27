@@ -10,6 +10,13 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     name: "",
     section: { name: "", id: 0 },
     isPerson: 1,
+    number: "",
+    idCard: "",
+    initVacation: 0,
+    takeVacation: 0,
+    initVacationSick: 0,
+    takeVacationSick: 0,
+    dateWork: new Date().toLocaleDateString(),
   });
   const employees = ref<Array<IEmployee>>([]);
   const pathBase = "/stockSys";

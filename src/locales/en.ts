@@ -1,4 +1,5 @@
 export default {
+  Profile: "Profile",
   Archive: "Archive",
   AllArchives: "All Archives",
   Title: "Title",
@@ -150,6 +151,11 @@ export default {
   "Date Out": "Date Out",
   "Search For Permission": "Search For Permission",
   Permissions: "Permissions",
+  Setting: "Setting",
   "Print Settings": "Print Settings",
   "General Settings": "General Settings",
+  "Change Language": "Change Language",
+  "Change Direction": "Change Direction",
+  "Change Theme": "Change Theme",
+  "Change Password": "Change Password",
 };

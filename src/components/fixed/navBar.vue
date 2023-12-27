@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { useI18n } from "@/stores/i18n/useI18n";
@@ -914,4 +914,3 @@ input[id="radio-3"]:checked ~ .glider {
   }
 } */
 </style>
-@/stores/authStore
