@@ -8,6 +8,8 @@ import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "@/stores/vacations/vacation";
 import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
 import { usePermissionStore } from "@/stores/permission";
+import { number } from "yup";
+import { isNumber } from "@vueuse/core";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const { t } = useI18n();
@@ -68,7 +70,7 @@ const getFilterData = async (page = 1) => {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
         dataBase.value = dataPage.value.data;
-        console.log(data.value);
+        makeExcel(data.value);
       }
     })
     .catch((error) => {
@@ -77,6 +79,7 @@ const getFilterData = async (page = 1) => {
 
   isLoading.value = false;
 };
+const makeExcel = (data: any) => {};
 //#endregion
 const openItem = (id: number) => {
   router.push({
@@ -107,6 +110,15 @@ onMounted(async () => {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
 });
+const ToNumber = (val: any, numericFormat: boolean = true) => {
+  if (isNaN(val) || isNumber(val) == false) {
+    return 0;
+  } else return round(val, 2);
+};
+const ToNumberShow = (val: any) => {
+  if (isNaN(val) || isNumber(val) == false || val == 0) return;
+  else return round(val, 2);
+};
 </script>
 <template>
   <div class="justify-between flex">
@@ -118,7 +130,9 @@ onMounted(async () => {
       <div
         class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
       >
-        <label for="table-search" class="sr-only">{{ t("Search") }}</label>
+        <label for="table-search" class="sr-only">{{
+          t("VacationSearch")
+        }}</label>
         <div class="relative flex">
           <div
             class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
@@ -144,7 +158,7 @@ onMounted(async () => {
             v-model="fastSearch"
             @input="makeFastSearch()"
             class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('SearchForItem')"
+            :placeholder="t('VacationSearch')"
           />
         </div>
         <!-- limit -->
@@ -178,7 +192,7 @@ onMounted(async () => {
             @click="getFilterData()"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
           >
-            {{ t("Search") }}
+            {{ t("VacationSearch") }}
           </button>
         </div>
       </div>
@@ -197,15 +211,15 @@ onMounted(async () => {
                 v-if="data.length > 0"
               >
                 <div class="mt-10 p-6">
-                  <div class="w-12/12 mx-2">
+                  <div class="w-12/12 mx-2 overflow-x-auto font-Tajawal">
                     <div
                       class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                     ></div>
                     <table
-                      class="min-w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
+                      class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
                     >
                       <thead
-                        class="sticky top-0 font-semibold dark:bg-tableNew bg-white"
+                        class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-blue-300 bg-white"
                       >
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
@@ -213,7 +227,7 @@ onMounted(async () => {
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             <!-- {{ t("VacationRecordReport") }} -->
-                            الرصيد السابق
+                            الرصيد المستحق
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             <!-- {{ t("VacationOldRecordReport") }} -->
@@ -221,13 +235,29 @@ onMounted(async () => {
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             <!-- {{ t("VacationOldRecordReport") }} -->
-                            الاجازات المتبقية
+                            الرصيد المتبقي
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            <!-- {{ t("VacationOldRecordReport") }} -->
+                            اجازات هذه السنة
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("VacationSumTimeReport") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("VacationSumDailyReport") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            <!-- {{ t("VacationRecordReport") }} -->
+                            رصيد المرضية
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            <!-- {{ t("VacationOldRecordReport") }} -->
+                            مستنفذ المرضية
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            <!-- {{ t("VacationOldRecordReport") }} -->
+                            متبقي المرضية
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("VacationSumSickReport") }}
@@ -247,26 +277,71 @@ onMounted(async () => {
                         >
                           <th>{{ row.Employee.name }}</th>
                           <th>
-                            {{ round(row.record, 3) }}
-                          </th>
-                          <th>
-                            {{ round(row.sumTime / 6 + row.sumDaily, 3) }}
+                            {{ ToNumberShow(row.oldRecord) }}
                           </th>
                           <th>
                             {{
-                              round(
-                                row.record - (row.sumTime / 6 + row.sumDaily),
-                                3
+                              ToNumberShow(
+                                ToNumber(row.newRecord) +
+                                  ToNumber(row.sumTime / 7) +
+                                  ToNumber(row.sumDaily)
                               )
                             }}
                           </th>
                           <th>
-                            {{ round(Number(row.sumTime), 3) }}
+                            {{
+                              ToNumberShow(
+                                row.oldRecord -
+                                  ToNumber(
+                                    ToNumber(row.newRecord) +
+                                      ToNumber(row.sumTime / 7) +
+                                      ToNumber(row.sumDaily)
+                                  )
+                              )
+                            }}
                           </th>
-                          <th>{{ row.sumDaily }}</th>
-                          <th>{{ row.sumSick }}</th>
+                          <th>
+                            {{
+                              ToNumberShow(
+                                ToNumber(row.sumTime / 7) + row.sumDaily
+                              )
+                            }}
+                          </th>
+                          <th>
+                            {{
+                              ToNumberShow(row.sumTime) == undefined
+                                ? ""
+                                : ToNumber(row.sumTime, false) + " Hours"
+                            }}
+                          </th>
+                          <th>{{ ToNumberShow(row.sumDaily) }}</th>
 
                           <th>
+                            {{ ToNumberShow(row.oldRecordSick) }}
+                          </th>
+                          <th>
+                            {{
+                              ToNumberShow(
+                                ToNumber(row.newRecordSick) +
+                                  ToNumber(row.sumSick)
+                              )
+                            }}
+                          </th>
+                          <th>
+                            {{
+                              ToNumberShow(
+                                row.oldRecordSick -
+                                  ToNumber(
+                                    ToNumber(row.newRecordSick) +
+                                      ToNumber(row.sumSick)
+                                  )
+                              )
+                            }}
+                          </th>
+
+                          <th>{{ ToNumberShow(row.sumSick) }}</th>
+
+                          <th class="p-2">
                             <button
                               class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
                               is-link

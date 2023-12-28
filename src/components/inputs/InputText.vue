@@ -34,8 +34,8 @@ const props = defineProps({
     default: "",
   },
   disabled: {
-    type: bool,
-    default: false,
+    type: String,
+    default: "false",
   },
 });
 // use `toRef` to create reactive references to `name` prop which is passed to `useField`

@@ -120,5 +120,6 @@ router.beforeResolve(async (to, from, next) => {
     }
   }
   next();
+  return;
 });
 export default router;

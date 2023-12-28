@@ -8,8 +8,6 @@ export const useVacationStore = defineStore("vacationStore", () => {
   const vacations = ref<IVacation[]>([]);
   const vacation = reactive<IVacation>({
     id: 0,
-    oldRecord: 0,
-    newRecord: 0,
     Employee: {
       id: 0,
       name: "",
@@ -23,7 +21,12 @@ export const useVacationStore = defineStore("vacationStore", () => {
       initVacationSick: 0,
       takeVacationSick: 0,
     },
+    oldRecord: 0,
+    newRecord: 0,
     record: 0,
+    oldRecordSick: 0,
+    newRecordSick: 0,
+    recordSick: 0,
     sumDaily: 0,
     sumTime: 0,
     sumSick: 0,

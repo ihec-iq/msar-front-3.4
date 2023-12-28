@@ -43,7 +43,7 @@ export default {
   In: "In",
   AvailableInStock: "Available",
   RecordDaily: "Days",
-  RecordSick: "Hours",
+  RecordSick: "Days",
 
   VacationIndex: "Vacations System",
   VacationDailyAdd: "Add Daily Vacation",
@@ -61,6 +61,8 @@ export default {
   VacationSumTimeReport: "Time Vacation",
   VacationSumDailyReport: "Daily Vacation",
   VacationSumSickReport: "Sick Vacation",
+
+  VacationSearch: "Search by Employee name",
 
   StoreIndex: "Store",
   StoreTypeReport: "Type Report",
@@ -94,6 +96,8 @@ export default {
   Date: "Date",
   Currency: "Currency",
   setting: "Setting",
+  Here: "Here",
+  Computers: "Computers",
   "Box Account": "Box Account",
   Note: "Note",
   User: "User",

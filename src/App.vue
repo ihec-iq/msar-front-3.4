@@ -57,7 +57,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <RouterView></RouterView>
+  <RouterView class="font-Tajawal"></RouterView>
 </template>
 <style scoped>
 .dark .image-bg {

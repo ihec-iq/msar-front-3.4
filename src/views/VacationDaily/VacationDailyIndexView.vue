@@ -212,17 +212,17 @@ onMounted(async () => {
                         <div class="flex justify-betweens">
                           اجازة لمدة
                           <div
-                            class="text-text dark:text-textGray"
+                            class="text-text dark:text-red-900 border-sky-100 border-2 pl-2 pr-2 ml-2 mr-2 bg-slate-300"
                             v-html="vacation.record"
                           ></div>
                           يوم من تاريخ
                           <div
-                            class="text-text dark:text-textGray"
+                            class="text-text dark:text-textGray ml-2 mr-2"
                             v-html="vacation.dayFrom"
                           ></div>
                           الى
                           <div
-                            class="text-text dark:text-textGray"
+                            class="text-text dark:text-textGray ml-2 mr-2"
                             v-html="vacation.dayTo"
                           ></div>
                         </div>

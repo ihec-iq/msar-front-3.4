@@ -48,7 +48,7 @@ export default {
   In: "داخل",
   AvailableInStock: "المتوفر",
   RecordDaily: "عدد الايام",
-  RecordSick: "عدد الساعات",
+  RecordSick: "عدد الايام",
 
   VacationDailyAdd: "اضافة اجازة اعتيادية",
   VacationDailyUpdate: "تعديل اجازة اعتيادية",
@@ -65,7 +65,7 @@ export default {
   VacationSumTimeReport: "الاجزات الزمنية",
   VacationSumDailyReport: "الاجازات الاعتيادية",
   VacationSumSickReport: "الاجازات المرضية",
-
+  VacationSearch: "ابحث عن اسم الموظف",
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",
   ConfigServer: "اعدادات الاتصال بالسيرفر",
@@ -98,6 +98,8 @@ export default {
   Expense: "مصاريف",
   Account: "الحساب",
   setting: "الاعدادات",
+  Here: "هنا",
+  Computers: "الحواسيب",
   "Account Name": "اسم الحساب",
   "Account Type": "نوع الحساب",
   Amount: "المبلغ",

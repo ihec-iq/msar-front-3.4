@@ -40,6 +40,10 @@ module.exports = {
   // /* gray 100 */
   // color: #f3f4f6;
   theme: {
+    fontFamily: {
+      Tajawal: ["Tajawal", "sans-serif"],
+      Tajawal_bold: ["Tajawal_bold", "sans-serif"],
+    },
     extend: {
       backgroundColor,
       screens: {
@@ -196,6 +200,7 @@ module.exports = {
         thLight: "#6b7280",
         bgLeftNavLight: "#fff",
         tableNew: "#2f3349",
+        tableHeaderNew: "#505051",
 
         //#endregion
       },

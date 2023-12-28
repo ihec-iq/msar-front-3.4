@@ -26,9 +26,7 @@ const permissions = () => {
   });
 };
 const back = () => {
-  router.push({
-    name: "userIndex",
-  });
+  router.back();
 };
 
 //#region "validations"
