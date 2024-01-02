@@ -98,8 +98,8 @@ onMounted(() => {
       <div class="flex items-center">
         <div class="text-gray-500 text-2xl">#</div>
         <div class="ml-2 text-sm text-text dark:text-textLight">
-          {{ t("General") }}
-          المفوضية العليا المستقلة للانتخابات - {{ user.user?.name }}
+          <!-- {{ t("General") }} -->
+          المفوضية العليا المستقلة للانتخابات - {{ user.user?.employee?.name }}
         </div>
         <!-- <div
           class="border-l flex-grow xs:hidden sm:hidden lg:block pl-3 ml-3 border-gray-600 text-xs text-gray-400"

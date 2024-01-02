@@ -13,6 +13,8 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import InputText from "@/components/inputs/InputText.vue";
 import { useUserStore } from "@/stores/userStore";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
@@ -145,6 +147,8 @@ const random = Math.floor(Math.random() * 10)
   .repeat(8);
 
 onMounted(async () => {
+  //checkPermissionAccessArray(["show user"]);
+
   isLoading.value = true;
   if (Number.isNaN(id)) {
     namePage.value = "Add User Card";

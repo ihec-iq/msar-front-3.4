@@ -18,7 +18,7 @@ const isLoading = ref(false);
 const data = ref<Array<IVacationSick>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IVacationSick>>([]);
-const { vacationSick } = useVacationSickStore();
+const vacationSick = useVacationSickStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -39,7 +39,7 @@ watch(
   }
 );
 const addItem = () => {
-  useVacationSickStore().reset();
+  vacationSick.reset();
   router.push({
     name: "vacationSickAdd",
   });
@@ -69,7 +69,7 @@ const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.limit = 0;
   searchFilter.value.record = Number(fastSearch.value);
-  await useVacationSickStore()
+  await vacationSick
     .get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {

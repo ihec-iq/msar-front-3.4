@@ -71,9 +71,8 @@ onMounted(() => {});
       :placeholder="placeholder"
       @input="handleChange"
       @blur="handleBlur"
-      :class="{ 'disabled p-1': disabled }"
     />
-
+    <!-- :class="{ 'disabled p-1': disabled }" -->
     <p class="help-message" v-show="errorMessage || meta.valid">
       {{ t(errorMessage || successMessage) }}
     </p>
