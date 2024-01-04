@@ -9,7 +9,7 @@ export interface IUser {
   any_device: number;
   active: number;
   roles: Array<IRole>;
-  employee?: IEmployee;
+  Employee?: IEmployee;
   permissions: Array<string>;
   id: number;
 }

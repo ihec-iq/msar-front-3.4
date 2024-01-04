@@ -33,6 +33,7 @@ export default {
   ItemUnit: "الوحدة",
   ItemCategory: "صنف المادة",
   SearchForItem: "ابحث عن اسم او وصف المادة",
+  SearchForUser: "ابحث عن اسم الموظف",
   ItemUpdate: "تحديث المادة",
   InputVoucher: "ادخال مخزني",
   InputVoucherNumber: "رقم العام",

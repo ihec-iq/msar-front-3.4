@@ -3,8 +3,11 @@ import UserTable from "./UserTable.vue";
 import { useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
-
+import { onMounted } from "vue";
+import { usePermissionStore } from "@/stores/permission";
+const { checkPermissionAccessArray } = usePermissionStore();
 const { t } = useI18n();
+//
 
 const router = useRouter();
 const userAdd = () => {
@@ -12,6 +15,9 @@ const userAdd = () => {
     name: "userAdd",
   });
 };
+onMounted(async () => {
+  checkPermissionAccessArray(["Show Users"]);
+});
 </script>
 <template>
   <PageTitle> {{ t("Users Details") }}</PageTitle>

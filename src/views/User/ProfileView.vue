@@ -104,13 +104,12 @@ function onInvalidSubmit(error: any) {
         <div class="moon">
           <!-- Row.1 -->
           <div class="row w-full flex justify-around my-10">
-            <div class="w-1/5">
+            <div class="w-1/5" disabled>
               <InputText
                 v-model="userInfo.name"
                 type="text"
                 name="name"
                 :label="t('User Name')"
-                :disabled="true"
               />
             </div>
             <div class="w-1/5" disabled>
@@ -119,7 +118,6 @@ function onInvalidSubmit(error: any) {
                 name="email"
                 :label="t('Email')"
                 type="text"
-                :disabled="true"
               />
             </div>
           </div>
@@ -256,7 +254,7 @@ function onInvalidSubmit(error: any) {
     >
       <!-- create -->
       <div class="flex">
-        <div class="items-center ml-2">
+        <div class="items-center ml-2">{{ userInfo.id }}
           <button
             type="submit"
             v-if="userInfo.id == 0"

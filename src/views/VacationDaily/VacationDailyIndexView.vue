@@ -30,6 +30,8 @@ const limits = reactive([
 
 const route = useRoute();
 const router = useRouter();
+const inputRefSearch = ref<HTMLInputElement | null>(null);
+
 watch(
   () => route.params.search,
   async (newValue) => {
@@ -44,7 +46,11 @@ const addItem = () => {
     name: "vacationDailyAdd",
   });
 };
-
+const Search = async (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    await getFilterData(1);
+  }
+};
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (_vacationDaily: IVacationDailyFilter) => {
@@ -97,7 +103,9 @@ onMounted(async () => {
   checkPermissionAccessArray(["show vacations daily"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-
+  if (inputRefSearch.value) {
+    inputRefSearch.value.addEventListener("keydown", Search);
+  }
   await getFilterData(1);
 });
 </script>
@@ -135,9 +143,10 @@ onMounted(async () => {
             type="text"
             id="table-search"
             v-model="fastSearch"
+            ref="inputRefSearch"
             @input="makeFastSearch()"
             class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('SearchForItem')"
+            :placeholder="t('SearchForUser')"
           />
         </div>
         <!-- limit -->

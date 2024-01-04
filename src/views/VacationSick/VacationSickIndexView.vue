@@ -13,6 +13,7 @@ import type {
   IVacationSick,
   IVacationSickFilter,
 } from "@/types/vacation/IVacationSick";
+import { isNumeric } from "vant/lib/utils";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IVacationSick>>([]);
@@ -30,6 +31,8 @@ const limits = reactive([
 
 const route = useRoute();
 const router = useRouter();
+const inputRefSearch = ref<HTMLInputElement | null>(null);
+
 watch(
   () => route.params.search,
   async (newValue) => {
@@ -59,16 +62,27 @@ const makeFastSearch = () => {
     //data.value = dataBase.value.filter(filterByIDName);
   }
 };
+const Search = async (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    await getFilterData(1);
+  }
+};
 //#endregion
 //#region Search
 const searchFilter = ref<IVacationSickFilter>({
   dayFrom: "",
   limit: 6,
 });
+const CNumber = (val: any = 0): number => {
+  if (isNumeric(val) == false) return 0;
+  return Number(val);
+};
+
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.limit = 0;
-  searchFilter.value.record = Number(fastSearch.value);
+  searchFilter.value.record = CNumber(fastSearch.value);
+  searchFilter.value.employeeName = fastSearch.value;
   await vacationSick
     .get_filter(searchFilter.value, page)
     .then((response) => {
@@ -99,6 +113,9 @@ onMounted(async () => {
     fastSearch.value = route.params.search.toString() || "";
 
   await getFilterData(1);
+  if (inputRefSearch.value) {
+    inputRefSearch.value.addEventListener("keydown", Search);
+  }
 });
 </script>
 <template>
@@ -134,10 +151,11 @@ onMounted(async () => {
           <input
             type="text"
             id="table-search"
+            ref="inputRefSearch"
             v-model="fastSearch"
             @input="makeFastSearch()"
             class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('SearchForItem')"
+            :placeholder="t('SearchForUser')"
           />
         </div>
         <!-- limit -->

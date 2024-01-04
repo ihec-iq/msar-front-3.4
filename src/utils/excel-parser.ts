@@ -8,7 +8,8 @@ export function excelParser(
   if (!data) return;
   try {
     const fileName = newFileName || "exported-data";
-    const exportType = exportFromJSON.types[fileExportType || "xls"];
+    const exportType = (fileExportType as string) || "xls";
+
     exportFromJSON({ data, fileName, exportType });
   } catch (e) {
     throw new Error("Parsing failed!");

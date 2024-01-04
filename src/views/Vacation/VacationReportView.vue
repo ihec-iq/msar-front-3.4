@@ -11,6 +11,7 @@ import { usePermissionStore } from "@/stores/permission";
 import { number } from "yup";
 import { isNumber } from "@vueuse/core";
 const { checkPermissionAccessArray } = usePermissionStore();
+import exportFromJSON from "export-from-json";
 
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -100,6 +101,11 @@ const Search = async (event: KeyboardEvent) => {
     await getFilterData(1);
   }
 };
+const ExportExcel = async (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    await getFilterData(1);
+  }
+};
 //#endregion
 onMounted(async () => {
   checkPermissionAccessArray(["vacation Report"]);
@@ -122,7 +128,7 @@ const ToNumberShow = (val: any) => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("VacationIndex") }} </PageTitle>
+    <PageTitle> {{ t("VacationIndex") }}</PageTitle>
   </div>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->

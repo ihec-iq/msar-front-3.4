@@ -13,7 +13,19 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
     dayFrom: new Date().toISOString().split("T")[0],
     dayTo: new Date().toISOString().split("T")[0],
     Vacation: {
-      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      Employee: {
+        id: 0,
+        name: "",
+        section: { id: 0, name: "" },
+        isPerson: 1,
+        dateWork: "",
+        number: "",
+        idCard: "",
+        initVacation: 0,
+        takeVacation: 0,
+        initVacationSick: 0,
+        takeVacationSick: 0,
+      },
       record: 0,
       newRecord: 0,
       oldRecord: 0,
@@ -21,6 +33,9 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       sumDaily: 0,
       sumTime: 0,
       sumSick: 0,
+      oldRecordSick: 0,
+      newRecordSick: 0,
+      recordSick: 0,
     },
     record: 0,
   });
@@ -31,8 +46,21 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
     const d = new Date(vacationSick.dayFrom);
     d.setDate(d.getDate() + vacationSick.record);
     vacationSick.dayTo = d.toISOString().split("T")[0];
+
     vacationSick.Vacation = {
-      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      Employee: {
+        id: 0,
+        name: "",
+        section: { id: 0, name: "" },
+        isPerson: 1,
+        dateWork: "",
+        number: "",
+        idCard: "",
+        initVacation: 0,
+        takeVacation: 0,
+        initVacationSick: 0,
+        takeVacationSick: 0,
+      },
       record: 0,
       newRecord: 0,
       oldRecord: 0,
@@ -40,6 +68,9 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       sumDaily: 0,
       sumTime: 0,
       sumSick: 0,
+      oldRecordSick: 0,
+      newRecordSick: 0,
+      recordSick: 0,
     };
   }
   const pathBase = "/vacationSys";

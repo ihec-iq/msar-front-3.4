@@ -67,6 +67,7 @@ export default {
   StoreIndex: "Store",
   StoreTypeReport: "Type Report",
   SearchForItem: "Search by name or description",
+  SearchForUser: "Search by Name",
   ConfigServer: "Server Configuration",
   ConnectionString: "Connection String Server",
   EmployeeAdd: "Add new employee",
