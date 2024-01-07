@@ -127,7 +127,7 @@ onMounted(async () => {
               <th>
                 <van-button
                   class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
-                  type="secondary"
+                  type="success"
                   is-link
                   @click="console.log('delete' + index)"
                   >Delete

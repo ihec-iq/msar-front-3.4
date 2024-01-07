@@ -163,6 +163,38 @@ const back = () => {
     name: "vacationDailyIndex",
   });
 };
+const print = () => {
+  const prtHtml = document.getElementById("print")?.innerHTML;
+  // Get all stylesheets HTML
+  let stylesHtml = "";
+  for (const node of [
+    ...document.querySelectorAll('link[rel="stylesheet"], style'),
+  ]) {
+    stylesHtml += node.outerHTML;
+  }
+
+  // Open the print window
+  const WinPrint = window.open(
+    "",
+    "",
+    "left=0,top=0, toolbar=0,scrollbars=0,status=0"
+  );
+
+  WinPrint?.document.write(`<!DOCTYPE html>
+<html>
+  <head>
+    ${stylesHtml}
+  </head>
+  <body>
+    ${prtHtml}
+  </body>
+</html>`);
+
+  WinPrint?.document.close();
+  WinPrint?.focus();
+  WinPrint?.print();
+  WinPrint?.close();
+};
 onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray(["show vacations daily"]);
@@ -195,6 +227,11 @@ const ChangeDateRecord = () => {
   d.setDate(d.getDate() + vacationDaily.value.record);
   vacationDaily.value.dayTo = d.toISOString().split("T")[0];
 };
+function getImageUrl(name: string, ext: string) {
+  console.log(new URL(`@/assets/${name}.${ext}`, import.meta.url).href);
+  return new URL(`@/assets./${name}.${ext}`, import.meta.url).href;
+}
+import imagePath from "@/assets/ihec_logo_header1.png";
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
@@ -274,6 +311,12 @@ const ChangeDateRecord = () => {
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
+            @click="print()"
+            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+          >
+            {{ t("Print") }}
+          </button>
+          <button
             v-if="vacationDaily.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
@@ -312,9 +355,34 @@ const ChangeDateRecord = () => {
       </button>
     </div>
   </div>
+  <div class="print:w-full w-full hiddens" id="print">
+    <div
+      class="background-container"
+      :style="{ 'background-image': `url(${imagePath})` }"
+    >
+      <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
+      .
+    </div>
+
+    <table class="print:w-full w-full print:rtl">
+      <tr class="print:bg-slate-600">
+        <td class="print:bg-slate-600">ID</td>
+        <td class="print:bg-slate-600">Name</td>
+      </tr>
+      <tr class="print:bg-slate-600">
+        <td class="print:bg-slate-600 print:text-red-600">1</td>
+        <td class="print:bg-slate-600 print:text-red-600">Ali</td>
+      </tr>
+    </table>
+  </div>
+
   <!-- end bottom tool -->
 </template>
 <style scoped>
+.logo {
+  height: 400px;
+  width: 400px;
+}
 .drop-area {
   width: 100%;
   max-width: 800px;

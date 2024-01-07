@@ -527,7 +527,7 @@ onMounted(async () => {
               <th>
                 <van-button
                   class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                  type="secondary"
+                  type="success"
                   is-link
                   @click="updatePopup(index, row)"
                   >Edit
@@ -535,7 +535,7 @@ onMounted(async () => {
                 |
                 <van-button
                   class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
-                  type="secondary"
+                  type="success"
                   is-link
                   @click="deleteItem(index)"
                   >Delete

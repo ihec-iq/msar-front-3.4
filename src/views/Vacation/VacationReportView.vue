@@ -8,10 +8,9 @@ import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "@/stores/vacations/vacation";
 import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
 import { usePermissionStore } from "@/stores/permission";
-import { number } from "yup";
 import { isNumber } from "@vueuse/core";
 const { checkPermissionAccessArray } = usePermissionStore();
-import exportFromJSON from "export-from-json";
+import JsonExcel from "vue-json-excel3";
 
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -199,6 +198,16 @@ const ToNumberShow = (val: any) => {
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
           >
             {{ t("VacationSearch") }}
+          </button>
+        </div>
+        <div class="ml-4 lg:mt-0 xs:mt-2">
+          <button
+            @click="getFilterData()"
+            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+          >
+            <JsonExcel :data="data" type="xlsx" name="filename.xls">
+              Download Excel
+            </JsonExcel>
           </button>
         </div>
       </div>

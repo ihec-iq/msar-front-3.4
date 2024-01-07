@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
+import { DefaultURL } from "@/utils/defualts";
 
 export const useConfigStore = defineStore("ConfigStore", () => {
   const ConnectionString = ref<string | null>("");
@@ -10,7 +11,6 @@ export const useConfigStore = defineStore("ConfigStore", () => {
         await localStorage.setItem("ConnectionString", config);
         ConnectionString.value = config;
         Api.defaults.baseURL = String(ConnectionString.value);
-        console.log("Config Saved Successfully");
       } catch (error) {
         console.error("Error writing  file:", error);
       }
@@ -20,7 +20,10 @@ export const useConfigStore = defineStore("ConfigStore", () => {
   };
   const load = async () => {
     try {
-      ConnectionString.value = await localStorage.getItem("ConnectionString");
+      const URL = ref(await localStorage.getItem("ConnectionString"));
+      if (URL.value == "" || URL.value == undefined || URL.value == null)
+        URL.value = DefaultURL;
+      ConnectionString.value = URL.value;
     } catch (error) {
       console.error("Error reading file:", error);
     }

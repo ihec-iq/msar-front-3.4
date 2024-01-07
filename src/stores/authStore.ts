@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import { usePermissionStore } from "./permission";
-import type { IUser } from "@/types/core/IUser";
+import type IUser from "@/types/core/IUser";
 import { useRouter } from "vue-router";
 export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);

@@ -305,7 +305,7 @@ onMounted(async () => {
                           <th>
                             <van-button
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                              type="secondary"
+                              type="success"
                               is-link
                               @click="openItem(row.voucherId, row.billType)"
                               >Open
