@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/employee";
+import { useEmployeeStore } from "@/stores/employeeStore";
 import { useSectionStore } from "@/stores/section";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";

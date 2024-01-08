@@ -37,6 +37,8 @@ export default {
   OutputVoucherSignaturePerson: "Signature Person",
   OutputVoucherNumber: "Voucher Number",
   OutputVoucherEmployeeRequest: "Employee Request",
+  OutputVoucherEmployeeAlter: "Employee Alter",
+
   NumberVoucher: "Number Voucher",
   DirectVoucher: "Direct Voucher",
   Out: "Out",
@@ -63,6 +65,7 @@ export default {
   VacationSumSickReport: "Sick Vacation",
 
   VacationSearch: "Search by Employee name",
+  VacationReason: "Vacation Reason",
 
   StoreIndex: "Store",
   StoreTypeReport: "Type Report",

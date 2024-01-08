@@ -7,11 +7,17 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
-import { useI18n } from "@/stores/i18n/useI18n";
-import type { IVacationDaily } from "@/types/vacation/IVacationDaily";
+
+import type {
+  IVacationDaily,
+  IVacationReason,
+} from "@/types/vacation/IVacationDaily";
 import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
 import { useVacationStore } from "@/stores/vacations/vacation";
+import { useEmployeeStore } from "@/stores/employeeStore";
+import { useVacationTimeStore } from "@/stores/vacations/vacationReason";
 import type { IVacation } from "@/types/vacation/IVacation";
+import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -29,6 +35,8 @@ const { is } = storeToRefs(rtlStore);
 const itemStore = useVacationDailyStore();
 const { vacationDaily } = storeToRefs(useVacationDailyStore());
 const { vacations } = storeToRefs(useVacationStore());
+const { reasons } = storeToRefs(useVacationTimeStore());
+const { employees } = storeToRefs(useEmployeeStore());
 const Loading = ref(false);
 
 const router = useRouter();
@@ -42,6 +50,10 @@ const store = () => {
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
+  formData.append(
+    "employeeAlter",
+    JSON.stringify(vacationDaily.value.employeeAlter)
+  );
   itemStore
     .store(formData)
     .then((response) => {
@@ -74,6 +86,10 @@ function update() {
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
+  formData.append(
+    "employeeAlter",
+    JSON.stringify(vacationDaily.value.employeeAlter)
+  );
   itemStore
     .update(vacationDaily.value.id, formData)
     .then((response) => {
@@ -207,6 +223,8 @@ onMounted(async () => {
     namePage.value = t("VacationDailyUpdate");
   }
   await useVacationStore().get_vacations();
+  await useVacationTimeStore().get();
+  await useEmployeeStore().get_employees();
 });
 const ChangeDate = () => {
   if (vacationDaily.value.dayFrom >= vacationDaily.value.dayTo) {
@@ -232,6 +250,7 @@ function getImageUrl(name: string, ext: string) {
   return new URL(`@/assets./${name}.${ext}`, import.meta.url).href;
 }
 import imagePath from "@/assets/ihec_logo_header1.png";
+import type { IEmployee } from "@/types/IEmployee";
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
@@ -294,6 +313,48 @@ import imagePath from "@/assets/ihec_logo_header1.png";
           <template #option="{ Employee }">
             <div>
               <span>{{ Employee.name }}</span>
+            </div>
+          </template>
+        </vSelect>
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("OutputVoucherEmployeeAlter") }}
+        </div>
+        <vSelect
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          v-model="vacationDaily.employeeAlter"
+          :options="employees"
+          :reduce="(employee: IEmployee) => employee"
+          label="name"
+          :getOptionLabel="(employee: IEmployee) => employee.name"
+        >
+          <template #option="{ name }">
+            <div>
+              <span>{{ name }}</span>
+            </div>
+          </template>
+        </vSelect>
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("VacationReason") }}
+        </div>
+        <vSelect
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          v-model="vacationDaily.reason"
+          :options="reasons"
+          :reduce="(reason: IVacationReason) => reason"
+          label="name"
+          :getOptionLabel="(reason: IVacationReason) => reason.name"
+        >
+          <template #option="{ name }">
+            <div>
+              <span>{{ name }}</span>
             </div>
           </template>
         </vSelect>

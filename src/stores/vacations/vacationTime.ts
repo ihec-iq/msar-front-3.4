@@ -39,6 +39,10 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       recordSick: 0,
     },
     record: 0.5,
+    reason: {
+      id: 0,
+      name: "",
+    },
   });
   const addHours = (Hour: number = 0, _date: string = "") => {
     if (_date == "")
