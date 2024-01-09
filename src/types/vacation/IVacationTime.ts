@@ -8,7 +8,7 @@ export interface IVacationTime {
   timeTo: string;
   record: number;
   Vacation: IVacation;
-  reason: IVacationReason;
+  Reason: IVacationReason;
 }
 
 export interface IVacationTimeFilter {

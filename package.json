@@ -33,6 +33,7 @@
     "vant": "^3.6.3",
     "vee-validate": "^4.7.1",
     "vue": "^3.3.2",
+    "vue-html-to-paper": "^2.0.3",
     "vue-i18n": "^9.2.2",
     "vue-json-excel3": "^1.0.19",
     "vue-resizable": "^2.1.7",

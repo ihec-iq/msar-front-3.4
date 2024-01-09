@@ -29,12 +29,26 @@ const globalOptions = {
 // set default globalOptions prop
 QuillEditor.props.globalOptions.default = () => globalOptions;
 // register QuillEditor component
+
+import VueHtmlToPaper from "vue-html-to-paper";
+const options = {
+  name: "_blank",
+  specs: ["fullscreen=yes", "titlebar=yes", "scrollbars=yes"],
+  styles: [
+    "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
+    "https://unpkg.com/kidlat-css/css/kidlat.css",
+  ],
+};
+
 const app = createApp(App);
 app.component("vSelect", vSelect);
 app.component("QuillEditor", QuillEditor);
+app.use(VueHtmlToPaper, options);
+
 app.use(createPinia());
 app.use(MotionPlugin);
 app.use(router);
+
 //#region Permission
 
 // app.config.globalProperties.$baseURL =

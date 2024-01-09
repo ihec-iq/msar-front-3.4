@@ -1,4 +1,5 @@
 export default {
+  ID: "المعرف",
   Profile: "الملف الشخصي",
   Archive: "الارشيف",
   AllArchives: "الارشيف الكامل",

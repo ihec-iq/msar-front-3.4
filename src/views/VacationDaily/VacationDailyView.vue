@@ -7,22 +7,17 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
-
-import type {
-  IVacationDaily,
-  IVacationReason,
-} from "@/types/vacation/IVacationDaily";
 import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
 import { useVacationStore } from "@/stores/vacations/vacation";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useVacationTimeStore } from "@/stores/vacations/vacationReason";
+import { useVacationReasonStore } from "@/stores/vacations/vacationReason";
 import type { IVacation } from "@/types/vacation/IVacation";
+
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
+import type { IVacationReason } from "@/types/vacation/IVacationDaily";
 
-//region"Drag and Drop"
-
-//#endregion
+import htmlToPaper from "vue-html-to-paper";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -35,7 +30,7 @@ const { is } = storeToRefs(rtlStore);
 const itemStore = useVacationDailyStore();
 const { vacationDaily } = storeToRefs(useVacationDailyStore());
 const { vacations } = storeToRefs(useVacationStore());
-const { reasons } = storeToRefs(useVacationTimeStore());
+const { reasons } = storeToRefs(useVacationReasonStore());
 const { employees } = storeToRefs(useEmployeeStore());
 const Loading = ref(false);
 
@@ -51,9 +46,10 @@ const store = () => {
   formData.append("record", vacationDaily.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
   formData.append(
-    "employeeAlter",
-    JSON.stringify(vacationDaily.value.employeeAlter)
+    "EmployeeAlter",
+    JSON.stringify(vacationDaily.value.EmployeeAlter)
   );
+  formData.append("Reason", JSON.stringify(vacationDaily.value.Reason));
   itemStore
     .store(formData)
     .then((response) => {
@@ -87,9 +83,11 @@ function update() {
   formData.append("record", vacationDaily.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
   formData.append(
-    "employeeAlter",
-    JSON.stringify(vacationDaily.value.employeeAlter)
+    "EmployeeAlter",
+    JSON.stringify(vacationDaily.value.EmployeeAlter)
   );
+  formData.append("Reason", JSON.stringify(vacationDaily.value.Reason));
+
   itemStore
     .update(vacationDaily.value.id, formData)
     .then((response) => {
@@ -156,7 +154,9 @@ const showData = async () => {
         vacationDaily.value.dayTo = response.data.data.dayTo;
         vacationDaily.value.record = response.data.data.record;
         vacationDaily.value.Vacation = response.data.data.Vacation;
-        vacationDaily.value = response.data.data as IVacationDaily;
+        vacationDaily.value.EmployeeAlter = response.data.data.EmployeeAlter;
+        vacationDaily.value.Reason = response.data.data.Reason;
+        //vacationDaily.value = response.data.data as IVacationDaily;
       }
     })
     .catch((errors) => {
@@ -179,7 +179,7 @@ const back = () => {
     name: "vacationDailyIndex",
   });
 };
-const print = () => {
+const print1 = () => {
   const prtHtml = document.getElementById("print")?.innerHTML;
   // Get all stylesheets HTML
   let stylesHtml = "";
@@ -211,6 +211,10 @@ const print = () => {
   WinPrint?.print();
   WinPrint?.close();
 };
+const print = () => {
+  // Pass the element id here
+  htmlToPaper("printMe");
+};
 onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray(["show vacations daily"]);
@@ -223,7 +227,7 @@ onMounted(async () => {
     namePage.value = t("VacationDailyUpdate");
   }
   await useVacationStore().get_vacations();
-  await useVacationTimeStore().get();
+  await useVacationReasonStore().get();
   await useEmployeeStore().get_employees();
 });
 const ChangeDate = () => {
@@ -266,7 +270,7 @@ import type { IEmployee } from "@/types/IEmployee";
           v-model="vacationDaily.dayFrom"
           type="date"
           @change="ChangeDate()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          class="DateStyle"
         />
       </div>
       <div class="w-11/12 mr-2">
@@ -325,7 +329,7 @@ import type { IEmployee } from "@/types/IEmployee";
         </div>
         <vSelect
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationDaily.employeeAlter"
+          v-model="vacationDaily.EmployeeAlter"
           :options="employees"
           :reduce="(employee: IEmployee) => employee"
           label="name"
@@ -346,7 +350,7 @@ import type { IEmployee } from "@/types/IEmployee";
         </div>
         <vSelect
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationDaily.reason"
+          v-model="vacationDaily.Reason"
           :options="reasons"
           :reduce="(reason: IVacationReason) => reason"
           label="name"
@@ -416,7 +420,7 @@ import type { IEmployee } from "@/types/IEmployee";
       </button>
     </div>
   </div>
-  <div class="print:w-full w-full hiddens" id="print">
+  <div class="print:w-full w-full hiddens" id="printMe">
     <div
       class="background-container"
       :style="{ 'background-image': `url(${imagePath})` }"
@@ -440,6 +444,9 @@ import type { IEmployee } from "@/types/IEmployee";
   <!-- end bottom tool -->
 </template>
 <style scoped>
+.DateStyle {
+  @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
+}
 .logo {
   height: 400px;
   width: 400px;

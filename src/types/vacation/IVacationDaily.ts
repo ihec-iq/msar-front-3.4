@@ -7,8 +7,8 @@ export interface IVacationDaily {
   dayTo: string;
   record: number;
   Vacation: IVacation;
-  employeeAlter: IEmployee;
-  reason: IVacationReason;
+  EmployeeAlter: IEmployee;
+  Reason: IVacationReason;
 }
 export interface IVacationType {
   id: number;

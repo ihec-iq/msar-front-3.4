@@ -37,7 +37,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       newRecordSick: 0,
       recordSick: 0,
     },
-    employeeAlter: {
+    EmployeeAlter: {
       id: 1,
       name: "",
       section: { id: 0, name: "" },
@@ -51,7 +51,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       takeVacationSick: 0,
     },
     record: 0,
-    reason: {
+    Reason: {
       id: 1,
       name: "",
     },
@@ -88,7 +88,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       newRecordSick: 0,
       recordSick: 0,
     };
-    vacationDaily.employeeAlter = {
+    vacationDaily.EmployeeAlter = {
       id: 1,
       name: "",
       section: { id: 0, name: "" },
@@ -101,6 +101,10 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       initVacationSick: 0,
       takeVacationSick: 0,
     };
+    vacationDaily.Reason = {
+      id: 0,
+      name: "",
+    };
   }
   const pathBase = "/vacationSys";
   const pathUrl = `${pathBase}/vacationDaily`;
@@ -111,11 +115,11 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
   async function get_filter(params: IVacationDailyFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
-  async function store(prams: object) {
+  async function store(prams: FormData) {
     return await Api.post(`${pathUrl}/store`, prams);
   }
 
-  async function update(archive_id: number, prams: object) {
+  async function update(archive_id: number, prams: FormData) {
     return await Api.post(`${pathUrl}/update/${archive_id}`, prams);
   }
   async function show(id: number) {

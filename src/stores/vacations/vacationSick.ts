@@ -38,6 +38,10 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       recordSick: 0,
     },
     record: 0,
+    Reason: {
+      id: 1,
+      name: "",
+    },
   });
   function reset() {
     vacationSick.id = 0;

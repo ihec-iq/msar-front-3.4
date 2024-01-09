@@ -4,7 +4,7 @@ import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import type { IVacationReason } from "@/types/vacation/IVacationDaily";
 
-export const useVacationTimeStore = defineStore("vacationReasonStore", () => {
+export const useVacationReasonStore = defineStore("vacationReasonStore", () => {
   const vacationReason = reactive<IVacationReason>({
     id: 0,
     name: "",

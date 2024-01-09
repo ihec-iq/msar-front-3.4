@@ -31,6 +31,7 @@ const { is } = storeToRefs(rtlStore);
 const itemStore = useVacationSickStore();
 const { vacationSick } = storeToRefs(useVacationSickStore());
 const { vacations } = storeToRefs(useVacationStore());
+
 const Loading = ref(false);
 
 const router = useRouter();
@@ -76,6 +77,7 @@ function update() {
   formData.append("dayTo", vacationSick.value.dayTo);
   formData.append("record", vacationSick.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
+
   itemStore
     .update(vacationSick.value.id, formData)
     .then((response) => {
@@ -142,6 +144,7 @@ const showData = async () => {
         vacationSick.value.dayTo = response.data.data.dayTo;
         vacationSick.value.record = response.data.data.record;
         vacationSick.value.Vacation = response.data.data.Vacation;
+
         vacationSick.value = response.data.data as IVacationSick;
       }
     })
