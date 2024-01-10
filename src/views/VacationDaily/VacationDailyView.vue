@@ -11,13 +11,14 @@ import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
 import { useVacationStore } from "@/stores/vacations/vacation";
 import { useEmployeeStore } from "@/stores/employeeStore";
 import { useVacationReasonStore } from "@/stores/vacations/vacationReason";
+import { usePaperizer } from "paperizer";
+const { paperize } = usePaperizer("printMe");
+
 import type { IVacation } from "@/types/vacation/IVacation";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import type { IVacationReason } from "@/types/vacation/IVacationDaily";
-
-import htmlToPaper from "vue-html-to-paper";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -213,7 +214,7 @@ const print1 = () => {
 };
 const print = () => {
   // Pass the element id here
-  htmlToPaper("printMe");
+  paperize();
 };
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -251,9 +252,12 @@ const ChangeDateRecord = () => {
 };
 function getImageUrl(name: string, ext: string) {
   console.log(new URL(`@/assets/${name}.${ext}`, import.meta.url).href);
-  return new URL(`@/assets./${name}.${ext}`, import.meta.url).href;
+  return new URL(`@/assets/${name}.${ext}`, import.meta.url).href;
 }
-import imagePath from "@/assets/ihec_logo_header1.png";
+const EmployeeInfo = ref();
+const headerImg = getImageUrl("ihec_logo_header1", "png");
+import imageHeaderPath from "@/assets/ihec_logo_header1.png";
+import imageFooterPath from "@/assets/ihec_logo_footer1.png";
 import type { IEmployee } from "@/types/IEmployee";
 </script>
 <template>
@@ -420,30 +424,67 @@ import type { IEmployee } from "@/types/IEmployee";
       </button>
     </div>
   </div>
-  <div class="print:w-full w-full hiddens" id="printMe">
-    <div
-      class="background-container"
-      :style="{ 'background-image': `url(${imagePath})` }"
-    >
+  <div class="hiddens print:w-[900px] w-[900px]" id="printMe">
+    <div class="background-container">
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
-      .
+
+      <img :src="imageHeaderPath" />
     </div>
 
     <table class="print:w-full w-full print:rtl">
       <tr class="print:bg-slate-600">
-        <td class="print:bg-slate-600">ID</td>
-        <td class="print:bg-slate-600">Name</td>
+        <td class="FirstRowTD">اسم الموظف</td>
+        <td class="">
+          {{ vacationDaily.Vacation.Employee.name }}
+        </td>
       </tr>
       <tr class="print:bg-slate-600">
-        <td class="print:bg-slate-600 print:text-red-600">1</td>
-        <td class="print:bg-slate-600 print:text-red-600">Ali</td>
+        <td class="">الشعبة</td>
+        <td class="">
+          {{ vacationDaily.Vacation.Employee.section.name }}
+        </td>
+      </tr>
+      <tr class="print:bg-slate-600">
+        <td class="">سبب الاجازة</td>
+        <td class="">
+          {{ vacationDaily.Reason.name }}
+        </td>
+      </tr>
+      <tr class="print:bg-slate-600">
+        <td class="">تفاصيل الاجازة</td>
+        <td class=""></td>
+      </tr>
+      <tr class="print:bg-slate-600">
+        <td class="">توقع الموظف</td>
+        <td class=""></td>
+      </tr>
+      <tr class="print:bg-slate-600">
+        <td class="">
+          الموظف البديل وتوقيعه
+        </td>
+        <td class="">
+          {{ vacationDaily.EmployeeAlter.name }}
+        </td>
       </tr>
     </table>
+    <div class="w-12/12">
+      <div class="w-6/12">موافقة مسؤول الشعبة</div>
+      <div class="w-6/12">موافقة معاون المدير</div>
+    </div>
+    <div class="background-container">
+      <img :src="imageFooterPath" />
+    </div>
   </div>
 
   <!-- end bottom tool -->
 </template>
 <style scoped>
+@print {
+  .FirstRowTD {
+    @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
+  }
+}
+
 .DateStyle {
   @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
 }

@@ -30,25 +30,20 @@ const globalOptions = {
 QuillEditor.props.globalOptions.default = () => globalOptions;
 // register QuillEditor component
 
-import VueHtmlToPaper from "vue-html-to-paper";
-const options = {
-  name: "_blank",
-  specs: ["fullscreen=yes", "titlebar=yes", "scrollbars=yes"],
-  styles: [
-    "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
-    "https://unpkg.com/kidlat-css/css/kidlat.css",
-  ],
-};
+import PrimeVue from "primevue/config";
+import Lara from "@/presets/lara"; //import preset
 
 const app = createApp(App);
 app.component("vSelect", vSelect);
 app.component("QuillEditor", QuillEditor);
-app.use(VueHtmlToPaper, options);
 
 app.use(createPinia());
 app.use(MotionPlugin);
 app.use(router);
-
+app.use(PrimeVue, {
+  unstyled: true,
+  pt: Lara,
+});
 //#region Permission
 
 // app.config.globalProperties.$baseURL =
