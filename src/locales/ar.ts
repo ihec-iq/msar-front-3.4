@@ -492,4 +492,5 @@ export default {
   Resolved: "مكتمل",
   "Not Resolved": "غير مكتمل",
   "Change Password": "تغيير الرقم السري",
+  readMore: "اقرأ المزيد",
 };
