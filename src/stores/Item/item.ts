@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
@@ -10,15 +10,25 @@ export const useItemStore = defineStore("itemStore", () => {
     name: "",
     description: "",
     code: "",
-    itemCategory: { name: "", id: 0 },
+    Category: { name: "", id: 0 },
     measuringUnit: "",
-    itemCategoryId: 0,
   });
-
+  const items = ref<Array<IItem>>([]);
   const pathBase = "/stockSys";
   const pathUrl = `${pathBase}/item`;
-  async function get(page: number = 1) {
-    return await Api.get(`${pathUrl}?page=${page}`);
+  async function get() {
+    return await Api.get(`${pathUrl}`);
+  }
+  async function get_items() {
+    await Api.get(`${pathUrl}`)
+      .then((response) => {
+        if (response.status == 200) {
+          items.value = response.data.data;
+        }
+      })
+      .catch((errors) => {
+        console.log("in get stocks : " + errors);
+      });
   }
   async function get_filter(params: IItemFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
@@ -37,8 +47,10 @@ export const useItemStore = defineStore("itemStore", () => {
   }
   return {
     item,
+    items,
     get,
     get_filter,
+    get_items,
     show,
     store,
     update,

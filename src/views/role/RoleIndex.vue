@@ -1,28 +1,29 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useRoleStore } from "@/stores/roles/role";
-import type IRole from "@/types/role/IRole.js";
+import { useRoleStore } from "@/stores/roles/roleStore";
+import type IRole from "@/types/role/IRole";
 import Swal from "sweetalert2";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
+import SimpleLoading from "@/components/general/loading.vue";
+
 import EditButton from "@/components/dropDown/EditButton.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
 import DeleteButton from "@/components/dropDown/DeleteButton.vue";
 import DuplicateButton from "@/components/dropDown/DuplicateButton.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
+import { useI18n } from "@/stores/i18n/useI18n";
 
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
+const { t } = useI18n();
+
 const router = useRouter();
-const data = ref<Array<IRole>>([]);
-const isLoading = ref(false);
-const { get, _delete } = useRoleStore();
+const roleData = ref<Array<IRole>>([]);
+const isLoadingData = ref(false);
+const { _delete } = useRoleStore();
 const permissions = () => {
   router.push({
     name: "permissions",
@@ -57,12 +58,18 @@ const show = (idRole: number) => {
 //   });
 // };
 const getData = async () => {
-  await get().then((response) => {
-    if (response.status == 200) {
-      data.value = response.data.data;
-    }
-  });
-  isLoading.value = false;
+  isLoadingData.value = true;
+  await useRoleStore()
+    .get()
+    .then((response) => {
+      if (response.status == 200) {
+        roleData.value = response.data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoadingData.value = false;
 };
 
 const Delete = async (id: number) => {
@@ -84,82 +91,124 @@ const Delete = async (id: number) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await _delete(id).then((response) => {
+        await _delete(id).then(async (response) => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
             "success"
           );
-          getData();
+          await getData();
         });
       }
     });
 };
 onMounted(async () => {
-  getData();
+  await getData();
 });
 </script>
 <template>
   <div class="w-full mb-12">
-    <PageTitle> {{ t("Role") }}</PageTitle>
+    <PageTitle> {{ t("Role") }} </PageTitle>
 
-    <div class="max-w-full px-8 ro">
-      <div class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10">
-        <div
-          v-for="role in data"
-          :key="role.id"
-          class="bg-cardLight role dark:bg-card flex w-full p-5 rounded-lg border border-gray-700 shadow-md shadow-gray-900 duration-300 hover:border hover:border-gray-600 hover:shadow-lg hover:shadow-gray-800"
-        >
-          <div class="w-11/12 overflow-hidden">
-            <div class="ml-2 text-left">
-              <div class="text-2xl text-text dark:text-textLight mb-2">
-                {{ t("Role Name") }}: {{ role.name }}
-              </div>
-              <div
-                class="transition-all m-auto justify-center rounded-md p-2 text-text dark:text-textLight"
-              >
-                {{ t("Permissions Count") }}: {{ role.permissions.length }}
-              </div>
-              <div class="text-text dark:text-textLight flex">
+    <div class="w-full">
+      <div class="flex flex-col">
+        <div class="py-4 inline-block min-w-full lg:px-8">
+          <!-- card -->
+
+          <div class="rounded-xl" v-if="isLoadingData == false">
+            <div
+              v-motion
+              :initial="{ opacity: 0, y: -15 }"
+              :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }"
+              :delay="200"
+              v-if="roleData.length > 0"
+            >
+              <div class="max-w-full relative">
                 <div
-                  v-for="item in role.permissions.slice(0, 3)"
-                  :key="item.id"
-                  class="text-text dark:text-textLight w-36 text-center capitalize m-auto ml-2 rounded-md p-1 bg-blue-500 hover:bg-backHover transition-all"
+                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
                 >
-                  {{ item.name }}
+                  <!-- card -->
+                  <div
+                    class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                    v-for="role in roleData"
+                    :key="role.id"
+                  >
+                    <div class="w-3/4 overflow-hidden">
+                      <div
+                        class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
+                      >
+                        <div
+                          class="text-2xl text-text dark:text-textLight mb-2"
+                        >
+                          {{ role.name }}
+                        </div>
+                        <div
+                          class="text-text dark:text-textGray mb-2 justify-between"
+                        ></div>
+                        <div
+                          class="transition-all m-auto justify-center rounded-md p-2 text-text dark:text-textLight"
+                        >
+                          {{ t("Permissions Count") }}:
+                          {{ role.permissions.length }}
+                        </div>
+                        <div class="text-text dark:text-textLight flex">
+                          <div
+                            v-for="item in role.permissions.slice(0, 3)"
+                            :key="item.id"
+                            class="text-text dark:text-textLight w-36 text-center capitalize m-auto ml-2 rounded-md p-1 bg-blue-500 hover:bg-backHover transition-all"
+                          >
+                            {{ item.name }}
+                          </div>
+                          <!-- {{ role.permissions.slice(0, 2) }} -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-1/4">
+                      <div class="dropdown">
+                        <button
+                          class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
+                          type="button"
+                          id="dropdownMenuButton2"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <img
+                            src="https://img.icons8.com/office/344/menu--v1.png "
+                            class="w-8 float-left"
+                            alt=""
+                          />
+                        </button>
+
+                        <ul
+                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
+                          aria-labelledby="dropdownMenuButton2"
+                        >
+                          <li>
+                            <EditButton
+                              @click="update(role.id)"
+                              :title="t('Edit')"
+                            />
+                          </li>
+                          <li>
+                            <DeleteButton @click="Delete(role.id)" />
+                          </li>
+
+                          <!-- <li>
+                            <ShowButton @click="show(item.id)" />
+                          </li> -->
+                          <!-- <li><BlockButton /></li> -->
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end card -->
                 </div>
-                <!-- {{ role.permissions.slice(0, 2) }} -->
               </div>
             </div>
           </div>
-
-          <div class="w-1/12">
-            <button
-              class="peer p-1 text-text dark:text-textLight font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-              type="button"
-              id="dropdownMenuButton2"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                src="https://img.icons8.com/office/344/menu--v1.png "
-                class="w-8 float-left"
-                alt=""
-              />
-            </button>
-
-            <ul
-              class="dropdown-menu peer-hover:block hover:block top-40 min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
-              aria-labelledby="dropdownMenuButton2"
-            >
-              <li>
-                <EditButton @click="update(role.id)" />
-              </li>
-              <li>
-                <DeleteButton @click="Delete(role.id)" />
-              </li>
-            </ul>
-          </div>
+          <SimpleLoading v-if="isLoadingData"></SimpleLoading>
+          <!-- end card -->
         </div>
       </div>
     </div>

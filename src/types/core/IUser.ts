@@ -1,5 +1,5 @@
 import type IRole from "@/types/role/IRole";
-import type IPermission from "@/types/role/IRole";
+import type { IEmployee } from "../IEmployee";
 export default interface IUser {
   name: string;
   email: string;
@@ -9,10 +9,8 @@ export default interface IUser {
   any_device: number;
   active: number;
   roles: Array<IRole>;
+  Employee?: IEmployee;
   permissions: Array<string>;
-  // roles: {
-  //   id: number;
-  //   name: string;
-  // };
   id: number;
 }
+export interface IUserProfile {}

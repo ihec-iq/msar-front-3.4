@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from "vue";
 import backVue from "@/components/general/back.vue";
-import { useRoleStore } from "@/stores/roles/role";
+import { useRoleStore } from "@/stores/roles/roleStore";
 import Swal from "sweetalert2";
 import type IRole from "@/types/role/IRole.js";
 import { useRouter } from "vue-router";
-import { usePermissionsStore } from "@/stores/roles/permission";
+import { usePermissionsStore } from "@/stores/roles/permissionStore";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
@@ -230,3 +230,4 @@ onMounted(async () => {
   visibility: visible;
 }
 </style>
+@/stores/roles/roleStore@/stores/roles/permissionStore
