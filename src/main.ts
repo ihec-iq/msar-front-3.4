@@ -4,8 +4,10 @@ import App from "./App.vue";
 import router from "./router";
 import "./assets/main.css";
 import "./assets/vue-select.css";
+import "./assets/print.css";
 import vSelect from "vue-select";
 import "nprogress/nprogress.css";
+
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { MotionPlugin } from "@vueuse/motion";
 import { QuillEditor } from "@vueup/vue-quill";

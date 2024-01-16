@@ -181,7 +181,7 @@ const back = () => {
   });
 };
 const print1 = () => {
-  const prtHtml = document.getElementById("print")?.innerHTML;
+  const prtHtml = document.getElementById("printMe")?.innerHTML;
   // Get all stylesheets HTML
   let stylesHtml = "";
   for (const node of [
@@ -189,7 +189,6 @@ const print1 = () => {
   ]) {
     stylesHtml += node.outerHTML;
   }
-
   // Open the print window
   const WinPrint = window.open(
     "",
@@ -206,15 +205,22 @@ const print1 = () => {
     ${prtHtml}
   </body>
 </html>`);
-
-  WinPrint?.document.close();
-  WinPrint?.focus();
-  WinPrint?.print();
-  WinPrint?.close();
+  setTimeout(function () {
+    // wait until all resources loaded
+    WinPrint?.document.close(); // necessary for IE >= 10
+    WinPrint?.focus(); // necessary for IE >= 10
+    WinPrint?.print(); // change window to winPrint
+    WinPrint?.close(); // change window to winPrint
+  }, 250);
+  // WinPrint?.document.close();
+  // WinPrint?.focus();
+  // WinPrint?.print();
+  // WinPrint?.close();
 };
 const print = () => {
   // Pass the element id here
-  paperize();
+  //paperize();
+  print1();
 };
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -424,67 +430,98 @@ import type { IEmployee } from "@/types/IEmployee";
       </button>
     </div>
   </div>
-  <div class="hiddens print:w-[900px] w-[900px]" id="printMe">
-    <div class="background-container">
+  <div
+    class="hiddens print:w-[900px] w-[900px] tablePrint m-2"
+    id="printMe"
+    print:rtl
+  >
+    <div class="w-[900px] print:w-[900px]">
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
-
-      <img :src="imageHeaderPath" />
+      <img :src="imageHeaderPath" class="w-[900px] print:w-[900px]" />
     </div>
-
-    <table class="print:w-full w-full print:rtl">
-      <tr class="print:bg-slate-600">
-        <td class="FirstRowTD">اسم الموظف</td>
-        <td class="">
+    <table
+      class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+      style="
+        width: 890px !important ;
+        margin: 3px !important ;
+        text-align: right;
+      "
+    >
+      <tr class="RowTable">
+        <td class="RowHeader w-[50%]">اسم الموظف</td>
+        <td class="RowContent w-[50%]">
           {{ vacationDaily.Vacation.Employee.name }}
         </td>
       </tr>
-      <tr class="print:bg-slate-600">
-        <td class="">الشعبة</td>
-        <td class="">
+      <tr class="RowTable">
+        <td class="RowHeader w-[50%]">الشعبة</td>
+        <td class="RowContent w-[50%]">
           {{ vacationDaily.Vacation.Employee.section.name }}
         </td>
       </tr>
-      <tr class="print:bg-slate-600">
-        <td class="">سبب الاجازة</td>
-        <td class="">
+      <tr class="RowTable">
+        <td class="RowHeader w-[50%]">سبب الاجازة</td>
+        <td class="RowContent w-[50%]">
           {{ vacationDaily.Reason.name }}
         </td>
       </tr>
-      <tr class="print:bg-slate-600">
-        <td class="">تفاصيل الاجازة</td>
-        <td class=""></td>
+      <tr class="RowTable">
+        <td class="RowHeader w-[50%]">تفاصيل الاجازة</td>
+        <td class="RowContent w-[50%]"></td>
       </tr>
-      <tr class="print:bg-slate-600">
-        <td class="">توقع الموظف</td>
-        <td class=""></td>
+      <tr class="RowTable">
+        <td class="RowHeader w-[50%]">توقيع الموظف</td>
+        <td class="RowContent w-[50%]"></td>
       </tr>
-      <tr class="print:bg-slate-600">
-        <td class="">
-          الموظف البديل وتوقيعه
-        </td>
-        <td class="">
+      <tr class="RowTable">
+        <td class="RowHeader w-[50%]">الموظف البديل وتوقيعه</td>
+        <td class="RowContent w-[50%]">
           {{ vacationDaily.EmployeeAlter.name }}
         </td>
       </tr>
     </table>
-    <div class="w-12/12">
-      <div class="w-6/12">موافقة مسؤول الشعبة</div>
-      <div class="w-6/12">موافقة معاون المدير</div>
-    </div>
-    <div class="background-container">
-      <img :src="imageFooterPath" />
+    <table
+      class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+      style="
+        width: 890px !important ;
+        margin: 3px !important ;
+        text-align: right;
+      "
+    >
+      <tr class="RowTable" style="align-content: center !important">
+        <td class="font-bold text-xl text-text dark:text-textLight p-10">
+          موافقة مسؤول الشعبة
+        </td>
+        <td class="font-bold text-xl text-text dark:text-textLight p-10">
+          موافقة معاون المدير
+        </td>
+      </tr>
+    </table>
+    <div class="w-[900px] print:w-[900px]">
+      <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
+
+      <img :src="imageFooterPath" class="w-[900px] print:w-[900px]" />
     </div>
   </div>
 
   <!-- end bottom tool -->
 </template>
 <style scoped>
-@print {
-  .FirstRowTD {
-    @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
+.RowHeader {
+  @apply font-bold pr-2 pt-2 text-xl outline-none h-10 px-3 py-2  rounded-md  text-text dark:text-textLight;
+}
+.RowContent {
+  @apply pr-2 pt-2 text-xl outline-none h-10 px-3 py-2  rounded-md  text-text dark:text-textLight;
+}
+.RowTable {
+  @apply border-solid border-2 border-[#27156D];
+}
+@media print {
+  table {
+    direction: rtl;
+    width: 80%;
   }
 }
-
 .DateStyle {
   @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
 }
