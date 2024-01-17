@@ -29,7 +29,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     await Api.get(`/profile`)
       .then((response) => {
         if (response.status == 200) {
+          console.log(response.data.data);
           setUser(response.data.data);
+          return user;
         }
       })
       .catch((errors) => {

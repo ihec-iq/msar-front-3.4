@@ -1,6 +1,8 @@
 import type IRole from "@/types/role/IRole";
 import type { IEmployee } from "../IEmployee";
 export default interface IUser {
+value: any;
+user: any;
   name: string;
   email: string;
   last_login: string;

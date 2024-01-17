@@ -52,7 +52,7 @@ export default {
   AvailableInStock: "المتوفر",
   RecordDaily: "عدد الايام",
   RecordSick: "عدد الايام",
-
+  VacationDaily: "اجازة اعتيادية",
   VacationDailyAdd: "اضافة اجازة اعتيادية",
   VacationDailyUpdate: "تعديل اجازة اعتيادية",
   VacationTime: "اجازة زمنية",
@@ -73,8 +73,8 @@ export default {
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",
   ConfigServer: "اعدادات الاتصال بالسيرفر",
-
   ConnectionString: "عنوان السيرفر",
+  Organization: "المؤوسسة",
   EmployeeAdd: "اضافة بيانات موظف",
   EmployeeUpdate: "تعديل بيانات موظف",
   EmployeeIndex: "بيانات الموظفين",
@@ -90,6 +90,8 @@ export default {
   Action: "المزيد",
   Control: "لوحة التحكم",
   Create: "أنشاء",
+  CreateWithPrint: "انشاء مع طباعة",
+
   Show: "عرض",
   Update: "تعديل",
   Add: "اضافة",
@@ -115,6 +117,7 @@ export default {
   "Supplier Account": " حساب المورد",
   "Agent Account": " حساب العميل",
   User: "مستخدم",
+  "Add New User": "اضافة مستخدم جديد",
   Vouchers: "السندات",
   Voucher: "سند",
   Receipt: "سند قبض",

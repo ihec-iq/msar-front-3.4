@@ -16,8 +16,9 @@ import type {
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IVacationDaily>>([]);
-const dataPage = ref();
 const dataBase = ref<Array<IVacationDaily>>([]);
+const dataPage = ref();
+
 const { vacationDaily } = useVacationDailyStore();
 
 const limits = reactive([
@@ -111,7 +112,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("VacationDailyUpdate") }} </PageTitle>
+    <PageTitle> {{ t("VacationDaily") }} </PageTitle>
   </div>
 
   <div class="flex">

@@ -53,6 +53,8 @@ const userInfo = reactive<IUser>({
   permissions: [],
   active: 1,
   last_login: "",
+  value: undefined,
+  user: undefined,
 });
 const random = Math.floor(Math.random() * 10)
   .toString()
@@ -62,21 +64,32 @@ onMounted(async () => {
   //router.push({ name: "Dashboard" });
   namePage.value = "Profile";
   userInfo.id = id.value;
-  authStore.get_profile().then(async () => {
-    console.log(authStore.user);
-    if (authStore.user) {
-      userInfo.name = authStore.user.name.toString();
-      userInfo.email = authStore.user.email.toString();
-      userInfo.password = authStore.user.password;
-      userInfo.password_confirmation = authStore.user.password_confirmation;
-      userInfo.any_device = authStore.user.any_device;
-      userInfo.roles = authStore.user.roles;
-      userInfo.permissions = authStore.user.permissions;
-      userInfo.active = authStore.user.active;
-    }
-    isLoading.value = false;
-    await roleStore.getRole();
-  });
+  if (authStore.user) {
+    userInfo.name = authStore.user.name.toString();
+    userInfo.email = authStore.user.email.toString();
+    userInfo.password = authStore.user.password;
+    userInfo.password_confirmation = authStore.user.password_confirmation;
+    userInfo.any_device = authStore.user.any_device;
+    userInfo.roles = authStore.user.roles;
+    userInfo.permissions = authStore.user.permissions;
+    userInfo.active = authStore.user.active;
+  }
+  isLoading.value = false;
+  // authStore.get_profile().then(async () => {
+  //   console.log(authStore.user);
+  //   if (authStore.user) {
+  //     userInfo.name = authStore.user.name.toString();
+  //     userInfo.email = authStore.user.email.toString();
+  //     userInfo.password = authStore.user.password;
+  //     userInfo.password_confirmation = authStore.user.password_confirmation;
+  //     userInfo.any_device = authStore.user.any_device;
+  //     userInfo.roles = authStore.user.roles;
+  //     userInfo.permissions = authStore.user.permissions;
+  //     userInfo.active = authStore.user.active;
+  //   }
+  //   isLoading.value = false;
+  //   await roleStore.getRole();
+  // });
 });
 const onSubmit = (values: any) => {};
 const schema = Yup.object().shape({

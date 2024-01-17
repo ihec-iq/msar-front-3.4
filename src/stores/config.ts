@@ -4,15 +4,43 @@ import Api from "@/api/apiConfig";
 import { DefaultURL } from "@/utils/defualts";
 
 export const useConfigStore = defineStore("ConfigStore", () => {
+  const Organization = ref<string | null>("");
   const ConnectionString = ref<string | null>("");
-  const store = async (config: string) => {
+
+  const store = async (config: string, organization: string) => {
+    try {
+      await localStorage.setItem("ConnectionString", config);
+      ConnectionString.value = config;
+      await localStorage.setItem("Organization", organization);
+      Organization.value = organization;
+      Api.defaults.baseURL = String(ConnectionString.value);
+    } catch (error) {
+      console.error("Error writing connection config:", error);
+    }
+  };
+
+  const storeConnection = async (config: string) => {
     if (ConnectionString.value) {
       try {
         await localStorage.setItem("ConnectionString", config);
         ConnectionString.value = config;
+
         Api.defaults.baseURL = String(ConnectionString.value);
       } catch (error) {
-        console.error("Error writing  file:", error);
+        console.error("Error writing connection config:", error);
+      }
+    } else {
+      console.log("save Config failed");
+    }
+  };
+
+  const storeOrganization = async (organization: string) => {
+    if (Organization.value) {
+      try {
+        await localStorage.setItem("Organization", organization);
+        Organization.value = organization;
+      } catch (error) {
+        console.error("Error writing organization config:", error);
       }
     } else {
       console.log("save Config failed");
@@ -24,10 +52,18 @@ export const useConfigStore = defineStore("ConfigStore", () => {
       if (URL.value == "" || URL.value == undefined || URL.value == null)
         URL.value = DefaultURL;
       ConnectionString.value = URL.value;
+      Organization.value = localStorage.getItem("Organization");
     } catch (error) {
       console.error("Error reading file:", error);
     }
   };
 
-  return { ConnectionString, store, load };
+  return {
+    ConnectionString,
+    Organization,
+    store,
+    storeConnection,
+    storeOrganization,
+    load,
+  };
 });
