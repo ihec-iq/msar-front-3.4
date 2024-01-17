@@ -279,6 +279,7 @@ function getImageUrl(name: string, ext: string) {
 }
 import imageHeaderPath from "@/assets/ihec_logo_header1.png";
 import imageFooterPath from "@/assets/ihec_logo_footer1.png";
+import { useAuthStore } from "@/stores/authStore";
 
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -474,79 +475,96 @@ onMounted(async () => {
     id="printMe"
     print:rtl
   >
-    <div class="w-[900px] print:w-[900px]">
+    <div id="Header" class="w-[900px] print:w-[900px]">
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
-      <img :src="imageHeaderPath" class="w-[900px] print:w-[900px]" />
+      <img
+        :src="imageHeaderPath"
+        class="downHeader w-[900px] print:w-[900px]"
+      />
     </div>
-    <table
-      class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
-      style="
-        width: 890px !important ;
-        margin: 3px !important ;
-        text-align: right;
-      "
-    >
-      <tr class="RowTable">
-        <td class="RowHeader w-[50%]">اسم الموظف</td>
-        <td class="RowContent w-[50%]">
-          {{ vacationDaily.Vacation.Employee.name }}
-        </td>
-      </tr>
-      <tr class="RowTable">
-        <td class="RowHeader w-[50%]">الشعبة</td>
-        <td class="RowContent w-[50%]">
-          {{ vacationDaily.Vacation.Employee.section.name }}
-        </td>
-      </tr>
-      <tr class="RowTable">
-        <td class="RowHeader w-[50%]">سبب الاجازة</td>
-        <td class="RowContent w-[50%]">
-          {{ vacationDaily.Reason.name }}
-        </td>
-      </tr>
-      <tr class="RowTable">
-        <td class="RowHeader w-[50%]">تفاصيل الاجازة</td>
-        <td class="RowContent w-[50%]"></td>
-      </tr>
-      <tr class="RowTable">
-        <td class="RowHeader w-[50%]">توقيع الموظف</td>
-        <td class="RowContent w-[50%]"></td>
-      </tr>
-      <tr class="RowTable">
-        <td class="RowHeader w-[50%]">الموظف البديل وتوقيعه</td>
-        <td class="RowContent w-[50%]">
-          {{ vacationDaily.EmployeeAlter.name }}
-        </td>
-      </tr>
-    </table>
-    <table
-      class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
-      style="
-        width: 890px !important ;
-        margin: 3px !important ;
-        text-align: right;
-      "
-    >
-      <tr class="RowTable" style="align-content: center !important">
-        <td class="font-bold text-xl text-text dark:text-textLight p-10">
-          موافقة مسؤول الشعبة
-        </td>
-        <td class="font-bold text-xl text-text dark:text-textLight p-10">
-          موافقة معاون المدير
-        </td>
-      </tr>
-      <tr class="RowTable" style="align-content: center !important">
-        <td class="font-bold text-xl text-text dark:text-textLight p-10">
-          اسم وتوقيع موظف الادارية
-        </td>
-        <td class="font-bold text-xl text-text dark:text-textLight p-10">
-          توقيع المدير
-        </td>
-      </tr>
-    </table>
-    <div class="w-[903px] print:w-[903px]">
-      <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
+    <div id="body">
+      <table
+        class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+        style="
+          width: 890px !important ;
+          margin: 3px !important ;
+          text-align: right;
+        "
+      >
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">اسم الموظف</td>
+          <td class="RowContent w-[50%]">
+            {{ vacationDaily.Vacation.Employee.name }}
+          </td>
+        </tr>
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">الشعبة</td>
+          <td class="RowContent w-[50%]">
+            {{ vacationDaily.Vacation.Employee.section.name }}
+          </td>
+        </tr>
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">تفاصيل الاجازة</td>
+          <td class="RowContent w-[50%]">
+            ارجو التفضل بالموافقة على منحي اجازة اعتيادية لمدة
+            {{ vacationDaily.record }}
+            من تاريخ
+            {{ vacationDaily.dayFrom }}
+            الى تاريخ
+            {{ vacationDaily.dayTo }}
+            وذلك بسبب
+            {{ vacationDaily.Reason.name }}
+          </td>
+        </tr>
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">توقيع الموظف</td>
+          <td class="RowContent w-[50%]"></td>
+        </tr>
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">الموظف البديل وتوقيعه</td>
+          <td class="RowContent w-[50%]">
+            {{ vacationDaily.EmployeeAlter.name }}
+          </td>
+        </tr>
+      </table>
+    </div>
 
+    <div class="divFooter1 z-0 w-[900px] print:w-[900px]">
+      <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
+      <table
+        class="float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+        style="
+          width: 890px !important ;
+          margin: 3px !important ;
+          text-align: right;
+        "
+      >
+        <tr class="RowTable margin15" style="align-content: center !important">
+          <td class="font-bold text-xl text-text dark:text-textLight p-10">
+            موافقة مسؤول الشعبة
+          </td>
+          <td class="font-bold text-xl text-text dark:text-textLight p-10">
+            موافقة معاون المدير
+          </td>
+        </tr>
+        <tr class="RowTable margin15" style="align-content: center !important">
+          <td class="font-bold text-sm text-text dark:text-textLight p-10">
+            اسم وتوقيع موظف الادارية
+            <br />
+            {{ useAuthStore().user?.Employee?.name }}
+          </td>
+          <td class="font-bold text-2xl text-text dark:text-textLight p-10">
+            توقيع المدير
+          </td>
+        </tr>
+      </table>
       <img
         :src="imageFooterPath"
         class="w-[903px] print:w-[903px]"
@@ -567,10 +585,26 @@ onMounted(async () => {
 .RowTable {
   @apply border-solid border-2 border-[#27156D];
 }
+@media screen {
+}
 @media print {
   table {
     direction: rtl;
     width: 80%;
+  }
+  div.margin15 {
+    margin-top: 10px;
+  }
+  div.divFooterSignature {
+    position: fixed;
+    bottom: 1;
+  }
+  div.divFooter {
+    position: fixed;
+    bottom: 0;
+  }
+  div.downHeader {
+    padding-top: 0px;
   }
 }
 .DateStyle {
