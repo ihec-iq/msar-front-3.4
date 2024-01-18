@@ -513,14 +513,13 @@ onMounted(async () => {
         <tr class="RowTable">
           <td class="RowHeader w-[50%]">تفاصيل الاجازة</td>
           <td class="RowContent w-[50%]">
-            ارجو التفضل بالموافقة على منحي اجازة اعتيادية لمدة
+            يرجى التفضل بالموافقة على منحي اجازة اعتيادية لمدة
             {{ vacationDaily.record }}
-            من تاريخ
+            ايام براتب تام من تاريخ
             {{ vacationDaily.dayFrom }}
             الى تاريخ
             {{ vacationDaily.dayTo }}
-            وذلك بسبب
-            {{ vacationDaily.Reason.name }}
+            وذلك بسبب ( {{ vacationDaily.Reason.name }} )
           </td>
         </tr>
         <tr class="RowTable">
