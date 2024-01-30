@@ -32,8 +32,7 @@ const globalOptions = {
 QuillEditor.props.globalOptions.default = () => globalOptions;
 // register QuillEditor component
 
-import PrimeVue from "primevue/config";
-import Lara from "@/presets/lara"; //import preset
+//import preset
 
 const app = createApp(App);
 app.component("vSelect", vSelect);
@@ -42,9 +41,12 @@ app.component("QuillEditor", QuillEditor);
 app.use(createPinia());
 app.use(MotionPlugin);
 app.use(router);
-app.use(PrimeVue, {
-  unstyled: true,
-  pt: Lara,
+app.directive("focus", {
+  // When the bound element is mounted into the DOM...
+  mounted(el) {
+    // Focus the element
+    el.focus();
+  },
 });
 //#region Permission
 
