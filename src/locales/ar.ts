@@ -28,6 +28,7 @@ export default {
     "قم بسحب البيانات الى هنا  <u> او قم بالنقر هنا </u> لتحميل البيانات.",
   "Your password": "Your password",
   "Your Email Address": "Your Email Address",
+  "See whats going on": "اطلع على المستجدات",
   Item: "مادة",
   Items: "مواد",
   ItemCode: "كود المادة",

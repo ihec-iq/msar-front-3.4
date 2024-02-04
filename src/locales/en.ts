@@ -24,6 +24,8 @@ export default {
   DropFiles: "Drop files here !!!",
   SearchForArchive: "Search in Document Number to Title",
   ReleaseFiles: "Drop files here or <u>click here </u> to upload.",
+  "See whats going on": "See whats going on",
+
   Item: "Item",
   Items: "Items",
   ItemCode: "Item Code",

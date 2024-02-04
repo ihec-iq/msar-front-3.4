@@ -43,7 +43,7 @@ const schema = Yup.object().shape({
   //   .oneOf([Yup.ref("password")], "Passwords do not match"),
 });
 
-const onSubmit = (values: any) => {
+const Save = (values: any) => {
   user.name = values.name;
   user.email = values.email;
   user.password = values.password;
@@ -54,8 +54,6 @@ const onSubmit = (values: any) => {
 
 function onInvalidSubmit(error: any) {
   console.log("onInvalidSubmit: ");
-  console.log(error);
-  console.log(user);
   const submitBtn = document.querySelector(".submit-btn");
   submitBtn?.classList.add("invalid");
   setTimeout(() => {
@@ -84,6 +82,8 @@ const user = reactive<IUser>({
   permissions: [],
   active: 1,
   last_login: "",
+  value: undefined,
+  user: undefined,
 });
 
 const store = () => {
