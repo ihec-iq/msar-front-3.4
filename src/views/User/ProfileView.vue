@@ -42,19 +42,20 @@ const userStore = useUserStore();
 const authStore = useAuthStore();
 const isLoading = ref(false);
 const namePage = ref("Add New User");
-const userInfo = reactive<IUser>({
+const userInfo = ref<IUser>({
   id: 1,
   name: "",
   email: "",
   password: "",
   password_confirmation: "",
-  any_device: 1,
   roles: [],
   permissions: [],
   active: 1,
-  last_login: "",
-  value: undefined,
-  user: undefined,
+  user_name: "",
+  phone: "",
+  code: "",
+  created: "",
+  expire_date: "",
 });
 const random = Math.floor(Math.random() * 10)
   .toString()
@@ -63,189 +64,144 @@ onMounted(async () => {
   isLoading.value = true;
   //router.push({ name: "Dashboard" });
   namePage.value = "Profile";
-  userInfo.id = id.value;
+  userInfo.value.id = id.value;
   if (authStore.user) {
-    userInfo.name = authStore.user.name.toString();
-    userInfo.email = authStore.user.email.toString();
-    userInfo.password = authStore.user.password;
-    userInfo.password_confirmation = authStore.user.password_confirmation;
-    userInfo.any_device = authStore.user.any_device;
-    userInfo.roles = authStore.user.roles;
-    userInfo.permissions = authStore.user.permissions;
-    userInfo.active = authStore.user.active;
+    userInfo.value = authStore.user as IUser;
   }
   isLoading.value = false;
-  // authStore.get_profile().then(async () => {
-  //   console.log(authStore.user);
-  //   if (authStore.user) {
-  //     userInfo.name = authStore.user.name.toString();
-  //     userInfo.email = authStore.user.email.toString();
-  //     userInfo.password = authStore.user.password;
-  //     userInfo.password_confirmation = authStore.user.password_confirmation;
-  //     userInfo.any_device = authStore.user.any_device;
-  //     userInfo.roles = authStore.user.roles;
-  //     userInfo.permissions = authStore.user.permissions;
-  //     userInfo.active = authStore.user.active;
-  //   }
-  //   isLoading.value = false;
-  //   await roleStore.getRole();
-  // });
 });
-const onSubmit = (values: any) => {};
-const schema = Yup.object().shape({
-  name: Yup.string().min(3).max(50).required(),
-});
-function onInvalidSubmit(error: any) {
-  console.log("onInvalidSubmit: ");
-  console.log(error);
-  console.log(user);
-  const submitBtn = document.querySelector(".submit-btn");
-  submitBtn?.classList.add("invalid");
-  setTimeout(() => {
-    submitBtn?.classList.remove("invalid");
-  }, 1000);
-}
 </script>
 <template>
   <div class="sun">
-    <Form :initial-values="userInfo">
-      <div>
-        <loadingFull v-if="isLoading == true" />
+    <div>
+      <loadingFull v-if="isLoading == true" />
 
-        <PageTitle> {{ t(namePage) }} </PageTitle>
+      <PageTitle> {{ t(namePage) }} </PageTitle>
 
-        <div class="moon">
-          <!-- Row.1 -->
-          <div class="row w-full flex justify-around my-10">
-            <div class="w-1/5" disabled>
-              <InputText
-                v-model="userInfo.name"
-                type="text"
-                name="name"
-                :label="t('User Name')"
-              />
+      <div class="moon">
+        <!-- Row.1 -->
+        <div class="row w-full flex justify-around my-10">
+          <div class="w-1/5" disabled>
+            <InputText
+              v-model="userInfo.name"
+              type="text"
+              name="name"
+              :label="t('User Name')"
+            />
+          </div>
+          <div class="w-1/5" disabled>
+            <InputText
+              v-model="userInfo.email"
+              name="email"
+              :label="t('Email')"
+              type="text"
+            />
+          </div>
+        </div>
+
+        <!-- row 3 -->
+        <div class="row3 flex justify-around">
+          <div class="w-1/5">
+            <div
+              class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"
+            >
+              {{ t("Role") }}
             </div>
-            <div class="w-1/5" disabled>
-              <InputText
-                v-model="userInfo.email"
-                name="email"
-                :label="t('Email')"
-                type="text"
-              />
+            <vSelect
+              disabled
+              multiple
+              class="w-full h-10 rounded-sm text-text dark:text-textLight bg-selectLight dark:bg-select"
+              v-model="userInfo.roles"
+              label="name"
+              :options="roleStore.roles"
+              :reduce="(role: IRole) => role.id"
+            ></vSelect>
+            <!-- add role page -->
+            <div
+              :class="{
+                'ltr:right-1/2 rtl:left-1/2': !isClose,
+                'ltr:right-[58%] rtl:left-[58%]': isClose,
+              }"
+              class="m-5 relative bottom-[56.9%] duration-700"
+            >
+              <button
+                @click="permissions()"
+                class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-[-262px] lg:mt-[24px] transition-all duration-300 text-white"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
-
-          <!-- row 3 -->
-          <div class="row3 flex justify-around">
-            <div class="w-1/5">
+          <div class="toggles flex w-1/5 mt-10">
+            <div class="flex ltr:mr-3 rtl:ml-3">
+              <input
+                type="checkbox"
+                v-model="check_any_device"
+                class="toggle toggle-info"
+              />
               <div
-                class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"
+                class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
               >
-                {{ t("Role") }}
-              </div>
-              <vSelect
-                disabled
-                multiple
-                class="w-full h-10 rounded-sm text-text dark:text-textLight bg-selectLight dark:bg-select"
-                v-model="userInfo.roles"
-                label="name"
-                :options="roleStore.roles"
-                :reduce="(role: IRole) => role.id"
-              ></vSelect>
-              <!-- add role page -->
-              <div
-                :class="{
-                  'ltr:right-1/2 rtl:left-1/2': !isClose,
-                  'ltr:right-[58%] rtl:left-[58%]': isClose,
-                }"
-                class="m-5 relative bottom-[56.9%] duration-700"
-              >
-                <button
-                  @click="permissions()"
-                  class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-[-262px] lg:mt-[24px] transition-all duration-300 text-white"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </button>
+                {{ t("Any Device") }}
               </div>
             </div>
-            <div class="toggles flex w-1/5 mt-10">
-              <div class="flex ltr:mr-3 rtl:ml-3">
-                <input
-                  type="checkbox"
-                  v-model="check_any_device"
-                  class="toggle toggle-info"
-                />
-                <div
-                  class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
-                >
-                  {{ t("Any Device") }}
-                </div>
-              </div>
-              <div class="flex justify-center">
-                <input
-                  type="checkbox"
-                  v-model="check_active"
-                  class="toggle toggle-info"
-                />
-                <div
-                  class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
-                >
-                  {{ t("Active") }}
-                </div>
+            <div class="flex justify-center">
+              <input
+                type="checkbox"
+                v-model="check_active"
+                class="toggle toggle-info"
+              />
+              <div
+                class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
+              >
+                {{ t("Active") }}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </Form>
+    </div>
 
-    <Form
-      :initial-values="userInfo"
-      @submit="onSubmit"
-      :validation-schema="schema"
-      @invalid-submit="onInvalidSubmit"
-    >
-      <div>
-        <loadingFull v-if="isLoading == true" />
+    <div>
+      <loadingFull v-if="isLoading == true" />
 
-        <PageTitle> {{ t("Change Password") }} </PageTitle>
+      <PageTitle> {{ t("Change Password") }} </PageTitle>
 
-        <div class="moon">
-          <!-- Row.1 -->
-          <div class="row2 w-full mb-10 flex justify-around">
-            <div class="w-1/5">
-              <InputText
-                v-model="userInfo.password"
-                type="password"
-                name="password"
-                :label="t('Password')"
-              />
-            </div>
-            <div class="w-1/5">
-              <InputText
-                v-model="userInfo.password_confirmation"
-                name="password_confirmation"
-                :label="t('Rewrite Password')"
-                type="password"
-              />
-            </div>
+      <div class="moon">
+        <!-- Row.1 -->
+        <div class="row2 w-full mb-10 flex justify-around">
+          <div class="w-1/5">
+            <InputText
+              v-model="userInfo.password"
+              type="password"
+              name="password"
+              :label="t('Password')"
+            />
+          </div>
+          <div class="w-1/5">
+            <InputText
+              v-model="userInfo.password_confirmation"
+              name="password_confirmation"
+              :label="t('Rewrite Password')"
+              type="password"
+            />
           </div>
         </div>
       </div>
-    </Form>
+    </div>
     <!-- <div class="text-white">{{ t("error.user_failed") }}</div> -->
     <!-- error  -->
     <div class="flex justify-center mb-12" v-if="errors != null">

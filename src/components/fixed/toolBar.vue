@@ -7,7 +7,6 @@ import { useAuthStore } from "@/stores/authStore";
 import { useI18n } from "@/stores/i18n/useI18n";
 import router from "@/router";
 import { useRoute } from "vue-router";
-import type IUser from "@/types/core/IUser";
 const { t, setLocale, Languages } = useI18n();
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);

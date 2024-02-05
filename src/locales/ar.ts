@@ -29,6 +29,8 @@ export default {
   "Your password": "Your password",
   "Your Email Address": "Your Email Address",
   "See whats going on": "اطلع على المستجدات",
+  UserSearch: "ابحث عن اسم المستخدم او الاميل",
+
   Item: "مادة",
   Items: "مواد",
   ItemCode: "كود المادة",

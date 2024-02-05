@@ -25,6 +25,7 @@ export default {
   SearchForArchive: "Search in Document Number to Title",
   ReleaseFiles: "Drop files here or <u>click here </u> to upload.",
   "See whats going on": "See whats going on",
+  UserSearch: "Search by User name or Email",
 
   Item: "Item",
   Items: "Items",

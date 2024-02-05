@@ -215,7 +215,6 @@ const ToNumberShow = (val: any) => {
         <div class="flex flex-col">
           <div class="py-4 inline-block min-w-full lg:px-8">
             <!-- card -->
-
             <div class="rounded-xl" v-if="isLoading == false">
               <div
                 v-motion
