@@ -4,7 +4,11 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useArchiveStore } from "@/stores/archives/archive";
 import { useI18n } from "@/stores/i18n/useI18n";
 import { usePermissionStore } from "@/stores/permission";
-import type { IArchive, IArchiveFilter, IDocument } from "@/types/archives/IArchive";
+import type {
+  IArchive,
+  IArchiveFilter,
+  IDocument,
+} from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { storeToRefs } from "pinia";
 import { onMounted, reactive, ref, watch } from "vue";
@@ -21,9 +25,9 @@ const { get_filter } = useArchiveStore();
 const { archiveTypes } = storeToRefs(useArchiveStore());
 
 const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
+  { name: "10", val: 10, selected: true },
+  { name: "20", val: 12, selected: false },
+  { name: "30", val: 24, selected: false },
   { name: "50", val: 50, selected: false },
   { name: "All", val: 999999999 },
 ]);
@@ -33,7 +37,8 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1, -1);
   }
 );
@@ -74,7 +79,7 @@ const makeFastSearch = () => {
 //#region Search
 const searchFilter = ref<IArchiveFilter>({
   title: "",
-  limit: 6,
+  limit: 10,
   issueDateFrom: new Date(new Date().setDate(new Date().getDate() - 360))
     .toISOString()
     .split("T")[0],
@@ -132,7 +137,8 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 const getPath = (files: Array<IDocument>) => {
-  if (files.length == 0 || files == null) return "https://picsum.photos/100/150/?random";
+  if (files.length == 0 || files == null)
+    return "https://picsum.photos/100/150/?random";
   else {
     if (files[0].extension == "png" || files[0].extension == "jpg")
       return String(files[0].path);
@@ -160,7 +166,9 @@ onMounted(async () => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
+      <div
+        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
+      >
         <label for="table-search" class="sr-only">{{ t("Search") }}</label>
         <div class="relative flex">
           <div
@@ -216,7 +224,9 @@ onMounted(async () => {
           </div>
         </div>
         <!-- limit -->
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
+        <div
+          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+        >
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
@@ -249,88 +259,99 @@ onMounted(async () => {
           </button>
         </div>
       </div>
-      <div class="w-full">
-        <div class="flex flex-col">
-          <div class="py-4 inline-block min-w-full lg:px-8">
-            <!-- card -->
-
-            <div class="rounded-xl">
-              <div
-                v-motion
-                :initial="{ opacity: 0, y: -15 }"
-                :enter="{ opacity: 1, y: 0 }"
-                :variants="{ custom: { scale: 2 } }"
-                :delay="200"
-                v-if="archiveTypes.length > 0"
-              >
-                <div class="max-w-full relative">
-                  <div
-                    class="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
-                  >
-                    <!-- card -->
+      <div class="collapse container-main m-2">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl font-medium">
+          للاطلاع على كافة الكتب حسب نوع الكتاب
+        </div>
+        <div class="collapse-content">
+          <div class="flex flex-col">
+            <div class="py-4 inline-block min-w-full lg:px-8">
+              <div class="rounded-xl">
+                <div
+                  v-motion
+                  :initial="{ opacity: 0, y: -15 }"
+                  :enter="{ opacity: 1, y: 0 }"
+                  :variants="{ custom: { scale: 2 } }"
+                  :delay="200"
+                  v-if="archiveTypes.length > 0"
+                >
+                  <div class="max-w-full relative">
                     <div
-                      class="bg-cardLight btn dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                      class="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
                     >
-                      <div class="w-4/4 overflow-hidden">
-                        <button
-                          @click="getFilterData(1, -1)"
-                          class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-2xl xs:text-2xl h-full text-text justify-between dark:text-textLight mb-2"
-                        >
-                          <span class="float-right flex"> عرض الجميع </span>
-                          <span class="float-left text-sm mr-8 flex dark:text-textGray">
-                            0
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
-                              ></path>
-                            </svg>
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                    <div v-for="archiveType in archiveTypes" :key="archiveType.id">
+                      <!-- card -->
                       <div
-                        class="bg-cardLight btn dark:bg-[#33393F] hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-600 dark:shadow-gray-900 duration-500 hover:border hover:border-gray-600 dark:hover:shadow-md hover:shadow-gray-400"
+                        class="bg-cardLight btn dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
                       >
-                        <button
-                          @click="getFilterData(1, archiveType.id)"
-                          class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-2xl xs:text-2xl h-full w-full p-15 text-text justify-between dark:text-textLight mb-2"
-                        >
-                          <span class="float-right flex">
-                            {{ archiveType.name }}
-                          </span>
-                          <span class="float-left text-sm mr-8 flex dark:text-textGray">
-                            {{ archiveType.archives }}
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
-                              class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
-                              viewBox="0 0 24 24"
+                        <div class="w-4/4 overflow-hidden">
+                          <button
+                            @click="getFilterData(1, -1)"
+                            class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-2xl xs:text-2xl h-full text-text justify-between dark:text-textLight mb-2"
+                          >
+                            <span class="float-right flex"> عرض الجميع </span>
+                            <span
+                              class="float-left text-sm mr-8 flex dark:text-textGray"
                             >
-                              <path
-                                fill="currentColor"
-                                d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
-                              ></path>
-                            </svg>
-                          </span>
-                        </button>
+                              0
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
+                                ></path>
+                              </svg>
+                            </span>
+                          </button>
+                        </div>
                       </div>
+                      <div
+                        v-for="archiveType in archiveTypes"
+                        :key="archiveType.id"
+                      >
+                        <div
+                          class="bg-cardLight btn dark:bg-[#33393F] hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-600 dark:shadow-gray-900 duration-500 hover:border hover:border-gray-600 dark:hover:shadow-md hover:shadow-gray-400"
+                        >
+                          <button
+                            @click="getFilterData(1, archiveType.id)"
+                            class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-2xl xs:text-2xl h-full w-full p-15 text-text justify-between dark:text-textLight mb-2"
+                          >
+                            <span class="float-right flex">
+                              {{ archiveType.name }}
+                            </span>
+                            <span
+                              class="float-left text-sm mr-8 flex dark:text-textGray"
+                            >
+                              {{ archiveType.archives }}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  d="m11.9.39l1.4 1.4c1.61.19 3.5-.74 4.61.37s.18 3 .37 4.61l1.4 1.4c.39.39.39 1.02 0 1.41l-9.19 9.2c-.4.39-1.03.39-1.42 0L1.29 11c-.39-.39-.39-1.02 0-1.42l9.2-9.19a.996.996 0 0 1 1.41 0zm.58 2.25l-.58.58l4.95 4.95l.58-.58c-.19-.6-.2-1.22-.15-1.82c.02-.31.05-.62.09-.92c.12-1 .18-1.63-.17-1.98s-.98-.29-1.98-.17c-.3.04-.61.07-.92.09c-.6.05-1.22.04-1.82-.15zm4.02.93c.39.39.39 1.03 0 1.42s-1.03.39-1.42 0s-.39-1.03 0-1.42s1.03-.39 1.42 0zm-6.72.36l-.71.7L15.44 11l.7-.71zM8.36 5.34l-.7.71l6.36 6.36l.71-.7zM6.95 6.76l-.71.7l6.37 6.37l.7-.71zM5.54 8.17l-.71.71l6.36 6.36l.71-.71zM4.12 9.58l-.71.71l6.37 6.37l.71-.71z"
+                                ></path>
+                              </svg>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                      <!-- end card -->
                     </div>
-                    <!-- end card -->
                   </div>
                 </div>
               </div>
+              <SimpleLoading v-if="isLoading"></SimpleLoading>
+              <!-- end card -->
             </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
-            <!-- end card -->
           </div>
         </div>
       </div>
@@ -368,16 +389,27 @@ onMounted(async () => {
                         />
                       </div>
                       <div class="w-3/4 overflow-hidden">
-                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
-                          <div class="text-2xl text-text dark:text-textLight mb-2">
+                        <div
+                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
+                        >
+                          <div
+                            class="text-2xl text-text dark:text-textLight mb-2"
+                          >
                             {{ item.title }}
                           </div>
-                          <div class="text-text dark:text-textGray mb-2 justify-between">
-                            <span>{{ t("NumberBook") }}: {{ item.number }}</span>
-                          </div>
-                          <div class="text-text dark:text-textGray mb-2 justify-between">
+                          <div
+                            class="text-text dark:text-textGray mb-2 justify-between"
+                          >
                             <span
-                              >{{ t("Date") }}: {{ item.issueDate.split(" ")[0] }}</span
+                              >{{ t("NumberBook") }}: {{ item.number }}</span
+                            >
+                          </div>
+                          <div
+                            class="text-text dark:text-textGray mb-2 justify-between"
+                          >
+                            <span
+                              >{{ t("Date") }}:
+                              {{ item.issueDate.split(" ")[0] }}</span
                             >
                             <span class="float-left flex">
                               {{ item.files.length }}
@@ -440,7 +472,7 @@ onMounted(async () => {
                         </button>
 
                         <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-gray-800"
+                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none dark:bg-gray-800 bg-white"
                           aria-labelledby="dropdownMenuButton2"
                         >
                           <li>
