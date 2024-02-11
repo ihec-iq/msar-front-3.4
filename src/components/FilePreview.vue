@@ -91,6 +91,9 @@ const openFile = (path: string) => {
       :alt="document.name"
       :title="document.name"
     />
+    <div style="color: darkkhaki" class="info">
+      {{ document.title }}
+    </div>
     <span style="color: darkkhaki" class="info">
       {{ document.extension }}
       {{ document.size }}

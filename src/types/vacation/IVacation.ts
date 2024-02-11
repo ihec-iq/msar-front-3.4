@@ -2,12 +2,15 @@ import type { IEmployee } from "../IEmployee";
 
 export interface IVacation {
   id: number;
+  Employee: IEmployee;
   record: number;
   oldRecord: number;
   newRecord: number;
-  Employee: IEmployee;
   sumDaily: number;
   sumTime: number;
+  oldRecordSick: number;
+  newRecordSick: number;
+  recordSick: number;
   sumSick: number;
 }
 

@@ -478,8 +478,12 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         ></div>
-        <table class="min-w-full text-center">
-          <thead class="border-b bg-[#0003] text-gray-300">
+        <table
+          class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
+        >
+          <thead
+            class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
+          >
             <tr>
               <th scope="col" class="text-sm font-medium px-2 py-2">
                 {{ t("ID") }}
@@ -510,11 +514,13 @@ onMounted(async () => {
               </th>
             </tr>
           </thead>
-          <tbody class="bg-[#1f2937]">
+          <tbody
+            class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
+          >
             <tr
               v-for="(row, index) in outputVoucher.Items"
               :key="row.id"
-              class="border-b border-black h-14 text-gray-100"
+              class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
             >
               <th>{{ row.id }}</th>
               <th>{{ row.Item?.name }}</th>
@@ -527,7 +533,7 @@ onMounted(async () => {
               <th>
                 <van-button
                   class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                  type="secondary"
+                  type="success"
                   is-link
                   @click="updatePopup(index, row)"
                   >Edit
@@ -535,7 +541,7 @@ onMounted(async () => {
                 |
                 <van-button
                   class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
-                  type="secondary"
+                  type="success"
                   is-link
                   @click="deleteItem(index)"
                   >Delete

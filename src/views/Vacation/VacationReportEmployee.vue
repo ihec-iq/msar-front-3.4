@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/employee";
+import { useEmployeeStore } from "@/stores/employeeStore";
 import { useSectionStore } from "@/stores/section";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
@@ -52,8 +52,8 @@ const isLoadingSick = ref(false);
 //#endregion
 //#region Functions
 const getFilterData = async (page: number = 1) => {
-  await getDataTime();
   await getDataDaily();
+  await getDataTime();
 };
 const getDataTime = async (page: number = 1) => {
   isLoadingTime.value = true;
@@ -67,7 +67,7 @@ const getDataTime = async (page: number = 1) => {
       if (response.status == 200) {
         dataPageVacationTime.value = response.data.data;
         dataVacationTime.value = response.data.data.data;
-        console.log(dataPageVacationTime);
+        console.log(dataPageVacationTime.value);
       }
     })
     .catch((error) => {
@@ -87,7 +87,7 @@ const getDataDaily = async (page: number = 1) => {
       if (response.status == 200) {
         dataPageVacationDaily.value = response.data.data;
         dataVacationDaily.value = response.data.data.data;
-        console.log(dataPageVacationDaily);
+        console.log(dataPageVacationDaily.value);
       }
     })
     .catch((error) => {
@@ -349,7 +349,7 @@ onMounted(async () => {
               :enter="{ opacity: 1, y: 0 }"
               :variants="{ custom: { scale: 2 } }"
               :delay="200"
-              v-if="dataVacationTime.length > 0"
+              v-if="dataVacationDaily.length > 0"
             >
               <div class="max-w-full relative">
                 <div

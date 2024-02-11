@@ -85,7 +85,7 @@ const router = createRouter({
         {
           path: "/unauthorized",
           name: "Unauthorized",
-          component: () => import("@/views/Unauthorized.vue"),
+          component: () => import("@/views/UnauthorizedView.vue"),
           meta: {
             middleware: [authMiddleware],
           },
@@ -120,5 +120,6 @@ router.beforeResolve(async (to, from, next) => {
     }
   }
   next();
+  return;
 });
 export default router;

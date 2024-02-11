@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/employee";
+import { useEmployeeStore } from "@/stores/employeeStore";
 import { useSectionStore } from "@/stores/section";
 
 import { storeToRefs } from "pinia";

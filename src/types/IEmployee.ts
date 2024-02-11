@@ -1,12 +1,25 @@
 import type { IItem } from "./IItem";
 import type { ISection } from "./ISection";
 import type { IStock } from "./IStock";
+import type { IVacationDaily } from "./vacation/IVacationDaily";
+import type { IVacationSick } from "./vacation/IVacationSick";
+import type { IVacationTime } from "./vacation/IVacationTime";
 
 export interface IEmployee {
   id: number;
   name: string;
   section: ISection;
   isPerson: number;
+  dateWork: string;
+  number: string;
+  idCard: string;
+  initVacation: number;
+  takeVacation: number;
+  initVacationSick: number;
+  takeVacationSick: number;
+  vacationDaily?: Array<IVacationDaily>;
+  vacationSick?: Array<IVacationSick>;
+  vacationTime?: Array<IVacationTime>;
 }
 const xx = {
   voucherItemHistoriable: {

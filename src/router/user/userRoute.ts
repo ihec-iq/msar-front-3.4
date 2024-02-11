@@ -1,7 +1,7 @@
 import authMiddleware from "../middleware/authMiddleware";
 export default [
   {
-    path: "/core/user/portal",
+    path: "/user/portal",
     name: "userPortal",
     component: () => import("@/views/User/UserPortalView.vue"),
     meta: {
@@ -9,7 +9,15 @@ export default [
     },
   },
   {
-    path: "/core/user",
+    path: "/user/profile",
+    name: "Profile",
+    component: () => import("@/views/User/ProfileView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
+    path: "/user",
     name: "userIndex",
     component: () => import("@/views/User/UserIndexView.vue"),
     meta: {
@@ -17,7 +25,7 @@ export default [
     },
   },
   {
-    path: "/core/user/add",
+    path: "/user/add",
     name: "userAdd",
     component: () => import("@/views/User/UserView.vue"),
     meta: {
@@ -25,7 +33,7 @@ export default [
     },
   },
   {
-    path: "/core/user/:id/update",
+    path: "/user/:id/update",
     name: "userUpdate",
     component: () => import("@/views/User/UserView.vue"),
     meta: {
@@ -33,7 +41,7 @@ export default [
     },
   },
   {
-    path: "/core/user/:id/show",
+    path: "/user/:id/show",
     name: "userShow",
     component: () => import("@/views/User/UserView.vue"),
     meta: {

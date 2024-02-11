@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -10,11 +10,13 @@ import { usePermissionStore } from "@/stores/permission";
 import moment from "moment";
 
 import { useI18n } from "@/stores/i18n/useI18n";
-import type { IVacationTime } from "@/types/vacation/IVacationTime";
 import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
 import { useVacationStore } from "@/stores/vacations/vacation";
 import { now } from "@vueuse/core";
 import type { IVacation } from "@/types/vacation/IVacation";
+import { useVacationReasonStore } from "@/stores/vacations/vacationReason";
+import type { IVacationReason } from "@/types/vacation/IVacationDaily";
+import type { IEmployee } from "@/types/IEmployee";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -32,6 +34,8 @@ const { is } = storeToRefs(rtlStore);
 const vacationTimeStore = useVacationTimeStore();
 const { vacationTime } = storeToRefs(useVacationTimeStore());
 const { vacations } = storeToRefs(useVacationStore());
+const { reasons } = storeToRefs(useVacationReasonStore());
+
 const { addHours } = useVacationTimeStore();
 const Loading = ref(false);
 
@@ -54,6 +58,8 @@ const store = () => {
   formData.append("timeTo", vacationTime.value.timeTo);
   formData.append("record", vacationTime.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
+  formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
+
   vacationTimeStore
     .store(formData)
     .then((response) => {
@@ -87,6 +93,8 @@ function update() {
   formData.append("timeTo", vacationTime.value.timeTo);
   formData.append("record", vacationTime.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
+  formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
+
   vacationTimeStore
     .update(vacationTime.value.id, formData)
     .then((response) => {
@@ -154,6 +162,8 @@ const showData = async () => {
         vacationTime.value.timeTo = response.data.data.timeTo;
         vacationTime.value.record = response.data.data.record;
         vacationTime.value.Vacation = response.data.data.Vacation;
+        vacationTime.value.Reason = response.data.data.Reason;
+
         //vacationTime.value = response.data.data as IVacationTime;
       }
     })
@@ -189,6 +199,7 @@ onMounted(async () => {
     namePage.value = t("VacationTimeUpdate");
   }
   await useVacationStore().get_vacations();
+  await useVacationReasonStore().get();
 });
 const ChangeDate = () => {
   //console.log("ChangeDate");
@@ -326,6 +337,27 @@ const ChangeDateRecord = () => {
           <template #option="{ Employee }">
             <div>
               <span>{{ Employee.name }}</span>
+            </div>
+          </template>
+        </vSelect>
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("VacationReason") }}
+        </div>
+        <vSelect
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          v-model="vacationTime.Reason"
+          :options="reasons"
+          :reduce="(reason: IVacationReason) => reason"
+          label="name"
+          :getOptionLabel="(reason: IVacationReason) => reason.name"
+        >
+          <template #option="{ name }">
+            <div>
+              <span>{{ name }}</span>
             </div>
           </template>
         </vSelect>

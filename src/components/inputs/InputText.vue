@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { toRef } from "vue";
+import { onMounted, toRef } from "vue";
 import { useField } from "vee-validate";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
+import { bool } from "yup";
 
 const st = i18nRepository.getState();
 const t = (text: string) => {
@@ -32,6 +33,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  disabled: {
+    type: String,
+    default: "false",
+  },
 });
 // use `toRef` to create reactive references to `name` prop which is passed to `useField`
 // this is important because vee-validate needs to know if the field name changes
@@ -48,6 +53,7 @@ const {
 } = useField(name, undefined, {
   initialValue: props.value,
 });
+onMounted(() => {});
 </script>
 
 <template>
@@ -57,7 +63,7 @@ const {
   >
     <label :for="name">{{ label }}</label>
     <input
-      class="placeholder:pl-2 placeholder:text-text dark:bg-input dark:text-gray-300 bg-lightInput dark:placeholder:text-textLight"
+      class="placeholder:pl-2 p-3 placeholder:text-text dark:bg-input dark:text-gray-300 bg-lightInput dark:placeholder:text-textLight"
       :name="name"
       :id="name"
       :type="type"
@@ -66,7 +72,7 @@ const {
       @input="handleChange"
       @blur="handleBlur"
     />
-
+    <!-- :class="{ 'disabled p-1': disabled }" -->
     <p class="help-message" v-show="errorMessage || meta.valid">
       {{ t(errorMessage || successMessage) }}
     </p>
