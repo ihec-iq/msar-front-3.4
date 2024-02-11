@@ -1,13 +1,25 @@
 import type IRole from "@/types/role/IRole";
-export default interface IUser {
+import type { IEmployee } from "../IEmployee";
+export interface IUser {
+  id: number;
   name: string;
+  user_name: string;
   email: string;
-  last_login: string;
-  password: string;
+  phone: string;
+  code: string;
+  created: string;
+  expire_date: string;
+  password?: string;
   password_confirmation?: string;
-  any_device: number;
-  active: number;
+  active?: number;
+  any_device?: number;
   roles: Array<IRole>;
   permissions: Array<string>;
-  id: number;
+  Employee?: IEmployee;
 }
+export interface IUserFilter {
+  limit: number;
+  name: string;
+  email?: string;
+}
+export interface IUserProfile {}

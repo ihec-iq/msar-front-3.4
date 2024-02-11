@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useArchiveStore } from "@/stores/archive/archive";
+import { useArchiveStore } from "@/stores/archives/archive";
 import Swal from "sweetalert2";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -91,7 +91,7 @@ function update() {
   const formData = new FormData();
   formData.append("id", archive.value.id.toString());
   formData.append("title", archive.value.title.toString());
-  formData.append("description", archive.value.description.toString());
+  formData.append("description", archive.value.description?.toString());
   formData.append("issueDate", archive.value.issueDate.toString());
   formData.append("number", archive.value.number.toString());
   formData.append("way", archive.value.way.toString());
@@ -462,4 +462,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/archives/archive

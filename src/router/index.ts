@@ -1,24 +1,25 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import notification from "@/views/NotificationView.vue";
-import archive from "./archives/archive";
+import archive from "./archives/archiveRoute";
 //#region for split routes in many files
 // import reports from "./reports/index";
 // import role from "./role/index";
 //#endregion
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
-import item from "./item/item";
-import inputVoucher from "./voucher/inputVoucher";
-import outputVoucher from "./voucher/outputVoucher";
-import itemCategory from "./item/itemCategory";
-import store from "./store/store";
+import item from "./item/itemRoute";
+import inputVoucher from "./voucher/inputVoucherRoute";
+import outputVoucher from "./voucher/outputVoucherRoute";
+import corruptedVoucher from "./voucher/corruptedVoucherRoute";
+import directVoucher from "./voucher/directVoucherRoute";
+import itemCategory from "./item/itemCategoryRoute";
+import vacation from "./vacation/vacationRoute";
+import userRoute from "./user/userRoute";
+import roleRoute from "./role/roleRoute";
+import store from "./store/storeRoute";
 import DefaultLayout from "@/views/layouts/MainView.vue";
 
-import employee from "./user/employee";
+import employee from "./user/employeeRoute";
 
 //#endregion
 
@@ -48,6 +49,11 @@ const router = createRouter({
         ...itemCategory,
         ...inputVoucher,
         ...outputVoucher,
+        ...corruptedVoucher,
+        ...directVoucher,
+        ...vacation,
+        ...userRoute,
+        ...roleRoute,
         ...store,
         ...employee,
         {
@@ -79,7 +85,7 @@ const router = createRouter({
         {
           path: "/unauthorized",
           name: "Unauthorized",
-          component: () => import("@/views/Unauthorized.vue"),
+          component: () => import("@/views/UnauthorizedView.vue"),
           meta: {
             middleware: [authMiddleware],
           },
@@ -114,5 +120,6 @@ router.beforeResolve(async (to, from, next) => {
     }
   }
   next();
+  return;
 });
 export default router;

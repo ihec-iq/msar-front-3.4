@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { useI18n } from "@/stores/i18n/useI18n";
+import { Links } from "./FixedMenu";
+import { usePermissionStore } from "@/stores/permission";
+
 const { t } = useI18n();
 // import { useUserStore } from "@/stores/accounting/accounts/user";
 // import type IUser from "@/types/accounting/accounts/IUser";
 // const { get } = useUserStore();
-const data = ref<any>({});
+
+const userData = ref<any>({});
 const changeStackSideBar = () => {
   isCloseStick.value = !isCloseStick.value;
 };
@@ -47,6 +51,27 @@ const activeNames = ref(["1"]);
 //     tab.value=nav.value?.toString()
 //   }
 // } )
+
+//#region nav menu
+const { permissions } = storeToRefs(usePermissionStore());
+const filteredLinks = computed(() =>
+  Links.filter((link) => {
+    // Check if any of the link's permissions are included in userPermissions
+    if (permissions.value == undefined) return;
+    return link.permissions.some(
+      (permission) =>
+        permissions.value.includes(permission) || permission == "public"
+    );
+  })
+);
+// watch(nav, newSearchQuery => {
+//   if(nav.value != "undefined" || nav.value != undefined ){
+//     tab.value=nav.value?.toString()
+//   }
+// } )
+
+//#endregion
+
 const authStore = useAuthStore();
 const logout = () => {
   authStore.logout();
@@ -58,11 +83,8 @@ const setting = () => {
     name: "setting",
   });
 };
-// const data = ref<any>();
 onMounted(() => {
-  data.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
-  //   // getData();
-  //   data.value = localStorage.getItem("user");
+  userData.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
 });
 </script>
 <template>
@@ -72,10 +94,10 @@ onMounted(() => {
     @mouseleave="handleMouseLeave"
   >
     <div
-      class="LeftNav bg-bgLeftNavLight ltr:pl-2 rtl:pr-2 z-50 dark:bg-bgLeftNav w-20 flex-none flex flex-col h-full py-2"
+      class="LeftNav bg-bgLeftNavLight ltr:pl-2 rtl:pr-2 z-50 dark:bg-bgLeftNav w-20 flex-none flex flex-col h-full"
     >
       <div
-        class="shadow-md shadow-slate-500 bg-white dark:bg-sideNav h-full md:min-h-screen md:h-screen px-4 py-10 sm:rounded-xl flex flex-col justify-between"
+        class="shadow-sm shadow-slate-100 bg-white dark:bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between"
       >
         <div
           v-motion
@@ -118,180 +140,23 @@ onMounted(() => {
         <nav class="flex items-center space-x-0 flex-col space-y-2">
           <!-- feature -->
           <router-link
-            :to="{ name: 'Dashboard' }"
-            @click.prevent="tab = 'Feature Admin'"
+            v-for="Link in filteredLinks"
+            :key="Link.routerName"
+            :to="{ name: Link.routerName }"
+            @click.prevent="tab = Link.tab"
           >
             <button
-              title="Feature"
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
+              class="dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark hover:text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
               href="#"
+              :title="Link.title"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6 text-gray-700"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
-                />
-              </svg>
+              <span v-html="Link.icon"></span>
             </button>
           </router-link>
-          <!-- Company -->
-          <router-link
-            :to="{ name: 'archiveIndex' }"
-            @click.prevent="tab = 'Company'"
-          >
-            <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!--  -->
-          <!-- Computer -->
-          <router-link
-            :to="{ name: 'itemIndex' }"
-            @click.prevent="tab = 'Computer'"
-          >
-            <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- Active -->
-          <router-link
-            :to="{ name: 'inputVoucherIndex' }"
-            @click.prevent="tab = 'Active'"
-          >
-            <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- news -->
-          <router-link
-            :to="{ name: 'storeIndex' }"
-            @click.prevent="tab = 'News'"
-          >
-            <button
-              class="text-white/50 p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-700"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- general -->
-          <router-link
-            :to="{ name: 'outputVoucherIndex' }"
-            @click.prevent="tab = 'general'"
-          >
-            <button
-              class="text-iconLight dark:text-icon p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- general -->
-          <router-link
-            :to="{ name: 'employeeIndex' }"
-            @click.prevent="tab = 'general1'"
-          >
-            <button
-              class="text-iconLight dark:text-icon p-4 inline-flex justify-center rounded-md hover:text-white smooth-hover"
-              href="#"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
-                />
-              </svg>
-            </button>
-          </router-link>
-          <!-- searcg -->
+
+          <!-- Search -->
           <button
-            class="text-white/50 p-4 inline-flex justify-center rounded-md text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:bg-sideNavHover dark:hover:text-iconHover smooth-hover"
+            class="dark:text-navIconColoDark p-4 inline-flex justify-center rounded-md hover:text-iconHoverLight dark:hover:text-navIconColorHoverDark dark:hover:bg-sideNavHover smooth-hover"
             :class="{
               'bg-gray-800 text-white  border-l-2 border-red-300 ':
                 tab === 'search',
@@ -300,7 +165,7 @@ onMounted(() => {
           >
             <div class="input-group relative flex mt-4">
               <button
-                class="inline-block text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:bg-sideNavHover dark:hover:text-iconHover font-medium text-xs leading-tight uppercase rounded transition duration-150 ease-in-out mr-1.5"
+                class="inline-block text-iconLight hover:text-iconHoverLight dark:text-navIconColoDark dark:hover:bg-sideNavHover dark:hover:text-navIconColorHoverDark font-medium text-xs leading-tight uppercase rounded transition duration-150 ease-in-out mr-1.5"
                 type="button"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasRight1"
@@ -344,7 +209,7 @@ onMounted(() => {
           <!-- #region setting icon -->
           <button
             @click="settingPop = !settingPop"
-            class="dark:text-textGray border-none dark:hover:text-iconHover bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
+            class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -368,7 +233,7 @@ onMounted(() => {
       :class="[
         isClose ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]' : 'transOn',
       ]"
-      class="shadow-md shadow-slate-500 bg-white mt-4 dark:bg-nav w-56 flex-none lg:flex flex-col justify-between duration-500"
+      class="shadow-md shadow-slate-500 bg-white mt-4 dark:bg-bgLeftNav w-56 flex-none lg:flex flex-col justify-between duration-500"
     >
       <!-- Feature Admin icon -->
       <div
@@ -377,7 +242,7 @@ onMounted(() => {
       >
         <ul class="px-2 py-3">
           <li
-            class="text-text dark:text-textLight px-2 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
+            class="text-text dark:text-textLight px-2 mt-3 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
           >
             <a href="#" class="flex items-center justify-between">
               <span class="ml-2">{{ t("EXPLORER") }}</span>
@@ -732,7 +597,7 @@ onMounted(() => {
             <!-- <div class="text-textGray text-xs w-full mr-1">0772 572 6027</div> -->
           </div>
         </div>
-        <div class="flex items-center text-iconLight dark:text-icon">
+        <div class="flex items-center text-iconLight dark:text-navIconColoDark">
           <a
             href="#"
             class="dark:hover:text-iconHover hover:text-iconHoverLight"
@@ -811,7 +676,7 @@ onMounted(() => {
         <div class="flex justify-between mx-8 mt-5">
           <div class="flex items-center">
             <div class="text-xl font-bold">{{ t("Name") }}:</div>
-            <div class="ltr:ml-1 text-lg rtl:mr-1">{{ data.name }}</div>
+            <div class="ltr:ml-1 text-lg rtl:mr-1">{{ userData.name }}</div>
           </div>
           <div class="avatar online">
             <div class="w-20 rounded-full">
@@ -821,7 +686,7 @@ onMounted(() => {
         </div>
         <div class="flex justify-end mx-8 mt-5">
           <div class="text-xl font-bold">{{ t("Email") }}:</div>
-          <div class="ltr:ml-1 text-lg rtl:mr-1">{{ data.email }}</div>
+          <div class="ltr:ml-1 text-lg rtl:mr-1">{{ userData.email }}</div>
         </div>
       </div>
       <div

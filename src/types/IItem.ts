@@ -3,11 +3,10 @@ import type { ICategoryItem } from "./ICategoryItem";
 export interface IItem {
   id: number;
   name: string;
-  code: String;
+  code: string;
   description: string;
-  itemCategory: ICategoryItem;
+  Category: ICategoryItem;
   measuringUnit: string;
-  itemCategoryId?: number;
 }
 export interface IItemFilter {
   name: string;

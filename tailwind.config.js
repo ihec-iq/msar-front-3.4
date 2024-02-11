@@ -40,22 +40,33 @@ module.exports = {
   // /* gray 100 */
   // color: #f3f4f6;
   theme: {
+    fontFamily: {
+      Tajawal: ["Tajawal", "sans-serif"],
+      Tajawal_bold: ["Tajawal_bold", "sans-serif"],
+    },
     extend: {
       backgroundColor,
       screens: {
         xs: "350px",
       },
       colors: {
+        mainBG: "#e8f6fd",
         // dark
-        sideNav: "#111827",
-        sideNavHover: "#111827",
+        sideNav: "#333333",
+        sideNavHover: "#252526",
+        nav: "#333333",
+        bgLeftNav: "#252526",
+        sideNavSetting: "#111827",
+        sideNavActive: "#1f2937",
+        navIconColoDark: "#858585",
+        navIconColorHoverDark: "#FEFEFE",
+
         hoverButton: "#111827",
         title: "#111827",
         designTable: "#111827",
         reportCheck: "#111827",
         designTableTr: "#111827",
         popUp: "#111827",
-        sideNavSetting: "#111827",
         tableHead: "#111827",
         //
         input: "#1f2937",
@@ -64,13 +75,12 @@ module.exports = {
         voucherFilter: "#1f2937",
         voucherTitlesHover: "#1f2937",
         text: "#1f2937",
-        sideNavActive: "#1f2937",
         tableBody: "#1f2937",
         dropDown: "#1f2937",
         select: "#1f2937",
         textAria: "#1f2937",
         //
-        nav: "#141c2a",
+
         bottomTool: "#141c2a",
         toolBar: "#141c2a",
         button: "#141c2a",
@@ -83,7 +93,6 @@ module.exports = {
         tripCount: "#374151",
         th: "#374151",
         //
-        bgLeftNav: "#1b2432",
         content: "#1b2432",
         //
         icon: "#6b7280",
@@ -191,7 +200,30 @@ module.exports = {
         thLight: "#6b7280",
         bgLeftNavLight: "#fff",
         tableNew: "#2f3349",
-
+        tableHeaderNew: "#505051",
+        "primary-50": "rgb(var(--primary-50))",
+        "primary-100": "rgb(var(--primary-100))",
+        "primary-200": "rgb(var(--primary-200))",
+        "primary-300": "rgb(var(--primary-300))",
+        "primary-400": "rgb(var(--primary-400))",
+        "primary-500": "rgb(var(--primary-500))",
+        "primary-600": "rgb(var(--primary-600))",
+        "primary-700": "rgb(var(--primary-700))",
+        "primary-800": "rgb(var(--primary-800))",
+        "primary-900": "rgb(var(--primary-900))",
+        "primary-950": "rgb(var(--primary-950))",
+        "surface-0": "rgb(var(--surface-0))",
+        "surface-50": "rgb(var(--surface-50))",
+        "surface-100": "rgb(var(--surface-100))",
+        "surface-200": "rgb(var(--surface-200))",
+        "surface-300": "rgb(var(--surface-300))",
+        "surface-400": "rgb(var(--surface-400))",
+        "surface-500": "rgb(var(--surface-500))",
+        "surface-600": "rgb(var(--surface-600))",
+        "surface-700": "rgb(var(--surface-700))",
+        "surface-800": "rgb(var(--surface-800))",
+        "surface-900": "rgb(var(--surface-900))",
+        "surface-950": "rgb(var(--surface-950))",
         //#endregion
       },
       // dark: {

@@ -3,7 +3,7 @@ import { reactive, ref, onMounted } from "vue";
 // import Footer from "@/components/login/footer.vue";
 import { Form } from "vee-validate";
 import * as Yup from "yup";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "vue-router";
 import { getError } from "@/utils/helpers";
 import TextInput from "@/components/general/TextInput.vue";

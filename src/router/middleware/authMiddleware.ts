@@ -14,8 +14,10 @@ export default async function authMiddleware(
   if (!isAuthenticated) {
     // If not authenticated, redirect to login
     next("/login");
+    return;
   } else {
     // If authenticated, proceed to the next middleware
     next();
+    return;
   }
 }
