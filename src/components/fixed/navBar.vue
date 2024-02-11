@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/authStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { useI18n } from "@/stores/i18n/useI18n";
@@ -58,8 +58,9 @@ const filteredLinks = computed(() =>
   Links.filter((link) => {
     // Check if any of the link's permissions are included in userPermissions
     if (permissions.value == undefined) return;
-    return link.permissions.some((permission) =>
-      permissions.value.includes(permission)
+    return link.permissions.some(
+      (permission) =>
+        permissions.value.includes(permission) || permission == "public"
     );
   })
 );

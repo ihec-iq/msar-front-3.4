@@ -10,8 +10,10 @@ export default async function permissionMiddleware(
   if (!hasPermission) {
     // If no permission, redirect to a permission denied page
     next("/403");
+    return;
   } else {
     // If permission granted, proceed to the route
     next();
+    return;
   }
 }

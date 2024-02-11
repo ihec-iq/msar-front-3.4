@@ -91,7 +91,7 @@ function update() {
   const formData = new FormData();
   formData.append("id", archive.value.id.toString());
   formData.append("title", archive.value.title.toString());
-  formData.append("description", archive.value.description.toString());
+  formData.append("description", archive.value.description?.toString());
   formData.append("issueDate", archive.value.issueDate.toString());
   formData.append("number", archive.value.number.toString());
   formData.append("way", archive.value.way.toString());

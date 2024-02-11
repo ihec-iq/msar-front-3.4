@@ -13,12 +13,13 @@ import type {
   IVacationSick,
   IVacationSickFilter,
 } from "@/types/vacation/IVacationSick";
+import { isNumeric } from "vant/lib/utils";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IVacationSick>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IVacationSick>>([]);
-const { vacationSick } = useVacationSickStore();
+const vacationSick = useVacationSickStore();
 
 const limits = reactive([
   { name: "6", val: 6, selected: true },
@@ -30,6 +31,8 @@ const limits = reactive([
 
 const route = useRoute();
 const router = useRouter();
+const inputRefSearch = ref<HTMLInputElement | null>(null);
+
 watch(
   () => route.params.search,
   async (newValue) => {
@@ -39,7 +42,7 @@ watch(
   }
 );
 const addItem = () => {
-  useVacationSickStore().reset();
+  vacationSick.reset();
   router.push({
     name: "vacationSickAdd",
   });
@@ -59,17 +62,28 @@ const makeFastSearch = () => {
     //data.value = dataBase.value.filter(filterByIDName);
   }
 };
+const Search = async (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    await getFilterData(1);
+  }
+};
 //#endregion
 //#region Search
 const searchFilter = ref<IVacationSickFilter>({
   dayFrom: "",
   limit: 6,
 });
+const CNumber = (val: any = 0): number => {
+  if (isNumeric(val) == false) return 0;
+  return Number(val);
+};
+
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.limit = 0;
-  searchFilter.value.record = Number(fastSearch.value);
-  await useVacationSickStore()
+  searchFilter.value.record = CNumber(fastSearch.value);
+  searchFilter.value.employeeName = fastSearch.value;
+  await vacationSick
     .get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -99,6 +113,9 @@ onMounted(async () => {
     fastSearch.value = route.params.search.toString() || "";
 
   await getFilterData(1);
+  if (inputRefSearch.value) {
+    inputRefSearch.value.addEventListener("keydown", Search);
+  }
 });
 </script>
 <template>
@@ -134,10 +151,11 @@ onMounted(async () => {
           <input
             type="text"
             id="table-search"
+            ref="inputRefSearch"
             v-model="fastSearch"
             @input="makeFastSearch()"
             class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('SearchForItem')"
+            :placeholder="t('SearchForUser')"
           />
         </div>
         <!-- limit -->
@@ -195,7 +213,7 @@ onMounted(async () => {
                   >
                     <!-- card -->
                     <div
-                      class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                      class="bg-cardLight font-Tajawal dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
                       v-for="vacation in data"
                       :key="vacation.id"
                     >
@@ -212,17 +230,17 @@ onMounted(async () => {
                         <div class="flex justify-betweens">
                           اجازة لمدة
                           <div
-                            class="text-text dark:text-textGray"
+                            class="text-text dark:text-red-900 border-sky-100 border-2 pl-2 pr-2 ml-2 mr-2 bg-slate-300"
                             v-html="vacation.record"
                           ></div>
                           يوم من تاريخ
                           <div
-                            class="text-text dark:text-textGray"
+                            class="text-text dark:text-textGray ml-2 mr-2"
                             v-html="vacation.dayFrom"
                           ></div>
                           الى
                           <div
-                            class="text-text dark:text-textGray"
+                            class="text-text dark:text-textGray ml-2 mr-2"
                             v-html="vacation.dayTo"
                           ></div>
                         </div>

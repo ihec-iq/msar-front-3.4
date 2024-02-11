@@ -20,6 +20,7 @@ export interface IArchiveType {
 }
 export interface IDocument {
   id: number;
+  title: string;
   name: string;
   path: string;
   extension: string;

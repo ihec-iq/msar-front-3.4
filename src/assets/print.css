@@ -1,0 +1,13 @@
+@media print {
+
+    body {
+      font-size: 16px;
+      color: black;
+      background-color: white;
+      margin: 0;
+    }
+    .tablePrint {
+        border: 2 solid gray;
+        background-color: blue;
+    }
+  }

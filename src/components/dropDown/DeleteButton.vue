@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
+import { useI18n } from "@/stores/i18n/useI18n";
+const { t } = useI18n();
 </script>
 <template>
   <button

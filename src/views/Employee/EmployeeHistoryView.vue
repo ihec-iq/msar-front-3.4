@@ -6,7 +6,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
-import { useEmployeeStore } from "@/stores/employee";
+import { useEmployeeStore } from "@/stores/employeeStore";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { storeToRefs } from "pinia";
@@ -379,7 +379,7 @@ onMounted(async () => {
           <div class="w-full bg-slate-600 p-2 flex">
             <van-button
               class="border-1 border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-amber-600 font-bold hover:bg-createHover"
-              type="secondary"
+              type="success"
               is-link
               @click="createCorruptedVoucher()"
               >انشاء سند شطب
@@ -483,7 +483,7 @@ onMounted(async () => {
                           <th>
                             <van-button
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                              type="secondary"
+                              type="primary"
                               is-link
                               @click="openItem(row.Voucher.idVoucher, row.type)"
                               >Open
@@ -526,3 +526,4 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
+@/stores/employeeStore

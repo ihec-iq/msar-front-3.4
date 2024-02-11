@@ -8,10 +8,25 @@ export const useVacationStore = defineStore("vacationStore", () => {
   const vacations = ref<IVacation[]>([]);
   const vacation = reactive<IVacation>({
     id: 0,
+    Employee: {
+      id: 0,
+      name: "",
+      section: { id: 0, name: "" },
+      isPerson: 1,
+      dateWork: Date.now().toLocaleString(),
+      idCard: "",
+      number: "",
+      initVacation: 0,
+      takeVacation: 0,
+      initVacationSick: 0,
+      takeVacationSick: 0,
+    },
     oldRecord: 0,
     newRecord: 0,
-    Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
     record: 0,
+    oldRecordSick: 0,
+    newRecordSick: 0,
+    recordSick: 0,
     sumDaily: 0,
     sumTime: 0,
     sumSick: 0,
@@ -26,6 +41,13 @@ export const useVacationStore = defineStore("vacationStore", () => {
       name: "",
       section: { id: 0, name: "" },
       isPerson: 1,
+      dateWork: Date.now().toLocaleString(),
+      idCard: "",
+      number: "",
+      initVacation: 0,
+      takeVacation: 0,
+      initVacationSick: 0,
+      takeVacationSick: 0,
     };
   }
   const pathBase = "/vacationSys";

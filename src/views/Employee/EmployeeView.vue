@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/employee";
+import { useEmployeeStore } from "@/stores/employeeStore";
 import { useSectionStore } from "@/stores/section";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
@@ -44,6 +44,18 @@ const store = () => {
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
   formData.append("sectionId", employee.value.section.id.toString());
+  formData.append("number", employee.value.number.toString());
+  formData.append("idCard", employee.value.idCard.toString());
+  formData.append("initVacation", employee.value.initVacation.toString());
+  formData.append("takeVacation", employee.value.takeVacation.toString());
+  formData.append(
+    "initVacationSick",
+    employee.value.initVacationSick.toString()
+  );
+  formData.append(
+    "takeVacationSick",
+    employee.value.takeVacationSick.toString()
+  );
 
   employeeStore
     .store(formData)
@@ -77,7 +89,18 @@ function update() {
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
   formData.append("sectionId", employee.value.section.id.toString());
-
+  formData.append("number", employee.value.number.toString());
+  formData.append("idCard", employee.value.idCard.toString());
+  formData.append("initVacation", employee.value.initVacation.toString());
+  formData.append("takeVacation", employee.value.takeVacation.toString());
+  formData.append(
+    "initVacationSick",
+    employee.value.initVacationSick.toString()
+  );
+  formData.append(
+    "takeVacationSick",
+    employee.value.takeVacationSick.toString()
+  );
   employeeStore
     .update(employee.value.id, formData)
     .then((response) => {

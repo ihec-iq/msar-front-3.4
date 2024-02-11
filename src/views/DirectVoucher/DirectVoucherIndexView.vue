@@ -6,7 +6,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/stores/permission";
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray, can } = usePermissionStore();
 import type {
   IDirectVoucher,
   IDirectVoucherFilter,

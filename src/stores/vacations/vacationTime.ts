@@ -14,7 +14,19 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
     timeFrom: new Date().toLocaleTimeString(),
     timeTo: new Date().toLocaleTimeString(),
     Vacation: {
-      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      Employee: {
+        id: 0,
+        name: "",
+        section: { id: 0, name: "" },
+        isPerson: 1,
+        dateWork: "",
+        number: "",
+        idCard: "",
+        initVacation: 0,
+        takeVacation: 0,
+        initVacationSick: 0,
+        takeVacationSick: 0,
+      },
       record: 0,
       newRecord: 0,
       oldRecord: 0,
@@ -22,8 +34,15 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       sumDaily: 0,
       sumTime: 0,
       sumSick: 0,
+      oldRecordSick: 0,
+      newRecordSick: 0,
+      recordSick: 0,
     },
     record: 0.5,
+    Reason: {
+      id: 0,
+      name: "",
+    },
   });
   const addHours = (Hour: number = 0, _date: string = "") => {
     if (_date == "")
@@ -51,7 +70,19 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
 
     vacationTime.date = new Date().toISOString().split("T")[0];
     vacationTime.Vacation = {
-      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      Employee: {
+        id: 0,
+        name: "",
+        section: { id: 0, name: "" },
+        isPerson: 1,
+        dateWork: "",
+        number: "",
+        idCard: "",
+        initVacation: 0,
+        takeVacation: 0,
+        initVacationSick: 0,
+        takeVacationSick: 0,
+      },
       record: 0,
       newRecord: 0,
       oldRecord: 0,
@@ -59,6 +90,13 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       sumDaily: 0,
       sumTime: 0,
       sumSick: 0,
+      oldRecordSick: 0,
+      newRecordSick: 0,
+      recordSick: 0,
+    };
+    vacationTime.Reason = {
+      id: 0,
+      name: "",
     };
     console.log(vacationTime);
   }

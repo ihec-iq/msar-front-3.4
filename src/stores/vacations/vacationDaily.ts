@@ -13,7 +13,19 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     dayFrom: new Date().toISOString().split("T")[0],
     dayTo: new Date().toISOString().split("T")[0],
     Vacation: {
-      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      Employee: {
+        id: 1,
+        name: "",
+        section: { id: 0, name: "" },
+        isPerson: 1,
+        dateWork: "",
+        number: "",
+        idCard: "",
+        initVacation: 0,
+        takeVacation: 0,
+        initVacationSick: 0,
+        takeVacationSick: 0,
+      },
       record: 0,
       newRecord: 0,
       oldRecord: 0,
@@ -21,8 +33,28 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       sumDaily: 0,
       sumTime: 0,
       sumSick: 0,
+      oldRecordSick: 0,
+      newRecordSick: 0,
+      recordSick: 0,
+    },
+    EmployeeAlter: {
+      id: 1,
+      name: "",
+      section: { id: 0, name: "" },
+      isPerson: 1,
+      dateWork: "",
+      number: "",
+      idCard: "",
+      initVacation: 0,
+      takeVacation: 0,
+      initVacationSick: 0,
+      takeVacationSick: 0,
     },
     record: 0,
+    Reason: {
+      id: 1,
+      name: "",
+    },
   });
   function reset() {
     vacationDaily.id = 0;
@@ -32,7 +64,19 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     d.setDate(d.getDate() + vacationDaily.record);
     vacationDaily.dayTo = d.toISOString().split("T")[0];
     vacationDaily.Vacation = {
-      Employee: { id: 0, name: "", section: { id: 0, name: "" }, isPerson: 1 },
+      Employee: {
+        id: 1,
+        name: "",
+        section: { id: 0, name: "" },
+        isPerson: 1,
+        dateWork: "",
+        number: "",
+        idCard: "",
+        initVacation: 0,
+        takeVacation: 0,
+        initVacationSick: 0,
+        takeVacationSick: 0,
+      },
       record: 0,
       newRecord: 0,
       oldRecord: 0,
@@ -40,6 +84,26 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       sumDaily: 0,
       sumTime: 0,
       sumSick: 0,
+      oldRecordSick: 0,
+      newRecordSick: 0,
+      recordSick: 0,
+    };
+    vacationDaily.EmployeeAlter = {
+      id: 1,
+      name: "",
+      section: { id: 0, name: "" },
+      isPerson: 1,
+      dateWork: "",
+      number: "",
+      idCard: "",
+      initVacation: 0,
+      takeVacation: 0,
+      initVacationSick: 0,
+      takeVacationSick: 0,
+    };
+    vacationDaily.Reason = {
+      id: 0,
+      name: "",
     };
   }
   const pathBase = "/vacationSys";
@@ -51,11 +115,11 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
   async function get_filter(params: IVacationDailyFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
-  async function store(prams: object) {
+  async function store(prams: FormData) {
     return await Api.post(`${pathUrl}/store`, prams);
   }
 
-  async function update(archive_id: number, prams: object) {
+  async function update(archive_id: number, prams: FormData) {
     return await Api.post(`${pathUrl}/update/${archive_id}`, prams);
   }
   async function show(id: number) {

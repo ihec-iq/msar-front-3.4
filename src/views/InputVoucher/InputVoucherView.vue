@@ -61,6 +61,7 @@ const AddPopupRef = ref<HTMLInputElement>();
 const AddPopup = () => {
   showPop.value = true;
   resetVoucherItemTemp();
+  AddPopupRef.value?.focus();
 };
 const resetVoucherItemTemp = () => {
   indexSelectedVoucherItem.value = 0;
@@ -493,8 +494,12 @@ const setItemFromChild = (_item: IItem) => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         ></div>
-        <table class="min-w-full text-center">
-          <thead class="border-b bg-[#0003] text-gray-300">
+        <table
+          class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
+        >
+          <thead
+            class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
+          >
             <tr>
               <th scope="col" class="text-sm font-medium px-2 py-2">
                 {{ t("ID") }}
@@ -525,11 +530,13 @@ const setItemFromChild = (_item: IItem) => {
               </th>
             </tr>
           </thead>
-          <tbody class="bg-[#1f2937]">
+          <tbody
+            class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
+          >
             <tr
               v-for="(row, index) in inputVoucher.Items"
               :key="row.id"
-              class="border-b border-black h-14 text-gray-100"
+              class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
             >
               <th>{{ row.id }}</th>
               <th>{{ row.Item.name }}</th>
@@ -542,7 +549,7 @@ const setItemFromChild = (_item: IItem) => {
               <th>
                 <van-button
                   class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                  type="secondary"
+                  type="success"
                   is-link
                   @click="updatePopup(index, row)"
                   >Edit
@@ -550,7 +557,7 @@ const setItemFromChild = (_item: IItem) => {
                 |
                 <van-button
                   class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
-                  type="secondary"
+                  type="success"
                   is-link
                   @click="deleteItem(index)"
                   >Delete
@@ -561,6 +568,21 @@ const setItemFromChild = (_item: IItem) => {
         </table>
       </div>
     </div>
+
+    <button class="btn" onclick="my_modal_5.showModal()">open modal</button>
+    <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Hello!</h3>
+        <p class="py-4">Press ESC key or click the button below to close</p>
+        <div class="modal-action">
+          <form method="dialog">
+            <!-- if there is a button in form, it will close the modal -->
+            <button class="btn">Close</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
     <div class="mt-10 p-6">
       <div class="w-full mx-2">
         <van-popup
@@ -579,7 +601,7 @@ const setItemFromChild = (_item: IItem) => {
                 <div
                   class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
                 >
-                  Item
+                  Item xxx
                 </div>
                 <vSelect
                   ref="AddPopupRef"

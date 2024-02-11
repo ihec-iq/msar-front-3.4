@@ -55,7 +55,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
       });
   }
   async function getEmployees() {
-    return await Api.get(`${pathBase}/employee/lite`)
+    return await Api.get("employee/lite")
       .then((response) => {
         if (response.status == 200) {
           outputVoucherEmployees.value = response.data.data;

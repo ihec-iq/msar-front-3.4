@@ -31,7 +31,7 @@ const toggleCheck = () => {
     permissionsStore.permissions.forEach((element: IPermission) => {
       checkedPermission.value.push(element.name);
     });
-    console.log(checkedPermission.value);
+    //console.log(checkedPermission.value);
   } else {
     checkedPermission.value = [];
   }
@@ -58,20 +58,9 @@ const role = reactive<IRole>({
   checkedPermission: [],
   permissions: [],
 });
-function onInvalidSubmit() {
-  const submitBtn = document.querySelector(".submit-btn");
-  submitBtn?.classList.add("invalid");
-  setTimeout(() => {
-    submitBtn?.classList.remove("invalid");
-  }, 1000);
-}
-const schema = Yup.object().shape({
-  name: Yup.string().min(3).max(50).required(),
-});
 
-const onSubmit = (values: any) => {
+const Save = () => {
   // checkedPermission.value = values.checkedPermission;
-  role.name = values.name;
   if (role.id == 0) store();
   else update();
   // else update();
@@ -121,8 +110,9 @@ const update = () => {
           title: "Your group has been Update",
           showConfirmButton: false,
           timer: 1500,
+        }).then(() => {
+          router.go(-1);
         });
-        router.go(-2);
       }
     })
     .catch((error) => {
@@ -159,159 +149,140 @@ onMounted(() => {
 </script>
 
 <template>
-  <Form
-    :initial-values="role"
-    @submit="onSubmit"
-    :validation-schema="schema"
-    @invalid-submit="onInvalidSubmit"
-  >
-    <div class="w-full">
-      <PageTitle> {{ t(namePage) }}</PageTitle>
-      <div class="px-4">
-        <div
-          class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"
-        ></div>
-        <div class="flex">
-          <div class="w-1/3">
-            <InputText
-              v-model="role.name"
-              type="text"
-              name="name"
-              :label="t('Role Name')"
-            />
-          </div>
-
-          <!--  -->
-          <div class="w-1/3 flex justify-end">
-            <button
-              v-if="role.id == 0"
-              type="submit"
-              class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
-            >
-              {{ t("Create") }}
-            </button>
-            <button
-              v-if="role.id > 0"
-              type="submit"
-              class="bg-update hover:bg-updateHover duration-500 h-10 w-32 rounded-lg text-white"
-            >
-              {{ t("Update") }}
-            </button>
-            <!--  -->
-          </div>
-        </div>
-      </div>
-      <div>
-        <h2
-          class="text-text dark:text-textLight font-semibold text-xl ltr:text-left rtl:text-right ltr:pl-8 rtl:pr-8"
-        >
-          {{ t("Permissions") }}:
-        </h2>
-      </div>
+  <div class="w-full">
+    <PageTitle> {{ t(namePage) }}</PageTitle>
+    <div class="px-4">
       <div
-        class="text-text dark:text-textLight font-black p-2 leading-8 ltr:text-left rtl:text-right px-4"
-      >
-        <span
-          v-for="permission in checkedPermission"
-          :key="permission"
-          class="relative z-10 w-28 text-center p-2 m-2 text-xs rounded-md leading-none text-white whitespace-no-wrap bg-green-600 shadow-lg"
-        >
-          {{ permission }}
-        </span>
-      </div>
-      <div class="flex justify-between">
-        <div
-          class="mb-4 text-center text-text dark:text-textLight bg-namePage dark:bg-title w-64 p-2 ml-4 rounded-lg text-lg"
-        >
-          {{ t("Set Permissions") }}
-        </div>
-        <label for="table-search" class="sr-only">{{ t("Search F") }}</label>
-        <div class="relative ltr:pr-4 rtl:pl-4">
+        class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"
+      ></div>
+      <div class="flex">
+        <div class="w-11/12 mx-2">
           <div
-            class="flex absolute bottom-8 ltr:left-0 rtl:right-0 items-center pl-3 pointer-events-none"
+            class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
           >
-            <svg
-              class="w-5 h-5 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
+            {{ t("Role Name") }}
           </div>
           <input
+            v-model="role.name"
             type="text"
-            id="table-search"
-            v-model="fastSearch"
-            @input="makeFastSearch()"
-            class="block p-2 ltr:pl-10 rtl:pr-8 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('Search For Permission')"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />
         </div>
+        <!--  -->
       </div>
-      <div class="flex">
-        <!-- {{ checkedPermission }}
+    </div>
+    <div>
+      <h2
+        class="text-text dark:text-textLight font-semibold text-xl ltr:text-left rtl:text-right ltr:pl-8 rtl:pr-8"
+      >
+        {{ t("Permissions") }}:
+      </h2>
+    </div>
+    <div
+      class="text-text dark:text-textLight font-black p-2 leading-8 ltr:text-left rtl:text-right px-4"
+    >
+      <span
+        v-for="permission in checkedPermission"
+        :key="permission"
+        class="relative z-10 w-28 text-center p-2 m-2 text-xs rounded-md leading-none text-white whitespace-no-wrap bg-green-600 shadow-lg"
+      >
+        {{ permission }}
+      </span>
+    </div>
+    <div class="flex justify-between">
+      <div
+        class="mb-4 text-center text-text dark:text-textLight bg-namePage dark:bg-title w-64 p-2 ml-4 rounded-lg text-lg"
+      >
+        {{ t("Set Permissions") }}
+      </div>
+      <label for="table-search" class="sr-only">{{
+        t("Search For Permission")
+      }}</label>
+      <div class="relative ltr:pr-4 rtl:pl-4">
+        <div
+          class="flex absolute bottom-8 ltr:left-0 rtl:right-0 items-center pl-3 pointer-events-none"
+        >
+          <svg
+            class="w-5 h-5 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+        <input
+          type="text"
+          id="table-search"
+          v-model="fastSearch"
+          @input="makeFastSearch()"
+          class="block p-2 ltr:pl-10 rtl:pr-8 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          :placeholder="t('Search For Permission')"
+        />
+      </div>
+    </div>
+    <div class="flex">
+      <!-- {{ checkedPermission }}
 <br/> -->
+      <input
+        type="checkbox"
+        v-model="CheckAll"
+        @change="toggleCheck"
+        class="checkbox checkbox-md ml-4 checkbox-success"
+      />
+      <label class="text-gray-300 mb-2 ml-1 mr-4">
+        {{ CheckAll ? t("Un Check") : t("Check All") }}
+      </label>
+    </div>
+    <div class="mb-10 flex w-full flex-wrap p-4">
+      <div
+        class="flex mb-4 bg-[#35587087] p-2 mr-2 rounded-md text-gray-200"
+        v-for="permission in permissionsStore.permissions"
+        :key="permission.id"
+      >
         <input
           type="checkbox"
-          v-model="CheckAll"
-          @change="toggleCheck"
-          class="checkbox checkbox-md ml-4 checkbox-success"
+          :value="permission.name"
+          v-model="checkedPermission"
+          class="checkbox checkbox-md checkbox-success"
         />
-        <label class="text-gray-300 mb-2 ml-1 mr-4">
-          {{ CheckAll ? t("Un Check") : t("Check All") }}
+        <label class="text-gray-200 ml-1 mr-4 capitalize">
+          {{ permission.name }}
         </label>
-      </div>
-      <div class="mb-10 flex w-full flex-wrap p-4">
-        <div
-          class="flex mb-4 bg-[#35587087] p-2 mr-2 rounded-md text-gray-200"
-          v-for="permission in permissionsStore.permissions"
-          :key="permission.id"
-        >
-          <input
-            type="checkbox"
-            :value="permission.name"
-            v-model="checkedPermission"
-            class="checkbox checkbox-md checkbox-success"
-          />
-          <label class="text-gray-200 ml-1 mr-4 capitalize">
-            {{ permission.name }}
-          </label>
-          <div class="relative flex flex-col items-center group">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-              />
-            </svg>
+        <div class="relative flex flex-col items-center group">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+            />
+          </svg>
 
-            <div
-              class="absolute bottom-0 flex-col items-center hidden mb-6 group-hover:flex"
+          <div
+            class="absolute bottom-0 flex-col items-center hidden mb-6 group-hover:flex"
+          >
+            <span
+              class="relative z-10 w-28 text-center p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg"
+              >{{ permission.name }}</span
             >
-              <span
-                class="relative z-10 w-28 text-center p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg"
-                >{{ permission.name }}</span
-              >
-              <div class="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
-            </div>
+            <div class="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
           </div>
         </div>
       </div>
     </div>
-  </Form>
+  </div>
   <div
     :class="{
       'w-[95%] bottom': isClose,
@@ -327,6 +298,23 @@ onMounted(() => {
       >
         {{ t("Back") }}
       </button>
+    </div>
+    <div class="w-1/3 flex justify-end">
+      <button
+        v-if="role.id == 0"
+        @click="Save"
+        class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+      >
+        {{ t("Create") }}
+      </button>
+      <button
+        v-if="role.id > 0"
+        @click="Save"
+        class="bg-update hover:bg-updateHover duration-500 h-10 w-32 rounded-lg text-white"
+      >
+        {{ t("Update") }}
+      </button>
+      <!--  -->
     </div>
   </div>
 </template>

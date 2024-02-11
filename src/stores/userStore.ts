@@ -6,31 +6,48 @@ import type IUser from "@/types/core/IUser";
 
 export const useUserStore = defineStore("userStore", () => {
   const user = reactive<IUser>({
+    id: 0,
     name: "",
+    user_name: "",
     email: "",
-    password: "",
-    password_confirmation: "",
-    active: 0,
-    any_device: 0,
+    phone: "",
+    code: "",
+    created: "",
+    expire_date: "",
     roles: [],
     permissions: [],
-    id: 0,
-    last_login: "",
   });
+  const pathUrl = "/user";
   async function get(params: object) {
-    return await Api.get(`/user`, { params: params });
+    return await Api.get(`${pathUrl}`, { params: params });
+  }
+  async function get_filter(params: object, page: number) {
+    return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function show(id: number) {
-    return await Api.get(`/user/${id}`);
+    return await Api.get(`${pathUrl}/${id}`);
+  }
+  async function profile() {
+    return await Api.get(`${pathUrl}/profile`);
   }
   async function store(prams: object) {
-    return await Api.post(`/user`, prams);
+    return await Api.post(`${pathUrl}`, prams);
   }
   async function update(prams: object, id: number) {
-    return await Api.post(`/user/${id}`, prams);
+    return await Api.post(`${pathUrl}/${id}`, prams);
   }
   async function _delete(id: number) {
-    return await Api.delete(`/user/delete/${id}`);
+    return await Api.delete(`${pathUrl}/delete/${id}`);
   }
-  return { user, get, _delete, store, update, show, getError };
+  return {
+    user,
+    get,
+    get_filter,
+    _delete,
+    store,
+    update,
+    show,
+    getError,
+    profile,
+  };
 });

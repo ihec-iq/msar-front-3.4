@@ -60,11 +60,13 @@ const reset = () => {
   item.value.measuringUnit = "";
   item.value.Category.id = 1;
 };
+const el = ref<HTMLInputElement>();
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show Item"]);
+  //checkPermissionAccessArray(["show Item"]);
   await itemCategoryStore.getFast();
   item.value.id = 0;
+  //el.value?.focus();
 });
 </script>
 <template>
@@ -79,6 +81,8 @@ onMounted(async () => {
             {{ t("Name") }}
           </div>
           <input
+           
+            ref="el"
             v-model="item.name"
             type="text"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"

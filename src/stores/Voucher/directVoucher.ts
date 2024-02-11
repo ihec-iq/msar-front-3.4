@@ -67,7 +67,7 @@ export const useDirectVoucherStore = defineStore("DirectVoucherStore", () => {
       });
   }
   async function getEmployees() {
-    return await Api.get(`${pathBase}/employee/lite`)
+    return await Api.get("employee/lite")
       .then((response) => {
         if (response.status == 200) {
           directVoucherEmployees.value = response.data.data;
