@@ -4,7 +4,7 @@
     <slot name="header"></slot>
     <div class="bg-slate-50 dark:bg-slate-800">
       <slot name="content"></slot>
+      <slot name="footer"></slot>
     </div>
-    <slot name="footer"></slot>
   </div>
 </template>
