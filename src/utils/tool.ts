@@ -1,5 +1,6 @@
-const truncateString = (text: string, maxLength: number): string => {
-  if (text == null || text == undefined) return;
+const truncateString = (text?: string, maxLength?: number): string => {
+  if (text == null || text == undefined) return "";
+  if (maxLength == null || maxLength == undefined) return "";
   if (text.length <= maxLength) {
     return text;
   } else {
@@ -8,7 +9,9 @@ const truncateString = (text: string, maxLength: number): string => {
     return truncated + "..." + extension;
   }
 };
-const formatFileSize = (fileSize: number): string => {
+const formatFileSize = (fileSize?: number): string => {
+  if (fileSize == null || fileSize == undefined) return "";
+
   if (fileSize < 1024) {
     return `${fileSize} B`;
   } else if (fileSize < 1024 * 1024) {
@@ -19,4 +22,12 @@ const formatFileSize = (fileSize: number): string => {
     return `${(fileSize / (1024 * 1024 * 1024)).toFixed(2)} GB`;
   }
 };
-export { truncateString, formatFileSize };
+const makeRandom = (length?: number): string => {
+  if (length == null || length == undefined) return "";
+
+  return Math.floor(Math.random() * 10)
+    .toString()
+    .repeat(length);
+};
+
+export { truncateString, formatFileSize, makeRandom };

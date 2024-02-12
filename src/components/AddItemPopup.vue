@@ -2,12 +2,11 @@
 import { onMounted, ref } from "vue";
 import { useItemStore } from "@/stores/item/item";
 import { useItemCategoryStore } from "@/stores/item/itemCategory";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permission";
 
 import { useI18n } from "@/stores/i18n/useI18n";
+import WangEditor from "./WangEditor.vue";
 const { t } = useI18n();
 const emit = defineEmits(["setItem"]);
 //region"Props"
@@ -81,7 +80,6 @@ onMounted(async () => {
             {{ t("Name") }}
           </div>
           <input
-           
             ref="el"
             v-model="item.name"
             type="text"
@@ -145,6 +143,7 @@ onMounted(async () => {
             theme="snow"
             class="text-text dark:text-textLight bg-lightInput dark:bg-input"
           ></quill-editor>
+          <WangEditor v-model="item.description"></WangEditor>
         </div>
       </div>
       <!-- bottom tool bar -->

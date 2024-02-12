@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, shallowRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/archives/archive";
 import Swal from "sweetalert2";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 import FilePreview from "@/components/FilePreview.vue";
 import DragDrop from "@/components/DragDrop.vue";
+import WangEditor from "@/components/WangEditor.vue";
 
 import { useDragDropStore } from "@/compositions/dragDrop";
 const { archiveTypes } = storeToRefs(useArchiveStore());
@@ -203,22 +202,7 @@ const back = () => {
     name: "archiveIndex",
   });
 };
-const options = {
-  theme: "snow",
-  modules: {
-    toolbar: [
-      ["bold", "italic", "underline"],
-      ["blockquote", "link"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ color: [] }, { background: [] }],
-      [{ align: ["right", "left", "center"] }],
-    ],
-  },
-  placeholder: "قم بملئ الملاحظات",
-  readOnly: false,
-  direction: "rtl",
-  formats: ["direction", "rtl", "right"],
-};
+
 onMounted(async () => {
   //console.log(can("show archives1"));
   checkPermissionAccessArray(["show archives"]);
@@ -233,28 +217,13 @@ onMounted(async () => {
   filesDataInput.value = [];
   await useArchiveStore().getArchiveTypes();
 });
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    [{ direction: "rtl" }], // this is rtl support
-  ],
-};
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
       <div class="w-11/12 mr-2">
-        <div class="_inputLabel">
-          {{ t("Title") }}
-        </div>
+        <div class="_inputLabel">{{ t("Title") }}</div>
         <input v-model="archive.title" type="text" class="_input" />
       </div>
       <div class="w-11/12 mr-2">
@@ -295,21 +264,13 @@ const modules = {
         <input v-model="archive.number" type="text" class="_input" />
       </div>
     </div>
-    <ScannerComponent></ScannerComponent>
     <DragDrop></DragDrop>
     <div class="mt-10 p-6">
       <div class="w-full mx-2">
         <div class="_inputLabel">
           {{ t("Description") }}
         </div>
-        <QuillEditor
-          v-model:content="archive.description"
-          contentType="html"
-          theme="snow"
-          direction="rtl"
-          class="text-text dark:text-textLight rtl bg-lightInput dark:bg-input h-60 ql-editor"
-        ></QuillEditor>
-        sss
+        <WangEditor v-model="archive.description"></WangEditor>
       </div>
     </div>
     <div class="mt-10 p-6">
@@ -465,41 +426,9 @@ label .smaller {
 button {
   cursor: pointer;
 }
-
-.ql-editor {
-  direction: rtl;
-  text-align: right;
-  font-size: initial;
-  direction: rtl;
-  text-align: right;
-  width: 100%;
-}
-
-.quill-editor img {
-  max-width: 100%;
-  height: auto;
-}
-
-.ql-toolbar.ql-snow .ql-formats {
-  margin-right: 0;
-  margin-left: 0;
-  margin-inline-end: 15px;
-}
-
-.ql-snow .ql-tooltip {
-  z-index: 99999;
-}
-
-.ql-snow .ql-toolbar .ql-formats {
-  margin: 8px;
-}
-
-.ql-snow .ql-toolbar .ql-formats:first-child {
-  margin-inline-start: 12px;
-}
-
-.ql-snow .ql-editor pre.ql-syntax {
-  direction: ltr;
-  text-align: left;
+html.dark {
+  --w-e-textarea-bg-color: #333;
+  --w-e-textarea-color: #fff;
+  /* ...others... */
 }
 </style>
