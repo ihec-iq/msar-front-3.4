@@ -227,24 +227,24 @@ onMounted(async () => {
     </template>
     <template v-slot:content
       ><div class="w-full">
-        <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
-          <div class="w-11/12 mr-2">
+        <div class="w-full p-6 grid lg:grid-cols-3 xs:grid-cols-2">
+          <div class="w-12/12 col-span-4">
             <div class="_inputLabel">{{ t("Title") }}</div>
             <input v-model="archive.title" type="text" class="_input" />
           </div>
-          <div class="w-11/12 mx-2">
+          <div class="w-12/12 mx-2">
             <div class="_inputLabel">
               {{ t("NumberBook") }}
             </div>
             <input v-model="archive.number" type="text" class="_input" />
           </div>
-          <div class="w-11/12 mx-2">
+          <div class="w-12/12 mx-2">
             <div class="_inputLabel">
               {{ t("Date") }}
             </div>
             <input v-model="archive.issueDate" type="date" class="_input" />
           </div>
-          <div class="w-11/12 mx-2">
+          <div class="w-12/12 mx-2">
             <div class="_inputLabel">
               {{ t("Type") }}
             </div>
@@ -258,11 +258,11 @@ onMounted(async () => {
               </option>
             </select>
           </div>
-          <div class="w-full mr-2">
+          <div class="w-full col-span-4">
             <div class="_inputLabel">{{ t("Description") }}</div>
             <input v-model="archive.description" type="text" class="_input" />
           </div>
-          <div class="w-11/12 mr-2">
+          <div class="w-12/12 my-5">
             <div class="_inputLabel">
               {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}
             </div>
