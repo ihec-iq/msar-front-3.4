@@ -27,11 +27,7 @@ const props = defineProps({
         </div>
       </div>
 
-      <div
-        class="!visible hidden grow basis-[100%] items-center lg:!flex lg:basis-auto"
-        id="navbarSupportedContentY"
-        data-te-collapse-item
-      >
+      <div>
         <slot name="buttons"></slot>
       </div>
     </div>
