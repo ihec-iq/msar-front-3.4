@@ -203,6 +203,22 @@ const back = () => {
     name: "archiveIndex",
   });
 };
+const options = {
+  theme: "snow",
+  modules: {
+    toolbar: [
+      ["bold", "italic", "underline"],
+      ["blockquote", "link"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ color: [] }, { background: [] }],
+      [{ align: ["right", "left", "center"] }],
+    ],
+  },
+  placeholder: "قم بملئ الملاحظات",
+  readOnly: false,
+  direction: "rtl",
+  formats: ["direction", "rtl", "right"],
+};
 onMounted(async () => {
   //console.log(can("show archives1"));
   checkPermissionAccessArray(["show archives"]);
@@ -286,12 +302,14 @@ const modules = {
         <div class="_inputLabel">
           {{ t("Description") }}
         </div>
-        <quill-editor
+        <QuillEditor
           v-model:content="archive.description"
           contentType="html"
           theme="snow"
-          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60 ql-editor"
-        ></quill-editor>
+          direction="rtl"
+          class="text-text dark:text-textLight rtl bg-lightInput dark:bg-input h-60 ql-editor"
+        ></QuillEditor>
+        sss
       </div>
     </div>
     <div class="mt-10 p-6">
@@ -446,5 +464,42 @@ label .smaller {
 }
 button {
   cursor: pointer;
+}
+
+.ql-editor {
+  direction: rtl;
+  text-align: right;
+  font-size: initial;
+  direction: rtl;
+  text-align: right;
+  width: 100%;
+}
+
+.quill-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 0;
+  margin-left: 0;
+  margin-inline-end: 15px;
+}
+
+.ql-snow .ql-tooltip {
+  z-index: 99999;
+}
+
+.ql-snow .ql-toolbar .ql-formats {
+  margin: 8px;
+}
+
+.ql-snow .ql-toolbar .ql-formats:first-child {
+  margin-inline-start: 12px;
+}
+
+.ql-snow .ql-editor pre.ql-syntax {
+  direction: ltr;
+  text-align: left;
 }
 </style>

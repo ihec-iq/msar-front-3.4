@@ -1,114 +1,77 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
+import { onMounted, ref } from "vue";
 import axios from "axios";
 
-export default defineComponent({
-  components: { QuillEditor },
-  props: {
-    modelValue: String,
-    placeholder: {
-      type: String,
-      default: "ابدء الكتابة هنا..",
-    },
+const editor = ref<any>(null);
+
+const options = {
+  theme: "snow",
+  modules: {
+    toolbar: [
+      ["bold", "italic", "underline"],
+      ["blockquote", "link"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ color: [] }, { background: [] }],
+      [{ align: [] }],
+    ],
   },
-  emits: ["update:modelValue"],
-  computed: {
-    options() {
-      return {
-        theme: "snow",
-        modules: {
-          toolbar: [
-            ["bold", "italic", "underline"],
-            ["blockquote", "link"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            [{ color: [] }, { background: [] }],
-            [{ align: [] }],
-          ],
-        },
-      };
-    },
-    editor() {
-      return editor.getQuill();
-    },
-  },
-  mounted() {
-    this.editor.format("direction", "rtl");
+};
 
-    this.setHTML(this.modelValue);
-  },
-  methods: {
-    getHTML() {
-      return this.$refs.editor.getHTML();
-    },
-    setHTML(value: string | undefined) {
-      return this.$refs.editor.setHTML(value);
-    },
-    onEditorReady(editor: {
-      getModule: (arg0: string) => {
-        (): any;
-        new (): any;
-        addHandler: {
-          (arg0: string, arg1: () => Promise<void>): void;
-          new (): any;
-        };
-      };
-    }) {
-      editor
-        .getModule("toolbar")
-        .addHandler("image", () => this.imageHandler(editor));
-    },
-    imageHandler: async function (editor: {
-      getSelection: (arg0: boolean) => any;
-      insertEmbed: (arg0: any, arg1: string, arg2: any) => any;
-    }) {
-      const input = document.createElement("input");
+const getHTML = () => editor.value.getHTML();
+const setHTML = (value: any) => editor.value.setHTML(value);
 
-      input.setAttribute("type", "file");
-      input.setAttribute("accept", "image/*");
-      input.click();
+const onEditorReady = (editorInstance: any) => {
+  editorInstance
+    .getModule("toolbar")
+    .addHandler("image", () => imageHandler(editorInstance));
+};
 
-      input.onchange = async () => {
-        const file = input.files[0];
-        const formData = new FormData();
+const imageHandler = async (editorInstance: any) => {
+  const input = document.createElement("input");
+  input.setAttribute("type", "file");
+  input.setAttribute("accept", "image/*");
+  input.click();
 
-        formData.append("file", file);
+  input.onchange = async () => {
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
 
-        // Save current cursor state
-        const range = editor.getSelection(true);
+    // Save current cursor state
+    const range = editorInstance.getSelection(true);
 
-        let toast = this.$toast.info("جاري رفع الصورة...", {
-          duration: null,
-        });
-
-        await axios
-          .post("/admin/media", formData)
-          .then(async ({ data }) => {
-            // Insert uploaded image
-            await editor.insertEmbed(range.index, "image", data.link);
-          })
-          .catch(({ response }) => {
-            this.$toast.error("حصلت مشكلة غير متوقعة");
-          })
-          .finally(() => {
-            toast.remove();
-          });
-      };
-    },
-  },
+    // let toast = this.$toasted.info('جاري رفع الصورة...', {
+    //   duration: null,
+    // });
+    console.log("جاري رفع الصورة...");
+    try {
+      const { data } = await axios.post("/admin/media", formData);
+      // Insert uploaded image
+      await editorInstance.insertEmbed(range.index, "image", data.link);
+    } catch (error) {
+      console.log("حصلت مشكلة غير متوقعة");
+    } finally {
+      toast.remove();
+    }
+  };
+};
+onMounted(() => {
+  editor.getQuill().format("direction", "rtl");
 });
 </script>
+
 <template>
   <div class="block">
     <QuillEditor
       ref="editor"
       class="quill-editor"
       :placeholder="placeholder"
-      :options="$$$options"
+      :options="options"
       :v-model="modelValue"
       @ready="onEditorReady($event)"
-      @update:content="$emit('update:modelValue', this.getHTML())"
+      @update:content="$emit('update:modelValue', getHTML())"
     />
   </div>
 </template>

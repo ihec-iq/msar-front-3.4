@@ -27,9 +27,12 @@ const globalOptions = {
   },
   placeholder: "قم بملئ الملاحظات",
   readOnly: false,
+  direction: "rtl",
+  formats: ["direction", "rtl"],
 };
 // set default globalOptions prop
 QuillEditor.props.globalOptions.default = () => globalOptions;
+
 // register QuillEditor component
 
 //import preset
