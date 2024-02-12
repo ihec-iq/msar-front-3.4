@@ -4,6 +4,7 @@ export default {
   Archive: "الارشيف",
   AllArchives: "الارشيف الكامل",
   Name: "اسم",
+  "User Name(for login)": "اسم المستخدم للدخول",
   NumberBook: "رقم الكتاب",
   FileBook: "تحميل الكتاب",
   TypeBook: "نوع الكتاب",

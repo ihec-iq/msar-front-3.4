@@ -10,7 +10,6 @@ import type { IUser, IUserFilter } from "@/types/core/IUser";
 import { usePermissionStore } from "@/stores/permission";
 const { checkPermissionAccessArray } = usePermissionStore();
 import JsonExcel from "vue-json-excel3";
-import row from "vant/lib/row";
 
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -33,15 +32,14 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (vacation: IUser) => {
-  if (vacation.Employee.name.includes(fastSearch.value)) {
+  if (vacation.Employee?.name.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -119,12 +117,8 @@ onMounted(async () => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div
-        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
-      >
-        <label for="table-search" class="sr-only">{{
-          t("VacationSearch")
-        }}</label>
+      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
+        <label for="table-search" class="sr-only">{{ t("VacationSearch") }}</label>
         <div class="relative flex">
           <div
             class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
@@ -154,9 +148,7 @@ onMounted(async () => {
           />
         </div>
         <!-- limit -->
-        <div
-          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
+        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
@@ -247,7 +239,7 @@ onMounted(async () => {
                           class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                         >
                           <th>{{ row.name }}</th>
-                          <th>{{ row.email }}</th>
+                          <th style="direction: ltr">{{ row.email }}</th>
                           <th>
                             <p
                               v-for="role in row.roles.slice(0, 3)"
@@ -257,9 +249,7 @@ onMounted(async () => {
                               {{ role.name }},
                             </p>
                           </th>
-                          <th></th>
-
-                          <th class="p-2">
+                          <th class="p-2 z-999">
                             <div class="dropdown">
                               <button
                                 class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"

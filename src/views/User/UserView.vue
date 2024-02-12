@@ -88,6 +88,7 @@ const store = () => {
     });
 };
 function update() {
+  console.log(user);
   errors.value = null;
   if (user.password == random) user.password = "";
   if (user.password_confirmation == random) user.password_confirmation = "";
@@ -118,6 +119,7 @@ const random = Math.floor(Math.random() * 10)
   .toString()
   .repeat(8);
 
+import { EnumDirection } from "@/utils/EnumSystem";
 onMounted(async () => {
   //checkPermissionAccessArray(["show user"]);
 
@@ -132,7 +134,6 @@ onMounted(async () => {
     user.id = id;
     userStore.show(user.id).then((response) => {
       if (response.status == 200) {
-        console.log(response.data.data);
         user.name = response.data.data.name;
         user.email = response.data.data.email;
         user.roles = response.data.data.roles;
@@ -151,28 +152,33 @@ onMounted(async () => {
       <loadingFull v-if="isLoading == true" />
 
       <PageTitle> {{ t(namePage) }} </PageTitle>
-
+      {{ user }}
       <div class="moon p-3">
         <!-- Row.1 -->
         <div class="row w-full flex justify-around my-10">
-          <TextInput label="User Name" :model-value="user.name" />
+          <TextInput label="Name" :model-value="user.name" :dir="EnumDirection.RTL" />
+          <TextInput
+            label="User Name(for login)"
+            :model-value="user.user_name"
+            :dir="EnumDirection.RTL"
+          />
+          <TextInput label="Email" :model-value="user.email" :dir="EnumDirection.LTR" />
+        </div>
+        <!-- Row.2 -->
+        <div class="row2 w-full mb-10 flex justify-around">
           <TextInput
             label="Password"
             type="password"
             :model-value="user.password"
+            :dir="EnumDirection.RTL"
           />
-        </div>
-
-        <!-- Row.2 -->
-        <div class="row2 w-full mb-10 flex justify-around">
-          <TextInput label="Email" :model-value="user.email" />
           <TextInput
             label="Rewrite Password"
             type="password"
             :model-value="user.password_confirmation"
+            :dir="EnumDirection.RTL"
           />
         </div>
-        {{ user }}
         <!-- row 3 -->
         <div class="row3 flex justify-around">
           <div class="w-1/5">
@@ -232,11 +238,7 @@ onMounted(async () => {
               </div>
             </div>
             <div class="flex justify-center">
-              <input
-                type="checkbox"
-                v-model="check_active"
-                class="toggle toggle-info"
-              />
+              <input type="checkbox" v-model="check_active" class="toggle toggle-info" />
               <div
                 class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
               >
@@ -270,7 +272,7 @@ onMounted(async () => {
       <div class="flex">
         <div class="items-center ml-2">
           <button
-            type="submit"
+            @click="store()"
             v-if="user.id == 0"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
           >
@@ -278,7 +280,7 @@ onMounted(async () => {
           </button>
           <button
             v-if="user.id != 0"
-            type="submit"
+            @click="update()"
             class="bg-update hover:bg-updateHover duration-500 h-12 w-32 rounded-lg text-white"
           >
             {{ t("Update") }}

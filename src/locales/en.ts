@@ -90,6 +90,8 @@ export default {
 
   ItemUpdate: "Update Item",
   Name: "Name",
+  "User Name(for login)": "User Name(for login)",
+
   Stats: "Stats",
   Action: "Action",
   Control: "Control",
