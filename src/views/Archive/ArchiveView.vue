@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, shallowRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/archives/archive";
 import Swal from "sweetalert2";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 import FilePreview from "@/components/FilePreview.vue";
 import DragDrop from "@/components/DragDrop.vue";
+import WangEditor from "@/components/WangEditor.vue";
 
 import { useDragDropStore } from "@/compositions/dragDrop";
 const { archiveTypes } = storeToRefs(useArchiveStore());
@@ -203,6 +202,7 @@ const back = () => {
     name: "archiveIndex",
   });
 };
+
 onMounted(async () => {
   //console.log(can("show archives1"));
   checkPermissionAccessArray(["show archives"]);
@@ -223,44 +223,25 @@ onMounted(async () => {
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
       <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("Title") }}
-        </div>
-        <input
-          v-model="archive.title"
-          type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
+        <div class="_inputLabel">{{ t("Title") }}</div>
+        <input v-model="archive.title" type="text" class="_input" />
       </div>
       <div class="w-11/12 mr-2">
-        <div class="form-control w-52">
-          <label class="cursor-pointer label">
-            <span
-              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-            >
-              {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}</span
-            >
-            <input
-              type="checkbox"
-              v-model="isIn"
-              class="toggle toggle-secondary"
-              checked
-            />
-          </label>
+        <div class="_inputLabel">
+          {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}
         </div>
+        <input
+          type="checkbox"
+          v-model="isIn"
+          class="toggle toggle-secondary"
+          checked
+        />
       </div>
       <div class="w-11/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="_inputLabel">
           {{ t("Type") }}
         </div>
-        <select
-          v-model="archive.archiveTypeId"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        >
+        <select v-model="archive.archiveTypeId" class="_input">
           <option
             v-for="archiveType in archiveTypes"
             :key="archiveType.id"
@@ -271,45 +252,25 @@ onMounted(async () => {
         </select>
       </div>
       <div class="w-11/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="_inputLabel">
           {{ t("Date") }}
         </div>
-        <input
-          v-model="archive.issueDate"
-          type="date"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
+        <input v-model="archive.issueDate" type="date" class="_input" />
       </div>
       <div class="w-11/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="_inputLabel">
           {{ t("NumberBook") }}
         </div>
-        <input
-          v-model="archive.number"
-          type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
+        <input v-model="archive.number" type="text" class="_input" />
       </div>
     </div>
-    <ScannerComponent></ScannerComponent>
     <DragDrop></DragDrop>
     <div class="mt-10 p-6">
       <div class="w-full mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="_inputLabel">
           {{ t("Description") }}
         </div>
-        <quill-editor
-          v-model:content="archive.description"
-          contentType="html"
-          theme="snow"
-          class="text-text dark:text-textLight bg-lightInput dark:bg-input h-60"
-        ></quill-editor>
+        <WangEditor v-model="archive.description"></WangEditor>
       </div>
     </div>
     <div class="mt-10 p-6">
@@ -326,7 +287,7 @@ onMounted(async () => {
           </div>
         </div>
         <div class="">
-          <div class="grid lg:grid-cols-6 md:grid-cols-4 xs:grid-cols-2 gap-10">
+          <div class="grid lg:grid-cols-4 md:grid-cols-4 xs:grid-cols-2 gap-10">
             <div
               class="flex-none hover:ease-in"
               v-for="document in archive.files"
@@ -397,6 +358,10 @@ onMounted(async () => {
   </div>
 </template>
 <style scoped>
+.ql-editor {
+  direction: rtl;
+  text-align: right;
+}
 .drop-area {
   width: 100%;
   max-width: 800px;
@@ -460,5 +425,10 @@ label .smaller {
 }
 button {
   cursor: pointer;
+}
+html.dark {
+  --w-e-textarea-bg-color: #333;
+  --w-e-textarea-color: #fff;
+  /* ...others... */
 }
 </style>

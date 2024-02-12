@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import DragDropFilePreview from "@/components/DragDropFilePreview.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 import { storeToRefs } from "pinia";
