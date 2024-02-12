@@ -9,7 +9,6 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AddItemPopup: typeof import('./src/components/AddItemPopup.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
-    ArchiveCardIndex: typeof import('./src/components/ihec/archive/ArchiveCardIndex.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
     BlockButton: typeof import('./src/components/dropDown/BlockButton.vue')['default']
     BottomToolBarView: typeof import('./src/components/general/BottomToolBarView.vue')['default']
@@ -33,7 +32,6 @@ declare module '@vue/runtime-core' {
     MovingList: typeof import('./src/components/MovingList.vue')['default']
     NamePage: typeof import('./src/components/general/namePage.vue')['default']
     NavBar: typeof import('./src/components/fixed/navBar.vue')['default']
-    QuillEditor: typeof import('./src/components/QuillEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ShowButton: typeof import('./src/components/dropDown/ShowButton.vue')['default']
