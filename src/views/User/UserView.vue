@@ -13,7 +13,7 @@ import TextInput from "@/components/inputs/TextInput.vue";
 import { useUserStore } from "@/stores/userStore";
 import { usePermissionStore } from "@/stores/permission";
 const { checkPermissionAccessArray } = usePermissionStore();
-
+import loadingFull from "@/components/general/loadingFull.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 const { t } = useI18n();
@@ -31,7 +31,7 @@ const back = () => {
 };
 
 const Save = (values: any) => {
-  if (user.id == 0) store();
+  if (user.value.id == 0) store();
   else update();
 };
 
@@ -45,7 +45,7 @@ const errors = ref<any>(null);
 const userStore = useUserStore();
 const isLoading = ref(false);
 const namePage = ref("Add New User");
-const user = reactive<IUser>({
+const user = ref<IUser>({
   id: 1,
   name: "",
   user_name: "",
@@ -59,8 +59,8 @@ const user = reactive<IUser>({
 });
 
 const store = () => {
-  user.any_device = check_any_device.value ? 1 : 0;
-  user.active = check_active.value ? 1 : 0;
+  user.value.any_device = check_any_device.value ? 1 : 0;
+  user.value.active = check_active.value ? 1 : 0;
   errors.value = null;
   userStore
     .store(user)
@@ -88,12 +88,12 @@ const store = () => {
     });
 };
 function update() {
-  console.log(user);
+  console.log(user.value);
   errors.value = null;
-  if (user.password == random) user.password = "";
-  if (user.password_confirmation == random) user.password_confirmation = "";
+  if (user.value.password == random) user.value.password = "";
+  if (user.value.password_confirmation == random) user.value.password_confirmation = "";
   userStore
-    .update(user, id)
+    .update(user.value, id)
     .then(() => {
       Swal.fire({
         position: "top-end",
@@ -118,31 +118,49 @@ function update() {
 const random = Math.floor(Math.random() * 10)
   .toString()
   .repeat(8);
-
-import { EnumDirection } from "@/utils/EnumSystem";
-onMounted(async () => {
-  //checkPermissionAccessArray(["show user"]);
-
+const showData = async () => {
   isLoading.value = true;
+  await userStore
+    .show(user.value.id)
+    .then((response) => {
+      if (response.status == 200) {
+        // user.value.name = response.data.data.name;
+        // user.value.email = response.data.data.email;
+        // user.value.roles = response.data.data.roles;
+        user.value = response.data.data as IUser;
+        check_any_device.value = user.value.any_device == 1 ? true : false;
+        check_active.value = user.value.active == 1 ? true : false;
+        user.value.password = random;
+        user.value.password_confirmation = random;
+        console.log(user.value);
+      }
+    })
+    .catch((errors) => {
+      console.log(errors);
+      Swal.fire({
+        position: "top-end",
+        icon: "warning",
+        title: "Your Item file not exist !!!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        router.go(-1);
+      });
+    });
+  isLoading.value = false;
+};
+import { EnumDirection, EnumPermission } from "@/utils/EnumSystem";
+onMounted(async () => {
+  checkPermissionAccessArray([EnumPermission.ShowUsers]);
+
   if (Number.isNaN(id)) {
     namePage.value = "Add User Card";
-    user.id = 0;
+    user.value.id = 0;
   } else {
-    user.password = random;
-    user.password_confirmation = random;
     namePage.value = "Update User Card";
-    user.id = id;
-    userStore.show(user.id).then((response) => {
-      if (response.status == 200) {
-        user.name = response.data.data.name;
-        user.email = response.data.data.email;
-        user.roles = response.data.data.roles;
-        check_any_device.value = user.any_device == 1 ? true : false;
-        check_active.value = user.active == 1 ? true : false;
-      }
-    });
+    user.value.id = id;
+    showData();
   }
-  isLoading.value = false;
   await roleStore.getRole();
 });
 </script>
@@ -156,26 +174,26 @@ onMounted(async () => {
       <div class="moon p-3">
         <!-- Row.1 -->
         <div class="row w-full flex justify-around my-10">
-          <TextInput label="Name" :model-value="user.name" :dir="EnumDirection.RTL" />
+          <TextInput label="Name" v-model="user.name" :dir="EnumDirection.RTL" />
           <TextInput
             label="User Name(for login)"
-            :model-value="user.user_name"
+            v-model="user.user_name"
             :dir="EnumDirection.RTL"
           />
-          <TextInput label="Email" :model-value="user.email" :dir="EnumDirection.LTR" />
+          <TextInput label="Email" v-model="user.email" :dir="EnumDirection.LTR" />
         </div>
         <!-- Row.2 -->
         <div class="row2 w-full mb-10 flex justify-around">
           <TextInput
             label="Password"
             type="password"
-            :model-value="user.password"
+            v-model="user.password"
             :dir="EnumDirection.RTL"
           />
           <TextInput
             label="Rewrite Password"
             type="password"
-            :model-value="user.password_confirmation"
+            v-model="user.password_confirmation"
             :dir="EnumDirection.RTL"
           />
         </div>
