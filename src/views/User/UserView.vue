@@ -13,7 +13,7 @@ import TextInput from "@/components/inputs/TextInput.vue";
 import { useUserStore } from "@/stores/userStore";
 import { usePermissionStore } from "@/stores/permission";
 const { checkPermissionAccessArray } = usePermissionStore();
-
+import loadingFull from "@/components/general/loadingFull.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 const { t } = useI18n();
@@ -31,7 +31,7 @@ const back = () => {
 };
 
 const Save = (values: any) => {
-  if (user.id == 0) store();
+  if (user.value.id == 0) store();
   else update();
 };
 
@@ -45,7 +45,7 @@ const errors = ref<any>(null);
 const userStore = useUserStore();
 const isLoading = ref(false);
 const namePage = ref("Add New User");
-const user = reactive<IUser>({
+const user = ref<IUser>({
   id: 1,
   name: "",
   user_name: "",
@@ -59,8 +59,8 @@ const user = reactive<IUser>({
 });
 
 const store = () => {
-  user.any_device = check_any_device.value ? 1 : 0;
-  user.active = check_active.value ? 1 : 0;
+  user.value.any_device = check_any_device.value ? 1 : 0;
+  user.value.active = check_active.value ? 1 : 0;
   errors.value = null;
   userStore
     .store(user)
@@ -88,11 +88,12 @@ const store = () => {
     });
 };
 function update() {
+  console.log(user.value);
   errors.value = null;
-  if (user.password == random) user.password = "";
-  if (user.password_confirmation == random) user.password_confirmation = "";
+  if (user.value.password == random) user.value.password = "";
+  if (user.value.password_confirmation == random) user.value.password_confirmation = "";
   userStore
-    .update(user, id)
+    .update(user.value, id)
     .then(() => {
       Swal.fire({
         position: "top-end",
@@ -117,31 +118,49 @@ function update() {
 const random = Math.floor(Math.random() * 10)
   .toString()
   .repeat(8);
-
-onMounted(async () => {
-  //checkPermissionAccessArray(["show user"]);
-
+const showData = async () => {
   isLoading.value = true;
+  await userStore
+    .show(user.value.id)
+    .then((response) => {
+      if (response.status == 200) {
+        // user.value.name = response.data.data.name;
+        // user.value.email = response.data.data.email;
+        // user.value.roles = response.data.data.roles;
+        user.value = response.data.data as IUser;
+        check_any_device.value = user.value.any_device == 1 ? true : false;
+        check_active.value = user.value.active == 1 ? true : false;
+        user.value.password = random;
+        user.value.password_confirmation = random;
+        console.log(user.value);
+      }
+    })
+    .catch((errors) => {
+      console.log(errors);
+      Swal.fire({
+        position: "top-end",
+        icon: "warning",
+        title: "Your Item file not exist !!!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        router.go(-1);
+      });
+    });
+  isLoading.value = false;
+};
+import { EnumDirection, EnumPermission } from "@/utils/EnumSystem";
+onMounted(async () => {
+  checkPermissionAccessArray([EnumPermission.ShowUsers]);
+
   if (Number.isNaN(id)) {
     namePage.value = "Add User Card";
-    user.id = 0;
+    user.value.id = 0;
   } else {
-    user.password = random;
-    user.password_confirmation = random;
     namePage.value = "Update User Card";
-    user.id = id;
-    userStore.show(user.id).then((response) => {
-      if (response.status == 200) {
-        console.log(response.data.data);
-        user.name = response.data.data.name;
-        user.email = response.data.data.email;
-        user.roles = response.data.data.roles;
-        check_any_device.value = user.any_device == 1 ? true : false;
-        check_active.value = user.active == 1 ? true : false;
-      }
-    });
+    user.value.id = id;
+    showData();
   }
-  isLoading.value = false;
   await roleStore.getRole();
 });
 </script>
@@ -151,28 +170,33 @@ onMounted(async () => {
       <loadingFull v-if="isLoading == true" />
 
       <PageTitle> {{ t(namePage) }} </PageTitle>
-
+      {{ user }}
       <div class="moon p-3">
         <!-- Row.1 -->
         <div class="row w-full flex justify-around my-10">
-          <TextInput label="User Name" :model-value="user.name" />
+          <TextInput label="Name" v-model="user.name" :dir="EnumDirection.RTL" />
+          <TextInput
+            label="User Name(for login)"
+            v-model="user.user_name"
+            :dir="EnumDirection.RTL"
+          />
+          <TextInput label="Email" v-model="user.email" :dir="EnumDirection.LTR" />
+        </div>
+        <!-- Row.2 -->
+        <div class="row2 w-full mb-10 flex justify-around">
           <TextInput
             label="Password"
             type="password"
-            :model-value="user.password"
+            v-model="user.password"
+            :dir="EnumDirection.RTL"
           />
-        </div>
-
-        <!-- Row.2 -->
-        <div class="row2 w-full mb-10 flex justify-around">
-          <TextInput label="Email" :model-value="user.email" />
           <TextInput
             label="Rewrite Password"
             type="password"
-            :model-value="user.password_confirmation"
+            v-model="user.password_confirmation"
+            :dir="EnumDirection.RTL"
           />
         </div>
-        {{ user }}
         <!-- row 3 -->
         <div class="row3 flex justify-around">
           <div class="w-1/5">
@@ -232,11 +256,7 @@ onMounted(async () => {
               </div>
             </div>
             <div class="flex justify-center">
-              <input
-                type="checkbox"
-                v-model="check_active"
-                class="toggle toggle-info"
-              />
+              <input type="checkbox" v-model="check_active" class="toggle toggle-info" />
               <div
                 class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
               >
@@ -270,7 +290,7 @@ onMounted(async () => {
       <div class="flex">
         <div class="items-center ml-2">
           <button
-            type="submit"
+            @click="store()"
             v-if="user.id == 0"
             class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
           >
@@ -278,7 +298,7 @@ onMounted(async () => {
           </button>
           <button
             v-if="user.id != 0"
-            type="submit"
+            @click="update()"
             class="bg-update hover:bg-updateHover duration-500 h-12 w-32 rounded-lg text-white"
           >
             {{ t("Update") }}
