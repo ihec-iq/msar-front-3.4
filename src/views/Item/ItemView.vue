@@ -5,7 +5,6 @@ import { useItemStore } from "@/stores/item/item";
 import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import Swal from "sweetalert2";
 import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";

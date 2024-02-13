@@ -10,11 +10,13 @@ import { usePermissionStore } from "@/stores/permission";
 import FilePreview from "@/components/FilePreview.vue";
 import DragDrop from "@/components/DragDrop.vue";
 import WangEditor from "@/components/WangEditor.vue";
-
 import { useDragDropStore } from "@/compositions/dragDrop";
-const { archiveTypes } = storeToRefs(useArchiveStore());
-
 import { useI18n } from "@/stores/i18n/useI18n";
+import IPage from "@/components/ihec/IPage.vue";
+import IPageHeader from "@/components/ihec/IPageHeader.vue";
+import IButton from "@/components/ihec/IButton.vue";
+
+const { archiveTypes } = storeToRefs(useArchiveStore());
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -219,74 +221,61 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <PageTitle> {{ namePage }}</PageTitle>
-  <div class="w-full">
-    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
-      <div class="w-11/12 mr-2">
-        <div class="_inputLabel">{{ t("Title") }}</div>
-        <input v-model="archive.title" type="text" class="_input" />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div class="_inputLabel">
-          {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}
-        </div>
-        <input
-          type="checkbox"
-          v-model="isIn"
-          class="toggle toggle-secondary"
-          checked
-        />
-      </div>
-      <div class="w-11/12 mx-2">
-        <div class="_inputLabel">
-          {{ t("Type") }}
-        </div>
-        <select v-model="archive.archiveTypeId" class="_input">
-          <option
-            v-for="archiveType in archiveTypes"
-            :key="archiveType.id"
-            :value="archiveType.id"
-          >
-            {{ archiveType.name }}
-          </option>
-        </select>
-      </div>
-      <div class="w-11/12 mx-2">
-        <div class="_inputLabel">
-          {{ t("Date") }}
-        </div>
-        <input v-model="archive.issueDate" type="date" class="_input" />
-      </div>
-      <div class="w-11/12 mx-2">
-        <div class="_inputLabel">
-          {{ t("NumberBook") }}
-        </div>
-        <input v-model="archive.number" type="text" class="_input" />
-      </div>
-    </div>
-    <DragDrop></DragDrop>
-    <div class="mt-10 p-6">
-      <div class="w-full mx-2">
-        <div class="_inputLabel">
-          {{ t("Description") }}
-        </div>
-        <WangEditor v-model="archive.description"></WangEditor>
-      </div>
-    </div>
-    <div class="mt-10 p-6">
-      <div id="showFiles" class="p-0 flex flex-col w-full mb-9 list-none">
-        <div class="w-64 content-center" v-if="Loading">
-          <div
-            class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-            role="status"
-          >
-            <span
-              class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-              >Loading...</span
-            >
+  <IPage>
+    <template v-slot:header>
+      <IPageHeader :title="namePage" />
+    </template>
+    <template v-slot:content
+      ><div class="w-full">
+        <div class="w-full p-6 grid lg:grid-cols-3 xs:grid-cols-2">
+          <div class="w-12/12 col-span-4">
+            <div class="_inputLabel">{{ t("Title") }}</div>
+            <input v-model="archive.title" type="text" class="_input" />
+          </div>
+          <div class="w-12/12 mx-2">
+            <div class="_inputLabel">
+              {{ t("NumberBook") }}
+            </div>
+            <input v-model="archive.number" type="text" class="_input" />
+          </div>
+          <div class="w-12/12 mx-2">
+            <div class="_inputLabel">
+              {{ t("Date") }}
+            </div>
+            <input v-model="archive.issueDate" type="date" class="_input" />
+          </div>
+          <div class="w-12/12 mx-2">
+            <div class="_inputLabel">
+              {{ t("Type") }}
+            </div>
+            <select v-model="archive.archiveTypeId" class="_input">
+              <option
+                v-for="archiveType in archiveTypes"
+                :key="archiveType.id"
+                :value="archiveType.id"
+              >
+                {{ archiveType.name }}
+              </option>
+            </select>
+          </div>
+          <div class="w-full col-span-4">
+            <div class="_inputLabel">{{ t("Description") }}</div>
+            <input v-model="archive.description" type="text" class="_input" />
+          </div>
+          <div class="w-12/12 my-5">
+            <div class="_inputLabel">
+              {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}
+            </div>
+            <input
+              type="checkbox"
+              v-model="isIn"
+              class="toggle toggle-secondary"
+              checked
+            />
           </div>
         </div>
-        <div class="">
+        <!-- Files preview -->
+        <div>
           <div class="grid lg:grid-cols-4 md:grid-cols-4 xs:grid-cols-2 gap-10">
             <div
               class="flex-none hover:ease-in"
@@ -302,60 +291,95 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-      </div>
-      <div id="DropZone"></div>
-    </div>
-    <!-- bottom tool bar -->
-    <div
-      :class="{
-        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-          !is,
-      }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-    >
-      <div class="flex ltr:ml-8 rtl:mr-8">
-        <div class="items-center mr-3">
-          <button
-            v-if="archive.id == 0"
-            @click="store()"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Create") }}
-          </button>
-          <button
-            v-else
-            @click="update()"
-            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Update") }}
-          </button>
-          <button
-            v-if="archive.id != 0"
-            @click="Delete()"
-            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
-          >
-            {{ t("Delete") }}
-          </button>
+        <DragDrop></DragDrop>
+        <div class="mt-10 p-6">
+          <div id="showFiles" class="p-0 flex flex-col w-full mb-9 list-none">
+            <div class="w-64 content-center" v-if="Loading">
+              <div
+                class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status"
+              >
+                <span
+                  class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                  >Loading...</span
+                >
+              </div>
+            </div>
+          </div>
+          <div id="DropZone"></div>
         </div>
+
+        <div class="flex end w-full flex-wrap items-center justify-between p-5">
+          <div class="flex w-full flex-wrap items-center justify-between px-3">
+            <IButton
+              v-if="archive.id != 0"
+              color="red"
+              type="outlined"
+              :text="t('Delete')"
+              :onClick="Delete"
+            />
+            <IButton
+              v-if="archive.id == 0"
+              :text="t('Create')"
+              :onClick="store"
+            />
+            <IButton v-else :text="t('Update')" :onClick="update" />
+          </div>
+        </div>
+
+        <!-- bottom tool bar -->
+        <!-- <div
+          :class="{
+            'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
+            'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+              !is,
+          }"
+          class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
+        >
+          <div class="flex ltr:ml-8 rtl:mr-8">
+            <div class="items-center mr-3">
+              <button
+                v-if="archive.id == 0"
+                @click="store()"
+                class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+              >
+                {{ t("Create") }}
+              </button>
+              <button
+                v-else
+                @click="update()"
+                class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+              >
+                {{ t("Update") }}
+              </button>
+              <button
+                v-if="archive.id != 0"
+                @click="Delete()"
+                class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
+              >
+                {{ t("Delete") }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          :class="{
+            'ltr:left-4 rtl:right-4': is,
+            'ltr:left-28 rtl:right-28': !is,
+          }"
+          class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
+        >
+          <button
+            @click="back()"
+            class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
+          >
+            {{ t("Back") }}
+          </button>
+        </div> -->
+        <!-- end bottom tool -->
       </div>
-    </div>
-    <div
-      :class="{
-        'ltr:left-4 rtl:right-4': is,
-        'ltr:left-28 rtl:right-28': !is,
-      }"
-      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-    >
-      <button
-        @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-      >
-        {{ t("Back") }}
-      </button>
-    </div>
-    <!-- end bottom tool -->
-  </div>
+    </template>
+  </IPage>
 </template>
 <style scoped>
 .ql-editor {
