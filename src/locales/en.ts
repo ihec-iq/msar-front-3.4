@@ -176,4 +176,5 @@ export default {
   "Change Direction": "Change Direction",
   "Change Theme": "Change Theme",
   "Change Password": "Change Password",
+  way: "Source/Destination",
 };
