@@ -86,6 +86,7 @@ export default {
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
   Employee: "الموظف",
+  UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",
   ItemAdd: "اضافة مادة",
