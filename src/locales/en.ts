@@ -86,6 +86,8 @@ export default {
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
   Employee: "Employee",
+  UserIndex: "User System",
+
   Help: "Help",
 
   ItemUpdate: "Update Item",

@@ -59,7 +59,7 @@ const store = () => {
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
-  console.log([...formData]);
+  //console.log([...formData]);
   archiveStore
     .store(formData)
     .then((response) => {
@@ -318,11 +318,7 @@ onMounted(async () => {
               :text="t('Delete')"
               :onClick="Delete"
             />
-            <IButton
-              v-if="archive.id == 0"
-              :text="t('Create')"
-              :onClick="store"
-            />
+            <IButton v-if="archive.id == 0" :text="t('Create')" :onClick="store" />
             <IButton v-else :text="t('Update')" :onClick="update" />
           </div>
         </div>
