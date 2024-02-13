@@ -1,0 +1,69 @@
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useRtlStore } from "@/stores/i18n/rtlPi";
+import { useAuthStore } from "@/stores/authStore";
+//import { usePermissionStore } from "@/stores/permission";
+import Api from "./api/apiConfig";
+import { useConfigStore } from "@/stores/config";
+const { ConnectionString } = storeToRefs(useConfigStore());
+
+// const { getUser } = useAuthStore();
+// const { setPermissions } = usePermissionStore();
+// const { CheckAuth } = useAuthStore();
+
+const rtlStore = useRtlStore();
+const { isClose, is } = storeToRefs(rtlStore);
+//#region  Code
+const show = ref(false);
+document.onkeydown = function (e) {
+  if (
+    (e.key === "k" && (e.ctrlKey || e.metaKey)) ||
+    (e.key === "K" && (e.ctrlKey || e.metaKey))
+  ) {
+    e.preventDefault(); // present "Save Page" from getting triggered.
+    show.value = true;
+  }
+};
+document.onkeydown = function (s) {
+  if ((s.key === "b" && s.ctrlKey) || (s.key === "B" && s.ctrlKey)) {
+    s.preventDefault(); // present "Save Page" from getting triggered.
+
+    isClose.value = !isClose.value;
+  }
+};
+// let htmlEl = document.querySelector("html");
+// htmlEl?.setAttribute("data-theme", "cupcake");
+onMounted(async () => {
+  await useConfigStore().load();
+  Api.defaults.baseURL = String(ConnectionString.value);
+
+  useAuthStore().CheckAuth();
+  //const user = await getUser();
+  //setPermissions(user.permissions);
+
+  let htmlEl = document.querySelector("html");
+  let dir: string | any = "rtl";
+  if (localStorage.getItem("dir")?.toString() != undefined)
+    dir = localStorage.getItem("dir")?.toString();
+  htmlEl?.setAttribute("dir", dir);
+  localStorage.getItem("isLtr");
+  // lang
+  let lang: string | any = "ar";
+  lang = localStorage.getItem("lang");
+  htmlEl?.setAttribute("lang", lang);
+});
+//#endregion
+</script>
+
+<template>
+  <RouterView class="font-Tajawal"></RouterView>
+</template>
+<style scoped>
+.dark .image-bg {
+  background-image: none;
+}
+.image-bg {
+  background-image: url("./assets/image/beams-home@95.jpg");
+}
+</style>
