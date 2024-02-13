@@ -143,7 +143,22 @@ function update() {
       });
     });
 }
-const Delete = async () => {
+const dataDelete = () => {
+  // Delete(-1, archiveStore,archive.value.id)
+  Delete({
+    RouterGo: -1,
+    storeName: archiveStore,
+    id: archive.value.id
+  });
+  // Delete(params);
+}
+// make this function global 
+interface DeleteParams {
+  RouterGo: number;
+  storeName: any;
+  id: number;
+}
+const Delete = async ({ RouterGo, storeName, id }: DeleteParams) => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn m-2 bg-red-700",
@@ -163,17 +178,53 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await archiveStore._delete(archive.value.id).then(() => {
+        await storeName._delete(id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
             "success"
           );
-          router.go(-1);
+          router.go(RouterGo);
         });
       }
     });
 };
+
+//
+
+
+// const Delete = async ( ) => {
+//   const swalWithBootstrapButtons = Swal.mixin({
+//     customClass: {
+//       confirmButton: "btn m-2 bg-red-700",
+//       cancelButton: "btn bg-grey-400",
+//     },
+//     buttonsStyling: false,
+//   });
+//   swalWithBootstrapButtons
+//     .fire({
+//       title: t("Are You Sure?"),
+//       text: t("You Won't Be Able To Revert This!"),
+//       icon: "warning",
+//       showCancelButton: true,
+//       confirmButtonText: t("Yes, delete it!"),
+//       cancelButtonText: t("No, cancel!"),
+//       reverseButtons: true,
+//     })
+//     .then(async (result) => {
+//       if (result.isConfirmed) {
+//         await archiveStore._delete(archive.value.id).then(() => {
+//           swalWithBootstrapButtons.fire(
+//             t("Deleted!"),
+//             t("Deleted successfully ."),
+//             "success"
+//           );
+//           router.go(-1);
+//         });
+//       }
+//     });
+// };
+//
 const showData = async () => {
   Loading.value = true;
   archive.value.files = [];
