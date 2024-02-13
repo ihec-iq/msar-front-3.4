@@ -30,7 +30,7 @@ const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref(".....");
 const route = useRoute();
 const id = ref(Number(route.params.id));
-const isIn = ref(false);
+const isIn = ref(true);
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
@@ -90,15 +90,29 @@ function update() {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
   const formData = new FormData();
+
   formData.append("id", archive.value.id.toString());
+
   formData.append("title", archive.value.title.toString());
-  formData.append("description", archive.value.description?.toString());
+  formData.append(
+    "description",
+    archive.value.description == null
+      ? ""
+      : archive.value.description.toString()
+  );
   formData.append("issueDate", archive.value.issueDate.toString());
-  formData.append("number", archive.value.number.toString());
-  formData.append("way", archive.value.way.toString());
+  formData.append(
+    "number",
+    archive.value.number == null ? "" : archive.value.number.toString()
+  );
+  formData.append(
+    "way",
+    archive.value.way == null ? "" : archive.value.way.toString()
+  );
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+
   const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
@@ -227,24 +241,24 @@ onMounted(async () => {
     </template>
     <template v-slot:content
       ><div class="w-full">
-        <div class="w-full p-6 grid lg:grid-cols-3 xs:grid-cols-2">
+        <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
           <div class="w-12/12 col-span-4">
             <div class="_inputLabel">{{ t("Title") }}</div>
             <input v-model="archive.title" type="text" class="_input" />
           </div>
-          <div class="w-12/12 mx-2">
+          <div class="w-12/12 mx-2 my-2">
             <div class="_inputLabel">
               {{ t("NumberBook") }}
             </div>
             <input v-model="archive.number" type="text" class="_input" />
           </div>
-          <div class="w-12/12 mx-2">
+          <div class="w-12/12 mx-2 my-2">
             <div class="_inputLabel">
               {{ t("Date") }}
             </div>
             <input v-model="archive.issueDate" type="date" class="_input" />
           </div>
-          <div class="w-12/12 mx-2">
+          <div class="w-12/12 mx-2 my-2">
             <div class="_inputLabel">
               {{ t("Type") }}
             </div>
@@ -258,11 +272,17 @@ onMounted(async () => {
               </option>
             </select>
           </div>
-          <div class="w-full col-span-4">
+          <div class="w-12/12 mx-2 my-2">
+            <div class="_inputLabel">
+              {{ t("way") }}
+            </div>
+            <input v-model="archive.way" type="text" class="_input" />
+          </div>
+          <div class="w-full col-span-4 my-2">
             <div class="_inputLabel">{{ t("Description") }}</div>
             <input v-model="archive.description" type="text" class="_input" />
           </div>
-          <div class="w-12/12 my-5">
+          <div class="w-12/12 my-2">
             <div class="_inputLabel">
               {{ t("TypeBook") }} : {{ isIn ? "داخل" : "خارج" }}
             </div>
@@ -274,7 +294,6 @@ onMounted(async () => {
             />
           </div>
         </div>
-        <!-- Files preview -->
         <div>
           <div class="grid lg:grid-cols-4 md:grid-cols-4 xs:grid-cols-2 gap-10">
             <div
@@ -292,8 +311,8 @@ onMounted(async () => {
           </div>
         </div>
         <DragDrop></DragDrop>
-        <div class="mt-10 p-6">
-          <div id="showFiles" class="p-0 flex flex-col w-full mb-9 list-none">
+        <div class="px-6">
+          <div id="showFiles" class="p-0 flex flex-col w-full list-none">
             <div class="w-64 content-center" v-if="Loading">
               <div
                 class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
@@ -309,22 +328,24 @@ onMounted(async () => {
           <div id="DropZone"></div>
         </div>
 
-        <div class="flex end w-full flex-wrap items-center justify-between p-5">
-          <div class="flex w-full flex-wrap items-center justify-between px-3">
-            <IButton
-              v-if="archive.id != 0"
-              color="red"
-              type="outlined"
-              :text="t('Delete')"
-              :onClick="Delete"
-            />
-            <IButton
-              v-if="archive.id == 0"
-              :text="t('Create')"
-              :onClick="store"
-            />
-            <IButton v-else :text="t('Update')" :onClick="update" />
-          </div>
+        <div
+          class="max-w-screen-xl flex flex-wrap items-center flex-row-reverse justify-between mx-auto p-4"
+        >
+          <!-- end -->
+          <IButton
+            v-if="archive.id == 0"
+            :text="t('Create')"
+            :onClick="store"
+          />
+          <IButton v-else :text="t('Update')" :onClick="update" />
+          <!-- start -->
+          <IButton
+            v-if="archive.id != 0"
+            color="red"
+            type="outlined"
+            :text="t('Delete')"
+            :onClick="Delete"
+          />
         </div>
 
         <!-- bottom tool bar -->
