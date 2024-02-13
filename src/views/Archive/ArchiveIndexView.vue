@@ -422,6 +422,15 @@ onMounted(async () => {
                           </div>
 
                           <div class="dropdown">
+                            <IButton
+                              type="outlined"
+                              width="18"
+                              :text="t('Edit')"
+                              :onClick="() => update(item.id)"
+                            />
+                          </div>
+
+                          <!-- <div class="dropdown">
                             <button
                               class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
                               type="button"
@@ -443,12 +452,8 @@ onMounted(async () => {
                               <li>
                                 <EditButton @click="update(item.id)" />
                               </li>
-                              <!-- <li>
-                            <ShowButton @click="show(item.id)" />
-                          </li> -->
-                              <!-- <li><BlockButton /></li> -->
                             </ul>
-                          </div>
+                          </div> -->
                         </div>
                         <!-- end card -->
                       </div>
