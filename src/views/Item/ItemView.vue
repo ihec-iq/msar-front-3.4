@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useItemStore } from "@/stores/item/item";
 import { useItemCategoryStore } from "@/stores/Item/itemCategory";
-import Swal from "sweetalert2";
+import Swal from "sweetalert2"; 
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";

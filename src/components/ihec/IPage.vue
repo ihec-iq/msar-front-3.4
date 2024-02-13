@@ -1,6 +1,6 @@
 <script setup lang="ts"></script>
 <template>
-  <div class="container mx-auto px-10 py-5">
+  <div class="container mx-auto p-3">
     <slot name="header"></slot>
     <div class="bg-slate-50 dark:bg-slate-800">
       <slot name="content"></slot>
