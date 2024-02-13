@@ -4,11 +4,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useArchiveStore } from "@/stores/archives/archive";
 import { useI18n } from "@/stores/i18n/useI18n";
 import { usePermissionStore } from "@/stores/permission";
-import type {
-  IArchive,
-  IArchiveFilter,
-  IDocument,
-} from "@/types/archives/IArchive";
+import type { IArchive, IArchiveFilter, IDocument } from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { storeToRefs } from "pinia";
 import { onMounted, reactive, ref, watch } from "vue";
@@ -41,8 +37,7 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1, -1);
   }
 );
@@ -141,8 +136,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 const getPath = (files: Array<IDocument>) => {
-  if (files.length == 0 || files == null)
-    return "https://picsum.photos/100/150/?random";
+  if (files.length == 0 || files == null) return "https://picsum.photos/100/150/?random";
   else {
     if (files[0].extension == "png" || files[0].extension == "jpg")
       return String(files[0].path);
@@ -165,7 +159,7 @@ onMounted(async () => {
   await useArchiveStore().getArchiveTypes();
 });
 </script>
-<template>
+<template> 
   <IPage>
     <template v-slot:header>
       <IPageHeader :title="t('Archive')">
@@ -177,7 +171,7 @@ onMounted(async () => {
     <template v-slot:content>
       <div class="flex">
         <!-- <Nav class="w-[5%]" /> -->
-        <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
+        <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]"> 
           <div
             class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
           >
@@ -234,10 +228,10 @@ onMounted(async () => {
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                 />
               </div>
-            </div>
+            </div> 
             <!-- limit -->
             <div
-              class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+              class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]" 
             >
               <div
                 class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
@@ -288,6 +282,7 @@ onMounted(async () => {
                       :delay="200"
                       v-if="archiveTypes.length > 0"
                     >
+ 
                       <div class="max-w-full relative">
                         <div
                           class="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
@@ -307,7 +302,7 @@ onMounted(async () => {
                           ></CArchiveCardIndex>
                           <!-- end card -->
                         </div>
-                      </div>
+                      </div> 
                     </div>
                   </div>
                   <SimpleLoading v-if="isLoading"></SimpleLoading>
@@ -334,6 +329,7 @@ onMounted(async () => {
                     :delay="200"
                     v-if="data.length > 0"
                   >
+ 
                     <div class="max-w-full relative">
                       <div
                         class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
@@ -354,7 +350,7 @@ onMounted(async () => {
                           </div>
                           <div class="w-3/4 overflow-hidden">
                             <div
-                              class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
+                              class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right" 
                             >
                               <div
                                 class="text-2xl text-text dark:text-textLight mb-2"

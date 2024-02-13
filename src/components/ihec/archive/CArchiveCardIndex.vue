@@ -6,7 +6,8 @@ const props = defineProps({
   },
   count: {
     type: String,
-    required: true,
+    required: false,
+    default: "0",
   },
 });
 </script>
