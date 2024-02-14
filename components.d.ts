@@ -44,7 +44,6 @@ declare module '@vue/runtime-core' {
     SimpleLoading: typeof import('./src/components/general/SimpleLoading.vue')['default']
     SkeletonTable: typeof import('./src/components/general/SkeletonTable.vue')['default']
     TableAll: typeof import('./src/components/general/TableAll.vue')['default']
-    TableLiteTs: typeof import('./src/components/ihec/TableLiteTs.vue')['default']
     TextInput: typeof import('./src/components/general/TextInput.vue')['default']
     ToolBar: typeof import('./src/components/fixed/toolBar.vue')['default']
     ToolTipComponent: typeof import('./src/components/ToolTipComponent.vue')['default']

@@ -2,7 +2,6 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
