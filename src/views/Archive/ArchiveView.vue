@@ -143,14 +143,12 @@ function update() {
       });
     });
 }
-const dataDelete = () => {
-  // Delete(-1, archiveStore,archive.value.id)
+const dataDelete = () => { 
   Delete({
     RouterGo: -1,
     storeName: archiveStore,
     id: archive.value.id
-  });
-  // Delete(params);
+  }); 
 }
 // make this function global 
 interface DeleteParams {
