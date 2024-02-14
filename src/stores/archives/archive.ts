@@ -15,12 +15,12 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     issueDate: new Date().toISOString().split("T")[0],
     files: [],
     description: "",
-    way: "way",
-    number: "123",
-    isIn: 0,
+    way: "",
+    number: "",
+    isIn: 1,
     isInWord: "",
     archiveType: { id: 0, name: "" },
-    archiveTypeId: 1,
+    archiveTypeId: 0,
     sectionId: 1,
   });
   const archiveTypes = ref<IArchiveType[]>([]);
