@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-
+import envConfig from "@/api/envConfig";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
@@ -54,7 +54,7 @@ onMounted(async () => {
     .load()
     .then(() => {
       if (ConnectionString.value == null || ConnectionString.value == "") {
-        ConnectionString.value = "http://10.10.10.10/workflow_ihec/public/api";
+        ConnectionString.value = envConfig._baseURL;
       }
       if (Organization.value == null || Organization.value == "") {
         Organization.value = "المفوضية العليا المستقلة للانتخابات";

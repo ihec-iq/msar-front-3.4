@@ -501,4 +501,5 @@ export default {
   "Not Resolved": "غير مكتمل",
   "Change Password": "تغيير الرقم السري",
   way: "جهة الكتاب",
+  readMore: "اقرأ المزيد"
 };

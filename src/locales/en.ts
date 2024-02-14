@@ -179,4 +179,5 @@ export default {
   "Change Theme": "Change Theme",
   "Change Password": "Change Password",
   way: "Source/Destination",
+  readMore: "Read more"
 };
