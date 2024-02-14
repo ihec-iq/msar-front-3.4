@@ -59,7 +59,7 @@ const store = () => {
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
-  console.log([...formData]);
+  //console.log([...formData]);
   archiveStore
     .store(formData)
     .then((response) => {
@@ -143,20 +143,7 @@ function update() {
       });
     });
 }
-const dataDelete = () => { 
-  Delete({
-    RouterGo: -1,
-    storeName: archiveStore,
-    id: archive.value.id
-  }); 
-}
-// make this function global 
-interface DeleteParams {
-  RouterGo: number;
-  storeName: any;
-  id: number;
-}
-const Delete = async ({ RouterGo, storeName, id }: DeleteParams) => {
+const Delete = async () => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn m-2 bg-red-700",
@@ -176,53 +163,17 @@ const Delete = async ({ RouterGo, storeName, id }: DeleteParams) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await storeName._delete(id).then(() => {
+        await archiveStore._delete(archive.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
             "success"
           );
-          router.go(RouterGo);
+          router.go(-1);
         });
       }
     });
 };
-
-//
-
-
-// const Delete = async ( ) => {
-//   const swalWithBootstrapButtons = Swal.mixin({
-//     customClass: {
-//       confirmButton: "btn m-2 bg-red-700",
-//       cancelButton: "btn bg-grey-400",
-//     },
-//     buttonsStyling: false,
-//   });
-//   swalWithBootstrapButtons
-//     .fire({
-//       title: t("Are You Sure?"),
-//       text: t("You Won't Be Able To Revert This!"),
-//       icon: "warning",
-//       showCancelButton: true,
-//       confirmButtonText: t("Yes, delete it!"),
-//       cancelButtonText: t("No, cancel!"),
-//       reverseButtons: true,
-//     })
-//     .then(async (result) => {
-//       if (result.isConfirmed) {
-//         await archiveStore._delete(archive.value.id).then(() => {
-//           swalWithBootstrapButtons.fire(
-//             t("Deleted!"),
-//             t("Deleted successfully ."),
-//             "success"
-//           );
-//           router.go(-1);
-//         });
-//       }
-//     });
-// };
-//
 const showData = async () => {
   Loading.value = true;
   archive.value.files = [];

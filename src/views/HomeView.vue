@@ -61,15 +61,15 @@ const filteredLinks = computed(() =>
           <div
             class="absolute p-4 opacity-0 transition-opacity group-hover:relative group-hover:opacity-100 sm:p-6 lg:p-8"
           >
-            <h3 class="mt-4 text-xl font-medium sm:text-2xl">
+            <h3 class="pt-4 mx-auto text-xl font-medium sm:text-2xl">
               {{ Link.title }}
             </h3>
 
-            <p class="mt-4 text-sm sm:text-base">
+            <p class="mt-2 mx-auto text-sm sm:text-base">
               {{ Link.description }}
             </p>
 
-            <p class="mt-8 font-bold">Read more</p>
+            <p class="mt-8 font-bold">{{ t("readMore") }}</p>
           </div>
         </div>
       </span>

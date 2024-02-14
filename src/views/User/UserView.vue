@@ -168,9 +168,7 @@ onMounted(async () => {
   <div class="sun">
     <div>
       <loadingFull v-if="isLoading == true" />
-
       <PageTitle> {{ t(namePage) }} </PageTitle>
-      {{ user }}
       <div class="moon p-3">
         <!-- Row.1 -->
         <div class="row w-full flex justify-around my-10">

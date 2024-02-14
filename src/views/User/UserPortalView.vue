@@ -5,17 +5,18 @@ import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import { UserLinks } from "./UserLinks";
 import { usePermissionStore } from "@/stores/permission";
+import { EnumPermission } from "@/utils/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["vacation Report"]);
+  checkPermissionAccessArray([EnumPermission.ShowUsers]);
 });
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("VacationIndex") }} </PageTitle>
+    <PageTitle> {{ t("UserIndex") }} </PageTitle>
   </div>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
@@ -29,9 +30,7 @@ onMounted(async () => {
               :to="{ name: Link.routerName }"
             >
               <span href="" class="group relative block h-64 sm:h-50 lg:h-60">
-                <span
-                  class="absolute inset-0 border-2 border-dashed border-black"
-                ></span>
+                <span class="absolute inset-0 border-2 border-dashed border-black"></span>
 
                 <div
                   class="relative flex h-full transform items-end border-2 border-black bg-white transition-transform group-hover:-translate-x-2 group-hover:-translate-y-2"
@@ -43,10 +42,7 @@ onMounted(async () => {
                       title="Feature"
                       class="dark:text-navIconColorHoverDark dark:hover:text-navIconColoDark hover:text-navIconColoDark text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
                     >
-                      <span
-                        v-html="Link.iconX"
-                        class="dark:text-content"
-                      ></span>
+                      <span v-html="Link.iconX" class="dark:text-content"></span>
                     </div>
 
                     <h2 class="mt-4 text-xl font-medium sm:text-2xl">

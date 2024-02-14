@@ -106,7 +106,7 @@ onMounted(async () => {
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-bgLeftNavLight dark:bg-[#22262A] shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-2 rtl:mr-2"
+    class="print:hidden flex text-white bg-bgLeftNavLight dark:bg-[#22262A] shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-2 rtl:mr-2 mb-5"
   >
     <div
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4 xs:w-full"
