@@ -8,10 +8,11 @@ import "./assets/print.css";
 import vSelect from "vue-select";
 import { MotionPlugin } from "@vueuse/motion";
 import { Icon } from "@iconify/vue";
+import { registerComponents } from "./components/registerComponents";
 
 const app = createApp(App);
 app.component("vSelect", vSelect);
-app.component("MDIicon", Icon);
+app.component("MdiIcon", Icon);
 app.use(createPinia());
 app.use(MotionPlugin);
 app.use(router);
@@ -22,5 +23,5 @@ app.directive("focus", {
     el.focus();
   },
 });
-
+//registerComponents(app);
 app.mount("#app");

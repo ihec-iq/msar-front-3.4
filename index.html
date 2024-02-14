@@ -1,149 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./src/assets/20220323_095012.png" sizes="any" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="./src/assets/20220323_095012.png" sizes="any" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#ffffff" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0677D3" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <link rel="manifest" href="/manifest.webmanifest" />
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0677D3">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <link rel="manifest" href="/manifest.webmanifest">
+    <title>Flow System</title>
+  </head>
 
-  <title>Flow System</title>
-</head>
+  <body>
+    <div id="app">
+      <img
+        src="./src/assets/logo-512x512.png"
+        width="200"
+        style="border-radius: 50%; margin-top: 7%"
+      />
 
-<body>
-  <div id="app"><img src="./src/assets/logo-512x512.png" width="200" style="border-radius: 50%; margin-top: 7%;">
-
-    <div class="logo-wrap">
-      <svg version="1.1" id="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-        y="0px" viewBox="0 0 855 150" style="enable-background:new 0 0 855 150; overflow: inherit;"
-        xml:space="preserve">
-        <text transform="matrix(1 0 0 1 0 125.5508)" class="st0 st1 st2 text-center">المفوضية العليا المستقلة
-          للانتخابات</text>
-      </svg>
+      <div class="logo-wrap">
+        <svg
+          version="1.1"
+          id=""
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 855 150"
+          style="enable-background: new 0 0 855 150; overflow: inherit"
+          xml:space="preserve"
+        >
+          <text
+            transform="matrix(1 0 0 1 0 125.5508)"
+            class="st0 st1 st2 text-center"
+          >
+            المفوضية العليا المستقلة للانتخابات
+          </text>
+        </svg>
+      </div>
     </div>
-  </div>
-  <script type="module" src="./src/main.ts"></script>
-</body>
-<script>
-</script>
-<style>
-  .st0 {
-    fill: none;
-    stroke: #FFFFFF;
-    stroke-width: 2;
-    stroke-miterlimit: 10;
-    width: auto;
-  }
-
-  .st1 {
-    font-family: 'open sans';
-  }
-
-  .st2 {
-    font-size: 30px;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  html,
-  body {
-    height: 100%;
-    width: 100%;
-  }
-
-  body {
-    position: relative;
-    overflow-x: hidden;
-    line-height: 1.5;
-    background: #171717;
-    font-size: 14px;
-    text-align: center;
-    /* display: table; */
-    /* height: 100vh; */
-  }
-
-  body .logo-wrap {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-  }
-
-  .st0 {
-    stroke: #fff;
-    fill: #fff;
-    stroke-dasharray: 920;
-    opacity: 1;
-    -webkit-animation: 5s logo-animation cubic-bezier(0.67, 0.5, 0.175, 1);
-    animation: 5s logo-animation cubic-bezier(0.67, 0.5, 0.175, 1);
-    -webkit-animation-fill-mode: forwards;
-    animation-fill-mode: forwards;
-  }
-
-  .st2 {
-    font-size: 50px;
-    letter-spacing: 12px;
-  }
-
-  @-webkit-keyframes logo-animation {
-    0% {
-      opacity: 0;
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+  <script></script>
+  <style>
+    .st0 {
       fill: none;
+      stroke: #ffffff;
+      stroke-width: 2;
+      stroke-miterlimit: 10;
+      width: auto;
+    }
+
+    .st1 {
+      font-family: "open sans";
+    }
+
+    .st2 {
+      font-size: 30px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      position: relative;
+      overflow-x: hidden;
+      line-height: 1.5;
+      background: #171717;
+      font-size: 14px;
+      text-align: center;
+      /* display: table; */
+      /* height: 100vh; */
+    }
+
+    body .logo-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+    }
+
+    .st0 {
+      stroke: #fff;
+      fill: #fff;
       stroke-dasharray: 920;
-    }
-
-    30% {
       opacity: 1;
+      -webkit-animation: 5s logo-animation cubic-bezier(0.67, 0.5, 0.175, 1);
+      animation: 5s logo-animation cubic-bezier(0.67, 0.5, 0.175, 1);
+      -webkit-animation-fill-mode: forwards;
+      animation-fill-mode: forwards;
     }
 
-    50% {
-      fill: rgba(255, 255, 255, 0);
+    .st2 {
+      font-size: 50px;
+      letter-spacing: 12px;
     }
 
-    100% {
-      opacity: 1;
-      stroke-dasharray: 200;
-      stroke: transparent;
-      fill: white;
-    }
-  }
+    @-webkit-keyframes logo-animation {
+      0% {
+        opacity: 0;
+        fill: none;
+        stroke-dasharray: 920;
+      }
 
-  @keyframes logo-animation {
-    0% {
-      opacity: 0;
-      fill: none;
-      stroke-dasharray: 920;
+      30% {
+        opacity: 1;
+      }
+
+      50% {
+        fill: rgba(255, 255, 255, 0);
+      }
+
+      100% {
+        opacity: 1;
+        stroke-dasharray: 200;
+        stroke: transparent;
+        fill: white;
+      }
     }
 
-    30% {
-      opacity: 1;
-    }
+    @keyframes logo-animation {
+      0% {
+        opacity: 0;
+        fill: none;
+        stroke-dasharray: 920;
+      }
 
-    50% {
-      fill: rgba(255, 255, 255, 0);
-    }
+      30% {
+        opacity: 1;
+      }
 
-    100% {
-      opacity: 1;
-      stroke-dasharray: 200;
-      stroke: transparent;
-      fill: white;
-    }
-  }
-</style>
-<script>
-</script>
+      50% {
+        fill: rgba(255, 255, 255, 0);
+      }
 
+      100% {
+        opacity: 1;
+        stroke-dasharray: 200;
+        stroke: transparent;
+        fill: white;
+      }
+    }
+  </style>
+  <script></script>
 </html>

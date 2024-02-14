@@ -4,11 +4,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useArchiveStore } from "@/stores/archives/archive";
 import { useI18n } from "@/stores/i18n/useI18n";
 import { usePermissionStore } from "@/stores/permission";
-import type {
-  IArchive,
-  IArchiveFilter,
-  IDocument,
-} from "@/types/archives/IArchive";
+import type { IArchive, IArchiveFilter, IDocument } from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { storeToRefs } from "pinia";
 import { onMounted, reactive, ref, watch } from "vue";
@@ -41,8 +37,7 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1, -1);
   }
 );
@@ -141,8 +136,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 const getPath = (files: Array<IDocument>) => {
-  if (files.length == 0 || files == null)
-    return "https://picsum.photos/100/150/?random";
+  if (files.length == 0 || files == null) return "https://picsum.photos/100/150/?random";
   else {
     if (files[0].extension == "png" || files[0].extension == "jpg")
       return String(files[0].path);
@@ -236,9 +230,7 @@ onMounted(async () => {
               </div>
             </div>
             <!-- limit -->
-            <div
-              class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-            >
+            <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
               <div
                 class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
               >
@@ -293,16 +285,16 @@ onMounted(async () => {
                           class="grid lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
                         >
                           <!-- card -->
-                          <CArchiveCardIndex
+                          <c-archive-card-index
                             title="عرض الجميع"
                             count="0"
                             @click="getFilterData(1, -1)"
-                          ></CArchiveCardIndex>
+                          ></c-archive-card-index>
                           <CArchiveCardIndex
                             v-for="archiveType in archiveTypes"
                             :key="archiveType.id"
                             :title="archiveType.name"
-                            :count="archiveType.archives"
+                            :count="archiveType.archives?.toString()"
                             @click="getFilterData(1, archiveType.id)"
                           ></CArchiveCardIndex>
                           <!-- end card -->
@@ -319,10 +311,7 @@ onMounted(async () => {
           <hr />
           <div class="w-full">
             <div class="flex flex-col">
-              <div
-                class="py-4 inline-block min-w-full lg:px-8"
-                id="PageDataStart"
-              >
+              <div class="py-4 inline-block min-w-full lg:px-8" id="PageDataStart">
                 <!-- card -->
 
                 <div class="rounded-xl" v-if="isLoading == false">
@@ -353,21 +342,14 @@ onMounted(async () => {
                             />
                           </div>
                           <div class="w-3/4 overflow-hidden">
-                            <div
-                              class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                            >
-                              <div
-                                class="text-2xl text-text dark:text-textLight mb-2"
-                              >
+                            <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                              <div class="text-2xl text-text dark:text-textLight mb-2">
                                 {{ item.title }}
                               </div>
                               <div
                                 class="text-text dark:text-textGray mb-2 justify-between"
                               >
-                                <span
-                                  >{{ t("NumberBook") }}:
-                                  {{ item.number }}</span
-                                >
+                                <span>{{ t("NumberBook") }}: {{ item.number }}</span>
                               </div>
                               <div
                                 class="text-text dark:text-textGray mb-2 justify-between"
@@ -477,3 +459,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
+ 
