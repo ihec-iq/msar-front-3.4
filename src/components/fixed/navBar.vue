@@ -59,8 +59,7 @@ const filteredLinks = computed(() =>
     // Check if any of the link's permissions are included in userPermissions
     if (permissions.value == undefined) return;
     return link.permissions.some(
-      (permission) =>
-        permissions.value.includes(permission) || permission == "public"
+      (permission) => permissions.value.includes(permission) || permission == "public"
     );
   })
 );
@@ -146,6 +145,7 @@ onMounted(() => {
             @click.prevent="tab = Link.tab"
           >
             <button
+              v-if="Link.isActive"
               class="dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark hover:text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
               href="#"
               :title="Link.title"
@@ -158,8 +158,7 @@ onMounted(() => {
           <button
             class="dark:text-navIconColoDark p-4 inline-flex justify-center rounded-md hover:text-iconHoverLight dark:hover:text-navIconColorHoverDark dark:hover:bg-sideNavHover smooth-hover"
             :class="{
-              'bg-gray-800 text-white  border-l-2 border-red-300 ':
-                tab === 'search',
+              'bg-gray-800 text-white  border-l-2 border-red-300 ': tab === 'search',
             }"
             href="#"
           >
@@ -230,9 +229,7 @@ onMounted(() => {
     </div>
     <!-- EXPLORER -->
     <div
-      :class="[
-        isClose ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]' : 'transOn',
-      ]"
+      :class="[isClose ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]' : 'transOn']"
       class="shadow-md shadow-slate-500 bg-white mt-4 dark:bg-bgLeftNav w-56 flex-none lg:flex flex-col justify-between duration-500"
     >
       <!-- Feature Admin icon -->
@@ -558,9 +555,7 @@ onMounted(() => {
                 id="offcanvasRight1"
                 aria-labelledby="offcanvasRightLabel"
               >
-                <div
-                  class="offcanvas-header flex items-center justify-between p-4"
-                >
+                <div class="offcanvas-header flex items-center justify-between p-4">
                   <h5
                     class="offcanvas-title mb-0 leading-normal font-semibold"
                     id="offcanvasRightLabel"
@@ -574,9 +569,7 @@ onMounted(() => {
                     aria-label="Close"
                   ></button>
                 </div>
-                <div class="offcanvas-body flex-grow p-4 overflow-y-auto">
-                  ...
-                </div>
+                <div class="offcanvas-body flex-grow p-4 overflow-y-auto">...</div>
               </div>
             </div>
           </div>
@@ -598,10 +591,7 @@ onMounted(() => {
           </div>
         </div>
         <div class="flex items-center text-iconLight dark:text-navIconColoDark">
-          <a
-            href="#"
-            class="dark:hover:text-iconHover hover:text-iconHoverLight"
-          >
+          <a href="#" class="dark:hover:text-iconHover hover:text-iconHoverLight">
             <svg
               class="w-5 h-5"
               fill="currentColor"
@@ -616,10 +606,7 @@ onMounted(() => {
               <path d="M0 0h24v24H0z" fill="none"></path>
             </svg>
           </a>
-          <a
-            href="#"
-            class="ml-3 dark:hover:text-iconHover hover:text-iconHoverLight"
-          >
+          <a href="#" class="ml-3 dark:hover:text-iconHover hover:text-iconHoverLight">
             <svg
               class="w-5 h-5"
               fill="currentColor"
@@ -634,10 +621,7 @@ onMounted(() => {
               ></path>
             </svg>
           </a>
-          <a
-            href="#"
-            class="ml-3 dark:hover:text-iconHover hover:text-iconHoverLight"
-          >
+          <a href="#" class="ml-3 dark:hover:text-iconHover hover:text-iconHoverLight">
             <svg
               class="w-5 h-5"
               fill="currentColor"
@@ -713,8 +697,7 @@ onMounted(() => {
           @click.prevent="settingMenu = 'MainSetting'"
           class="-mr-3 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
           :class="{
-            ' text-white  border-l-2 border-blue-500 ':
-              settingMenu === 'MainSetting',
+            ' text-white  border-l-2 border-blue-500 ': settingMenu === 'MainSetting',
           }"
         >
           <!-- Heroicon name: outline/shield-check -->
@@ -842,8 +825,7 @@ li:hover > button svg {
   display: flex;
   position: relative;
   background-color: #6b7280;
-  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15),
-    0 6px 12px 0 rgba(24, 94, 224, 0.15);
+  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
   padding: 0.75rem;
   border-radius: 20px;
 }

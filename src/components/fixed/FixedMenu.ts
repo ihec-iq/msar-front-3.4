@@ -1,3 +1,5 @@
+import { EnumPermission } from "@/utils/EnumSystem";
+
 interface IconLink {
   routerName: string;
   title: string;
@@ -6,6 +8,8 @@ interface IconLink {
   tab: string;
   description: string;
   permissions: Array<string>;
+  isActive: boolean;
+  children?: Array<IconLink>;
 }
 
 export const Links: Array<IconLink> = [
@@ -18,7 +22,8 @@ export const Links: Array<IconLink> = [
     tab: "Feature Admin",
     description:
       "البوابة الاساسية للنظام ومن خلالها تستطيع الدخول على كاف خدمات النظام",
-    permissions: ["dashboard"],
+    permissions: [EnumPermission.Dashboard],
+    isActive: true,
   },
   {
     routerName: "Profile",
@@ -30,6 +35,7 @@ export const Links: Array<IconLink> = [
     description:
       "البوابة الاساسية للنظام ومن خلالها تستطيع الدخول على كاف خدمات النظام",
     permissions: ["public"],
+    isActive: true,
   },
   {
     routerName: "archiveIndex",
@@ -40,6 +46,7 @@ export const Links: Array<IconLink> = [
     tab: "Company",
     description: "نظام ارشيف الكتب الرسمية",
     permissions: ["show archives"],
+    isActive: true,
   },
   {
     routerName: "itemIndex",
@@ -50,17 +57,9 @@ export const Links: Array<IconLink> = [
     tab: "Computer",
     description: "المواد الاساسية في النظام والاصناف الخاصة بها",
     permissions: ["show items"],
+    isActive: true,
   },
-  {
-    routerName: "inputVoucherIndex",
-    title: "الادخال المخزني",
-    icon: '<svg    xmlns="http://www.w3.org/2000/svg"    width="32"    height="32"    viewBox="0 0 24 24"    stroke="currentColor"    class="w-6 h-6"  >    <path  fill="currentColor"  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"    />  </svg>',
-    iconX:
-      '<svg    xmlns="http://www.w3.org/2000/svg"    width="64" height="64"    viewBox="0 0 24 24"    stroke="currentColor"    >    <path  fill="currentColor"  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"    />  </svg>',
-    tab: "Active",
-    description: "مستند الادخال المخزني",
-    permissions: ["show inputVouchers"],
-  },
+
   {
     routerName: "storeIndex",
     title: "المخزنية",
@@ -70,26 +69,42 @@ export const Links: Array<IconLink> = [
     tab: "News",
     description: "تقرير المخزنية الحالية للمواد",
     permissions: ["show storage"],
-  },
-  {
-    routerName: "outputVoucherIndex",
-    title: "الاخراج المخزني",
-    icon: '<svg    xmlns="http://www.w3.org/2000/svg"    width="32"    height="32"    viewBox="0 0 24 24"    stroke="currentColor"    class="w-6 h-6"  >    <path  fill="currentColor"  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"    />  </svg>',
-    iconX:
-      '<svg    xmlns="http://www.w3.org/2000/svg"    width="64" height="64"    viewBox="0 0 24 24"    stroke="currentColor" >    <path  fill="currentColor"  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"    />  </svg>',
-    tab: "general",
-    description: "مستند الاخراج المخزني",
-    permissions: ["show outputVouchers"],
-  },
-  {
-    routerName: "directVoucherIndex",
-    title: "الصرف المباشر",
-    icon: '<svg    xmlns="http://www.w3.org/2000/svg"    width="32"    height="32"    stroke="currentColor"    viewBox="0 0 24 24"    class="w-6 h-6"  >    <path  fill="currentColor"  d="M18.75 8.65q-.675.675-1.55 1.025t-1.75.35q-.875 0-1.725-.338T12.2 8.65l-1.875-1.875q-.375-.375-.85-.563T8.5 6.026q-.5 0-.975.188t-.85.562L4.8 8.65L3.375 7.225L5.25 5.35q.675-.675 1.525-1.012T8.5 4q.875 0 1.713.338t1.512 1.012L13.6 7.225q.4.4.875.588T15.45 8q.5 0 .988-.188t.887-.587L19.2 5.35l1.425 1.425L18.75 8.65Zm0 5q-.675.675-1.538 1.012T15.475 15q-.875 0-1.737-.338T12.2 13.65l-1.875-1.875q-.375-.375-.85-.563t-.975-.187q-.5 0-.975.188t-.85.562L4.8 13.65l-1.425-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 9q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.875.588t.975.187q.5 0 .988-.187t.887-.588L19.2 10.35l1.425 1.425l-1.875 1.875Zm-.025 5q-.675.675-1.525 1.012T15.475 20q-.875 0-1.737-.338T12.2 18.65l-1.9-1.875q-.375-.375-.85-.562t-.975-.188q-.5 0-.975.188t-.85.562L4.775 18.65l-1.4-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 14q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.888.588t.987.187q.5 0 .975-.188t.875-.587L19.2 15.35l1.4 1.425l-1.875 1.875Z"/>  </svg>',
-    iconX:
-      '<svg    xmlns="http://www.w3.org/2000/svg"    width="64" height="64"    stroke="currentColor"    viewBox="0 0 24 24"  >    <path  fill="currentColor"  d="M18.75 8.65q-.675.675-1.55 1.025t-1.75.35q-.875 0-1.725-.338T12.2 8.65l-1.875-1.875q-.375-.375-.85-.563T8.5 6.026q-.5 0-.975.188t-.85.562L4.8 8.65L3.375 7.225L5.25 5.35q.675-.675 1.525-1.012T8.5 4q.875 0 1.713.338t1.512 1.012L13.6 7.225q.4.4.875.588T15.45 8q.5 0 .988-.188t.887-.587L19.2 5.35l1.425 1.425L18.75 8.65Zm0 5q-.675.675-1.538 1.012T15.475 15q-.875 0-1.737-.338T12.2 13.65l-1.875-1.875q-.375-.375-.85-.563t-.975-.187q-.5 0-.975.188t-.85.562L4.8 13.65l-1.425-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 9q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.875.588t.975.187q.5 0 .988-.187t.887-.588L19.2 10.35l1.425 1.425l-1.875 1.875Zm-.025 5q-.675.675-1.525 1.012T15.475 20q-.875 0-1.737-.338T12.2 18.65l-1.9-1.875q-.375-.375-.85-.562t-.975-.188q-.5 0-.975.188t-.85.562L4.775 18.65l-1.4-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 14q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.888.588t.987.187q.5 0 .975-.188t.875-.587L19.2 15.35l1.4 1.425l-1.875 1.875Z"/>  </svg>',
-    tab: "general",
-    description: "مستند الصرف المباشر للمواد قابلة الاستهلاك السريع",
-    permissions: ["show directVouchers"],
+    isActive: true,
+    children: [
+      {
+        routerName: "inputVoucherIndex",
+        title: "الادخال المخزني",
+        icon: '<svg    xmlns="http://www.w3.org/2000/svg"    width="32"    height="32"    viewBox="0 0 24 24"    stroke="currentColor"    class="w-6 h-6"  >    <path  fill="currentColor"  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"    />  </svg>',
+        iconX:
+          '<svg    xmlns="http://www.w3.org/2000/svg"    width="64" height="64"    viewBox="0 0 24 24"    stroke="currentColor"    >    <path  fill="currentColor"  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"    />  </svg>',
+        tab: "Active",
+        description: "مستند الادخال المخزني",
+        permissions: ["show inputVouchers"],
+        isActive: true,
+      },
+      {
+        routerName: "outputVoucherIndex",
+        title: "الاخراج المخزني",
+        icon: '<svg    xmlns="http://www.w3.org/2000/svg"    width="32"    height="32"    viewBox="0 0 24 24"    stroke="currentColor"    class="w-6 h-6"  >    <path  fill="currentColor"  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"    />  </svg>',
+        iconX:
+          '<svg    xmlns="http://www.w3.org/2000/svg"    width="64" height="64"    viewBox="0 0 24 24"    stroke="currentColor" >    <path  fill="currentColor"  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"    />  </svg>',
+        tab: "general",
+        description: "مستند الاخراج المخزني",
+        permissions: ["show outputVouchers"],
+        isActive: true,
+      },
+      {
+        routerName: "directVoucherIndex",
+        title: "الصرف المباشر",
+        icon: '<svg    xmlns="http://www.w3.org/2000/svg"    width="32"    height="32"    stroke="currentColor"    viewBox="0 0 24 24"    class="w-6 h-6"  >    <path  fill="currentColor"  d="M18.75 8.65q-.675.675-1.55 1.025t-1.75.35q-.875 0-1.725-.338T12.2 8.65l-1.875-1.875q-.375-.375-.85-.563T8.5 6.026q-.5 0-.975.188t-.85.562L4.8 8.65L3.375 7.225L5.25 5.35q.675-.675 1.525-1.012T8.5 4q.875 0 1.713.338t1.512 1.012L13.6 7.225q.4.4.875.588T15.45 8q.5 0 .988-.188t.887-.587L19.2 5.35l1.425 1.425L18.75 8.65Zm0 5q-.675.675-1.538 1.012T15.475 15q-.875 0-1.737-.338T12.2 13.65l-1.875-1.875q-.375-.375-.85-.563t-.975-.187q-.5 0-.975.188t-.85.562L4.8 13.65l-1.425-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 9q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.875.588t.975.187q.5 0 .988-.187t.887-.588L19.2 10.35l1.425 1.425l-1.875 1.875Zm-.025 5q-.675.675-1.525 1.012T15.475 20q-.875 0-1.737-.338T12.2 18.65l-1.9-1.875q-.375-.375-.85-.562t-.975-.188q-.5 0-.975.188t-.85.562L4.775 18.65l-1.4-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 14q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.888.588t.987.187q.5 0 .975-.188t.875-.587L19.2 15.35l1.4 1.425l-1.875 1.875Z"/>  </svg>',
+        iconX:
+          '<svg    xmlns="http://www.w3.org/2000/svg"    width="64" height="64"    stroke="currentColor"    viewBox="0 0 24 24"  >    <path  fill="currentColor"  d="M18.75 8.65q-.675.675-1.55 1.025t-1.75.35q-.875 0-1.725-.338T12.2 8.65l-1.875-1.875q-.375-.375-.85-.563T8.5 6.026q-.5 0-.975.188t-.85.562L4.8 8.65L3.375 7.225L5.25 5.35q.675-.675 1.525-1.012T8.5 4q.875 0 1.713.338t1.512 1.012L13.6 7.225q.4.4.875.588T15.45 8q.5 0 .988-.188t.887-.587L19.2 5.35l1.425 1.425L18.75 8.65Zm0 5q-.675.675-1.538 1.012T15.475 15q-.875 0-1.737-.338T12.2 13.65l-1.875-1.875q-.375-.375-.85-.563t-.975-.187q-.5 0-.975.188t-.85.562L4.8 13.65l-1.425-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 9q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.875.588t.975.187q.5 0 .988-.187t.887-.588L19.2 10.35l1.425 1.425l-1.875 1.875Zm-.025 5q-.675.675-1.525 1.012T15.475 20q-.875 0-1.737-.338T12.2 18.65l-1.9-1.875q-.375-.375-.85-.562t-.975-.188q-.5 0-.975.188t-.85.562L4.775 18.65l-1.4-1.4l1.875-1.9q.675-.675 1.525-1.012T8.5 14q.875 0 1.713.338t1.512 1.012l1.875 1.875q.4.4.888.588t.987.187q.5 0 .975-.188t.875-.587L19.2 15.35l1.4 1.425l-1.875 1.875Z"/>  </svg>',
+        tab: "general",
+        description: "مستند الصرف المباشر للمواد قابلة الاستهلاك السريع",
+        permissions: ["show directVouchers"],
+        isActive: true,
+      },
+    ],
   },
   {
     routerName: "employeeIndex",
@@ -100,6 +115,7 @@ export const Links: Array<IconLink> = [
     tab: "general1",
     description: "جميع معلومات الموظفين",
     permissions: ["show employees"],
+    isActive: true,
   },
   {
     routerName: "vacationIndex",
@@ -110,6 +126,7 @@ export const Links: Array<IconLink> = [
     tab: "general1",
     description: "الاجازات الزمنية والدورية والمرضية الخاصة بالموظفين",
     permissions: ["vacations"],
+    isActive: true,
   },
   {
     routerName: "userPortal",
@@ -120,5 +137,6 @@ export const Links: Array<IconLink> = [
     tab: "general1",
     description: "المستخدمين والصلاحيات",
     permissions: ["show users"],
+    isActive: true,
   },
 ];
