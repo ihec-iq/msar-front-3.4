@@ -4,6 +4,7 @@ export default {
   Archive: "الارشيف",
   AllArchives: "الارشيف الكامل",
   Name: "اسم",
+  "User Name(for login)": "اسم المستخدم للدخول",
   NumberBook: "رقم الكتاب",
   FileBook: "تحميل الكتاب",
   TypeBook: "نوع الكتاب",
@@ -28,6 +29,9 @@ export default {
     "قم بسحب البيانات الى هنا  <u> او قم بالنقر هنا </u> لتحميل البيانات.",
   "Your password": "Your password",
   "Your Email Address": "Your Email Address",
+  "See whats going on": "اطلع على المستجدات",
+  UserSearch: "ابحث عن اسم المستخدم او الاميل",
+
   Item: "مادة",
   Items: "مواد",
   ItemCode: "كود المادة",
@@ -52,7 +56,7 @@ export default {
   AvailableInStock: "المتوفر",
   RecordDaily: "عدد الايام",
   RecordSick: "عدد الايام",
-
+  VacationDaily: "اجازة اعتيادية",
   VacationDailyAdd: "اضافة اجازة اعتيادية",
   VacationDailyUpdate: "تعديل اجازة اعتيادية",
   VacationTime: "اجازة زمنية",
@@ -73,8 +77,8 @@ export default {
   StoreIndex: "المخزنية",
   StoreTypeReport: "نوع التقرير",
   ConfigServer: "اعدادات الاتصال بالسيرفر",
-
   ConnectionString: "عنوان السيرفر",
+  Organization: "المؤوسسة",
   EmployeeAdd: "اضافة بيانات موظف",
   EmployeeUpdate: "تعديل بيانات موظف",
   EmployeeIndex: "بيانات الموظفين",
@@ -82,6 +86,7 @@ export default {
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
   Employee: "الموظف",
+  UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",
   ItemAdd: "اضافة مادة",
@@ -90,6 +95,8 @@ export default {
   Action: "المزيد",
   Control: "لوحة التحكم",
   Create: "أنشاء",
+  CreateWithPrint: "انشاء مع طباعة",
+
   Show: "عرض",
   Update: "تعديل",
   Add: "اضافة",
@@ -115,6 +122,7 @@ export default {
   "Supplier Account": " حساب المورد",
   "Agent Account": " حساب العميل",
   User: "مستخدم",
+  "Add New User": "اضافة مستخدم جديد",
   Vouchers: "السندات",
   Voucher: "سند",
   Receipt: "سند قبض",
@@ -492,5 +500,6 @@ export default {
   Resolved: "مكتمل",
   "Not Resolved": "غير مكتمل",
   "Change Password": "تغيير الرقم السري",
-  readMore: "اقرأ المزيد",
+  way: "جهة الكتاب",
+  readMore: "اقرأ المزيد"
 };

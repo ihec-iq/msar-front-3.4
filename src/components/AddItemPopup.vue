@@ -2,12 +2,11 @@
 import { onMounted, ref } from "vue";
 import { useItemStore } from "@/stores/item/item";
 import { useItemCategoryStore } from "@/stores/item/itemCategory";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permission";
 
 import { useI18n } from "@/stores/i18n/useI18n";
+import WangEditor from "./WangEditor.vue";
 const { t } = useI18n();
 const emit = defineEmits(["setItem"]);
 //region"Props"
@@ -60,11 +59,13 @@ const reset = () => {
   item.value.measuringUnit = "";
   item.value.Category.id = 1;
 };
+const el = ref<HTMLInputElement>();
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show Item"]);
+  //checkPermissionAccessArray(["show Item"]);
   await itemCategoryStore.getFast();
   item.value.id = 0;
+  //el.value?.focus();
 });
 </script>
 <template>
@@ -79,6 +80,7 @@ onMounted(async () => {
             {{ t("Name") }}
           </div>
           <input
+            ref="el"
             v-model="item.name"
             type="text"
             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -141,6 +143,7 @@ onMounted(async () => {
             theme="snow"
             class="text-text dark:text-textLight bg-lightInput dark:bg-input"
           ></quill-editor>
+          <WangEditor v-model="item.description"></WangEditor>
         </div>
       </div>
       <!-- bottom tool bar -->

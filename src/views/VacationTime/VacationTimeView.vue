@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
@@ -16,6 +15,7 @@ import { now } from "@vueuse/core";
 import type { IVacation } from "@/types/vacation/IVacation";
 import { useVacationReasonStore } from "@/stores/vacations/vacationReason";
 import type { IVacationReason } from "@/types/vacation/IVacationDaily";
+import type { IEmployee } from "@/types/IEmployee";
 const { t } = useI18n();
 
 //region"Drag and Drop"

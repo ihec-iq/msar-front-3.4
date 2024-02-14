@@ -7,7 +7,6 @@
   --secondaryLight: #92969a;
   --secondaryHoverLight: #818181;
 
- 
   /* vant dropDown reset */
   --van-collapse-item-content-background-color: none;
   --van-cell-background-color: none;
@@ -15,9 +14,7 @@
   --van-cell-horizontal-padding: 12px;
   --van-collapse-item-content-padding: 0px 10px;
   /* vant */
-
 }
-
 
 .accordion-button::after {
   margin-left: var(--van-padding-base) !important;
@@ -44,7 +41,7 @@
   position: inherit !important;
 } */
 .vs__selected {
-  background-color: #DCDDE3;
+  background-color: #dcdde3;
   border: 1px solid #999;
 }
 
@@ -54,7 +51,8 @@
   will-change: height;
 }
 
-.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after {
+.van-hairline--top-bottom:after,
+.van-hairline-unset--top-bottom:after {
   border-width: 0;
 }
 
@@ -118,12 +116,11 @@
   --bg-tertiary: 238, 238, 238;
 
   table: #fff;
-  darkNav: #fff;
+  darknav: #fff;
 
   create: #2ecc;
-  createHover: #139e4d;
+  createhover: #139e4d;
   content: #fff;
-
 }
 
 .icon-shadow {
@@ -177,17 +174,29 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Tajawal';
-  src: url('./font//Tajawal/Tajawal-Medium.ttf');
+  font-family: "Tajawal";
+  src: url("./font//Tajawal/Tajawal-Medium.ttf");
   font-weight: 100;
 }
+
 @font-face {
-  font-family: 'Tajawal_bold';
-  src: url('./font//Tajawal/Tajawal-Bold.ttf');
+  font-family: "Tajawal_bold";
+  src: url("./font//Tajawal/Tajawal-Bold.ttf");
   font-weight: 700;
 }
 
 @layer components {
+  .container-main {
+    @apply bg-cardLight btn dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 
+    flex w-full rounded-lg border border-gray-300 shadow-sm shadow-gray-500 
+    duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600;
+  }
+  ._input {
+    @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
+  }
+  ._inputLabel {
+    @apply mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight;
+  }
   .select2-dropdown {
     @apply rounded-b-lg shadow-md;
   }
@@ -201,20 +210,16 @@
   }
 
   .dark .linkExactActiveClass {
-    @apply bg-sideNavActive text-textLight border-l-2 border-sideNavActiveBorder rounded-md
+    @apply bg-sideNavActive text-textLight border-l-2 border-sideNavActiveBorder rounded-md;
   }
 
   .linkExactActiveClass {
-    @apply bg-sideNavLightActive text-text border-l-2 border-sideNavLightActiveBorder rounded-md
+    @apply bg-sideNavLightActive text-text border-l-2 border-sideNavLightActiveBorder rounded-md;
   }
 
   .nav-router-link {
-    @apply text-white/50 inline-flex justify-center rounded-md
+    @apply text-white/50 inline-flex justify-center rounded-md;
   }
-
-  /* ... */
-
-
 }
 
 @media (max-width: 390px) {

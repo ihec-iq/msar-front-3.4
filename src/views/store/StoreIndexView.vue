@@ -223,10 +223,10 @@ onMounted(async () => {
                       class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                     ></div>
                     <table
-                      class="min-w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
+                      class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
                     >
                       <thead
-                        class="sticky top-0 font-semibold dark:bg-tableNew bg-white"
+                        class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
                       >
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">

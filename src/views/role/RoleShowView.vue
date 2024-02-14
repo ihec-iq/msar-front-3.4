@@ -230,4 +230,3 @@ onMounted(async () => {
   visibility: visible;
 }
 </style>
-@/stores/roles/roleStore@/stores/roles/permissionStore

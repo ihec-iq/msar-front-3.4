@@ -12,6 +12,8 @@ const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
 const route = useRoute();
+import { useConfigStore } from "@/stores/config";
+const { Organization } = storeToRefs(useConfigStore());
 const colorMode = useColorMode({
   modes: {
     red: "red",
@@ -40,7 +42,20 @@ const changeDark = () => {
   themeDark.value = !themeDark.value;
   toggleDark(themeDark.value);
 };
-const user = useAuthStore();
+// const user = ref<IUser>({
+//   name: "Loading ...",
+//   email: "",
+//   last_login: "",
+//   password: "",
+//   any_device: 0,
+//   active: 0,
+//   roles: [],
+//   permissions: [],
+//   id: 0,
+//   value: undefined,
+//   user: undefined,
+// });
+const { user } = storeToRefs(useAuthStore());
 const change = () => {
   ChangeDirection();
 };
@@ -81,11 +96,12 @@ const inputRefSearch = ref<HTMLInputElement | null>(null);
 
 //#endregion
 
-onMounted(() => {
+onMounted(async () => {
   themeDark.value = isDark.value;
   if (inputRefSearch.value) {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
+  //user.value = await useAuthStore().getUser();
 });
 </script>
 <template>
@@ -99,7 +115,7 @@ onMounted(() => {
         <div class="text-gray-500 text-2xl">#</div>
         <div class="ml-2 text-sm text-text dark:text-textLight">
           <!-- {{ t("General") }} -->
-          المفوضية العليا المستقلة للانتخابات - {{ user.user?.Employee?.name }}
+          {{ Organization }} - {{ user?.Employee?.name }}
         </div>
         <!-- <div
           class="border-l flex-grow xs:hidden sm:hidden lg:block pl-3 ml-3 border-gray-600 text-xs text-gray-400"

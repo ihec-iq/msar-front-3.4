@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useArchiveStore } from "@/stores/archives/archive";
+
 import Swal from "sweetalert2";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
+import { truncateString } from "@/utils/tool";
 
+import { useArchiveStore } from "@/stores/archives/archive";
 const { _deleteDocument } = useArchiveStore();
+
 const props = defineProps({
   file: { type: Object, required: true },
   tag: { type: String, default: "li" },
@@ -82,15 +85,27 @@ const openFile = (path: string) => {
 };
 </script>
 <template>
-  <component :is="tag" class="file-preview" style="display: block">
+  <component
+    :is="tag"
+    class="file-preview w-200px bg-black-200/10 ma-2 pa-6"
+    style="display: block"
+  >
     <button @click="removeFile(document.id)" class="close-icon">&times;</button>
     <img
       @click="openFile(document.path)"
       class="object-cover lg:h-36 lg:w-36 md:w-20 md:h-20 xs:w-12 xs:h-12 m-2 ml-auto mr-auto"
       :src="generateURL(document.path, document.extension)"
-      :alt="document.name"
-      :title="document.name"
+      :alt="document.title"
+      :title="document.title"
     />
+    <div
+      style="color: darkkhaki"
+      class="info"
+      :alt="document.title"
+      :title="document.title"
+    >
+      {{ truncateString(document.title, 15) }}
+    </div>
     <span style="color: darkkhaki" class="info">
       {{ document.extension }}
       {{ document.size }}
@@ -126,11 +141,11 @@ const openFile = (path: string) => {
   /* width: 20%; */
   margin: 1rem 2.5%;
   position: relative;
-  aspect-ratio: 1/1;
+  /* aspect-ratio: 1/1; */
   overflow: hidden;
   padding: 1px;
   border-radius: 5%;
-  border: #040 2px solid;
+  border: #888 1px solid;
 }
 .file-preview img {
   /* width: 100%;

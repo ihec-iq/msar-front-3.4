@@ -24,6 +24,9 @@ export default {
   DropFiles: "Drop files here !!!",
   SearchForArchive: "Search in Document Number to Title",
   ReleaseFiles: "Drop files here or <u>click here </u> to upload.",
+  "See whats going on": "See whats going on",
+  UserSearch: "Search by User name or Email",
+
   Item: "Item",
   Items: "Items",
   ItemCode: "Item Code",
@@ -49,6 +52,7 @@ export default {
   RecordSick: "Days",
 
   VacationIndex: "Vacations System",
+  VacationDaily: "Daily Vacation",
   VacationDailyAdd: "Add Daily Vacation",
   VacationDailyUpdate: "Update Daily Vacation",
   VacationTime: " Time Vacation",
@@ -74,6 +78,7 @@ export default {
   SearchForUser: "Search by Name",
   ConfigServer: "Server Configuration",
   ConnectionString: "Connection String Server",
+  Organization: "Organization",
   EmployeeAdd: "Add new employee",
   EmployeeUpdate: "update employee",
   EmployeeIndex: "Employees",
@@ -81,14 +86,19 @@ export default {
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
   Employee: "Employee",
+  UserIndex: "User System",
+
   Help: "Help",
 
   ItemUpdate: "Update Item",
   Name: "Name",
+  "User Name(for login)": "User Name(for login)",
+
   Stats: "Stats",
   Action: "Action",
   Control: "Control",
   Create: "Create",
+  CreateWithPrint: "Create & Print",
   Show: "Show",
   Update: "Update",
   Add: "Add",
@@ -106,6 +116,7 @@ export default {
   "Box Account": "Box Account",
   Note: "Note",
   User: "User",
+  "Add New User": "Add New User",
   Vouchers: "Vouchers",
   Voucher: "Voucher",
   Receipt: "Receipt",
@@ -167,5 +178,6 @@ export default {
   "Change Direction": "Change Direction",
   "Change Theme": "Change Theme",
   "Change Password": "Change Password",
-  readMore: "Read more",
+  way: "Source/Destination",
+  readMore: "Read more"
 };

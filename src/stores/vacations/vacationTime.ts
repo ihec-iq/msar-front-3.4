@@ -39,7 +39,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       recordSick: 0,
     },
     record: 0.5,
-    reason: {
+    Reason: {
       id: 0,
       name: "",
     },
@@ -93,6 +93,10 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       oldRecordSick: 0,
       newRecordSick: 0,
       recordSick: 0,
+    };
+    vacationTime.Reason = {
+      id: 0,
+      name: "",
     };
     console.log(vacationTime);
   }

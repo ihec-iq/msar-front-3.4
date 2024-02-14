@@ -249,8 +249,12 @@ onMounted(async () => {
                     <div
                       class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                     ></div>
-                    <table class="min-w-full text-center">
-                      <thead class="border-b bg-[#0003] text-gray-300">
+                    <table
+                      class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
+                    >
+                      <thead
+                        class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
+                      >
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("Item") }}
@@ -278,11 +282,13 @@ onMounted(async () => {
                           </th>
                         </tr>
                       </thead>
-                      <tbody class="bg-[#1f2937]">
+                      <tbody
+                        class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
+                      >
                         <tr
                           v-for="row in data"
                           :key="row.itemName"
-                          class="border-b border-black h-14 text-gray-100"
+                          class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                         >
                           <th>{{ row.itemName }}</th>
                           <th>{{ row.serialNumber }}</th>

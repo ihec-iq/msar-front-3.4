@@ -12,7 +12,7 @@ const { t } = useI18n();
 const rtlStore = useRtlStore();
 import { useConfigStore } from "@/stores/config";
 
-const { ConnectionString } = storeToRefs(useConfigStore());
+const { ConnectionString, Organization } = storeToRefs(useConfigStore());
 const { is } = storeToRefs(rtlStore);
 
 //region"Drag and Drop"
@@ -33,7 +33,7 @@ const back = () => {
 };
 const store = async () => {
   await useConfigStore()
-    .store(String(ConnectionString.value))
+    .store(String(ConnectionString.value), String(Organization.value))
     .then(() => {
       Swal.fire({
         position: "top-end",
@@ -56,6 +56,9 @@ onMounted(async () => {
       if (ConnectionString.value == null || ConnectionString.value == "") {
         ConnectionString.value = "http://10.10.10.10/workflow_ihec/public/api";
       }
+      if (Organization.value == null || Organization.value == "") {
+        Organization.value = "المفوضية العليا المستقلة للانتخابات";
+      }
     });
 });
 </script>
@@ -72,6 +75,18 @@ onMounted(async () => {
         </div>
         <input
           v-model="ConnectionString"
+          type="text"
+          class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("Organization") }}
+        </div>
+        <input
+          v-model="Organization"
           type="text"
           class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />

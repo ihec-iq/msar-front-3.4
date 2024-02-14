@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -9,15 +9,17 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
 import { useVacationStore } from "@/stores/vacations/vacation";
+import type { IEmployee } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
 import { useVacationReasonStore } from "@/stores/vacations/vacationReason";
+import { usePaperizer } from "paperizer";
+const { paperize } = usePaperizer("printMe");
+
 import type { IVacation } from "@/types/vacation/IVacation";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import type { IVacationReason } from "@/types/vacation/IVacationDaily";
-
-import htmlToPaper from "vue-html-to-paper";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -33,12 +35,11 @@ const { vacations } = storeToRefs(useVacationStore());
 const { reasons } = storeToRefs(useVacationReasonStore());
 const { employees } = storeToRefs(useEmployeeStore());
 const Loading = ref(false);
-
 const router = useRouter();
 const errors = ref<String | null>();
 //#endregion
 //#region CURD
-const store = () => {
+const store = (withPrint: boolean = false) => {
   errors.value = null;
   const formData = new FormData();
   formData.append("dayFrom", vacationDaily.value.dayFrom);
@@ -61,6 +62,7 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        if (withPrint) print();
         router.go(-1);
       }
     })
@@ -180,7 +182,7 @@ const back = () => {
   });
 };
 const print1 = () => {
-  const prtHtml = document.getElementById("print")?.innerHTML;
+  const prtHtml = document.getElementById("printMe")?.innerHTML;
   // Get all stylesheets HTML
   let stylesHtml = "";
   for (const node of [
@@ -188,7 +190,6 @@ const print1 = () => {
   ]) {
     stylesHtml += node.outerHTML;
   }
-
   // Open the print window
   const WinPrint = window.open(
     "",
@@ -205,31 +206,24 @@ const print1 = () => {
     ${prtHtml}
   </body>
 </html>`);
-
-  WinPrint?.document.close();
-  WinPrint?.focus();
-  WinPrint?.print();
-  WinPrint?.close();
+  setTimeout(function () {
+    // wait until all resources loaded
+    WinPrint?.document.close(); // necessary for IE >= 10
+    WinPrint?.focus(); // necessary for IE >= 10
+    WinPrint?.print(); // change window to winPrint
+    WinPrint?.close(); // change window to winPrint
+  }, 250);
+  // WinPrint?.document.close();
+  // WinPrint?.focus();
+  // WinPrint?.print();
+  // WinPrint?.close();
 };
 const print = () => {
   // Pass the element id here
-  htmlToPaper("printMe");
+  //paperize();
+  print1();
 };
-onMounted(async () => {
-  //console.log(can("show items1"));
-  checkPermissionAccessArray(["show vacations daily"]);
-  if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("VacationDailyAdd");
-    vacationDaily.value.id = 0;
-  } else {
-    await showData();
-    vacationDaily.value.id = id.value;
-    namePage.value = t("VacationDailyUpdate");
-  }
-  await useVacationStore().get_vacations();
-  await useVacationReasonStore().get();
-  await useEmployeeStore().get_employees();
-});
+
 const ChangeDate = () => {
   if (vacationDaily.value.dayFrom >= vacationDaily.value.dayTo) {
     vacationDaily.value.record = 1;
@@ -249,12 +243,60 @@ const ChangeDateRecord = () => {
   d.setDate(d.getDate() + vacationDaily.value.record);
   vacationDaily.value.dayTo = d.toISOString().split("T")[0];
 };
+//#region filters"
+const SelectedEmployees = ref<Array<IEmployee>>([]);
+
+const SelectEmployeeSection = () => {
+  if (
+    vacationDaily.value.Vacation.id == 0 ||
+    vacationDaily.value.Vacation.id == undefined
+  ) {
+    SelectedEmployees.value = employees.value;
+  } else {
+    SelectedEmployees.value = employees.value.filter(filterEmployeesBySection);
+  }
+};
+const filterEmployeesBySection = (_employee: IEmployee) => {
+  if (
+    _employee.section.id
+      .toString()
+      .includes(vacationDaily.value.Vacation.Employee.section.id.toString()) &&
+    _employee.id != vacationDaily.value.Vacation.Employee.id
+  ) {
+    return true;
+  } else return false;
+};
+watch(
+  () => vacationDaily.value.Vacation,
+  () => {
+    SelectEmployeeSection();
+  }
+);
+//#endregion
 function getImageUrl(name: string, ext: string) {
   console.log(new URL(`@/assets/${name}.${ext}`, import.meta.url).href);
-  return new URL(`@/assets./${name}.${ext}`, import.meta.url).href;
+  return new URL(`@/assets/${name}.${ext}`, import.meta.url).href;
 }
-import imagePath from "@/assets/ihec_logo_header1.png";
-import type { IEmployee } from "@/types/IEmployee";
+import imageHeaderPath from "@/assets/ihec_logo_header1.png";
+import imageFooterPath from "@/assets/ihec_logo_footer1.png";
+import { useAuthStore } from "@/stores/authStore";
+
+onMounted(async () => {
+  //console.log(can("show items1"));
+  checkPermissionAccessArray(["show vacations daily"]);
+  if (Number.isNaN(id.value) || id.value === undefined) {
+    namePage.value = t("VacationDailyAdd");
+    vacationDaily.value.id = 0;
+  } else {
+    await showData();
+    vacationDaily.value.id = id.value;
+    namePage.value = t("VacationDailyUpdate");
+  }
+  await useVacationStore().get_vacations();
+  await useVacationReasonStore().get();
+  await useEmployeeStore().get_employees();
+  SelectedEmployees.value = employees.value;
+});
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
@@ -330,7 +372,7 @@ import type { IEmployee } from "@/types/IEmployee";
         <vSelect
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           v-model="vacationDaily.EmployeeAlter"
-          :options="employees"
+          :options="SelectedEmployees"
           :reduce="(employee: IEmployee) => employee"
           label="name"
           :getOptionLabel="(employee: IEmployee) => employee.name"
@@ -383,11 +425,19 @@ import type { IEmployee } from "@/types/IEmployee";
           </button>
           <button
             v-if="vacationDaily.id == 0"
+            @click="store(true)"
+            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+          >
+            {{ t("CreateWithPrint") }}
+          </button>
+          <button
+            v-if="vacationDaily.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
             {{ t("Create") }}
           </button>
+
           <button
             v-else
             @click="update()"
@@ -420,30 +470,142 @@ import type { IEmployee } from "@/types/IEmployee";
       </button>
     </div>
   </div>
-  <div class="print:w-full w-full hiddens" id="printMe">
-    <div
-      class="background-container"
-      :style="{ 'background-image': `url(${imagePath})` }"
-    >
+  <div
+    class="hiddens print:w-[900px] w-[900px] tablePrint m-2"
+    id="printMe"
+    print:rtl
+  >
+    <div id="Header" class="w-[900px] print:w-[900px]">
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
-      .
+      <img
+        :src="imageHeaderPath"
+        class="downHeader w-[900px] print:w-[900px]"
+      />
+    </div>
+    <div id="body">
+      <table
+        class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+        style="
+          width: 890px !important ;
+          margin: 3px !important ;
+          text-align: right;
+        "
+      >
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">اسم الموظف</td>
+          <td class="RowContent w-[50%]">
+            {{ vacationDaily.Vacation.Employee.name }}
+          </td>
+        </tr>
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">الشعبة</td>
+          <td class="RowContent w-[50%]">
+            {{ vacationDaily.Vacation.Employee.section.name }}
+          </td>
+        </tr>
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">تفاصيل الاجازة</td>
+          <td class="RowContent w-[50%]">
+            يرجى التفضل بالموافقة على منحي اجازة اعتيادية لمدة
+            {{ vacationDaily.record }}
+            ايام براتب تام من تاريخ
+            {{ vacationDaily.dayFrom }}
+            الى تاريخ
+            {{ vacationDaily.dayTo }}
+            وذلك بسبب ( {{ vacationDaily.Reason.name }} )
+          </td>
+        </tr>
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">توقيع الموظف</td>
+          <td class="RowContent w-[50%]"></td>
+        </tr>
+        <tr class="RowTable">
+          <td class="RowHeader w-[50%]">الموظف البديل وتوقيعه</td>
+          <td class="RowContent w-[50%]">
+            {{ vacationDaily.EmployeeAlter.name }}
+          </td>
+        </tr>
+      </table>
     </div>
 
-    <table class="print:w-full w-full print:rtl">
-      <tr class="print:bg-slate-600">
-        <td class="print:bg-slate-600">ID</td>
-        <td class="print:bg-slate-600">Name</td>
-      </tr>
-      <tr class="print:bg-slate-600">
-        <td class="print:bg-slate-600 print:text-red-600">1</td>
-        <td class="print:bg-slate-600 print:text-red-600">Ali</td>
-      </tr>
-    </table>
+    <div class="divFooter1 z-0 w-[900px] print:w-[900px]">
+      <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
+      <table
+        class="float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+        style="
+          width: 890px !important ;
+          margin: 3px !important ;
+          text-align: right;
+        "
+      >
+        <tr class="RowTable margin15" style="align-content: center !important">
+          <td class="font-bold text-xl text-text dark:text-textLight p-10">
+            موافقة مسؤول الشعبة
+          </td>
+          <td class="font-bold text-xl text-text dark:text-textLight p-10">
+            موافقة معاون المدير
+          </td>
+        </tr>
+        <tr class="RowTable margin15" style="align-content: center !important">
+          <td class="font-bold text-sm text-text dark:text-textLight p-10">
+            اسم وتوقيع موظف الادارية
+            <br />
+            {{ useAuthStore().user?.Employee?.name }}
+          </td>
+          <td class="font-bold text-2xl text-text dark:text-textLight p-10">
+            توقيع المدير
+          </td>
+        </tr>
+      </table>
+      <img
+        :src="imageFooterPath"
+        class="w-[903px] print:w-[903px]"
+        style="margin-right: -10"
+      />
+    </div>
   </div>
 
   <!-- end bottom tool -->
 </template>
 <style scoped>
+.RowHeader {
+  @apply font-bold pr-2 pt-2 text-xl outline-none h-10 px-3 py-2  rounded-md  text-text dark:text-textLight;
+}
+.RowContent {
+  @apply pr-2 pt-2 text-xl outline-none h-10 px-3 py-2  rounded-md  text-text dark:text-textLight;
+}
+.RowTable {
+  @apply border-solid border-2 border-[#27156D];
+}
+@media screen {
+}
+@media print {
+  table {
+    direction: rtl;
+    width: 80%;
+  }
+  div.margin15 {
+    margin-top: 10px;
+  }
+  div.divFooterSignature {
+    position: fixed;
+    bottom: 1;
+  }
+  div.divFooter {
+    position: fixed;
+    bottom: 0;
+  }
+  div.downHeader {
+    padding-top: 0px;
+  }
+}
 .DateStyle {
   @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
 }

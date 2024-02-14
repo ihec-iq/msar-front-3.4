@@ -19,7 +19,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     dateWork: new Date().toLocaleDateString(),
   });
   const employees = ref<Array<IEmployee>>([]);
-  const pathBase = "/stockSys";
+  const pathBase = "";
   const pathUrl = `${pathBase}/employee`;
   async function get() {
     return await Api.get(`${pathUrl}`);
