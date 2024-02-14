@@ -86,6 +86,8 @@ export default {
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
   Employee: "Employee",
+  UserIndex: "User System",
+
   Help: "Help",
 
   ItemUpdate: "Update Item",
@@ -177,4 +179,5 @@ export default {
   "Change Theme": "Change Theme",
   "Change Password": "Change Password",
   way: "Source/Destination",
+  readMore: "Read more"
 };

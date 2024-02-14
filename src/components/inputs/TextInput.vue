@@ -22,7 +22,6 @@ defineProps({
 });
 
 import { useI18n } from "@/stores/i18n/useI18n";
-import type { ComponentObjectPropsOptions } from "vue";
 const { t } = useI18n();
 </script>
 <template>

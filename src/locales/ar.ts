@@ -86,6 +86,7 @@ export default {
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
   Employee: "الموظف",
+  UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",
   ItemAdd: "اضافة مادة",
@@ -500,4 +501,5 @@ export default {
   "Not Resolved": "غير مكتمل",
   "Change Password": "تغيير الرقم السري",
   way: "جهة الكتاب",
+  readMore: "اقرأ المزيد"
 };
