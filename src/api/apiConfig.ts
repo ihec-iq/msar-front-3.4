@@ -2,7 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
 import { useAuthStore } from "@/stores/authStore";
-import envConfig from "./envConfig";  
+import envConfig from "./envConfig";
 const Api = axios.create({
   //baseURL: "http://10.9.8.7/workflow_ihec/public/api",
   // baseURL: "http://10.10.10.10/workflow_ihec/public/api",
