@@ -8,7 +8,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
 import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
-import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
+import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";

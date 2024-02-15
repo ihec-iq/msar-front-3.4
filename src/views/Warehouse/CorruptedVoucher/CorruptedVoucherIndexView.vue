@@ -11,7 +11,7 @@ import type {
   ICorruptedVoucher,
   ICorruptedVoucherFilter,
 } from "@/types/ICorruptedVoucher";
-import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
+import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 const isLoading = ref(false);
 const data = ref<Array<ICorruptedVoucher>>([]);
 const dataPage = ref();

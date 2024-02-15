@@ -8,7 +8,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   const employee = reactive<IEmployee>({
     id: 0,
     name: "",
-    section: { name: "", id: 0 },
+    Section: { name: "", id: 0 },
     isPerson: 1,
     number: "",
     idCard: "",

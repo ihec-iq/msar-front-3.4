@@ -1,6 +1,7 @@
 import type { IItem } from "./IItem";
 import type { ISection } from "./ISection";
 import type { IStock } from "./IStock";
+import type { IUser } from "./core/IUser";
 import type { IVacationDaily } from "./vacation/IVacationDaily";
 import type { IVacationSick } from "./vacation/IVacationSick";
 import type { IVacationTime } from "./vacation/IVacationTime";
@@ -8,7 +9,7 @@ import type { IVacationTime } from "./vacation/IVacationTime";
 export interface IEmployee {
   id: number;
   name: string;
-  section: ISection;
+  Section: ISection;
   isPerson: number;
   dateWork: string;
   number: string;
@@ -17,6 +18,7 @@ export interface IEmployee {
   takeVacation: number;
   initVacationSick: number;
   takeVacationSick: number;
+  User?:IUser;
   vacationDaily?: Array<IVacationDaily>;
   vacationSick?: Array<IVacationSick>;
   vacationTime?: Array<IVacationTime>;
