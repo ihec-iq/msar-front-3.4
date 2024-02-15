@@ -44,3 +44,4 @@ export const crud_delete = async ({ RouterGo, store, id }: DeleteParams) => {
     console.error("Error during deletion:", error);
   }
 };
+ 
