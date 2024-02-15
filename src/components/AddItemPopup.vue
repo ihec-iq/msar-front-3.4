@@ -5,9 +5,8 @@ import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permission";
 
-import { useI18n } from "@/stores/i18n/useI18n";
 import WangEditor from "./WangEditor.vue";
-const { t } = useI18n();
+import { useI18n } from "@/stores/i18n/useI18n";
 const emit = defineEmits(["setItem"]);
 //region"Props"
 
@@ -164,9 +163,7 @@ onMounted(async () => {
       </div>
       <div class="border-red-800 border-[1px]" v-if="errors">{{ errors }}</div>
     </div>
-    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem"
-      >Close</label
-    >
+    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem">Close</label>
   </div>
 </template>
 <style scoped>
@@ -235,3 +232,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/item1/item@/stores/item1/itemCategory

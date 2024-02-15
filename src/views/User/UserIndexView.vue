@@ -6,7 +6,6 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import { usePermissionStore } from "@/stores/permission";
 import type { IUser, IUserFilter } from "@/types/core/IUser";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { storeToRefs } from "pinia";
 import { onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { EnumPermission } from "@/utils/EnumSystem";
@@ -14,7 +13,6 @@ import JsonExcel from "vue-json-excel3";
 //#region Vars
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IUser>>([]);
 const dataPage = ref();
@@ -22,13 +20,8 @@ const dataBase = ref<Array<IUser>>([]);
 
 const { user } = useUserStore();
 const { get_filter } = useUserStore();
-const limits = reactive([
-  { name: "10", val: 10, selected: true },
-  { name: "20", val: 12, selected: false },
-  { name: "30", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
+import t from "@/utils/I18nPlugin";
 
 const route = useRoute();
 const router = useRouter();

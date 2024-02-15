@@ -287,3 +287,4 @@ onMounted(async () => {
   </div>
 </template>
 @/stores/item/itemCategory
+@/stores/item1/itemCategory

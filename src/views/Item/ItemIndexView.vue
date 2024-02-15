@@ -339,3 +339,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/item1/item
