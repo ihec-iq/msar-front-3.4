@@ -6,10 +6,10 @@ import { storeToRefs } from "pinia";
 import envConfig from "@/api/envConfig";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 const rtlStore = useRtlStore();
-import { useConfigStore } from "@/stores/config";
+import { useConfigStore } from "@/stores/configStore";
 
 const { ConnectionString, Organization } = storeToRefs(useConfigStore());
 const { is } = storeToRefs(rtlStore);
@@ -207,3 +207,4 @@ button {
   text-align: right !important;
 }
 </style>
+@/stores/configStore@/stores/permissionStore

@@ -3,7 +3,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import PageTitle from "@/components/general/namePage.vue";
 import { useArchiveStore } from "@/stores/archives/archive";
 import { t } from "@/utils/I18nPlugin";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import type { IArchive, IArchiveFilter, IDocument } from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { storeToRefs } from "pinia";
@@ -23,13 +23,7 @@ const { archive } = useArchiveStore();
 const { get_filter } = useArchiveStore();
 const { archiveTypes } = storeToRefs(useArchiveStore());
 
-const limits = reactive([
-  { name: "10", val: 10, selected: true },
-  { name: "20", val: 12, selected: false },
-  { name: "30", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -458,3 +452,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
+@/stores/archives/archiveStore@/stores/permissionStore

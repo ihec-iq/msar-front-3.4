@@ -3,7 +3,7 @@ import { onMounted } from "vue";
 import PageTitle from "@/components/general/namePage.vue";
 import { t } from "@/utils/I18nPlugin";
 import { UserLinks } from "./UserLinks";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { EnumPermission } from "@/utils/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionStore();
 
@@ -72,3 +72,4 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
+@/stores/permissionStore

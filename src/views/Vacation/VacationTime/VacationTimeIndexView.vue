@@ -1,33 +1,23 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useVacationSickStore } from "@/stores/vacations/vacationSick";
+import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-import type {
-  IVacationSick,
-  IVacationSickFilter,
-} from "@/types/vacation/IVacationSick";
-import { isNumeric } from "vant/lib/utils";
+import type { IVacationTime, IVacationTimeFilter } from "@/types/vacation/IVacationTime";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IVacationSick>>([]);
+const data = ref<Array<IVacationTime>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IVacationSick>>([]);
-const vacationSick = useVacationSickStore();
+const dataBase = ref<Array<IVacationTime>>([]);
+const { vacationTime } = useVacationTimeStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -36,22 +26,21 @@ const inputRefSearch = ref<HTMLInputElement | null>(null);
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
 const addItem = () => {
-  vacationSick.reset();
+  useVacationTimeStore().reset();
   router.push({
-    name: "vacationSickAdd",
+    name: "vacationTimeAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (_vacationSick: IVacationSickFilter) => {
-  if (_vacationSick.dayFrom?.toString().includes(fastSearch.value)) {
+const filterByIDName = (_vacationTime: IVacationTimeFilter) => {
+  if (_vacationTime.dayFrom?.toString().includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -62,28 +51,17 @@ const makeFastSearch = () => {
     //data.value = dataBase.value.filter(filterByIDName);
   }
 };
-const Search = async (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    await getFilterData(1);
-  }
-};
 //#endregion
 //#region Search
-const searchFilter = ref<IVacationSickFilter>({
+const searchFilter = ref<IVacationTimeFilter>({
   dayFrom: "",
   limit: 10,
 });
-const CNumber = (val: any = 0): number => {
-  if (isNumeric(val) == false) return 0;
-  return Number(val);
-};
-
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.limit = 0;
-  searchFilter.value.record = CNumber(fastSearch.value);
-  searchFilter.value.employeeName = fastSearch.value;
-  await vacationSick
+  searchFilter.value.record = Number(fastSearch.value);
+  await useVacationTimeStore()
     .get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -100,28 +78,31 @@ const getFilterData = async (page: number = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "vacationSickUpdate",
+    name: "vacationTimeUpdate",
     params: { id: id },
   });
 };
-
+const Search = async (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    await getFilterData(1);
+  }
+};
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show vacations sick"]);
+  checkPermissionAccessArray(["show vacations time"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-
-  await getFilterData(1);
   if (inputRefSearch.value) {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
+  await getFilterData(1);
 });
 </script>
 <template>
   <IPage>
     <template v-slot:header>
-      <IPageHeader :title="t('VacationSick')">
+      <IPageHeader :title="t('VacationTime')">
         <template v-slot:buttons>
           <IButton width="28" :onClick="addItem" :text="t('Add')" />
         </template>
@@ -162,8 +143,8 @@ onMounted(async () => {
           </div>
         </div>
       </IRow>
-      <IRow>
-        <div class="flex flex-col">
+      <IRow
+        ><div class="flex flex-col">
           <div class="py-4 inline-block min-w-full lg:px-8">
             <!-- card -->
 
@@ -182,17 +163,13 @@ onMounted(async () => {
                   >
                     <!-- card -->
                     <div
-                      class="bg-cardLight font-Tajawal dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                      class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
                       v-for="vacation in data"
                       :key="vacation.id"
                     >
                       <div class="w-3/4 overflow-hidden">
-                        <div
-                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                        >
-                          <div
-                            class="text-2xl text-text dark:text-textLight mb-2"
-                          >
+                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                          <div class="text-2xl text-text dark:text-textLight mb-2">
                             {{ vacation.Vacation.Employee.name }}
                           </div>
                         </div>
@@ -202,15 +179,15 @@ onMounted(async () => {
                             class="text-text dark:text-red-900 border-sky-100 border-2 pl-2 pr-2 ml-2 mr-2 bg-slate-300"
                             v-html="vacation.record"
                           ></div>
-                          يوم من تاريخ
+                          ساعة من تاريخ
                           <div
                             class="text-text dark:text-textGray ml-2 mr-2"
-                            v-html="vacation.dayFrom"
+                            v-html="vacation.timeFrom"
                           ></div>
                           الى
                           <div
                             class="text-text dark:text-textGray ml-2 mr-2"
-                            v-html="vacation.dayTo"
+                            v-html="vacation.timeTo"
                           ></div>
                         </div>
                       </div>
@@ -258,8 +235,9 @@ onMounted(async () => {
             <SimpleLoading v-if="isLoading"></SimpleLoading>
             <!-- end card -->
           </div>
-        </div></IRow
-      >
+        </div>
+      </IRow>
     </template>
   </IPage>
 </template>
+@/stores/vacations/vacationTimeStore@/stores/permissionStore

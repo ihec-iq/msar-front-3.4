@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
+import moment from "moment";
 
 import { useI18n } from "@/stores/i18n/useI18n";
-import type { IVacationSick } from "@/types/vacation/IVacationSick";
-import { useVacationSickStore } from "@/stores/vacations/vacationSick";
-import { useVacationStore } from "@/stores/vacations/vacation";
+import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
+import { useVacationStore } from "@/stores/vacations/vacationStore";
+import { now } from "@vueuse/core";
 import type { IVacation } from "@/types/vacation/IVacation";
-
+import { useVacationReasonStore } from "@/stores/vacations/vacationReasonStore";
+import type { IVacationReason } from "@/types/vacation/IVacationDaily";
+import type { IEmployee } from "@/types/IEmployee";
 const { t } = useI18n();
 
 //region"Drag and Drop"
@@ -27,24 +30,36 @@ const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
-const itemStore = useVacationSickStore();
-const { vacationSick } = storeToRefs(useVacationSickStore());
+const vacationTimeStore = useVacationTimeStore();
+const { vacationTime } = storeToRefs(useVacationTimeStore());
 const { vacations } = storeToRefs(useVacationStore());
+const { reasons } = storeToRefs(useVacationReasonStore());
 
+const { addHours } = useVacationTimeStore();
 const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<String | null>();
+const times = reactive([
+  { display: "نصف ساعة", value: 0.5, selected: true },
+  { display: "1 ساعة", value: 1, selected: false },
+  { display: "2 ساعة", value: 2, selected: false },
+  { display: "3 ساعة", value: 3, selected: false },
+]);
 //#endregion
 //#region CURD
 const store = () => {
+  console.log(vacationTime.value);
   errors.value = null;
   const formData = new FormData();
-  formData.append("dayFrom", vacationSick.value.dayFrom);
-  formData.append("dayTo", vacationSick.value.dayTo);
-  formData.append("record", vacationSick.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
-  itemStore
+  formData.append("date", vacationTime.value.date);
+  formData.append("timeFrom", vacationTime.value.timeFrom);
+  formData.append("timeTo", vacationTime.value.timeTo);
+  formData.append("record", vacationTime.value.record.toString());
+  formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
+  formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
+
+  vacationTimeStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -60,7 +75,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemStore.getError(error);
+      errors.value = vacationTimeStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -72,13 +87,15 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("dayFrom", vacationSick.value.dayFrom);
-  formData.append("dayTo", vacationSick.value.dayTo);
-  formData.append("record", vacationSick.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
+  formData.append("date", vacationTime.value.date);
+  formData.append("timeFrom", vacationTime.value.timeFrom);
+  formData.append("timeTo", vacationTime.value.timeTo);
+  formData.append("record", vacationTime.value.record.toString());
+  formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
+  formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
 
-  itemStore
-    .update(vacationSick.value.id, formData)
+  vacationTimeStore
+    .update(vacationTime.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -93,7 +110,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemStore.getError(error);
+      errors.value = vacationTimeStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -122,7 +139,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemStore._delete(vacationSick.value.id).then(() => {
+        await vacationTimeStore._delete(vacationTime.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -135,16 +152,18 @@ const Delete = async () => {
 };
 const showData = async () => {
   Loading.value = true;
-  await useVacationSickStore()
+  await useVacationTimeStore()
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        vacationSick.value.dayFrom = response.data.data.dayFrom;
-        vacationSick.value.dayTo = response.data.data.dayTo;
-        vacationSick.value.record = response.data.data.record;
-        vacationSick.value.Vacation = response.data.data.Vacation;
+        console.log(response.data.data);
+        vacationTime.value.timeFrom = response.data.data.timeFrom;
+        vacationTime.value.timeTo = response.data.data.timeTo;
+        vacationTime.value.record = response.data.data.record;
+        vacationTime.value.Vacation = response.data.data.Vacation;
+        vacationTime.value.Reason = response.data.data.Reason;
 
-        vacationSick.value = response.data.data as IVacationSick;
+        //vacationTime.value = response.data.data as IVacationTime;
       }
     })
     .catch((errors) => {
@@ -164,46 +183,104 @@ const showData = async () => {
 //#endregion
 const back = () => {
   router.push({
-    name: "vacationSickIndex",
+    name: "vacationTimeIndex",
   });
 };
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show vacations sick"]);
+  checkPermissionAccessArray(["show vacations time"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("VacationSickAdd");
-    vacationSick.value.id = 0;
+    namePage.value = t("VacationTimeAdd");
+    vacationTime.value.id = 0;
   } else {
     await showData();
-    vacationSick.value.id = id.value;
-    namePage.value = t("VacationSickUpdate");
+    vacationTime.value.id = id.value;
+    namePage.value = t("VacationTimeUpdate");
   }
   await useVacationStore().get_vacations();
+  await useVacationReasonStore().get();
 });
 const ChangeDate = () => {
-  if (vacationSick.value.dayFrom >= vacationSick.value.dayTo) {
-    vacationSick.value.record = 1;
-    ChangeDateRecord();
-    return;
-  }
-  const oneDay = 24 * 60 * 60 * 1000;
-  const days = Math.round(
-    (new Date(vacationSick.value.dayTo).valueOf() -
-      new Date(vacationSick.value.dayFrom).valueOf()) /
-      oneDay
-  );
-  vacationSick.value.record = days;
+  //console.log("ChangeDate");
+  if (vacationTime.value.timeFrom.length == 5)
+    vacationTime.value.timeFrom = vacationTime.value.timeFrom + ":00";
+  if (vacationTime.value.timeTo.length == 5)
+    vacationTime.value.timeTo = vacationTime.value.timeTo + ":00";
+
+  const currentDate = new Date(now());
+  const timeFrom =
+    currentDate.getFullYear() +
+    "-" +
+    currentDate.getMonth() +
+    "-" +
+    currentDate.getDay() +
+    " " +
+    vacationTime.value.timeFrom;
+  vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
+  console.log(vacationTime.value.timeTo);
+  // if (vacationTime.value.timeFrom >= vacationTime.value.timeTo) {
+  //   vacationTime.value.record = 0.5;
+  //   ChangeDateRecord();
+  //   return;
+  // }
+  // const oneDay = 24 * 60 * 60 * 1000;
+  // const days = Math.round(
+  //   (new Date(vacationTime.value.timeTo).valueOf() -
+  //     new Date(vacationTime.value.timeFrom).valueOf()) /
+  //     oneDay
+  // );
+  // vacationTime.value.record = days;
 };
 const ChangeDateRecord = () => {
-  let d = new Date(vacationSick.value.dayFrom);
-  d.setDate(d.getDate() + vacationSick.value.record);
-  vacationSick.value.dayTo = d.toISOString().split("T")[0];
+  console.log("ChangeDateRecord");
+  const timeFrom =
+    new Date().toISOString().split("T")[0] + " " + vacationTime.value.timeFrom;
+  vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
+  console.log(vacationTime.value.timeTo);
 };
 </script>
 <template>
-  <PageTitle> {{ namePage }}</PageTitle>
+  <PageTitle>
+    {{ namePage }}
+    <span>{{ moment(now()).format("dddd") }}</span></PageTitle
+  >
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("Date") }}
+        </div>
+        <input
+          v-model="vacationTime.date"
+          type="date"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
+      </div>
+
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("VacationTimeRecord") }}
+        </div>
+        <select
+          v-model="vacationTime.record"
+          @change="ChangeDateRecord()"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        >
+          <option
+            v-for="time in times"
+            :key="time.value"
+            :value="time.value"
+            :selected="time.selected == true"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+          >
+            {{ time.display }}
+          </option>
+        </select>
+      </div>
       <div class="w-11/12 mr-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -211,9 +288,9 @@ const ChangeDateRecord = () => {
           {{ t("DateFrom") }}
         </div>
         <input
-          v-model="vacationSick.dayFrom"
-          type="date"
-          @change="ChangeDate()"
+          v-model="vacationTime.timeFrom"
+          type="time"
+          @input="ChangeDate()"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
@@ -224,23 +301,8 @@ const ChangeDateRecord = () => {
           {{ t("DateTo") }}
         </div>
         <input
-          v-model="vacationSick.dayTo"
-          type="date"
-          @change="ChangeDate()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("RecordSick") }}
-        </div>
-        <input
-          v-model="vacationSick.record"
-          type="number"
-          @input="ChangeDateRecord()"
-          min="1"
+          v-model="vacationTime.timeTo"
+          type="time"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
@@ -250,9 +312,22 @@ const ChangeDateRecord = () => {
         >
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
+        <!-- <select
+          v-model="vacationTime.Vacation"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        >
+          <option
+            v-for="vacation in vacations"
+            :key="vacation.id"
+            :value="vacation"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+          >
+            {{ vacation.Employee.name }}
+          </option>
+        </select> -->
         <vSelect
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationSick.Vacation"
+          v-model="vacationTime.Vacation"
           :options="vacations"
           :reduce="(vacation: IVacation) => vacation"
           label="name"
@@ -261,6 +336,27 @@ const ChangeDateRecord = () => {
           <template #option="{ Employee }">
             <div>
               <span>{{ Employee.name }}</span>
+            </div>
+          </template>
+        </vSelect>
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("VacationReason") }}
+        </div>
+        <vSelect
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          v-model="vacationTime.Reason"
+          :options="reasons"
+          :reduce="(reason: IVacationReason) => reason"
+          label="name"
+          :getOptionLabel="(reason: IVacationReason) => reason.name"
+        >
+          <template #option="{ name }">
+            <div>
+              <span>{{ name }}</span>
             </div>
           </template>
         </vSelect>
@@ -277,7 +373,7 @@ const ChangeDateRecord = () => {
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
-            v-if="vacationSick.id == 0"
+            v-if="vacationTime.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
@@ -291,7 +387,7 @@ const ChangeDateRecord = () => {
             {{ t("Update") }}
           </button>
           <button
-            v-if="vacationSick.id != 0"
+            v-if="vacationTime.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
           >

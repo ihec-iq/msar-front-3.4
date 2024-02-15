@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { useStockStore } from "@/stores/Voucher/stock";
 import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 import { useItemStore } from "@/stores/item/item";
@@ -945,3 +945,4 @@ button {
 }
 </style>
 @/stores/item1/item
+@/stores/voucher1/stock@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/inputVoucher@/stores/item/itemStore@/stores/permissionStore

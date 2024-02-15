@@ -8,7 +8,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const isLoading = ref(false);
@@ -17,13 +17,7 @@ const dataPage = ref();
 const dataBase = ref<Array<IItem>>([]);
 const { item, get_filter } = useItemStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -317,3 +311,4 @@ onMounted(async () => {
   </div>
 </template>
 @/stores/item1/item
+@/stores/item/itemStore@/stores/permissionStore

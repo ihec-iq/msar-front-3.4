@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useItemStore } from "@/stores/item/item";
 import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 import WangEditor from "./WangEditor.vue";
 const emit = defineEmits(["setItem"]);
@@ -232,3 +232,4 @@ button {
 }
 </style>
 @/stores/item1/item@/stores/item1/itemCategory
+@/stores/item/itemStore@/stores/item/itemCategoryStore@/stores/permissionStore

@@ -10,7 +10,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 const isLoading = ref(false);
 const { employee } = storeToRefs(useEmployeeStore());
@@ -22,13 +22,7 @@ const dataPage = ref();
 const dataBase = ref<Array<IEmployee>>([]);
 const { get_filter } = useEmployeeStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: false },
-  { name: "12", val: 12, selected: true },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -303,3 +297,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/permissionStore@/stores/sectionStore

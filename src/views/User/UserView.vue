@@ -11,7 +11,7 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 import { useUserStore } from "@/stores/userStore";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import loadingFull from "@/components/general/loadingFull.vue";
 const rtlStore = useRtlStore();
@@ -355,3 +355,4 @@ onMounted(async () => {
   }
 }
 </style>
+@/stores/permissionStore

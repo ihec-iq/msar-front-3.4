@@ -5,7 +5,7 @@ import { useArchiveStore } from "@/stores/archives/archive";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import FilePreview from "@/components/FilePreview.vue";
 import DragDrop from "@/components/DragDrop.vue";
 import { useDragDropStore } from "@/compositions/dragDrop";
@@ -429,3 +429,4 @@ html.dark {
   /* ...others... */
 }
 </style>
+@/stores/archives/archiveStore@/stores/permissionStore
