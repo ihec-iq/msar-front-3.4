@@ -88,7 +88,7 @@ onMounted(() => {
 <template>
   <div
     class="flex fixed h-full z-[999] bg-white dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
-    :class="[isClose ? 'absolute lg:w-20 xs:w-[66px]' : 'lg:w-64  ']"
+    :class="[isClose ? 'lg:w-20 xs:w-[66px]' : 'lg:w-64  ']"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
@@ -96,6 +96,7 @@ onMounted(() => {
       <div
         class="bg-white dark:bg-darkNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
+      <!-- little circule -->
         <div
           v-motion
           :initial="{ opacity: 0, x: -85 }"
@@ -134,6 +135,7 @@ onMounted(() => {
             </svg>
           </button>
         </div>
+        <!-- logo and co Name  -->
         <div
           class="font-bold items-center flex flex-col justify-center text-black mt-5"
           :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
@@ -146,7 +148,7 @@ onMounted(() => {
               class="w-8 h-8 rounded-full"
             />
             <div
-              class="text-lg mt-1 ml-1 duration-700 w-32 dark:text-textLight text-text"
+              class="text-lg mt-1 ml-1 duration-700 w-28 dark:text-textLight text-text"
               :class="{ hidden: isClose, block: !isClose }"
             >
               IHEC
@@ -157,6 +159,7 @@ onMounted(() => {
             :class="{ 'lg:w-52 xs:w-40': !isClose, 'w-[40px] ': isClose }"
           />
         </div>
+        <!-- main list -->
         <nav class="flex flex-col">
           <!-- main route -->
           <ul class="relative overflow-hidden">
@@ -171,10 +174,11 @@ onMounted(() => {
                 class=""
               >
                 <button
-                  class="dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark hover:text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
+                  class="hover:text-[#444] dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark p-4 inline-flex justify-center rounded-md smooth-hover"
                 >
                   <i :title="Link.title" v-html="Link.icon" /></button
               ></router-link>
+              <!-- childrens -->
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
@@ -198,13 +202,13 @@ onMounted(() => {
             </li>
           </ul>
         </nav>
-        <!-- setting and log out -->
+        <!-- setting -->
         <div class="">
           <!-- #region setting icon -->
           <button
             @click="settingPop = !settingPop"
             class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
-            :class="{ 'float-left ': !isClose, 'mr-8': isClose }"
+            :class="{ 'ltr:float-left rtl:float-right ': !isClose, 'ltr:mr-8 rtl:ml-8': isClose }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
