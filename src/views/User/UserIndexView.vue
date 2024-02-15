@@ -2,14 +2,15 @@
 //region"Basic Import"
 import SimpleLoading from "@/components/general/loading.vue";
 import { useUserStore } from "@/stores/userStore";
-import { useI18n } from "@/stores/i18n/useI18n";
 import { usePermissionStore } from "@/stores/permission";
 import type { IUser, IUserFilter } from "@/types/core/IUser";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { EnumPermission } from "@/utils/EnumSystem";
 import JsonExcel from "vue-json-excel3";
+import { t } from "@/utils/I18nPlugin";
+
 //#region Vars
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -21,8 +22,6 @@ const dataBase = ref<Array<IUser>>([]);
 const { user } = useUserStore();
 const { get_filter } = useUserStore();
 import { limits } from "@/utils/defaultParams";
-import t from "@/utils/I18nPlugin";
-
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -55,7 +54,7 @@ const makeFastSearch = () => {
 //#region Search
 //#region Filter
 const searchFilter = ref<IUserFilter>({
-  limit: 6,
+  limit: 10,
   name: "",
   email: "",
 });
@@ -117,11 +116,14 @@ onMounted(async () => {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
 });
+import { getCurrentInstance } from "vue";
+const app = getCurrentInstance();
+const trns = app?.appContext.config.globalProperties.$trns;
 </script>
 <template>
   <IPage>
     <template v-slot:header>
-      <IPageHeader :title="t('UserIndex')">
+      <IPageHeader :title="trns('UserIndex')">
         <template v-slot:buttons>
           <IButton width="28" :onClick="add" :text="t('Add')" />
         </template>
@@ -230,7 +232,7 @@ onMounted(async () => {
                           :key="role.id"
                           class="text-sm leading-none text-text dark:text-textLight ml-2"
                         >
-                          {{ role.name }},
+                          <IBadge>{{ role.name }}</IBadge>
                         </p>
                       </th>
                       <th class="p-2 z-999">

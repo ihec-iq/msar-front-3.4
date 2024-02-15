@@ -4,10 +4,10 @@ import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/authStore";
-import { useI18n } from "@/stores/i18n/useI18n";
 import router from "@/router";
 import { useRoute } from "vue-router";
-const { t, setLocale, Languages } = useI18n();
+import { t, setLocale, Languages } from "@/utils/I18nPlugin";
+
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
@@ -219,11 +219,7 @@ onMounted(async () => {
           </div>
           <div class="switch4">
             <label class="switch">
-              <input
-                type="checkbox"
-                @input="changeDark()"
-                v-model="themeDark"
-              />
+              <input type="checkbox" @input="changeDark()" v-model="themeDark" />
               <span class="slider"></span>
             </label>
           </div>
@@ -234,9 +230,7 @@ onMounted(async () => {
           </div>
           <div class="flex items-center">
             <!-- :class="{ 'rtl; bg-red-900 ': isLtr, 'bg-green-900': !isLtr }" -->
-            <div
-              class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3"
-            >
+            <div class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3">
               {{ isRtl ? "RTL" : "LTR" }}
             </div>
             <input
@@ -262,10 +256,7 @@ onMounted(async () => {
                   class="dropdown-content ltr:right-0 rtl:left-0 menu p-2 shadow bg-settingLight dark:bg-setting text-text dark:text-textLight rounded-box mt-5"
                 >
                   <li v-for="language in Languages" :key="language.code">
-                    <button
-                      @click="setLocale(language)"
-                      class="flex justify-between"
-                    >
+                    <button @click="setLocale(language)" class="flex justify-between">
                       {{ language.name }}
                     </button>
                   </li>

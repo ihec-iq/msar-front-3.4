@@ -41,8 +41,7 @@ const inputRefSearch = ref<HTMLInputElement | null>(null);
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -75,12 +74,12 @@ const makeFastSearch = () => {
 //#region Search
 const searchFilter = ref<IVacationDailyFilter>({
   dayFrom: "",
-  limit: 6,
+  limit: 10,
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.limit = 0;
-  searchFilter.value.record = Number(fastSearch.value);
+  searchFilter.value.employeeName = fastSearch.value.toString();
   await useVacationDailyStore()
     .get_filter(searchFilter.value, page)
     .then((response) => {
@@ -185,12 +184,8 @@ onMounted(async () => {
                           :key="vacation.id"
                         >
                           <div class="w-3/4 overflow-hidden">
-                            <div
-                              class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                            >
-                              <div
-                                class="text-2xl text-text dark:text-textLight mb-2"
-                              >
+                            <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                              <div class="text-2xl text-text dark:text-textLight mb-2">
                                 {{ vacation.Vacation.Employee.name }}
                               </div>
                             </div>

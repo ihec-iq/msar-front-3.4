@@ -3,7 +3,7 @@ import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
@@ -22,7 +22,6 @@ const { employees } = storeToRefs(useEmployeeStore());
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
-const { t } = useI18n();
 const isLoading = ref(false);
 const IsShowCorrupted = ref(false);
 const data = ref<Array<IEmployeeHistory>>([]);
@@ -55,8 +54,7 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -84,7 +82,7 @@ const makeFastSearch = () => {
 const { SelectedOutItemCorrupted } = storeToRefs(corruptedVoucherStore);
 //#region Search
 const searchFilter = ref<IEmployeeFilter>({
-  limit: 6,
+  limit: 10,
   checked: true,
   name: "",
   employeeId: 0,
@@ -164,9 +162,7 @@ onMounted(async () => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div
-        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
-      >
+      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
         <label for="table-search" class="sr-only">{{ t("Search") }}</label>
         <div class="relative flex">
           <div
@@ -196,9 +192,7 @@ onMounted(async () => {
           />
         </div>
         <!-- limit -->
-        <div
-          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
+        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
@@ -296,11 +290,7 @@ onMounted(async () => {
                     />
                   </th>
                   <th>
-                    <input
-                      class="w-[450px] p-2"
-                      type="text"
-                      :value="row.notes"
-                    />
+                    <input class="w-[450px] p-2" type="text" :value="row.notes" />
                   </th>
                   <th>
                     <button

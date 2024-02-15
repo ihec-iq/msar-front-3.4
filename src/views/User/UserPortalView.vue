@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import PageTitle from "@/components/general/namePage.vue";
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 import { UserLinks } from "./UserLinks";
 import { usePermissionStore } from "@/stores/permission";
 import { EnumPermission } from "@/utils/EnumSystem";

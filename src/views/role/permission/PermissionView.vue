@@ -11,11 +11,9 @@ import { useRoute, useRouter } from "vue-router";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
-import { useI18n } from "@/stores/i18n/useI18n";
-
+import { t } from "@/utils/I18nPlugin";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
-const { t } = useI18n();
 
 const permissionsStore = usePermissionsStore();
 const namePage = ref("Add Role");
@@ -48,8 +46,9 @@ const makeFastSearch = () => {
   if (fastSearch.value == "")
     permissionsStore.permissions = permissionsStore.permissionsBase;
   else {
-    permissionsStore.permissions =
-      permissionsStore.permissionsBase.filter(filterByIDName);
+    permissionsStore.permissions = permissionsStore.permissionsBase.filter(
+      filterByIDName
+    );
   }
 };
 const role = reactive<IRole>({
@@ -195,9 +194,7 @@ onMounted(() => {
       >
         {{ t("Set Permissions") }}
       </div>
-      <label for="table-search" class="sr-only">{{
-        t("Search For Permission")
-      }}</label>
+      <label for="table-search" class="sr-only">{{ t("Search For Permission") }}</label>
       <div class="relative ltr:pr-4 rtl:pl-4">
         <div
           class="flex absolute bottom-8 ltr:left-0 rtl:right-0 items-center pl-3 pointer-events-none"

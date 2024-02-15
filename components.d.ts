@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     EditButton: typeof import('./src/components/dropDown/EditButton.vue')['default']
     FilePreview: typeof import('./src/components/FilePreview.vue')['default']
     I2BtnSearch: typeof import('./src/components/v2/I2BtnSearch.vue')['default']
+    IBadge: typeof import('./src/components/inputs/IBadge.vue')['default']
     IBtnSearch: typeof import('./src/components/ihec/IBtnSearch.vue')['default']
     IButton: typeof import('./src/components/ihec/IButton.vue')['default']
     InputNumber: typeof import('./src/components/inputs/InputNumber.vue')['default']

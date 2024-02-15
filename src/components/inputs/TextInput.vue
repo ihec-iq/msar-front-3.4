@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const modelValue = defineModel();
 import { EnumDirection } from "@/utils/EnumSystem";
+import { t } from "@/utils/I18nPlugin";
 
 defineProps({
   type: {
@@ -20,9 +21,6 @@ defineProps({
     default: EnumDirection.LTR, // Default value (optional)
   },
 });
-
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
 </script>
 <template>
   <div class="w-11/12 mr-2">

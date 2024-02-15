@@ -65,7 +65,7 @@ const makeFastSearch = () => {
 //#region Search
 const searchFilter = ref<IVacationTimeFilter>({
   dayFrom: "",
-  limit: 6,
+  limit: 10,
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;

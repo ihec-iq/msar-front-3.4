@@ -5,14 +5,13 @@ import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permission";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import IPage from "@/components/ihec/IPage.vue";
 import IPageHeader from "@/components/ihec/IPageHeader.vue";
 import IButton from "@/components/ihec/IButton.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 
 //#region Vars
-const { t } = useI18n();
 const namePage = ref(".....");
 const route = useRoute();
 const id = ref(Number(route.params.id));

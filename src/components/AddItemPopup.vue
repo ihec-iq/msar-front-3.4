@@ -4,9 +4,8 @@ import { useItemStore } from "@/stores/item/item";
 import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permission";
-
+import { t } from "@/utils/I18nPlugin";
 import WangEditor from "./WangEditor.vue";
-import { useI18n } from "@/stores/i18n/useI18n";
 const emit = defineEmits(["setItem"]);
 //region"Props"
 

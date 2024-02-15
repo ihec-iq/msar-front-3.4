@@ -4,11 +4,10 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
-import { useI18n } from "@/stores/i18n/useI18n";
 import { Links } from "./FixedMenu";
 import { usePermissionStore } from "@/stores/permission";
 
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 // import { useUserStore } from "@/stores/accounting/accounts/user";
 // import type IUser from "@/types/accounting/accounts/IUser";
 // const { get } = useUserStore();
@@ -59,8 +58,7 @@ const filteredLinks = computed(() =>
     // Check if any of the link's permissions are included in userPermissions
     if (permissions.value == undefined) return;
     return link.permissions.some(
-      (permission) =>
-        permissions.value.includes(permission) || permission == "public"
+      (permission) => permissions.value.includes(permission) || permission == "public"
     );
   })
 );
@@ -94,9 +92,7 @@ onMounted(() => {
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <div
-      class="LeftNav z-50 bg-white dark:bg-darkNav flex flex-col h-full"
-    >
+    <div class="LeftNav z-50 bg-white dark:bg-darkNav flex flex-col h-full">
       <div
         class="bg-white dark:bg-darkNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
@@ -293,8 +289,7 @@ onMounted(() => {
           @click.prevent="settingMenu = 'MainSetting'"
           class="-mr-3 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
           :class="{
-            ' text-white  border-l-2 border-blue-500 ':
-              settingMenu === 'MainSetting',
+            ' text-white  border-l-2 border-blue-500 ': settingMenu === 'MainSetting',
           }"
         >
           <!-- Heroicon name: outline/shield-check -->
@@ -422,8 +417,7 @@ li:hover > button svg {
   display: flex;
   position: relative;
   background-color: #6b7280;
-  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15),
-    0 6px 12px 0 rgba(24, 94, 224, 0.15);
+  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
   padding: 0.75rem;
   border-radius: 20px;
 }
