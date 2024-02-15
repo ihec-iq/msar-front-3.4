@@ -8,7 +8,7 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { useStockStore } from "@/stores/voucher/stock";
 import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
-import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
+import { useInputVoucherStore } from "@/stores/warehouse/inputVoucherStore";
 import type { IOutputVoucherItem } from "@/types/IOutputVoucher";
 import { t } from "@/utils/I18nPlugin";
 import type { IInputVoucherItem } from "@/types/IInputVoucher";
@@ -268,4 +268,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore
+@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore@/stores/warehouse/stock@/stores/warehouse/corruptedVoucher@/stores/warehouse/inputVoucher

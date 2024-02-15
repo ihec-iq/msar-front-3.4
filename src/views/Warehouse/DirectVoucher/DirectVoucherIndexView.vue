@@ -6,18 +6,15 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
-import type {
-  ICorruptedVoucher,
-  ICorruptedVoucherFilter,
-} from "@/types/ICorruptedVoucher";
-import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
-const isLoading = ref(false);
-const data = ref<Array<ICorruptedVoucher>>([]);
-const dataPage = ref();
-const dataBase = ref<Array<ICorruptedVoucher>>([]);
-const { corruptedVoucher, get_filter } = useCorruptedVoucherStore();
+const { checkPermissionAccessArray, can } = usePermissionStore();
+import type { IDirectVoucher, IDirectVoucherFilter } from "@/types/IDirectVoucher";
+import { useDirectVoucherStore } from "@/stores/warehouse/directVoucherStore";
 
+const isLoading = ref(false);
+const data = ref<Array<IDirectVoucher>>([]);
+const dataPage = ref();
+const dataBase = ref<Array<IDirectVoucher>>([]);
+const { directVoucher, get_filter } = useDirectVoucherStore();
 import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
@@ -30,25 +27,26 @@ watch(
   }
 );
 const addItem = () => {
-  corruptedVoucher.id = 0;
-  corruptedVoucher.number = "";
-  corruptedVoucher.date = "";
-  corruptedVoucher.notes = "";
-  corruptedVoucher.items = [];
-  corruptedVoucher.signaturePerson = "";
+  directVoucher.id = 0;
+  directVoucher.number = "";
+  directVoucher.date = "";
+  directVoucher.notes = "";
+  directVoucher.Items = [];
+  directVoucher.signaturePerson = "";
   router.push({
-    name: "corruptedVoucherAdd",
+    name: "directVoucherAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: ICorruptedVoucher) => {
+const filterByIDName = (item: IDirectVoucher) => {
   if (item.number.includes(fastSearch.value) || item.notes.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
 const makeFastSearch = () => {
+  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -56,7 +54,7 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<ICorruptedVoucherFilter>({
+const searchFilter = ref<IDirectVoucherFilter>({
   name: "",
   limit: 10,
   description: "",
@@ -80,7 +78,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "corruptedVoucherUpdate",
+    name: "directVoucherUpdate",
     params: { id: id },
   });
 };
@@ -88,7 +86,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show corruptedVouchers"]);
+  checkPermissionAccessArray(["show directVouchers"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -96,7 +94,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("OutputVoucher") }} </PageTitle>
+    <PageTitle> {{ t("DirectVoucher") }} </PageTitle>
   </div>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
@@ -213,6 +211,7 @@ onMounted(async () => {
                           <div class="flex justify-betweens">
                             <div
                               class="text-text dark:text-textGray"
+                              v-if="item.notes"
                               v-html="item.notes"
                             ></div>
                           </div>
@@ -290,4 +289,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher1/corruptedVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore
+@/stores/voucher/directVoucher@/stores/permissionStore

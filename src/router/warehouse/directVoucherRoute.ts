@@ -4,7 +4,7 @@ export default [
   {
     path: "/directVouchers/:search?",
     name: "directVoucherIndex",
-    component: () => import("@/views/DirectVoucher/DirectVoucherIndexView.vue"),
+    component: () => import("@/views/Warehouse/DirectVoucher/DirectVoucherIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -12,7 +12,7 @@ export default [
   {
     path: "/directVoucher",
     name: "directVoucherAdd",
-    component: () => import("@/views/DirectVoucher/DirectVoucherView.vue"),
+    component: () => import("@/views/Warehouse/DirectVoucher/DirectVoucherView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -20,7 +20,7 @@ export default [
   {
     path: "/directVoucher/:id",
     name: "directVoucherUpdate",
-    component: () => import("@/views/DirectVoucher/DirectVoucherView.vue"),
+    component: () => import("@/views/Warehouse/DirectVoucher/DirectVoucherView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

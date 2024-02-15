@@ -6,8 +6,8 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
-import { useStoringStore } from "@/stores/storingStore";
-import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
+import { useStoringStore } from "@/stores/warehouse/storingStore";
+import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -88,7 +88,7 @@ const openItem = (id: number, billType: string) => {
       name: "inputVoucherUpdate",
       params: { id: id },
     });
-  } else {
+  } else if (billType == "out") {
     router.push({
       name: "outputVoucherUpdate",
       params: { id: id },
@@ -99,6 +99,7 @@ const openItem = (id: number, billType: string) => {
 //#endregion
 onMounted(async () => {
   checkPermissionAccessArray(["show storage"]);
+
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
   await outputVoucherStore.getEmployees().then(() => {});
@@ -234,8 +235,12 @@ onMounted(async () => {
                     <div
                       class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                     ></div>
-                    <table class="min-w-full text-center">
-                      <thead class="border-b bg-[#0003] text-gray-300">
+                    <table
+                      class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
+                    >
+                      <thead
+                        class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
+                      >
                         <tr>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("Item") }}
@@ -256,15 +261,20 @@ onMounted(async () => {
                             {{ t("Stock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
+                            {{ t("Employee") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("Actions") }}
                           </th>
                         </tr>
                       </thead>
-                      <tbody class="bg-[#1f2937]">
+                      <tbody
+                        class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
+                      >
                         <tr
                           v-for="row in data"
                           :key="row.itemName"
-                          class="border-b border-black h-14 text-gray-100"
+                          class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                         >
                           <th>{{ row.itemName }}</th>
                           <th>{{ row.serialNumber }}</th>
@@ -273,22 +283,23 @@ onMounted(async () => {
                             <span
                               v-if="row.count > 0"
                               class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-                              >↑{{ row.count }}</span
+                              >↓{{ row.count }}</span
                             >
                             <span
                               v-else
                               class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-                              >↓{{ row.count }}</span
+                              >↑{{ row.count }}</span
                             >
                           </th>
                           <th>{{ row.price }}</th>
                           <th>{{ row.stockName }}</th>
+                          <th>{{ row.Employee.name }}</th>
                           <th>
                             <van-button
                               class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
                               type="success"
                               is-link
-                              @click="openItem(row.itemId, row.billType)"
+                              @click="openItem(row.voucherId, row.billType)"
                               >Open
                             </van-button>
                           </th>
@@ -315,3 +326,4 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
+@/stores/warehouse/outputVoucher

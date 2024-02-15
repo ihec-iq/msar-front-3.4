@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useItemStore } from "@/stores/item/item";
+import { useItemStore } from "@/stores/item/itemStore";
 import { useItemCategoryStore } from "@/stores/item/itemCategory";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permissionStore";
