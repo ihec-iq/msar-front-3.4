@@ -8,7 +8,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
 import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const isLoading = ref(false);
@@ -296,4 +296,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher1/inputVoucher@/stores/voucher1/inputVoucher
+@/stores/voucher1/inputVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore

@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
 
@@ -355,3 +355,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/permissionStore@/stores/sectionStore

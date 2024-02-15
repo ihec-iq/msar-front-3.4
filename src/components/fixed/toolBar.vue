@@ -12,7 +12,7 @@ const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
 const route = useRoute();
-import { useConfigStore } from "@/stores/config";
+import { useConfigStore } from "@/stores/configStore";
 const { Organization } = storeToRefs(useConfigStore());
 const colorMode = useColorMode({
   modes: {
@@ -484,3 +484,4 @@ input:checked + .slider::before {
   color: yellow;
 }
 </style>
+@/stores/configStore

@@ -5,7 +5,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray, can } = usePermissionStore();
 import type { IDirectVoucher, IDirectVoucherFilter } from "@/types/IDirectVoucher";
 import { useDirectVoucherStore } from "@/stores/voucher1/directVoucher";
@@ -289,3 +289,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/voucher/directVoucher@/stores/permissionStore

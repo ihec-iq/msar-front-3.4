@@ -5,7 +5,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type {
   ICorruptedVoucher,
@@ -290,4 +290,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher1/corruptedVoucher@/stores/voucher1/corruptedVoucher
+@/stores/voucher1/corruptedVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore

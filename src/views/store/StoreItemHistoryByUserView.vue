@@ -6,10 +6,10 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
-import { useStoringStore } from "@/stores/storing";
+import { useStoringStore } from "@/stores/storingStore";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const outputVoucherStore = useOutputVoucherStore();
@@ -315,4 +315,3 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
-@/stores/voucher1/outputVoucher@/stores/voucher1/outputVoucher

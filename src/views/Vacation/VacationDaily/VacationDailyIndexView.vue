@@ -7,7 +7,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type {
   IVacationDaily,
@@ -252,3 +252,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
+@/stores/permissionStore

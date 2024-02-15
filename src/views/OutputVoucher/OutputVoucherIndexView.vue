@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type { IOutputVoucher, IOutputVoucherFilter } from "@/types/IOutputVoucher";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
@@ -287,4 +287,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher1/outputVoucher@/stores/voucher1/outputVoucher
+@/stores/permissionStore

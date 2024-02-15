@@ -3,7 +3,7 @@
 import SimpleLoading from "@/components/general/loading.vue";
 import { useArchiveStore } from "@/stores/archives/archive";
 import { t } from "@/utils/I18nPlugin";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import type { IArchive, IArchiveFilter, IDocument } from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { storeToRefs } from "pinia";
@@ -453,3 +453,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
+@/stores/archives/archiveStore@/stores/permissionStore

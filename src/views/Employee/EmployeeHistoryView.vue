@@ -12,7 +12,7 @@ import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const outputVoucherStore = useOutputVoucherStore();
@@ -511,4 +511,4 @@ onMounted(async () => {
 </template>
 <style></style>
 @/stores/employeeStore
-@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher
+@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore

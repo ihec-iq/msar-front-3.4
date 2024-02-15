@@ -8,7 +8,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const isLoading = ref(false);
@@ -311,3 +311,4 @@ onMounted(async () => {
   </div>
 </template>
 @/stores/item1/item
+@/stores/item/itemStore@/stores/permissionStore

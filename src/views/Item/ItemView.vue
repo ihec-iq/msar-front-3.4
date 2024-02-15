@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "@/types/IItem";
@@ -363,3 +363,4 @@ button {
 }
 </style>
 @/stores/item1/item@/stores/item1/itemCategory
+@/stores/item/itemStore@/stores/item/itemCategoryStore@/stores/permissionStore

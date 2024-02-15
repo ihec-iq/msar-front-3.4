@@ -2,7 +2,7 @@
 //region"Basic Import"
 import SimpleLoading from "@/components/general/loading.vue";
 import { useUserStore } from "@/stores/userStore";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import type { IUser, IUserFilter } from "@/types/core/IUser";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
@@ -283,3 +283,4 @@ const trns = app?.appContext.config.globalProperties.$trns;
   </IPage>
 </template>
 <style></style>
+@/stores/permissionStore

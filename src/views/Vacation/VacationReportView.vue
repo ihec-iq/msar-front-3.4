@@ -5,9 +5,9 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import { useVacationStore } from "@/stores/vacations/vacation";
+import { useVacationStore } from "@/stores/vacations/vacationStore";
 import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { isNumber } from "@vueuse/core";
 const { checkPermissionAccessArray } = usePermissionStore();
 import JsonExcel from "vue-json-excel3";
@@ -368,3 +368,4 @@ const ToNumberShow = (val: any) => {
   </div>
 </template>
 <style></style>
+@/stores/vacations/vacationStore@/stores/permissionStore

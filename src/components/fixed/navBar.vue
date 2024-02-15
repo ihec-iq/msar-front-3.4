@@ -5,7 +5,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { Links } from "./FixedMenu";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
 // import { useUserStore } from "@/stores/accounting/accounts/user";
@@ -488,3 +488,4 @@ input[id="radio-3"]:checked ~ .glider {
   }
 } */
 </style>
+@/stores/permissionStore

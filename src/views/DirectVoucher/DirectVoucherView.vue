@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { useDirectVoucherStore } from "@/stores/voucher/directVoucher";
 import type { IDirectVoucherItem } from "@/types/IDirectVoucher";
 import { t } from "@/utils/I18nPlugin";
@@ -693,4 +693,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher1/directVoucher@/stores/voucher1/directVoucher
+@/stores/voucher1/directVoucher@/stores/voucher1/directVoucher@/stores/permissionStore

@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { useStockStore } from "@/stores/voucher/stock";
 import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
@@ -268,4 +268,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher
+@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore

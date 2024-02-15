@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useVacationSickStore } from "@/stores/vacations/vacationSick";
+import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type { IVacationSick, IVacationSickFilter } from "@/types/vacation/IVacationSick";
 import { isNumeric } from "vant/lib/utils";
@@ -249,3 +249,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
+@/stores/permissionStore
