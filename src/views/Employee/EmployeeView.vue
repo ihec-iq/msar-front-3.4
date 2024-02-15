@@ -9,8 +9,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 
 //region"Drag and Drop"
 
@@ -48,14 +47,8 @@ const store = () => {
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
-  formData.append(
-    "initVacationSick",
-    employee.value.initVacationSick.toString()
-  );
-  formData.append(
-    "takeVacationSick",
-    employee.value.takeVacationSick.toString()
-  );
+  formData.append("initVacationSick", employee.value.initVacationSick.toString());
+  formData.append("takeVacationSick", employee.value.takeVacationSick.toString());
 
   employeeStore
     .store(formData)
@@ -93,14 +86,8 @@ function update() {
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
-  formData.append(
-    "initVacationSick",
-    employee.value.initVacationSick.toString()
-  );
-  formData.append(
-    "takeVacationSick",
-    employee.value.takeVacationSick.toString()
-  );
+  formData.append("initVacationSick", employee.value.initVacationSick.toString());
+  formData.append("takeVacationSick", employee.value.takeVacationSick.toString());
   employeeStore
     .update(employee.value.id, formData)
     .then((response) => {
@@ -228,11 +215,7 @@ onMounted(async () => {
           {{ t("EmployeeSection") }}
         </div>
         <select v-model="employee.section.id" class="p-2">
-          <option
-            v-for="section in sections"
-            :key="section.id"
-            :value="section.id"
-          >
+          <option v-for="section in sections" :key="section.id" :value="section.id">
             {{ section.name }}
           </option>
         </select>
@@ -259,8 +242,7 @@ onMounted(async () => {
     <div
       :class="{
         'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-          !is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >

@@ -55,7 +55,7 @@ const makeFastSearch = () => {
 //#endregion
 //#region Search
 const searchFilter = ref<IVacationFilter>({
-  limit: 6,
+  limit: 10,
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {

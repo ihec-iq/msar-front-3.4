@@ -7,9 +7,7 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
-
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 
 //region"Drag and Drop"
 
@@ -319,3 +317,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/item1/itemCategory

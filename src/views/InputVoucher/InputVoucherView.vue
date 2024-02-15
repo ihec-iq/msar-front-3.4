@@ -10,11 +10,10 @@ import { useStockStore } from "@/stores/Voucher/stock";
 import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 import { useItemStore } from "@/stores/item/item";
 import type { IInputVoucherItem } from "@/types/IInputVoucher";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "@/types/IItem";
 import AddItemPopup from "@/components/AddItemPopup.vue";
 
-const { t } = useI18n();
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
 const { item } = storeToRefs(useItemStore());
@@ -945,3 +944,4 @@ button {
   text-align: right !important;
 }
 </style>
+@/stores/item1/item

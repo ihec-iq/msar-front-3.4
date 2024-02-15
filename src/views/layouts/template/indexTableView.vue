@@ -2,7 +2,7 @@
 //region"Basic Import"
 import SimpleLoading from "@/components/general/loading.vue";
 import { useArchiveStore } from "@/stores/archives/archive";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import { usePermissionStore } from "@/stores/permission";
 import type { IArchive, IArchiveFilter, IDocument } from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
@@ -16,7 +16,7 @@ import IButton from "@/components/ihec/IButton.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const { t } = useI18n();
+
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
 const dataPage = ref();
