@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useSectionStore } from "@/stores/section";
+import { useSectionStore } from "@/stores/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
@@ -124,8 +124,8 @@ const showData = async () => {
       if (response.status == 200) {
         employee.value.id = response.data.data.id;
         employee.value.name = response.data.data.name;
-        employee.value.section.id = response.data.data.section.id;
-        employee.value.section.name = response.data.data.section.name;
+        employee.value.Section.id = response.data.data.section.id;
+        employee.value.Section.name = response.data.data.section.name;
         employee.value.isPerson = response.data.data.isPerson;
         isIn.value = response.data.data.isPerson == 0 ? false : true;
       }
@@ -198,7 +198,7 @@ onMounted(async () => {
           {{ t("EmployeeSection") }}
         </div>
         <input
-          v-model="employee.section.name"
+          v-model="employee.Section.name"
           type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />

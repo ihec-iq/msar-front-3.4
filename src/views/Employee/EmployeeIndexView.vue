@@ -2,7 +2,7 @@
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useSectionStore } from "@/stores/section";
+import { useSectionStore } from "@/stores/sectionStore";
 
 import { storeToRefs } from "pinia";
 
@@ -23,6 +23,7 @@ const dataBase = ref<Array<IEmployee>>([]);
 const { get_filter } = useEmployeeStore();
 
 import { limits } from "@/utils/defaultParams";
+import IButton from "@/components/ihec/IButton.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -36,7 +37,7 @@ watch(
 const addEmployee = () => {
   employee.value.id = 0;
   employee.value.name = "";
-  employee.value.section = { name: "", id: 0 };
+  employee.value.Section = { name: "", id: 0 };
   employee.value.isPerson = 0;
   router.push({
     name: "employeeAdd",
@@ -51,6 +52,7 @@ const filterByIDName = (employee: IEmployee) => {
   } else return false;
 };
 const makeFastSearch = () => {
+  return;
   // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
@@ -122,61 +124,55 @@ onMounted(async () => {
           @get-filter-data="getFilterData()"
           @make-fast-search="makeFastSearch()"
         ></IBtnSearch>
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+        <div
+          class="mr-2 ml-2 lg:mt-0 xs:mt-2 py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+        >
+          <p>{{ t("Sort By") }}:</p>
+          <select
+            aria-label="select"
+            v-model="searchFilter.limit"
+            class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
+            @change="getFilterData()"
           >
-            <p>{{ t("Sort By") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.limit"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData()"
+            <option
+              v-for="limit in limits"
+              :key="limit.val"
+              :value="limit.val"
+              :selected="limit.selected == true"
+              class="text-sm text-indigo-800"
             >
-              <option
-                v-for="limit in limits"
-                :key="limit.val"
-                :value="limit.val"
-                :selected="limit.selected == true"
-                class="text-sm text-indigo-800"
-              >
-                {{ limit.name }}
-              </option>
-            </select>
-          </div>
+              {{ limit.name }}
+            </option>
+          </select>
         </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[15%] xs:w-[81.5%]">
-            <div
-              class="py-3 px-4 flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-            >
-              <p>{{ t("EmployeeSection") }}:</p>
-              <select
-                aria-label="select"
-                v-model="searchFilter.sectionId"
-                class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1 font-medium"
-                @change="getFilterData()"
-              >
-                <option
-                  v-for="section in sections"
-                  :key="section.id"
-                  :value="section.id"
-                  :selected="section.id == 2"
-                  class="text-sm text-indigo-800 font-bold"
-                >
-                  {{ section.name }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <button
-            @click="getFilterData()"
-            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+        <div
+          class="mr-2 ml-2 lg:mt-0 xs:mt-2 py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+        >
+          <p>{{ t("EmployeeSection") }}:</p>
+          <select
+            aria-label="select"
+            v-model="searchFilter.sectionId"
+            class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1 font-medium"
+            @change="getFilterData()"
           >
-            {{ t("Search") }}
-          </button>
+            <option
+              v-for="section in sections"
+              :key="section.id"
+              :value="section.id"
+              :selected="section.id == 2"
+              class="text-sm text-indigo-800 font-bold"
+            >
+              {{ section.name }}
+            </option>
+          </select>
+        </div>
+        <div class="mr-2 ml-2 lg:mt-0 xs:mt-2 flex items-center">
+          <IButton
+            :on-click="getFilterData"
+            :text="t('Search')"
+            color="green"
+            type="outlined"
+          ></IButton>
         </div>
       </IRow>
       <IRow>
@@ -223,7 +219,7 @@ onMounted(async () => {
                       class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                     >
                       <th>{{ row.name }}</th>
-                      <th style="direction: ltr">{{ row.section.name }}</th>
+                      <th style="direction: ltr">{{ row.Section.name }}</th>
                       <th class="p-2 z-999">
                         <div class="dropdown">
                           <button
