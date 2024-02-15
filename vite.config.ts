@@ -5,7 +5,6 @@ import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import Components from "unplugin-vue-components/vite";
 import { VantResolver } from "unplugin-vue-components/resolvers";
-import { resolve } from "path";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
@@ -13,7 +12,14 @@ export default defineConfig({
     vue(),
     vueJsx(),
     Components({
-      resolvers: [VantResolver()],
+      resolvers: [
+        (I2) => {
+          // where `componentName` is always CapitalCase
+          if (I2.startsWith("I2")) return { name: I2.slice(3), from: "I2" };
+        },
+        VantResolver(),
+      ],
+      dts: true,
     }),
     [
       VitePWA({

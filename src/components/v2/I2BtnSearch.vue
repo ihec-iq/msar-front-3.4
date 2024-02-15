@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { t } from "@/utils/I18nPlugin";
 import { Icon } from "@iconify/vue";
-
-const props = defineProps({
-  searchText: {
-    type: String,
-    default: "Search",
-  },
-});
-
+import { t } from "@/utils/I18nPlugin";
 const fastSearch = defineModel();
+
 const emit = defineEmits(["getFilterData", "makeFastSearch"]);
 const inputRefSearch = ref<HTMLInputElement | null>(null);
 const Search = async (event: KeyboardEvent) => {
@@ -36,7 +29,7 @@ onMounted(async () => {
       v-model="fastSearch"
       @input="emit('makeFastSearch')"
       class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      :placeholder="t(props.searchText)"
+      :placeholder="t('UserSearch')"
     />
   </div>
 </template>

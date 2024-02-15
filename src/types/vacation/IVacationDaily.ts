@@ -21,6 +21,7 @@ export interface IVacationReason {
 export interface IVacationDailyFilter {
   limit: number;
   employeeId?: number;
+  employeeName?: string;
   issueDateFrom?: string;
   issueDateTo?: string;
   dayFrom?: string;

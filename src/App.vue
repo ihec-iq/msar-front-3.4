@@ -3,9 +3,9 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/authStore";
-//import { usePermissionStore } from "@/stores/permission";
+//import { usePermissionStore } from "@/stores/permissionStore";
 import Api from "./api/apiConfig";
-import { useConfigStore } from "@/stores/config";
+import { useConfigStore } from "@/stores/configStore";
 const { ConnectionString } = storeToRefs(useConfigStore());
 
 // const { getUser } = useAuthStore();
@@ -67,3 +67,4 @@ onMounted(async () => {
   background-image: url("./assets/image/beams-home@95.jpg");
 }
 </style>
+@/stores/configStore

@@ -7,14 +7,13 @@ import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "vue-router";
 import { getError } from "@/utils/helpers";
 import TextInput from "@/components/general/TextInput.vue";
-import { useI18n } from "@/stores/i18n/useI18n";
-import { useConfigStore } from "@/stores/config";
+import { t, setLocale, Languages } from "@/utils/I18nPlugin";
+import { useConfigStore } from "@/stores/configStore";
 import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
 import SimpleLoading from "@/components/general/SimpleLoading.vue";
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-const { t, setLocale, Languages } = useI18n();
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
@@ -108,9 +107,7 @@ onMounted(async () => {
         swalWithBootstrapButtons
           .fire({
             title: t("Are You Sure?"),
-            text: t(
-              "Your Server is down ,You want to open Connection Setting ?"
-            ),
+            text: t("Your Server is down ,You want to open Connection Setting ?"),
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: t("Yes, open it!"),
@@ -133,9 +130,7 @@ onMounted(async () => {
   <div
     class="relative z-30 overflow-y-hidden sm:flex sm:flex-row justify-evenly bg-transparent rounded-3xl"
   >
-    <div
-      class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md"
-    >
+    <div class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md">
       <div class="self-start hidden lg:flex flex-col text-gray-300">
         <!-- <p class="pr-3 text-sm opacity-75">
           Lorem ipsum is placeholder text commonly used in the graphic, print,
@@ -293,25 +288,19 @@ onMounted(async () => {
     <div class="waveWrapperInner bgTop">
       <div
         class="wave waveTop"
-        style="
-          background-image: url('http://front-end-noobs.com/jecko/img/wave-top.png');
-        "
+        style="background-image: url('http://front-end-noobs.com/jecko/img/wave-top.png')"
       ></div>
     </div>
     <div class="waveWrapperInner bgMiddle">
       <div
         class="wave waveMiddle"
-        style="
-          background-image: url('http://front-end-noobs.com/jecko/img/wave-mid.png');
-        "
+        style="background-image: url('http://front-end-noobs.com/jecko/img/wave-mid.png')"
       ></div>
     </div>
     <div class="waveWrapperInner bgBottom">
       <div
         class="wave waveBottom"
-        style="
-          background-image: url('http://front-end-noobs.com/jecko/img/wave-bot.png');
-        "
+        style="background-image: url('http://front-end-noobs.com/jecko/img/wave-bot.png')"
       ></div>
     </div>
   </div>
@@ -367,11 +356,7 @@ onMounted(async () => {
           </div>
           <div class="switch4">
             <label class="switch">
-              <input
-                type="checkbox"
-                @input="changeDark()"
-                v-model="themeDark"
-              />
+              <input type="checkbox" @input="changeDark()" v-model="themeDark" />
               <span class="slider"></span>
             </label>
           </div>
@@ -382,9 +367,7 @@ onMounted(async () => {
           </div>
           <div class="flex items-center">
             <!-- :class="{ 'rtl; bg-red-900 ': isLtr, 'bg-green-900': !isLtr }" -->
-            <div
-              class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3"
-            >
+            <div class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3">
               {{ isRtl ? "RTL" : "LTR" }}
             </div>
             <input
@@ -408,10 +391,7 @@ onMounted(async () => {
                   class="dropdown-content ltr:right-0 rtl:left-0 menu p-2 shadow bg-settingLight dark:bg-setting text-text dark:text-textLight rounded-box mt-5"
                 >
                   <li v-for="language in Languages" :key="language.code">
-                    <button
-                      @click="setLocale(language)"
-                      class="flex justify-between"
-                    >
+                    <button @click="setLocale(language)" class="flex justify-between">
                       {{ language.name }}
                     </button>
                   </li>
@@ -843,3 +823,4 @@ input:checked + .slider::before {
       </div>
   </div>
 </div></template> -->
+@/stores/configStore

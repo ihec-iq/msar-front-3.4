@@ -5,18 +5,17 @@ import { useRouter, useRoute } from "vue-router";
 import type { IUser } from "@/types/core/IUser";
 import { useRoleStore } from "@/stores/roles/roleStore";
 import type IRole from "@/types/role/IRole";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import TextInput from "@/components/inputs/TextInput.vue";
 import { useUserStore } from "@/stores/userStore";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import loadingFull from "@/components/general/loadingFull.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
-const { t } = useI18n();
 
 const roleStore = useRoleStore();
 const permissions = () => {
@@ -356,3 +355,4 @@ onMounted(async () => {
   }
 }
 </style>
+@/stores/permissionStore

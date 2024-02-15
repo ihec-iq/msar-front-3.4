@@ -1,33 +1,24 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
+import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-import type {
-  IVacationDaily,
-  IVacationDailyFilter,
-} from "@/types/vacation/IVacationDaily";
+import type { IVacationSick, IVacationSickFilter } from "@/types/vacation/IVacationSick";
+import { isNumeric } from "vant/lib/utils";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IVacationDaily>>([]);
-const dataBase = ref<Array<IVacationDaily>>([]);
+const data = ref<Array<IVacationSick>>([]);
 const dataPage = ref();
+const dataBase = ref<Array<IVacationSick>>([]);
+const vacationSick = useVacationSickStore();
 
-const { vacationDaily } = useVacationDailyStore();
-
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -36,26 +27,21 @@ const inputRefSearch = ref<HTMLInputElement | null>(null);
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
 const addItem = () => {
-  useVacationDailyStore().reset();
+  vacationSick.reset();
   router.push({
-    name: "vacationDailyAdd",
+    name: "vacationSickAdd",
   });
 };
-const Search = async (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    await getFilterData(1);
-  }
-};
+
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (_vacationDaily: IVacationDailyFilter) => {
-  if (_vacationDaily.dayFrom?.toString().includes(fastSearch.value)) {
+const filterByIDName = (_vacationSick: IVacationSickFilter) => {
+  if (_vacationSick.dayFrom?.toString().includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -66,17 +52,28 @@ const makeFastSearch = () => {
     //data.value = dataBase.value.filter(filterByIDName);
   }
 };
+const Search = async (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    await getFilterData(1);
+  }
+};
 //#endregion
 //#region Search
-const searchFilter = ref<IVacationDailyFilter>({
+const searchFilter = ref<IVacationSickFilter>({
   dayFrom: "",
-  limit: 6,
+  limit: 10,
 });
+const CNumber = (val: any = 0): number => {
+  if (isNumeric(val) == false) return 0;
+  return Number(val);
+};
+
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.limit = 0;
-  searchFilter.value.record = Number(fastSearch.value);
-  await useVacationDailyStore()
+  searchFilter.value.record = CNumber(fastSearch.value);
+  searchFilter.value.employeeName = fastSearch.value;
+  await vacationSick
     .get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -93,7 +90,7 @@ const getFilterData = async (page: number = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "vacationDailyUpdate",
+    name: "vacationSickUpdate",
     params: { id: id },
   });
 };
@@ -101,58 +98,36 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show vacations daily"]);
+  checkPermissionAccessArray(["show vacations sick"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+
+  await getFilterData(1);
   if (inputRefSearch.value) {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
-  await getFilterData(1);
 });
 </script>
 <template>
-  <div class="justify-between flex">
-    <PageTitle> {{ t("VacationDaily") }} </PageTitle>
-  </div>
-
-  <div class="flex">
-    <!-- <Nav class="w-[5%]" /> -->
-    <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div
-        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
-      >
-        <label for="table-search" class="sr-only">{{ t("Search") }}</label>
-        <div class="relative flex">
-          <div
-            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-          >
-            <svg
-              class="w-5 h-5 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-          </div>
-          <input
-            type="text"
-            id="table-search"
-            v-model="fastSearch"
-            ref="inputRefSearch"
-            @input="makeFastSearch()"
-            class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('SearchForUser')"
-          />
-        </div>
+  <IPage>
+    <template v-slot:header>
+      <IPageHeader :title="t('VacationSick')">
+        <template v-slot:buttons>
+          <IButton width="28" :onClick="addItem" :text="t('Add')" />
+        </template>
+      </IPageHeader>
+    </template>
+    <template v-slot:content>
+      <IRow>
+        <IBtnSearch
+          class="p-2 mx-2"
+          v-model="fastSearch"
+          @get-filter-data="getFilterData()"
+          @make-fast-search="makeFastSearch()"
+        ></IBtnSearch>
         <!-- limit -->
         <div
-          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+          class="py-2 limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
         >
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
@@ -176,16 +151,8 @@ onMounted(async () => {
             </select>
           </div>
         </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <button
-            @click="getFilterData(1)"
-            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
-          >
-            {{ t("Search") }}
-          </button>
-        </div>
-      </div>
-      <div class="w-full">
+      </IRow>
+      <IRow>
         <div class="flex flex-col">
           <div class="py-4 inline-block min-w-full lg:px-8">
             <!-- card -->
@@ -205,17 +172,13 @@ onMounted(async () => {
                   >
                     <!-- card -->
                     <div
-                      class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                      class="bg-cardLight font-Tajawal dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
                       v-for="vacation in data"
                       :key="vacation.id"
                     >
                       <div class="w-3/4 overflow-hidden">
-                        <div
-                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                        >
-                          <div
-                            class="text-2xl text-text dark:text-textLight mb-2"
-                          >
+                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                          <div class="text-2xl text-text dark:text-textLight mb-2">
                             {{ vacation.Vacation.Employee.name }}
                           </div>
                         </div>
@@ -281,31 +244,9 @@ onMounted(async () => {
             <SimpleLoading v-if="isLoading"></SimpleLoading>
             <!-- end card -->
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- bottom tool bar -->
-  <div class="m-5 fixed bottom-0 ltr:right-0 rtl:left-0">
-    <button
-      @click="addItem()"
-      class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-0 transition-all duration-300 text-white"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="w-6 h-6"
+        </div></IRow
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    </button>
-  </div>
+    </template>
+  </IPage>
 </template>
+@/stores/permissionStore

@@ -4,15 +4,15 @@ import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/authStore";
-import { useI18n } from "@/stores/i18n/useI18n";
 import router from "@/router";
 import { useRoute } from "vue-router";
-const { t, setLocale, Languages } = useI18n();
+import { t, setLocale, Languages } from "@/utils/I18nPlugin";
+
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
 const route = useRoute();
-import { useConfigStore } from "@/stores/config";
+import { useConfigStore } from "@/stores/configStore";
 const { Organization } = storeToRefs(useConfigStore());
 const colorMode = useColorMode({
   modes: {
@@ -106,7 +106,7 @@ onMounted(async () => {
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-bgLeftNavLight dark:bg-[#22262A] shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-2 rtl:mr-2 mb-5"
+    class="print:hidden flex text-white bg-white dark:bg-darkNav shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-2 rtl:mr-2 mb-5"
   >
     <div
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4 xs:w-full"
@@ -219,11 +219,7 @@ onMounted(async () => {
           </div>
           <div class="switch4">
             <label class="switch">
-              <input
-                type="checkbox"
-                @input="changeDark()"
-                v-model="themeDark"
-              />
+              <input type="checkbox" @input="changeDark()" v-model="themeDark" />
               <span class="slider"></span>
             </label>
           </div>
@@ -234,9 +230,7 @@ onMounted(async () => {
           </div>
           <div class="flex items-center">
             <!-- :class="{ 'rtl; bg-red-900 ': isLtr, 'bg-green-900': !isLtr }" -->
-            <div
-              class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3"
-            >
+            <div class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3">
               {{ isRtl ? "RTL" : "LTR" }}
             </div>
             <input
@@ -262,10 +256,7 @@ onMounted(async () => {
                   class="dropdown-content ltr:right-0 rtl:left-0 menu p-2 shadow bg-settingLight dark:bg-setting text-text dark:text-textLight rounded-box mt-5"
                 >
                   <li v-for="language in Languages" :key="language.code">
-                    <button
-                      @click="setLocale(language)"
-                      class="flex justify-between"
-                    >
+                    <button @click="setLocale(language)" class="flex justify-between">
                       {{ language.name }}
                     </button>
                   </li>
@@ -493,3 +484,4 @@ input:checked + .slider::before {
   color: yellow;
 }
 </style>
+@/stores/configStore

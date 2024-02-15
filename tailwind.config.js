@@ -117,6 +117,8 @@ module.exports = {
         backHover: "#163f7c",
         print: "#27BEC4",
         printHover: "#199a9e",
+        darkNav: "#2f3349",
+        bgLeftNav: "#1b2432",
         //#region "commits"
         //left nav bar and tool bar in top
         // for sitting

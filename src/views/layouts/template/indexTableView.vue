@@ -2,8 +2,8 @@
 //region"Basic Import"
 import SimpleLoading from "@/components/general/loading.vue";
 import { useArchiveStore } from "@/stores/archives/archive";
-import { useI18n } from "@/stores/i18n/useI18n";
-import { usePermissionStore } from "@/stores/permission";
+import { t } from "@/utils/I18nPlugin";
+import { usePermissionStore } from "@/stores/permissionStore";
 import type { IArchive, IArchiveFilter, IDocument } from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { storeToRefs } from "pinia";
@@ -16,7 +16,7 @@ import IButton from "@/components/ihec/IButton.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const { t } = useI18n();
+
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
 const dataPage = ref();
@@ -25,13 +25,7 @@ const dataBase = ref<Array<IArchive>>([]);
 const { archive } = useArchiveStore();
 const { get_filter } = useArchiveStore();
 const { archiveTypes } = storeToRefs(useArchiveStore());
-const limits = reactive([
-  { name: "10", val: 10, selected: true },
-  { name: "20", val: 12, selected: false },
-  { name: "30", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -459,3 +453,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
+@/stores/archives/archiveStore@/stores/permissionStore
