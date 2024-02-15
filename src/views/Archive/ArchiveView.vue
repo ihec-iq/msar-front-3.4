@@ -17,6 +17,8 @@ import IPageHeader from "@/components/ihec/IPageHeader.vue";
 import IButton from "@/components/ihec/IButton.vue";
 import { crud_delete } from "@/utils/crudTool";
 import IPageFooter from "@/components/ihec/IPageFooter.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import ISelect from "@/components/inputs/ISelect.vue";
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
 const { t } = useI18n();
@@ -244,6 +246,8 @@ onMounted(async () => {
   filesDataInput.value = [];
   await useArchiveStore().getArchiveTypes();
 });
+import { EnumDirection } from "@/utils/EnumSystem";
+
 </script>
 <template>
   <IPage>
@@ -273,25 +277,44 @@ onMounted(async () => {
       ><div class="w-full">
         <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
           <div class="w-12/12 col-span-4">
-            <div class="_inputLabel">{{ t("Title") }}</div>
-            <input v-model="archive.title" type="text" class="_input" />
+            <!-- <div class="_inputLabel">{{ t("Title") }}</div>
+            <input v-model="archive.title" type="text" class="_input" /> -->
+            <IInput
+              label="Title"
+              v-model="archive.title"
+              name="title"
+              type="text"
+              :dir="EnumDirection.LTR"
+            />
           </div>
-          <div class="w-12/12 mx-2 my-2">
-            <div class="_inputLabel">
+          <div class="w-12/12 m-2">
+            <!-- <div class="_inputLabel">
               {{ t("NumberBook") }}
             </div>
-            <input v-model="archive.number" type="text" class="_input" />
+            <input v-model="archive.number" type="text" class="_input" /> -->
+            <IInput
+              label="NumberBook"
+              v-model="archive.number"
+              name="number"
+              type="text"
+            />
           </div>
-          <div class="w-12/12 mx-2 my-2">
-            <div class="_inputLabel">
+          <div class="w-12/12 m-2">
+            <!-- <div class="_inputLabel">
               {{ t("Date") }}
             </div>
-            <input v-model="archive.issueDate" type="date" class="_input" />
+            <input v-model="archive.issueDate" type="date" class="_input" /> -->
+            <IInput
+              label="Date"
+              v-model="archive.issueDate"
+              name="issueDate"
+              type="date"
+            />
           </div>
-          <div class="w-12/12 mx-2 my-2">
-            <div class="_inputLabel">
+          <div class="w-12/12 m-2">
+            <!--  <span class="_inputLabel">
               {{ t("Type") }}
-            </div>
+            </span>
             <select v-model="archive.archiveTypeId" class="_input">
               <option
                 v-for="archiveType in archiveTypes"
@@ -300,17 +323,35 @@ onMounted(async () => {
               >
                 {{ archiveType.name }}
               </option>
-            </select>
+            </select> -->
+            <ISelect
+              :label="t('Archive Type')"
+              v-model="archive.archiveTypeId"
+              name="archiveTypeId"
+              :options="archiveTypes"
+            />
           </div>
-          <div class="w-12/12 mx-2 my-2">
-            <div class="_inputLabel">
+          <div class="w-12/12 m-2">
+            <!-- <div class="_inputLabel">
               {{ t("way") }}
             </div>
-            <input v-model="archive.way" type="text" class="_input" />
+            <input v-model="archive.way" type="text" class="_input" /> -->
+            <IInput
+              label="way"
+              v-model="archive.way"
+              name="way"
+              type="text"
+            />
           </div>
           <div class="w-full col-span-4 my-2">
-            <div class="_inputLabel">{{ t("Description") }}</div>
-            <input v-model="archive.description" type="text" class="_input" />
+            <!-- <div class="_inputLabel">{{ t("Description") }}</div>
+            <input v-model="archive.description" type="text" class="_input" /> -->
+            <IInput
+              label="Description"
+              v-model="archive.description"
+              name="description"
+              type="text"
+            />
           </div>
           <div class="w-12/12 my-2">
             <div class="_inputLabel">

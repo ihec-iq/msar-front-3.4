@@ -38,10 +38,11 @@ export const crud_delete = async ({ RouterGo, store, id }: DeleteParams) => {
         "success"
       );
       // Use nextTick to wait for the Vue instance to be updated
-    //   await router.isReady();
+      //   await router.isReady();
       //router.go(RouterGo);
     }
   } catch (error) {
     console.error("Error during deletion:", error);
   }
 };
+ 
