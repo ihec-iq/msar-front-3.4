@@ -8,7 +8,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
 import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const isLoading = ref(false);
@@ -17,13 +17,7 @@ const dataPage = ref();
 const dataBase = ref<Array<IInputVoucher>>([]);
 const { inputVoucher, get_filter } = useInputVoucherStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -302,3 +296,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/voucher1/inputVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore

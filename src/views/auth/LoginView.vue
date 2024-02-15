@@ -8,7 +8,7 @@ import { useRouter } from "vue-router";
 import { getError } from "@/utils/helpers";
 import TextInput from "@/components/general/TextInput.vue";
 import { t, setLocale, Languages } from "@/utils/I18nPlugin";
-import { useConfigStore } from "@/stores/config";
+import { useConfigStore } from "@/stores/configStore";
 import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
 import SimpleLoading from "@/components/general/SimpleLoading.vue";
@@ -823,3 +823,4 @@ input:checked + .slider::before {
       </div>
   </div>
 </div></template> -->
+@/stores/configStore

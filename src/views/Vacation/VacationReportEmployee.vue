@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 
@@ -23,20 +23,15 @@ import type { IVacationSick } from "@/types/vacation/IVacationSick";
 
 const { t } = useI18n();
 //#region Stores
-import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
+import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
 import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import { useVacationSickStore } from "@/stores/vacations/vacationSick";
+import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
 
 //endregion
 
 //#region Data
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
+
 const limit = ref(6);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
 const dataVacationDaily = ref<Array<IVacationDaily>>([]);
@@ -506,3 +501,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/vacations/vacationTimeStore@/stores/permissionStore@/stores/sectionStore

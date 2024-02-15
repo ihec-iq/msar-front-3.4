@@ -12,7 +12,7 @@ import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const outputVoucherStore = useOutputVoucherStore();
@@ -28,13 +28,7 @@ const data = ref<Array<IEmployeeHistory>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IEmployeeHistory>>([]);
 
-const limits = reactive([
-  { name: "6", val: 6, selected: false },
-  { name: "12", val: 12, selected: true },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const CorruptedVoucher = ref<{
   number: string;
@@ -517,3 +511,4 @@ onMounted(async () => {
 </template>
 <style></style>
 @/stores/employeeStore
+@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore

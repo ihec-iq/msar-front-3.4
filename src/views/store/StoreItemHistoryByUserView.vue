@@ -6,10 +6,10 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
-import { useStoringStore } from "@/stores/storing";
+import { useStoringStore } from "@/stores/storingStore";
 import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const outputVoucherStore = useOutputVoucherStore();
@@ -22,13 +22,7 @@ const dataBase = ref<Array<IStoreItemHistory>>([]);
 
 const { get_item } = useStoringStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: false },
-  { name: "12", val: 12, selected: true },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();

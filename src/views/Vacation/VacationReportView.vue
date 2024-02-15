@@ -5,9 +5,9 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import { useVacationStore } from "@/stores/vacations/vacation";
+import { useVacationStore } from "@/stores/vacations/vacationStore";
 import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { isNumber } from "@vueuse/core";
 const { checkPermissionAccessArray } = usePermissionStore();
 import JsonExcel from "vue-json-excel3";
@@ -20,21 +20,14 @@ const dataBase = ref<Array<IVacation>>([]);
 
 const { get_filter } = useVacationStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -132,12 +125,8 @@ const ToNumberShow = (val: any) => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div
-        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
-      >
-        <label for="table-search" class="sr-only">{{
-          t("VacationSearch")
-        }}</label>
+      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
+        <label for="table-search" class="sr-only">{{ t("VacationSearch") }}</label>
         <div class="relative flex">
           <div
             class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
@@ -167,9 +156,7 @@ const ToNumberShow = (val: any) => {
           />
         </div>
         <!-- limit -->
-        <div
-          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
+        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
@@ -315,11 +302,7 @@ const ToNumberShow = (val: any) => {
                             }}
                           </th>
                           <th>
-                            {{
-                              ToNumberShow(
-                                ToNumber(row.sumTime / 7) + row.sumDaily
-                              )
-                            }}
+                            {{ ToNumberShow(ToNumber(row.sumTime / 7) + row.sumDaily) }}
                           </th>
                           <th>
                             {{
@@ -336,8 +319,7 @@ const ToNumberShow = (val: any) => {
                           <th>
                             {{
                               ToNumberShow(
-                                ToNumber(row.newRecordSick) +
-                                  ToNumber(row.sumSick)
+                                ToNumber(row.newRecordSick) + ToNumber(row.sumSick)
                               )
                             }}
                           </th>
@@ -346,8 +328,7 @@ const ToNumberShow = (val: any) => {
                               ToNumberShow(
                                 row.oldRecordSick -
                                   ToNumber(
-                                    ToNumber(row.newRecordSick) +
-                                      ToNumber(row.sumSick)
+                                    ToNumber(row.newRecordSick) + ToNumber(row.sumSick)
                                   )
                               )
                             }}
@@ -387,3 +368,4 @@ const ToNumberShow = (val: any) => {
   </div>
 </template>
 <style></style>
+@/stores/vacations/vacationStore@/stores/permissionStore

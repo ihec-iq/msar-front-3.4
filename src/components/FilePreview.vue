@@ -233,3 +233,4 @@ const openFile = (path: string) => {
   }
 }
 </style>
+@/stores/archives/archiveStore

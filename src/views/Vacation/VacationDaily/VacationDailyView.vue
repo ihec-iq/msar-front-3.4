@@ -5,12 +5,12 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import { useVacationStore } from "@/stores/vacations/vacation";
+import { useVacationStore } from "@/stores/vacations/vacationStore";
 import type { IEmployee } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useVacationReasonStore } from "@/stores/vacations/vacationReason";
+import { useVacationReasonStore } from "@/stores/vacations/vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
 
@@ -456,7 +456,7 @@ onMounted(async () => {
       </button>
     </div>
   </div>
-  <div class="hiddens print:w-[900px] w-[900px] tablePrint m-2" id="printMe" print:rtl>
+  <div class="hidden print:w-[900px] w-[900px] tablePrint m-2" id="printMe" print:rtl>
     <div id="Header" class="w-[900px] print:w-[900px]">
       <br />
       <br />
@@ -649,3 +649,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/vacations/vacationStore@/stores/vacations/vacationReasonStore@/stores/permissionStore

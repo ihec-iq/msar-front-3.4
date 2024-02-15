@@ -4,7 +4,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import { VacationLinks } from "./VacationLinks";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 //#region Pagination
@@ -77,3 +77,4 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
+@/stores/permissionStore

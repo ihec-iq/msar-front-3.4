@@ -5,24 +5,17 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray, can } = usePermissionStore();
 import type { IDirectVoucher, IDirectVoucherFilter } from "@/types/IDirectVoucher";
-import { useDirectVoucherStore } from "@/stores/voucher/directVoucher";
+import { useDirectVoucherStore } from "@/stores/voucher1/directVoucher";
 
 const isLoading = ref(false);
 const data = ref<Array<IDirectVoucher>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IDirectVoucher>>([]);
 const { directVoucher, get_filter } = useDirectVoucherStore();
-
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -296,3 +289,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/voucher/directVoucher@/stores/permissionStore
