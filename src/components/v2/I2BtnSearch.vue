@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useI18n } from "@/stores/i18n/useI18n";
 import { Icon } from "@iconify/vue";
+import { t } from "@/utils/I18nPlugin";
 const fastSearch = defineModel();
-const { t } = useI18n();
+
 const emit = defineEmits(["getFilterData", "makeFastSearch"]);
 const inputRefSearch = ref<HTMLInputElement | null>(null);
 const Search = async (event: KeyboardEvent) => {

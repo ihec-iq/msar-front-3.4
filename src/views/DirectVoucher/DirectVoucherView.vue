@@ -8,13 +8,10 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 import { useDirectVoucherStore } from "@/stores/voucher/directVoucher";
 import type { IDirectVoucherItem } from "@/types/IDirectVoucher";
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 const { directVoucherItemsVSelect } = storeToRefs(useDirectVoucherStore());
 const directVoucherStore = useDirectVoucherStore();
-const { directVoucher, directVoucherEmployees } = storeToRefs(
-  useDirectVoucherStore()
-);
+const { directVoucher, directVoucherEmployees } = storeToRefs(useDirectVoucherStore());
 //region"Drag and Drop"
 
 //#endregion
@@ -106,10 +103,7 @@ const ChangeValueTotal = () => {
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
   ChangeValueTotal();
-  directVoucherStore.editItem(
-    indexSelectedVoucherItem.value,
-    VoucherItem.value
-  );
+  directVoucherStore.editItem(indexSelectedVoucherItem.value, VoucherItem.value);
   resetVoucherItem();
   showPop.value = false;
 };
@@ -127,14 +121,8 @@ const store = () => {
   formData.append("notes", directVoucher.value.notes.toString());
   formData.append("date", directVoucher.value.date.toString());
   formData.append("items", JSON.stringify(directVoucher.value.Items));
-  formData.append(
-    "employeeRequestId",
-    directVoucher.value.Employee.id.toString()
-  );
-  formData.append(
-    "signaturePerson",
-    String(directVoucher.value.signaturePerson)
-  );
+  formData.append("employeeRequestId", directVoucher.value.Employee.id.toString());
+  formData.append("signaturePerson", String(directVoucher.value.signaturePerson));
   directVoucherStore
     .store(formData)
     .then((response) => {
@@ -167,14 +155,8 @@ function update() {
   formData.append("notes", String(directVoucher.value.notes));
   formData.append("date", directVoucher.value.date.toString());
   formData.append("items", JSON.stringify(directVoucher.value.Items));
-  formData.append(
-    "employeeRequestId",
-    directVoucher.value.Employee.id.toString()
-  );
-  formData.append(
-    "signaturePerson",
-    String(directVoucher.value.signaturePerson)
-  );
+  formData.append("employeeRequestId", directVoucher.value.Employee.id.toString());
+  formData.append("signaturePerson", String(directVoucher.value.signaturePerson));
   directVoucherStore
     .update(directVoucher.value.id, formData)
     .then(async (response) => {
@@ -244,8 +226,7 @@ const showData = async (id: number) => {
         directVoucher.value.notes = response.data.data.notes;
         directVoucher.value.Items = response.data.data.Items;
         directVoucher.value.Employee = response.data.data.Employee;
-        directVoucher.value.signaturePerson =
-          response.data.data.signaturePerson;
+        directVoucher.value.signaturePerson = response.data.data.signaturePerson;
       }
     })
     .catch((errors) => {
@@ -455,9 +436,7 @@ onMounted(async () => {
           <div class="flex flex-col overflow-hidden w-full">
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Item
                 </div>
                 <!-- v-model="VoucherItem.directVoucherItem" -->
@@ -487,9 +466,7 @@ onMounted(async () => {
             </div>
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Serial Number
                 </div>
                 <input
@@ -499,9 +476,7 @@ onMounted(async () => {
                 />
               </div>
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Count
                 </div>
                 <input
@@ -513,9 +488,7 @@ onMounted(async () => {
                 />
               </div>
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Price
                 </div>
                 <input
@@ -526,9 +499,7 @@ onMounted(async () => {
                 />
               </div>
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Total
                 </div>
                 <input
@@ -540,9 +511,7 @@ onMounted(async () => {
             </div>
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-full">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Notes
                 </div>
                 <div
@@ -557,9 +526,7 @@ onMounted(async () => {
             </div>
           </div>
           <!-- add close form -->
-          <div
-            class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3"
-          >
+          <div class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3">
             <div class="flex justify-between">
               <div class="items-center ml-2">
                 <button
@@ -590,9 +557,7 @@ onMounted(async () => {
 
           <!-- vr line -->
           <div class="outer w-px h-full m-auto relative overflow-hidden ml-2">
-            <div
-              class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"
-            ></div>
+            <div class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"></div>
           </div>
         </van-popup>
       </div>
@@ -601,8 +566,7 @@ onMounted(async () => {
     <div
       :class="{
         'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-          !is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >

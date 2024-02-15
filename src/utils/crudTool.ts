@@ -1,8 +1,7 @@
 import Swal from "sweetalert2";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const { t } = useI18n();
 
 interface DeleteParams {
   RouterGo: number;
@@ -38,7 +37,7 @@ export const crud_delete = async ({ RouterGo, store, id }: DeleteParams) => {
         "success"
       );
       // Use nextTick to wait for the Vue instance to be updated
-    //   await router.isReady();
+      //   await router.isReady();
       //router.go(RouterGo);
     }
   } catch (error) {

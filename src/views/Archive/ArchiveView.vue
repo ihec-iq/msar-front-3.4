@@ -4,14 +4,12 @@ import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/archives/archive";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permission";
 import FilePreview from "@/components/FilePreview.vue";
 import DragDrop from "@/components/DragDrop.vue";
-import WangEditor from "@/components/WangEditor.vue";
 import { useDragDropStore } from "@/compositions/dragDrop";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import IPage from "@/components/ihec/IPage.vue";
 import IPageHeader from "@/components/ihec/IPageHeader.vue";
 import IButton from "@/components/ihec/IButton.vue";
@@ -19,7 +17,6 @@ import { crud_delete } from "@/utils/crudTool";
 import IPageFooter from "@/components/ihec/IPageFooter.vue";
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
-const { t } = useI18n();
 
 //region"Drag and Drop"
 
@@ -98,19 +95,14 @@ function update() {
   formData.append("title", archive.value.title.toString());
   formData.append(
     "description",
-    archive.value.description == null
-      ? ""
-      : archive.value.description.toString()
+    archive.value.description == null ? "" : archive.value.description.toString()
   );
   formData.append("issueDate", archive.value.issueDate.toString());
   formData.append(
     "number",
     archive.value.number == null ? "" : archive.value.number.toString()
   );
-  formData.append(
-    "way",
-    archive.value.way == null ? "" : archive.value.way.toString()
-  );
+  formData.append("way", archive.value.way == null ? "" : archive.value.way.toString());
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
@@ -247,8 +239,8 @@ onMounted(async () => {
 </script>
 <template>
   <IPage>
-    <template v-slot:header>
-      <IPageHeader :title="t(namePage)"> </IPageHeader>
+    <template v-slot:header> 
+      <IPageHeader :title="t(namePage)"> </IPageHeader> 
     </template>
     <template v-slot:content
       ><div class="w-full">

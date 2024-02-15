@@ -16,9 +16,7 @@ import DeleteButton from "@/components/dropDown/DeleteButton.vue";
 import DuplicateButton from "@/components/dropDown/DuplicateButton.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
-import { useI18n } from "@/stores/i18n/useI18n";
-
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 
 const router = useRouter();
 const roleData = ref<Array<IRole>>([]);
@@ -135,12 +133,8 @@ onMounted(async () => {
                     :key="role.id"
                   >
                     <div class="w-3/4 overflow-hidden">
-                      <div
-                        class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                      >
-                        <div
-                          class="text-2xl text-text dark:text-textLight mb-2"
-                        >
+                      <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                        <div class="text-2xl text-text dark:text-textLight mb-2">
                           {{ role.name }}
                         </div>
                         <div
@@ -185,10 +179,7 @@ onMounted(async () => {
                           aria-labelledby="dropdownMenuButton2"
                         >
                           <li>
-                            <EditButton
-                              @click="update(role.id)"
-                              :title="t('Edit')"
-                            />
+                            <EditButton @click="update(role.id)" :title="t('Edit')" />
                           </li>
                           <li>
                             <DeleteButton @click="Delete(role.id)" />

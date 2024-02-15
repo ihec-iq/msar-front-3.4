@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import { Icon } from "@iconify/vue";
 
 const props = defineProps({
@@ -11,7 +11,6 @@ const props = defineProps({
 });
 
 const fastSearch = defineModel();
-const { t } = useI18n();
 const emit = defineEmits(["getFilterData", "makeFastSearch"]);
 const inputRefSearch = ref<HTMLInputElement | null>(null);
 const Search = async (event: KeyboardEvent) => {
@@ -27,13 +26,8 @@ onMounted(async () => {
 </script>
 <template>
   <div class="relative flex">
-    <div
-      class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-    >
-      <Icon
-        icon="mdi:magnify"
-        class="w-5 h-5 text-gray-500 dark:text-gray-400"
-      />
+    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+      <Icon icon="mdi:magnify" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
     </div>
     <input
       type="text"

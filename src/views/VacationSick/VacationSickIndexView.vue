@@ -71,7 +71,7 @@ const Search = async (event: KeyboardEvent) => {
 //#region Search
 const searchFilter = ref<IVacationSickFilter>({
   dayFrom: "",
-  limit: 6,
+  limit: 10,
 });
 const CNumber = (val: any = 0): number => {
   if (isNumeric(val) == false) return 0;

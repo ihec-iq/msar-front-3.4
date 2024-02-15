@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useI18n } from "@/stores/i18n/useI18n";
 import { onMounted } from "vue";
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 const props = defineProps({
   title: { type: String, default: "تعديل" },
 });

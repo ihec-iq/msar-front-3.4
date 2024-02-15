@@ -12,6 +12,7 @@ export interface IVacationSick {
 
 export interface IVacationSickFilter {
   limit: number;
+  employeeId?: number;
   employeeName?: string;
   issueDateFrom?: string;
   issueDateTo?: string;
