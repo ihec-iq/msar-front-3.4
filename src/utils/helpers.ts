@@ -1,5 +1,4 @@
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 export const getError = (error: {
   response: {
     data: { errors: { [s: string]: unknown } | ArrayLike<unknown> };

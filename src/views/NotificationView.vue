@@ -2,7 +2,7 @@
 import { useRouter, useRoute } from "vue-router";
 import { ref, onMounted, onBeforeMount } from "vue";
 import Swal from "sweetalert2";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
@@ -284,3 +284,4 @@ onMounted(async () => {
   }
 }
 </style>
+@/stores/permissionStore

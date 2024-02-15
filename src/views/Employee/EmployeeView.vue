@@ -2,15 +2,16 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useSectionStore } from "@/stores/section";
+import { useSectionStore } from "@/stores/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
+import type { IUser } from "@/types/core/IUser";
+import { useUserStore } from "@/stores/userStore";
 
 //region"Drag and Drop"
 
@@ -34,6 +35,7 @@ const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<String | null>();
+const SelectedUsers = ref<Array<IUser>>([]);
 //#endregion
 //#region CURD
 const store = () => {
@@ -43,19 +45,14 @@ const store = () => {
   formData.append("id", employee.value.id.toString());
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("sectionId", employee.value.section.id.toString());
+  formData.append("sectionId", employee.value.Section.id.toString());
+  formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", employee.value.number.toString());
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
-  formData.append(
-    "initVacationSick",
-    employee.value.initVacationSick.toString()
-  );
-  formData.append(
-    "takeVacationSick",
-    employee.value.takeVacationSick.toString()
-  );
+  formData.append("initVacationSick", employee.value.initVacationSick.toString());
+  formData.append("takeVacationSick", employee.value.takeVacationSick.toString());
 
   employeeStore
     .store(formData)
@@ -88,19 +85,14 @@ function update() {
   employee.value.isPerson = isIn.value ? 1 : 0;
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("sectionId", employee.value.section.id.toString());
+  formData.append("sectionId", employee.value.Section.id.toString());
+  formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", employee.value.number.toString());
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
-  formData.append(
-    "initVacationSick",
-    employee.value.initVacationSick.toString()
-  );
-  formData.append(
-    "takeVacationSick",
-    employee.value.takeVacationSick.toString()
-  );
+  formData.append("initVacationSick", employee.value.initVacationSick.toString());
+  formData.append("takeVacationSick", employee.value.takeVacationSick.toString());
   employeeStore
     .update(employee.value.id, formData)
     .then((response) => {
@@ -165,8 +157,9 @@ const showData = async () => {
       if (response.status == 200) {
         employee.value.id = response.data.data.id;
         employee.value.name = response.data.data.name;
-        employee.value.section.id = response.data.data.section.id;
-        employee.value.section.name = response.data.data.section.name;
+        employee.value.Section.id = response.data.data.section.id;
+        employee.value.Section.name = response.data.data.section.name;
+        employee.value.User = response.data.data.User;
         employee.value.isPerson = response.data.data.isPerson;
         isIn.value = response.data.data.isPerson == 0 ? false : true;
       }
@@ -203,6 +196,11 @@ onMounted(async () => {
     employee.value.id = id.value;
     namePage.value = t("EmployeeUpdate");
   }
+  await useUserStore()
+    .get()
+    .then((response) => {
+      SelectedUsers.value = response.data.data;
+    });
 });
 </script>
 <template>
@@ -227,15 +225,32 @@ onMounted(async () => {
         >
           {{ t("EmployeeSection") }}
         </div>
-        <select v-model="employee.section.id" class="p-2">
-          <option
-            v-for="section in sections"
-            :key="section.id"
-            :value="section.id"
-          >
+        <select v-model="employee.Section.id" class="p-2">
+          <option v-for="section in sections" :key="section.id" :value="section.id">
             {{ section.name }}
           </option>
         </select>
+      </div>
+      <div class="w-11/12 mr-2">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
+          {{ t("User") }}
+        </div>
+        <vSelect
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          v-model="employee.User"
+          :options="SelectedUsers"
+          :reduce="(user: IUser) => user"
+          label="name"
+          :getOptionLabel="(user: IUser) => user.name"
+        >
+          <template #option="{ name }">
+            <div>
+              <span>{{ name }}</span>
+            </div>
+          </template>
+        </vSelect>
       </div>
       <div class="w-11/12 mr-2">
         <div class="form-control w-52">
@@ -259,8 +274,7 @@ onMounted(async () => {
     <div
       :class="{
         'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-          !is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >
@@ -373,3 +387,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/permissionStore@/stores/sectionStore

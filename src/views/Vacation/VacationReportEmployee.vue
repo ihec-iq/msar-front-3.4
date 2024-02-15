@@ -2,12 +2,12 @@
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useSectionStore } from "@/stores/section";
+import { useSectionStore } from "@/stores/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 
@@ -23,20 +23,15 @@ import type { IVacationSick } from "@/types/vacation/IVacationSick";
 
 const { t } = useI18n();
 //#region Stores
-import { useVacationTimeStore } from "@/stores/vacations/vacationTime";
+import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
 import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import { useVacationSickStore } from "@/stores/vacations/vacationSick";
+import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
 
 //endregion
 
 //#region Data
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
+
 const limit = ref(6);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
 const dataVacationDaily = ref<Array<IVacationDaily>>([]);
@@ -129,8 +124,8 @@ const showData = async () => {
       if (response.status == 200) {
         employee.value.id = response.data.data.id;
         employee.value.name = response.data.data.name;
-        employee.value.section.id = response.data.data.section.id;
-        employee.value.section.name = response.data.data.section.name;
+        employee.value.Section.id = response.data.data.section.id;
+        employee.value.Section.name = response.data.data.section.name;
         employee.value.isPerson = response.data.data.isPerson;
         isIn.value = response.data.data.isPerson == 0 ? false : true;
       }
@@ -203,7 +198,7 @@ onMounted(async () => {
           {{ t("EmployeeSection") }}
         </div>
         <input
-          v-model="employee.section.name"
+          v-model="employee.Section.name"
           type="text"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
@@ -506,3 +501,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/vacations/vacationTimeStore@/stores/permissionStore@/stores/sectionStore

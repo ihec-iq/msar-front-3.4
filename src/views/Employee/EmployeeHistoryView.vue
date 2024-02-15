@@ -3,16 +3,16 @@ import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
-import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
+import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
+import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const outputVoucherStore = useOutputVoucherStore();
@@ -22,20 +22,13 @@ const { employees } = storeToRefs(useEmployeeStore());
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
-const { t } = useI18n();
 const isLoading = ref(false);
 const IsShowCorrupted = ref(false);
 const data = ref<Array<IEmployeeHistory>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IEmployeeHistory>>([]);
 
-const limits = reactive([
-  { name: "6", val: 6, selected: false },
-  { name: "12", val: 12, selected: true },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const CorruptedVoucher = ref<{
   number: string;
@@ -55,8 +48,7 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -84,7 +76,7 @@ const makeFastSearch = () => {
 const { SelectedOutItemCorrupted } = storeToRefs(corruptedVoucherStore);
 //#region Search
 const searchFilter = ref<IEmployeeFilter>({
-  limit: 6,
+  limit: 10,
   checked: true,
   name: "",
   employeeId: 0,
@@ -164,9 +156,7 @@ onMounted(async () => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div
-        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
-      >
+      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
         <label for="table-search" class="sr-only">{{ t("Search") }}</label>
         <div class="relative flex">
           <div
@@ -196,9 +186,7 @@ onMounted(async () => {
           />
         </div>
         <!-- limit -->
-        <div
-          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
+        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
@@ -296,11 +284,7 @@ onMounted(async () => {
                     />
                   </th>
                   <th>
-                    <input
-                      class="w-[450px] p-2"
-                      type="text"
-                      :value="row.notes"
-                    />
+                    <input class="w-[450px] p-2" type="text" :value="row.notes" />
                   </th>
                   <th>
                     <button
@@ -527,3 +511,4 @@ onMounted(async () => {
 </template>
 <style></style>
 @/stores/employeeStore
+@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore@/stores/warehouse/outputVoucher@/stores/warehouse/corruptedVoucher

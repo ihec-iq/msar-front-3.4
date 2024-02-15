@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DragDropFilePreview from "@/components/DragDropFilePreview.vue";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import { storeToRefs } from "pinia";
 import { useDragDropStore } from "@/compositions/dragDrop";
 import { ref } from "vue";
@@ -16,8 +16,6 @@ function onDropFile(files: File[] | null) {
 
 const { onInputChange, addFilesInput } = useDragDropStore();
 const { filesDataInput } = storeToRefs(useDragDropStore());
-
-const { t } = useI18n();
 </script>
 <template>
   <div class="w-full p-6">

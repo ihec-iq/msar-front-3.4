@@ -5,10 +5,10 @@ import router from "./router";
 import "./assets/main.css";
 import "./assets/vue-select.css";
 import "./assets/print.css";
+import { t } from "./utils/I18nPlugin";
 import vSelect from "vue-select";
 import { MotionPlugin } from "@vueuse/motion";
 import { Icon } from "@iconify/vue";
-import { registerComponents } from "./components/registerComponents";
 
 const app = createApp(App);
 app.component("vSelect", vSelect);
@@ -23,5 +23,7 @@ app.directive("focus", {
     el.focus();
   },
 });
+app.config.globalProperties.$trns = t;
+
 //registerComponents(app);
 app.mount("#app");

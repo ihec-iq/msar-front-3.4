@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { Links } from "@/components/fixed/FixedMenu";
-import { useI18n } from "@/stores/i18n/useI18n";
-import { usePermissionStore } from "@/stores/permission";
+import { t } from "@/utils/I18nPlugin";
+import { usePermissionStore } from "@/stores/permissionStore";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-const { t } = useI18n();
 //#region nav menu
 const { permissions } = storeToRefs(usePermissionStore());
 const filteredLinks = computed(() =>
   Links.filter((link) => {
     // Check if any of the link's permissions are included in userPermissions
     if (permissions.value == undefined) return;
-    return link.permissions.some((permission) =>
-      permissions.value.includes(permission)
-    );
+    return link.permissions.some((permission) => permissions.value.includes(permission));
   })
 );
 // watch(nav, newSearchQuery => {
@@ -35,9 +32,7 @@ const filteredLinks = computed(() =>
         href=""
         class="group relative block sm:h-50 lg:h-60 h-32 rounded-lg bg-gray-200"
       >
-        <span
-          class="absolute inset-0 border-2 border-dashed border-black"
-        ></span>
+        <span class="absolute inset-0 border-2 border-dashed border-black"></span>
 
         <div
           class="relative flex h-full transform items-end border-2 border-black bg-white transition-transform group-hover:-translate-x-2 group-hover:-translate-y-2"
@@ -122,3 +117,4 @@ const filteredLinks = computed(() =>
     </router-link>
   </div> -->
 </template>
+@/stores/permissionStore

@@ -2,18 +2,16 @@
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useSectionStore } from "@/stores/section";
+import { useSectionStore } from "@/stores/sectionStore";
 
 import { storeToRefs } from "pinia";
 
-import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-const { t } = useI18n();
 const isLoading = ref(false);
 const { employee } = storeToRefs(useEmployeeStore());
 const { sections } = storeToRefs(useSectionStore());
@@ -24,28 +22,22 @@ const dataPage = ref();
 const dataBase = ref<Array<IEmployee>>([]);
 const { get_filter } = useEmployeeStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: false },
-  { name: "12", val: 12, selected: true },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
+import IButton from "@/components/ihec/IButton.vue";
 
 const route = useRoute();
 const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
 const addEmployee = () => {
   employee.value.id = 0;
   employee.value.name = "";
-  employee.value.section = { name: "", id: 0 };
+  employee.value.Section = { name: "", id: 0 };
   employee.value.isPerson = 0;
   router.push({
     name: "employeeAdd",
@@ -60,6 +52,7 @@ const filterByIDName = (employee: IEmployee) => {
   } else return false;
 };
 const makeFastSearch = () => {
+  return;
   // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
@@ -71,7 +64,7 @@ const makeFastSearch = () => {
 const searchFilter = ref<IEmployeeFilter>({
   name: "",
   sectionId: 0,
-  limit: 6,
+  limit: 10,
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
@@ -132,64 +125,54 @@ onMounted(async () => {
           @make-fast-search="makeFastSearch()"
         ></IBtnSearch>
         <div
-          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+          class="mr-2 ml-2 lg:mt-0 xs:mt-2 py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
         >
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+          <p>{{ t("Sort By") }}:</p>
+          <select
+            aria-label="select"
+            v-model="searchFilter.limit"
+            class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
+            @change="getFilterData()"
           >
-            <p>{{ t("Sort By") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.limit"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData()"
+            <option
+              v-for="limit in limits"
+              :key="limit.val"
+              :value="limit.val"
+              :selected="limit.selected == true"
+              class="text-sm text-indigo-800"
             >
-              <option
-                v-for="limit in limits"
-                :key="limit.val"
-                :value="limit.val"
-                :selected="limit.selected == true"
-                class="text-sm text-indigo-800"
-              >
-                {{ limit.name }}
-              </option>
-            </select>
-          </div>
+              {{ limit.name }}
+            </option>
+          </select>
         </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <div
-            class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[15%] xs:w-[81.5%]"
+        <div
+          class="mr-2 ml-2 lg:mt-0 xs:mt-2 py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+        >
+          <p>{{ t("EmployeeSection") }}:</p>
+          <select
+            aria-label="select"
+            v-model="searchFilter.sectionId"
+            class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1 font-medium"
+            @change="getFilterData()"
           >
-            <div
-              class="py-3 px-4   flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
+            <option
+              v-for="section in sections"
+              :key="section.id"
+              :value="section.id"
+              :selected="section.id == 2"
+              class="text-sm text-indigo-800 font-bold"
             >
-              <p>{{ t("EmployeeSection") }}:</p>
-              <select
-                aria-label="select"
-                v-model="searchFilter.sectionId"
-                class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1 font-medium"
-                @change="getFilterData()"
-              >
-                <option
-                  v-for="section in sections"
-                  :key="section.id"
-                  :value="section.id"
-                  :selected="section.id == 2"
-                  class="text-sm text-indigo-800 font-bold"
-                >
-                  {{ section.name }}
-                </option>
-              </select>
-            </div>
-          </div>
+              {{ section.name }}
+            </option>
+          </select>
         </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <button
-            @click="getFilterData()"
-            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
-          >
-            {{ t("Search") }}
-          </button>
+        <div class="mr-2 ml-2 lg:mt-0 xs:mt-2 flex items-center">
+          <IButton
+            :on-click="getFilterData"
+            :text="t('Search')"
+            color="green"
+            type="outlined"
+          ></IButton>
         </div>
       </IRow>
       <IRow>
@@ -220,7 +203,7 @@ onMounted(async () => {
                       </th>
                       <th scope="col" class="text-sm font-medium px-6 py-4">
                         {{ t("section") }}
-                      </th> 
+                      </th>
 
                       <th scope="col" class="text-sm font-medium px-6 py-4">
                         {{ t("Details") }}
@@ -236,7 +219,7 @@ onMounted(async () => {
                       class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                     >
                       <th>{{ row.name }}</th>
-                      <th style="direction: ltr">{{ row.section.name }}</th> 
+                      <th style="direction: ltr">{{ row.Section.name }}</th>
                       <th class="p-2 z-999">
                         <div class="dropdown">
                           <button
@@ -310,3 +293,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/permissionStore@/stores/sectionStore

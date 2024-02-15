@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref, shallowRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useArchiveStore } from "@/stores/archives/archive";
+import { useArchiveStore } from "@/stores/archives/archiveStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 import FilePreview from "@/components/FilePreview.vue";
 import DragDrop from "@/components/DragDrop.vue";
-import WangEditor from "@/components/WangEditor.vue";
 import { useDragDropStore } from "@/compositions/dragDrop";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import IPage from "@/components/ihec/IPage.vue";
 import IPageHeader from "@/components/ihec/IPageHeader.vue";
 import IButton from "@/components/ihec/IButton.vue";
@@ -21,7 +19,6 @@ import IInput from "@/components/inputs/IInput.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
-const { t } = useI18n();
 
 //region"Drag and Drop"
 
@@ -100,19 +97,14 @@ function update() {
   formData.append("title", archive.value.title.toString());
   formData.append(
     "description",
-    archive.value.description == null
-      ? ""
-      : archive.value.description.toString()
+    archive.value.description == null ? "" : archive.value.description.toString()
   );
   formData.append("issueDate", archive.value.issueDate.toString());
   formData.append(
     "number",
     archive.value.number == null ? "" : archive.value.number.toString()
   );
-  formData.append(
-    "way",
-    archive.value.way == null ? "" : archive.value.way.toString()
-  );
+  formData.append("way", archive.value.way == null ? "" : archive.value.way.toString());
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
@@ -252,26 +244,7 @@ import { EnumDirection } from "@/utils/EnumSystem";
 <template>
   <IPage>
     <template v-slot:header>
-      <IPageHeader :title="t(namePage)">
-        <template v-slot:buttons>
-          <div class="flex gap-2">
-            <IButton
-              v-if="archive.id == 0"
-              :text="t('Create')"
-              :onClick="store"
-            />
-            <IButton v-else :text="t('Update')" :onClick="update" />
-            <IButton
-              v-if="archive.id != 0"
-              color="red"
-              type="outlined"
-              :text="t('Delete')"
-              :onClick="Delete"
-              class="hover:text-white"
-            />
-          </div>
-        </template>
-      </IPageHeader>
+      <IPageHeader :title="t(namePage)"> </IPageHeader>
     </template>
     <template v-slot:content
       ><div class="w-full">
@@ -398,64 +371,21 @@ import { EnumDirection } from "@/utils/EnumSystem";
           </div>
           <div id="DropZone"></div>
         </div>
-        <!-- bottom tool bar -->
-        <!-- <div
-          :class="{
-            'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-            'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-              !is,
-          }"
-          class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-        >
-          <div class="flex ltr:ml-8 rtl:mr-8">
-            <div class="items-center mr-3">
-              <button
-                v-if="archive.id == 0"
-                @click="store()"
-                class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-              >
-                {{ t("Create") }}
-              </button>
-              <button
-                v-else
-                @click="update()"
-                class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-              >
-                {{ t("Update") }}
-              </button>
-              <button
-                v-if="archive.id != 0"
-                @click="Delete()"
-                class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
-              >
-                {{ t("Delete") }}
-              </button>
-            </div>
-          </div>
+        <div class="max-w-screen-xl flex flex-wrap flex-row-reverse justify-between p-4">
+          <!-- end -->
+          <IButton v-if="archive.id == 0" :text="t('Create')" :onClick="store" />
+          <IButton v-else :text="t('Update')" :onClick="update" />
+          <!-- start -->
+          <!-- <IButton :text="t('Back')" :onClick="back" /> -->
+          <IButton
+            v-if="archive.id != 0"
+            color="red"
+            type="outlined"
+            :text="t('Delete')"
+            :onClick="Delete"
+          />
         </div>
-        <div
-          :class="{
-            'ltr:left-4 rtl:right-4': is,
-            'ltr:left-28 rtl:right-28': !is,
-          }"
-          class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-        >
-          <button
-            @click="back()"
-            class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-          >
-            {{ t("Back") }}
-          </button>
-        </div> -->
-        <!-- end bottom tool -->
       </div>
-    </template>
-    <template v-slot:footer>
-      <IPageFooter>
-        <template v-slot:buttons>
-          <IButton :text="t('Back')" :onClick="back" />
-        </template>
-      </IPageFooter>
     </template>
   </IPage>
 </template>
@@ -534,3 +464,4 @@ html.dark {
   /* ...others... */
 }
 </style>
+@/stores/archives/archiveStore@/stores/permissionStore

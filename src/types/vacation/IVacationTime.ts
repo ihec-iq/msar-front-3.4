@@ -14,6 +14,7 @@ export interface IVacationTime {
 export interface IVacationTimeFilter {
   limit: number;
   employeeId?: number;
+  employeeName?: string;
   issueDateFrom?: string;
   issueDateTo?: string;
   dayFrom?: string;

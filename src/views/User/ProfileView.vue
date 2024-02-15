@@ -2,12 +2,12 @@
 import { onMounted, reactive, ref } from "vue";
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
-import type IUser from "@/types/core/IUser";
+import type { IUser } from "@/types/core/IUser";;
 import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { useRoleStore } from "@/stores/roles/roleStore";
 import type IRole from "@/types/role/IRole";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
@@ -17,7 +17,6 @@ import { useAuthStore } from "@/stores/authStore";
 const user = useAuthStore();
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
-const { t } = useI18n();
 
 const roleStore = useRoleStore();
 const permissions = () => {
@@ -159,11 +158,7 @@ onMounted(async () => {
               </div>
             </div>
             <div class="flex justify-center">
-              <input
-                type="checkbox"
-                v-model="check_active"
-                class="toggle toggle-info"
-              />
+              <input type="checkbox" v-model="check_active" class="toggle toggle-info" />
               <div
                 class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
               >

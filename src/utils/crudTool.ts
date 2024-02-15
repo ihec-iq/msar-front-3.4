@@ -1,8 +1,7 @@
 import Swal from "sweetalert2";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const { t } = useI18n();
 
 interface DeleteParams {
   RouterGo: number;

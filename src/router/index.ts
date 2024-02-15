@@ -1,28 +1,27 @@
 import { createRouter, createWebHistory } from "vue-router";
 import notification from "@/views/NotificationView.vue";
-import archive from "./archives/archiveRoute";
-//#region for split routes in many files
-// import reports from "./reports/index";
-// import role from "./role/index";
-//#endregion
+ 
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
-import item from "./item/itemRoute";
-import inputVoucher from "./voucher/inputVoucherRoute";
-import outputVoucher from "./voucher/outputVoucherRoute";
-import corruptedVoucher from "./voucher/corruptedVoucherRoute";
-import directVoucher from "./voucher/directVoucherRoute";
-import itemCategory from "./item/itemCategoryRoute";
-import vacation from "./vacation/vacationRoute";
-import userRoute from "./user/userRoute";
-import roleRoute from "./role/roleRoute";
-import store from "./store/storeRoute";
-import DefaultLayout from "@/views/layouts/MainView.vue";
-
-import employee from "./user/employeeRoute";
-
 //#endregion
 
+//#region RouteArray
+import archiveRoute from "./archives/archiveRoute";
+import itemRoute from "./item/itemRoute";
+import inputVoucherRoute from "./warehouse/inputVoucherRoute";
+import outputVoucherRoute from "./warehouse/outputVoucherRoute";
+import corruptedVoucherRoute from "./warehouse/corruptedVoucherRoute";
+import directVoucherRoute from "./warehouse/directVoucherRoute";
+import itemCategoryRoute from "./item/itemCategoryRoute";
+import vacationRoute from "./vacation/vacationRoute";
+import userRoute from "./user/userRoute";
+import roleRoute from "./role/roleRoute";
+import warehouseRoute from "./warehouse/warehouseRoute";
+import employeeRoute from "./user/employeeRoute"; 
+//#endregion
+
+
+import DefaultLayout from "@/views/layouts/MainView.vue";
 const router = createRouter({
   history: createWebHistory(
     process.env.NODE_ENV === "production" ? "/10/" : "/"
@@ -44,18 +43,18 @@ const router = createRouter({
       name: "main",
       component: DefaultLayout,
       children: [
-        ...archive,
-        ...item,
-        ...itemCategory,
-        ...inputVoucher,
-        ...outputVoucher,
-        ...corruptedVoucher,
-        ...directVoucher,
-        ...vacation,
+        ...archiveRoute,
+        ...itemRoute,
+        ...itemCategoryRoute,
+        ...inputVoucherRoute,
+        ...outputVoucherRoute,
+        ...corruptedVoucherRoute,
+        ...directVoucherRoute,
+        ...vacationRoute,
         ...userRoute,
         ...roleRoute,
-        ...store,
-        ...employee,
+        ...warehouseRoute,
+        ...employeeRoute,
         {
           path: "/dashboard",
           name: "Dashboard",

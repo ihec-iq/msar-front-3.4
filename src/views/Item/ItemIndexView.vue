@@ -1,38 +1,30 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/item/item";
+import { useItemStore } from "@/stores/item/itemStore";
 import PageTitle from "@/components/general/namePage.vue";
 import type { IItem, IItemFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { useI18n } from "@/stores/i18n/useI18n";
+import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permission";
+import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
-const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IItem>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IItem>>([]);
 const { item, get_filter } = useItemStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -50,10 +42,7 @@ const addItem = () => {
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (item: IItem) => {
-  if (
-    item.name.includes(fastSearch.value) ||
-    item.code.includes(fastSearch.value)
-  ) {
+  if (item.name.includes(fastSearch.value) || item.code.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -68,7 +57,7 @@ const makeFastSearch = () => {
 //#region Search
 const searchFilter = ref<IItemFilter>({
   name: "",
-  limit: 6,
+  limit: 10,
   description: "",
 });
 const getFilterData = async (page = 1) => {
@@ -112,12 +101,7 @@ onMounted(async () => {
       :to="{ name: 'itemCategoryIndex' }"
       class="float-left flex m-5 btn-outline btn"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        viewBox="0 0 24 24"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
         <path
           fill="currentColor"
           d="M4 2a2 2 0 0 0-2 2v10h2V4h10V2H4m4 4a2 2 0 0 0-2 2v10h2V8h10V6H8m12 6v8h-8v-8h8m0-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2Z"
@@ -130,9 +114,7 @@ onMounted(async () => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div
-        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
-      >
+      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
         <label for="table-search" class="sr-only">{{ t("Search") }}</label>
         <div class="relative flex">
           <div
@@ -162,9 +144,7 @@ onMounted(async () => {
           />
         </div>
         <!-- limit -->
-        <div
-          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
+        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
@@ -221,17 +201,11 @@ onMounted(async () => {
                       :key="item.id"
                     >
                       <div class="w-3/4 overflow-hidden">
-                        <div
-                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                        >
-                          <div
-                            class="text-2xl text-text dark:text-textLight mb-2"
-                          >
+                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                          <div class="text-2xl text-text dark:text-textLight mb-2">
                             {{ item.name }}
                           </div>
-                          <div
-                            class="text-text dark:text-textGray mb-2 justify-between"
-                          >
+                          <div class="text-text dark:text-textGray mb-2 justify-between">
                             <span>{{ t("ItemCode") }}: {{ item.code }}</span>
                             <span class="float-left flex">
                               {{ item.Category.name }}
@@ -243,10 +217,7 @@ onMounted(async () => {
                               >
                                 <g id="evaCameraOutline0" fill="#7f7e7e">
                                   <g id="evaCameraOutline1">
-                                    <g
-                                      id="evaCameraOutline2"
-                                      fill="currentColor"
-                                    >
+                                    <g id="evaCameraOutline2" fill="currentColor">
                                       <path
                                         d="M19 7h-3V5.5A2.5 2.5 0 0 0 13.5 3h-3A2.5 2.5 0 0 0 8 5.5V7H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3Zm-9-1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V7h-4ZM20 18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1Z"
                                       />
@@ -339,3 +310,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/item1/item @/stores/item/itemStore@/stores/permissionStore

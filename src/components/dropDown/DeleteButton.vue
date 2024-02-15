@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+import { t } from "@/utils/I18nPlugin";
 </script>
 <template>
   <button
