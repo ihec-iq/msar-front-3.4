@@ -89,15 +89,16 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="flex fixed h-full bg-bgLeftNavLight dark:bg-bgLeftNav nav print:hidden duration-500"
+    class="flex fixed h-full z-[999] bg-white dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
+    :class="[isClose ? 'absolute lg:w-20 xs:w-[66px]' : 'lg:w-64  ']"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
     <div
-      class="LeftNav bg-bgLeftNavLight ltr:pl-2 rtl:pr-2 z-50 dark:bg-bgLeftNav w-20 flex-none flex flex-col h-full"
+      class="LeftNav z-50 bg-white dark:bg-darkNav flex flex-col h-full"
     >
       <div
-        class="shadow-sm shadow-slate-100 bg-white dark:bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between"
+        class="bg-white dark:bg-darkNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
         <div
           v-motion
@@ -106,7 +107,7 @@ onMounted(() => {
           :variants="{ custom: { scale: 2 } }"
           :delay="300"
           v-if="!isClose"
-          class="fixed ltr:left-[275px] rtl:right-[275px] top-4 text-white"
+          class="lg:fixed ltr:left-[225px] rtl:right-[225px] top-4 text-white lg:block xs:hidden"
         >
           <button @click="changeStackSideBar()" v-if="isCloseStick">
             <svg
@@ -114,7 +115,7 @@ onMounted(() => {
               width="24"
               height="24"
               viewBox="0 0 24 24"
-              class="text-textLight"
+              class="text-black"
             >
               <path
                 fill="currentColor"
@@ -137,72 +138,69 @@ onMounted(() => {
             </svg>
           </button>
         </div>
-        <nav class="flex items-center space-x-0 flex-col space-y-2">
-          <!-- feature -->
-          <router-link
-            v-for="Link in filteredLinks"
-            :key="Link.routerName"
-            :to="{ name: Link.routerName }"
-            @click.prevent="tab = Link.tab"
-          >
-            <button
-              class="dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark hover:text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
-              href="#"
-              :title="Link.title"
+        <div
+          class="font-bold items-center flex flex-col justify-center text-black mt-5"
+          :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
+        >
+          <div class="flex ml-4">
+            <img
+              @click="isClose = !isClose"
+              src="./../../assets/logo-512x512.png"
+              alt=""
+              class="w-8 h-8 rounded-full"
+            />
+            <div
+              class="text-lg mt-1 ml-1 duration-700 w-32 dark:text-textLight text-text"
+              :class="{ hidden: isClose, block: !isClose }"
             >
-              <span v-html="Link.icon"></span>
-            </button>
-          </router-link>
-
-          <!-- Search -->
-          <button
-            class="dark:text-navIconColoDark p-4 inline-flex justify-center rounded-md hover:text-iconHoverLight dark:hover:text-navIconColorHoverDark dark:hover:bg-sideNavHover smooth-hover"
-            :class="{
-              'bg-gray-800 text-white  border-l-2 border-red-300 ':
-                tab === 'search',
-            }"
-            href="#"
-          >
-            <div class="input-group relative flex mt-4">
-              <button
-                class="inline-block text-iconLight hover:text-iconHoverLight dark:text-navIconColoDark dark:hover:bg-sideNavHover dark:hover:text-navIconColorHoverDark font-medium text-xs leading-tight uppercase rounded transition duration-150 ease-in-out mr-1.5"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasRight1"
-                aria-controls="offcanvasRight"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-6 h-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                  />
-                </svg>
-              </button>
+              IHEC
             </div>
-
-            <!-- <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
+          </div>
+          <hr
+            class="absolute top-14 left-5 duration-500"
+            :class="{ 'lg:w-52 xs:w-40': !isClose, 'w-[40px] ': isClose }"
+          />
+        </div>
+        <nav class="flex flex-col">
+          <!-- main route -->
+          <ul class="relative overflow-hidden">
+            <li
+              v-for="Link in filteredLinks"
+              :key="Link.routerName"
+              class="overflow-hidden flex items-center"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg> -->
-          </button>
+              <router-link
+                :to="{ name: Link.routerName }"
+                @click.prevent="tab = Link.tab"
+                class=""
+              >
+                <button
+                  class="dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark hover:text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
+                >
+                  <i :title="Link.title" v-html="Link.icon" /></button
+              ></router-link>
+              <div>
+                <div
+                  v-if="Link.children?.length ?? 0 > 0"
+                  class="p-4 text-base whitespace-pre-wrap cursor-pointer duration-500"
+                >
+                  <div
+                    v-for="child in Link.children"
+                    :key="child.routerName"
+                    :class="{ 'flex ': !isClose, hidden: isClose }"
+                  >
+                    <router-link
+                      :to="{ name: child.routerName }"
+                      v-if="tab == Link.tab"
+                      class="p-2 cursor-pointer"
+                    >
+                      {{ child.title }}
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </nav>
         <!-- setting and log out -->
         <div class="">
@@ -210,6 +208,7 @@ onMounted(() => {
           <button
             @click="settingPop = !settingPop"
             class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
+            :class="{ 'float-left ': !isClose, 'mr-8': isClose }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -227,434 +226,14 @@ onMounted(() => {
           <!-- #endregion -->
         </div>
       </div>
+      <!-- <div v-if="!isClose" class="w-full"></div> -->
     </div>
-    <!-- EXPLORER -->
-    <div
-      :class="[
-        isClose ? 'transOff ltr:-ml-[224px] rtl:-mr-[624px]' : 'transOn',
-      ]"
-      class="shadow-md shadow-slate-500 bg-white mt-4 dark:bg-bgLeftNav w-56 flex-none lg:flex flex-col justify-between duration-500"
-    >
-      <!-- Feature Admin icon -->
-      <div
-        class="hashtag-bar text-sm leading-relaxed overflow-y-auto main"
-        v-if="tab === 'Feature Admin'"
-      >
-        <ul class="px-2 py-3">
-          <li
-            class="text-text dark:text-textLight px-2 mt-3 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
-          >
-            <a href="#" class="flex items-center justify-between">
-              <span class="ml-2">{{ t("EXPLORER") }}</span>
-              <span class="text-xl">...</span>
-            </a>
-            <hr />
-          </li>
-        </ul>
-
-        <button
-          class="flex items-center text-text dark:text-textLight dark:hover:text-textGray"
-        >
-          <svg fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
-            <path
-              class="heroicon-ui"
-              d="M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z"
-            ></path>
-          </svg>
-          <h3 class="uppercase tracking-wide font-semibold text-xs">
-            {{ t("Archive") }}
-          </h3>
-        </button>
-
-        <ul class="px-2 py-3 pt-2">
-          <li
-            class="text-text dark:text-textLight hover:bg-sideNavLightHover dark:hover:bg-sideNavHover mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          >
-            <router-link
-              :to="{ name: 'archiveIndex' }"
-              @click.prevent="secondTab === 'Companies'"
-              class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                />
-              </svg>
-              <span class="ml-2">{{ t("AllArchives") }}</span>
-            </router-link>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Companies -->
-      <div
-        class="hashtag-bar text-sm leading-relaxed overflow-y-auto bills"
-        v-if="tab === 'Company'"
-      >
-        <ul class="px-2 py-3 pt-2">
-          <li
-            class="text-text dark:text-textLight px-2 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
-          >
-            <a href="#" class="flex items-center justify-between">
-              <span class="ml-2">{{ t("EXPLORER") }}</span>
-              <span class="text-xl">...</span>
-            </a>
-          </li>
-          <li
-            class="text-text dark:text-textLight mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          >
-            <van-collapse v-model="activeNames">
-              <van-collapse-item :title="t('Here')" name="3">
-                <ul class="px-2 py-3 pt-2">
-                  <li
-                    class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    Here
-                  </li>
-                  <li
-                    class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  ></li>
-                  <li
-                    class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  ></li>
-                </ul>
-              </van-collapse-item>
-            </van-collapse>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Computers -->
-      <div
-        class="hashtag-bar text-sm leading-relaxed overflow-y-auto bills"
-        v-if="tab === 'Computer'"
-      >
-        <ul class="px-2 py-3">
-          <li
-            class="text-text dark:text-textLight px-2 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
-          >
-            <a href="#" class="flex items-center justify-between">
-              <span class="ml-2">{{ t("EXPLORER") }}</span>
-              <span class="text-xl">...</span>
-            </a>
-            <hr />
-          </li>
-        </ul>
-
-        <button
-          class="flex items-center text-text dark:text-textLight dark:hover:text-textGray"
-        >
-          <h3 class="uppercase p-2 pl-4 tracking-wide font-semibold text-xs">
-            {{ t("Computers") }}
-          </h3>
-        </button>
-
-        <ul class="px-2 py-3 pt-2">
-          <li
-            class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          ></li>
-          <li
-            class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          ></li>
-        </ul>
-      </div>
-
-      <!-- active -->
-      <div
-        class="hashtag-bar text-sm leading-relaxed overflow-y-auto bills"
-        v-if="tab === 'Active'"
-      >
-        <ul class="px-2 py-3 pt-2">
-          <li
-            class="text-text dark:text-textLight px-2 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
-          >
-            <a href="#" class="flex items-center justify-between">
-              <span class="ml-2">{{ t("EXPLORER") }}</span>
-              <span class="text-xl">...</span>
-            </a>
-          </li>
-          <li
-            class="text-text dark:text-textLight mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          >
-            <van-collapse v-model="activeNames">
-              <van-collapse-item :title="t('Active')" name="3">
-                <ul class="px-2 py-3 pt-2">
-                  <li
-                    class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    <router-link
-                      :to="{ name: 'activeIndex' }"
-                      @click.prevent="secondTab === 'Companies'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                        />
-                      </svg>
-                      <span class="ml-2">{{ t("Active Computer") }}</span>
-                    </router-link>
-                  </li>
-                  <li
-                    class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    <router-link
-                      :to="{ name: 'activeUserIndex' }"
-                      @click.prevent="secondTab === 'Companies'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                        />
-                      </svg>
-                      <span class="ml-2">{{ t("Active User") }}</span>
-                    </router-link>
-                  </li>
-                </ul>
-              </van-collapse-item>
-            </van-collapse>
-          </li>
-        </ul>
-      </div>
-      <!-- General -->
-      <div
-        class="hashtag-bar text-sm leading-relaxed overflow-y-auto bills"
-        v-if="tab === 'general'"
-      >
-        <ul class="px-2 py-3 pt-2">
-          <li
-            class="text-text dark:text-textLight px-2 dark:hover:text-textGray dark:hover:bg-sideNavHover hover:bg-sideNavLightHover"
-          >
-            <a href="#" class="flex items-center justify-between">
-              <span class="ml-2">{{ t("See whats going on") }}</span>
-              <span class="text-xl">...</span>
-            </a>
-          </li>
-          <li
-            class="text-text dark:text-textLight mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-          >
-            <van-collapse v-model="activeNames">
-              <van-collapse-item :title="t('General')" name="3">
-                <ul class="px-2 py-3 pt-2">
-                  <li
-                    class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    <router-link
-                      :to="{ name: 'allSupport' }"
-                      @click.prevent="secondTab === 'generalIndex'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                        />
-                      </svg>
-                      <span class="ml-2">{{ t("All Supports") }}</span>
-                    </router-link>
-                  </li>
-                  <li
-                    class="text-gray-200 hover:bg-gray-700 mb-2 cursor-pointer hover:text-gray-200 bg-gray-750 rounded"
-                  >
-                    <router-link
-                      :to="{ name: 'allBugs' }"
-                      @click.prevent="secondTab === 'generalIndex'"
-                      class="flex items-center text-text dark:text-textLight dark:hover:bg-sideNavHover hover:bg-sideNavLightHover px-2 py-1"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-                        />
-                      </svg>
-                      <span class="ml-2">{{ t("All Bugs") }}</span>
-                    </router-link>
-                  </li>
-                </ul>
-              </van-collapse-item>
-            </van-collapse>
-          </li>
-        </ul>
-      </div>
-
-      <!-- search -->
-      <div
-        class="hashtag-bar text-sm leading-relaxed overflow-y-auto search"
-        v-if="tab === 'User'"
-      >
-        <div class="flex justify-center mx-2">
-          <div class="mb-3">
-            <div class="input-group relative flex mt-4">
-              <!-- <button
-                class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out mr-1.5"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasRight"
-                aria-controls="offcanvasRight"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-6 h-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                  />
-                </svg>
-              </button> -->
-
-              <div
-                class="offcanvas offcanvas-end fixed bottom-0 flex flex-col max-w-full bg-white invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 right-0 border-none w-96"
-                tabindex="-1"
-                id="offcanvasRight1"
-                aria-labelledby="offcanvasRightLabel"
-              >
-                <div
-                  class="offcanvas-header flex items-center justify-between p-4"
-                >
-                  <h5
-                    class="offcanvas-title mb-0 leading-normal font-semibold"
-                    id="offcanvasRightLabel"
-                  >
-                    Offcanvas right
-                  </h5>
-                  <button
-                    type="button"
-                    class="btn-close box-content w-4 h-4 p-2 -my-5 -mr-2 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div class="offcanvas-body flex-grow p-4 overflow-y-auto">
-                  ...
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- for Footer Support -->
-      <div class="bg-gray-850 px-3 py-2 flex items-center justify-between">
-        <div class="flex items-center">
-          <a href="#"
-            ><img
-              src="@/assets/20220323_095012.png"
-              alt="avatar"
-              class="w-8 h-8 rounded-full"
-          /></a>
-          <div class="text-xs ml-1 mb-4">
-            <div class="text-text dark:text-textLight">{{ t("Help") }}</div>
-            <!-- <div class="text-textGray text-xs w-full mr-1">0772 572 6027</div> -->
-          </div>
-        </div>
-        <div class="flex items-center text-iconLight dark:text-navIconColoDark">
-          <a
-            href="#"
-            class="dark:hover:text-iconHover hover:text-iconHoverLight"
-          >
-            <svg
-              class="w-5 h-5"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"
-              ></path>
-              <path d="M0 0h24v24H0z" fill="none"></path>
-            </svg>
-          </a>
-          <a
-            href="#"
-            class="ml-3 dark:hover:text-iconHover hover:text-iconHoverLight"
-          >
-            <svg
-              class="w-5 h-5"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path d="M0 0h24v24H0z" opacity=".1" fill="none"></path>
-              <path
-                d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"
-              ></path>
-            </svg>
-          </a>
-          <a
-            href="#"
-            class="ml-3 dark:hover:text-iconHover hover:text-iconHoverLight"
-          >
-            <svg
-              class="w-5 h-5"
-              fill="currentColor"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path d="M0 0h24v24H0z" fill="none"></path>
-              <path
-                d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"
-              ></path>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
-
+    <!-- EXPLORER
+    transOff ltr:-ml-[224px] rtl:-mr-[624px] -->
+    <!-- <div
+      class="bg-red-900 w-56"
+      :class="[isClose ? 'absolute z-[9999999] right-32' : '']"
+    ></div> -->
     <!-- end EXPLORER -->
   </div>
   <!--! #region user info -->
@@ -698,10 +277,11 @@ onMounted(() => {
     </div>
   </van-popup>
   <!--? #endregion -->
+
   <!--! #region setting pop -->
   <div
     v-if="settingPop == true"
-    class="bg-settingLight dark:bg-setting fixed rtl:right-14 ltr:left-14 bottom-10 h-[350px] w-[300px] rounded-xl z-50 flex overflow-hidden"
+    class="bg-settingLight dark:bg-setting fixed rtl:right-14 ltr:left-14 bottom-10 h-[350px] w-[300px] rounded-xl z-[9999999] flex overflow-hidden"
   >
     <!-- main setting -->
     <div

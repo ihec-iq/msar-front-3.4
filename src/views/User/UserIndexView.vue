@@ -9,14 +9,8 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { storeToRefs } from "pinia";
 import { onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import IPage from "@/components/ihec/IPage.vue";
-import IPageHeader from "@/components/ihec/IPageHeader.vue";
-import IButton from "@/components/ihec/IButton.vue";
-import IRow from "@/components/ihec/IRow.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import JsonExcel from "vue-json-excel3";
-import SearchIcon from "@/assets/svg/search.svg";
-import { Icon } from "@iconify/vue";
 //#region Vars
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -57,7 +51,8 @@ const filterByIDName = (vacation: IUser) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
+  getFilterData();
+  return;
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -141,22 +136,11 @@ onMounted(async () => {
     </template>
     <template v-slot:content>
       <IRow>
-        <div class="relative flex">
-          <div
-            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-          >
-            <Icon icon="mdi:magnify" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-          </div>
-          <input
-            type="text"
-            id="table-search"
-            ref="inputRefSearch"
-            v-model="fastSearch"
-            @input="makeFastSearch()"
-            class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('UserSearch')"
-          />
-        </div>
+        <IBtnSearch
+          v-model="fastSearch"
+          @get-filter-data="getFilterData()"
+          @make-fast-search="makeFastSearch()"
+        ></IBtnSearch>
         <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"

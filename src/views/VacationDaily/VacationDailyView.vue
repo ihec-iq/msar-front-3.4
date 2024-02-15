@@ -2,7 +2,6 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
@@ -46,10 +45,7 @@ const store = (withPrint: boolean = false) => {
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
-  formData.append(
-    "EmployeeAlter",
-    JSON.stringify(vacationDaily.value.EmployeeAlter)
-  );
+  formData.append("EmployeeAlter", JSON.stringify(vacationDaily.value.EmployeeAlter));
   formData.append("Reason", JSON.stringify(vacationDaily.value.Reason));
   itemStore
     .store(formData)
@@ -84,10 +80,7 @@ function update() {
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
-  formData.append(
-    "EmployeeAlter",
-    JSON.stringify(vacationDaily.value.EmployeeAlter)
-  );
+  formData.append("EmployeeAlter", JSON.stringify(vacationDaily.value.EmployeeAlter));
   formData.append("Reason", JSON.stringify(vacationDaily.value.Reason));
 
   itemStore
@@ -185,17 +178,11 @@ const print1 = () => {
   const prtHtml = document.getElementById("printMe")?.innerHTML;
   // Get all stylesheets HTML
   let stylesHtml = "";
-  for (const node of [
-    ...document.querySelectorAll('link[rel="stylesheet"], style'),
-  ]) {
+  for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
     stylesHtml += node.outerHTML;
   }
   // Open the print window
-  const WinPrint = window.open(
-    "",
-    "",
-    "left=0,top=0, toolbar=0,scrollbars=0,status=0"
-  );
+  const WinPrint = window.open("", "", "left=0,top=0, toolbar=0,scrollbars=0,status=0");
 
   WinPrint?.document.write(`<!DOCTYPE html>
 <html>
@@ -410,8 +397,7 @@ onMounted(async () => {
     <div
       :class="{
         'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-          !is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >
@@ -470,11 +456,7 @@ onMounted(async () => {
       </button>
     </div>
   </div>
-  <div
-    class="hiddens print:w-[900px] w-[900px] tablePrint m-2"
-    id="printMe"
-    print:rtl
-  >
+  <div class="hiddens print:w-[900px] w-[900px] tablePrint m-2" id="printMe" print:rtl>
     <div id="Header" class="w-[900px] print:w-[900px]">
       <br />
       <br />
@@ -484,19 +466,12 @@ onMounted(async () => {
       <br />
       <br />
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
-      <img
-        :src="imageHeaderPath"
-        class="downHeader w-[900px] print:w-[900px]"
-      />
+      <img :src="imageHeaderPath" class="downHeader w-[900px] print:w-[900px]" />
     </div>
     <div id="body">
       <table
         class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
-        style="
-          width: 890px !important ;
-          margin: 3px !important ;
-          text-align: right;
-        "
+        style="width: 890px !important ; margin: 3px !important ; text-align: right"
       >
         <tr class="RowTable">
           <td class="RowHeader w-[50%]">اسم الموظف</td>
@@ -539,11 +514,7 @@ onMounted(async () => {
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
       <table
         class="float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
-        style="
-          width: 890px !important ;
-          margin: 3px !important ;
-          text-align: right;
-        "
+        style="width: 890px !important ; margin: 3px !important ; text-align: right"
       >
         <tr class="RowTable margin15" style="align-content: center !important">
           <td class="font-bold text-xl text-text dark:text-textLight p-10">

@@ -15,6 +15,8 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import IPage from "@/components/ihec/IPage.vue";
 import IPageHeader from "@/components/ihec/IPageHeader.vue";
 import IButton from "@/components/ihec/IButton.vue";
+import { crud_delete } from "@/utils/crudTool";
+import IPageFooter from "@/components/ihec/IPageFooter.vue";
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
 const { t } = useI18n();
@@ -143,37 +145,46 @@ function update() {
       });
     });
 }
-const Delete = async () => {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn m-2 bg-red-700",
-      cancelButton: "btn bg-grey-400",
-    },
-    buttonsStyling: false,
+
+const Delete = () => {
+  crud_delete({
+    RouterGo: -1,
+    store: archiveStore,
+    id: archive.value.id,
   });
-  swalWithBootstrapButtons
-    .fire({
-      title: t("Are You Sure?"),
-      text: t("You Won't Be Able To Revert This!"),
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: t("Yes, delete it!"),
-      cancelButtonText: t("No, cancel!"),
-      reverseButtons: true,
-    })
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        await archiveStore._delete(archive.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        });
-      }
-    });
+  router.go(-1);
 };
+// const Delete = async () => {
+//   const swalWithBootstrapButtons = Swal.mixin({
+//     customClass: {
+//       confirmButton: "btn m-2 bg-red-700",
+//       cancelButton: "btn bg-grey-400",
+//     },
+//     buttonsStyling: false,
+//   });
+//   swalWithBootstrapButtons
+//     .fire({
+//       title: t("Are You Sure?"),
+//       text: t("You Won't Be Able To Revert This!"),
+//       icon: "warning",
+//       showCancelButton: true,
+//       confirmButtonText: t("Yes, delete it!"),
+//       cancelButtonText: t("No, cancel!"),
+//       reverseButtons: true,
+//     })
+//     .then(async (result) => {
+//       if (result.isConfirmed) {
+//         await archiveStore._delete(archive.value.id).then(() => {
+//           swalWithBootstrapButtons.fire(
+//             t("Deleted!"),
+//             t("Deleted successfully ."),
+//             "success"
+//           );
+//           router.go(-1);
+//         });
+//       }
+//     });
+// };
 const showData = async () => {
   Loading.value = true;
   archive.value.files = [];
@@ -237,7 +248,26 @@ onMounted(async () => {
 <template>
   <IPage>
     <template v-slot:header>
-      <IPageHeader :title="namePage" />
+      <IPageHeader :title="t(namePage)">
+        <template v-slot:buttons>
+          <div class="flex gap-2">
+            <IButton
+              v-if="archive.id == 0"
+              :text="t('Create')"
+              :onClick="store"
+            />
+            <IButton v-else :text="t('Update')" :onClick="update" />
+            <IButton
+              v-if="archive.id != 0"
+              color="red"
+              type="outlined"
+              :text="t('Delete')"
+              :onClick="Delete"
+              class="hover:text-white"
+            />
+          </div>
+        </template>
+      </IPageHeader>
     </template>
     <template v-slot:content
       ><div class="w-full">
@@ -327,27 +357,6 @@ onMounted(async () => {
           </div>
           <div id="DropZone"></div>
         </div>
-
-        <div
-          class="max-w-screen-xl flex flex-wrap items-center flex-row-reverse justify-between mx-auto p-4"
-        >
-          <!-- end -->
-          <IButton
-            v-if="archive.id == 0"
-            :text="t('Create')"
-            :onClick="store"
-          />
-          <IButton v-else :text="t('Update')" :onClick="update" />
-          <!-- start -->
-          <IButton
-            v-if="archive.id != 0"
-            color="red"
-            type="outlined"
-            :text="t('Delete')"
-            :onClick="Delete"
-          />
-        </div>
-
         <!-- bottom tool bar -->
         <!-- <div
           :class="{
@@ -399,6 +408,13 @@ onMounted(async () => {
         </div> -->
         <!-- end bottom tool -->
       </div>
+    </template>
+    <template v-slot:footer>
+      <IPageFooter>
+        <template v-slot:buttons>
+          <IButton :text="t('Back')" :onClick="back" />
+        </template>
+      </IPageFooter>
     </template>
   </IPage>
 </template>
