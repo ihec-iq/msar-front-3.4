@@ -7,8 +7,8 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { useStockStore } from "@/stores/Voucher/stock";
-import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
-import { useItemStore } from "@/stores/item/item";
+import { useInputVoucherStore } from "@/stores/warehouse/inputVoucherStore";
+import { useItemStore } from "@/stores/item/itemStore";
 import type { IInputVoucherItem } from "@/types/IInputVoucher";
 import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "@/types/IItem";
@@ -945,4 +945,4 @@ button {
 }
 </style>
 @/stores/item1/item
-@/stores/voucher1/stock@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/inputVoucher@/stores/item/itemStore@/stores/permissionStore
+@/stores/voucher1/stock@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/inputVoucher@/stores/item/itemStore@/stores/permissionStore@/stores/warehouse/stock@/stores/warehouse/inputVoucher

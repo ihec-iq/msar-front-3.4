@@ -5,7 +5,7 @@ export default [
     path: "/corruptedVouchers/:search?",
     name: "corruptedVoucherIndex",
     component: () =>
-      import("@/views/CorruptedVoucher/CorruptedVoucherIndexView.vue"),
+      import("@/views/Warehouse/CorruptedVoucher/CorruptedVoucherIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -14,7 +14,7 @@ export default [
     path: "/corruptedVoucher",
     name: "corruptedVoucherAdd",
     component: () =>
-      import("@/views/CorruptedVoucher/CorruptedVoucherView.vue"),
+      import("@/views/Warehouse/CorruptedVoucher/CorruptedVoucherView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -23,7 +23,7 @@ export default [
     path: "/corruptedVoucher/:id",
     name: "corruptedVoucherUpdate",
     component: () =>
-      import("@/views/CorruptedVoucher/CorruptedVoucherView.vue"),
+      import("@/views/Warehouse/CorruptedVoucher/CorruptedVoucherView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

@@ -5,22 +5,16 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
-import { useStoringStore } from "@/stores/storingStore";
-import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
-import { storeToRefs } from "pinia";
+import type { IStore, IStoreFilter } from "@/types/IStore";
+import { useStoringStore } from "@/stores/warehouse/storingStore";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-
-const outputVoucherStore = useOutputVoucherStore();
-const { outputVoucherEmployees } = storeToRefs(useOutputVoucherStore());
-
 const isLoading = ref(false);
-const data = ref<Array<IStoreItemHistory>>([]);
+const data = ref<Array<IStore>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IStoreItemHistory>>([]);
+const dataBase = ref<Array<IStore>>([]);
 
-const { get_item } = useStoringStore();
+const { get_filter, get_summation } = useStoringStore();
 
 import { limits } from "@/utils/defaultParams";
 
@@ -35,7 +29,7 @@ watch(
 );
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IStoreItemHistory) => {
+const filterByIDName = (item: IStore) => {
   if (
     item.itemName.includes(fastSearch.value) ||
     item.serialNumber.includes(fastSearch.value)
@@ -52,48 +46,54 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IStoreItemFilter>({
-  itemId: "0",
+const searchFilter = ref<IStoreFilter>({
+  item: "",
   limit: 10,
   serialNumber: "",
   summation: true,
-  isEmployee: false,
-  employeeId: 0,
 });
 const getFilterData = async (page = 1) => {
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
   isLoading.value = true;
+  searchFilter.value.item = fastSearch.value;
   searchFilter.value.serialNumber = fastSearch.value;
-  searchFilter.value.itemId = route.params.id.toString();
-  await get_item(searchFilter.value, page)
-    .then((response) => {
-      if (response.status == 200) {
-        dataPage.value = response.data.data;
-        data.value = dataPage.value.data;
-        dataBase.value = dataPage.value.data;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+  if (searchFilter.value.summation == true) {
+    await get_summation(searchFilter.value, page)
+      .then((response) => {
+        if (response.status == 200) {
+          dataPage.value = response.data.data;
+          data.value = dataPage.value.data;
+          dataBase.value = dataPage.value.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
+    await get_filter(searchFilter.value, page)
+      .then((response) => {
+        if (response.status == 200) {
+          dataPage.value = response.data.data;
+          data.value = dataPage.value.data;
+          dataBase.value = dataPage.value.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   isLoading.value = false;
 };
 //#endregion
-const openItem = (id: number, billType: string) => {
-  if (billType == "in") {
-    router.push({
-      name: "inputVoucherUpdate",
-      params: { id: id },
-    });
-  } else if (billType == "out") {
-    router.push({
-      name: "outputVoucherUpdate",
-      params: { id: id },
-    });
-  }
+const openItem = (id: number) => {
+  router.push({
+    name: "ItemHistory",
+    params: { id: id },
+  });
 };
 //#region Pagination
 //#endregion
@@ -101,9 +101,7 @@ onMounted(async () => {
   checkPermissionAccessArray(["show storage"]);
 
   if (route.params.search != undefined)
-    fastSearch.value = route.params.id.toString() || "";
-  await outputVoucherStore.getEmployees().then(() => {});
-
+    fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
 });
 </script>
@@ -167,29 +165,6 @@ onMounted(async () => {
             </select>
           </div>
         </div>
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-          >
-            <p>{{ t("Employee") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.employeeId"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData()"
-            >
-              <option
-                v-for="employee in outputVoucherEmployees"
-                :key="employee.id"
-                :value="employee.id"
-                :selected="employee.id == 1"
-                class="text-sm text-indigo-800"
-              >
-                {{ employee.name }}
-              </option>
-            </select>
-          </div>
-        </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
           <label class="cursor-pointer label">
             <span
@@ -249,13 +224,13 @@ onMounted(async () => {
                             {{ t("SerialNumber") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("BillType") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("AvailableInStock") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Price") }}
+                            {{ t("Out") }}
+                          </th>
+                          <th scope="col" class="text-sm font-medium px-6 py-4">
+                            {{ t("In") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("Stock") }}
@@ -278,30 +253,37 @@ onMounted(async () => {
                         >
                           <th>{{ row.itemName }}</th>
                           <th>{{ row.serialNumber }}</th>
-                          <th>{{ row.billType }}</th>
                           <th>
                             <span
-                              v-if="row.count > 0"
-                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-                              >↓{{ row.count }}</span
+                              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
                             >
+                              {{ row.count }}
+                            </span>
+                          </th>
+                          <th>
                             <span
-                              v-else
+                              v-if="Number(row.out) > 0"
                               class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-                              >↑{{ row.count }}</span
+                              >↑{{ row.out }}</span
+                            >
+                          </th>
+                          <th>
+                            <span
+                              v-if="Number(row.in) > 0"
+                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+                              >↓{{ row.in }}</span
                             >
                           </th>
                           <th>{{ row.price }}</th>
                           <th>{{ row.stockName }}</th>
-                          <th>{{ row.Employee.name }}</th>
                           <th>
-                            <van-button
-                              class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                              type="success"
+                            <button
+                              class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
                               is-link
-                              @click="openItem(row.voucherId, row.billType)"
-                              >Open
-                            </van-button>
+                              @click="openItem(row.itemId)"
+                            >
+                              Open
+                            </button>
                           </th>
                         </tr>
                       </tbody>
