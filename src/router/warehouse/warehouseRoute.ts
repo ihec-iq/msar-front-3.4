@@ -4,7 +4,7 @@ export default [
   {
     path: "/storeIndex",
     name: "storeIndex",
-    component: () => import("@/views/store/StoreIndexView.vue"),
+    component: () => import("@/views/Warehouse/StoreIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -12,7 +12,7 @@ export default [
   {
     path: "/ItemHistory/:id",
     name: "ItemHistory",
-    component: () => import("@/views/store/StoreItemHistoryView.vue"),
+    component: () => import("@/views/Warehouse/StoreItemHistoryView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

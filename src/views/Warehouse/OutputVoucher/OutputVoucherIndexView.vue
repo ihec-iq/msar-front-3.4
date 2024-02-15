@@ -3,20 +3,17 @@ import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IInputVoucher, IInputVoucherFilter } from "@/types/IInputVoucher";
-import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
-import EditButton from "@/components/dropDown/EditButton.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-
+import type { IOutputVoucher, IOutputVoucherFilter } from "@/types/IOutputVoucher";
+import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
+import { t } from "@/utils/I18nPlugin";
 const isLoading = ref(false);
-const data = ref<Array<IInputVoucher>>([]);
+const data = ref<Array<IOutputVoucher>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IInputVoucher>>([]);
-const { inputVoucher, get_filter } = useInputVoucherStore();
-
+const dataBase = ref<Array<IOutputVoucher>>([]);
+const { outputVoucher, get_filter } = useOutputVoucherStore();
 import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
@@ -29,26 +26,21 @@ watch(
   }
 );
 const addItem = () => {
-  inputVoucher.id = 0;
-  inputVoucher.number = "";
-  inputVoucher.date = "";
-  inputVoucher.notes = "";
-  inputVoucher.State = { name: "", id: 0 };
-  inputVoucher.Items = [];
-  inputVoucher.signaturePerson = "";
-  inputVoucher.requestedBy = "";
+  outputVoucher.id = 0;
+  outputVoucher.number = "";
+  outputVoucher.date = "";
+  outputVoucher.notes = "";
+  outputVoucher.Items = [];
+  outputVoucher.signaturePerson = "";
   router.push({
-    name: "inputVoucherAdd",
+    name: "outputVoucherAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IInputVoucher) => {
-  if (
-    item.number.toString().includes(fastSearch.value) ||
-    item.notes.includes(fastSearch.value)
-  ) {
+const filterByIDName = (item: IOutputVoucher) => {
+  if (item.number.includes(fastSearch.value) || item.notes.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -61,15 +53,14 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IInputVoucherFilter>({
+const searchFilter = ref<IOutputVoucherFilter>({
   name: "",
   limit: 10,
   description: "",
 });
 const getFilterData = async (page = 1) => {
   isLoading.value = true;
-  searchFilter.value.name = "";
-  if (fastSearch.value != "") searchFilter.value.name = fastSearch.value;
+  searchFilter.value.name = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -86,7 +77,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "inputVoucherUpdate",
+    name: "outputVoucherUpdate",
     params: { id: id },
   });
 };
@@ -94,7 +85,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show inputVouchers"]);
+  checkPermissionAccessArray(["show outputVouchers"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -102,7 +93,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="justify-between flex">
-    <PageTitle> {{ t("InputVoucher") }} </PageTitle>
+    <PageTitle> {{ t("OutputVoucher") }} </PageTitle>
   </div>
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
@@ -241,7 +232,7 @@ onMounted(async () => {
                         </button>
 
                         <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
+                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-gray-800"
                           aria-labelledby="dropdownMenuButton2"
                         >
                           <li>
@@ -296,4 +287,5 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher1/inputVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore
+@/stores/permissionStore
+@/stores/warehouse/outputVoucher

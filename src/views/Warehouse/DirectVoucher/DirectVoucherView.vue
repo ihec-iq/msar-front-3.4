@@ -6,13 +6,12 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
-import { useStockStore } from "@/stores/voucher/stock";
-import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
-import { useInputVoucherStore } from "@/stores/voucher/inputVoucher";
-import type { IOutputVoucherItem } from "@/types/IOutputVoucher";
+import { useDirectVoucherStore } from "@/stores/warehouse/directVoucherStore";
+import type { IDirectVoucherItem } from "@/types/IDirectVoucher";
 import { t } from "@/utils/I18nPlugin";
-import type { IInputVoucherItem } from "@/types/IInputVoucher";
-const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
+const { directVoucherItemsVSelect } = storeToRefs(useDirectVoucherStore());
+const directVoucherStore = useDirectVoucherStore();
+const { directVoucher, directVoucherEmployees } = storeToRefs(useDirectVoucherStore());
 //region"Drag and Drop"
 
 //#endregion
@@ -24,68 +23,42 @@ const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
+const Loading = ref(false);
+const router = useRouter();
+const errors = ref<String | null>();
+//#endregion
 
-const outputVoucherStore = useOutputVoucherStore();
-const { outputVoucher, outputVoucherEmployees } = storeToRefs(useOutputVoucherStore());
 //#region popUp
 const showPop = ref(false);
-const VoucherItem = ref<IOutputVoucherItem>({
+const VoucherItem = ref<IDirectVoucherItem>({
   id: 0,
-  Item: {
-    id: 1,
-    name: "",
-    code: "",
-    description: "",
-    Category: {
-      id: 1,
-      name: "",
-    },
-    measuringUnit: "",
-  },
-  Stock: {
-    id: 1,
-    name: "",
-  },
+  item: "",
   serialNumber: "",
   count: 1,
   price: 0,
   value: 0,
   notes: "",
   Employee: { id: 1, name: "" },
-  inputVoucherItemId: 0,
 });
 const AddPopup = () => {
   showPop.value = true;
   resetVoucherItem();
 };
 const resetVoucherItem = () => {
+  IsUpdateItem.value = false;
   indexSelectedVoucherItem.value = 0;
   VoucherItem.value = {
     id: 0,
-    Item: {
-      id: 0,
-      name: "",
-      code: "",
-      description: "",
-      Category: {
-        id: 1,
-        name: "",
-      },
-      measuringUnit: "",
-    },
-    Stock: {
-      id: 1,
-      name: "",
-    },
+    item: "",
     serialNumber: "",
     count: 1,
     price: 0,
     value: 0,
     notes: "",
     Employee: { id: 1, name: "" },
-    inputVoucherItemId: 0,
   };
 };
+//#endregion
 //#region Item Row
 const deleteItem = (index: number) => {
   const swalWithBootstrapButtons = Swal.mixin({
@@ -107,63 +80,50 @@ const deleteItem = (index: number) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        outputVoucherStore.removeItem(index);
+        directVoucherStore.removeItem(index);
       }
     });
 };
-const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
+const IsUpdateItem = ref(false);
+const updatePopup = (index: number, itemX: IDirectVoucherItem) => {
+  IsUpdateItem.value = true;
   showPop.value = true;
-  console.log("updatePopup");
-  console.log(itemX);
-  console.log(VoucherItem.value);
   indexSelectedVoucherItem.value = index;
   VoucherItem.value = itemX;
-  console.log(VoucherItem.value);
 };
 const AddItem = () => {
-  VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
-  VoucherItem.value.Stock = VoucherItem.value.inputVoucherItem?.Stock || {
-    id: 1,
-    name: "",
-  };
-  VoucherItem.value.serialNumber = String(
-    VoucherItem.value.inputVoucherItem?.serialNumber
-  );
-  VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
-  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  outputVoucherStore.addItem(VoucherItem.value);
+  ChangeValueTotal();
+  directVoucherStore.addItem(VoucherItem.value);
   resetVoucherItem();
   showPop.value = false;
 };
 const ChangeValueTotal = () => {
-  VoucherItem.value.value =
-    VoucherItem.value.count * Number(VoucherItem.value.inputVoucherItem?.price);
+  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
 };
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
-  console.log(VoucherItem.value);
-  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  outputVoucherStore.editItem(indexSelectedVoucherItem.value, VoucherItem.value);
+  ChangeValueTotal();
+  directVoucherStore.editItem(indexSelectedVoucherItem.value, VoucherItem.value);
   resetVoucherItem();
   showPop.value = false;
 };
-//#endregion
 
-const Loading = ref(false);
-const router = useRouter();
-const errors = ref<String | null>();
+// const handleEnter = (event: KeyboardEvent) => {
+//   const enteredValue = (event.target as HTMLInputElement).value;
+//   VoucherItem.value.item = enteredValue;
+// };
 
 //#region CURD
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("number", outputVoucher.value.number.toString());
-  formData.append("notes", outputVoucher.value.notes.toString());
-  formData.append("date", outputVoucher.value.date.toString());
-  formData.append("items", JSON.stringify(outputVoucher.value.Items));
-  formData.append("employeeRequestId", outputVoucher.value.Employee.id.toString());
-  formData.append("signaturePerson", String(outputVoucher.value.signaturePerson));
-  outputVoucherStore
+  formData.append("number", directVoucher.value.number.toString());
+  formData.append("notes", directVoucher.value.notes.toString());
+  formData.append("date", directVoucher.value.date.toString());
+  formData.append("items", JSON.stringify(directVoucher.value.Items));
+  formData.append("employeeRequestId", directVoucher.value.Employee.id.toString());
+  formData.append("signaturePerson", String(directVoucher.value.signaturePerson));
+  directVoucherStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -179,7 +139,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = outputVoucherStore.getError(error);
+      errors.value = directVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -191,15 +151,15 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("number", outputVoucher.value.number.toString());
-  formData.append("notes", String(outputVoucher.value.notes));
-  formData.append("date", outputVoucher.value.date.toString());
-  formData.append("items", JSON.stringify(outputVoucher.value.Items));
-  formData.append("employeeRequestId", outputVoucher.value.Employee.id.toString());
-  formData.append("signaturePerson", String(outputVoucher.value.signaturePerson));
-  outputVoucherStore
-    .update(outputVoucher.value.id, formData)
-    .then((response) => {
+  formData.append("number", directVoucher.value.number.toString());
+  formData.append("notes", String(directVoucher.value.notes));
+  formData.append("date", directVoucher.value.date.toString());
+  formData.append("items", JSON.stringify(directVoucher.value.Items));
+  formData.append("employeeRequestId", directVoucher.value.Employee.id.toString());
+  formData.append("signaturePerson", String(directVoucher.value.signaturePerson));
+  directVoucherStore
+    .update(directVoucher.value.id, formData)
+    .then(async (response) => {
       if (response.status === 200) {
         Swal.fire({
           position: "top-end",
@@ -208,12 +168,13 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
-        showData(outputVoucher.value.id);
+        showData(directVoucher.value.id);
+        await useDirectVoucherStore().getItemsVSelect();
       }
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = outputVoucherStore.getError(error);
+      errors.value = directVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -242,7 +203,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await outputVoucherStore._delete(outputVoucher.value.id).then(() => {
+        await directVoucherStore._delete(directVoucher.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -255,17 +216,17 @@ const Delete = async () => {
 };
 const showData = async (id: number) => {
   Loading.value = true;
-  await outputVoucherStore
+  await directVoucherStore
     .show(id)
     .then((response) => {
       if (response.status == 200) {
-        outputVoucher.value.id = response.data.data.id;
-        outputVoucher.value.date = response.data.data.date;
-        outputVoucher.value.number = response.data.data.number;
-        outputVoucher.value.notes = response.data.data.notes;
-        outputVoucher.value.Items = response.data.data.Items;
-        outputVoucher.value.Employee = response.data.data.Employee;
-        outputVoucher.value.signaturePerson = response.data.data.signaturePerson;
+        directVoucher.value.id = response.data.data.id;
+        directVoucher.value.date = response.data.data.date;
+        directVoucher.value.number = response.data.data.number;
+        directVoucher.value.notes = response.data.data.notes;
+        directVoucher.value.Items = response.data.data.Items;
+        directVoucher.value.Employee = response.data.data.Employee;
+        directVoucher.value.signaturePerson = response.data.data.signaturePerson;
       }
     })
     .catch((errors) => {
@@ -288,82 +249,19 @@ const back = () => {
 };
 
 onMounted(async () => {
-  checkPermissionAccessArray(["show outputVouchers"]);
-  await outputVoucherStore.getEmployees().then(() => {});
+  checkPermissionAccessArray(["show directVouchers"]);
+  await directVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("OutputVoucher");
-    outputVoucher.value.id = 0;
-    outputVoucher.value.date = new Date().toISOString().split("T")[0];
+    namePage.value = t("DirectVoucher");
+    directVoucher.value.id = 0;
+    directVoucher.value.date = new Date().toISOString().split("T")[0];
   } else {
-    outputVoucher.value.id = id.value;
+    directVoucher.value.id = id.value;
     await showData(id.value);
-    namePage.value = t("OutputVoucher");
+    namePage.value = t("DirectVoucher");
   }
-  await useStockStore().get_stocks();
-  await useInputVoucherStore().getItemsVSelect();
+  await useDirectVoucherStore().getItemsVSelect();
 });
-
-//#region // selectInputItem2
-// const vSelectValue = ref<IInputVoucherItem>({
-//   item: {
-//     id: 0,
-//     name: "",
-//     code: "",
-//     description: "",
-//     itemCategory: {
-//       id: 0,
-//       name: "",
-//     },
-//     measuringUnit: "",
-//   },
-//   stock: {
-//     id: 0,
-//     name: "",
-//   },
-//   serialNumber: "",
-//   count: 0,
-//   price: 0,
-//   value: 0,
-// });
-// function selectInputItem2() {
-//   console.log(vSelectValue.value);
-//   VoucherItem.value.inputVoucherItem = {
-//     id: vSelectValue.value.id,
-//     input_voucher_id: 0,
-//     item: {
-//       id: 0,
-//       name: vSelectValue.value.itemName,
-//       code: String(vSelectValue.value.code),
-//       description: String(vSelectValue.value.notes),
-//       itemCategory: {
-//         id: 0,
-//         name: String(vSelectValue.value.itemCategory),
-//       },
-//       measuringUnit: "",
-//       itemCategoryId: 0,
-//     },
-//     itemId: 0,
-//     stock: {
-//       id: 0,
-//       name: String(vSelectValue.value.stockName),
-//     },
-//     stockId: 0,
-//     serialNumber: String(vSelectValue.value.serialNumber),
-//     count:
-//       Number(vSelectValue.value.inValue) - Number(vSelectValue.value.outValue),
-//     price: Number(vSelectValue.value.price),
-//     value: Number(vSelectValue.value.price),
-//     notes: String(vSelectValue.value.notes),
-//   };
-// }
-
-// watch(
-//   () => vSelectValue.value,
-//   () => {
-//     selectInputItem2();
-//   }
-// );
-//#endregion
 </script>
 <template>
   <PageTitle> {{ namePage }}</PageTitle>
@@ -373,12 +271,12 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("OutputVoucherNumber") }}
+          {{ t("InputVoucherNumber") }}
         </div>
         <input
-          v-model="outputVoucher.number"
+          v-model="directVoucher.number"
           type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightDirect dark:bg-input text-text dark:text-textLight"
         />
       </div>
       <div class="w-11/12 mr-2">
@@ -388,26 +286,26 @@ onMounted(async () => {
           {{ t("Date") }}
         </div>
         <input
-          v-model="outputVoucher.date"
+          v-model="directVoucher.date"
           type="date"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightDirect dark:bg-input text-text dark:text-textLight"
         />
       </div>
       <div class="w-11/12 mr-2">
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("OutputVoucherEmployeeRequest") }}
+          {{ t("InputVoucherEmployeeRequest") }}
         </div>
         <select
-          v-model="outputVoucher.Employee.id"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+          v-model="directVoucher.Employee.id"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightDirect dark:bg-input text-text dark:text-textLight"
         >
           <option
-            v-for="employee in outputVoucherEmployees"
+            v-for="employee in directVoucherEmployees"
             :key="employee.id"
             :value="employee.id"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightDirect dark:bg-input text-text dark:text-textLight"
           >
             {{ employee.name }}
           </option>
@@ -417,12 +315,12 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         >
-          {{ t("OutputVoucherSignaturePerson") }}
+          {{ t("InputVoucherSignaturePerson") }}
         </div>
         <input
-          v-model="outputVoucher.signaturePerson"
+          v-model="directVoucher.signaturePerson"
           type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightDirect dark:bg-input text-text dark:text-textLight"
         />
       </div>
     </div>
@@ -434,9 +332,9 @@ onMounted(async () => {
           {{ t("Description") }}
         </div>
         <quill-editor
-          v-model:content="outputVoucher.notes"
+          v-model:content="directVoucher.notes"
           contentType="html"
-          class="text-text dark:text-textLight bg-lightOutput dark:bg-input h-60 custom-quill"
+          class="text-text dark:text-textLight bg-lightDirect dark:bg-input h-60 custom-quill"
         ></quill-editor>
       </div>
     </div>
@@ -459,12 +357,8 @@ onMounted(async () => {
         <div
           class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
         ></div>
-        <table
-          class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
-        >
-          <thead
-            class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
-          >
+        <table class="min-w-full text-center">
+          <thead class="border-b bg-[#0003] text-gray-300">
             <tr>
               <th scope="col" class="text-sm font-medium px-2 py-2">
                 {{ t("ID") }}
@@ -485,9 +379,6 @@ onMounted(async () => {
                 {{ t("Total") }}
               </th>
               <th scope="col" class="text-sm font-medium px-6 py-4">
-                {{ t("Stock") }}
-              </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
                 {{ t("Notes") }}
               </th>
               <th scope="col" class="text-sm font-medium px-6 py-4">
@@ -495,21 +386,18 @@ onMounted(async () => {
               </th>
             </tr>
           </thead>
-          <tbody
-            class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
-          >
+          <tbody class="bg-[#1f2937]">
             <tr
-              v-for="(row, index) in outputVoucher.Items"
+              v-for="(row, index) in directVoucher.Items"
               :key="row.id"
-              class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
+              class="border-b border-black h-14 text-gray-100"
             >
-              <th>{{ row.id }}</th>
-              <th>{{ row.Item?.name }}</th>
+              <th>{{ index }}/{{ row.id }}</th>
+              <th>{{ row.item }}</th>
               <th>{{ row.serialNumber }}</th>
               <th>{{ row.count }}</th>
               <th>{{ row.price.toLocaleString() }}</th>
               <th>{{ (row.count * row.price).toLocaleString() }}</th>
-              <th>{{ row.Stock.name }}</th>
               <th>{{ row.notes }}</th>
               <th>
                 <van-button
@@ -551,108 +439,40 @@ onMounted(async () => {
                 <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Item
                 </div>
-                <!-- v-model="VoucherItem.inputVoucherItem" -->
-                <vSelect
+                <!-- v-model="VoucherItem.directVoucherItem" -->
+                <!-- <vSelect
                   class="capitalize dir-rtl mx-2 rounded-md h-10 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                  :options="inputVoucherItemsVSelect"
-                  :reduce="(_item: IInputVoucherItem) => _item"
-                  :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
-                  :create-option="(_item: IInputVoucherItem) => _item"
-                  v-model="VoucherItem.inputVoucherItem"
+                  :options="directVoucherItemsVSelect"
+                  :reduce="(_item: IDirectVoucherItem) => _item"
+                  :get-option-label="(_item: IDirectVoucherItem) => _item.item"
+                  :create-option="(_item: IDirectVoucherItem) => _item"
+                  v-model="VoucherItem.item"
+                  @input="handleEnter"
                 >
                   <template #option="_item">
                     <div
                       class="rounded-md text-right focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold"
                     >
-                      {{ _item.Item.name.toString() }}
+                      {{ _item.item.toString() }}
                     </div>
-                    <cite class="text-right">
-                      <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-600 bg-gray-700 text-gray-200 p-1 mb-1"
-                      >
-                        {{ t("ItemCode") }}: {{ _item.Item.code.toString() }}
-                      </div>
-                      <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-600 bg-gray-700 text-gray-200 p-1 mb-1"
-                      >
-                        {{ t("ItemCategory") }}:
-                        {{ _item.Item.Category.name.toString() }}
-                      </div>
-                      <div
-                        v-if="_item.serialNumber"
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
-                      >
-                        {{ t("SerialNumber") }}:
-                        {{ _item.serialNumber.toString() }}
-                      </div>
-                      <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
-                      >
-                        {{ t("Available") }}:
-                        {{ Number(_item.inValue) - Number(_item.outValue) }}
-                      </div>
-                      <cite class="flex flex-wrap text-left text-xs w-fit">
-                        {{ _item.notes }}
-                      </cite>
-                    </cite>
                   </template>
-                </vSelect>
-              </div>
-              <div
-                class="w-4/5 rounded-md border-2 border-gray-600 flex"
-                v-if="String(VoucherItem.Item?.name).length > 0"
-              >
-                <div class="w-1/5" v-if="VoucherItem.Item?.code">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    Code
-                  </div>
-                  <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
-                  >
-                    {{ VoucherItem.Item.code.toString() }}
-                  </div>
-                </div>
-                <div class="w-1/5">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    Category
-                  </div>
-                  <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
-                  >
-                    {{ String(VoucherItem.Item?.Category.name) }}
-                  </div>
-                </div>
-                <div class="w-2/5" v-if="VoucherItem.Item?.description">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    Description
-                  </div>
-                  <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
-                  >
-                    {{ VoucherItem.Item?.description }}
-                  </div>
-                </div>
+                </vSelect> -->
+                <input
+                  v-model="VoucherItem.item"
+                  type="text"
+                  class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                />
               </div>
             </div>
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-1/5">
                 <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                  Stock
-                </div>
-                <input
-                  :value="VoucherItem.inputVoucherItem?.Stock.name"
-                  type="text"
-                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                />
-              </div>
-              <div class="w-1/5">
-                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Serial Number
                 </div>
                 <input
-                  :value="VoucherItem.inputVoucherItem?.serialNumber"
+                  v-model="VoucherItem.serialNumber"
                   type="text"
-                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                  class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
               </div>
               <div class="w-1/5">
@@ -661,11 +481,7 @@ onMounted(async () => {
                 </div>
                 <input
                   @input="ChangeValueTotal()"
-                  v-model="VoucherItem.count"
-                  :max="
-                    Number(VoucherItem.inputVoucherItem?.inValue) -
-                    Number(VoucherItem.inputVoucherItem?.outValue)
-                  "
+                  v-model.number="VoucherItem.count"
                   min="1"
                   type="number"
                   class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
@@ -677,9 +493,9 @@ onMounted(async () => {
                 </div>
                 <input
                   @input="ChangeValueTotal()"
-                  :value="VoucherItem.inputVoucherItem?.price"
+                  v-model.number="VoucherItem.price"
                   type="number"
-                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                  class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
               </div>
               <div class="w-1/5">
@@ -689,7 +505,7 @@ onMounted(async () => {
                 <input
                   :value="VoucherItem.value"
                   type="number"
-                  class="rounded-md disabled focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
+                  class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
                 />
               </div>
             </div>
@@ -714,7 +530,7 @@ onMounted(async () => {
             <div class="flex justify-between">
               <div class="items-center ml-2">
                 <button
-                  v-if="VoucherItem.id == 0"
+                  v-if="IsUpdateItem == false"
                   @click="AddItem()"
                   class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-gray-300"
                 >
@@ -743,47 +559,6 @@ onMounted(async () => {
           <div class="outer w-px h-full m-auto relative overflow-hidden ml-2">
             <div class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"></div>
           </div>
-
-          <!-- filters -->
-
-          <!-- <div
-            class="w-1/5 mt-1 ml-2 flex flex-col items-center overflow-hidden"
-          >
-            <div class="text-gray-300 my-5 pl-8 text-xl">Filter</div>
-            <div>
-              <div class="ml-3 text-gray-300">Customer Name</div>
-              <vSelect
-                class="capitalize mx-2 rounded-md h-10 w-56 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                v-model="selectedFilterId"
-                label="first_name"
-                :options="customerFilterStore.customerDataFilter"
-                :reduce="(filter: ICustomer) => filter.id"
-              >
-              </vSelect>
-            </div>
-            <div>
-              <div class="ml-3 text-gray-300">Phone</div>
-              <vSelect
-                class="capitalize mx-2 rounded-md h-10 w-56 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                v-model="selectedFilterId"
-                label="phone1"
-                :options="customerFilterStore.customerDataFilter"
-                :reduce="(filter: ICustomer) => filter.id"
-              >
-              </vSelect>
-            </div>
-            <div>
-              <div class="ml-3 text-gray-300">Passport</div>
-              <vSelect
-                class="capitalize mx-2 rounded-md h-10 w-56 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                v-model="selectedFilterId"
-                label="passport"
-                :options="customerFilterStore.customerDataFilter"
-                :reduce="(filter: ICustomer) => filter.id"
-              >
-              </vSelect>
-            </div>
-          </div> -->
         </van-popup>
       </div>
     </div>
@@ -798,7 +573,7 @@ onMounted(async () => {
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
           <button
-            v-if="outputVoucher.id == 0"
+            v-if="directVoucher.id == 0"
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
@@ -812,7 +587,7 @@ onMounted(async () => {
             {{ t("Update") }}
           </button>
           <button
-            v-if="outputVoucher.id != 0"
+            v-if="directVoucher.id != 0"
             @click="Delete()"
             class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
           >
@@ -918,4 +693,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher1/stock@/stores/voucher1/outputVoucher@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/outputVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore
+@/stores/voucher1/directVoucher@/stores/voucher1/directVoucher@/stores/permissionStore@/stores/warehouse/directVoucher

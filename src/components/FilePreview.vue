@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { t } from "@/utils/I18nPlugin";
 import { truncateString } from "@/utils/tool";
 
-import { useArchiveStore } from "@/stores/archives/archive";
+import { useArchiveStore } from "@/stores/archives/archiveStore";
 const { _deleteDocument } = useArchiveStore();
 
 const props = defineProps({

@@ -7,7 +7,7 @@ import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
+import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
 import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
@@ -511,4 +511,4 @@ onMounted(async () => {
 </template>
 <style></style>
 @/stores/employeeStore
-@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore
+@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore@/stores/warehouse/outputVoucher@/stores/warehouse/corruptedVoucher
