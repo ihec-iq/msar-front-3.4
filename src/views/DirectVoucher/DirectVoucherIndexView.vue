@@ -8,7 +8,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/stores/permission";
 const { checkPermissionAccessArray, can } = usePermissionStore();
 import type { IDirectVoucher, IDirectVoucherFilter } from "@/types/IDirectVoucher";
-import { useDirectVoucherStore } from "@/stores/voucher/directVoucher";
+import { useDirectVoucherStore } from "@/stores/voucher1/directVoucher";
 
 const isLoading = ref(false);
 const data = ref<Array<IDirectVoucher>>([]);
@@ -289,4 +289,3 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher1/directVoucher

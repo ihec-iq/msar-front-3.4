@@ -693,4 +693,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher1/directVoucher
+@/stores/voucher1/directVoucher@/stores/voucher1/directVoucher

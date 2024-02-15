@@ -271,4 +271,3 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/item/itemCategory @/stores/item1/itemCategory

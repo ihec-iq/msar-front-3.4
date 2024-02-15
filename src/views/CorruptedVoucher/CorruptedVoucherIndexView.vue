@@ -290,4 +290,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/voucher1/corruptedVoucher
+@/stores/voucher1/corruptedVoucher@/stores/voucher1/corruptedVoucher

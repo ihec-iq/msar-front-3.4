@@ -511,4 +511,4 @@ onMounted(async () => {
 </template>
 <style></style>
 @/stores/employeeStore
-@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher
+@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher
