@@ -18,13 +18,7 @@ const dataPage = ref();
 const dataBase = ref<Array<ICorruptedVoucher>>([]);
 const { corruptedVoucher, get_filter } = useCorruptedVoucherStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -296,3 +290,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/stores/voucher1/corruptedVoucher

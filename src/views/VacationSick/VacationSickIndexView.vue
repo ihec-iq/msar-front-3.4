@@ -9,10 +9,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
 import { usePermissionStore } from "@/stores/permission";
 const { checkPermissionAccessArray } = usePermissionStore();
-import type {
-  IVacationSick,
-  IVacationSickFilter,
-} from "@/types/vacation/IVacationSick";
+import type { IVacationSick, IVacationSickFilter } from "@/types/vacation/IVacationSick";
 import { isNumeric } from "vant/lib/utils";
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -21,13 +18,7 @@ const dataPage = ref();
 const dataBase = ref<Array<IVacationSick>>([]);
 const vacationSick = useVacationSickStore();
 
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
 const router = useRouter();
@@ -36,8 +27,7 @@ const inputRefSearch = ref<HTMLInputElement | null>(null);
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined)
-      fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -187,12 +177,8 @@ onMounted(async () => {
                       :key="vacation.id"
                     >
                       <div class="w-3/4 overflow-hidden">
-                        <div
-                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                        >
-                          <div
-                            class="text-2xl text-text dark:text-textLight mb-2"
-                          >
+                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                          <div class="text-2xl text-text dark:text-textLight mb-2">
                             {{ vacation.Vacation.Employee.name }}
                           </div>
                         </div>

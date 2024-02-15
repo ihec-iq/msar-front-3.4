@@ -30,13 +30,8 @@ import { useVacationSickStore } from "@/stores/vacations/vacationSick";
 //endregion
 
 //#region Data
-const limits = reactive([
-  { name: "6", val: 6, selected: true },
-  { name: "12", val: 12, selected: false },
-  { name: "24", val: 24, selected: false },
-  { name: "50", val: 50, selected: false },
-  { name: "All", val: 999999999 },
-]);
+import { limits } from "@/utils/defaultParams";
+
 const limit = ref(6);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
 const dataVacationDaily = ref<Array<IVacationDaily>>([]);

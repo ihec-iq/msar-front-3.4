@@ -19,12 +19,8 @@ const filter = reactive({
   limit: 50,
 });
 
-const limits = reactive([
-  { name: "12", val: 12 },
-  { name: "24", val: 24 },
-  { name: "50", val: 50 },
-  { name: t("All"), val: 99999 },
-]);
+import { limits } from "@/utils/defaultParams";
+
 //#region "ROUTER"
 const userUpdate = (id: number) => {
   router.push({

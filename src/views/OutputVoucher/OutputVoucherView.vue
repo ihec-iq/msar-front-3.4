@@ -918,3 +918,4 @@ button {
   text-align: right !important;
 }
 </style>
+@/stores/voucher1/stock@/stores/voucher1/outputVoucher@/stores/voucher1/inputVoucher

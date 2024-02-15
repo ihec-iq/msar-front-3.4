@@ -945,3 +945,4 @@ button {
 }
 </style>
 @/stores/item1/item
+@/stores/voucher1/stock@/stores/voucher1/inputVoucher
