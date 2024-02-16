@@ -3,17 +3,21 @@ import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
+import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-import type { IOutputVoucher, IOutputVoucherFilter } from "@/types/IOutputVoucher";
-import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
-import { t } from "@/utils/I18nPlugin";
+import type {
+  ICorruptedVoucher,
+  ICorruptedVoucherFilter,
+} from "@/types/ICorruptedVoucher";
+import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 const isLoading = ref(false);
-const data = ref<Array<IOutputVoucher>>([]);
+const data = ref<Array<ICorruptedVoucher>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IOutputVoucher>>([]);
-const { outputVoucher, get_filter } = useOutputVoucherStore();
+const dataBase = ref<Array<ICorruptedVoucher>>([]);
+const { corruptedVoucher, get_filter } = useCorruptedVoucherStore();
+
 import { limits } from "@/utils/defaultParams";
 
 const route = useRoute();
@@ -26,26 +30,25 @@ watch(
   }
 );
 const addItem = () => {
-  outputVoucher.id = 0;
-  outputVoucher.number = "";
-  outputVoucher.date = "";
-  outputVoucher.notes = "";
-  outputVoucher.Items = [];
-  outputVoucher.signaturePerson = "";
+  corruptedVoucher.id = 0;
+  corruptedVoucher.number = "";
+  corruptedVoucher.date = "";
+  corruptedVoucher.notes = "";
+  corruptedVoucher.items = [];
+  corruptedVoucher.signaturePerson = "";
   router.push({
-    name: "outputVoucherAdd",
+    name: "corruptedVoucherAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IOutputVoucher) => {
+const filterByIDName = (item: ICorruptedVoucher) => {
   if (item.number.includes(fastSearch.value) || item.notes.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -53,7 +56,7 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IOutputVoucherFilter>({
+const searchFilter = ref<ICorruptedVoucherFilter>({
   name: "",
   limit: 10,
   description: "",
@@ -77,7 +80,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "outputVoucherUpdate",
+    name: "corruptedVoucherUpdate",
     params: { id: id },
   });
 };
@@ -85,7 +88,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show outputVouchers"]);
+  checkPermissionAccessArray(["show corruptedVouchers"]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -287,4 +290,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/permissionStore
+@/stores/voucher1/corruptedVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore@/stores/warehouse/corruptedVoucher

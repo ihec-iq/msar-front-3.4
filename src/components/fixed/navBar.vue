@@ -96,7 +96,7 @@ onMounted(() => {
       <div
         class="bg-white dark:bg-darkNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
-      <!-- little circule -->
+        <!-- little circule -->
         <div
           v-motion
           :initial="{ opacity: 0, x: -85 }"
@@ -137,15 +137,15 @@ onMounted(() => {
         </div>
         <!-- logo and co Name  -->
         <div
-          class="font-bold items-center flex flex-col justify-center text-black mt-5"
+          class="font-bold items-center flex flex-col text-black mt-5"
           :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
         >
-          <div class="flex ml-4">
+          <div class="flex items-center">
             <img
               @click="isClose = !isClose"
-              src="./../../assets/logo-512x512.png"
+              src="@/assets/logo-512x512.png"
               alt=""
-              class="w-8 h-8 rounded-full"
+              class="w-12 h-12 rounded-full border-2 align-middle"
             />
             <div
               class="text-lg mt-1 ml-1 duration-700 w-28 dark:text-textLight text-text"
@@ -174,7 +174,7 @@ onMounted(() => {
                 class=""
               >
                 <button
-                  class="hover:text-[#444] dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark p-4 inline-flex justify-center rounded-md smooth-hover"
+                  class="hover:text-[#444] border-solid border-[#aaa] border-2 m-1 rounded-full dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark p-4 inline-flex justify-center smooth-hover"
                 >
                   <i :title="Link.title" v-html="Link.icon" /></button
               ></router-link>
@@ -182,7 +182,7 @@ onMounted(() => {
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
-                  class="p-4 text-base whitespace-pre-wrap cursor-pointer duration-500"
+                  class="p-2 text-base whitespace-pre-wrap cursor-pointer duration-800"
                 >
                   <div
                     v-for="child in Link.children"
@@ -192,7 +192,7 @@ onMounted(() => {
                     <router-link
                       :to="{ name: child.routerName }"
                       v-if="tab == Link.tab"
-                      class="p-2 cursor-pointer"
+                      class="p-1 cursor-pointer"
                     >
                       {{ child.title }}
                     </router-link>
@@ -208,7 +208,10 @@ onMounted(() => {
           <button
             @click="settingPop = !settingPop"
             class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
-            :class="{ 'ltr:float-left rtl:float-right ': !isClose, 'ltr:mr-8 rtl:ml-8': isClose }"
+            :class="{
+              'ltr:float-left rtl:float-right ': !isClose,
+              'ltr:mr-8 rtl:ml-8': isClose,
+            }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

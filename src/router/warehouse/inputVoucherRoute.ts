@@ -4,7 +4,7 @@ export default [
   {
     path: "/inputVouchers/:search?",
     name: "inputVoucherIndex",
-    component: () => import("@/views/InputVoucher/InputVoucherIndexView.vue"),
+    component: () => import("@/views/Warehouse/InputVoucher/InputVoucherIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -12,7 +12,7 @@ export default [
   {
     path: "/inputVoucher",
     name: "inputVoucherAdd",
-    component: () => import("@/views/InputVoucher/InputVoucherView.vue"),
+    component: () => import("@/views/Warehouse/InputVoucher/InputVoucherView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -20,7 +20,7 @@ export default [
   {
     path: "/inputVoucher/:id",
     name: "inputVoucherUpdate",
-    component: () => import("@/views/InputVoucher/InputVoucherView.vue"),
+    component: () => import("@/views/Warehouse/InputVoucher/InputVoucherView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

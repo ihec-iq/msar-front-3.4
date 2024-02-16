@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SimpleLoading from "@/components/general/loading.vue";
 import PageTitle from "@/components/general/namePage.vue";
-import { useArchiveStore } from "@/stores/archives/archive";
+import { useArchiveStore } from "@/stores/archives/archiveStore";
 import { t } from "@/utils/I18nPlugin";
 import { usePermissionStore } from "@/stores/permissionStore";
 import type { IArchive, IArchiveFilter, IDocument } from "@/types/archives/IArchive";

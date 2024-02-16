@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/item/item";
+import { useItemStore } from "@/stores/item/itemStore";
 import PageTitle from "@/components/general/namePage.vue";
 import type { IItem, IItemFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
@@ -310,5 +310,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
-@/stores/item1/item
-@/stores/item/itemStore@/stores/permissionStore
+@/stores/item1/item @/stores/item/itemStore@/stores/permissionStore

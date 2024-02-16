@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, shallowRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useArchiveStore } from "@/stores/archives/archive";
+import { useArchiveStore } from "@/stores/archives/archiveStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
@@ -239,8 +239,8 @@ onMounted(async () => {
 </script>
 <template>
   <IPage>
-    <template v-slot:header> 
-      <IPageHeader :title="t(namePage)"> </IPageHeader> 
+    <template v-slot:header>
+      <IPageHeader :title="t(namePage)"> </IPageHeader>
     </template>
     <template v-slot:content
       ><div class="w-full">
@@ -330,15 +330,9 @@ onMounted(async () => {
           </div>
           <div id="DropZone"></div>
         </div>
-        <div
-          class="max-w-screen-xl flex flex-wrap flex-row-reverse justify-between p-4"
-        >
+        <div class="max-w-screen-xl flex flex-wrap flex-row-reverse justify-between p-4">
           <!-- end -->
-          <IButton
-            v-if="archive.id == 0"
-            :text="t('Create')"
-            :onClick="store"
-          />
+          <IButton v-if="archive.id == 0" :text="t('Create')" :onClick="store" />
           <IButton v-else :text="t('Update')" :onClick="update" />
           <!-- start -->
           <!-- <IButton :text="t('Back')" :onClick="back" /> -->
