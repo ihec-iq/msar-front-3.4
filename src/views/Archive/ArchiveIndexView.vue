@@ -29,6 +29,8 @@ const { get_filter } = useArchiveStore();
 const { archiveTypes } = storeToRefs(useArchiveStore());
 
 import { limits } from "@/utils/defaultParams";
+import IInput from "@/components/inputs/IInput.vue";
+import ISearchBar from "@/components/ihec/ISearchBar.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -173,8 +175,7 @@ onMounted(async () => {
           class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
         >
           <!-- fast search -->
-          <label for="table-search" class="sr-only">{{ t("Search") }}</label>
-          <div class="relative flex">
+          <!-- <div class="relative flex">
             <div
               class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
             >
@@ -192,77 +193,124 @@ onMounted(async () => {
                 ></path>
               </svg>
             </div>
-            <input
-              type="text"
-              id="table-search"
-              v-model="fastSearch"
-              @input="makeFastSearch()"
-              class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              :placeholder="t('SearchForArchive')"
-            />
-          </div>
-          <!-- date -->
-          <div class="flex mb-2">
-            <div class="ml-4">
-              <div
-                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              >
-                {{ t("DateFrom") }}
-              </div>
-              <input
-                type="date"
-                v-model="searchFilter.issueDateFrom"
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              />
-            </div>
-            <div class="ml-4">
-              <div
-                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              >
-                {{ t("DateTo") }}
-              </div>
-              <input
-                type="date"
-                v-model="searchFilter.issueDateTo"
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              />
-            </div>
-          </div>
+            <IFullRow>
+              <ICol>
+                <IInput
+                  :placeholder="t('SearchForArchive')"
+                  class="w-80 block p-2 pl-4"
+                  id="table-search"
+                  :label="t('')"
+                  v-model="fastSearch"
+                  @input="makeFastSearch()"
+                />
+              </ICol>
+            </IFullRow>
+
+          </div> -->
           <!-- limit -->
-          <div
-            class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-          >
-            <div
-              class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-            >
-              <p>{{ t("Sort By") }}:</p>
-              <select
-                aria-label="select"
-                v-model="searchFilter.limit"
-                class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-                @change="getFilterData()"
-              >
-                <option
-                  v-for="limit in limits"
-                  :key="limit.val"
-                  :value="limit.val"
-                  :selected="limit.selected == true"
-                  class="text-sm text-indigo-800"
-                >
-                  {{ limit.name }}
-                </option>
-              </select>
+          <!-- date -->
+          <!-- <div class="flex mb-2">
+            <div class="ml-4">
+              <IInput
+                :label="t('DateFrom')"
+                v-model="searchFilter.issueDateFrom"
+                name="issueDateFrom"
+                type="date"
+              />
             </div>
-          </div>
+            <div class="ml-4">
+              <IInput
+                :label="t('DateTo')"
+                v-model="searchFilter.issueDateTo"
+                name="issueDateTo"
+                type="date"
+              />
+            </div>
+          </div> -->
+          <!-- limit -->
+
+          <!-- <IFullRow>
+            <ICol>
+              <ISelect
+                :label="t('Sort By')"
+                v-model="searchFilter.limit"
+                name="archiveTypeId"
+                :options="limits"
+                @change="getFilterData()"
+              />
+            </ICol>
+          </IFullRow> -->
           <!-- search button -->
-          <div class="ml-4 lg:mt-0 xs:mt-2">
+          <!-- <div class="ml-4 lg:mt-0 xs:mt-2">
             <IButton
               color="green"
               type="outlined"
               :text="t('Search')"
               :onClick="getFilterData"
             />
-          </div>
+          </div> -->
+          <ISearchBar :getDataButton="getFilterData">
+            <!-- fast search -->
+            <div class="relative flex">
+              <div
+                class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <IInput
+                :placeholder="t('SearchForArchive')"
+                v-model="fastSearch"
+                type="text"
+                @input="makeFastSearch()"
+              />
+            </div>
+
+            <!-- date -->
+            <div class="flex mb-2">
+              <div class="ml-4">
+                <IInput
+                  :label="t('DateFrom')"
+                  v-model="searchFilter.issueDateFrom"
+                  name="issueDateFrom"
+                  type="date"
+                />
+              </div>
+              <div class="ml-4">
+                <IInput
+                  :label="t('DateTo')"
+                  v-model="searchFilter.issueDateTo"
+                  name="issueDateTo"
+                  type="date"
+                />
+              </div>
+            </div>
+
+            <!-- limit -->
+
+            <IFullRow>
+              <ICol>
+                <ISelect
+                  :label="t('Sort By')"
+                  v-model="searchFilter.limit"
+                  name="archiveTypeId"
+                  :options="limits"
+                  @change="getFilterData()"
+                />
+              </ICol>
+            </IFullRow>
+          </ISearchBar>
         </div>
         <div class="collapse container-main1 m-2">
           <input type="checkbox" />
@@ -469,4 +517,3 @@ onMounted(async () => {
     </div>
   </IPage>
 </template>
-@/stores/archives/archiveStore@/stores/permissionStore
