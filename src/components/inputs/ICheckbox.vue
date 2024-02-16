@@ -3,7 +3,7 @@ import { defineModel, defineProps } from "vue";
 
 const modelValue = defineModel<boolean>();
 
-const props = defineProps({
+defineProps({
   label: {
     type: String,
     required: true,

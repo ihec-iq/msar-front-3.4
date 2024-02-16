@@ -106,6 +106,7 @@ onMounted(async () => {
 });
 </script>
 <template>
+  <IButton /> 
   <div class="justify-between flex">
     <PageTitle> {{ t("StoreIndex") }} </PageTitle>
   </div>

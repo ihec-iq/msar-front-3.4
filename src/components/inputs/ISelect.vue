@@ -3,7 +3,7 @@ import { defineModel, defineProps } from "vue";
 
 const modelValue = defineModel<any>();
 
-const props = defineProps({
+defineProps({
   name: {
     type: String,
     required: true,
