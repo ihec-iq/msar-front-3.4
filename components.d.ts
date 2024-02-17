@@ -41,6 +41,7 @@ declare module '@vue/runtime-core' {
     ISearchBar: typeof import('./src/components/ihec/ISearchBar.vue')['default']
     ISelect: typeof import('./src/components/inputs/ISelect.vue')['default']
     ITable: typeof import('./src/components/ihec/ITable.vue')['default']
+    ITableNew: typeof import('./src/components/ihec/ITableNew.vue')['default']
     Loading: typeof import('./src/components/general/loading.vue')['default']
     LoadingFull: typeof import('./src/components/general/loadingFull.vue')['default']
     LoadingScreen: typeof import('./src/components/LoadingScreen.vue')['default']
