@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import notification from "@/views/NotificationView.vue";
- 
+
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
 //#endregion
@@ -17,9 +17,8 @@ import vacationRoute from "./vacation/vacationRoute";
 import userRoute from "./user/userRoute";
 import roleRoute from "./role/roleRoute";
 import warehouseRoute from "./warehouse/warehouseRoute";
-import employeeRoute from "./user/employeeRoute"; 
+import employeeRoute from "./user/employeeRoute";
 //#endregion
-
 
 import DefaultLayout from "@/views/layouts/MainView.vue";
 const router = createRouter({
@@ -37,6 +36,11 @@ const router = createRouter({
           component: () => import("@/views/auth/LoginView.vue"),
         },
       ],
+    },
+    {
+      path: "/config",
+      name: "Config",
+      component: () => import("@/views/ConnectionSettingView.vue"),
     },
     {
       path: "/",

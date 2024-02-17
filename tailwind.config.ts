@@ -55,7 +55,7 @@ module.exports = {
         sideNav: "#333333",
         sideNavHover: "#252526",
         nav: "#333333",
-        bgLeftNav: "#252526",
+        bgLeftNav1: "#252526",
         sideNavSetting: "#111827",
         sideNavActive: "#1f2937",
         navIconColoDark: "#858585",
