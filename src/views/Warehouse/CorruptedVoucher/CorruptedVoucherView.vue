@@ -7,7 +7,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { useStockStore } from "@/stores/voucher/stock";
-import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
+import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 import { useInputVoucherStore } from "@/stores/warehouse/inputVoucherStore";
 import type { IOutputVoucherItem } from "@/types/IOutputVoucher";
 import { t } from "@/utils/I18nPlugin";

@@ -11,11 +11,13 @@ const { isClose } = storeToRefs(rtlStore);
   <div class="flex duration-300 bg-mainBG overflow-hidden dark:bg-[#25293c]">
     <navbar />
     <div
-      :class="{
-        'ltr:ml-[80px] rtl:mr-[80px]': isClose,
-        'rtl:mr-[255px] ltr:ml-[255px]': !isClose,
+    :class="{
+        'lg:ltr:ml-[80px] lg:rtl:mr-[80px] xs:ltr:ml-[65px] xs:rtl:mr-[65px]':
+        isClose,
+        'lg:rtl:mr-[256px] lg:ltr:ml-[256px] opacity-100': !isClose, 
       }"
-      class="flex-1 bg-mainBG overflow-hidden dark:bg-[#25293c] flex flex-col min-h-screen h-full print:ltr:ml-0 print:rtl:mr-0 duration-500"
+      class="flex-1 bg-mainBG overflow-hidden dark:bg-[#25293c] flex flex-col min-h-screen h-full 
+             print:ltr:ml-0 print:rtl:mr-0 duration-500"
     >
       <Toolbar />
       <RouterView />
