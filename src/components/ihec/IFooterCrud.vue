@@ -47,8 +47,12 @@ const props = defineProps({
         :onClick="props.onUpdate"
       />
     </div>
-    <button @click="router.go(-1)" class="text-blue-500 hover:text-blue-700 text-lg flex">
-      {{ t("Back") }}<svg
+    <button
+      @click="router.go(-1)"
+      class="text-blue-500 hover:text-blue-700 text-lg flex"
+    >
+      {{ t("Back")
+      }}<svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

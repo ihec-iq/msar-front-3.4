@@ -14,7 +14,7 @@ import IPage from "@/components/ihec/IPage.vue";
 import IPageHeader from "@/components/ihec/IPageHeader.vue";
 import IButton from "@/components/ihec/IButton.vue";
 import { crud_delete } from "@/utils/crudTool";
-import IFooterForm from "@/components/ihec/IFooterForm.vue";
+import IFooterForm from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
@@ -104,14 +104,19 @@ function update() {
   formData.append("title", archive.value.title.toString());
   formData.append(
     "description",
-    archive.value.description == null ? "" : archive.value.description.toString()
+    archive.value.description == null
+      ? ""
+      : archive.value.description.toString()
   );
   formData.append("issueDate", archive.value.issueDate.toString());
   formData.append(
     "number",
     archive.value.number == null ? "" : archive.value.number.toString()
   );
-  formData.append("way", archive.value.way == null ? "" : archive.value.way.toString());
+  formData.append(
+    "way",
+    archive.value.way == null ? "" : archive.value.way.toString()
+  );
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
@@ -232,15 +237,14 @@ const back = () => {
 };
 
 onMounted(async () => {
-  //console.log(can("show archives1"));
   checkPermissionAccessArray(["show archives"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "ArchiveAdd";
+    namePage.value = t("ArchiveAdd");
     archive.value.id = 0;
   } else {
     await showData();
     archive.value.id = id.value;
-    namePage.value = "ArchiveUpdate";
+    namePage.value = t("ArchiveUpdate");
   }
   filesDataInput.value = [];
   await useArchiveStore().getArchiveTypes();
@@ -248,89 +252,100 @@ onMounted(async () => {
 import { EnumDirection } from "@/utils/EnumSystem";
 </script>
 <template>
-  <IPage>
-    <IPageHeader :title="t(namePage)" />
-    <i-form>
-      <!-- row 1 -->
-      <IFullRow>
-        <ICol :col="8">
-          <IInput
-            :label="t('Title')"
-            v-model="archive.title"
-            name="title"
-            type="text"
-            :dir="EnumDirection.LTR"
-        /></ICol>
-        <ICol :col="4">
-          <ICheckbox
-            :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
-            v-model="isIn"
-            :checked="true"
-        /></ICol>
-      </IFullRow>
-      <!-- row 2 -->
-      <IFullRow>
-        <ICol :col="3">
-          <IInput
-            :label="t('NumberBook')"
-            v-model="archive.number"
-            name="number"
-            type="text"
-        /></ICol>
-        <ICol :col="3">
-          <IInput
-            :label="t('Date')"
-            v-model="archive.issueDate"
-            name="issueDate"
-            type="date"
-        /></ICol>
-        <ICol :col="3">
-          <ISelect
-            :label="t('ArchiveType')"
-            v-model="archive.archiveTypeId"
-            name="archiveTypeId"
-            :options="archiveTypes"
-        /></ICol>
-        <ICol :col="3">
-          <IInput :label="t('way')" v-model="archive.way" name="way" type="text"
-        /></ICol>
-      </IFullRow>
-      <!-- row 3 -->
-      <IFullRow>
-        <ICol :col="12">
-          <IInput
-            :label="t('Description')"
-            v-model="archive.description"
-            name="description"
-            type="text"
-            class="w-full"
-        /></ICol>
-      </IFullRow>
-      <!-- file -->
-      <IFullRow>
-        <ICol :col="4" class="" v-for="document in archive.files" :key="document.name">
-          <FilePreview :file="document" @updateList="updateList"> </FilePreview>
-        </ICol>
-      </IFullRow>
-      <DragDrop></DragDrop>
-      <div class="px-6">
-        <div id="showFiles" class="p-0 flex flex-col w-full list-none">
-          <div class="w-64 content-center" v-if="Loading">
-            <div
-              class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-              role="status"
-            >
-              <span
-                class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-                >Loading...</span
+  <IPage :HeaderTitle="namePage">
+    <IPageContent>
+      <i-form>
+        <!-- row 1 -->
+        <IFullRow>
+          <ICol :col="8">
+            <IInput
+              :label="t('Title')"
+              v-model="archive.title"
+              name="title"
+              type="text"
+              :dir="EnumDirection.LTR"
+          /></ICol>
+          <ICol :col="4">
+            <ICheckbox
+              :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
+              v-model="isIn"
+              :checked="true"
+          /></ICol>
+        </IFullRow>
+        <!-- row 2 -->
+        <IFullRow>
+          <ICol :col="3">
+            <IInput
+              :label="t('NumberBook')"
+              v-model="archive.number"
+              name="number"
+              type="text"
+          /></ICol>
+          <ICol :col="3">
+            <IInput
+              :label="t('Date')"
+              v-model="archive.issueDate"
+              name="issueDate"
+              type="date"
+          /></ICol>
+          <ICol :col="3">
+            <ISelect
+              :label="t('ArchiveType')"
+              v-model="archive.archiveTypeId"
+              name="archiveTypeId"
+              :options="archiveTypes"
+          /></ICol>
+          <ICol :col="3">
+            <IInput
+              :label="t('way')"
+              v-model="archive.way"
+              name="way"
+              type="text"
+          /></ICol>
+        </IFullRow>
+        <!-- row 3 -->
+        <IFullRow>
+          <ICol :col="12">
+            <IInput
+              :label="t('Description')"
+              v-model="archive.description"
+              name="description"
+              type="text"
+              class="w-full"
+          /></ICol>
+        </IFullRow>
+        <!-- file -->
+        <IFullRow>
+          <ICol
+            :col="4"
+            class=""
+            v-for="document in archive.files"
+            :key="document.name"
+          >
+            <FilePreview :file="document" @updateList="updateList">
+            </FilePreview>
+          </ICol>
+        </IFullRow>
+        <DragDrop></DragDrop>
+        <div class="px-6">
+          <div id="showFiles" class="p-0 flex flex-col w-full list-none">
+            <div class="w-64 content-center" v-if="Loading">
+              <div
+                class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status"
               >
+                <span
+                  class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                  >Loading...</span
+                >
+              </div>
             </div>
           </div>
+          <div id="DropZone"></div>
         </div>
-        <div id="DropZone"></div>
-      </div>
-      <!-- end file -->
-    </i-form>
+        <!-- end file -->
+      </i-form>
+    </IPageContent>
     <IFooterForm
       :isAdd="archive.id == 0"
       :onCreate="store"

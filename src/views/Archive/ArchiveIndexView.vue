@@ -163,10 +163,10 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :TitleHeader="t('Archive')">
-      <template #HeaderButtons>
-        <IButton width="28" :onClick="addArchive" :text="t('Add')" />
-      </template> 
+  <IPage :HeaderTitle="t('Archive')">
+    <template #HeaderButtons>
+      <IButton width="28" :onClick="addArchive" :text="t('Add')" />
+    </template>
     <IPageContent>
       <IRow>
         <ISearchBar :getDataButton="getFilterData">
