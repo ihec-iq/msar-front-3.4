@@ -13,11 +13,10 @@ const props = defineProps({
 </script>
 <template>
   <div
-    class="bg-cardLight btn dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+    class="bg-cardLight btn dark:bg-card overflow-hidden hover:bg-gray-300 dark:hover:bg-gray-800 flex w-full p-15 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
   >
-    <div class="w-4/4 overflow-hidden">
       <button
-        class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-xl xs:text-2xl h-full text-text justify-between dark:text-textLight mb-2"
+        class="ltr:ml-2 rtl:mr-2 lg:text-xl md:text-xl sm:text-xl xs:text-2xl h-full w-full text-text justify-between dark:text-textLight mb-2"
       >
         <span class="float-right flex"> {{ props.title }}</span>
         <span class="float-left text-sm mr-8 flex dark:text-textGray">
@@ -36,6 +35,5 @@ const props = defineProps({
           </svg>
         </span>
       </button>
-    </div>
   </div>
 </template>

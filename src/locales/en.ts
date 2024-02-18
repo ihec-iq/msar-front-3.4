@@ -22,8 +22,8 @@ export default {
   ArchiveAdd: "Archive Add",
   ArchiveUpdate: "Archive Update",
   ArchiveType: "Archive Type",
-  In:"In",
-  Out:"Out",
+  In: "In",
+  Out: "Out",
   DropFiles: "Drop files here !!!",
   SearchForArchive: "Search in Document Number to Title",
   ReleaseFiles: "Drop files here or <u>click here </u> to upload.",
@@ -47,7 +47,7 @@ export default {
   OutputVoucherEmployeeAlter: "Employee Alter",
 
   NumberVoucher: "Number Voucher",
-  DirectVoucher: "Direct Voucher", 
+  DirectVoucher: "Direct Voucher",
   AvailableInStock: "Available",
   RecordDaily: "Days",
   RecordSick: "Days",
@@ -180,5 +180,10 @@ export default {
   "Change Theme": "Change Theme",
   "Change Password": "Change Password",
   way: "Source/Destination",
-  readMore: "Read more"
+  readMore: "Read more",
+  Close: "Close",
+  Employees: "Employees",
+  SortBy: "Sort By",
+  Limit: "Limit",
+  Section: "Section",
 };

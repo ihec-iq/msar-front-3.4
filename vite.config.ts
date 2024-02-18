@@ -9,11 +9,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   plugins: [
-    vue({
-      script: {
-        defineModel: true,
-      },
-    }),
+    vue({}),
     vueJsx(),
     Components({
       resolvers: [
@@ -118,4 +114,9 @@ export default defineConfig({
     "process.env": process.env,
   },
   base: process.env.NODE_ENV === "production" ? "/10/" : "/",
+  server: {
+    watch: {
+      usePolling: true,
+    },
+  },
 });

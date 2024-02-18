@@ -88,7 +88,7 @@ onMounted(() => {
 <template>
   <div
     class="flex fixed h-full z-[999] bg-white dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
-    :class="[isClose ? 'lg:w-20 xs:w-[66px]' : 'lg:w-64  ']"
+    :class="[isClose ? 'lg:w-20 xs:w-[68px]' : 'lg:w-64  ']"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
@@ -174,7 +174,7 @@ onMounted(() => {
                 class=""
               >
                 <button
-                  class="hover:text-[#444] border-solid border-[#aaa] border-2 m-1 rounded-full dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark p-4 inline-flex justify-center smooth-hover"
+                  class="hover:text-[#444] border-solid border-[#aaa] border-2 mt-1 mb-1 p-3 rounded-full dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark   inline-flex justify-center smooth-hover"
                 >
                   <i :title="Link.title" v-html="Link.icon" /></button
               ></router-link>

@@ -35,7 +35,7 @@ onMounted(async () => {
       ref="inputRefSearch"
       v-model="fastSearch"
       @input="emit('makeFastSearch')"
-      class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      class="block p-2 pl-10 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
       :placeholder="t(props.searchText)"
     />
   </div>
