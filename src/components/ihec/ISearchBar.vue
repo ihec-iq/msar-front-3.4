@@ -12,7 +12,7 @@ const props = defineProps({
   <!-- search button -->
   <div class="ml-4 lg:mt-0 xs:mt-2">
     <IButton
-      color="green"
+      color="blue"
       type="outlined"
       :text="t('Search')"
       :onClick="props.getDataButton"
