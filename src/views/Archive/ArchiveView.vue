@@ -14,13 +14,13 @@ import IPage from "@/components/ihec/IPage.vue";
 import IPageHeader from "@/components/ihec/IPageHeader.vue";
 import IButton from "@/components/ihec/IButton.vue";
 import { crud_delete } from "@/utils/crudTool";
-import IFooterForm from "@/components/ihec/IFooterForm.vue";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
 
-import IFullRow from "@/components/ihec/IFullRow.vue";
+import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 
 import ICrudButtons from "@/components/ihec/ICrudButtons.vue";
@@ -104,14 +104,19 @@ function update() {
   formData.append("title", archive.value.title.toString());
   formData.append(
     "description",
-    archive.value.description == null ? "" : archive.value.description.toString()
+    archive.value.description == null
+      ? ""
+      : archive.value.description.toString()
   );
   formData.append("issueDate", archive.value.issueDate.toString());
   formData.append(
     "number",
     archive.value.number == null ? "" : archive.value.number.toString()
   );
-  formData.append("way", archive.value.way == null ? "" : archive.value.way.toString());
+  formData.append(
+    "way",
+    archive.value.way == null ? "" : archive.value.way.toString()
+  );
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
@@ -250,9 +255,8 @@ import { EnumDirection } from "@/utils/EnumSystem";
 <template>
   <IPage>
     <IPageHeader :title="t(namePage)" />
-    <i-form>
-      <!-- row 1 -->
-      <IFullRow>
+    <IForm>
+      <IRow>
         <ICol :col="8">
           <IInput
             :label="t('Title')"
@@ -267,9 +271,8 @@ import { EnumDirection } from "@/utils/EnumSystem";
             v-model="isIn"
             :checked="true"
         /></ICol>
-      </IFullRow>
-      <!-- row 2 -->
-      <IFullRow>
+      </IRow>
+      <IRow>
         <ICol :col="3">
           <IInput
             :label="t('NumberBook')"
@@ -292,11 +295,14 @@ import { EnumDirection } from "@/utils/EnumSystem";
             :options="archiveTypes"
         /></ICol>
         <ICol :col="3">
-          <IInput :label="t('way')" v-model="archive.way" name="way" type="text"
+          <IInput
+            :label="t('way')"
+            v-model="archive.way"
+            name="way"
+            type="text"
         /></ICol>
-      </IFullRow>
-      <!-- row 3 -->
-      <IFullRow>
+      </IRow>
+      <IRow>
         <ICol :col="12">
           <IInput
             :label="t('Description')"
@@ -305,13 +311,18 @@ import { EnumDirection } from "@/utils/EnumSystem";
             type="text"
             class="w-full"
         /></ICol>
-      </IFullRow>
+      </IRow>
       <!-- file -->
-      <IFullRow>
-        <ICol :col="4" class="" v-for="document in archive.files" :key="document.name">
+      <IRow>
+        <ICol
+          :col="4"
+          class=""
+          v-for="document in archive.files"
+          :key="document.name"
+        >
           <FilePreview :file="document" @updateList="updateList"> </FilePreview>
         </ICol>
-      </IFullRow>
+      </IRow>
       <DragDrop></DragDrop>
       <div class="px-6">
         <div id="showFiles" class="p-0 flex flex-col w-full list-none">
@@ -329,9 +340,8 @@ import { EnumDirection } from "@/utils/EnumSystem";
         </div>
         <div id="DropZone"></div>
       </div>
-      <!-- end file -->
-    </i-form>
-    <IFooterForm
+    </IForm>
+    <IFooterCrud
       :isAdd="archive.id == 0"
       :onCreate="store"
       :onUpdate="update"
