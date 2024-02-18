@@ -23,6 +23,9 @@ export default {
   DateFrom: "من تاريخ",
   ArchiveAdd: "اضافة الارشيف",
   ArchiveUpdate: "تحديث الارشيف",
+  ArchiveType: "نوع الكتاب",
+  In: "داخل",
+  Out: "خارج",
   SearchForArchive: "ابحث عن رقم كتاب او عنوان",
   DropFiles: "افلت الملفات هنا !!!",
   ReleaseFiles:
@@ -51,8 +54,6 @@ export default {
   OutputVoucherEmployeeAlter: "البديل",
   NumberVoucher: "رقم المستند",
   DirectVoucher: "سند صرف مباشر",
-  Out: "خارج",
-  In: "داخل",
   AvailableInStock: "المتوفر",
   RecordDaily: "عدد الايام",
   RecordSick: "عدد الايام",
@@ -447,7 +448,7 @@ export default {
   "Your Customer has been Added": "تم اضافة زبونك بنجاح",
   "Your bill sale has been updated": "تم نعديل فاتورة المبيع",
   Dinar: "الدينار",
-  "Sort By": "الحد",
+
   "Room Info": "معلومات الغرفة",
   Pay: "نوع الدفع",
   Duplicate: "نسخ",
@@ -501,5 +502,9 @@ export default {
   "Not Resolved": "غير مكتمل",
   "Change Password": "تغيير الرقم السري",
   way: "جهة الكتاب",
-  readMore: "اقرأ المزيد"
+  readMore: "اقرأ المزيد",
+  Employees: "موظفين",
+  SortBy: "ترتيب حسب",
+  Limit: "الحد",
+  Section: "القسم"
 };

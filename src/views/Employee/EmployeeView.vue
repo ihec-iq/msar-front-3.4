@@ -197,7 +197,7 @@ onMounted(async () => {
     namePage.value = t("EmployeeUpdate");
   }
   await useUserStore()
-    .get()
+    .get({})
     .then((response) => {
       SelectedUsers.value = response.data.data;
     });

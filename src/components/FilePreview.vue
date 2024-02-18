@@ -84,7 +84,7 @@ const openFile = (path: string) => {
 <template>
   <component
     :is="tag"
-    class="file-preview w-200px bg-black-200/10 ma-2 pa-6"
+    class="file-preview w-200px bg-black-200/10 ma-2 pa-6 preview-card cursor-pointer"
     style="display: block"
   >
     <button @click="removeFile(document.id)" class="close-icon">&times;</button>

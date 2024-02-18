@@ -125,7 +125,7 @@ onMounted(async () => {
       <div
         class="mr-2 ml-2 lg:mt-0 xs:mt-2 py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
       >
-        <p>{{ t("Sort By") }}:</p>
+        <p>{{ t("Limit") }}:</p>
         <select
           aria-label="select"
           v-model="searchFilter.limit"
@@ -200,7 +200,7 @@ onMounted(async () => {
                       {{ t("Name") }}
                     </th>
                     <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("section") }}
+                      {{ t("Section") }}
                     </th>
 
                     <th scope="col" class="text-sm font-medium px-6 py-4">
@@ -217,7 +217,7 @@ onMounted(async () => {
                     class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                   >
                     <th>{{ row.name }}</th>
-                    <th style="direction: ltr">{{ row.Section.name }}</th>
+                    <th style="direction: ltr">{{ row.Section?.name }}</th>
                     <th class="p-2 z-999">
                       <div class="dropdown">
                         <button
