@@ -35,7 +35,7 @@ const { filesDataInput } = storeToRefs(useDragDropStore());
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isIn = ref(true);
@@ -104,19 +104,14 @@ function update() {
   formData.append("title", archive.value.title.toString());
   formData.append(
     "description",
-    archive.value.description == null
-      ? ""
-      : archive.value.description.toString()
+    archive.value.description == null ? "" : archive.value.description.toString()
   );
   formData.append("issueDate", archive.value.issueDate.toString());
   formData.append(
     "number",
     archive.value.number == null ? "" : archive.value.number.toString()
   );
-  formData.append(
-    "way",
-    archive.value.way == null ? "" : archive.value.way.toString()
-  );
+  formData.append("way", archive.value.way == null ? "" : archive.value.way.toString());
   formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
@@ -240,12 +235,12 @@ onMounted(async () => {
   //console.log(can("show archives1"));
   checkPermissionAccessArray(["show archives"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("ArchiveAdd");
+    namePage.value = "ArchiveAdd";
     archive.value.id = 0;
   } else {
     await showData();
     archive.value.id = id.value;
-    namePage.value = t("ArchiveUpdate");
+    namePage.value = "ArchiveUpdate";
   }
   filesDataInput.value = [];
   await useArchiveStore().getArchiveTypes();
@@ -254,17 +249,23 @@ import { EnumDirection } from "@/utils/EnumSystem";
 </script>
 <template>
   <IPage>
-    <IPageHeader :title="t(namePage)" />  
+    <IPageHeader :title="t(namePage)" />
     <i-form>
       <!-- row 1 -->
       <IFullRow>
-        <ICol>
+        <ICol :col="8">
           <IInput
             :label="t('Title')"
             v-model="archive.title"
             name="title"
             type="text"
             :dir="EnumDirection.LTR"
+        /></ICol>
+        <ICol :col="4">
+          <ICheckbox
+            :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
+            v-model="isIn"
+            :checked="true"
         /></ICol>
       </IFullRow>
       <!-- row 2 -->
@@ -285,22 +286,18 @@ import { EnumDirection } from "@/utils/EnumSystem";
         /></ICol>
         <ICol :col="3">
           <ISelect
-            :label="t('Archive Type')"
+            :label="t('ArchiveType')"
             v-model="archive.archiveTypeId"
             name="archiveTypeId"
             :options="archiveTypes"
         /></ICol>
         <ICol :col="3">
-          <IInput
-            :label="t('way')"
-            v-model="archive.way"
-            name="way"
-            type="text"
+          <IInput :label="t('way')" v-model="archive.way" name="way" type="text"
         /></ICol>
       </IFullRow>
       <!-- row 3 -->
       <IFullRow>
-        <ICol :col="8">
+        <ICol :col="12">
           <IInput
             :label="t('Description')"
             v-model="archive.description"
@@ -308,29 +305,12 @@ import { EnumDirection } from "@/utils/EnumSystem";
             type="text"
             class="w-full"
         /></ICol>
-
-        <ICol :col="4">
-          <ICheckbox
-            :label="`${t('TypeBook')}: ${isIn ? t('خارج') : t('داخل')}`"
-            v-model="isIn"
-            :checked="true"
-        /></ICol>
       </IFullRow>
       <!-- file -->
       <IFullRow>
-        <ICol>
-          <div
-            class="flex-none hover:ease-in"
-            v-for="document in archive.files"
-            :key="document.name"
-          >
-            <FilePreview
-              :file="document"
-              @updateList="updateList"
-              class="preview-card cursor-pointer"
-            >
-            </FilePreview></div
-        ></ICol>
+        <ICol :col="4" class="" v-for="document in archive.files" :key="document.name">
+          <FilePreview :file="document" @updateList="updateList"> </FilePreview>
+        </ICol>
       </IFullRow>
       <DragDrop></DragDrop>
       <div class="px-6">

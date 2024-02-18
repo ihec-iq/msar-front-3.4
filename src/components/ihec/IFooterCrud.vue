@@ -3,6 +3,7 @@ import { defineProps } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 import { t } from "@/utils/I18nPlugin";
+import IButton from "./IButton.vue";
 
 const props = defineProps({
   onCreate: {

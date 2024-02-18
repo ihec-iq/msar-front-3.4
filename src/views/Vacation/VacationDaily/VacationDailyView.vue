@@ -247,7 +247,7 @@ const filterEmployeesBySection = (_employee: IEmployee) => {
   if (
     _employee.Section.id
       .toString()
-      .includes(vacationDaily.value.Vacation.employee.Section.id.toString()) &&
+      .includes(vacationDaily.value.Vacation.Employee.Section.id.toString()) &&
     _employee.id != vacationDaily.value.Vacation.Employee.id
   ) {
     return true;
@@ -482,7 +482,7 @@ onMounted(async () => {
         <tr class="RowTable">
           <td class="RowHeader w-[50%]">الشعبة</td>
           <td class="RowContent w-[50%]">
-            {{ vacationDaily.Vacation.employee.Section.name }}
+            {{ vacationDaily.Vacation.Employee.Section.name }}
           </td>
         </tr>
         <tr class="RowTable">

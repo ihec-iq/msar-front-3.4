@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { toRef } from "vue";
 import { EnumDirection } from "@/utils/EnumSystem";
 const modelValue = defineModel<string | number>();
 
@@ -27,7 +26,7 @@ defineProps({
     <input
       class="_input"
       :type="type"
-      v-model="modelValue"
+      :v-model="modelValue"
       :placeholder="placeholder"
       :style="{ direction: dir }"
     />
