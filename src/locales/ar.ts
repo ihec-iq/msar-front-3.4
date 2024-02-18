@@ -23,6 +23,9 @@ export default {
   DateFrom: "من تاريخ",
   ArchiveAdd: "اضافة الارشيف",
   ArchiveUpdate: "تحديث الارشيف",
+  ArchiveType: "نوع الكتاب",
+  In: "داخل",
+  Out: "خارج",
   SearchForArchive: "ابحث عن رقم كتاب او عنوان",
   DropFiles: "افلت الملفات هنا !!!",
   ReleaseFiles:
@@ -51,8 +54,6 @@ export default {
   OutputVoucherEmployeeAlter: "البديل",
   NumberVoucher: "رقم المستند",
   DirectVoucher: "سند صرف مباشر",
-  Out: "خارج",
-  In: "داخل",
   AvailableInStock: "المتوفر",
   RecordDaily: "عدد الايام",
   RecordSick: "عدد الايام",
@@ -501,5 +502,5 @@ export default {
   "Not Resolved": "غير مكتمل",
   "Change Password": "تغيير الرقم السري",
   way: "جهة الكتاب",
-  readMore: "اقرأ المزيد"
+  readMore: "اقرأ المزيد",
 };

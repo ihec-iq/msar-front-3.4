@@ -29,6 +29,7 @@ const { archiveTypes } = storeToRefs(useArchiveStore());
 import { limits } from "@/utils/defaultParams";
 import IInput from "@/components/inputs/IInput.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
+import ISelect from "@/components/inputs/ISelect.vue";
 
 const route = useRoute();
 const router = useRouter();

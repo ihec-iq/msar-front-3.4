@@ -26,12 +26,12 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   }
   async function get_employees() {
     await Api.get(`${pathUrl}`)
-      .then((response) => {
+      .then((response: any) => {
         if (response.status == 200) {
           employees.value = response.data.data;
         }
       })
-      .catch((errors) => {
+      .catch((errors: any) => {
         console.log("in get employee : " + errors);
       });
   }

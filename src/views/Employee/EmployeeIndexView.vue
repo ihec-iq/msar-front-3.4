@@ -217,7 +217,7 @@ onMounted(async () => {
                     class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                   >
                     <th>{{ row.name }}</th>
-                    <th style="direction: ltr">{{ row.Section.name }}</th>
+                    <th style="direction: ltr">{{ row.Section?.name }}</th>
                     <th class="p-2 z-999">
                       <div class="dropdown">
                         <button
