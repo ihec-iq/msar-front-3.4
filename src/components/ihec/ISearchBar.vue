@@ -10,10 +10,12 @@ const props = defineProps({
 <template>
   <slot></slot>
   <!-- search button -->
-  <IButton
-    color="green"
-    type="outlined"
-    :text="t('Search')"
-    :onClick="props.getDataButton"
-  />
+  <div class="ml-4 lg:mt-0 xs:mt-2">
+    <IButton
+      color="blue"
+      type="outlined"
+      :text="t('Search')"
+      :onClick="props.getDataButton"
+    />
+  </div>
 </template>
