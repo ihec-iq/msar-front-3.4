@@ -290,7 +290,8 @@ import { EnumDirection } from "@/utils/EnumSystem";
               name="issueDate"
               type="date"
           /></ICol>
-          <ICol  :span=1 :span-md=2 :span-sm=4>
+          
+          <ICol :span=1 :span-md=2 :span-sm=4>
             <ISelect
               :label="t('ArchiveType')"
               v-model="archive.archiveTypeId"
@@ -312,6 +313,7 @@ import { EnumDirection } from "@/utils/EnumSystem";
               v-model="archive.description"
               name="description"
               type="text"
+              class="w-full"
           /></ICol>
         </IRow>
         <!-- file -->

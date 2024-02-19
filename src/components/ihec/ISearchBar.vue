@@ -12,6 +12,7 @@ const props = defineProps({
   <slot></slot>
   <!-- search button -->
   <IButton
+    :name="'ISearch'"
     color="green"
     type="outlined"
     :text="t('Search')"

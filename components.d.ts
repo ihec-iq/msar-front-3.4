@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     IBadge: typeof import('./src/components/inputs/IBadge.vue')['default']
     IBtnSearch: typeof import('./src/components/ihec/IBtnSearch.vue')['default']
     IButton: typeof import('./src/components/ihec/IButton.vue')['default']
+    IButton2: typeof import('./src/components/ihec/archive/IButton2.vue')['default']
     ICheckbox: typeof import('./src/components/inputs/ICheckbox.vue')['default']
     ICol: typeof import('./src/components/ihec/ICol.vue')['default']
     ICrudButtons: typeof import('./src/components/ihec/ICrudButtons.vue')['default']
