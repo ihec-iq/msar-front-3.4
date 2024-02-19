@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useItemStore } from "@/stores/item/itemStore";
-import { useItemCategoryStore } from "@/stores/Item/itemCategory";
+import { useItemCategoryStore } from "@/stores/Item/itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
@@ -200,7 +200,11 @@ onMounted(async () => {
           {{ t("ItemCategory") }}
         </div>
         <select v-model="item.Category.id" class="p-2">
-          <option v-for="category in categories" :key="category.id" :value="category.id">
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id"
+          >
             {{ category.name }}
           </option>
         </select>
@@ -249,7 +253,8 @@ onMounted(async () => {
     <div
       :class="{
         'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+          !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >
