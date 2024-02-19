@@ -32,6 +32,7 @@ import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IPageContent from "@/components/ihec/archive/IPageContent.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -109,6 +110,8 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
   if (archiveType != 0) {
     searchFilter.value.archiveTypeId = archiveType;
   }
+  console.log(fastSearch.value);
+  console.log(searchFilter.value);
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -153,7 +156,7 @@ const getPath = (files: Array<IDocument>) => {
   }
 };
 onMounted(async () => {
-  checkPermissionAccessArray(["show archives"]);
+  checkPermissionAccessArray([EnumPermission.ShowArchives]);
 
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
@@ -163,10 +166,10 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :TitleHeader="t('Archive')">
-      <template #HeaderButtons>
-        <IButton width="28" :onClick="addArchive" :text="t('Add')" />
-      </template> 
+  <IPage :HeaderTitle="t('Archive')">
+    <template #HeaderButtons>
+      <IButton width="28" :onClick="addArchive" :text="t('Add')" />
+    </template>
     <IPageContent>
       <IRow>
         <ISearchBar :getDataButton="getFilterData">
@@ -177,7 +180,6 @@ onMounted(async () => {
               :placeholder="t('SearchForArchive')"
               v-model="fastSearch"
               type="text"
-              @input="makeFastSearch()"
             />
           </ICol>
           <!-- date -->
@@ -187,6 +189,7 @@ onMounted(async () => {
               v-model="searchFilter.issueDateFrom"
               name="issueDateFrom"
               type="date"
+              :IsRequire="true"
             />
           </ICol>
           <ICol :col="4">
@@ -195,43 +198,34 @@ onMounted(async () => {
               v-model="searchFilter.issueDateTo"
               name="issueDateTo"
               type="date"
+              :IsRequire="true"
             />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow v-if="archiveTypes.length > 0">
-        <div class="collapse m-2">
-          <input type="checkbox" />
-          <div class="collapse-title align-middle content-center items-center">
+        <div class="collapse align-middle">
+          <input type="checkbox" class=" " />
+          <div
+            class="collapse-title align-middle content-center items-center flex"
+          >
             للاطلاع على كافة الكتب حسب نوع الكتاب
           </div>
-          <div class="collapse-content">
-            <IRow
-              v-motion
-              :initial="{ opacity: 0, y: -15 }"
-              :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }"
-              :delay="200"
-            >
-              <ICol :col="4"
-                ><c-archive-card-index
-                  title="عرض الجميع"
-                  count="0"
-                  @click="getFilterData(1, -1)"
-                ></c-archive-card-index
-              ></ICol>
-              <ICol
-                :col="4"
-                v-for="archiveType in archiveTypes"
-                :key="archiveType.id"
-              >
-                <CArchiveCardIndex
-                  :title="archiveType.name"
-                  :count="archiveType.archives?.toString()"
-                  @click="getFilterData(1, archiveType.id)"
-                ></CArchiveCardIndex>
-              </ICol>
-            </IRow>
+          <div class="collapse-content flex flex-col xs:flex-col">
+            <c-archive-card-index
+              title="عرض الجميع"
+              count="0"
+              @click="getFilterData(1, -1)"
+              class="w-4/12 flex flex-row"
+            ></c-archive-card-index>
+            <CArchiveCardIndex
+              class="w-4/12 flex flex-row"
+              v-for="archiveType in archiveTypes"
+              :key="archiveType.id"
+              :title="archiveType.name"
+              :count="archiveType.archives?.toString()"
+              @click="getFilterData(1, archiveType.id)"
+            ></CArchiveCardIndex>
           </div>
         </div>
       </IRow>

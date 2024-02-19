@@ -1,4 +1,4 @@
-export function VantResolver(): ComponentResolver {
+export function VantResolver(): ComponentResolver | any {
   return {
     type: 'component',
     resolve: (name: string) => {
