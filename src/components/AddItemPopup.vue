@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useItemStore } from "@/stores/item/itemStore";
-import { useItemCategoryStore } from "@/stores/item/itemCategory";
+import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
@@ -162,7 +162,9 @@ onMounted(async () => {
       </div>
       <div class="border-red-800 border-[1px]" v-if="errors">{{ errors }}</div>
     </div>
-    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem">Close</label>
+    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem"
+      >Close</label
+    >
   </div>
 </template>
 <style scoped>

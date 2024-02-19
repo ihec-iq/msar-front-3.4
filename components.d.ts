@@ -63,6 +63,7 @@ declare module '@vue/runtime-core' {
     ToolTipComponent: typeof import('./src/components/ToolTipComponent.vue')['default']
     TstView1: typeof import('./src/components/tstView1.vue')['default']
     ValidateInput: typeof import('./src/components/general/ValidateInput.vue')['default']
+    VanButton: typeof import('vant/es')['Button']
     VanPopup: typeof import('vant/es')['Popup']
     WangEditor: typeof import('./src/components/WangEditor.vue')['default']
     WindowsDesign: typeof import('./src/components/general/WindowsDesign.vue')['default']
