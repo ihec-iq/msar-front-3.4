@@ -11,16 +11,15 @@ import DragDrop from "@/components/DragDrop.vue";
 import { useDragDropStore } from "@/compositions/dragDrop";
 import { t } from "@/utils/I18nPlugin";
 import IPage from "@/components/ihec/IPage.vue";
-import IPageHeader from "@/components/ihec/IPageHeader.vue";
 import IButton from "@/components/ihec/IButton.vue";
 import { crud_delete } from "@/utils/crudTool";
-import IFooterForm from "@/components/ihec/IFooterCrud.vue";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
 
-import IFullRow from "@/components/ihec/IFullRow.vue";
+import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 
 import ICrudButtons from "@/components/ihec/ICrudButtons.vue";
@@ -50,6 +49,7 @@ const router = useRouter();
 const errors = ref<String | null>();
 //#endregion
 //#region CURD
+const reset = () => {};
 const store = () => {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
@@ -237,14 +237,15 @@ const back = () => {
 };
 
 onMounted(async () => {
+  //console.log(can("show archives1"));
   checkPermissionAccessArray(["show archives"]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("ArchiveAdd");
+    namePage.value = "ArchiveAdd";
     archive.value.id = 0;
   } else {
     await showData();
     archive.value.id = id.value;
-    namePage.value = t("ArchiveUpdate");
+    namePage.value = "ArchiveUpdate";
   }
   filesDataInput.value = [];
   await useArchiveStore().getArchiveTypes();
@@ -252,12 +253,14 @@ onMounted(async () => {
 import { EnumDirection } from "@/utils/EnumSystem";
 </script>
 <template>
-  <IPage :HeaderTitle="namePage">
-    <IPageContent>
-      <i-form>
-        <!-- row 1 -->
-        <IFullRow>
-          <ICol :col="8">
+  <IPage :HeaderTitle="t(namePage)">
+    <template #HeaderButtons>
+      <IButton width="28" type="outlined" :onClick="reset" :text="t('New')" />
+    </template>
+    <IRow>
+      <IForm>
+        <IRow :col-lg="2" :col-md="2" :col-sm="1">
+          <ICol :span="6">
             <IInput
               :label="t('Title')"
               v-model="archive.title"
@@ -265,57 +268,54 @@ import { EnumDirection } from "@/utils/EnumSystem";
               type="text"
               :dir="EnumDirection.LTR"
           /></ICol>
-          <ICol :col="4">
+          <ICol :span="4">
             <ICheckbox
               :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
               v-model="isIn"
               :checked="true"
           /></ICol>
-        </IFullRow>
-        <!-- row 2 -->
-        <IFullRow>
-          <ICol :col="3">
+        </IRow>
+        <IRow :col-lg="4" :col-md="2" :col-sm="1">
+          <ICol :span="3" :span-md="2" :span-sm="1">
             <IInput
               :label="t('NumberBook')"
               v-model="archive.number"
               name="number"
               type="text"
           /></ICol>
-          <ICol :col="3">
+          <ICol :span="1" :span-md="2" :span-sm="4">
             <IInput
               :label="t('Date')"
               v-model="archive.issueDate"
               name="issueDate"
               type="date"
           /></ICol>
-          <ICol :col="3">
+          <ICol  :span=1 :span-md=2 :span-sm=4>
             <ISelect
               :label="t('ArchiveType')"
               v-model="archive.archiveTypeId"
               name="archiveTypeId"
               :options="archiveTypes"
           /></ICol>
-          <ICol :col="3">
+          <ICol :span="1" :span-md="2" :span-sm="4">
             <IInput
               :label="t('way')"
               v-model="archive.way"
               name="way"
               type="text"
           /></ICol>
-        </IFullRow>
-        <!-- row 3 -->
-        <IFullRow>
-          <ICol :col="12">
+        </IRow>
+        <IRow >
+          <ICol>
             <IInput
               :label="t('Description')"
               v-model="archive.description"
               name="description"
               type="text"
-              class="w-full"
           /></ICol>
-        </IFullRow>
+        </IRow>
         <!-- file -->
-        <IFullRow>
+        <IRow>
           <ICol
             :col="4"
             class=""
@@ -325,7 +325,7 @@ import { EnumDirection } from "@/utils/EnumSystem";
             <FilePreview :file="document" @updateList="updateList">
             </FilePreview>
           </ICol>
-        </IFullRow>
+        </IRow>
         <DragDrop></DragDrop>
         <div class="px-6">
           <div id="showFiles" class="p-0 flex flex-col w-full list-none">
@@ -343,15 +343,16 @@ import { EnumDirection } from "@/utils/EnumSystem";
           </div>
           <div id="DropZone"></div>
         </div>
-        <!-- end file -->
-      </i-form>
-    </IPageContent>
-    <IFooterForm
-      :isAdd="archive.id == 0"
-      :onCreate="store"
-      :onUpdate="update"
-      :onDelete="Delete"
-    />
+      </IForm>
+    </IRow>
+    <template #Footer>
+      <IFooterCrud
+        :isAdd="archive.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
+    </template>
   </IPage>
 </template>
 <style scoped>

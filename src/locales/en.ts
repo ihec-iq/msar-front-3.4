@@ -186,4 +186,6 @@ export default {
   SortBy: "Sort By",
   Limit: "Limit",
   Section: "Section",
+  Save: "Save",
+  New: "New",
 };
