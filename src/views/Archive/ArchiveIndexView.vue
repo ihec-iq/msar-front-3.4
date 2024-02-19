@@ -32,6 +32,7 @@ import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IPageContent from "@/components/ihec/archive/IPageContent.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -153,7 +154,7 @@ const getPath = (files: Array<IDocument>) => {
   }
 };
 onMounted(async () => {
-  checkPermissionAccessArray(["show archives"]);
+  checkPermissionAccessArray([EnumPermission.ShowArchives]);
 
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
@@ -168,70 +169,60 @@ onMounted(async () => {
       <IButton width="28" :onClick="addArchive" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow>
+      <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
-          <!-- fast search -->
-
-          <ICol :col="4">
+          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
+              :label="t('Title')"
               :placeholder="t('SearchForArchive')"
               v-model="fastSearch"
               type="text"
-              @input="makeFastSearch()"
             />
           </ICol>
           <!-- date -->
-          <ICol :col="4">
+          <ICol :span-lg="1" :span-md="2" :span="1">
             <IInput
               :label="t('DateFrom')"
               v-model="searchFilter.issueDateFrom"
               name="issueDateFrom"
               type="date"
+              :IsRequire="true"
             />
           </ICol>
-          <ICol :col="4">
+          <ICol :span-lg="1" :span-md="2">
             <IInput
               :label="t('DateTo')"
               v-model="searchFilter.issueDateTo"
               name="issueDateTo"
               type="date"
+              :IsRequire="true"
             />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow v-if="archiveTypes.length > 0">
-        <div class="collapse m-2">
-          <input type="checkbox" />
-          <div class="collapse-title align-middle content-center items-center">
+        <div class="collapse align-middle">
+          <input type="checkbox" class=" " />
+          <div
+            class="collapse-title align-middle content-center items-center flex"
+          >
             للاطلاع على كافة الكتب حسب نوع الكتاب
           </div>
-          <div class="collapse-content">
-            <IRow
-              v-motion
-              :initial="{ opacity: 0, y: -15 }"
-              :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }"
-              :delay="200"
-            >
-              <ICol :col="4"
-                ><c-archive-card-index
-                  title="عرض الجميع"
-                  count="0"
-                  @click="getFilterData(1, -1)"
-                ></c-archive-card-index
-              ></ICol>
-              <ICol
-                :col="4"
-                v-for="archiveType in archiveTypes"
-                :key="archiveType.id"
-              >
-                <CArchiveCardIndex
-                  :title="archiveType.name"
-                  :count="archiveType.archives?.toString()"
-                  @click="getFilterData(1, archiveType.id)"
-                ></CArchiveCardIndex>
-              </ICol>
-            </IRow>
+          <div class="collapse-content grid grid-cols-4">
+            <c-archive-card-index
+              title="عرض الجميع"
+              count="0"
+              @click="getFilterData(1, -1)"
+              class="col-span-4"
+            ></c-archive-card-index>
+            <CArchiveCardIndex
+              class="col-span-4"
+              v-for="archiveType in archiveTypes"
+              :key="archiveType.id"
+              :title="archiveType.name"
+              :count="archiveType.archives?.toString()"
+              @click="getFilterData(1, archiveType.id)"
+            ></CArchiveCardIndex>
           </div>
         </div>
       </IRow>

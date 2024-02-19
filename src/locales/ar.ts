@@ -460,7 +460,7 @@ export default {
   "General Settings": "اعدادات عامة",
   "Sale Custom Group": "بيع الكروبات المخصصة",
   "Design Custom Group": "تصميم الكروبات المخصصة",
-  Save: "حفظ",
+
   "Change Theme": "تغير المظهر",
   "Change Direction": "تغير الاتجاه",
   "Change Language": "تغير اللغة",
@@ -506,5 +506,7 @@ export default {
   Employees: "موظفين",
   SortBy: "ترتيب حسب",
   Limit: "الحد",
-  Section: "القسم"
+  Section: "القسم",
+  Save: "حفظ",
+  New: "جديد",
 };
