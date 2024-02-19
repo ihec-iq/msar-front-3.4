@@ -240,79 +240,80 @@ const ChangeDateRecord = () => {
 };
 </script>
 <template>
-  <PageTitle>
-    {{ namePage }}
-    <span>{{ moment(now()).format("dddd") }}</span></PageTitle
-  >
-  <div class="w-full">
-    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("Date") }}
-        </div>
-        <input
-          v-model="vacationTime.date"
-          type="date"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
+  <IPage>
+    <template #header>
+      <IPageHeader :title="t(namePage)"> </IPageHeader>
+    </template>
+    <template #content>
+      <IRow>
+        <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
+          <div class="w-11/12 mr-2">
+            <div
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("Date") }}
+            </div>
+            <input
+              v-model="vacationTime.date"
+              type="date"
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            />
+          </div>
 
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("VacationTimeRecord") }}
-        </div>
-        <select
-          v-model="vacationTime.record"
-          @change="ChangeDateRecord()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        >
-          <option
-            v-for="time in times"
-            :key="time.value"
-            :value="time.value"
-            :selected="time.selected == true"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-          >
-            {{ time.display }}
-          </option>
-        </select>
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("DateFrom") }}
-        </div>
-        <input
-          v-model="vacationTime.timeFrom"
-          type="time"
-          @input="ChangeDate()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("DateTo") }}
-        </div>
-        <input
-          v-model="vacationTime.timeTo"
-          type="time"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("OutputVoucherEmployeeRequest") }}
-        </div>
-        <!-- <select
+          <div class="w-11/12 mr-2">
+            <div
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("VacationTimeRecord") }}
+            </div>
+            <select
+              v-model="vacationTime.record"
+              @change="ChangeDateRecord()"
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            >
+              <option
+                v-for="time in times"
+                :key="time.value"
+                :value="time.value"
+                :selected="time.selected == true"
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+              >
+                {{ time.display }}
+              </option>
+            </select>
+          </div>
+          <div class="w-11/12 mr-2">
+            <div
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("DateFrom") }}
+            </div>
+            <input
+              v-model="vacationTime.timeFrom"
+              type="time"
+              @input="ChangeDate()"
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            />
+          </div>
+          <div class="w-11/12 mr-2">
+            <div
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("DateTo") }}
+            </div>
+            <input
+              v-model="vacationTime.timeTo"
+              type="time"
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            />
+          </div>
+          <div class="w-11/12 mr-2">
+            <div
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("OutputVoucherEmployeeRequest") }}
+            </div>
+            <!-- <select
           v-model="vacationTime.Vacation"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         >
@@ -325,93 +326,68 @@ const ChangeDateRecord = () => {
             {{ vacation.Employee.name }}
           </option>
         </select> -->
-        <vSelect
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationTime.Vacation"
-          :options="vacations"
-          :reduce="(vacation: IVacation) => vacation"
-          label="name"
-          :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
-        >
-          <template #option="{ Employee }">
-            <div>
-              <span>{{ Employee.name }}</span>
+            <vSelect
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              v-model="vacationTime.Vacation"
+              :options="vacations"
+              :reduce="(vacation: IVacation) => vacation"
+              label="name"
+              :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
+            >
+              <template #option="{ Employee }">
+                <div>
+                  <span>{{ Employee.name }}</span>
+                </div>
+              </template>
+            </vSelect>
+          </div>
+          <div class="w-11/12 mr-2">
+            <div
+              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+            >
+              {{ t("VacationReason") }}
             </div>
-          </template>
-        </vSelect>
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("VacationReason") }}
+            <vSelect
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              v-model="vacationTime.Reason"
+              :options="reasons"
+              :reduce="(reason: IVacationReason) => reason"
+              label="name"
+              :getOptionLabel="(reason: IVacationReason) => reason.name"
+            >
+              <template #option="{ name }">
+                <div>
+                  <span>{{ name }}</span>
+                </div>
+              </template>
+            </vSelect>
+          </div>
         </div>
-        <vSelect
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationTime.Reason"
-          :options="reasons"
-          :reduce="(reason: IVacationReason) => reason"
-          label="name"
-          :getOptionLabel="(reason: IVacationReason) => reason.name"
-        >
-          <template #option="{ name }">
-            <div>
-              <span>{{ name }}</span>
-            </div>
-          </template>
-        </vSelect>
-      </div>
-    </div>
-    <!-- bottom tool bar -->
-    <div
-      :class="{
-        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
-      }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-    >
-      <div class="flex ltr:ml-8 rtl:mr-8">
-        <div class="items-center mr-3">
-          <button
-            v-if="vacationTime.id == 0"
-            @click="store()"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Create") }}
-          </button>
-          <button
-            v-else
-            @click="update()"
-            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Update") }}
-          </button>
-          <button
-            v-if="vacationTime.id != 0"
-            @click="Delete()"
-            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
-          >
-            {{ t("Delete") }}
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      :class="{
-        'ltr:left-4 rtl:right-4': is,
-        'ltr:left-28 rtl:right-28': !is,
-      }"
-      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-    >
-      <button
-        @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
+      </IRow>
+    </template>
+    <template #footer>
+      <div
+        class="max-w-screen-xl flex flex-wrap flex-row-reverse justify-between p-4"
       >
-        {{ t("Back") }}
-      </button>
-    </div>
-  </div>
-  <!-- end bottom tool -->
+        <!-- end -->
+        <IButton
+          v-if="vacationTime.id == 0"
+          :text="t('Create')"
+          :onClick="store"
+        />
+        <IButton v-else :text="t('Update')" :onClick="update" />
+        <!-- start -->
+        <!-- <IButton :text="t('Back')" :onClick="back" /> -->
+        <IButton
+          v-if="vacationTime.id != 0"
+          color="red"
+          type="outlined"
+          :text="t('Delete')"
+          :onClick="Delete"
+        />
+      </div>
+    </template>
+  </IPage>
 </template>
 <style scoped>
 .drop-area {
