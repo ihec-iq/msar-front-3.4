@@ -110,8 +110,6 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
   if (archiveType != 0) {
     searchFilter.value.archiveTypeId = archiveType;
   }
-  console.log(fastSearch.value);
-  console.log(searchFilter.value);
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -171,19 +169,18 @@ onMounted(async () => {
       <IButton width="28" :onClick="addArchive" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow>
+      <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
-          <!-- fast search -->
-
-          <ICol :col="4">
+          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
+              :label="t('Title')"
               :placeholder="t('SearchForArchive')"
               v-model="fastSearch"
               type="text"
             />
           </ICol>
           <!-- date -->
-          <ICol :col="4">
+          <ICol :span-lg="1" :span-md="2" :span="1">
             <IInput
               :label="t('DateFrom')"
               v-model="searchFilter.issueDateFrom"
@@ -192,7 +189,7 @@ onMounted(async () => {
               :IsRequire="true"
             />
           </ICol>
-          <ICol :col="4">
+          <ICol :span-lg="1" :span-md="2">
             <IInput
               :label="t('DateTo')"
               v-model="searchFilter.issueDateTo"
@@ -211,15 +208,15 @@ onMounted(async () => {
           >
             للاطلاع على كافة الكتب حسب نوع الكتاب
           </div>
-          <div class="collapse-content flex flex-col xs:flex-col">
+          <div class="collapse-content grid grid-cols-4">
             <c-archive-card-index
               title="عرض الجميع"
               count="0"
               @click="getFilterData(1, -1)"
-              class="w-4/12 flex flex-row"
+              class="col-span-4"
             ></c-archive-card-index>
             <CArchiveCardIndex
-              class="w-4/12 flex flex-row"
+              class="col-span-4"
               v-for="archiveType in archiveTypes"
               :key="archiveType.id"
               :title="archiveType.name"

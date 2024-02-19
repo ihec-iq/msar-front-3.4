@@ -259,45 +259,45 @@ import { EnumDirection } from "@/utils/EnumSystem";
     </template>
     <IRow>
       <IForm>
-        <IRow>
-          <ICol>
-            <IInput 
+        <IRow :col-lg="2" :col-md="2" :col-sm="1">
+          <ICol :span="6">
+            <IInput
               :label="t('Title')"
               v-model="archive.title"
               name="title"
               type="text"
               :dir="EnumDirection.LTR"
           /></ICol>
-          <ICol :col="4">
+          <ICol :span="4">
             <ICheckbox
               :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
               v-model="isIn"
               :checked="true"
           /></ICol>
         </IRow>
-        <IRow>
-          <ICol :col="3">
+        <IRow :col-lg="4" :col-md="2" :col-sm="1">
+          <ICol :span="3" :span-md="2" :span-sm="1">
             <IInput
               :label="t('NumberBook')"
               v-model="archive.number"
               name="number"
               type="text"
           /></ICol>
-          <ICol :col="3">
+          <ICol :span="1" :span-md="2" :span-sm="4">
             <IInput
               :label="t('Date')"
               v-model="archive.issueDate"
               name="issueDate"
               type="date"
           /></ICol>
-          <ICol :col="3">
+          <ICol  :span=1 :span-md=2 :span-sm=4>
             <ISelect
               :label="t('ArchiveType')"
               v-model="archive.archiveTypeId"
               name="archiveTypeId"
               :options="archiveTypes"
           /></ICol>
-          <ICol :col="3">
+          <ICol :span="1" :span-md="2" :span-sm="4">
             <IInput
               :label="t('way')"
               v-model="archive.way"
@@ -305,14 +305,13 @@ import { EnumDirection } from "@/utils/EnumSystem";
               type="text"
           /></ICol>
         </IRow>
-        <IRow>
-          <ICol :col="12">
+        <IRow >
+          <ICol>
             <IInput
               :label="t('Description')"
               v-model="archive.description"
               name="description"
               type="text"
-              class="w-full"
           /></ICol>
         </IRow>
         <!-- file -->

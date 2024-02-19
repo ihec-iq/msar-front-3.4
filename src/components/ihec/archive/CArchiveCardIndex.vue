@@ -14,7 +14,7 @@ const props = defineProps({
 <template>
   <div
     class="bg-cardLight btn dark:bg-card overflow-hidden hover:bg-gray-300
-     dark:hover:bg-gray-800 flex flex-row w-full rounded-lg border border-gray-300 shadow-md
+     dark:hover:bg-gray-800  rounded-lg border border-gray-300 shadow-md
       shadow-gray-400 duration-500 hover:border hover:border-gray-400 
       hover:shadow-md hover:shadow-gray-600 mb-2"
   >

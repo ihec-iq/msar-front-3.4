@@ -4,6 +4,7 @@ import IButton from "./IButton.vue";
 const props = defineProps({
   getDataButton: {
     type: Function,
+    required: true,
   },
 });
 </script>
