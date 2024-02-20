@@ -55,10 +55,10 @@ const filterByIDName = (employee: IEmployee) => {
 const makeFastSearch = () => {
   return;
   // eslint-disable-next-line no-self-assign
-  if (fastSearch.value == "") data.value = dataBase.value;
-  else {
-    data.value = dataBase.value.filter(filterByIDName);
-  }
+  // if (fastSearch.value == "") data.value = dataBase.value;
+  // else {
+  //   data.value = dataBase.value.filter(filterByIDName);
+  // }
 };
 //#endregion
 //#region Search

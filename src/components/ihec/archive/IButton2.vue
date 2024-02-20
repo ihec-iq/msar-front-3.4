@@ -45,13 +45,18 @@ const PostIcon = computed(() => {
   return "mdi:" + props.postIcon;
 });
 const classIcon = computed(() => {
-  return (
-    "w-5 h-5 text-" +
-    props.color +
-    "-500 dark:text-" +
-    props.color +
-    "-400 mr-2 ml-2 basis-1/3 "
-  );
+  let _classIcon = "";
+  if (props.type === "default") {
+    _classIcon = "w-5 h-5 text-white-500 mr-2 ml-2 basis-1/3 ";
+  } else if (props.type === "outlined") {
+    _classIcon = "w-5 h-5 text-gray-500 mr-2 ml-2 basis-1/3 ";
+  } else {
+    _classIcon = "w-5 h-5 text-white-500 mr-2 ml-2 basis-1/3 ";
+  }
+  return _classIcon;
+});
+const BColor = computed(() => {
+  return props.color;
 });
 const buttonClass = computed(() => {
   let colorClass = "";
@@ -79,9 +84,7 @@ const buttonClass = computed(() => {
       " py-2 px-4 rounded";
   } else {
     colorClass =
-      "bg-" +
-      props.color +
-      "-500 hover:bg-" +
+      "bg-green-500 hover:bg-" +
       props.color +
       "-700 duration-500 text-white font-bold w-" +
       props.width +
@@ -92,11 +95,7 @@ const buttonClass = computed(() => {
 </script>
 
 <template>
-  <button
-    @click="onClick()"
-    :class="buttonClass"
-    class="flex flex-row mx-2 mt-3"
-  >
+  <button @click="onClick()" :class="buttonClass" class="flex flex-row mx-2">
     <Icon
       v-if="props.preIcon != ''"
       :icon="PreIcon"

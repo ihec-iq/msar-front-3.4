@@ -9,7 +9,7 @@ import type {
 } from "@/types/archives/IArchive";
 
 export const useArchiveStore = defineStore("archiveStore", () => {
-  const archive = reactive<IArchive>({
+  const archive = ref<IArchive>({
     id: 0,
     title: "",
     issueDate: new Date().toISOString().split("T")[0],
@@ -73,7 +73,22 @@ export const useArchiveStore = defineStore("archiveStore", () => {
         console.log("in get Categories : " + errors);
       });
   }
-
+  const resetData = () => {
+    archive.value = {
+      id: 0,
+      title: "",
+      issueDate: new Date().toISOString().split("T")[0],
+      files: [],
+      description: "",
+      way: "",
+      number: "",
+      isIn: 1,
+      isInWord: "",
+      archiveType: { id: 0, name: "" },
+      archiveTypeId: 0,
+      sectionId: 1,
+    };
+  };
   return {
     archive,
     archiveTypes,
@@ -89,5 +104,6 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     addDocumentMulti,
     getDocuments,
     _deleteDocument,
+    resetData,
   };
 });

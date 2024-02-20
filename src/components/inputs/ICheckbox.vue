@@ -12,6 +12,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  IsRequire: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // import { useI18n } from "@/stores/i18n/useI18n";
@@ -19,9 +23,9 @@ defineProps({
 </script>
 
 <template>
-  <div class="mb-4">
-    <label class="_inputLabel">
-      {{ label }}
+  <div class="mb-2 flex">
+    <label class="_inputLabel mx-2">
+      <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
     <input
       type="checkbox"

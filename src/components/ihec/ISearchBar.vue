@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { t } from "@/utils/I18nPlugin";
-import IButton from "./IButton.vue";
 import IButton2 from "./archive/IButton2.vue";
 const props = defineProps({
   getDataButton: {
@@ -19,6 +18,8 @@ const props = defineProps({
       :text="t('Search')"
       preIcon="magnify"
       :onClick="props.getDataButton"
+      class="mt-3"
+      width="25"
     />
   </div>
 </template>
