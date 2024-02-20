@@ -55,6 +55,9 @@ const classIcon = computed(() => {
   }
   return _classIcon;
 });
+const BColor = computed(() => {
+  return props.color;
+});
 const buttonClass = computed(() => {
   let colorClass = "";
   if (props.type === "default") {
@@ -81,9 +84,7 @@ const buttonClass = computed(() => {
       " py-2 px-4 rounded";
   } else {
     colorClass =
-      "bg-" +
-      props.color +
-      "-500 hover:bg-" +
+      "bg-green-500 hover:bg-" +
       props.color +
       "-700 duration-500 text-white font-bold w-" +
       props.width +

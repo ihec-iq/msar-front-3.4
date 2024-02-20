@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { t } from "@/utils/I18nPlugin";
-import IButton from "./IButton.vue";
 import IButton2 from "./archive/IButton2.vue";
 const props = defineProps({
   getDataButton: {
@@ -14,13 +13,13 @@ const props = defineProps({
   <!-- search button -->
   <div class="ml-4 lg:mt-0 xs:mt-2">
     <IButton2
-      color="blue"
+      color="green"
       type="outlined"
       :text="t('Search')"
-      postIcon="magnify"
-      preIcon="home"
+      preIcon="magnify"
       :onClick="props.getDataButton"
       class="mt-3"
+      width="25"
     />
   </div>
 </template>

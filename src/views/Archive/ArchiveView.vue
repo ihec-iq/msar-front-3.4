@@ -252,6 +252,7 @@ import IButton2 from "@/components/ihec/archive/IButton2.vue";
   <IPage :HeaderTitle="t(namePage)">
     <template #HeaderButtons>
       <IButton2
+        color="green"
         width="28"
         type="outlined"
         pre-icon="autorenew"
