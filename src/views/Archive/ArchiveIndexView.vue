@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import SimpleLoading from "@/components/general/loading.vue";
 import { useArchiveStore } from "@/stores/archives/archiveStore";
+import { Icon } from "@iconify/vue";
+
 import { t } from "@/utils/I18nPlugin";
 import { usePermissionStore } from "@/stores/permissionStore";
 import type {
@@ -204,11 +206,15 @@ onMounted(async () => {
         <div class="collapse align-middle">
           <input type="checkbox" class=" " />
           <div
-            class="collapse-title align-middle content-center items-center flex"
+            class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
           >
-            للاطلاع على كافة الكتب حسب نوع الكتاب
+            <span class="mx-2 px-2">
+              للاطلاع على كافة الكتب حسب نوع الكتاب
+            </span>
+            <Icon icon="mdi:filter-check"></Icon>
           </div>
           <div class="collapse-content grid grid-cols-4">
+            <div class="mt-5"></div>
             <c-archive-card-index
               title="عرض الجميع"
               count="0"
