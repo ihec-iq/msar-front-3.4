@@ -20,6 +20,7 @@ const props = defineProps({
       postIcon="magnify"
       preIcon="home"
       :onClick="props.getDataButton"
+      class="mt-3"
     />
   </div>
 </template>

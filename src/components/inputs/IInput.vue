@@ -27,14 +27,14 @@ defineProps({
 <template>
   <div class="mb-2">
     <label class="_inputLabel">
-      <span v-if="IsRequire" class="text-red-600">*</span> {{ label }} 
+      <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
     <input
       class="_input"
       :type="type"
       v-model="modelValue"
       :placeholder="placeholder"
-      :style="{ direction: dir }" 
+      :style="{ direction: dir }"
     />
   </div>
 </template>

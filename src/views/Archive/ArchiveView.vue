@@ -1,28 +1,24 @@
 <script setup lang="ts">
-import { onMounted, ref, shallowRef } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "@/stores/archives/archiveStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 import FilePreview from "@/components/FilePreview.vue";
 import DragDrop from "@/components/DragDrop.vue";
 import { useDragDropStore } from "@/compositions/dragDrop";
 import { t } from "@/utils/I18nPlugin";
+
 import IPage from "@/components/ihec/IPage.vue";
-import IButton from "@/components/ihec/IButton.vue";
 import { crud_delete } from "@/utils/crudTool";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
-
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
-
-import ICrudButtons from "@/components/ihec/ICrudButtons.vue";
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
 
@@ -38,8 +34,6 @@ const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isIn = ref(true);
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
 
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
@@ -49,7 +43,9 @@ const router = useRouter();
 const errors = ref<String | null>();
 //#endregion
 //#region CURD
-const reset = () => {};
+const reset = () => {
+  archiveStore.resetData();
+};
 const store = () => {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
@@ -250,55 +246,64 @@ onMounted(async () => {
   filesDataInput.value = [];
   await useArchiveStore().getArchiveTypes();
 });
-import { EnumDirection } from "@/utils/EnumSystem";
+import IButton2 from "@/components/ihec/archive/IButton2.vue";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">
     <template #HeaderButtons>
-      <IButton width="28" type="outlined" :onClick="reset" :text="t('New')" />
+      <IButton2
+        width="28"
+        type="outlined"
+        pre-icon="autorenew"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IRow>
       <IForm>
-        <IRow :col-lg="2" :col-md="2" :col-sm="1">
-          <ICol :span="6">
+        <IRow col="2" col-lg="2" col-md="1" col-sm="1">
+          <ICol>
             <IInput
               :label="t('Title')"
               v-model="archive.title"
               name="title"
               type="text"
-              :dir="EnumDirection.LTR"
+              :IsRequire="true"
           /></ICol>
-          <ICol :span="4">
+          <ICol>
             <ICheckbox
               :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
               v-model="isIn"
               :checked="true"
+              :IsRequire="true"
           /></ICol>
         </IRow>
-        <IRow :col-lg="4" :col-md="2" :col-sm="1">
-          <ICol :span="3" :span-md="2" :span-sm="1">
+        <IRow col-lg="4" col-md="2" col-sm="1">
+          <ICol span="3" span-md="2" span-sm="1">
             <IInput
               :label="t('NumberBook')"
               v-model="archive.number"
               name="number"
               type="text"
           /></ICol>
-          <ICol :span="1" :span-md="2" :span-sm="4">
+          <ICol span="1" span-md="2" span-sm="4">
             <IInput
               :label="t('Date')"
               v-model="archive.issueDate"
               name="issueDate"
               type="date"
+              :IsRequire="true"
           /></ICol>
-          
-          <ICol :span=1 :span-md=2 :span-sm=4>
+
+          <ICol span="1" span-md="2" span-sm="4">
             <ISelect
               :label="t('ArchiveType')"
               v-model="archive.archiveTypeId"
               name="archiveTypeId"
               :options="archiveTypes"
+              :IsRequire="true"
           /></ICol>
-          <ICol :span="1" :span-md="2" :span-sm="4">
+          <ICol span="1" span-md="2" span-sm="4">
             <IInput
               :label="t('way')"
               v-model="archive.way"
@@ -306,7 +311,7 @@ import { EnumDirection } from "@/utils/EnumSystem";
               type="text"
           /></ICol>
         </IRow>
-        <IRow >
+        <IRow>
           <ICol>
             <IInput
               :label="t('Description')"

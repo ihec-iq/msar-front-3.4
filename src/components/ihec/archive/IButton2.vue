@@ -94,11 +94,7 @@ const buttonClass = computed(() => {
 </script>
 
 <template>
-  <button
-    @click="onClick()"
-    :class="buttonClass"
-    class="flex flex-row mx-2 mt-3"
-  >
+  <button @click="onClick()" :class="buttonClass" class="flex flex-row mx-2">
     <Icon
       v-if="props.preIcon != ''"
       :icon="PreIcon"
