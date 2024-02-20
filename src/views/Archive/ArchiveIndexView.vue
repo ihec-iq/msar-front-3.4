@@ -248,7 +248,7 @@ onMounted(async () => {
               >
                 <!-- card -->
                 <div
-                  class="bg-cardLight dark:bg-[#22262A] flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                  class="bg-cardLight hover:bg-[#E8F6FD] dark:bg-[#22262A] flex w-full p-5 rounded-md border border-gray-200 shadow-sm shadow-gray-600 duration-500 hover:border hover:border-gray-400 hover:shadow-sm hover:shadow-gray-600"
                   v-for="item in data"
                   :key="item.id"
                 >
