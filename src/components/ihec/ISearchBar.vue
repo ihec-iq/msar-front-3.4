@@ -17,8 +17,7 @@ const props = defineProps({
       color="green"
       type="outlined"
       :text="t('Search')"
-      postIcon="magnify"
-      preIcon="home"
+      preIcon="magnify"
       :onClick="props.getDataButton"
     />
   </div>
