@@ -23,7 +23,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="">
+  <div >
     <label class="_inputLabel" :for="name"> {{ label }}* </label>
     <select class="_input" :name="name" :id="name" :v-model="modelValue">
       <option
