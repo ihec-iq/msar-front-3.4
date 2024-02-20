@@ -136,8 +136,8 @@ const ToNumberShow = (val: any) => {
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
-              :label="t('Title')"
-              :placeholder="t('SearchForArchive')"
+              :label="t('Search')"
+              :placeholder="t('Search')"
               v-model="fastSearch"
               type="text"
             />
