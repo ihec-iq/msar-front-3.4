@@ -45,13 +45,15 @@ const PostIcon = computed(() => {
   return "mdi:" + props.postIcon;
 });
 const classIcon = computed(() => {
-  return (
-    "w-5 h-5 text-" +
-    props.color +
-    "-500 dark:text-" +
-    props.color +
-    "-400 mr-2 ml-2 basis-1/3 "
-  );
+  let _classIcon = "";
+  if (props.type === "default") {
+    _classIcon = "w-5 h-5 text-white-500 mr-2 ml-2 basis-1/3 ";
+  } else if (props.type === "outlined") {
+    _classIcon = "w-5 h-5 text-gray-500 mr-2 ml-2 basis-1/3 ";
+  } else {
+    _classIcon = "w-5 h-5 text-white-500 mr-2 ml-2 basis-1/3 ";
+  }
+  return _classIcon;
 });
 const buttonClass = computed(() => {
   let colorClass = "";
