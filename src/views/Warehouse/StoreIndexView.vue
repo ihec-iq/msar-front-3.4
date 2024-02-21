@@ -19,6 +19,7 @@ const { get_filter, get_summation } = useStoringStore();
 import { limits } from "@/utils/defaultParams";
 import ICol from "@/components/ihec/ICol.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
+import ISearchBar from "@/components/ihec/ISearchBar.vue";
 
 const route = useRoute();
 const router = useRouter();

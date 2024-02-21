@@ -246,7 +246,7 @@ onMounted(async () => {
   filesDataInput.value = [];
   await useArchiveStore().getArchiveTypes();
 });
-import IButton2 from "@/components/ihec/archive/IButton2.vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">
