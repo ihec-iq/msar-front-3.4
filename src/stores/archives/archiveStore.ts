@@ -70,7 +70,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
         }
       })
       .catch((errors) => {
-        console.log("in get Categories : " + errors);
+        console.log("in get ArchiveTypes : " + errors);
       });
   }
   const resetData = () => {
