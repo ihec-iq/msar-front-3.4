@@ -36,7 +36,7 @@ watch(
   }
 );
 const addItem = () => {
-  vacationSick.reset();
+  vacationSick.resetData();
   router.push({
     name: "vacationSickAdd",
   });
