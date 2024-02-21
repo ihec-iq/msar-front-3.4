@@ -355,4 +355,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/vacations/vacationStore@/stores/permissionStore

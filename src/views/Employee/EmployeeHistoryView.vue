@@ -141,7 +141,7 @@ const createCorruptedVoucher = () => {
 //#endregion
 
 onMounted(async () => {
-  checkPermissionAccessArray(["show employees"]);
+  checkPermissionAccessArray([EnumPermission.ShowEmployees]);;
   searchFilter.value.limit = 24;
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";

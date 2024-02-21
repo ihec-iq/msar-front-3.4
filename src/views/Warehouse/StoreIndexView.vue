@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
@@ -20,6 +19,7 @@ import { limits } from "@/utils/defaultParams";
 import ICol from "@/components/ihec/ICol.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -102,7 +102,7 @@ const openItem = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show storage"]);
+  checkPermissionAccessArray([EnumPermission.ShowStorage]);
 
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";

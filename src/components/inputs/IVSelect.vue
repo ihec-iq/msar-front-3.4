@@ -35,20 +35,22 @@ const Change = () => {
     <label class="_inputLabel" :for="name">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
-    <select
-      class="_input"
-      :name="name"
+    <vSelect
       :id="name"
+      class="_input"
       v-model="modelValue"
+      :options="options"
+      :reduce="(user: any) => user"
+      label="name"
+      :name="name"
+      :getOptionLabel="(user: any) => user.name"
       @change="Change"
     >
-      <option
-        v-for="(option, index) in options"
-        :key="index"
-        :value="option.id"
-      >
-        {{ option.name }}
-      </option>
-    </select>
+      <template #option="{ name }">
+        <div>
+          <span>{{ name }}</span>
+        </div>
+      </template>
+    </vSelect>
   </div>
 </template>
