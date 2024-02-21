@@ -38,6 +38,7 @@ const goBack = () => {
         :text="t('Create')"
         :onClick="props.onCreate"
       />
+      <IButton v-else :text="t('Update')" :onClick="props.onUpdate" />
       <IButton
         v-if="!props.isAdd"
         color="red"
