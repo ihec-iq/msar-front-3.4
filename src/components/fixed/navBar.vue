@@ -58,7 +58,8 @@ const filteredLinks = computed(() =>
     // Check if any of the link's permissions are included in userPermissions
     if (permissions.value == undefined) return;
     return link.permissions.some(
-      (permission) => permissions.value.includes(permission) || permission == "public"
+      (permission) =>
+        permissions.value.includes(permission) || permission == "public"
     );
   })
 );
@@ -171,28 +172,31 @@ onMounted(() => {
               <router-link
                 :to="{ name: Link.routerName }"
                 @click.prevent="tab = Link.tab"
+                @mouseover="tab = Link.tab"
                 class=""
               >
                 <button
-                  class="hover:text-[#444] border-solid border-[#aaa] border-2 mt-1 mb-1 p-3 rounded-full dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark   inline-flex justify-center smooth-hover"
-                >
-                  <i :title="Link.title" v-html="Link.icon" /></button
+                  class="hover:text-[#444] btn-outline hover:rounded-2xl p-3 rounded-full bg-gray border-solid border-[#aaa] border-2 m-1 dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark duration-500"
+                  :title="Link.title"
+                  v-html="Link.icon"
+                ></button
               ></router-link>
               <!-- childrens -->
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
-                  class="p-2 text-base whitespace-pre-wrap cursor-pointer duration-800"
+                  class="p-2 text-base whitespace-pre-wrap cursor-pointer duration-500"
                 >
                   <div
                     v-for="child in Link.children"
                     :key="child.routerName"
                     :class="{ 'flex ': !isClose, hidden: isClose }"
+                    class="rounded-md border-2 my-2 hover:bg-gray-200"
                   >
                     <router-link
                       :to="{ name: child.routerName }"
                       v-if="tab == Link.tab"
-                      class="p-1 cursor-pointer"
+                      class="cursor-pointer rounded-md p-2"
                     >
                       {{ child.title }}
                     </router-link>
@@ -296,7 +300,8 @@ onMounted(() => {
           @click.prevent="settingMenu = 'MainSetting'"
           class="-mr-3 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
           :class="{
-            ' text-white  border-l-2 border-blue-500 ': settingMenu === 'MainSetting',
+            ' text-white  border-l-2 border-blue-500 ':
+              settingMenu === 'MainSetting',
           }"
         >
           <!-- Heroicon name: outline/shield-check -->
@@ -424,7 +429,8 @@ li:hover > button svg {
   display: flex;
   position: relative;
   background-color: #6b7280;
-  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15),
+    0 6px 12px 0 rgba(24, 94, 224, 0.15);
   padding: 0.75rem;
   border-radius: 20px;
 }

@@ -34,7 +34,7 @@ watch(
   }
 );
 const addItem = () => {
-  useVacationTimeStore().reset();
+  useVacationTimeStore().resetData();
   router.push({
     name: "vacationTimeAdd",
   });
@@ -112,6 +112,7 @@ onMounted(async () => {
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
+              :label="t('Search')"
               :placeholder="t('Search')"
               v-model="fastSearch"
               type="text"

@@ -16,7 +16,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       Employee: {
         id: 0,
         name: "",
-        section: { id: 0, name: "" },
+        Section: { id: 0, name: "" },
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -43,7 +43,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       name: "",
     },
   });
-  function reset() {
+  function resetData() {
     vacationSick.id = 0;
     vacationSick.record = 1;
     vacationSick.dayFrom = new Date().toISOString().split("T")[0];
@@ -55,7 +55,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       Employee: {
         id: 0,
         name: "",
-        section: { id: 0, name: "" },
+        Section: { id: 0, name: "" },
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -102,7 +102,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
 
   return {
     vacationSick,
-    reset,
+    resetData,
     get,
     get_filter,
     show,

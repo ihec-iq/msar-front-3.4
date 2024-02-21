@@ -17,7 +17,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       Employee: {
         id: 0,
         name: "",
-        section: { id: 0, name: "" },
+        Section: { id: 0, name: "" },
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -57,7 +57,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       "00";
     return dateTimeTo;
   };
-  function reset() {
+  function resetData() {
     vacationTime.timeFrom = addHours();
     vacationTime.record = 0.5;
     vacationTime.timeTo = addHours(vacationTime.record);
@@ -73,7 +73,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       Employee: {
         id: 0,
         name: "",
-        section: { id: 0, name: "" },
+        Section: { id: 0, name: "" },
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -125,7 +125,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
 
   return {
     vacationTime,
-    reset,
+    resetData,
     get,
     get_filter,
     show,

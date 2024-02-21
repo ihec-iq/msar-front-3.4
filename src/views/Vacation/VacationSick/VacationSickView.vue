@@ -37,6 +37,9 @@ const router = useRouter();
 const errors = ref<String | null>();
 //#endregion
 //#region CURD
+const reset = () => {
+  itemStore.resetData();
+};
 const store = () => {
   errors.value = null;
   const formData = new FormData();
@@ -201,98 +204,88 @@ const ChangeDateRecord = () => {
 };
 </script>
 <template>
-  <IPage>
-    <template #header>
-      <IPageHeader :title="t(namePage)"> </IPageHeader>
+  <IPage :HeaderTitle="t(namePage)">
+    <template #HeaderButtons>
+      <IButton2
+        color="green"
+        width="28"
+        type="outlined"
+        pre-icon="autorenew"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
-    <template #content>
+    <IPageContent>
       <IRow>
-        <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
-          <div class="w-11/12 mr-2">
-            <div
-              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-            >
-              {{ t("DateFrom") }}
-            </div>
-            <input
-              v-model="vacationSick.dayFrom"
-              type="date"
-              @change="ChangeDate()"
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-            />
-          </div>
-          <div class="w-11/12 mr-2">
-            <div
-              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-            >
-              {{ t("DateTo") }}
-            </div>
-            <input
-              v-model="vacationSick.dayTo"
-              type="date"
-              @change="ChangeDate()"
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-            />
-          </div>
-          <div class="w-11/12 mr-2">
-            <div
-              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-            >
-              {{ t("RecordSick") }}
-            </div>
-            <input
-              v-model="vacationSick.record"
-              type="number"
-              @input="ChangeDateRecord()"
-              min="1"
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-            />
-          </div>
-          <div class="w-11/12 mr-2">
-            <div
-              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-            >
-              {{ t("OutputVoucherEmployeeRequest") }}
-            </div>
-            <vSelect
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="vacationSick.Vacation"
-              :options="vacations"
-              :reduce="(vacation: IVacation) => vacation"
-              label="name"
-              :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
-            >
-              <template #option="{ Employee }">
-                <div>
-                  <span>{{ Employee.name }}</span>
-                </div>
-              </template>
-            </vSelect>
-          </div>
-        </div>
+        <IForm>
+          <IRow col-lg="4" col-md="2" col-sm="1">
+            <ICol span="3" span-md="2" span-sm="1">
+              <IInput
+                :label="t('DateFrom')"
+                name="dayFrom"
+                v-model="vacationSick.dayFrom"
+                type="date"
+                @change="ChangeDate()"
+            /></ICol>
+            <ICol span="1" span-md="2" span-sm="4">
+              <IInput
+                :label="t('DateTo')"
+                v-model="vacationSick.dayTo"
+                name="issueDate"
+                type="date"
+                @change="ChangeDate()"
+                :IsRequire="true"
+            /></ICol>
+            <ICol span="1" span-md="2" span-sm="4">
+              <IInput
+                :label="t('RecordSick')"
+                v-model="vacationSick.record"
+                type="number"
+                @input="ChangeDateRecord()"
+                min="1"
+                :IsRequire="true"
+            /></ICol>
+            <ICol span="1" span-md="2" span-sm="4">
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("OutputVoucherEmployeeRequest") }}
+              </div>
+              <vSelect
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                v-model="vacationSick.Vacation"
+                :options="vacations"
+                :reduce="(vacation: IVacation) => vacation"
+                label="name"
+                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
+              >
+                <template #option="{ Employee }">
+                  <div>
+                    <span>{{ Employee.name }}</span>
+                  </div>
+                </template>
+              </vSelect>
+            </ICol>
+            <!-- <ICol span="1" span-md="2" span-sm="4">
+              <ISelect
+                :label="t('ArchiveType')"
+                v-model="archive.archiveTypeId"
+                name="archiveTypeId"
+                :options="archiveTypes"
+                :IsRequire="true"
+            /></ICol> -->
+          </IRow>
+        </IForm>
       </IRow>
-    </template>
-    <template #footer>
-      <div
-        class="max-w-screen-xl flex flex-wrap flex-row-reverse justify-between p-4"
-      >
-        <!-- end -->
-        <IButton
-          v-if="vacationSick.id == 0"
-          :text="t('Create')"
-          :onClick="store"
-        />
-        <IButton v-else :text="t('Update')" :onClick="update" />
-        <!-- start -->
-        <!-- <IButton :text="t('Back')" :onClick="back" /> -->
-        <IButton
-          v-if="vacationSick.id != 0"
-          color="red"
-          type="outlined"
-          :text="t('Delete')"
-          :onClick="Delete"
-        />
-      </div>
+    </IPageContent>
+
+    <template #Footer>
+      <IFooterCrud
+        :isAdd="vacationSick.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
     </template>
   </IPage>
 </template>
