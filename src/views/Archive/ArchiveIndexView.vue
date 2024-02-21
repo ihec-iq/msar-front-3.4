@@ -175,7 +175,7 @@ onMounted(async () => {
         </ISearchBar>
       </IRow>
       <IRow>
-        <CardsArchiveTypeindex></CardsArchiveTypeindex>
+        <CardsArchiveTypeindex :OnClick="getFilterData"></CardsArchiveTypeindex>
       </IRow>
       <IRow
         ><div class="rounded-xl" v-if="isLoading == false">
@@ -191,10 +191,11 @@ onMounted(async () => {
               <div
                 class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-5 lg:m-0 xs:mx-3"
               >
-                <!-- card -->
-                <div v-for="item in data" :key="item.id">
-                  <CardArchiveIndex :item="item"></CardArchiveIndex>
-                </div>
+                <CardArchiveIndex
+                  v-for="item in data"
+                  :key="item.id"
+                  :item="item"
+                ></CardArchiveIndex>
               </div>
               <TailwindPagination
                 class="flex justify-center mt-10"

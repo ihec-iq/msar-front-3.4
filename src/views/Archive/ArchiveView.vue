@@ -260,99 +260,102 @@ import IButton2 from "@/components/ihec/archive/IButton2.vue";
         :text="t('New')"
       />
     </template>
-    <IRow>
-      <IForm>
-        <IRow col="2" col-lg="2" col-md="1" col-sm="1">
-          <ICol>
-            <IInput
-              :label="t('Title')"
-              v-model="archive.title"
-              name="title"
-              type="text"
-              :IsRequire="true"
-          /></ICol>
-          <ICol>
-            <ICheckbox
-              :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
-              v-model="isIn"
-              :checked="true"
-              :IsRequire="true"
-          /></ICol>
-        </IRow>
-        <IRow col-lg="4" col-md="2" col-sm="1">
-          <ICol span="3" span-md="2" span-sm="1">
-            <IInput
-              :label="t('NumberBook')"
-              v-model="archive.number"
-              name="number"
-              type="text"
-          /></ICol>
-          <ICol span="1" span-md="2" span-sm="4">
-            <IInput
-              :label="t('Date')"
-              v-model="archive.issueDate"
-              name="issueDate"
-              type="date"
-              :IsRequire="true"
-          /></ICol>
+    <IPageContent>
+      <IRow>
+        <IForm>
+          <IRow col="2" col-lg="2" col-md="1" col-sm="1">
+            <ICol>
+              <IInput
+                :label="t('Title')"
+                v-model="archive.title"
+                name="title"
+                type="text"
+                :IsRequire="true"
+            /></ICol>
+            <ICol>
+              <ICheckbox
+                :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
+                v-model="isIn"
+                :checked="true"
+                :IsRequire="true"
+            /></ICol>
+          </IRow>
+          <IRow col-lg="4" col-md="2" col-sm="1">
+            <ICol span="3" span-md="2" span-sm="1">
+              <IInput
+                :label="t('NumberBook')"
+                v-model="archive.number"
+                name="number"
+                type="text"
+            /></ICol>
+            <ICol span="1" span-md="2" span-sm="4">
+              <IInput
+                :label="t('Date')"
+                v-model="archive.issueDate"
+                name="issueDate"
+                type="date"
+                :IsRequire="true"
+            /></ICol>
 
-          <ICol span="1" span-md="2" span-sm="4">
-            <ISelect
-              :label="t('ArchiveType')"
-              v-model="archive.archiveTypeId"
-              name="archiveTypeId"
-              :options="archiveTypes"
-              :IsRequire="true"
-          /></ICol>
-          <ICol span="1" span-md="2" span-sm="4">
-            <IInput
-              :label="t('way')"
-              v-model="archive.way"
-              name="way"
-              type="text"
-          /></ICol>
-        </IRow>
-        <IRow>
-          <ICol>
-            <IInput
-              :label="t('Description')"
-              v-model="archive.description"
-              name="description"
-              type="text"
-              class="w-full"
-          /></ICol>
-        </IRow>
-        <!-- file -->
-        <IRow>
-          <ICol
-            :col="4"
-            class=""
-            v-for="document in archive.files"
-            :key="document.name"
-          >
-            <FilePreview :file="document" @updateList="updateList">
-            </FilePreview>
-          </ICol>
-        </IRow>
-        <DragDrop></DragDrop>
-        <div class="px-6">
-          <div id="showFiles" class="p-0 flex flex-col w-full list-none">
-            <div class="w-64 content-center" v-if="Loading">
-              <div
-                class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                role="status"
-              >
-                <span
-                  class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-                  >Loading...</span
+            <ICol span="1" span-md="2" span-sm="4">
+              <ISelect
+                :label="t('ArchiveType')"
+                v-model="archive.archiveTypeId"
+                name="archiveTypeId"
+                :options="archiveTypes"
+                :IsRequire="true"
+            /></ICol>
+            <ICol span="1" span-md="2" span-sm="4">
+              <IInput
+                :label="t('way')"
+                v-model="archive.way"
+                name="way"
+                type="text"
+            /></ICol>
+          </IRow>
+          <IRow>
+            <ICol>
+              <IInput
+                :label="t('Description')"
+                v-model="archive.description"
+                name="description"
+                type="text"
+                class="w-full"
+            /></ICol>
+          </IRow>
+          <!-- file -->
+          <IRow>
+            <ICol
+              :col="4"
+              class=""
+              v-for="document in archive.files"
+              :key="document.name"
+            >
+              <FilePreview :file="document" @updateList="updateList">
+              </FilePreview>
+            </ICol>
+          </IRow>
+          <DragDrop></DragDrop>
+          <div class="px-6">
+            <div id="showFiles" class="p-0 flex flex-col w-full list-none">
+              <div class="w-64 content-center" v-if="Loading">
+                <div
+                  class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                  role="status"
                 >
+                  <span
+                    class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                    >Loading...</span
+                  >
+                </div>
               </div>
             </div>
+            <div id="DropZone"></div>
           </div>
-          <div id="DropZone"></div>
-        </div>
-      </IForm>
-    </IRow>
+        </IForm>
+      </IRow>
+    </IPageContent>
+
     <template #Footer>
       <IFooterCrud
         :isAdd="archive.id == 0"
