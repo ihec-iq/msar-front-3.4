@@ -26,7 +26,7 @@ export default [
     },
   },
   {
-    path: "/vacation/time/:search?",
+    path: "/vacation/times/:search?",
     name: "vacationTimeIndex",
     component: () =>
       import("@/views/Vacation/VacationTime/VacationTimeIndexView.vue"),
@@ -53,7 +53,7 @@ export default [
     },
   },
   {
-    path: "/vacation/daily/:search?",
+    path: "/vacation/dailies/:search?",
     name: "vacationDailyIndex",
     component: () =>
       import("@/views/Vacation/VacationDaily/VacationDailyIndexView.vue"),
@@ -80,7 +80,7 @@ export default [
     },
   },
   {
-    path: "/vacation/sick/:search?",
+    path: "/vacation/sicks/:search?",
     name: "vacationSickIndex",
     component: () =>
       import("@/views/Vacation/VacationSick/VacationSickIndexView.vue"),
