@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useItemStore } from "@/stores/item/itemStore";
-import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
+import { useItemCategoryStore } from "@/stores/Item/itemCategoryStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 import WangEditor from "./WangEditor.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 const emit = defineEmits(["setItem"]);
 //region"Props"
 
@@ -60,7 +61,7 @@ const reset = () => {
 const el = ref<HTMLInputElement>();
 onMounted(async () => {
   //console.log(can("show items1"));
-  //checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray([EnumPermission.ShowItems]);
   await itemCategoryStore.getFast();
   item.value.id = 0;
   //el.value?.focus();
