@@ -20,7 +20,7 @@ import { EnumPermission } from "@/utils/EnumSystem";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("EmployeeAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
@@ -207,12 +207,12 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   await sectionStore.get_sections();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("EmployeeAdd");
+    namePage.value = "EmployeeAdd";
     employee.value.id = 0;
   } else {
     await showData();
     employee.value.id = id.value;
-    namePage.value = t("EmployeeUpdate");
+    namePage.value = "EmployeeUpdate";
   }
   await useUserStore()
     .get({})
