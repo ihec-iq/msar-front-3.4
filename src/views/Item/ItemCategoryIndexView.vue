@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/item/itemCategory";
+import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
 import PageTitle from "@/components/general/namePage.vue";
 import type { IItemCategory, IItemCategoryFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
@@ -25,7 +25,8 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -100,7 +101,9 @@ onMounted(async () => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
+      <div
+        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
+      >
         <label for="table-search" class="sr-only">{{ t("Search") }}</label>
         <div class="relative flex">
           <div
@@ -130,7 +133,9 @@ onMounted(async () => {
           />
         </div>
         <!-- limit -->
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
+        <div
+          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+        >
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
@@ -187,8 +192,12 @@ onMounted(async () => {
                       :key="item.id"
                     >
                       <div class="w-3/4 overflow-hidden">
-                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
-                          <div class="text-2xl text-text dark:text-textLight mb-2">
+                        <div
+                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
+                        >
+                          <div
+                            class="text-2xl text-text dark:text-textLight mb-2"
+                          >
                             {{ item.name }}
                           </div>
                         </div>
