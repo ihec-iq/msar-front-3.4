@@ -16,6 +16,10 @@ defineProps({
     type: Array<any>,
     required: true,
   },
+  IsRequire: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // import { useI18n } from "@/stores/i18n/useI18n";
@@ -23,8 +27,10 @@ defineProps({
 </script>
 
 <template>
-  <div >
-    <label class="_inputLabel" :for="name"> {{ label }}* </label>
+  <div class="mb-2 mx-1">
+    <label class="_inputLabel" :for="name">
+      <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
+    </label>
     <select class="_input" :name="name" :id="name" :v-model="modelValue">
       <option
         v-for="(option, index) in options"

@@ -192,7 +192,7 @@
     duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600;
   }
   ._input {
-    @apply w-[95%] outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
+    @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
   }
   ._inputLabel {
     @apply mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight;

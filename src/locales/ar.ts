@@ -7,7 +7,7 @@ export default {
   "User Name(for login)": "اسم المستخدم للدخول",
   NumberBook: "رقم الكتاب",
   FileBook: "تحميل الكتاب",
-  TypeBook: "نوع الكتاب",
+  TypeBook: "تصنيف الكتاب",
   Language: "العربية",
   Description: "تفاصيل",
   Open: "فتح",
