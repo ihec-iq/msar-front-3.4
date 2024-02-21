@@ -27,6 +27,13 @@ export const useItemCategoryStore = defineStore("itemCategoryStore", () => {
         console.log("in get Categories : " + errors);
       });
   }
+
+  function resetData() {
+    category.id = 0;
+    category.name = "";
+    category.description = "";
+  }
+
   async function get_filter(params: IItemCategoryFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
@@ -45,6 +52,7 @@ export const useItemCategoryStore = defineStore("itemCategoryStore", () => {
   return {
     category,
     categories,
+    resetData,
     get,
     getFast,
     get_filter,
