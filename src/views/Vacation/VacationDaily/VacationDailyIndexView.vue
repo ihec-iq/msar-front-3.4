@@ -41,7 +41,7 @@ watch(
   }
 );
 const addItem = () => {
-  useVacationDailyStore().reset();
+  useVacationDailyStore().resetData();
   router.push({
     name: "vacationDailyAdd",
   });

@@ -56,7 +56,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       name: "",
     },
   });
-  function reset() {
+  function resetData() {
     vacationDaily.id = 0;
     vacationDaily.record = 1;
     vacationDaily.dayFrom = new Date().toISOString().split("T")[0];
@@ -131,7 +131,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
 
   return {
     vacationDaily,
-    reset,
+    resetData,
     get,
     get_filter,
     show,
