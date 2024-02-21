@@ -45,7 +45,10 @@ const store = (withPrint: boolean = false) => {
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
-  formData.append("EmployeeAlter", JSON.stringify(vacationDaily.value.EmployeeAlter));
+  formData.append(
+    "EmployeeAlter",
+    JSON.stringify(vacationDaily.value.EmployeeAlter)
+  );
   formData.append("Reason", JSON.stringify(vacationDaily.value.Reason));
   itemStore
     .store(formData)
@@ -80,7 +83,10 @@ function update() {
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationDaily.value.Vacation));
-  formData.append("EmployeeAlter", JSON.stringify(vacationDaily.value.EmployeeAlter));
+  formData.append(
+    "EmployeeAlter",
+    JSON.stringify(vacationDaily.value.EmployeeAlter)
+  );
   formData.append("Reason", JSON.stringify(vacationDaily.value.Reason));
 
   itemStore
@@ -178,11 +184,17 @@ const print1 = () => {
   const prtHtml = document.getElementById("printMe")?.innerHTML;
   // Get all stylesheets HTML
   let stylesHtml = "";
-  for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
+  for (const node of [
+    ...document.querySelectorAll('link[rel="stylesheet"], style'),
+  ]) {
     stylesHtml += node.outerHTML;
   }
   // Open the print window
-  const WinPrint = window.open("", "", "left=0,top=0, toolbar=0,scrollbars=0,status=0");
+  const WinPrint = window.open(
+    "",
+    "",
+    "left=0,top=0, toolbar=0,scrollbars=0,status=0"
+  );
 
   WinPrint?.document.write(`<!DOCTYPE html>
 <html>
@@ -247,7 +259,7 @@ const filterEmployeesBySection = (_employee: IEmployee) => {
   if (
     _employee.Section.id
       .toString()
-      .includes(vacationDaily.value.Vacation.employee.Section.id.toString()) &&
+      .includes(vacationDaily.value.Vacation.Employee.Section.id.toString()) &&
     _employee.id != vacationDaily.value.Vacation.Employee.id
   ) {
     return true;
@@ -284,179 +296,209 @@ onMounted(async () => {
   await useEmployeeStore().get_employees();
   SelectedEmployees.value = employees.value;
 });
+const reset = () => {
+  useVacationDailyStore().resetData();
+};
 </script>
 <template>
-  <PageTitle> {{ namePage }}</PageTitle>
-  <div class="w-full">
-    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
-      <div class="w-11/12 mr-2">
+  <IPage :HeaderTitle="namePage">
+    <template #HeaderButtons>
+      <IButton2
+        color="green"
+        width="28"
+        type="outlined"
+        pre-icon="autorenew"
+        :onClick="reset"
+        :text="t('New')"
+      />
+    </template>
+    <IPageContent>
+      <IRow>
+        <IForm>
+          <IRow col="3" col-lg="3" col-md="1" col-sm="1">
+            <ICol
+              ><div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("DateFrom") }}
+              </div>
+              <input
+                v-model="vacationDaily.dayFrom"
+                type="date"
+                @change="ChangeDate()"
+                class="DateStyle"
+              />
+            </ICol>
+            <ICol>
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("DateTo") }}
+              </div>
+              <input
+                v-model="vacationDaily.dayTo"
+                type="date"
+                @change="ChangeDate()"
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              />
+            </ICol>
+            <ICol>
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("RecordDaily") }}
+              </div>
+              <input
+                v-model="vacationDaily.record"
+                type="number"
+                @input="ChangeDateRecord()"
+                min="1"
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              />
+            </ICol>
+          </IRow>
+          <IRow col="3" col-lg="3" col-md="1" col-sm="1">
+            <ICol>
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("OutputVoucherEmployeeRequest") }}
+              </div>
+              <vSelect
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                v-model="vacationDaily.Vacation"
+                :options="vacations"
+                :reduce="(vacation: IVacation) => vacation"
+                label="name"
+                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
+              >
+                <template #option="{ Employee }">
+                  <div>
+                    <span>{{ Employee.name }}</span>
+                  </div>
+                </template>
+              </vSelect>
+            </ICol>
+            <ICol>
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("OutputVoucherEmployeeAlter") }}
+              </div>
+              <vSelect
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                v-model="vacationDaily.EmployeeAlter"
+                :options="SelectedEmployees"
+                :reduce="(employee: IEmployee) => employee"
+                label="name"
+                :getOptionLabel="(employee: IEmployee) => employee.name"
+              >
+                <template #option="{ name }">
+                  <div>
+                    <span>{{ name }}</span>
+                  </div>
+                </template>
+              </vSelect>
+            </ICol>
+            <ICol>
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("VacationReason") }}
+              </div>
+              <vSelect
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                v-model="vacationDaily.Reason"
+                :options="reasons"
+                :reduce="(reason: IVacationReason) => reason"
+                label="name"
+                :getOptionLabel="(reason: IVacationReason) => reason.name"
+              >
+                <template #option="{ name }">
+                  <div>
+                    <span>{{ name }}</span>
+                  </div>
+                </template>
+              </vSelect>
+            </ICol>
+          </IRow>
+        </IForm>
+      </IRow>
+    </IPageContent>
+    <template #Footer>
+      <div class="w-full">
+        <!-- bottom tool bar -->
         <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+          :class="{
+            'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
+            'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+              !is,
+          }"
+          class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
         >
-          {{ t("DateFrom") }}
-        </div>
-        <input
-          v-model="vacationDaily.dayFrom"
-          type="date"
-          @change="ChangeDate()"
-          class="DateStyle"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("DateTo") }}
-        </div>
-        <input
-          v-model="vacationDaily.dayTo"
-          type="date"
-          @change="ChangeDate()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("RecordDaily") }}
-        </div>
-        <input
-          v-model="vacationDaily.record"
-          type="number"
-          @input="ChangeDateRecord()"
-          min="1"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("OutputVoucherEmployeeRequest") }}
-        </div>
-        <vSelect
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationDaily.Vacation"
-          :options="vacations"
-          :reduce="(vacation: IVacation) => vacation"
-          label="name"
-          :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
-        >
-          <template #option="{ Employee }">
-            <div>
-              <span>{{ Employee.name }}</span>
-            </div>
-          </template>
-        </vSelect>
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("OutputVoucherEmployeeAlter") }}
-        </div>
-        <vSelect
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationDaily.EmployeeAlter"
-          :options="SelectedEmployees"
-          :reduce="(employee: IEmployee) => employee"
-          label="name"
-          :getOptionLabel="(employee: IEmployee) => employee.name"
-        >
-          <template #option="{ name }">
-            <div>
-              <span>{{ name }}</span>
-            </div>
-          </template>
-        </vSelect>
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("VacationReason") }}
-        </div>
-        <vSelect
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationDaily.Reason"
-          :options="reasons"
-          :reduce="(reason: IVacationReason) => reason"
-          label="name"
-          :getOptionLabel="(reason: IVacationReason) => reason.name"
-        >
-          <template #option="{ name }">
-            <div>
-              <span>{{ name }}</span>
-            </div>
-          </template>
-        </vSelect>
-      </div>
-    </div>
-    <!-- bottom tool bar -->
-    <div
-      :class="{
-        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
-      }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-    >
-      <div class="flex ltr:ml-8 rtl:mr-8">
-        <div class="items-center mr-3">
-          <button
-            @click="print()"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Print") }}
-          </button>
-          <button
-            v-if="vacationDaily.id == 0"
-            @click="store(true)"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("CreateWithPrint") }}
-          </button>
-          <button
-            v-if="vacationDaily.id == 0"
-            @click="store()"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Create") }}
-          </button>
+          <div class="flex ltr:ml-8 rtl:mr-8">
+            <div class="items-center mr-3">
+              <button
+                @click="print()"
+                class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+              >
+                {{ t("Print") }}
+              </button>
+              <button
+                v-if="vacationDaily.id == 0"
+                @click="store(true)"
+                class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+              >
+                {{ t("CreateWithPrint") }}
+              </button>
+              <button
+                v-if="vacationDaily.id == 0"
+                @click="store()"
+                class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+              >
+                {{ t("Create") }}
+              </button>
 
+              <button
+                v-else
+                @click="update()"
+                class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+              >
+                {{ t("Update") }}
+              </button>
+              <button
+                v-if="vacationDaily.id != 0"
+                @click="Delete()"
+                class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
+              >
+                {{ t("Delete") }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          :class="{
+            'ltr:left-4 rtl:right-4': is,
+            'ltr:left-28 rtl:right-28': !is,
+          }"
+          class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
+        >
           <button
-            v-else
-            @click="update()"
-            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+            @click="back()"
+            class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
           >
-            {{ t("Update") }}
-          </button>
-          <button
-            v-if="vacationDaily.id != 0"
-            @click="Delete()"
-            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
-          >
-            {{ t("Delete") }}
+            {{ t("Back") }}
           </button>
         </div>
-      </div>
-    </div>
-    <div
-      :class="{
-        'ltr:left-4 rtl:right-4': is,
-        'ltr:left-28 rtl:right-28': !is,
-      }"
-      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
+      </div></template
     >
-      <button
-        @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-      >
-        {{ t("Back") }}
-      </button>
-    </div>
-  </div>
-  <div class="hidden print:w-[900px] w-[900px] tablePrint m-2" id="printMe" print:rtl>
+  </IPage>
+
+  <div
+    class="hidden print:w-[900px] w-[900px] tablePrint m-2"
+    id="printMe"
+    print:rtl
+  >
     <div id="Header" class="w-[900px] print:w-[900px]">
       <br />
       <br />
@@ -466,12 +508,19 @@ onMounted(async () => {
       <br />
       <br />
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
-      <img :src="imageHeaderPath" class="downHeader w-[900px] print:w-[900px]" />
+      <img
+        :src="imageHeaderPath"
+        class="downHeader w-[900px] print:w-[900px]"
+      />
     </div>
     <div id="body">
       <table
         class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
-        style="width: 890px !important ; margin: 3px !important ; text-align: right"
+        style="
+          width: 890px !important ;
+          margin: 3px !important ;
+          text-align: right;
+        "
       >
         <tr class="RowTable">
           <td class="RowHeader w-[50%]">اسم الموظف</td>
@@ -482,7 +531,7 @@ onMounted(async () => {
         <tr class="RowTable">
           <td class="RowHeader w-[50%]">الشعبة</td>
           <td class="RowContent w-[50%]">
-            {{ vacationDaily.Vacation.employee.Section.name }}
+            {{ vacationDaily.Vacation.Employee.Section?.name }}
           </td>
         </tr>
         <tr class="RowTable">
@@ -514,7 +563,11 @@ onMounted(async () => {
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
       <table
         class="float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
-        style="width: 890px !important ; margin: 3px !important ; text-align: right"
+        style="
+          width: 890px !important ;
+          margin: 3px !important ;
+          text-align: right;
+        "
       >
         <tr class="RowTable margin15" style="align-content: center !important">
           <td class="font-bold text-xl text-text dark:text-textLight p-10">
@@ -542,8 +595,6 @@ onMounted(async () => {
       />
     </div>
   </div>
-
-  <!-- end bottom tool -->
 </template>
 <style scoped>
 .RowHeader {
@@ -649,4 +700,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/vacations/vacationStore@/stores/vacations/vacationReasonStore@/stores/permissionStore

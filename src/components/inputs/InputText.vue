@@ -2,7 +2,6 @@
 import { onMounted, toRef } from "vue";
 import { useField } from "vee-validate";
 import { i18nRepository } from "@/stores/i18n/I18nRepository";
-import { bool } from "yup";
 
 const st = i18nRepository.getState();
 const t = (text: string) => {

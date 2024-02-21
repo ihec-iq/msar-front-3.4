@@ -6,7 +6,7 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
-import { useStockStore } from "@/stores/Voucher/stock";
+import { useStockStore } from "@/stores/warehouse/stockStore";
 import { useInputVoucherStore } from "@/stores/warehouse/inputVoucherStore";
 import { useItemStore } from "@/stores/item/itemStore";
 import type { IInputVoucherItem } from "@/types/IInputVoucher";
@@ -30,7 +30,9 @@ const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
 const inputVoucherStore = useInputVoucherStore();
-const { inputVoucher, inputVoucherStates } = storeToRefs(useInputVoucherStore());
+const { inputVoucher, inputVoucherStates } = storeToRefs(
+  useInputVoucherStore()
+);
 //#region popUp
 const showPop = ref(false);
 const VoucherItemTemp = ref<IInputVoucherItem>({
@@ -110,18 +112,24 @@ const updatePopup = (index: number, item: IInputVoucherItem) => {
   VoucherItemTemp.value = item;
 };
 const AddItem = () => {
-  VoucherItemTemp.value.value = VoucherItemTemp.value.count * VoucherItemTemp.value.price;
+  VoucherItemTemp.value.value =
+    VoucherItemTemp.value.count * VoucherItemTemp.value.price;
   inputVoucherStore.addItem(VoucherItemTemp.value);
   resetVoucherItemTemp();
   showPop.value = false;
 };
 const ChangeValueTotal = () => {
-  VoucherItemTemp.value.value = VoucherItemTemp.value.count * VoucherItemTemp.value.price;
+  VoucherItemTemp.value.value =
+    VoucherItemTemp.value.count * VoucherItemTemp.value.price;
 };
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
-  VoucherItemTemp.value.value = VoucherItemTemp.value.count * VoucherItemTemp.value.price;
-  inputVoucherStore.editItem(indexSelectedVoucherItem.value, VoucherItemTemp.value);
+  VoucherItemTemp.value.value =
+    VoucherItemTemp.value.count * VoucherItemTemp.value.price;
+  inputVoucherStore.editItem(
+    indexSelectedVoucherItem.value,
+    VoucherItemTemp.value
+  );
   resetVoucherItemTemp();
   showPop.value = false;
 };
@@ -141,7 +149,10 @@ const store = () => {
   formData.append("items", JSON.stringify(inputVoucher.value.Items));
   formData.append("State", JSON.stringify(inputVoucher.value.State));
   formData.append("requestedBy", inputVoucher.value.requestedBy);
-  formData.append("signaturePerson", String(inputVoucher.value.signaturePerson));
+  formData.append(
+    "signaturePerson",
+    String(inputVoucher.value.signaturePerson)
+  );
   inputVoucherStore
     .store(formData)
     .then((response) => {
@@ -176,7 +187,10 @@ function update() {
   formData.append("items", JSON.stringify(inputVoucher.value.Items));
   formData.append("State", JSON.stringify(inputVoucher.value.State));
   formData.append("requestedBy", inputVoucher.value.requestedBy);
-  formData.append("signaturePerson", String(inputVoucher.value.signaturePerson));
+  formData.append(
+    "signaturePerson",
+    String(inputVoucher.value.signaturePerson)
+  );
   inputVoucherStore
     .update(inputVoucher.value.id, formData)
     .then((response) => {
@@ -410,7 +424,11 @@ const setItemFromChild = (_item: IItem) => {
           v-model="inputVoucher.State.id"
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         >
-          <option v-for="state in inputVoucherStates" :key="state.id" :value="state.id">
+          <option
+            v-for="state in inputVoucherStates"
+            :key="state.id"
+            :value="state.id"
+          >
             {{ state.name }}
           </option>
         </select>
@@ -577,7 +595,9 @@ const setItemFromChild = (_item: IItem) => {
           <div class="flex flex-col overflow-hidden w-full">
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-1/5">
-                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                <div
+                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                >
                   Item xxx
                 </div>
                 <vSelect
@@ -641,7 +661,9 @@ const setItemFromChild = (_item: IItem) => {
                 v-if="VoucherItemTemp.Item"
               >
                 <div class="w-1/5" v-if="VoucherItemTemp.Item.code">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                  <div
+                    class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                  >
                     Code
                   </div>
                   <div
@@ -651,7 +673,9 @@ const setItemFromChild = (_item: IItem) => {
                   </div>
                 </div>
                 <div class="w-1/5">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                  <div
+                    class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                  >
                     Category
                   </div>
                   <div
@@ -661,7 +685,9 @@ const setItemFromChild = (_item: IItem) => {
                   </div>
                 </div>
                 <div class="w-2/5" v-if="VoucherItemTemp.Item.description">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                  <div
+                    class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                  >
                     Description
                   </div>
                   <div
@@ -674,7 +700,9 @@ const setItemFromChild = (_item: IItem) => {
             </div>
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-1/5">
-                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                <div
+                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                >
                   Stock
                 </div>
                 <select
@@ -692,7 +720,9 @@ const setItemFromChild = (_item: IItem) => {
                 </select>
               </div>
               <div class="w-1/5">
-                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                <div
+                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                >
                   Serial Number
                 </div>
                 <input
@@ -702,7 +732,9 @@ const setItemFromChild = (_item: IItem) => {
                 />
               </div>
               <div class="w-1/5">
-                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                <div
+                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                >
                   Count
                 </div>
                 <input
@@ -713,7 +745,9 @@ const setItemFromChild = (_item: IItem) => {
                 />
               </div>
               <div class="w-1/5">
-                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                <div
+                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                >
                   Price
                 </div>
                 <input
@@ -724,7 +758,9 @@ const setItemFromChild = (_item: IItem) => {
                 />
               </div>
               <div class="w-1/5">
-                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
+                <div
+                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
+                >
                   Total
                 </div>
                 <input
@@ -736,7 +772,9 @@ const setItemFromChild = (_item: IItem) => {
             </div>
           </div>
           <!-- add close form -->
-          <div class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3">
+          <div
+            class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3"
+          >
             <div class="flex justify-between">
               <div class="items-center ml-2">
                 <button
@@ -767,7 +805,9 @@ const setItemFromChild = (_item: IItem) => {
 
           <!-- vr line -->
           <div class="outer w-px h-full m-auto relative overflow-hidden ml-2">
-            <div class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"></div>
+            <div
+              class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"
+            ></div>
           </div>
 
           <!-- filters -->
@@ -817,7 +857,8 @@ const setItemFromChild = (_item: IItem) => {
     <div
       :class="{
         'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+          !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >

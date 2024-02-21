@@ -20,6 +20,7 @@ const dataBase = ref<Array<IVacationTime>>([]);
 const { vacationTime } = useVacationTimeStore();
 
 import { limits } from "@/utils/defaultParams";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -34,7 +35,7 @@ watch(
   }
 );
 const addItem = () => {
-  useVacationTimeStore().reset();
+  useVacationTimeStore().resetData();
   router.push({
     name: "vacationTimeAdd",
   });
@@ -62,7 +63,6 @@ const searchFilter = ref<IVacationTimeFilter>({
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-  searchFilter.value.limit = 0;
   searchFilter.value.record = Number(fastSearch.value);
   await useVacationTimeStore()
     .get_filter(searchFilter.value, page)
@@ -93,7 +93,7 @@ const Search = async (event: KeyboardEvent) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show vacations time"]);
+  checkPermissionAccessArray([EnumPermission.ShowVacationsTime]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   if (inputRefSearch.value) {
@@ -103,143 +103,134 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage>
-    <IPageHeader :title="t('VacationTime')">
-      <template v-slot:buttons>
-        <IButton width="28" :onClick="addItem" :text="t('Add')" />
-      </template>
-    </IPageHeader>
-    <IRow>
-      <IBtnSearch
-        class="p-2 mx-2"
-        v-model="fastSearch"
-        @get-filter-data="getFilterData()"
-        @make-fast-search="makeFastSearch()"
-      ></IBtnSearch>
-      <!-- limit -->
-      <div
-        class="py-2 limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-      >
-        <div
-          class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-        >
-          <p>{{ t("Sort By") }}:</p>
-          <select
-            aria-label="select"
-            v-model="searchFilter.limit"
-            class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-            @change="getFilterData(1)"
-          >
-            <option
-              v-for="limit in limits"
-              :key="limit.val"
-              :value="limit.val"
-              :selected="limit.selected == true"
-              class="text-sm text-indigo-800"
-            >
-              {{ limit.name }}
-            </option>
-          </select>
-        </div>
-      </div>
-    </IRow>
-    <IRow
-      ><div class="flex flex-col">
-        <div class="py-4 inline-block min-w-full lg:px-8">
-          <!-- card -->
-
-          <div class="rounded-xl" v-if="isLoading == false">
-            <div
-              v-motion
-              :initial="{ opacity: 0, y: -15 }"
-              :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }"
-              :delay="200"
-              v-if="data.length > 0"
-            >
-              <div class="max-w-full relative">
-                <div
-                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
-                >
-                  <!-- card -->
+  <IPage :HeaderTitle="t('VacationTime')">
+    <template #HeaderButtons>
+      <IButton width="28" :onClick="addItem" :text="t('Add')" />
+    </template>
+    <IPageContent>
+      <IRow :col="5" :col-md="2" :col-lg="4">
+        <ISearchBar :getDataButton="getFilterData">
+          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
+            <IInput
+              :label="t('Search')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              type="text"
+            />
+          </ICol>
+        </ISearchBar>
+      </IRow>
+      <IRow
+        ><div class="flex flex-col">
+          <div class="py-4 inline-block min-w-full lg:px-8">
+            <!-- card -->
+            <div class="rounded-xl" v-if="isLoading == false">
+              <div
+                v-motion
+                :initial="{ opacity: 0, y: -15 }"
+                :enter="{ opacity: 1, y: 0 }"
+                :variants="{ custom: { scale: 2 } }"
+                :delay="200"
+                v-if="data.length > 0"
+              >
+                <div class="max-w-full relative">
                   <div
-                    class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                    v-for="vacation in data"
-                    :key="vacation.id"
+                    class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
                   >
-                    <div class="w-3/4 overflow-hidden">
-                      <div
-                        class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                      >
+                    <!-- card -->
+                    <div
+                      class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                      v-for="vacation in data"
+                      :key="vacation.id"
+                    >
+                      <div class="w-3/4 overflow-hidden">
                         <div
-                          class="text-2xl text-text dark:text-textLight mb-2"
+                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
                         >
-                          {{ vacation.Vacation.Employee.name }}
+                          <div
+                            class="text-2xl text-text dark:text-textLight mb-2"
+                          >
+                            {{ vacation.Vacation.Employee.name }}
+                          </div>
+                        </div>
+                        <div class="flex justify-betweens">
+                          اجازة لمدة
+                          <div
+                            class="text-text dark:text-red-900 border-sky-100 border-2 pl-2 pr-2 ml-2 mr-2 bg-slate-300"
+                            v-html="vacation.record"
+                          ></div>
+                          ساعة من تاريخ
+                          <div
+                            class="text-text dark:text-textGray ml-2 mr-2"
+                            v-html="vacation.timeFrom"
+                          ></div>
+                          الى
+                          <div
+                            class="text-text dark:text-textGray ml-2 mr-2"
+                            v-html="vacation.timeTo"
+                          ></div>
                         </div>
                       </div>
-                      <div class="flex justify-betweens">
-                        اجازة لمدة
-                        <div
-                          class="text-text dark:text-red-900 border-sky-100 border-2 pl-2 pr-2 ml-2 mr-2 bg-slate-300"
-                          v-html="vacation.record"
-                        ></div>
-                        ساعة من تاريخ
-                        <div
-                          class="text-text dark:text-textGray ml-2 mr-2"
-                          v-html="vacation.timeFrom"
-                        ></div>
-                        الى
-                        <div
-                          class="text-text dark:text-textGray ml-2 mr-2"
-                          v-html="vacation.timeTo"
-                        ></div>
-                      </div>
-                    </div>
 
-                    <div class="dropdown">
-                      <button
-                        class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                        type="button"
-                        id="dropdownMenuButton2"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <img
-                          src="https://img.icons8.com/office/344/menu--v1.png "
-                          class="w-8 float-left"
-                          alt=""
-                        />
-                      </button>
+                      <div class="dropdown">
+                        <button
+                          class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
+                          type="button"
+                          id="dropdownMenuButton2"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <img
+                            src="https://img.icons8.com/office/344/menu--v1.png "
+                            class="w-8 float-left"
+                            alt=""
+                          />
+                        </button>
 
-                      <ul
-                        class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
-                        aria-labelledby="dropdownMenuButton2"
-                      >
-                        <li>
-                          <EditButton @click="update(vacation.id)" />
-                        </li>
-                        <!-- <li>
+                        <ul
+                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
+                          aria-labelledby="dropdownMenuButton2"
+                        >
+                          <li>
+                            <EditButton @click="update(vacation.id)" />
+                          </li>
+                          <!-- <li>
                             <ShowButton @click="show(vacation.id)" />
                           </li> -->
-                        <!-- <li><BlockButton /></li> -->
-                      </ul>
+                          <!-- <li><BlockButton /></li> -->
+                        </ul>
+                      </div>
+                    </div>
+                    <!-- end card -->
+                  </div>
+                  <div class="w-full flex flex-row">
+                    <div class="basis-4/5 hidden">
+                      <TailwindPagination
+                        class="flex justify-center mt-6"
+                        :data="dataPage"
+                        @pagination-change-page="getFilterData"
+                        :limit="searchFilter.limit"
+                      />
+                    </div>
+                    <div class="basis-1/5" v-if="searchFilter.limit > 1">
+                      <ISelect
+                        :label="t('Limit')"
+                        v-model="searchFilter.limit"
+                        name="archiveTypeId"
+                        :options="limits"
+                        :IsRequire="true"
+                        @onChange="getFilterData()"
+                      />
                     </div>
                   </div>
-                  <!-- end card -->
                 </div>
-                <TailwindPagination
-                  class="flex justify-center mt-10"
-                  :data="dataPage"
-                  @pagination-change-page="getFilterData"
-                  :limit="10"
-                />
               </div>
             </div>
+            <SimpleLoading v-if="isLoading"></SimpleLoading>
+            <!-- end card -->
           </div>
-          <SimpleLoading v-if="isLoading"></SimpleLoading>
-          <!-- end card -->
         </div>
-      </div>
-    </IRow>
+      </IRow>
+    </IPageContent>
   </IPage>
 </template>

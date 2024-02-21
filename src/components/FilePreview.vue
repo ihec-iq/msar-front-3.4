@@ -28,12 +28,14 @@ const generateURL = (
   else if (extension == "pdf" || extension == "application/pdf")
     return new URL("@/assets/image/pdf.png", import.meta.url).toString();
   else if (
-    extension == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    extension ==
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
     extension == "xls" ||
     extension == "xlsx"
   )
     return new URL("@/assets/image/excel.png", import.meta.url).toString();
-  else return new URL("@/assets/image/undefined.png", import.meta.url).toString();
+  else
+    return new URL("@/assets/image/undefined.png", import.meta.url).toString();
 };
 const emits = defineEmits<{
   //(e: "change", id: number): void;
@@ -84,7 +86,7 @@ const openFile = (path: string) => {
 <template>
   <component
     :is="tag"
-    class="file-preview w-200px bg-black-200/10 ma-2 pa-6"
+    class="file-preview w-200px bg-black-200/10 ma-2 pa-6 preview-card cursor-pointer"
     style="display: block"
   >
     <button @click="removeFile(document.id)" class="close-icon">&times;</button>
@@ -115,13 +117,19 @@ const openFile = (path: string) => {
       </button> -->
     </span>
 
-    <span class="status-indicator loading-indicator" v-show="document.status == 'loading'"
+    <span
+      class="status-indicator loading-indicator"
+      v-show="document.status == 'loading'"
       >In Progress</span
     >
-    <span class="status-indicator success-indicator" v-show="document.status == true"
+    <span
+      class="status-indicator success-indicator"
+      v-show="document.status == true"
       >Uploaded</span
     >
-    <span class="status-indicator failure-indicator" v-show="document.status == false"
+    <span
+      class="status-indicator failure-indicator"
+      v-show="document.status == false"
       >Error</span
     >
   </component>

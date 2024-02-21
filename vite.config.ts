@@ -14,15 +14,10 @@ export default defineConfig({
         defineModel: true,
       },
     }),
+    ,
     vueJsx(),
     Components({
-      resolvers: [
-        (I2) => {
-          // where `componentName` is always CapitalCase
-          if (I2.startsWith("I2")) return { name: I2.slice(3), from: "I2" };
-        },
-        VantResolver(),
-      ],
+      resolvers: [VantResolver()],
       dts: true,
     }),
     [
@@ -118,4 +113,9 @@ export default defineConfig({
     "process.env": process.env,
   },
   base: process.env.NODE_ENV === "production" ? "/10/" : "/",
+  server: {
+    watch: {
+      usePolling: true,
+    },
+  },
 });

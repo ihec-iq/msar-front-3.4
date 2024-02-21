@@ -50,12 +50,12 @@ module.exports = {
         xs: "350px",
       },
       colors: {
-        mainBG: "#e8f6fd",
+        mainBG: "#F2F3F5",
         // dark
-        sideNav: "#333333",
+        sideNav: "#E3E5E8",
         sideNavHover: "#252526",
         nav: "#333333",
-        bgLeftNav: "#252526",
+        bgLeftNav1: "#252526",
         sideNavSetting: "#111827",
         sideNavActive: "#1f2937",
         navIconColoDark: "#858585",
@@ -183,7 +183,7 @@ module.exports = {
         settingLightHover: "#d2d4dc",
         //
         sortByLight: "#e2e8f0",
-        cardLight: "#e2e8f0",
+        cardLight: "#F2F3F5",
         //
         voucherTitlesLightHover: "#9ca3af",
         tdLight: "#9ca3af",

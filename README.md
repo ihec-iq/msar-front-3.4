@@ -26,15 +26,17 @@ This template should help get you started developing with Vue 3 in Vite.
 
 - npm i -D vue-tsc@latest // for update last version vue-tsc
 
-# Rules of naming system
+## Rules of naming system
 
 - name of multi-word component must to be Pascal Case
 - name of variables multi-word component must to be Pascal Case
 - name of variables must to be clear ( ex : customPath)
 
-# Svg file in assets/svg folder , use of it in design code
+## Svg file in assets/svg folder , use of it in design code
 
-- exmaple <img src="@/assets/svg/logo.svg" alt="avatar" class="w-8 h-8 rounded-full" />
+```html
+exmaple <img src="@/assets/svg/logo.svg" alt="avatar" class="w-8 h-8 rounded-full" />
+```
 
 - name of multi-word component must to be Pascal Case
 - name of variables multi-word component must to be Pascal Case
@@ -87,4 +89,21 @@ npm run test:unit
 
 ```sh
 npm run lint
+```
+
+### Global Config
+
+for ignore capitalization of directory git
+
+```git
+git config core.ignorecase false
+```
+
+NPM update all to latest version
+
+```node
+npm install -g npm@latest
+npx npm-check-updates -u
+npm install
+
 ```

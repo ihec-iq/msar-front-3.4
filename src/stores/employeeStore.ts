@@ -1,11 +1,11 @@
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
 
 export const useEmployeeStore = defineStore("employeeStore", () => {
-  const employee = reactive<IEmployee>({
+  const employee = ref<IEmployee>({
     id: 0,
     name: "",
     Section: { name: "", id: 0 },
@@ -26,14 +26,29 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   }
   async function get_employees() {
     await Api.get(`${pathUrl}`)
-      .then((response) => {
+      .then((response: any) => {
         if (response.status == 200) {
           employees.value = response.data.data;
         }
       })
-      .catch((errors) => {
+      .catch((errors: any) => {
         console.log("in get employee : " + errors);
       });
+  }
+  function resetData() {
+    employee.value = {
+      id: 0,
+      name: "",
+      Section: { name: "", id: 0 },
+      isPerson: 1,
+      number: "",
+      idCard: "",
+      initVacation: 0,
+      takeVacation: 0,
+      initVacationSick: 0,
+      takeVacationSick: 0,
+      dateWork: new Date().toLocaleDateString(),
+    };
   }
   async function get_filter(params: IEmployeeFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
@@ -57,6 +72,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   }
   return {
     employee,
+    resetData,
     employees,
     get,
     get_filter,

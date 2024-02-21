@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
@@ -17,13 +16,18 @@ const dataBase = ref<Array<IStore>>([]);
 const { get_filter, get_summation } = useStoringStore();
 
 import { limits } from "@/utils/defaultParams";
+import ICol from "@/components/ihec/ICol.vue";
+import ICheckbox from "@/components/inputs/ICheckbox.vue";
+import ISearchBar from "@/components/ihec/ISearchBar.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -98,7 +102,7 @@ const openItem = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show storage"]);
+  checkPermissionAccessArray([EnumPermission.ShowStorage]);
 
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
@@ -106,206 +110,141 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IButton /> 
-  <div class="justify-between flex">
-    <PageTitle> {{ t("StoreIndex") }} </PageTitle>
-  </div>
-  <div class="flex">
-    <!-- <Nav class="w-[5%]" /> -->
-    <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
-        <label for="table-search" class="sr-only">{{ t("Search") }}</label>
-        <div class="relative flex">
-          <div
-            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-          >
-            <svg
-              class="w-5 h-5 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-          </div>
-          <input
-            type="text"
-            id="table-search"
-            v-model="fastSearch"
-            @input="makeFastSearch()"
-            class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('SearchForItem')"
-          />
-        </div>
-        <!-- limit -->
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-          >
-            <p>{{ t("Sort By") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.limit"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
+  <IPage :HeaderTitle="t('StoreIndex')">
+    <IPageContent>
+      <IRow :col="3" :col-md="2" :col-lg="3">
+        <ISearchBar :getDataButton="getFilterData">
+          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
+            <IInput
+              :label="t('Title')"
+              :placeholder="t('SearchForItem')"
+              v-model="fastSearch"
+              type="text"
+            />
+          </ICol>
+          <!-- date -->
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <ICheckbox
+              v-model="searchFilter.summation"
+              :checked="searchFilter.summation"
               @change="getFilterData()"
-            >
-              <option
-                v-for="limit in limits"
-                :key="limit.val"
-                :value="limit.val"
-                :selected="limit.selected == true"
-                class="text-sm text-indigo-800"
-              >
-                {{ limit.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <label class="cursor-pointer label">
-            <span
-              class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
             >
               {{ t("StoreTypeReport") }} :
-              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</span
+              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</ICheckbox
             >
-            <input
-              type="checkbox"
-              v-model="searchFilter.summation"
-              class="toggle toggle-secondary"
-              checked
-              @change="getFilterData()"
-            />
-          </label>
-        </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <button
-            @click="getFilterData()"
-            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
+          </ICol>
+        </ISearchBar>
+      </IRow>
+      <IRow
+        ><div class="rounded-xl" v-if="isLoading == false">
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: -15 }"
+            :enter="{ opacity: 1, y: 0 }"
+            :variants="{ custom: { scale: 2 } }"
+            :delay="200"
+            v-if="data.length > 0"
           >
-            {{ t("Search") }}
-          </button>
-        </div>
-      </div>
-      <div class="w-full">
-        <div class="flex flex-col">
-          <div class="py-4 inline-block min-w-full lg:px-8">
-            <!-- card -->
-
-            <div class="rounded-xl" v-if="isLoading == false">
-              <div
-                v-motion
-                :initial="{ opacity: 0, y: -15 }"
-                :enter="{ opacity: 1, y: 0 }"
-                :variants="{ custom: { scale: 2 } }"
-                :delay="200"
-                v-if="data.length > 0"
+            <div class="max-w-full relative">
+              <table
+                class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
               >
-                <div class="mt-10 p-6">
-                  <div class="w-12/12 mx-2">
-                    <div
-                      class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-                    ></div>
-                    <table
-                      class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
-                    >
-                      <thead
-                        class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
+                <thead
+                  class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
+                >
+                  <tr>
+                    <th scope="col" class="text-sm font-medium px-6 py-4">
+                      {{ t("Item") }}
+                    </th>
+                    <th scope="col" class="text-sm font-medium px-6 py-4">
+                      {{ t("SerialNumber") }}
+                    </th>
+                    <th scope="col" class="text-sm font-medium px-6 py-4">
+                      {{ t("AvailableInStock") }}
+                    </th>
+                    <th scope="col" class="text-sm font-medium px-6 py-4">
+                      {{ t("Out") }}
+                    </th>
+                    <th scope="col" class="text-sm font-medium px-6 py-4">
+                      {{ t("In") }}
+                    </th>
+                    <th scope="col" class="text-sm font-medium px-6 py-4">
+                      {{ t("Stock") }}
+                    </th>
+                    <th scope="col" class="text-sm font-medium px-6 py-4">
+                      {{ t("Employee") }}
+                    </th>
+                    <th scope="col" class="text-sm font-medium px-6 py-4">
+                      {{ t("Actions") }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
+                >
+                  <tr
+                    v-for="row in data"
+                    :key="row.itemName"
+                    class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
+                  >
+                    <th>{{ row.itemName }}</th>
+                    <th>{{ row.serialNumber }}</th>
+                    <th>
+                      <span
+                        class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
                       >
-                        <tr>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Item") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("SerialNumber") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("AvailableInStock") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Out") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("In") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Stock") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Employee") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Actions") }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
+                        {{ row.count }}
+                      </span>
+                    </th>
+                    <th>
+                      <span
+                        v-if="Number(row.out) > 0"
+                        class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
+                        >↑{{ row.out }}</span
                       >
-                        <tr
-                          v-for="row in data"
-                          :key="row.itemName"
-                          class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
-                        >
-                          <th>{{ row.itemName }}</th>
-                          <th>{{ row.serialNumber }}</th>
-                          <th>
-                            <span
-                              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
-                            >
-                              {{ row.count }}
-                            </span>
-                          </th>
-                          <th>
-                            <span
-                              v-if="Number(row.out) > 0"
-                              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-                              >↑{{ row.out }}</span
-                            >
-                          </th>
-                          <th>
-                            <span
-                              v-if="Number(row.in) > 0"
-                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-                              >↓{{ row.in }}</span
-                            >
-                          </th>
-                          <th>{{ row.price }}</th>
-                          <th>{{ row.stockName }}</th>
-                          <th>
-                            <button
-                              class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
-                              is-link
-                              @click="openItem(row.itemId)"
-                            >
-                              Open
-                            </button>
-                          </th>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <TailwindPagination
-                    class="flex justify-center mt-10"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="10"
-                  />
-                </div>
-              </div>
+                    </th>
+                    <th>
+                      <span
+                        v-if="Number(row.in) > 0"
+                        class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+                        >↓{{ row.in }}</span
+                      >
+                    </th>
+                    <th>{{ row.price }}</th>
+                    <th>{{ row.stockName }}</th>
+                    <th>
+                      <button
+                        class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
+                        is-link
+                        @click="openItem(row.itemId)"
+                      >
+                        Open
+                      </button>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+              <TailwindPagination
+                class="flex justify-center mt-10"
+                :data="dataPage"
+                @pagination-change-page="getFilterData"
+                :limit="searchFilter.limit"
+              />
+              <ISelect
+                v-if="data.length >= searchFilter.limit"
+                :label="t('Limit')"
+                v-model="searchFilter.limit"
+                name="archiveTypeId"
+                :options="limits"
+                @change="getFilterData()"
+              />
             </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
-            <!-- end card -->
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+        <SimpleLoading v-if="isLoading">.</SimpleLoading></IRow
+      >
+      <IRow><div id="PageDataEnd"></div></IRow>
+    </IPageContent>
+  </IPage>
 </template>
 <style></style>
