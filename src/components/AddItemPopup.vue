@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useItemStore } from "@/stores/item/itemStore";
-import { useItemCategoryStore } from "@/stores/item/itemCategory";
+import { useItemCategoryStore } from "@/stores/Item/itemCategoryStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 import WangEditor from "./WangEditor.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 const emit = defineEmits(["setItem"]);
 //region"Props"
 
@@ -60,7 +61,7 @@ const reset = () => {
 const el = ref<HTMLInputElement>();
 onMounted(async () => {
   //console.log(can("show items1"));
-  //checkPermissionAccessArray(["show Item"]);
+  checkPermissionAccessArray([EnumPermission.ShowItems]);
   await itemCategoryStore.getFast();
   item.value.id = 0;
   //el.value?.focus();
@@ -162,7 +163,9 @@ onMounted(async () => {
       </div>
       <div class="border-red-800 border-[1px]" v-if="errors">{{ errors }}</div>
     </div>
-    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem">Close</label>
+    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem"
+      >Close</label
+    >
   </div>
 </template>
 <style scoped>

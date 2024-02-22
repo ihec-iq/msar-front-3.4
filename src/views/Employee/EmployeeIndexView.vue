@@ -24,6 +24,8 @@ const { get_filter } = useEmployeeStore();
 
 import { limits } from "@/utils/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
+import ISelect from "@/components/inputs/ISelect.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -35,7 +37,7 @@ watch(
     await getFilterData(1);
   }
 );
-const addEmployee = () => {
+const addItem = () => {
   employee.value.id = 0;
   employee.value.name = "";
   employee.value.Section = { name: "", id: 0 };
@@ -55,16 +57,16 @@ const filterByIDName = (employee: IEmployee) => {
 const makeFastSearch = () => {
   return;
   // eslint-disable-next-line no-self-assign
-  if (fastSearch.value == "") data.value = dataBase.value;
-  else {
-    data.value = dataBase.value.filter(filterByIDName);
-  }
+  // if (fastSearch.value == "") data.value = dataBase.value;
+  // else {
+  //   data.value = dataBase.value.filter(filterByIDName);
+  // }
 };
 //#endregion
 //#region Search
 const searchFilter = ref<IEmployeeFilter>({
   name: "",
-  sectionId: 0,
+  sectionId: 1,
   limit: 10,
 });
 const getFilterData = async (page = 1) => {
@@ -99,9 +101,7 @@ const history = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show employees"]);
-
-  searchFilter.value.limit = 12;
+  checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await useSectionStore().get_sections();
@@ -110,72 +110,35 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage>
-    <IPageHeader :title="t(namePage)">
-      <template v-slot:buttons>
-        <IButton width="28" :onClick="addEmployee" :text="t('Add')" />
-      </template>
-    </IPageHeader>
-    <IRow>
-      <IBtnSearch
-        v-model="fastSearch"
-        @get-filter-data="getFilterData()"
-        @make-fast-search="makeFastSearch()"
-      ></IBtnSearch>
-      <div
-        class="mr-2 ml-2 lg:mt-0 xs:mt-2 py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-      >
-        <p>{{ t("Limit") }}:</p>
-        <select
-          aria-label="select"
-          v-model="searchFilter.limit"
-          class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-          @change="getFilterData()"
-        >
-          <option
-            v-for="limit in limits"
-            :key="limit.val"
-            :value="limit.val"
-            :selected="limit.selected == true"
-            class="text-sm text-indigo-800"
-          >
-            {{ limit.name }}
-          </option>
-        </select>
-      </div>
-      <div
-        class="mr-2 ml-2 lg:mt-0 xs:mt-2 py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-      >
-        <p>{{ t("EmployeeSection") }}:</p>
-        <select
-          aria-label="select"
-          v-model="searchFilter.sectionId"
-          class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1 font-medium"
-          @change="getFilterData()"
-        >
-          <option
-            v-for="section in sections"
-            :key="section.id"
-            :value="section.id"
-            :selected="section.id == 2"
-            class="text-sm text-indigo-800 font-bold"
-          >
-            {{ section.name }}
-          </option>
-        </select>
-      </div>
-      <div class="mr-2 ml-2 lg:mt-0 xs:mt-2 flex items-center">
-        <IButton
-          :on-click="getFilterData"
-          :text="t('Search')"
-          color="green"
-          type="outlined"
-        ></IButton>
-      </div>
-    </IRow>
-    <IRow>
-      <div class="py-4 min-w-full w-full h-full lg:px-8">
-        <!-- card -->
+  <IPage :HeaderTitle="t('EmployeeIndex')">
+    <template #HeaderButtons>
+      <IButton width="28" :onClick="addItem" :text="t('Add')" />
+    </template>
+    <IPageContent>
+      <IRow :col="3" :col-md="2" :col-lg="3">
+        <ISearchBar :getDataButton="getFilterData">
+          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
+            <IInput
+              :label="t('SearchForUser')"
+              :placeholder="t('SearchForUser')"
+              v-model="fastSearch"
+              type="text"
+            />
+          </ICol>
+          <!-- date -->
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <ISelect
+              :label="t('EmployeeSection')"
+              v-model="searchFilter.sectionId"
+              name="archiveTypeId"
+              :options="sections"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </ICol>
+        </ISearchBar>
+      </IRow>
+      <IRow>
         <div class="rounded-xl" v-if="isLoading == false">
           <div
             v-motion
@@ -217,7 +180,7 @@ onMounted(async () => {
                     class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
                   >
                     <th>{{ row.name }}</th>
-                    <th style="direction: ltr">{{ row.Section?.name }}</th>
+                    <th style="direction: ltr">{{ row.Section.name }}</th>
                     <th class="p-2 z-999">
                       <div class="dropdown">
                         <button
@@ -248,45 +211,31 @@ onMounted(async () => {
                 </tbody>
               </table>
             </div>
-            <div class="w-12/12 mx-2 overflow-x-auto font-Tajawal">
-              <TailwindPagination
-                class="flex justify-center mt-10"
-                :data="dataPage"
-                @pagination-change-page="getFilterData"
-                :limit="10"
-              />
+            <div class="w-full flex flex-row">
+              <div class="basis-4/5 hidden">
+                <TailwindPagination
+                  class="flex justify-center mt-6"
+                  :data="dataPage"
+                  @pagination-change-page="getFilterData"
+                  :limit="searchFilter.limit"
+                />
+              </div>
+              <div class="basis-1/5" v-if="searchFilter.limit > 1">
+                <ISelect
+                  :label="t('Limit')"
+                  v-model="searchFilter.limit"
+                  name="archiveTypeId"
+                  :options="limits"
+                  :IsRequire="true"
+                  @onChange="getFilterData()"
+                />
+              </div>
             </div>
           </div>
         </div>
-        <SimpleLoading v-if="isLoading"></SimpleLoading>
-        <!-- end card -->
-      </div>
-    </IRow>
+        <SimpleLoading v-if="isLoading">.</SimpleLoading>
+      </IRow>
+      <IRow><div id="PageDataEnd"></div></IRow>
+    </IPageContent>
   </IPage>
-  <!-- <div class="justify-between flex">
-    <PageTitle> {{ namePage }} </PageTitle>
-  </div> -->
-
-  <!-- bottom tool bar -->
-  <div class="m-5 fixed bottom-0 ltr:right-0 rtl:left-0">
-    <button
-      @click="addEmployee()"
-      class="flex p-2.5 float-right bg-create rounded-xl hover:rounded-3xl md:mr-5 lg:mr-0 transition-all duration-300 text-white"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="w-6 h-6"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    </button>
-  </div>
 </template>

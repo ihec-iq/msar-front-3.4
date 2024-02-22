@@ -7,7 +7,7 @@ export default {
   "User Name(for login)": "اسم المستخدم للدخول",
   NumberBook: "رقم الكتاب",
   FileBook: "تحميل الكتاب",
-  TypeBook: "نوع الكتاب",
+  TypeBook: "تصنيف الكتاب",
   Language: "العربية",
   Description: "تفاصيل",
   Open: "فتح",
@@ -87,6 +87,8 @@ export default {
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
   Employee: "الموظف",
+  EmployeeNumber: "الرقم الوظيفي",
+  EmployeeIdCard: "رقم الهوية",
   UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",
@@ -179,7 +181,7 @@ export default {
   Groups: "الكروبات",
   "Add New Bill Sale": "اضافة فاتورة بيع",
   Next: "التالي",
-  "Any Device": "اي جهاز",
+  AnyDevice: "اي جهاز",
   "Add User Card": "اضافة بطاقة مستخدم",
   "User Details": "تفاصيل المستخدم",
   "Users Details": "تفاصيل المستخدمين",
@@ -460,7 +462,7 @@ export default {
   "General Settings": "اعدادات عامة",
   "Sale Custom Group": "بيع الكروبات المخصصة",
   "Design Custom Group": "تصميم الكروبات المخصصة",
-  Save: "حفظ",
+
   "Change Theme": "تغير المظهر",
   "Change Direction": "تغير الاتجاه",
   "Change Language": "تغير اللغة",
@@ -506,5 +508,7 @@ export default {
   Employees: "موظفين",
   SortBy: "ترتيب حسب",
   Limit: "الحد",
-  Section: "القسم"
+  Section: "القسم",
+  Save: "حفظ",
+  New: "جديد",
 };

@@ -26,8 +26,13 @@ onMounted(async () => {
 </script>
 <template>
   <div class="relative flex">
-    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-      <Icon icon="mdi:magnify" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+    <div
+      class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
+    >
+      <Icon
+        icon="mdi:magnify"
+        class="w-5 h-5 text-gray-500 dark:text-gray-400"
+      />
     </div>
     <input
       type="text"

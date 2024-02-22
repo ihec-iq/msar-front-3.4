@@ -13,11 +13,23 @@ defineProps({
     type: String,
     required: true,
   },
+  labelVSelect: {
+    type: String,
+    default: "name",
+  },
   options: {
     type: Array<any>,
     required: true,
   },
   IsRequire: {
+    type: Boolean,
+    default: false,
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
     type: Boolean,
     default: false,
   },
@@ -33,20 +45,24 @@ const Change = () => {
     <label class="_inputLabel" :for="name">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
-    <select
-      class="_input"
-      :name="name"
+    <vSelect
       :id="name"
+      class="_input"
       v-model="modelValue"
+      :options="options"
+      :reduce="(user: any) => user"
+      :label="labelVSelect"
+      :name="name"
+      :getOptionLabel="(user: any) => user.name"
       @change="Change"
+      :multiple="multiple"
+      :disabled="disabled"
     >
-      <option
-        v-for="(option, index) in options"
-        :key="index"
-        :value="option.id"
-      >
-        {{ option.name }}
-      </option>
-    </select>
+      <template #option="{ name }">
+        <div class="_input">
+          <span class="_input">{{ name }}</span>
+        </div>
+      </template>
+    </vSelect>
   </div>
 </template>
