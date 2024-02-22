@@ -181,7 +181,7 @@ export default {
   Groups: "الكروبات",
   "Add New Bill Sale": "اضافة فاتورة بيع",
   Next: "التالي",
-  "Any Device": "اي جهاز",
+  AnyDevice: "اي جهاز",
   "Add User Card": "اضافة بطاقة مستخدم",
   "User Details": "تفاصيل المستخدم",
   "Users Details": "تفاصيل المستخدمين",
