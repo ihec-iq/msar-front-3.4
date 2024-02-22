@@ -15,11 +15,23 @@ defineProps({
     type: String,
     required: true,
   },
+  labelVSelect: {
+    type: String,
+    default: "name",
+  },
   options: {
     type: Array<any>,
     required: true,
   },
   IsRequire: {
+    type: Boolean,
+    default: false,
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
     type: Boolean,
     default: false,
   },
@@ -41,14 +53,16 @@ const Change = () => {
       v-model="modelValue"
       :options="options"
       :reduce="(user: any) => user"
-      label="name"
+      :label="labelVSelect"
       :name="name"
       :getOptionLabel="(user: any) => user.name"
       @change="Change"
+      :multiple="multiple"
+      :disabled="disabled"
     >
       <template #option="{ name }">
-        <div>
-          <span>{{ name }}</span>
+        <div class="_input">
+          <span class="_input">{{ name }}</span>
         </div>
       </template>
     </vSelect>

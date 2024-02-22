@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+
 import { useRouter } from "vue-router";
 const router = useRouter();
 import { t } from "@/utils/I18nPlugin";
@@ -9,19 +9,43 @@ import IButton2 from "./IButton2.vue";
 const props = defineProps({
   onCreate: {
     type: Function,
-    required: true,
+    default: () => {},
   },
   onUpdate: {
     type: Function,
-    required: true,
+    default: () => {},
   },
   onDelete: {
     type: Function,
-    required: true,
+    default: () => {},
   },
   isAdd: {
     type: Boolean,
     required: true,
+  },
+  showUpdate: {
+    type: Boolean,
+    default: true,
+  },
+  showDelete: {
+    type: Boolean,
+    default: true,
+  },
+  showAdd: {
+    type: Boolean,
+    default: true,
+  },
+  titleAdd: {
+    type: String,
+    default: "Add",
+  },
+  titleUpdate: {
+    type: String,
+    default: "Update",
+  },
+  titleDelete: {
+    type: String,
+    default: "Delete",
   },
 });
 const goBack = () => {
@@ -34,16 +58,20 @@ const goBack = () => {
   >
     <div class="flex gap-3">
       <IButton
-        v-if="props.isAdd"
-        :text="t('Create')"
+        v-if="props.isAdd && props.showAdd"
+        :text="t(titleAdd)"
         :onClick="props.onCreate"
       />
-      <IButton v-else :text="t('Update')" :onClick="props.onUpdate" />
       <IButton
-        v-if="!props.isAdd"
+        v-if="!props.isAdd && props.showUpdate"
+        :text="t(titleUpdate)"
+        :onClick="props.onUpdate"
+      />
+      <IButton
+        v-if="!props.isAdd && props.showDelete"
         color="red"
         type="outlined"
-        :text="t('Delete')"
+        :text="t(titleDelete)"
         :onClick="props.onDelete"
       />
     </div>
