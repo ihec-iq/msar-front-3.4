@@ -5,12 +5,12 @@ import { useItemStore } from "@/stores/item/itemStore";
 import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
- import { useRtlStore } from "@/stores/i18n/rtlPi";
+import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "@/types/IItem";
- 
+
 //region"Drag and Drop"
 
 //#endregion
@@ -125,7 +125,7 @@ const Delete = async () => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
-            "success"
+            "success",
           );
           router.go(-1);
         });
