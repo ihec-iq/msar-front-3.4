@@ -18,6 +18,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
   dir: {
     type: String as () => EnumDirection, // Cast to the enum type
     default: EnumDirection.Auto, // Default value (optional)
@@ -30,6 +34,7 @@ defineProps({
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
     <input
+      :disabled="disabled"
       class="_input"
       :type="type"
       v-model="modelValue"

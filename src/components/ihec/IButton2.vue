@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { computed, type PropType } from "vue";
-import { defineProps } from "vue";
 
 const props = defineProps({
   text: {

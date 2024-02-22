@@ -16,6 +16,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // import { useI18n } from "@/stores/i18n/useI18n";
@@ -30,6 +34,7 @@ defineProps({
       <slot class="_inputLabel"></slot>
     </label>
     <input
+      :disabled="disabled"
       type="checkbox"
       class="toggle toggle-secondary mx-2"
       v-model="modelValue"

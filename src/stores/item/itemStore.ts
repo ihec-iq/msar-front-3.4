@@ -1,11 +1,11 @@
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
 import type { IItem, IItemFilter } from "@/types/IItem";
 
 export const useItemStore = defineStore("itemStore", () => {
-  const item = reactive<IItem>({
+  const item = ref<IItem>({
     id: 0,
     name: "",
     description: "",
@@ -18,6 +18,16 @@ export const useItemStore = defineStore("itemStore", () => {
   const pathUrl = `${pathBase}/item`;
   async function get() {
     return await Api.get(`${pathUrl}`);
+  }
+  function resetData() {
+    item.value = {
+      id: 0,
+      name: "",
+      description: "",
+      code: "",
+      Category: { name: "", id: 0 },
+      measuringUnit: "",
+    };
   }
   async function get_items() {
     await Api.get(`${pathUrl}`)
@@ -50,6 +60,7 @@ export const useItemStore = defineStore("itemStore", () => {
     items,
     get,
     get_filter,
+    resetData,
     get_items,
     show,
     store,

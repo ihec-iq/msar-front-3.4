@@ -5,8 +5,6 @@ import { useEmployeeStore } from "@/stores/employeeStore";
 import { useSectionStore } from "@/stores/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
@@ -23,8 +21,6 @@ const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("EmployeeAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
 const isPerson = ref(false);
 
 const employeeStore = useEmployeeStore();
@@ -317,71 +313,3 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
-
-<style scoped>
-.drop-area {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 50px;
-  background: rgba(255, 255, 255, 0.333);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: 0.2s ease;
-}
-.drop-area[data-active="true"] {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background: rgba(255, 255, 255, 0.8);
-}
-label {
-  font-size: 36px;
-  cursor: pointer;
-  display: block;
-}
-label span {
-  display: block;
-}
-label input[type="file"]:not(:focus-visible) {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-label .smaller {
-  font-size: 16px;
-}
-.image-list {
-  display: flex;
-  list-style: none;
-  flex-wrap: wrap;
-  padding: 0;
-  margin-bottom: 35px;
-}
-.preview-card {
-  display: flex;
-  border: 1px solid #a2a2a2;
-  padding: 5px;
-  margin: 5px;
-}
-.upload-button {
-  display: block;
-  appearance: none;
-  border: 0;
-  border-radius: 50px;
-  padding: 0.75rem 3rem;
-  margin: 1rem auto;
-  font-size: 1.25rem;
-  font-weight: bold;
-  background: #369;
-  color: #fff;
-  text-transform: uppercase;
-}
-button {
-  cursor: pointer;
-}
-</style>
-@/stores/permissionStore@/stores/sectionStore
