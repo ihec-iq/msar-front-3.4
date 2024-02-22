@@ -7,6 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    _ITable: typeof import('./src/components/ihec/_ITable.vue')['default']
+    _ITable2: typeof import('./src/components/ihec/_ITable2.vue')['default']
     AddItemPopup: typeof import('./src/components/AddItemPopup.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
