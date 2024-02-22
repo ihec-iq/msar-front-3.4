@@ -28,7 +28,6 @@ declare module '@vue/runtime-core' {
     ICol: typeof import('./src/components/ihec/ICol.vue')['default']
     ICrudButtons: typeof import('./src/components/ihec/ICrudButtons.vue')['default']
     IFooterCrud: typeof import('./src/components/ihec/IFooterCrud.vue')['default']
-    IFooterForm: typeof import('./src/components/ihec/IFooterForm.vue')['default']
     IForm: typeof import('./src/components/ihec/IForm.vue')['default']
     IFullRow: typeof import('./src/components/ihec/IFullRow.vue')['default']
     IInput: typeof import('./src/components/inputs/IInput.vue')['default']

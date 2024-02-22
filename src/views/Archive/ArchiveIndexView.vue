@@ -15,7 +15,6 @@ import { useRoute, useRouter } from "vue-router";
 import CArchiveCardIndex from "@/components/ihec/archive/CArchiveCardIndex.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IPageHeader from "@/components/ihec/IPageHeader.vue";
-import IButton from "@/components/ihec/IButton.vue";
 
 const { checkPermissionAccessArray } = usePermissionStore();
 const isLoading = ref(false);
@@ -164,9 +163,9 @@ onMounted(async () => {
 </script>
 <template>
   <IPage :TitleHeader="t('Archive')">
-      <template #HeaderButtons>
-        <IButton width="28" :onClick="addArchive" :text="t('Add')" />
-      </template> 
+    <template #HeaderButtons>
+      <IButton width="28" :onClick="addArchive" :text="t('Add')" />
+    </template>
     <IPageContent>
       <IRow>
         <ISearchBar :getDataButton="getFilterData">
@@ -181,6 +180,7 @@ onMounted(async () => {
             />
           </ICol>
           <!-- date -->
+
           <ICol :col="4">
             <IInput
               :label="t('DateFrom')"

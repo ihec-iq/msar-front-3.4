@@ -6,6 +6,7 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 import Components from "unplugin-vue-components/vite";
 import { VantResolver } from "unplugin-vue-components/resolvers";
 import { VitePWA } from "vite-plugin-pwa";
+import AutoImport from "unplugin-auto-import/vite";
 
 export default defineConfig({
   plugins: [
@@ -104,6 +105,25 @@ export default defineConfig({
         },
       }),
     ],
+    AutoImport({
+      /* options */
+      dts: true,
+      eslintrc: {
+        enabled: true, // <-- this
+      },
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/,
+        /\.vue\?vue/, // .vue
+        /\.md$/, // .md
+      ],
+      imports: [
+        // presets
+        "vue",
+        "vue-router",
+        "pinia"
+      ],
+    }),
   ],
   resolve: {
     alias: {

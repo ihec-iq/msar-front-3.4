@@ -1,2 +1,2 @@
-const DefaultURL = "http://10.10.10.10/workflow_ihec/public/api";
+const DefaultURL = "http://localhost/ihec-backend/public/api";
 export { DefaultURL };
