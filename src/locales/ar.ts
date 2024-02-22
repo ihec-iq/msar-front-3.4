@@ -87,6 +87,8 @@ export default {
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
   Employee: "الموظف",
+  EmployeeNumber: "الرقم الوظيفي",
+  EmployeeIdCard: "رقم الهوية",
   UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",

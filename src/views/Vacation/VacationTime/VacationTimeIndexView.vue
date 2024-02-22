@@ -20,6 +20,7 @@ const dataBase = ref<Array<IVacationTime>>([]);
 const { vacationTime } = useVacationTimeStore();
 
 import { limits } from "@/utils/defaultParams";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -62,7 +63,6 @@ const searchFilter = ref<IVacationTimeFilter>({
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-  searchFilter.value.limit = 0;
   searchFilter.value.record = Number(fastSearch.value);
   await useVacationTimeStore()
     .get_filter(searchFilter.value, page)
@@ -93,7 +93,7 @@ const Search = async (event: KeyboardEvent) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show vacations time"]);
+  checkPermissionAccessArray([EnumPermission.ShowVacationsTime]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   if (inputRefSearch.value) {
@@ -203,45 +203,31 @@ onMounted(async () => {
                     </div>
                     <!-- end card -->
                   </div>
-                  <TailwindPagination
-                    class="flex justify-center mt-10"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="10"
-                  />
+                  <div class="w-full flex flex-row">
+                    <div class="basis-4/5 hidden">
+                      <TailwindPagination
+                        class="flex justify-center mt-6"
+                        :data="dataPage"
+                        @pagination-change-page="getFilterData"
+                        :limit="searchFilter.limit"
+                      />
+                    </div>
+                    <div class="basis-1/5" v-if="searchFilter.limit > 1">
+                      <ISelect
+                        :label="t('Limit')"
+                        v-model="searchFilter.limit"
+                        name="archiveTypeId"
+                        :options="limits"
+                        :IsRequire="true"
+                        @onChange="getFilterData()"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <SimpleLoading v-if="isLoading"></SimpleLoading>
             <!-- end card -->
-          </div>
-        </div>
-      </IRow>
-      <IRow>
-        <!-- limit -->
-        <div
-          class="py-2 limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-          >
-            <p>{{ t("Limit") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.limit"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData(1)"
-            >
-              <option
-                v-for="limit in limits"
-                :key="limit.val"
-                :value="limit.val"
-                :selected="limit.selected == true"
-                class="text-sm text-indigo-800"
-              >
-                {{ limit.name }}
-              </option>
-            </select>
           </div>
         </div>
       </IRow>

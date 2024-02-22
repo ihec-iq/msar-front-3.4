@@ -197,20 +197,26 @@ onMounted(async () => {
                   :item="item"
                 ></CardArchiveIndex>
               </div>
-              <TailwindPagination
-                class="flex justify-center mt-10"
-                :data="dataPage"
-                @pagination-change-page="getFilterData"
-                :limit="searchFilter.limit"
-              />
-              <ISelect
-                v-if="data.length >= searchFilter.limit"
-                :label="t('Limit')"
-                v-model="searchFilter.limit"
-                name="archiveTypeId"
-                :options="limits"
-                @change="getFilterData()"
-              />
+              <div class="w-full flex flex-row">
+                <div class="basis-4/5 hidden">
+                  <TailwindPagination
+                    class="flex justify-center mt-6"
+                    :data="dataPage"
+                    @pagination-change-page="getFilterData"
+                    :limit="searchFilter.limit"
+                  />
+                </div>
+                <div class="basis-1/5" v-if="searchFilter.limit > 1">
+                  <ISelect
+                    :label="t('Limit')"
+                    v-model="searchFilter.limit"
+                    name="archiveTypeId"
+                    :options="limits"
+                    :IsRequire="true"
+                    @onChange="getFilterData()"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
