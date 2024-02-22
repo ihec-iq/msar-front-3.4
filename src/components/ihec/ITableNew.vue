@@ -14,14 +14,7 @@ const props = defineProps({
   },
 });
 
-import { defineProps, defineEmits } from "vue";
-
-// defineProps(["headers", "items"]);
-const emits = defineEmits(["updateClick"]);
-
-const handleUpdateClick = (id: number) => {
-  emits("updateClick", id);
-};
+import { defineProps } from "vue";
 </script>
 <template>
   <slot name="tableBar"></slot>
@@ -53,15 +46,23 @@ const handleUpdateClick = (id: number) => {
       <tbody>
         <tr
           class="dark:hover:bg-tableBodyHover bg-gray-100 dark:bg-tableBody hover:bg-gray-300 duration-300 border-t border-gray-400 dark:border-gray-900"
-          v-for="(item, index) in items"
-          :key="index"
+          v-for="(row, rowIndex) in items"
+          :key="rowIndex"
         >
           <td
             class="text-sm font-light px-6 py-4 whitespace-nowrap"
-            v-for="(header, index) in headers"
-            :key="index"
+            v-for="(cell, cellIndex) in row"
+            :key="cellIndex"
           >
-            {{ item[header] }}
+            <slot
+              :name="cellIndex"
+              :row="row"
+              :cell="cell"
+              :rowIndex="rowIndex"
+              :cellIndex="cellIndex"
+            >
+              {{ cell }}
+            </slot>
           </td>
           <td>
             <slot name="buttons"></slot>
@@ -71,3 +72,9 @@ const handleUpdateClick = (id: number) => {
     </table>
   </div>
 </template>
+<!-- Example -->
+<!-- 
+  <ITableNew :items="items" :headers="headers">
+      <template v-slot:actions="{ row }"> {{ row.id }} </template>
+  </ITableNew>
+ -->
