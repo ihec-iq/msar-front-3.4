@@ -9,7 +9,10 @@ import SimpleLoading from "@/components/general/loading.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-import type { IVacationSick, IVacationSickFilter } from "@/types/vacation/IVacationSick";
+import type {
+  IVacationSick,
+  IVacationSickFilter,
+} from "@/types/vacation/IVacationSick";
 import { isNumeric } from "vant/lib/utils";
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -27,12 +30,13 @@ const inputRefSearch = ref<HTMLInputElement | null>(null);
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
 const addItem = () => {
-  vacationSick.reset();
+  vacationSick.resetData();
   router.push({
     name: "vacationSickAdd",
   });
@@ -109,54 +113,27 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage>
-    <template v-slot:header>
-      <IPageHeader :title="t('VacationSick')">
-        <template v-slot:buttons>
-          <IButton width="28" :onClick="addItem" :text="t('Add')" />
-        </template>
-      </IPageHeader>
+  <IPage :HeaderTitle="t('VacationSick')">
+    <template #HeaderButtons>
+      <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
-    <template v-slot:content>
-      <IRow>
-        <IBtnSearch
-          class="p-2 mx-2"
-          v-model="fastSearch"
-          @get-filter-data="getFilterData()"
-          @make-fast-search="makeFastSearch()"
-        ></IBtnSearch>
-        <!-- limit -->
-        <div
-          class="py-2 limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-          >
-            <p>{{ t("Sort By") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.limit"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData(1)"
-            >
-              <option
-                v-for="limit in limits"
-                :key="limit.val"
-                :value="limit.val"
-                :selected="limit.selected == true"
-                class="text-sm text-indigo-800"
-              >
-                {{ limit.name }}
-              </option>
-            </select>
-          </div>
-        </div>
+    <IPageContent>
+      <IRow :col="5" :col-md="2" :col-lg="4">
+        <ISearchBar :getDataButton="getFilterData">
+          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
+            <IInput
+              :label="t('Search')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              type="text"
+            />
+          </ICol>
+        </ISearchBar>
       </IRow>
       <IRow>
         <div class="flex flex-col">
           <div class="py-4 inline-block min-w-full lg:px-8">
             <!-- card -->
-
             <div class="rounded-xl" v-if="isLoading == false">
               <div
                 v-motion
@@ -177,8 +154,12 @@ onMounted(async () => {
                       :key="vacation.id"
                     >
                       <div class="w-3/4 overflow-hidden">
-                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
-                          <div class="text-2xl text-text dark:text-textLight mb-2">
+                        <div
+                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
+                        >
+                          <div
+                            class="text-2xl text-text dark:text-textLight mb-2"
+                          >
                             {{ vacation.Vacation.Employee.name }}
                           </div>
                         </div>
@@ -232,21 +213,34 @@ onMounted(async () => {
                     </div>
                     <!-- end card -->
                   </div>
-                  <TailwindPagination
-                    class="flex justify-center mt-10"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="10"
-                  />
+                  <div class="w-full flex flex-row">
+                    <div class="basis-4/5 hidden">
+                      <TailwindPagination
+                        class="flex justify-center mt-6"
+                        :data="dataPage"
+                        @pagination-change-page="getFilterData"
+                        :limit="searchFilter.limit"
+                      />
+                    </div>
+                    <div class="basis-1/5" v-if="searchFilter.limit > 1">
+                      <ISelect
+                        :label="t('Limit')"
+                        v-model="searchFilter.limit"
+                        name="archiveTypeId"
+                        :options="limits"
+                        :IsRequire="true"
+                        @onChange="getFilterData()"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <SimpleLoading v-if="isLoading"></SimpleLoading>
             <!-- end card -->
           </div>
-        </div></IRow
-      >
-    </template>
+        </div>
+      </IRow>
+    </IPageContent>
   </IPage>
 </template>
-@/stores/permissionStore

@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref } from "vue";
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
-import type { IUser } from "@/types/core/IUser";
+import type { IUser } from "@/types/core/IUser";;
 import { useRoleStore } from "@/stores/roles/roleStore";
 import type IRole from "@/types/role/IRole";
 import { t } from "@/utils/I18nPlugin";

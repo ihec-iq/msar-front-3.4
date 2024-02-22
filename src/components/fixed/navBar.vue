@@ -58,7 +58,8 @@ const filteredLinks = computed(() =>
     // Check if any of the link's permissions are included in userPermissions
     if (permissions.value == undefined) return;
     return link.permissions.some(
-      (permission) => permissions.value.includes(permission) || permission == "public"
+      (permission) =>
+        permissions.value.includes(permission) || permission == "public"
     );
   })
 );
@@ -88,7 +89,7 @@ onMounted(() => {
 <template>
   <div
     class="flex fixed h-full z-[999] bg-white dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
-    :class="[isClose ? 'lg:w-20 xs:w-[66px]' : 'lg:w-64  ']"
+    :class="[isClose ? 'lg:w-20 xs:w-[68px]' : 'lg:w-64  ']"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
@@ -96,7 +97,7 @@ onMounted(() => {
       <div
         class="bg-white dark:bg-darkNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
-      <!-- little circule -->
+        <!-- little circule -->
         <div
           v-motion
           :initial="{ opacity: 0, x: -85 }"
@@ -137,15 +138,15 @@ onMounted(() => {
         </div>
         <!-- logo and co Name  -->
         <div
-          class="font-bold items-center flex flex-col justify-center text-black mt-5"
+          class="font-bold items-center flex flex-col text-black mt-5"
           :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
         >
-          <div class="flex ml-4">
+          <div class="flex items-center">
             <img
               @click="isClose = !isClose"
-              src="./../../assets/logo-512x512.png"
+              src="@/assets/logo-512x512.png"
               alt=""
-              class="w-8 h-8 rounded-full"
+              class="w-12 h-12 rounded-full border-2 align-middle"
             />
             <div
               class="text-lg mt-1 ml-1 duration-700 w-28 dark:text-textLight text-text"
@@ -171,28 +172,31 @@ onMounted(() => {
               <router-link
                 :to="{ name: Link.routerName }"
                 @click.prevent="tab = Link.tab"
+                @mouseover="tab = Link.tab"
                 class=""
               >
                 <button
-                  class="hover:text-[#444] dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark p-4 inline-flex justify-center rounded-md smooth-hover"
-                >
-                  <i :title="Link.title" v-html="Link.icon" /></button
+                  class="hover:text-[#444] btn-outline hover:rounded-2xl p-3 rounded-full bg-gray border-solid border-[#aaa] border-2 m-1 dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark duration-500"
+                  :title="Link.title"
+                  v-html="Link.icon"
+                ></button
               ></router-link>
               <!-- childrens -->
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
-                  class="p-4 text-base whitespace-pre-wrap cursor-pointer duration-500"
+                  class="p-2 text-base whitespace-pre-wrap cursor-pointer duration-500"
                 >
                   <div
                     v-for="child in Link.children"
                     :key="child.routerName"
                     :class="{ 'flex ': !isClose, hidden: isClose }"
+                    class="rounded-md border-2 my-2 hover:bg-gray-200"
                   >
                     <router-link
                       :to="{ name: child.routerName }"
                       v-if="tab == Link.tab"
-                      class="p-2 cursor-pointer"
+                      class="cursor-pointer rounded-md p-2"
                     >
                       {{ child.title }}
                     </router-link>
@@ -208,7 +212,10 @@ onMounted(() => {
           <button
             @click="settingPop = !settingPop"
             class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
-            :class="{ 'ltr:float-left rtl:float-right ': !isClose, 'ltr:mr-8 rtl:ml-8': isClose }"
+            :class="{
+              'ltr:float-left rtl:float-right ': !isClose,
+              'ltr:mr-8 rtl:ml-8': isClose,
+            }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -293,7 +300,8 @@ onMounted(() => {
           @click.prevent="settingMenu = 'MainSetting'"
           class="-mr-3 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
           :class="{
-            ' text-white  border-l-2 border-blue-500 ': settingMenu === 'MainSetting',
+            ' text-white  border-l-2 border-blue-500 ':
+              settingMenu === 'MainSetting',
           }"
         >
           <!-- Heroicon name: outline/shield-check -->
@@ -421,7 +429,8 @@ li:hover > button svg {
   display: flex;
   position: relative;
   background-color: #6b7280;
-  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15),
+    0 6px 12px 0 rgba(24, 94, 224, 0.15);
   padding: 0.75rem;
   border-radius: 20px;
 }

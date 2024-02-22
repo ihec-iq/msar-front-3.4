@@ -37,6 +37,9 @@ const router = useRouter();
 const errors = ref<String | null>();
 //#endregion
 //#region CURD
+const reset = () => {
+  itemStore.resetData();
+};
 const store = () => {
   errors.value = null;
   const formData = new FormData();
@@ -201,121 +204,90 @@ const ChangeDateRecord = () => {
 };
 </script>
 <template>
-  <PageTitle> {{ namePage }}</PageTitle>
-  <div class="w-full">
-    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("DateFrom") }}
-        </div>
-        <input
-          v-model="vacationSick.dayFrom"
-          type="date"
-          @change="ChangeDate()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("DateTo") }}
-        </div>
-        <input
-          v-model="vacationSick.dayTo"
-          type="date"
-          @change="ChangeDate()"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("RecordSick") }}
-        </div>
-        <input
-          v-model="vacationSick.record"
-          type="number"
-          @input="ChangeDateRecord()"
-          min="1"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("OutputVoucherEmployeeRequest") }}
-        </div>
-        <vSelect
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          v-model="vacationSick.Vacation"
-          :options="vacations"
-          :reduce="(vacation: IVacation) => vacation"
-          label="name"
-          :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
-        >
-          <template #option="{ Employee }">
-            <div>
-              <span>{{ Employee.name }}</span>
-            </div>
-          </template>
-        </vSelect>
-      </div>
-    </div>
-    <!-- bottom tool bar -->
-    <div
-      :class="{
-        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
-      }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-    >
-      <div class="flex ltr:ml-8 rtl:mr-8">
-        <div class="items-center mr-3">
-          <button
-            v-if="vacationSick.id == 0"
-            @click="store()"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Create") }}
-          </button>
-          <button
-            v-else
-            @click="update()"
-            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Update") }}
-          </button>
-          <button
-            v-if="vacationSick.id != 0"
-            @click="Delete()"
-            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
-          >
-            {{ t("Delete") }}
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      :class="{
-        'ltr:left-4 rtl:right-4': is,
-        'ltr:left-28 rtl:right-28': !is,
-      }"
-      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-    >
-      <button
-        @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-      >
-        {{ t("Back") }}
-      </button>
-    </div>
-  </div>
-  <!-- end bottom tool -->
+  <IPage :HeaderTitle="t(namePage)">
+    <template #HeaderButtons>
+      <IButton2
+        color="green"
+        width="28"
+        type="outlined"
+        pre-icon="autorenew"
+        :onClick="reset"
+        :text="t('New')"
+      />
+    </template>
+    <IPageContent>
+      <IRow>
+        <IForm>
+          <IRow col-lg="4" col-md="2" col-sm="1">
+            <ICol span="3" span-md="2" span-sm="1">
+              <IInput
+                :label="t('DateFrom')"
+                name="dayFrom"
+                v-model="vacationSick.dayFrom"
+                type="date"
+                @change="ChangeDate()"
+            /></ICol>
+            <ICol span="1" span-md="2" span-sm="4">
+              <IInput
+                :label="t('DateTo')"
+                v-model="vacationSick.dayTo"
+                name="issueDate"
+                type="date"
+                @change="ChangeDate()"
+                :IsRequire="true"
+            /></ICol>
+            <ICol span="1" span-md="2" span-sm="4">
+              <IInput
+                :label="t('RecordSick')"
+                v-model="vacationSick.record"
+                type="number"
+                @input="ChangeDateRecord()"
+                min="1"
+                :IsRequire="true"
+            /></ICol>
+            <ICol span="1" span-md="2" span-sm="4">
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("OutputVoucherEmployeeRequest") }}
+              </div>
+              <vSelect
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                v-model="vacationSick.Vacation"
+                :options="vacations"
+                :reduce="(vacation: IVacation) => vacation"
+                label="name"
+                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
+              >
+                <template #option="{ Employee }">
+                  <div>
+                    <span>{{ Employee.name }}</span>
+                  </div>
+                </template>
+              </vSelect>
+            </ICol>
+            <!-- <ICol span="1" span-md="2" span-sm="4">
+              <ISelect
+                :label="t('ArchiveType')"
+                v-model="archive.archiveTypeId"
+                name="archiveTypeId"
+                :options="archiveTypes"
+                :IsRequire="true"
+            /></ICol> -->
+          </IRow>
+        </IForm>
+      </IRow>
+    </IPageContent>
+
+    <template #Footer>
+      <IFooterCrud
+        :isAdd="vacationSick.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
+    </template>
+  </IPage>
 </template>
 <style scoped>
 .drop-area {
@@ -383,4 +355,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/vacations/vacationStore@/stores/permissionStore

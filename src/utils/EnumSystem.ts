@@ -68,5 +68,6 @@ enum EnumPermission {
 enum EnumDirection {
   RTL = "rtl",
   LTR = "ltr",
+  Auto = "inherit",
 }
 export { EnumPermission, EnumDirection };

@@ -7,8 +7,8 @@ import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useOutputVoucherStore } from "@/stores/voucher/outputVoucher";
-import { useCorruptedVoucherStore } from "@/stores/voucher/corruptedVoucher";
+import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
+import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
@@ -141,7 +141,7 @@ const createCorruptedVoucher = () => {
 //#endregion
 
 onMounted(async () => {
-  checkPermissionAccessArray(["show employees"]);
+  checkPermissionAccessArray([EnumPermission.ShowEmployees]);;
   searchFilter.value.limit = 24;
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
@@ -190,7 +190,7 @@ onMounted(async () => {
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
-            <p>{{ t("Sort By") }}:</p>
+            <p>{{ t("Limit") }}:</p>
             <select
               aria-label="select"
               v-model="searchFilter.limit"
@@ -511,4 +511,4 @@ onMounted(async () => {
 </template>
 <style></style>
 @/stores/employeeStore
-@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore
+@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/voucher1/outputVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore@/stores/warehouse/outputVoucher@/stores/warehouse/corruptedVoucher

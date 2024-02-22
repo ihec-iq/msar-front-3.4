@@ -19,7 +19,7 @@ export default [
   {
     path: "/user",
     name: "userIndex",
-    component: () => import("@/views/User/UserIndexView.vue"),
+    component: () => import("@/views/User/UserIndexViewTest.vue"),
     meta: {
       middleware: [authMiddleware],
     },

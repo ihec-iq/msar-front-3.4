@@ -9,7 +9,7 @@ import EditButton from "@/components/dropDown/EditButton.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
 import DeleteButton from "@/components/dropDown/DeleteButton.vue";
 import { t } from "@/utils/I18nPlugin";
-import type IUser from "@/types/core/IUser";
+import type { IUser } from "@/types/core/IUser";
 import { useUserStore } from "@/stores/userStore";
 
 //#endregion
@@ -123,7 +123,7 @@ onBeforeMount(() => {
       <div
         class="limit py-3 px-4 flex items-center text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
       >
-        <p>{{ t("Sort By") }}:</p>
+        <p>{{ t("Limit") }}:</p>
         <select
           aria-label="select"
           v-model="filter.limit"
@@ -240,7 +240,7 @@ onBeforeMount(() => {
                   <td class="pl-5">
                     <div class="flex justify-center">
                       <p class="text-sm leading-none text-text dark:text-textLight ml-2">
-                        {{ user.last_login }}
+                        {{ user.phone }}
                       </p>
                     </div>
                   </td>
