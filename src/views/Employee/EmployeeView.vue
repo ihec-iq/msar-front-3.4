@@ -53,11 +53,11 @@ const store = () => {
   formData.append("takeVacation", employee.value.takeVacation.toString());
   formData.append(
     "initVacationSick",
-    employee.value.initVacationSick.toString()
+    employee.value.initVacationSick.toString(),
   );
   formData.append(
     "takeVacationSick",
-    employee.value.takeVacationSick.toString()
+    employee.value.takeVacationSick.toString(),
   );
 
   employeeStore
@@ -99,11 +99,11 @@ function update() {
   formData.append("takeVacation", employee.value.takeVacation.toString());
   formData.append(
     "initVacationSick",
-    employee.value.initVacationSick.toString()
+    employee.value.initVacationSick.toString(),
   );
   formData.append(
     "takeVacationSick",
-    employee.value.takeVacationSick.toString()
+    employee.value.takeVacationSick.toString(),
   );
   employeeStore
     .update(employee.value.id, formData)
@@ -154,7 +154,7 @@ const Delete = async () => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
-            "success"
+            "success",
           );
           router.go(-1);
         });
