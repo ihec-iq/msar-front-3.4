@@ -29,5 +29,11 @@ const makeRandom = (length?: number): string => {
     .toString()
     .repeat(length);
 };
+function isNumber(value?: string | number): boolean
+{
+   return ((value != null) &&
+           (value !== '') &&
+           !isNaN(Number(value.toString())));
+}
 
-export { truncateString, formatFileSize, makeRandom };
+export { truncateString, formatFileSize, makeRandom, isNumber };
