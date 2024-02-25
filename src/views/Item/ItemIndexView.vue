@@ -2,7 +2,6 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useItemStore } from "@/stores/item/itemStore";
-import PageTitle from "@/components/general/namePage.vue";
 import type { IItem, IItemFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";

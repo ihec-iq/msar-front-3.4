@@ -167,7 +167,7 @@ export default {
   Active: "Active",
   Groups: "Groups",
   Next: "Next",
-  "Any Device": "Any Device",
+  AnyDevice: "Any Device",
   "Add User Card": "Add User Card",
   "Supplier Name": "Supplier Name",
   "Date in": "Date in",

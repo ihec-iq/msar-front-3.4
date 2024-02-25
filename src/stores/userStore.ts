@@ -2,7 +2,7 @@ import { reactive } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IUser } from "@/types/core/IUser";;
+import type { IUser } from "@/types/core/IUser";
 
 export const useUserStore = defineStore("userStore", () => {
   const user = reactive<IUser>({
@@ -36,6 +36,9 @@ export const useUserStore = defineStore("userStore", () => {
   async function update(prams: object, id: number) {
     return await Api.post(`${pathUrl}/${id}`, prams);
   }
+  async function updateMyPasspord(prams: object) {
+    return await Api.post(`${pathUrl}/update/MyPassword`, prams);
+  }
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
@@ -46,6 +49,7 @@ export const useUserStore = defineStore("userStore", () => {
     _delete,
     store,
     update,
+    updateMyPasspord,
     show,
     getError,
     profile,

@@ -2,16 +2,14 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useItemStore } from "@/stores/item/itemStore";
-import { useItemCategoryStore } from "@/stores/Item/itemCategoryStore";
+import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "@/types/IItem";
-import ISelect from "@/components/inputs/ISelect.vue";
 
 //region"Drag and Drop"
 
@@ -127,7 +125,7 @@ const Delete = async () => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
-            "success"
+            "success",
           );
           router.go(-1);
         });
