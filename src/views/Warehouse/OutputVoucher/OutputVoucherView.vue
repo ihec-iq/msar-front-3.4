@@ -307,7 +307,7 @@ const back = () => {
 
 onMounted(async () => {
   checkPermissionAccessArray(["show outputVouchers"]);
-  await outputVoucherStore.getEmployees().then(() => {});
+  await outputVoucherStore.getEmployees().then(() => { });
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
     outputVoucher.value.id = 0;
@@ -388,101 +388,63 @@ onMounted(async () => {
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
       <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
           {{ t("OutputVoucherNumber") }}
         </div>
-        <input
-          v-model="outputVoucher.number"
-          type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-        />
+        <input v-model="outputVoucher.number" type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight" />
       </div>
       <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
           {{ t("Date") }}
         </div>
-        <input
-          v-model="outputVoucher.date"
-          type="date"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-        />
+        <input v-model="outputVoucher.date" type="date"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight" />
       </div>
       <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
           {{ t("OutputVoucherEmployeeRequest") }}
         </div>
-        <select
-          v-model="outputVoucher.Employee.id"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-        >
-          <option
-            v-for="employee in outputVoucherEmployees"
-            :key="employee.id"
-            :value="employee.id"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-          >
+        <select v-model="outputVoucher.Employee.id"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight">
+          <option v-for="employee in outputVoucherEmployees" :key="employee.id" :value="employee.id"
+            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight">
             {{ employee.name }}
           </option>
         </select>
       </div>
       <div class="w-11/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
           {{ t("OutputVoucherSignaturePerson") }}
         </div>
-        <input
-          v-model="outputVoucher.signaturePerson"
-          type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-        />
+        <input v-model="outputVoucher.signaturePerson" type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight" />
       </div>
     </div>
     <div class="mt-10 p-6">
       <div class="w-full mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
           {{ t("Description") }}
         </div>
-        <quill-editor
-          v-model:content="outputVoucher.notes"
-          contentType="html"
-          class="text-text dark:text-textLight bg-lightOutput dark:bg-input h-60 custom-quill"
-        ></quill-editor>
+        <textarea v-model="outputVoucher.notes"
+          class="text-text dark:text-textLight  bg-white dark:bg-input p-2  w-full"></textarea>
       </div>
     </div>
     <div class="mt-10 p-6">
       <div class="w-11/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        ></div>
-        <van-button
-          class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-          type="primary"
-          is-link
-          @click="AddPopup()"
-          >Add Items
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"></div>
+        <van-button class="border-none duration-500 rounded-lg bg-create hover:bg-createHover" type="primary" is-link
+          @click="AddPopup()">Add Items
         </van-button>
       </div>
     </div>
     <div class="mt-10 p-6">
       <div class="w-12/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        ></div>
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"></div>
         <table
-          class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
-        >
+          class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800">
           <thead
-            class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
-          >
+            class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300">
             <tr>
               <th scope="col" class="text-sm font-medium px-2 py-2">
                 {{ t("ID") }}
@@ -513,14 +475,9 @@ onMounted(async () => {
               </th>
             </tr>
           </thead>
-          <tbody
-            class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
-          >
-            <tr
-              v-for="(row, index) in outputVoucher.Items"
-              :key="row.id"
-              class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
-            >
+          <tbody class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto">
+            <tr v-for="(row, index) in outputVoucher.Items" :key="row.id"
+              class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t">
               <th>{{ row.id }}</th>
               <th>{{ row.Item?.name }}</th>
               <th>{{ row.serialNumber }}</th>
@@ -530,20 +487,12 @@ onMounted(async () => {
               <th>{{ row.Stock.name }}</th>
               <th>{{ row.notes }}</th>
               <th>
-                <van-button
-                  class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                  type="success"
-                  is-link
-                  @click="updatePopup(index, row)"
-                  >Edit
+                <van-button class="border-none duration-500 rounded-lg bg-create hover:bg-createHover" type="success"
+                  is-link @click="updatePopup(index, row)">Edit
                 </van-button>
                 |
-                <van-button
-                  class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
-                  type="success"
-                  is-link
-                  @click="deleteItem(index)"
-                  >Delete
+                <van-button class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover" type="success"
+                  is-link @click="deleteItem(index)">Delete
                 </van-button>
               </th>
             </tr>
@@ -553,61 +502,44 @@ onMounted(async () => {
     </div>
     <div class="mt-10 p-6">
       <div class="w-full mx-2">
-        <van-popup
-          class="bg-content flex"
-          v-model:show="showPop"
-          round
-          position="bottom"
-          :style="{ height: '60%' }"
-        >
+        <van-popup class="bg-content flex" v-model:show="showPop" round position="bottom" :style="{ height: '60%' }">
           <!-- <van-button type="primary" is-link @click="show=false">Close</van-button> -->
 
           <div class="text-gray-300 my-5 pl-8 text-xl">Bill Sale Info</div>
           <div class="flex flex-col overflow-hidden w-full">
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Item
                 </div>
                 <!-- v-model="VoucherItem.inputVoucherItem" -->
                 <vSelect
                   class="capitalize dir-rtl mx-2 rounded-md h-10 bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                  :options="inputVoucherItemsVSelect"
-                  :reduce="(_item: IInputVoucherItem) => _item"
+                  :options="inputVoucherItemsVSelect" :reduce="(_item: IInputVoucherItem) => _item"
                   :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
-                  :create-option="(_item: IInputVoucherItem) => _item"
-                  v-model="VoucherItem.inputVoucherItem"
-                >
+                  :create-option="(_item: IInputVoucherItem) => _item" v-model="VoucherItem.inputVoucherItem">
                   <template #option="_item">
                     <div
-                      class="rounded-md text-right focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold"
-                    >
+                      class="rounded-md text-right focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold">
                       {{ _item.Item.name.toString() }}
                     </div>
                     <cite class="text-right">
                       <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-600 bg-gray-700 text-gray-200 p-1 mb-1"
-                      >
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-600 bg-gray-700 text-gray-200 p-1 mb-1">
                         {{ t("ItemCode") }}: {{ _item.Item.code.toString() }}
                       </div>
                       <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-600 bg-gray-700 text-gray-200 p-1 mb-1"
-                      >
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-600 bg-gray-700 text-gray-200 p-1 mb-1">
                         {{ t("ItemCategory") }}:
                         {{ _item.Item.Category.name.toString() }}
                       </div>
-                      <div
-                        v-if="_item.serialNumber"
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
-                      >
+                      <div v-if="_item.serialNumber"
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
                         {{ t("SerialNumber") }}:
                         {{ _item.serialNumber.toString() }}
                       </div>
                       <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
-                      >
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1">
                         {{ t("Available") }}:
                         {{ Number(_item.inValue) - Number(_item.outValue) }}
                       </div>
@@ -618,43 +550,32 @@ onMounted(async () => {
                   </template>
                 </vSelect>
               </div>
-              <div
-                class="w-4/5 rounded-md border-2 border-gray-600 flex"
-                v-if="String(VoucherItem.Item?.name).length > 0"
-              >
+              <div class="w-4/5 rounded-md border-2 border-gray-600 flex"
+                v-if="String(VoucherItem.Item?.name).length > 0">
                 <div class="w-1/5" v-if="VoucherItem.Item?.code">
-                  <div
-                    class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                  >
+                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                     Code
                   </div>
                   <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
-                  >
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold">
                     {{ VoucherItem.Item.code.toString() }}
                   </div>
                 </div>
                 <div class="w-1/5">
-                  <div
-                    class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                  >
+                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                     Category
                   </div>
                   <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
-                  >
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold">
                     {{ String(VoucherItem.Item?.Category.name) }}
                   </div>
                 </div>
                 <div class="w-2/5" v-if="VoucherItem.Item?.description">
-                  <div
-                    class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                  >
+                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                     Description
                   </div>
                   <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
-                  >
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold">
                     {{ VoucherItem.Item?.description }}
                   </div>
                 </div>
@@ -662,128 +583,78 @@ onMounted(async () => {
             </div>
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Stock
                 </div>
-                <input
-                  :value="VoucherItem.inputVoucherItem?.Stock.name"
-                  type="text"
-                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                />
+                <input :value="VoucherItem.inputVoucherItem?.Stock.name" type="text"
+                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
               </div>
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Serial Number
                 </div>
-                <input
-                  :value="VoucherItem.inputVoucherItem?.serialNumber"
-                  type="text"
-                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                />
+                <input :value="VoucherItem.inputVoucherItem?.serialNumber" type="text"
+                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
               </div>
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Count
                 </div>
-                <input
-                  @input="ChangeValueTotal()"
-                  v-model="VoucherItem.count"
-                  :max="
-                    Number(VoucherItem.inputVoucherItem?.inValue) -
-                    Number(VoucherItem.inputVoucherItem?.outValue)
-                  "
-                  min="1"
-                  type="number"
-                  class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                />
+                <input @input="ChangeValueTotal()" v-model="VoucherItem.count" :max="Number(VoucherItem.inputVoucherItem?.inValue) -
+                  Number(VoucherItem.inputVoucherItem?.outValue)
+                  " min="1" type="number"
+                  class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
               </div>
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Price
                 </div>
-                <input
-                  @input="ChangeValueTotal()"
-                  :value="VoucherItem.inputVoucherItem?.price"
-                  type="number"
-                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                />
+                <input @input="ChangeValueTotal()" :value="VoucherItem.inputVoucherItem?.price" type="number"
+                  class="rounded-md focus:outline-none disabled focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
               </div>
               <div class="w-1/5">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Total
                 </div>
-                <input
-                  :value="VoucherItem.value"
-                  type="number"
-                  class="rounded-md disabled focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                />
+                <input :value="VoucherItem.value" type="number"
+                  class="rounded-md disabled focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
               </div>
             </div>
             <div class="flex justify-around w-full mt-4 ml-6">
               <div class="w-full">
-                <div
-                  class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300"
-                >
+                <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
                   Notes
                 </div>
                 <div
-                  class="rounded-md w-full focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold"
-                >
-                  <textarea
-                    v-model="VoucherItem.notes"
-                    class="rounded-md w-full focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"
-                  ></textarea>
+                  class="rounded-md w-full focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold">
+                  <textarea v-model="VoucherItem.notes"
+                    class="rounded-md w-full focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold"></textarea>
                 </div>
               </div>
             </div>
           </div>
           <!-- add close form -->
-          <div
-            class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3"
-          >
+          <div class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3">
             <div class="flex justify-between">
               <div class="items-center ml-2">
-                <button
-                  v-if="VoucherItem.id == 0"
-                  @click="AddItem()"
-                  class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-gray-300"
-                >
+                <button v-if="VoucherItem.id == 0" @click="AddItem()"
+                  class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-gray-300">
                   Add
                 </button>
-                <button
-                  v-else
-                  @click="EditItem()"
-                  class="bg-update hover:bg-updateHover ml-2 duration-500 h-10 w-32 rounded-lg text-gray-300"
-                  is-link
-                >
+                <button v-else @click="EditItem()"
+                  class="bg-update hover:bg-updateHover ml-2 duration-500 h-10 w-32 rounded-lg text-gray-300" is-link>
                   Update
                 </button>
               </div>
               <van-button
                 class="ml-4 border-none left-0 bg-back duration-500 h-10 w-32 text-gray-300 hover:bg-backHover rounded-lg"
-                type="primary"
-                is-link
-                @click="showPop = false"
-                >Close</van-button
-              >
+                type="primary" is-link @click="showPop = false">Close</van-button>
             </div>
           </div>
 
           <!-- vr line -->
           <div class="outer w-px h-full m-auto relative overflow-hidden ml-2">
-            <div
-              class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"
-            ></div>
+            <div class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"></div>
           </div>
 
           <!-- filters -->
@@ -830,51 +701,35 @@ onMounted(async () => {
       </div>
     </div>
     <!-- bottom tool bar -->
-    <div
-      :class="{
-        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-          !is,
-      }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-    >
+    <div :class="{
+      'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
+      'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+        !is,
+    }"
+      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden">
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
-          <button
-            v-if="outputVoucher.id == 0"
-            @click="store()"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
+          <button v-if="outputVoucher.id == 0" @click="store()"
+            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white">
             {{ t("Create") }}
           </button>
-          <button
-            v-else
-            @click="update()"
-            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
+          <button v-else @click="update()"
+            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white">
             {{ t("Update") }}
           </button>
-          <button
-            v-if="outputVoucher.id != 0"
-            @click="Delete()"
-            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
-          >
+          <button v-if="outputVoucher.id != 0" @click="Delete()"
+            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2">
             {{ t("Delete") }}
           </button>
         </div>
       </div>
     </div>
-    <div
-      :class="{
-        'ltr:left-4 rtl:right-4': is,
-        'ltr:left-28 rtl:right-28': !is,
-      }"
-      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-    >
-      <button
-        @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-      >
+    <div :class="{
+      'ltr:left-4 rtl:right-4': is,
+      'ltr:left-28 rtl:right-28': !is,
+    }" class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden">
+      <button @click="back()"
+        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white">
         {{ t("Back") }}
       </button>
     </div>
@@ -961,4 +816,3 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher1/stock@/stores/voucher1/outputVoucher@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/outputVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore@/stores/warehouse/stock@/stores/warehouse/outputVoucher@/stores/warehouse/inputVoucher

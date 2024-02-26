@@ -190,15 +190,9 @@ const trns = app?.appContext.config.globalProperties.$trns;
                     :limit="searchFilter.limit"
                   />
                 </div>
-                <div class="basis-1/5" v-if="searchFilter.limit > limits[0].id">
-                  <ISelect
-                    :label="t('Limit')"
-                    v-model="searchFilter.limit"
-                    name="archiveTypeId"
-                    :options="limits"
-                    :IsRequire="true"
-                    @onChange="getFilterData()"
-                  />
+                <div class="basis-1/5" v-if="data.length >= limits[0].id">
+                  <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+                    :IsRequire="true" @onChange="getFilterData()" />
                 </div>
               </div>
             </div>
