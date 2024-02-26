@@ -9,13 +9,13 @@ import { t } from "./utils/I18nPlugin";
 import vSelect from "vue-select";
 import { MotionPlugin } from "@vueuse/motion";
 import { Icon } from "@iconify/vue";
-
 const app = createApp(App);
 app.component("vSelect", vSelect);
 app.component("MdiIcon", Icon);
 app.use(createPinia());
 app.use(MotionPlugin);
 app.use(router);
+
 app.directive("focus", {
   // When the bound element is mounted into the DOM...
   mounted(el) {

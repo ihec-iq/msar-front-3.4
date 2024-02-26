@@ -7,6 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    _ITable: typeof import('./src/components/ihec/_ITable.vue')['default']
+    _ITable2: typeof import('./src/components/ihec/_ITable2.vue')['default']
     AddItemPopup: typeof import('./src/components/AddItemPopup.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
@@ -45,7 +47,6 @@ declare module 'vue' {
     ISearchBar: typeof import('./src/components/ihec/ISearchBar.vue')['default']
     ISelect: typeof import('./src/components/inputs/ISelect.vue')['default']
     ITable: typeof import('./src/components/ihec/ITable.vue')['default']
-    ITableNew: typeof import('./src/components/ihec/ITableNew.vue')['default']
     IVSelect: typeof import('./src/components/inputs/IVSelect.vue')['default']
     Loading: typeof import('./src/components/general/loading.vue')['default']
     LoadingFull: typeof import('./src/components/general/loadingFull.vue')['default']
