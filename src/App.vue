@@ -67,4 +67,3 @@ onMounted(async () => {
   background-image: url("./assets/image/beams-home@95.jpg");
 }
 </style>
-@/stores/configStore

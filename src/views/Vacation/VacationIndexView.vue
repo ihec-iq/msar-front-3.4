@@ -77,4 +77,3 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
-@/stores/permissionStore
