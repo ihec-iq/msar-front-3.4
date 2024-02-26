@@ -20,5 +20,11 @@
     },
     "noImplicitAny": false,
     "allowJs": true,
+    "module": "es2022",
+    "moduleResolution": "Node"
   },
+  "include": [
+    "src/**/*",
+    "package.json" // <---
+  ]
 }

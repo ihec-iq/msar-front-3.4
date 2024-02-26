@@ -17,6 +17,7 @@ import DuplicateButton from "@/components/dropDown/DuplicateButton.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 import { t } from "@/utils/I18nPlugin";
+import IDropdown from "@/components/ihec/IDropdown.vue";
 
 const router = useRouter();
 const roleData = ref<Array<IRole>>([]);
@@ -114,44 +115,27 @@ onMounted(async () => {
           <!-- card -->
 
           <div class="rounded-xl" v-if="isLoadingData == false">
-            <div
-              v-motion
-              :initial="{ opacity: 0, y: -15 }"
-              :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }"
-              :delay="200"
-              v-if="roleData.length > 0"
-            >
+            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="roleData.length > 0">
               <div class="max-w-full relative">
-                <div
-                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
-                >
+                <div class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3">
                   <!-- card -->
                   <div
                     class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                    v-for="role in roleData"
-                    :key="role.id"
-                  >
+                    v-for="role in roleData" :key="role.id">
                     <div class="w-3/4 overflow-hidden">
                       <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
                         <div class="text-2xl text-text dark:text-textLight mb-2">
                           {{ role.name }}
                         </div>
-                        <div
-                          class="text-text dark:text-textGray mb-2 justify-between"
-                        ></div>
-                        <div
-                          class="transition-all m-auto justify-center rounded-md p-2 text-text dark:text-textLight"
-                        >
+                        <div class="text-text dark:text-textGray mb-2 justify-between"></div>
+                        <div class="transition-all m-auto justify-center rounded-md p-2 text-text dark:text-textLight">
                           {{ t("Permissions Count") }}:
                           {{ role.permissions.length }}
                         </div>
                         <div class="text-text dark:text-textLight flex">
-                          <div
-                            v-for="item in role.permissions.slice(0, 3)"
-                            :key="item.id"
-                            class="text-text dark:text-textLight w-36 text-center capitalize m-auto ml-2 rounded-md p-1 bg-blue-500 hover:bg-backHover transition-all"
-                          >
+                          <div v-for="item in role.permissions.slice(0, 3)" :key="item.id"
+                            class="text-text dark:text-textLight w-36 text-center capitalize m-auto ml-2 rounded-md p-1 bg-blue-500 hover:bg-backHover transition-all">
                             {{ item.name }}
                           </div>
                           <!-- {{ role.permissions.slice(0, 2) }} -->
@@ -159,38 +143,14 @@ onMounted(async () => {
                       </div>
                     </div>
                     <div class="w-1/4">
-                      <div class="dropdown">
-                        <button
-                          class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                          type="button"
-                          id="dropdownMenuButton2"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <img
-                            src="https://img.icons8.com/office/344/menu--v1.png "
-                            class="w-8 float-left"
-                            alt=""
-                          />
-                        </button>
-
-                        <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
-                          aria-labelledby="dropdownMenuButton2"
-                        >
-                          <li>
-                            <EditButton @click="update(role.id)" :title="t('Edit')" />
-                          </li>
-                          <li>
-                            <DeleteButton @click="Delete(role.id)" />
-                          </li>
-
-                          <!-- <li>
-                            <ShowButton @click="show(item.id)" />
-                          </li> -->
-                          <!-- <li><BlockButton /></li> -->
-                        </ul>
-                      </div>
+                      <IDropdown>
+                        <li>
+                          <EditButton @click="update(role.id)" :title="t('Edit')" />
+                        </li>
+                        <li>
+                          <DeleteButton @click="Delete(role.id)" />
+                        </li>
+                      </IDropdown>
                     </div>
                   </div>
                   <!-- end card -->
@@ -206,42 +166,25 @@ onMounted(async () => {
   </div>
 
   <!-- bottom tool bar -->
-  <div
-    :class="{
-      'w-[95%] bottom': isClose,
-      'w-10/12 bottom': !isClose,
-    }"
-    class="dark:bg-bottomTool duration-700 bg-sideNavLight p-2 rounded-lg flex items-center justify-between fixed bottom-0"
-  >
+  <div :class="{
+    'w-[95%] bottom': isClose,
+    'w-10/12 bottom': !isClose,
+  }"
+    class="dark:bg-bottomTool duration-700 bg-sideNavLight p-2 rounded-lg flex items-center justify-between fixed bottom-0">
     <!-- back button -->
     <div class="backBtn">
-      <button
-        @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white"
-      >
+      <button @click="back()" class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white">
         {{ t("Back") }}
       </button>
     </div>
     <!-- create -->
     <div class="flex">
       <div class="items-center ml-2">
-        <button
-          @click="permissions()"
-          class="flex p-2.5 float-right items-center bg-create rounded-xl hover:rounded-3xl transition-all duration-300 text-white"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
+        <button @click="permissions()"
+          class="flex p-2.5 float-right items-center bg-create rounded-xl hover:rounded-3xl transition-all duration-300 text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </button>
       </div>
@@ -253,9 +196,11 @@ onMounted(async () => {
   .bottom {
     width: 103%;
   }
+
   .backBtn {
     margin-left: 1%;
   }
+
   .role {
     margin-bottom: 15px;
   }

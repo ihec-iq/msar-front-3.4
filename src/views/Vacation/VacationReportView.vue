@@ -8,7 +8,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "@/stores/vacations/vacationStore";
 import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
 import { usePermissionStore } from "@/stores/permissionStore";
-import { isNumber } from "@vueuse/core";
+import { isNumber } from '@/utils/tools';
 const { checkPermissionAccessArray } = usePermissionStore();
 import JsonExcel from "vue-json-excel3";
 

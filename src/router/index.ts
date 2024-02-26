@@ -38,6 +38,16 @@ const router = createRouter({
       ],
     },
     {
+      path: "/",
+      children: [
+        {
+          name: "start",
+          path: "/",
+          component: () => import("@/views/AboutView.vue"),
+        },
+      ],
+    },
+    {
       path: "/config",
       name: "Config",
       component: () => import("@/views/ConnectionSettingView.vue"),
@@ -79,11 +89,6 @@ const router = createRouter({
           path: "/config",
           name: "Config",
           component: () => import("@/views/ConnectionSettingView.vue"),
-        },
-        {
-          path: "/",
-          name: "start",
-          component: () => import("@/views/AboutView.vue"),
         },
         {
           path: "/unauthorized",
