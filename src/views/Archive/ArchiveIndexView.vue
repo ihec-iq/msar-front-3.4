@@ -206,7 +206,7 @@ onMounted(async () => {
                     :limit="searchFilter.limit"
                   />
                 </div>
-                <div class="basis-1/5" v-if="searchFilter.limit > 1">
+                <div class="basis-1/5" v-if="searchFilter.limit > limits[0].id">
                   <ISelect
                     :label="t('Limit')"
                     v-model="searchFilter.limit"

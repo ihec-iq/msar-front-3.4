@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+ import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import envConfig from "@/api/envConfig";
@@ -19,6 +18,7 @@ const { is } = storeToRefs(rtlStore);
 //#endregion
 
 //#region Vars
+const app = getCurrentInstance()
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref(t("ConfigServer"));
 const route = useRoute();

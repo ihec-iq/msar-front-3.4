@@ -1,7 +1,7 @@
-export interface ITableItem {
+export type ITableItem {
   [key: string]: any;
 }
-export interface ITableHeader {
+export type ITableHeader {
   caption: string;
   value: string;
 }
