@@ -176,7 +176,7 @@ onMounted(async () => {
                             <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
                               @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
                           </div>
-                          <div class="basis-1/5" v-if="data.length > limits[0].id">
+                          <div class="basis-1/5" v-if="data.length >= limits[0].id">
                             <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId"
                               :options="limits" :IsRequire="true" @onChange="getFilterData()" />
                           </div>
