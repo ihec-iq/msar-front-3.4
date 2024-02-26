@@ -104,7 +104,7 @@ const Search = async (event: KeyboardEvent) => {
     await getFilterData(1);
   }
 };
-const makeExcel = (data: any) => { };
+const makeExcel = (data: any) => {};
 const ExportExcel = async (event: KeyboardEvent) => {
   if (event.key === "Enter") {
     await getFilterData(1);
@@ -135,10 +135,14 @@ const trns = app?.appContext.config.globalProperties.$trns;
     <IPageContent>
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
-          <!-- date -->
           <ICol :span-lg="1" :span-md="2" :span="1">
-            <IInput :label="t('UserSearch')" v-model="fastSearch" name="Name" type="text" :IsRequire="true"
-              :getDataByInter="getFilterData" />
+            <IInput
+              :label="t('Search')"
+              v-model="fastSearch"
+              name="Name"
+              type="text"
+              :getDataByInter="getFilterData"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
@@ -155,9 +159,12 @@ const trns = app?.appContext.config.globalProperties.$trns;
             <span style="direction: ltr">{{ row.email }}</span>
           </template>
           <template v-slot:roles="{ row }">
-            <span v-if="row.roles != '[]'" class="flex">
-              <p v-for="role in row.roles.slice(0, 3)" :key="role.id"
-                class="text-sm leading-none text-text dark:text-textLight ml-2 flex-shrink">
+            <span v-if="row.roles != '[]'" class="flex justify-center">
+              <p
+                v-for="role in row.roles.slice(0, 3)"
+                :key="role.id"
+                class="text-sm leading-none text-text dark:text-textLight ml-2 flex-shrink"
+              >
                 <IBadge>{{ role.name }}</IBadge>
               </p>
             </span>
@@ -166,16 +173,32 @@ const trns = app?.appContext.config.globalProperties.$trns;
         <div class="py-4 min-w-full w-full h-full lg:px-8">
           <!-- card -->
           <div class="rounded-xl" v-if="isLoading == false">
-            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
+            <div
+              v-motion
+              :initial="{ opacity: 0, y: -15 }"
+              :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }"
+              :delay="200"
+              v-if="data.length > 0"
+            >
               <div class="w-full flex flex-row">
                 <div class="basis-4/5 overflow-x-auto font-Tajawal">
-                  <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                    @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+                  <TailwindPagination
+                    class="flex justify-center mt-6"
+                    :data="dataPage"
+                    @pagination-change-page="getFilterData"
+                    :limit="searchFilter.limit"
+                  />
                 </div>
                 <div class="basis-1/5" v-if="searchFilter.limit > limits[0].id">
-                  <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-                    :IsRequire="true" @onChange="getFilterData()" />
+                  <ISelect
+                    :label="t('Limit')"
+                    v-model="searchFilter.limit"
+                    name="archiveTypeId"
+                    :options="limits"
+                    :IsRequire="true"
+                    @onChange="getFilterData()"
+                  />
                 </div>
               </div>
             </div>
@@ -187,4 +210,3 @@ const trns = app?.appContext.config.globalProperties.$trns;
     </IPageContent>
   </IPage>
 </template>
-<style></style>
