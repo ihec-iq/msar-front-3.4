@@ -79,8 +79,8 @@ export function useI18n() {
     const htmlEl = document.querySelector("html");
     htmlEl?.setAttribute("lang", currentLocale.value.code);
   }
-  provide("i18n", i18n);
-  provide("currentLocale", currentLocale);
+  // provide("i18n", i18n);
+  // provide("currentLocale", currentLocale);
 
   return { setLocale, t: i18n.global.t, currentLocale, Languages };
 }

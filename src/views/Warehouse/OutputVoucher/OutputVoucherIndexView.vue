@@ -163,13 +163,30 @@ onMounted(async () => {
                       </IDropdown>
                     </div>
                     <!-- end card -->
-                  </div> xxx
-                  <TailwindPagination class="flex justify-center mt-10" :data="dataPage"
-                    @pagination-change-page="getFilterData" :limit="10" />
+                  </div>
+                  <div class="py-4 min-w-full w-full h-full lg:px-8">
+                    <!-- card -->
+                    <div class="rounded-xl" v-if="isLoading == false">
+                      <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
+                        :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
+                        <div class="w-full flex flex-row">
+                          <div class="basis-4/5 overflow-x-auto font-Tajawal">
+                            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+                              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+                          </div>
+                          <div class="basis-1/5" v-if="searchFilter.limit > limits[0].id">
+                            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId"
+                              :options="limits" :IsRequire="true" @onChange="getFilterData()" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <SimpleLoading v-if="isLoading"></SimpleLoading>
+                    <!-- end card -->
+                  </div>
                 </div>
               </div>
             </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
             <!-- end card -->
           </div>
         </div>

@@ -484,4 +484,3 @@ input:checked + .slider::before {
   color: yellow;
 }
 </style>
-@/stores/configStore

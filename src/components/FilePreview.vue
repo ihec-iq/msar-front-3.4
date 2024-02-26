@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 
 import Swal from "sweetalert2";
 import { t } from "@/utils/I18nPlugin";
-import { truncateString } from "@/utils/tool";
+import { truncateString } from "@/utils/tools";
 
 import { useArchiveStore } from "@/stores/archives/archiveStore";
 const { _deleteDocument } = useArchiveStore();
@@ -241,4 +241,3 @@ const openFile = (path: string) => {
   }
 }
 </style>
-@/stores/archives/archiveStore

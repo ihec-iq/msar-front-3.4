@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import notification from "@/views/NotificationView.vue";
 
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
@@ -23,7 +22,7 @@ import employeeRoute from "./user/employeeRoute";
 import DefaultLayout from "@/views/layouts/MainView.vue";
 const router = createRouter({
   history: createWebHistory(
-    process.env.NODE_ENV === "production" ? "/10/" : "/"
+    process.env.NODE_ENV === "production" ? "/10/" : "/",
   ), //import.meta.env.BASE_URL
   linkExactActiveClass: "linkExactActiveClass",
   routes: [
@@ -94,14 +93,6 @@ const router = createRouter({
           path: "/unauthorized",
           name: "Unauthorized",
           component: () => import("@/views/UnauthorizedView.vue"),
-          meta: {
-            middleware: [authMiddleware],
-          },
-        },
-        {
-          path: "/notification",
-          name: "notification",
-          component: notification,
           meta: {
             middleware: [authMiddleware],
           },
