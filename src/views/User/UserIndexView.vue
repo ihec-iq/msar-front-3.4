@@ -9,7 +9,6 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { EnumPermission } from "@/utils/EnumSystem";
-import JsonExcel from "vue-json-excel3";
 import { t } from "@/utils/I18nPlugin";
 
 //#region Vars
@@ -105,7 +104,7 @@ const Search = async (event: KeyboardEvent) => {
     await getFilterData(1);
   }
 };
-const makeExcel = (data: any) => {};
+const makeExcel = (data: any) => { };
 const ExportExcel = async (event: KeyboardEvent) => {
   if (event.key === "Enter") {
     await getFilterData(1);
@@ -124,6 +123,7 @@ import ITable from "@/components/ihec/ITable.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { Icon } from "@iconify/vue";
+import IDropdown from "@/components/ihec/IDropdown.vue";
 const app = getCurrentInstance();
 const trns = app?.appContext.config.globalProperties.$trns;
 </script>
@@ -137,51 +137,27 @@ const trns = app?.appContext.config.globalProperties.$trns;
         <ISearchBar :getDataButton="getFilterData">
           <!-- date -->
           <ICol :span-lg="1" :span-md="2" :span="1">
-            <IInput
-              :label="t('UserSearch')"
-              v-model="fastSearch"
-              name="Name"
-              type="text"
-              :IsRequire="true"
-              :getDataByInter="getFilterData"
-            />
+            <IInput :label="t('UserSearch')" v-model="fastSearch" name="Name" type="text" :IsRequire="true"
+              :getDataByInter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow>
         <ITable :items="data" :headers="headers">
           <template v-slot:actions="{ row }">
-            <div class="dropdown">
-              <button
-                class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                type="button"
-                id="dropdownMenuButton2"
-                data-bs-toggle="dropdown"
-                aria-expanded="true"
-              >
-                <Icon icon="mdi:menu" color="black" width="32"></Icon>
-              </button>
-
-              <ul
-                class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
-                aria-labelledby="dropdownMenuButton2"
-              >
-                <li>
-                  <EditButton @click="update(row.id)" />
-                </li>
-              </ul>
-            </div>
+            <IDropdown>
+              <li>
+                <EditButton @click="update(row.id)" />
+              </li>
+            </IDropdown>
           </template>
           <template v-slot:email="{ row }">
             <span style="direction: ltr">{{ row.email }}</span>
           </template>
           <template v-slot:roles="{ row }">
             <span v-if="row.roles != '[]'" class="flex">
-              <p
-                v-for="role in row.roles.slice(0, 3)"
-                :key="role.id"
-                class="text-sm leading-none text-text dark:text-textLight ml-2 flex-shrink"
-              >
+              <p v-for="role in row.roles.slice(0, 3)" :key="role.id"
+                class="text-sm leading-none text-text dark:text-textLight ml-2 flex-shrink">
                 <IBadge>{{ role.name }}</IBadge>
               </p>
             </span>
@@ -190,32 +166,16 @@ const trns = app?.appContext.config.globalProperties.$trns;
         <div class="py-4 min-w-full w-full h-full lg:px-8">
           <!-- card -->
           <div class="rounded-xl" v-if="isLoading == false">
-            <div
-              v-motion
-              :initial="{ opacity: 0, y: -15 }"
-              :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }"
-              :delay="200"
-              v-if="data.length > 0"
-            >
+            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
               <div class="w-full flex flex-row">
                 <div class="basis-4/5 overflow-x-auto font-Tajawal">
-                  <TailwindPagination
-                    class="flex justify-center mt-6"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="searchFilter.limit"
-                  />
+                  <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+                    @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
                 </div>
-                <div class="basis-1/5" v-if="searchFilter.limit > 1">
-                  <ISelect
-                    :label="t('Limit')"
-                    v-model="searchFilter.limit"
-                    name="archiveTypeId"
-                    :options="limits"
-                    :IsRequire="true"
-                    @onChange="getFilterData()"
-                  />
+                <div class="basis-1/5" v-if="searchFilter.limit > limits[0].id">
+                  <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+                    :IsRequire="true" @onChange="getFilterData()" />
                 </div>
               </div>
             </div>

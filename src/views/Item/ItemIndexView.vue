@@ -17,6 +17,7 @@ const dataBase = ref<Array<IItem>>([]);
 const { item, get_filter } = useItemStore();
 
 import { limits } from "@/utils/defaultParams";
+import IDropdown from "@/components/ihec/IDropdown.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -26,7 +27,7 @@ watch(
     if (route.params.search != undefined)
       fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
-  }
+  },
 );
 const addItem = () => {
   item.id = 0;
@@ -106,12 +107,7 @@ onMounted(async () => {
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput
-              :label="t('Search')"
-              :placeholder="t('Search')"
-              v-model="fastSearch"
-              type="text"
-            />
+            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" type="text" />
           </ICol>
         </ISearchBar>
       </IRow>
@@ -122,150 +118,69 @@ onMounted(async () => {
               <div class="py-4 inline-block min-w-full lg:px-8">
                 <!-- card -->
                 <div class="rounded-xl" v-if="isLoading == false">
-                  <div
-                    v-motion
-                    :initial="{ opacity: 0, y: -15 }"
-                    :enter="{ opacity: 1, y: 0 }"
-                    :variants="{ custom: { scale: 2 } }"
-                    :delay="200"
-                    v-if="data.length > 0"
-                  >
+                  <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
+                    :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
                     <div class="max-w-full relative">
-                      <div
-                        class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
-                      >
+                      <div class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3">
                         <!-- card -->
                         <div
                           class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                          v-for="item in data"
-                          :key="item.id"
-                        >
+                          v-for="item in data" :key="item.id">
                           <div class="w-3/4 overflow-hidden">
-                            <div
-                              class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
-                            >
-                              <div
-                                class="text-2xl text-text dark:text-textLight mb-2"
-                              >
+                            <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                              <div class="text-2xl text-text dark:text-textLight mb-2">
                                 {{ item.name }}
                               </div>
-                              <div
-                                class="text-text dark:text-textGray mb-2 justify-between"
-                              >
-                                <span
-                                  >{{ t("ItemCode") }}: {{ item.code }}</span
-                                >
+                              <div class="text-text dark:text-textGray mb-2 justify-between">
+                                <span>{{ t("ItemCode") }}: {{ item.code }}</span>
                                 <span class="float-left flex">
                                   {{ item.Category.name }}
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <g id="evaCameraOutline0" fill="#7f7e7e">
-                                      <g id="evaCameraOutline1">
-                                        <g
-                                          id="evaCameraOutline2"
-                                          fill="currentColor"
-                                        >
-                                          <path
-                                            d="M19 7h-3V5.5A2.5 2.5 0 0 0 13.5 3h-3A2.5 2.5 0 0 0 8 5.5V7H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3Zm-9-1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V7h-4ZM20 18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1Z"
-                                          />
-                                          <path
-                                            d="M12 10.5a3.5 3.5 0 1 0 3.5 3.5a3.5 3.5 0 0 0-3.5-3.5Zm0 5a1.5 1.5 0 1 1 1.5-1.5a1.5 1.5 0 0 1-1.5 1.5Z"
-                                          />
-                                        </g>
-                                      </g>
-                                    </g>
-                                  </svg>
+                                  <img src="@/assets/svg/bag.svg" />
                                 </span>
                               </div>
                               <div class="flex justify-betweens">
-                                <div
-                                  class="text-text dark:text-textGray"
-                                  v-html="item.description"
-                                ></div>
+                                <div class="text-text dark:text-textGray" v-html="item.description"></div>
                               </div>
                             </div>
                           </div>
-
-                          <div class="dropdown">
-                            <button
-                              class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                              type="button"
-                              id="dropdownMenuButton2"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              <img
-                                src="https://img.icons8.com/office/344/menu--v1.png "
-                                class="w-8 float-left"
-                                alt=""
-                              />
-                            </button>
-
-                            <ul
-                              class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
-                              aria-labelledby="dropdownMenuButton2"
-                            >
-                              <li>
-                                <EditButton @click="update(item.id)" />
-                              </li>
-                              <!-- <li>
-                            <ShowButton @click="show(item.id)" />
-                          </li> -->
-                              <!-- <li><BlockButton /></li> -->
-                            </ul>
-                          </div>
+                          <IDropdown>
+                            <li>
+                              <EditButton @click="update(item.id)" />
+                            </li>
+                          </IDropdown>
                         </div>
                         <!-- end card -->
                       </div>
-                      <TailwindPagination
-                        class="flex justify-center mt-10"
-                        :data="dataPage"
-                        @pagination-change-page="getFilterData"
-                        :limit="10"
-                      />
+                      <div class="py-4 min-w-full w-full h-full lg:px-8">
+                        <!-- card -->
+                        <div class="rounded-xl" v-if="isLoading == false">
+                          <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
+                            :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
+                            <div class="w-full flex flex-row">
+                              <div class="basis-4/5 overflow-x-auto font-Tajawal">
+                                <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+                                  @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+                              </div>
+                              <div class="basis-1/5" v-if="searchFilter.limit > limits[0].id">
+                                <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId"
+                                  :options="limits" :IsRequire="true" @onChange="getFilterData()" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <SimpleLoading v-if="isLoading"></SimpleLoading>
+                        <!-- end card -->
+                      </div>
                     </div>
                   </div>
                 </div>
-                <SimpleLoading v-if="isLoading"></SimpleLoading>
                 <!-- end card -->
               </div>
             </div>
           </div>
         </div>
       </IRow>
-      <IRow>
-        <!-- limit -->
-        <div
-          v-if="data.length > 10"
-          class="py-2 limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-        >
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-          >
-            <p>{{ t("Limit") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.limit"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData(1)"
-            >
-              <option
-                v-for="limit in limits"
-                :key="limit.val"
-                :value="limit.val"
-                :selected="limit.selected == true"
-                class="text-sm text-indigo-800"
-              >
-                {{ limit.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </IRow>
+      <IRow> </IRow>
     </IPageContent>
   </IPage>
 </template>
