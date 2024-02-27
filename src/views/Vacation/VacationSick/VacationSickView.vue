@@ -193,7 +193,7 @@ const ChangeDate = () => {
   const days = Math.round(
     (new Date(vacationSick.value.dayTo).valueOf() -
       new Date(vacationSick.value.dayFrom).valueOf()) /
-      oneDay
+    oneDay
   );
   vacationSick.value.record = days;
 };
@@ -206,59 +206,32 @@ const ChangeDateRecord = () => {
 <template>
   <IPage :HeaderTitle="t(namePage)">
     <template #HeaderButtons>
-      <IButton2
-        color="green"
-        width="28"
-        type="outlined"
-        pre-icon="autorenew"
-        :onClick="reset"
-        :text="t('New')"
-      />
+      <IButton2 color="green" width="28" type="outlined" pre-icon="autorenew" :onClick="reset" :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>
         <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="3" span-md="2" span-sm="1">
-              <IInput
-                :label="t('DateFrom')"
-                name="dayFrom"
-                v-model="vacationSick.dayFrom"
-                type="date"
-                @change="ChangeDate()"
-            /></ICol>
+              <IInput :label="t('DateFrom')" name="dayFrom" v-model="vacationSick.dayFrom" type="date"
+                @change="ChangeDate()" />
+            </ICol>
             <ICol span="1" span-md="2" span-sm="4">
-              <IInput
-                :label="t('DateTo')"
-                v-model="vacationSick.dayTo"
-                name="issueDate"
-                type="date"
-                @change="ChangeDate()"
-                :IsRequire="true"
-            /></ICol>
+              <IInput :label="t('DateTo')" v-model="vacationSick.dayTo" name="issueDate" type="date"
+                @change="ChangeDate()" :IsRequire="true" />
+            </ICol>
             <ICol span="1" span-md="2" span-sm="4">
-              <IInput
-                :label="t('RecordSick')"
-                v-model="vacationSick.record"
-                type="number"
-                @input="ChangeDateRecord()"
-                min="1"
-                :IsRequire="true"
-            /></ICol>
+              <IInput :label="t('RecordSick')" v-model="vacationSick.record" type="number" @input="ChangeDateRecord()"
+                min="1" :IsRequire="true" />
+            </ICol>
             <ICol span="1" span-md="2" span-sm="4">
-              <div
-                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              >
+              <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                 {{ t("OutputVoucherEmployeeRequest") }}
               </div>
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="vacationSick.Vacation"
-                :options="vacations"
-                :reduce="(vacation: IVacation) => vacation"
-                label="name"
-                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
-              >
+                v-model="vacationSick.Vacation" :options="vacations" :reduce="(vacation: IVacation) => vacation"
+                label="name" :getOptionLabel="(vacation: IVacation) => vacation.Employee.name">
                 <template #option="{ Employee }">
                   <div>
                     <span>{{ Employee.name }}</span>
@@ -280,78 +253,7 @@ const ChangeDateRecord = () => {
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud
-        :isAdd="vacationSick.id == 0"
-        :onCreate="store"
-        :onUpdate="update"
-        :onDelete="Delete"
-      />
+      <IFooterCrud :isAdd="vacationSick.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
     </template>
   </IPage>
 </template>
-<style scoped>
-.drop-area {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 50px;
-  background: rgba(255, 255, 255, 0.333);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: 0.2s ease;
-}
-.drop-area[data-active="true"] {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background: rgba(255, 255, 255, 0.8);
-}
-label {
-  font-size: 36px;
-  cursor: pointer;
-  display: block;
-}
-label span {
-  display: block;
-}
-label input[type="file"]:not(:focus-visible) {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-label .smaller {
-  font-size: 16px;
-}
-.image-list {
-  display: flex;
-  list-style: none;
-  flex-wrap: wrap;
-  padding: 0;
-  margin-bottom: 35px;
-}
-.preview-card {
-  display: flex;
-  border: 1px solid #a2a2a2;
-  padding: 5px;
-  margin: 5px;
-}
-.upload-button {
-  display: block;
-  appearance: none;
-  border: 0;
-  border-radius: 50px;
-  padding: 0.75rem 3rem;
-  margin: 1rem auto;
-  font-size: 1.25rem;
-  font-weight: bold;
-  background: #369;
-  color: #fff;
-  text-transform: uppercase;
-}
-button {
-  cursor: pointer;
-}
-</style>

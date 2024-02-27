@@ -34,7 +34,8 @@ export default {
   "Your Email Address": "Your Email Address",
   "See whats going on": "اطلع على المستجدات",
   UserSearch: "ابحث عن اسم المستخدم او الاميل",
-
+  Code: 'الرمز',
+  Category: 'الصنف',
   Item: "مادة",
   Items: "مواد",
   ItemCode: "كود المادة",
@@ -44,6 +45,8 @@ export default {
   SearchForUser: "ابحث عن اسم الموظف",
   ItemUpdate: "تحديث المادة",
   InputVoucher: "ادخال مخزني",
+  InputVoucherAdd: "اضافة الادخال مخزني",
+  InputVoucherUpdate: "تعديل الادخال مخزني",
   InputVoucherNumber: "رقم العام",
   InputVoucherEmployeeRequest: "طلب من",
   InputVoucherSignaturePerson: "توقيع الموظف",
