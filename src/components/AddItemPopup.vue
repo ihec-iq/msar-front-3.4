@@ -5,7 +5,6 @@ import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
-import WangEditor from "./WangEditor.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 const emit = defineEmits(["setItem"]);
 //region"Props"
@@ -69,22 +68,22 @@ onMounted(async () => {
 </script>
 <template>
   <input type="checkbox" id="my_modal_7" class="modal-toggle" />
-  <div class="modal w-full">
-    <div class="modal-box w-11/12 max-w-5xl">
+  <div class="modal w-full ">
+    <div class="modal-box w-11/12 max-w-5xl bg-slate-300 dark:bg-input">
       <div class="w-full p-4 grid lg:grid-cols-2 xs:grid-cols-2">
         <div class="w-12/12 mx-2">
           <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
             {{ t("Name") }}
           </div>
           <input ref="el" v-model="item.name" type="text"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+            class="w-full outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
         </div>
         <div class="w-11/12 mr-2">
-          <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+          <div class="mb-2 md:text-sm text-base mr-3  font-bold text-text dark:text-textLight">
             {{ t("ItemCategory") }}
           </div>
           <select v-model="item.Category.id"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight">
+            class="w-full outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight">
             <option v-for="category in categories" :key="category.id" :value="category.id">
               {{ category.name }}
             </option>
@@ -95,23 +94,23 @@ onMounted(async () => {
             {{ t("ItemCode") }}
           </div>
           <input v-model="item.code" type="text"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+            class="w-full outline-none h-10 px-3 border-2 border-gray-500 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
         </div>
         <div class="w-11/12 mx-2">
           <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
             {{ t("ItemUnit") }}
           </div>
           <input v-model="item.measuringUnit" type="text"
-            class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+            class="w-full outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
         </div>
       </div>
-      <div class="w-full p-4 lg:grid-cols-1 xs:grid-cols-1 mt-2">
-        <div class="w-full mx-2">
-          <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-            {{ t("Description") }}
-          </div>
-          <WangEditor v-model="item.description"></WangEditor>
+      <div class="w-12/12 mx-2">
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+          {{ t("Description") }}
         </div>
+        <input v-model="item.description" type="text"
+          class="w-full outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+
       </div>
       <!-- bottom tool bar -->
       <div
