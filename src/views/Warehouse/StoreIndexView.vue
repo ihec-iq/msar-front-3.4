@@ -20,6 +20,7 @@ import ICol from "@/components/ihec/ICol.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
+import { ITableHeader } from "@/types/core/components/ITable";
 
 const route = useRoute();
 const router = useRouter();
@@ -108,22 +109,33 @@ onMounted(async () => {
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
 });
+
+const headers = ref<Array<ITableHeader>>([
+  { caption: t("Item"), value: "itemName" },
+  { caption: t("SerialNumber"), value: "serialNumber" },
+  { caption: t("In"), value: "in" },
+  { caption: t("Out"), value: "out" },
+  { caption: t("AvailableInStock"), value: "count" },
+  { caption: t("Price"), value: "price" },
+  { caption: t("Stock"), value: "stockName" },
+  { caption: t("Details"), value: "actions" },
+]);
 </script>
 <template>
   <IPage :HeaderTitle="t('StoreIndex')">
     <IPageContent>
-      <IRow :col="3" :col-md="2" :col-lg="3">
+      <IRow :col="4" :col-md="4" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
-          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
+          <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
             <IInput
               :label="t('Title')"
-              :placeholder="t('SearchForItem')"
+              :placeholder="t('Search')"
               v-model="fastSearch"
               type="text"
             />
           </ICol>
-          <!-- date -->
-          <ICol :span-lg="1" :span-md="2" :span="1">
+          <!-- report type -->
+          <ICol :span-lg="1" :span-md="1" :span="1">
             <ICheckbox
               v-model="searchFilter.summation"
               :checked="searchFilter.summation"
@@ -135,114 +147,37 @@ onMounted(async () => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow
-        ><div class="rounded-xl" v-if="isLoading == false">
-          <div
-            v-motion
-            :initial="{ opacity: 0, y: -15 }"
-            :enter="{ opacity: 1, y: 0 }"
-            :variants="{ custom: { scale: 2 } }"
-            :delay="200"
-            v-if="data.length > 0"
+      <IRow>
+        <ITable :items="data" :headers="headers">
+          <template v-slot:actions="{ row }">
+            <IDropdown>
+              <li>
+                <EditButton @click="openItem(row.itemId)" />
+              </li>
+            </IDropdown>
+          </template>
+          <template v-slot:in="{ row }">
+            <span
+              v-if="Number(row.in) > 0"
+              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+              >↓{{ row.in }}</span
+            >
+          </template>
+          <template v-slot:out="{ row }">
+            <span
+              v-if="Number(row.out) > 0"
+              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
+              >↑{{ row.out }}</span
+            ></template
           >
-            <div class="max-w-full relative">
-              <table
-                class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
-              >
-                <thead
-                  class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
-                >
-                  <tr>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("Item") }}
-                    </th>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("SerialNumber") }}
-                    </th>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("AvailableInStock") }}
-                    </th>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("Out") }}
-                    </th>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("In") }}
-                    </th>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("Stock") }}
-                    </th>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("Employee") }}
-                    </th>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("Actions") }}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody
-                  class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
-                >
-                  <tr
-                    v-for="row in data"
-                    :key="row.itemName"
-                    class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
-                  >
-                    <th>{{ row.itemName }}</th>
-                    <th>{{ row.serialNumber }}</th>
-                    <th>
-                      <span
-                        class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
-                      >
-                        {{ row.count }}
-                      </span>
-                    </th>
-                    <th>
-                      <span
-                        v-if="Number(row.out) > 0"
-                        class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-                        >↑{{ row.out }}</span
-                      >
-                    </th>
-                    <th>
-                      <span
-                        v-if="Number(row.in) > 0"
-                        class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-                        >↓{{ row.in }}</span
-                      >
-                    </th>
-                    <th>{{ row.price }}</th>
-                    <th>{{ row.stockName }}</th>
-                    <th>
-                      <button
-                        class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
-                        is-link
-                        @click="openItem(row.itemId)"
-                      >
-                        Open
-                      </button>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
-              <TailwindPagination
-                class="flex justify-center mt-10"
-                :data="dataPage"
-                @pagination-change-page="getFilterData"
-                :limit="searchFilter.limit"
-              />
-              <ISelect
-                v-if="data.length >= searchFilter.limit"
-                :label="t('Limit')"
-                v-model="searchFilter.limit"
-                name="archiveTypeId"
-                :options="limits"
-                @change="getFilterData()"
-              />
-            </div>
-          </div>
-        </div>
-        <SimpleLoading v-if="isLoading">.</SimpleLoading></IRow
-      >
+          <template v-slot:count="{ row }">
+            <span
+              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
+              >{{ row.count }}</span
+            ></template
+          >
+        </ITable>
+      </IRow>
       <IRow><div id="PageDataEnd"></div></IRow>
     </IPageContent>
   </IPage>
