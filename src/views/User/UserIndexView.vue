@@ -34,7 +34,7 @@ watch(
     if (route.params.search != undefined)
       fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
-  },
+  }
 );
 //#endregion
 
@@ -155,9 +155,6 @@ const trns = app?.appContext.config.globalProperties.$trns;
               </li>
             </IDropdown>
           </template>
-          <template v-slot:email="{ row }">
-            <span style="direction: ltr">{{ row.email }}</span>
-          </template>
           <template v-slot:roles="{ row }">
             <span v-if="row.roles != '[]'" class="flex justify-center">
               <p
@@ -191,8 +188,14 @@ const trns = app?.appContext.config.globalProperties.$trns;
                   />
                 </div>
                 <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                  <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-                    :IsRequire="true" @onChange="getFilterData()" />
+                  <ISelect
+                    :label="t('Limit')"
+                    v-model="searchFilter.limit"
+                    name="archiveTypeId"
+                    :options="limits"
+                    :IsRequire="true"
+                    @onChange="getFilterData()"
+                  />
                 </div>
               </div>
             </div>
