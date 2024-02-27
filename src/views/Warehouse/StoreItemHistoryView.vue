@@ -23,13 +23,17 @@ const dataBase = ref<Array<IStoreItemHistory>>([]);
 const { get_item } = useStoringStore();
 
 import { limits } from "@/utils/defaultParams";
+import ISearchBar from "@/components/ihec/ISearchBar.vue";
+import { ITableHeader } from "@/types/core/components/ITable";
+import ISelect from "@/components/inputs/ISelect.vue";
 
 const route = useRoute();
 const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -102,160 +106,88 @@ onMounted(async () => {
 
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
-  await outputVoucherStore.getEmployees().then(() => { });
+  await outputVoucherStore.getEmployees().then(() => {});
 
   await getFilterData(1);
 });
+
+const headers = ref<Array<ITableHeader>>([
+  { caption: t("Item"), value: "itemName" },
+  { caption: t("SerialNumber"), value: "serialNumber" },
+  { caption: t("BillType"), value: "billType" },
+  { caption: t("AvailableInStock"), value: "count" },
+  { caption: t("Price"), value: "price" },
+  { caption: t("Stock"), value: "stockName" },
+  { caption: t("Employee"), value: "name" },
+  { caption: t("Details"), value: "actions" },
+]);
 </script>
 <template>
-  <div class="justify-between flex">
-    <PageTitle> {{ t("StoreIndex") }} </PageTitle>
-  </div>
-  <div class="flex">
-    <!-- <Nav class="w-[5%]" /> -->
-    <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
-        <label for="table-search" class="sr-only">{{ t("Search") }}</label>
-        <div class="relative flex">
-          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
-              viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clip-rule="evenodd"></path>
-            </svg>
-          </div>
-          <input type="text" id="table-search" v-model="fastSearch" @input="makeFastSearch()"
-            class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('SearchForItem')" />
-        </div>
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded">
-            <p>{{ t("Employee") }}:</p>
-            <select aria-label="select" v-model="searchFilter.employeeId"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1" @change="getFilterData()">
-              <option v-for="employee in outputVoucherEmployees" :key="employee.id" :value="employee.id"
-                :selected="employee.id == 1" class="text-sm text-indigo-800">
-                {{ employee.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <label class="cursor-pointer label">
-            <span class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+  <IPage :HeaderTitle="t('StoreIndex')">
+    <IPageContent>
+      <IRow :col="4" :col-md="4" :col-lg="4">
+        <ISearchBar :getDataButton="getFilterData">
+          <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
+            <IInput
+              :label="t('Title')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              type="text"
+            />
+          </ICol>
+          <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
+            <ISelect
+              :options="outputVoucherEmployees"
+              @onChange="getFilterData()"
+              :label="t('Employee')"
+              :name="t('Employee')"
+            >
+            </ISelect>
+          </ICol>
+          <!-- report type -->
+          <ICol :span-lg="1" :span-md="1" :span="1">
+            <ICheckbox
+              v-model="searchFilter.summation"
+              :checked="searchFilter.summation"
+              @change="getFilterData()"
+            >
               {{ t("StoreTypeReport") }} :
-              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</span>
-            <input type="checkbox" v-model="searchFilter.summation" class="toggle toggle-secondary" checked
-              @change="getFilterData()" />
-          </label>
-        </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <button @click="getFilterData()"
-            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white">
-            {{ t("Search") }}
-          </button>
-        </div>
-      </div>
-      <div class="w-full">
-        <div class="flex flex-col">
-          <div class="py-4 inline-block min-w-full lg:px-8">
-            <!-- card -->
-
-            <div class="rounded-xl" v-if="isLoading == false">
-              <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-                :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
-                <div class="mt-10 p-6">
-                  <div class="w-12/12 mx-2">
-                    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"></div>
-                    <table
-                      class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800">
-                      <thead
-                        class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300">
-                        <tr>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Item") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("SerialNumber") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("BillType") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("AvailableInStock") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Price") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Stock") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Employee") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Actions") }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto">
-                        <tr v-for="row in data" :key="row.itemName"
-                          class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t">
-                          <th>{{ row.itemName }}</th>
-                          <th>{{ row.serialNumber }}</th>
-                          <th>{{ row.billType }}</th>
-                          <th>
-                            <span v-if="row.count > 0"
-                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2">↓{{
-                                row.count }}</span>
-                            <span v-else
-                              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2">↑{{
-                                row.count }}</span>
-                          </th>
-                          <th>{{ row.price }}</th>
-                          <th>{{ row.stockName }}</th>
-                          <th>{{ row.Employee.name }}</th>
-                          <th>
-                            <van-button class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                              type="success" is-link @click="openItem(row.voucherId, row.billType)">Open
-                            </van-button>
-                          </th>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div class="py-4 min-w-full w-full h-full lg:px-8">
-                    <!-- card -->
-                    <div class="rounded-xl" v-if="isLoading == false">
-                      <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-                        :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
-                        <div class="w-full flex flex-row">
-                          <div class="basis-4/5 overflow-x-auto font-Tajawal">
-                            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-                          </div>
-                          <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId"
-                              :options="limits" :IsRequire="true" @onChange="getFilterData()" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <SimpleLoading v-if="isLoading"></SimpleLoading>
-                    <!-- end card -->
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- end card -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</ICheckbox
+            >
+          </ICol>
+        </ISearchBar>
+      </IRow>
+      <IRow>
+        <ITable :items="data" :headers="headers">
+          <template v-slot:name="{ row }">
+            <span>{{ row.Employee.name }}</span></template
+          >
+          <template v-slot:billType="{ row }">
+            <span>{{
+              row.billType == "in" ? t("In") : t("Out")
+            }}</span></template
+          >
+          <template v-slot:count="{ row }">
+            <span
+              v-if="row.count > 0"
+              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+              >↓{{ row.count }}</span
+            >
+            <span
+              v-else
+              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
+              >↑{{ row.count }}</span
+            ></template
+          >
+          <template v-slot:actions="{ row }">
+            <IDropdown>
+              <li>
+                <EditButton @click="openItem(row.voucherId, row.billType)" />
+              </li>
+            </IDropdown>
+          </template>
+        </ITable>
+      </IRow>
+    </IPageContent>
+  </IPage>
 </template>
-<style></style>
