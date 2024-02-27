@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ITableItem, ITableHeader } from "@/types/core/components/ITable";
- 
+
 defineProps({
   headers: {
     type: Array as () => ITableHeader[],
@@ -42,6 +42,7 @@ defineProps({
         >
           <td
             class="text-sm font-light px-3 py-0 whitespace-nowrap"
+            dir="auto"
             v-for="(header, index) in headers"
             :key="index"
           >
