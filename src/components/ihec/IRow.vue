@@ -32,7 +32,7 @@ const props = defineProps({
   },
 });
 const colClass = computed(() => {
-  var classStyle ="grid "
+  let classStyle ="grid "
   if (props.col != null) classStyle += ` grid-cols-${props.col}`;
   if (props.colXl != null) classStyle += ` xl:grid-cols-${props.colXl}`;
   if (props.colLg != null) classStyle += ` lg:grid-cols-${props.colLg}`;
@@ -46,7 +46,6 @@ const debugClass = computed(() => {
   return "";
 });
 
-// var colClass  = `ltr:mr-2 rtl:ml-2 grid-cols-${props.col}`;
 </script>
 <template>
   <div

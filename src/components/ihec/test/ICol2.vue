@@ -2,19 +2,19 @@
 import { defineProps } from 'vue';
 
 const props = defineProps({
-    col: {
+    span: {
         type: Number,
         required: true,
     },
-     colLg: {
+     spanLg: {
         type: Number,
         default: null,
     },
-     colMd: {
+     spanMd: {
         type: Number,
         default: null,
     },
-    colSm: {
+    spanSm: {
         type: Number,
         default: null,
     },
@@ -22,16 +22,16 @@ const props = defineProps({
 });
 
 function getClassNames(): string {
-    let classNames = `col-span-${props.col}`;
+    let classNames = `col-span-${props.span}`;
   
-    if (props.colLg !== null) {
-        classNames += ` lg:col-span-${props.colLg}`;
+    if (props.spanLg !== null) {
+        classNames += ` lg:col-span-${props.spanLg}`;
     }
-    if (props.colMd !== null) {
-        classNames += ` md:col-span-${props.colMd}`;
+    if (props.spanMd !== null) {
+        classNames += ` md:col-span-${props.spanMd}`;
     }
-      if (props.colSm !== null) {
-        classNames += ` sm:col-span-${props.colSm}`;
+      if (props.spanSm !== null) {
+        classNames += ` sm:col-span-${props.spanSm}`;
     }
     return classNames;
 }
