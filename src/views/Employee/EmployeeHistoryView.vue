@@ -30,6 +30,7 @@ const dataBase = ref<Array<IEmployeeHistory>>([]);
 
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
+import { ITableHeader } from "@/types/core/components/ITable";
 
 const CorruptedVoucher = ref<{
   number: string;
@@ -49,7 +50,8 @@ const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -142,264 +144,395 @@ const createCorruptedVoucher = () => {
 //#endregion
 
 onMounted(async () => {
-  checkPermissionAccessArray([EnumPermission.ShowEmployees]);;
+  checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   searchFilter.value.limit = 24;
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
-  await outputVoucherStore.getEmployees().then(() => { });
+  await outputVoucherStore.getEmployees().then(() => {});
   await getFilterData(1);
 });
+const headers = ref<Array<ITableHeader>>([
+  { caption: t("Employee"), value: "name" },
+  { caption: t("Section"), value: "serialNumber" },
+  { caption: t("Section"), value: "voucherDate" },
+  { caption: t("Section"), value: "type" },
+  { caption: t("Section"), value: "count" },
+  { caption: t("Section"), value: "price" },
+  { caption: t("Section"), value: "stock" },
+  { caption: t("Details"), value: "actions" },
+]);
 </script>
 <template>
-  <div class="justify-between flex">
-    <PageTitle> {{ t("StoreIndex") }} </PageTitle>
-  </div>
-  <div class="flex">
-    <!-- <Nav class="w-[5%]" /> -->
-    <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
-        <label for="table-search" class="sr-only">{{ t("Search") }}</label>
-        <div class="relative flex">
-          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
-              viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clip-rule="evenodd"></path>
-            </svg>
-          </div>
-          <input type="text" id="table-search" v-model="fastSearch" @input="makeFastSearch()"
-            class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :placeholder="t('SearchForItem')" />
-        </div>
+  <IPage :HeaderTitle="t('StoreIndex')">
+    <IPageContent>
+      <IRow :col="5" :col-md="2" :col-lg="4">
+        <ISearchBar :getDataButton="getFilterData">
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <IInput
+              :label="t('Search')"
+              v-model="fastSearch"
+              name="Name"
+              type="text"
+              :getDataByInter="getFilterData"
+            />
+          </ICol>
+          <ICol :span-lg="1" :span-md="2" :span="1"
+            ><div class="ml-4 lg:mt-0 xs:mt-2">
+              <label class="cursor-pointer label">
+                <span
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
+                  {{ t("StoreTypeReport") }} :
+                  {{ searchFilter.checked ? " تجميعي " : " مفصل " }}</span
+                >
+                <input
+                  type="checkbox"
+                  v-model="searchFilter.checked"
+                  class="toggle toggle-secondary"
+                  checked
+                  @change="getFilterData()"
+                />
+              </label>
+            </div>
+          </ICol>
+        </ISearchBar>
+      </IRow>
+      <IRow>
+        <!-- <ITable :items="data" :headers="headers"></ITable> -->
+        <WindowsDesign
+          :width="250"
+          class="col-11 shadow-lg rounded-2xl border-red-700"
+          v-if="SelectedOutItemCorrupted.length > 0"
+        >
+          <template v-slot:header>
+            <div class="">انشاء سند شطب</div>
+          </template>
+          <template v-slot:main>
+            <div>
+              <p class="p-[5px] text-right text-lg bg-[#1f2937]">
+                تستطيع التعديل على كمية المواد من خلال تغير قيمة العدد.
+              </p>
+              <table class="min-w-full text-center">
+                <thead class="border-b bg-[#0003] text-gray-300">
+                  <tr class="bg-[#1f2937]">
+                    <th scope="col" class="text-sm font-large px-6 py-4">
+                      {{ t("Item") }}
+                    </th>
+                    <th scope="col" class="text-sm font-large px-6 py-4">
+                      {{ t("SerialNumber") }}
+                    </th>
+                    <th scope="col" class="text-sm font-large px-6 py-4">
+                      {{ t("Count") }}
+                    </th>
+                    <th scope="col" class="text-sm font-large px-6 py-4">
+                      {{ t("Note") }}
+                    </th>
+                    <th scope="col" class="text-sm font-medium px-6 py-4"></th>
+                  </tr>
+                </thead>
+                <tbody class="bg-[#1f2937]">
+                  <tr
+                    v-for="(row, index) in SelectedOutItemCorrupted"
+                    :key="row.id"
+                    class="border-b border-black h-14 text-gray-100"
+                  >
+                    <th>{{ row.Voucher.Item.name }}</th>
+                    <th>{{ row.Voucher.serialNumber }}</th>
+                    <th>
+                      <input
+                        class="w-[50px] p-2"
+                        type="number"
+                        :value="row.count"
+                        min="1"
+                        :max="row.count"
+                      />
+                    </th>
+                    <th>
+                      <input
+                        class="w-[450px] p-2"
+                        type="text"
+                        :value="row.notes"
+                      />
+                    </th>
+                    <th>
+                      <button
+                        class="border-none duration-900 h-[40px] p-[5px] m-[5px] rounded-sm bg-delete hover:bg-deleteHover"
+                        is-link
+                        @click="deleteItem(index)"
+                      >
+                        Remove
+                      </button>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="flex bg-[#1f2937]">
+                <div class="w-4/12 mr-2">
+                  <div
+                    class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                  >
+                    {{ t("NumberVoucher") }}
+                    <input
+                      v-model="CorruptedVoucher.number"
+                      type="text"
+                      class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+                    />
+                  </div>
+                </div>
+                <div class="w-4/12 mr-2 flex">
+                  <div
+                    class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                  >
+                    {{ t("Date") }}
+                    <input
+                      v-model="CorruptedVoucher.date"
+                      type="date"
+                      class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+                    />
+                  </div>
+                </div>
+                <div class="w-4/12 mr-2 flex">
+                  <div
+                    class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                  >
+                    {{ t("InputVoucherSignaturePerson") }}
+                    <input
+                      v-model="CorruptedVoucher.signaturePerson"
+                      type="text"
+                      class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+                    />
+                  </div>
+                </div>
+                <div class="w-4/12 mr-2 flex">
+                  <div
+                    class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                  >
+                    {{ t("InputVoucherEmployeeRequest") }}
 
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <label class="cursor-pointer label">
-            <span class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-              {{ t("StoreTypeReport") }} :
-              {{ searchFilter.checked ? " تجميعي " : " مفصل " }}</span>
-            <input type="checkbox" v-model="searchFilter.checked" class="toggle toggle-secondary" checked
-              @change="getFilterData()" />
-          </label>
-        </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2">
-          <button @click="getFilterData()"
-            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white">
-            {{ t("Search") }}
-          </button>
-        </div>
-      </div>
-      <WindowsDesign :width="250" class="col-11 shadow-lg rounded-2xl border-red-700"
-        v-if="SelectedOutItemCorrupted.length > 0">
-        <template v-slot:header>
-          <div class="">انشاء سند شطب</div>
-        </template>
-        <template v-slot:main>
-          <div>
-            <p class="p-[5px] text-right text-lg bg-[#1f2937]">
-              تستطيع التعديل على كمية المواد من خلال تغير قيمة العدد.
-            </p>
-            <table class="min-w-full text-center">
-              <thead class="border-b bg-[#0003] text-gray-300">
-                <tr class="bg-[#1f2937]">
-                  <th scope="col" class="text-sm font-large px-6 py-4">
-                    {{ t("Item") }}
-                  </th>
-                  <th scope="col" class="text-sm font-large px-6 py-4">
-                    {{ t("SerialNumber") }}
-                  </th>
-                  <th scope="col" class="text-sm font-large px-6 py-4">
-                    {{ t("Count") }}
-                  </th>
-                  <th scope="col" class="text-sm font-large px-6 py-4">
-                    {{ t("Note") }}
-                  </th>
-                  <th scope="col" class="text-sm font-medium px-6 py-4"></th>
-                </tr>
-              </thead>
-              <tbody class="bg-[#1f2937]">
-                <tr v-for="(row, index) in SelectedOutItemCorrupted" :key="row.id"
-                  class="border-b border-black h-14 text-gray-100">
-                  <th>{{ row.Voucher.Item.name }}</th>
-                  <th>{{ row.Voucher.serialNumber }}</th>
-                  <th>
-                    <input class="w-[50px] p-2" type="number" :value="row.count" min="1" :max="row.count" />
-                  </th>
-                  <th>
-                    <input class="w-[450px] p-2" type="text" :value="row.notes" />
-                  </th>
-                  <th>
-                    <button
-                      class="border-none duration-900 h-[40px] p-[5px] m-[5px] rounded-sm bg-delete hover:bg-deleteHover"
-                      is-link @click="deleteItem(index)">
-                      Remove
-                    </button>
-                  </th>
-                </tr>
-              </tbody>
-            </table>
-            <div class="flex bg-[#1f2937]">
-              <div class="w-4/12 mr-2">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t("NumberVoucher") }}
-                  <input v-model="CorruptedVoucher.number" type="text"
-                    class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight" />
-                </div>
-              </div>
-              <div class="w-4/12 mr-2 flex">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t("Date") }}
-                  <input v-model="CorruptedVoucher.date" type="date"
-                    class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight" />
-                </div>
-              </div>
-              <div class="w-4/12 mr-2 flex">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t("InputVoucherSignaturePerson") }}
-                  <input v-model="CorruptedVoucher.signaturePerson" type="text"
-                    class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight" />
-                </div>
-              </div>
-              <div class="w-4/12 mr-2 flex">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t("InputVoucherEmployeeRequest") }}
-
-                  <select v-model="CorruptedVoucher.requestEmployeeId"
-                    class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight">
-                    <option v-for="employee in employees" :key="employee.id" :value="employee.id"
-                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight">
-                      {{ employee.name }}
-                    </option>
-                  </select>
+                    <select
+                      v-model="CorruptedVoucher.requestEmployeeId"
+                      class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
+                    >
+                      <option
+                        v-for="employee in employees"
+                        :key="employee.id"
+                        :value="employee.id"
+                        class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                      >
+                        {{ employee.name }}
+                      </option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </template>
-        <template v-slot:footer>
-          <div class="w-full bg-slate-600 p-2 flex">
-            <van-button
-              class="border-1 border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-amber-600 font-bold hover:bg-createHover"
-              type="success" is-link @click="createCorruptedVoucher()">انشاء سند شطب
-            </van-button>
-          </div>
-        </template>
-      </WindowsDesign>
-      <div class="w-full">
-        <div class="flex flex-col">
-          <div class="py-4 inline-block min-w-full lg:px-8">
-            <!-- card -->
+          </template>
+          <template v-slot:footer>
+            <div class="w-full bg-slate-600 p-2 flex">
+              <van-button
+                class="border-1 border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-amber-600 font-bold hover:bg-createHover"
+                type="success"
+                is-link
+                @click="createCorruptedVoucher()"
+                >انشاء سند شطب
+              </van-button>
+            </div>
+          </template>
+        </WindowsDesign>
+        <div class="w-full">
+          <div class="flex flex-col">
+            <div class="py-4 inline-block min-w-full lg:px-8">
+              <!-- card -->
 
-            <div class="rounded-xl" v-if="isLoading == false">
-              <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-                :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
-                <div class="mt-10 p-6">
-                  <div class="w-12/12 mx-2">
-                    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                      <input type="checkbox" v-model="IsShowCorrupted" />
-                      تفعيل سند اتلاف
+              <div class="rounded-xl" v-if="isLoading == false">
+                <div
+                  v-motion
+                  :initial="{ opacity: 0, y: -15 }"
+                  :enter="{ opacity: 1, y: 0 }"
+                  :variants="{ custom: { scale: 2 } }"
+                  :delay="200"
+                  v-if="data.length > 0"
+                >
+                  <div class="mt-10 p-6">
+                    <div class="w-12/12 mx-2">
+                      <div
+                        class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                      >
+                        <input type="checkbox" v-model="IsShowCorrupted" />
+                        تفعيل سند اتلاف
+                      </div>
+                      <table class="min-w-full text-center">
+                        <thead class="border-b bg-[#0003] text-gray-300">
+                          <tr>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                              v-if="IsShowCorrupted"
+                            >
+                              {{ t("Selected") }}
+                            </th>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                            >
+                              {{ t("Item") }}
+                            </th>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                            >
+                              {{ t("Date") }}
+                            </th>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                            >
+                              {{ t("SerialNumber") }}
+                            </th>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                            >
+                              {{ t("BillType") }}
+                            </th>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                            >
+                              {{ t("Available") }}
+                            </th>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                            >
+                              {{ t("Price") }}
+                            </th>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                            >
+                              {{ t("Stock") }}
+                            </th>
+                            <th
+                              scope="col"
+                              class="text-sm font-medium px-6 py-4"
+                            >
+                              {{ t("Actions") }}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody class="bg-[#1f2937]">
+                          <tr
+                            v-for="row in data"
+                            :key="row.id"
+                            class="border-b border-black h-14 text-gray-100"
+                            :class="{
+                              'bg-[#19472a26]': row.count > 0,
+                              'bg-[#d7000017]': row.count < 0,
+                            }"
+                          >
+                            <th v-if="IsShowCorrupted">
+                              <input
+                                type="checkbox"
+                                v-model="SelectedOutItemCorrupted"
+                                :value="row"
+                              />
+                            </th>
+                            <th>{{ row.Voucher.Item.name }}</th>
+                            <th>{{ row.Voucher.date }}</th>
+                            <th>{{ row.Voucher.serialNumber }}</th>
+                            <th>{{ row.type }}</th>
+                            <th>
+                              <span
+                                v-if="row.count > 0"
+                                class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+                                >↑{{ row.count }}</span
+                              >
+                              <span
+                                v-else
+                                class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
+                                >↓{{ row.count }}</span
+                              >
+                            </th>
+                            <th>{{ row.price.toLocaleString() }}</th>
+                            <th>{{ row.Voucher.Stock.name }}</th>
+                            <th>
+                              <van-button
+                                class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
+                                type="primary"
+                                is-link
+                                @click="
+                                  openItem(row.Voucher.idVoucher, row.type)
+                                "
+                                >Open
+                              </van-button>
+                            </th>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-                    <table class="min-w-full text-center">
-                      <thead class="border-b bg-[#0003] text-gray-300">
-                        <tr>
-                          <th scope="col" class="text-sm font-medium px-6 py-4" v-if="IsShowCorrupted">
-                            {{ t("Selected") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Item") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Date") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("SerialNumber") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("BillType") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Available") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Price") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Stock") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Actions") }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="bg-[#1f2937]">
-                        <tr v-for="row in data" :key="row.id" class="border-b border-black h-14 text-gray-100" :class="{
-                          'bg-[#19472a26]': row.count > 0,
-                          'bg-[#d7000017]': row.count < 0,
-                        }">
-                          <th v-if="IsShowCorrupted">
-                            <input type="checkbox" v-model="SelectedOutItemCorrupted" :value="row" />
-                          </th>
-                          <th>{{ row.Voucher.Item.name }}</th>
-                          <th>{{ row.Voucher.date }}</th>
-                          <th>{{ row.Voucher.serialNumber }}</th>
-                          <th>{{ row.type }}</th>
-                          <th>
-                            <span v-if="row.count > 0"
-                              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2">↑{{
-                                row.count }}</span>
-                            <span v-else
-                              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2">↓{{
-                                row.count }}</span>
-                          </th>
-                          <th>{{ row.price.toLocaleString() }}</th>
-                          <th>{{ row.Voucher.Stock.name }}</th>
-                          <th>
-                            <van-button class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                              type="primary" is-link @click="openItem(row.Voucher.idVoucher, row.type)">Open
-                            </van-button>
-                          </th>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
 
-                  <div class="py-4 min-w-full w-full h-full lg:px-8">
-                    <!-- card -->
-                    <div class="rounded-xl" v-if="isLoading == false">
-                      <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-                        :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
-                        <div class="w-full flex flex-row">
-                          <div class="basis-4/5 overflow-x-auto font-Tajawal">
-                            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-                          </div>
-                          <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId"
-                              :options="limits" :IsRequire="true" @onChange="getFilterData()" />
+                    <div class="py-4 min-w-full w-full h-full lg:px-8">
+                      <!-- card -->
+                      <div class="rounded-xl" v-if="isLoading == false">
+                        <div
+                          v-motion
+                          :initial="{ opacity: 0, y: -15 }"
+                          :enter="{ opacity: 1, y: 0 }"
+                          :variants="{ custom: { scale: 2 } }"
+                          :delay="200"
+                          v-if="data.length > 0"
+                        >
+                          <div class="w-full flex flex-row">
+                            <div class="basis-4/5 overflow-x-auto font-Tajawal">
+                              <TailwindPagination
+                                class="flex justify-center mt-6"
+                                :data="dataPage"
+                                @pagination-change-page="getFilterData"
+                                :limit="searchFilter.limit"
+                              />
+                            </div>
+                            <div
+                              class="basis-1/5"
+                              v-if="data.length >= limits[0].id"
+                            >
+                              <ISelect
+                                :label="t('Limit')"
+                                v-model="searchFilter.limit"
+                                name="archiveTypeId"
+                                :options="limits"
+                                :IsRequire="true"
+                                @onChange="getFilterData()"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
+                      <SimpleLoading v-if="isLoading"></SimpleLoading>
+                      <!-- end card -->
                     </div>
-                    <SimpleLoading v-if="isLoading"></SimpleLoading>
-                    <!-- end card -->
                   </div>
                 </div>
               </div>
+              <!-- end card -->
             </div>
-            <!-- end card -->
           </div>
         </div>
-      </div>
-    </div>
-    <div :class="{
-      'ltr:left-4 rtl:right-4': is,
-      'ltr:left-28 rtl:right-28': !is,
-    }" class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden">
-      <button @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white">
-        {{ t("Back") }}
-      </button>
-    </div>
-  </div>
+        <div
+          :class="{
+            'ltr:left-4 rtl:right-4': is,
+            'ltr:left-28 rtl:right-28': !is,
+          }"
+          class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
+        >
+          <button
+            @click="back()"
+            class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
+          >
+            {{ t("Back") }}
+          </button>
+        </div>
+      </IRow>
+    </IPageContent>
+  </IPage>
 </template>
-<style></style>
