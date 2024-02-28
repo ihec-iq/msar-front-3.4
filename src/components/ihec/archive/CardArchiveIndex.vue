@@ -49,7 +49,7 @@ const getPath = (files: Array<IDocument>) => {
           <span>{{ t("Date") }}: {{ item.issueDate.split(" ")[0] }}</span>
           <span class="float-left flex">
             {{ item.files.length }}
-            <img src="@/assets/svg/document.svg" />
+            <img src="@/assets/svg/document.svg" :alt="item.title" />
           </span>
         </div>
         <div class="flex justify-betweens">
