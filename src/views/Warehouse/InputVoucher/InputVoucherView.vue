@@ -16,6 +16,9 @@ import { EnumPermission } from "@/utils/EnumSystem";
 import { ITableHeader } from "@/types/core/components/ITable";
 import ICol from "@/components/ihec/ICol.vue";
 import IRow from "@/components/ihec/IRow.vue";
+import ILabel from "@/components/ihec/ILabel.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import IButton from "@/components/ihec/IButton2.vue";
 
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
@@ -34,7 +37,7 @@ const { is } = storeToRefs(rtlStore);
 
 const inputVoucherStore = useInputVoucherStore();
 const { inputVoucher, inputVoucherStates } = storeToRefs(
-  useInputVoucherStore(),
+  useInputVoucherStore()
 );
 //#region popUp
 const showPop = ref(false);
@@ -62,7 +65,7 @@ const AddPopup = () => {
   resetVoucherItemTemp();
 };
 const resetVoucherItemTemp = () => {
-  IsAdd.value = true
+  IsAdd.value = true;
   indexSelectedVoucherItem.value = 0;
   VoucherItemTemp.value = {
     id: 0,
@@ -131,7 +134,7 @@ const EditItem = () => {
     VoucherItemTemp.value.count * VoucherItemTemp.value.price;
   inputVoucherStore.editItem(
     indexSelectedVoucherItem.value,
-    VoucherItemTemp.value,
+    VoucherItemTemp.value
   );
   resetVoucherItemTemp();
   showPop.value = false;
@@ -157,7 +160,7 @@ const store = () => {
   formData.append("requestedBy", inputVoucher.value.requestedBy);
   formData.append(
     "signaturePerson",
-    String(inputVoucher.value.signaturePerson),
+    String(inputVoucher.value.signaturePerson)
   );
   inputVoucherStore
     .store(formData)
@@ -195,7 +198,7 @@ function update() {
   formData.append("requestedBy", inputVoucher.value.requestedBy);
   formData.append(
     "signaturePerson",
-    String(inputVoucher.value.signaturePerson),
+    String(inputVoucher.value.signaturePerson)
   );
   inputVoucherStore
     .update(inputVoucher.value.id, formData)
@@ -246,7 +249,7 @@ const Delete = async () => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
-            "success",
+            "success"
           );
           router.go(-1);
         });
@@ -305,7 +308,7 @@ onMounted(async () => {
 const handleEnter = (event: KeyboardEvent) => {
   const enteredValue = (event.target as HTMLInputElement).value;
   const matchingOption = items.value.find(
-    (option: IItem) => option.name === enteredValue,
+    (option: IItem) => option.name === enteredValue
   );
   if (matchingOption === undefined && enteredValue.length > 0) {
     let btn = document.getElementById("my_modal_7");
@@ -354,40 +357,79 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t(namePage)">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" type="outlined" pre-icon="autorenew" :onClick="reset" :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        type="outlined"
+        pre-icon="autorenew"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
-      <IRow>
+      <IContainer>
         <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="3" span-md="2" span-sm="1">
-              <IInput :label="t('Name')" name="Name" v-model="inputVoucher.number" type="text" />
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('Name')"
+                name="Name"
+                v-model="inputVoucher.number"
+                type="text"
+              />
             </ICol>
-            <ICol span="3" span-md="2" span-sm="1">
-              <IInput :label="t('Date')" name="InputVoucherNumer" v-model="inputVoucher.date" type="date" />
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('Date')"
+                name="InputVoucherNumer"
+                v-model="inputVoucher.date"
+                type="date"
+              />
             </ICol>
-            <ICol span="3" span-md="2" span-sm="1">
-              <ISelect :label="t('Section')" v-model="inputVoucher.State.id" name="inputVoucherStateId"
-                :options="inputVoucherStates" :IsRequire="true" />
+            <ICol span="1" span-md="2" span-sm="1">
+              <ISelect
+                :label="t('Section')"
+                v-model="inputVoucher.State.id"
+                name="inputVoucherStateId"
+                :options="inputVoucherStates"
+                :IsRequire="true"
+              />
             </ICol>
-            <ICol span="3" span-md="2" span-sm="1">
-              <IInput :label="t('InputVoucherEmployeeRequest')" name="InputVoucherNumer"
-                v-model="inputVoucher.requestedBy" type="text" />
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucherEmployeeRequest')"
+                name="InputVoucherNumer"
+                v-model="inputVoucher.requestedBy"
+                type="text"
+              />
             </ICol>
-            <ICol span="3" span-md="2" span-sm="1">
-              <IInput :label="t('InputVoucherSignaturePerson')" name="InputVoucherNumer"
-                v-model="inputVoucher.signaturePerson" type="text" />
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucherSignaturePerson')"
+                name="InputVoucherNumer"
+                v-model="inputVoucher.signaturePerson"
+                type="text"
+              />
             </ICol>
           </IRow>
           <IRow>
             <ICol>
-              <IInput :label="t('Notes')" name="InputVoucherNumer" v-model="inputVoucher.notes" type="text" />
+              <IInput
+                :label="t('Notes')"
+                name="InputVoucherNumer"
+                v-model="inputVoucher.notes"
+                type="text"
+              />
             </ICol>
           </IRow>
           <IRow>
             <ICol>
-              <van-button class="border-none duration-500 rounded-lg bg-create hover:bg-createHover" type="primary"
-                is-link @click="AddPopup()">Add Items
+              <van-button
+                class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
+                type="primary"
+                is-link
+                @click="AddPopup()"
+                >Add Items
               </van-button>
             </ICol>
           </IRow>
@@ -404,187 +446,231 @@ const headers = ref<Array<ITableHeader>>([
                   {{ row.count * row.price }}
                 </template>
                 <template v-slot:Actions="{ row, rowIndex }">
-                  <van-button class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"
-                    type="success" is-link @click="updatePopup(rowIndex, row)">{{ t("Edit") }}
+                  <van-button
+                    class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"
+                    type="success"
+                    is-link
+                    @click="updatePopup(rowIndex, row)"
+                    >{{ t("Edit") }}
                   </van-button>
                   |
-                  <van-button class="duration-500 rounded-lg m-2 bg-white hover:bg-deleteHover border-red-700 border-2"
-                    is-link @click="deleteItem(rowIndex)">{{ t("Delete") }}
+                  <van-button
+                    class="duration-500 rounded-lg m-2 bg-white hover:bg-deleteHover border-red-700 border-2"
+                    is-link
+                    @click="deleteItem(rowIndex)"
+                    >{{ t("Delete") }}
                   </van-button>
                 </template>
               </ITable>
             </ICol>
           </IRow>
         </IForm>
-      </IRow>
+      </IContainer>
       <IContainer>
-        <van-popup class="bg-content overflow-hidden" v-model:show="showPop" round position="bottom"
-          :style="{ height: '60%' }">
-          <IRow>
-            <ICol>
-              <IRow col="4" col-lg="4" col-md="2" col-sm="1" col-xs="1">
-                <ICol span="1" span-lg="1" span-md="2" span-sm="4" span-xs="4" >
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    {{ t('Item') }}
-                  </div>
-                  <vSelect
-                    class="capitalize mx-2 rounded-md w-[93%] h-10  bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 p-2 mb-10"
-                    v-model="VoucherItemTemp.Item" :options="items" :reduce="(_item: IItem) => _item"
-                    :get-option-label="(_item: IItem) => _item.name" @keydown.enter="handleEnter" @input="clearSelected"
-                    :create-option="(_item: IItem) => ({
-                      input_voucher_id: 0,
-                      Item: {
-                        name: '',
-                        id: 0,
-                        code: 0,
-                        description: 0,
-                        Category: { id: 0, name: '' },
-                        measuringUnit: '',
-                      },
-                      Stock: { name: '', id: 0 },
-                      serialNumber: '',
-                      count: 0,
-                      price: 0,
-                      value: 0,
-                      notes: '',
-                    })
-                      ">
-                    <template #option="{ code, Category, description, name }">
+        <van-popup
+          class="overflow-hidden"
+          v-model:show="showPop"
+          round
+          position="bottom"
+        >
+          <IRow col="4" col-lg="4" col-md="2" col-sm="1" col-xs="1">
+            <ICol span="1" span-lg="1" span-md="1" span-sm="1" span-xs="1">
+              <div
+                class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
+              >
+                {{ t("Item") }}
+              </div>
+              <vSelect
+                class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 mb-10"
+                v-model="VoucherItemTemp.Item"
+                :options="items"
+                :reduce="(_item: IItem) => _item"
+                :get-option-label="(_item: IItem) => _item.name"
+                @keydown.enter="handleEnter"
+                @input="clearSelected"
+                :create-option="
+                  (_item: IItem) => ({
+                    input_voucher_id: 0,
+                    Item: {
+                      name: '',
+                      id: 0,
+                      code: 0,
+                      description: 0,
+                      Category: { id: 0, name: '' },
+                      measuringUnit: '',
+                    },
+                    Stock: { name: '', id: 0 },
+                    serialNumber: '',
+                    count: 0,
+                    price: 0,
+                    value: 0,
+                    notes: '',
+                  })
+                "
+              >
+                <template #option="{ code, Category, description, name }">
+                  <div class="rtl:text-right border-2 p-2 rounded-md">
+                    <div
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
+                    >
+                      {{ name }}
+                    </div>
+                    <cite>
                       <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-100 p-1 mb-1 font-bold">
-                        {{ name }}
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                      >
+                        {{ t("Code") }}: {{ code }}
                       </div>
-                      <cite>
-                        <div
-                          class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
-                          {{ t('Code') }}: {{ code }}
-                        </div>
-                        <div
-                          class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
-                          {{ t('Category') }}: {{ Category.name }}
-                        </div>
-                      </cite>
-                      <br />
-                      <cite>
-                        {{ description }}
-                      </cite>
-                    </template>
-                  </vSelect>
-                  <AddItemPopup :setItem="setItemFromChild"></AddItemPopup>
+                      <div
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                      >
+                        {{ t("Category") }}: {{ Category.name }}
+                      </div>
+                    </cite>
+                    <br />
+                    <cite>
+                      {{ description }}
+                    </cite>
+                  </div>
+                </template>
+              </vSelect>
+              <AddItemPopup :setItem="setItemFromChild"></AddItemPopup>
+            </ICol>
+            <ICol
+              span="3"
+              span-xl="3"
+              span-lg="3"
+              span-md="1"
+              span-sm="1"
+              span-xs="1"
+              v-if="VoucherItemTemp.Item == null"
+              class="border-2 border-dotted border-gray-600"
+            >
+              <div class="w-full text-center align-middle border-gray-600">
+                <div
+                  class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
+                >
+                  قم بأختيار مادة
+                </div>
+              </div>
+            </ICol>
+            <ICol
+              span="3"
+              span-xl="3"
+              span-lg="3"
+              span-md="1"
+              span-sm="1"
+              v-else="VoucherItemTemp.Item"
+              class="flex"
+            >
+              <IRow col="5">
+                <ICol span="1">
+                  <ILabel :title="t('Code')">
+                    {{ VoucherItemTemp.Item.code }}</ILabel
+                  >
                 </ICol>
-                <ICol span="3" span-lg="3" span-md="3" span-sm="4"  span-xs="4"  v-if="VoucherItemTemp.Item == null" class="border-2 border-dotted border-gray-600">
-                  <div class="w-full text-center align-middle  border-gray-600">
-                    <div class=" md:text-sm text-base ml-2 font-bold text-gray-300  mt-auto mb-auto w-full">
-                      قم بأختيار مادة
-                    </div>
-                  </div>
+                <ICol span="1">
+                  <ILabel :title="t('Category')">
+                    {{ VoucherItemTemp.Item.Category.name }}</ILabel
+                  >
                 </ICol>
-                <ICol span="3" span-lg="3" span-md="3" span-sm="4" v-if="VoucherItemTemp.Item" class="flex">
-                  <div class="w-1/5" v-if="VoucherItemTemp.Item.code">
-                    <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                      {{ t('Code') }}
-                    </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold">
-                      {{ VoucherItemTemp.Item.code }}
-                    </div>
-                  </div>
-                  <div class="w-1/5" v-if="VoucherItemTemp.Item.Category.name">
-                    <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                      {{ t('Category') }}
-                    </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold">
-                      {{ VoucherItemTemp.Item.Category.name }}
-                    </div>
-                  </div>
-                  <div class="w-3/5" v-if="VoucherItemTemp.Item.description">
-                    <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                      {{ t('Description') }}
-                    </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 m-2 font-bold">
-                      {{ VoucherItemTemp.Item.description }}
-                    </div>
-                  </div>
+                <ICol span="3">
+                  <ILabel :title="t('Description')">
+                    {{ VoucherItemTemp.Item.description }}</ILabel
+                  >
                 </ICol>
               </IRow>
             </ICol>
           </IRow>
           <IRow>
             <ICol>
-              <div class="flex justify-around w-full mt-4 ml-6">
-                <div class="w-1/5">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    {{ t('Stock') }}
+              <IRow col="5">
+                <ICol span="1">
+                  <div class="mb-2">
+                    <label class="_inputLabel">
+                      <span class="text-red-600">*</span> {{ t("Stock") }}
+                    </label>
+                    <select v-model="VoucherItemTemp.Stock" class="_input">
+                      <option
+                        v-for="stock in stocks"
+                        :key="stock.id"
+                        :value="stock"
+                      >
+                        {{ stock.name }}
+                      </option>
+                    </select>
                   </div>
-                  <select v-model="VoucherItemTemp.Stock"
-                    class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight">
-                    <option v-for="stock in stocks" :key="stock.id" :value="stock"
-                      class="bg-lightInput dark:bg-input text-text dark:text-textLight">
-                      {{ stock.name }}
-                    </option>
-                  </select>
-                </div>
-                <div class="w-1/5">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    {{ t('SerialNumber') }}
-                  </div>
-                  <input v-model="VoucherItemTemp.serialNumber" type="text"
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
-                </div>
-                <div class="w-1/5">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    {{ t('Count') }}
-                  </div>
-                  <input @input="ChangeValueTotal()" v-model="VoucherItemTemp.count" type="number"
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
-                </div>
-                <div class="w-1/5">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    {{ t('Price') }}
-                  </div>
-                  <input @input="ChangeValueTotal()" v-model="VoucherItemTemp.price" type="number"
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
-                </div>
-                <div class="w-1/5">
-                  <div class="mb-1 md:text-sm text-base ml-2 font-bold text-gray-300">
-                    {{ t('Total') }}
-                  </div>
-                  <input v-model="VoucherItemTemp.value" type="number"
-                    class="rounded-md disabled focus:outline-none focus:border focus:border-gray-700 bg-gray-800 text-gray-300 p-2 mb-10 font-bold" />
-                </div>
-              </div>
+                </ICol>
+                <ICol span="1">
+                  <IInput
+                    :label="t('SerialNumber')"
+                    v-model="VoucherItemTemp.serialNumber"
+                  />
+                </ICol>
+                <ICol span="1">
+                  <IInput
+                    :label="t('Count')"
+                    :on-input="ChangeValueTotal"
+                    type="number"
+                    v-model="VoucherItemTemp.count"
+                  />
+                </ICol>
+                <ICol span="1">
+                  <IInput
+                    :label="t('Price')"
+                    :on-input="ChangeValueTotal"
+                    type="number"
+                    v-model="VoucherItemTemp.price"
+                  />
+                </ICol>
+                <ICol span="1">
+                  <IInput
+                    :label="t('Total')"
+                    type="number"
+                    v-model="VoucherItemTemp.value"
+                  />
+                </ICol>
+              </IRow>
             </ICol>
           </IRow>
-
-          <!-- add close form -->
-          <div class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3">
-            <div class="flex justify-between">
-              <div class="items-center ml-2">{{ IsAdd }}
-                <button v-if="IsAdd" @click="AddItem()"
-                  class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-gray-300">
-                  {{ t('Add') }}
-                </button>
-                <button v-else @click="EditItem()"
-                  class="bg-update hover:bg-updateHover ml-2 duration-500 h-10 w-32 rounded-lg text-gray-300" is-link>
-                  {{ t('Update') }}
-                </button>
-              </div>
+          <IRow>
+            <ICol>
+              <IButton
+                :text="t('Add')"
+                color="blue"
+                type="default"
+                :on-click="AddItem"
+                v-if="IsAdd"
+              />
+              <IButton
+                :text="t('Update')"
+                color="blue"
+                type="default"
+                :on-click="EditItem"
+                v-else
+              />
+            </ICol>
+            <ICol>
               <van-button
                 class="ml-4 border-none left-0 bg-back duration-500 h-10 w-32 text-gray-300 hover:bg-backHover rounded-lg"
-                type="primary" is-link @click="showPop = false">{{ t('Close') }}</van-button>
-            </div>
-          </div>
-          <div class="outer w-px h-full m-auto relative overflow-hidden ml-2">
-            <div class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"></div>
-          </div>
+                type="primary"
+                is-link
+                @click="showPop = false"
+                >{{ t("Close") }}</van-button
+              >
+            </ICol>
+          </IRow>
         </van-popup>
       </IContainer>
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud :isAdd="inputVoucher.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+      <IFooterCrud
+        :isAdd="inputVoucher.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
     </template>
   </IPage>
 </template>

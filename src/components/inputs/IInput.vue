@@ -31,6 +31,10 @@ const props = defineProps({
     type: Function, // Cast to the enum type
     default: () => {}, // Default value (optional)
   },
+   onInput: {
+    type: Function, // Cast to the enum type
+    default: () => {}, // Default value (optional)
+  },
 });
 
 const keydown = () => {
@@ -50,6 +54,7 @@ const keydown = () => {
       v-model="modelValue"
       :placeholder="placeholder"
       :style="{ direction: dir }"
+      @input="onInput()"
     />
   </div>
 </template>
