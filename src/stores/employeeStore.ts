@@ -54,7 +54,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function getItemHistory(params: IEmployeeFilter, page: number) {
-    return await Api.get(`${pathBase}/voucherItemHistory/filter?page=${page}`, {
+    return await Api.get(`stockSys/voucherItemHistory/filter?page=${page}`, {
       params: params,
     });
   }

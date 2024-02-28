@@ -18,6 +18,7 @@ import ICol from "@/components/ihec/ICol.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ILabel from "@/components/ihec/ILabel.vue";
 import IInput from "@/components/inputs/IInput.vue";
+import IButton from "@/components/ihec/IButton2.vue";
 
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
@@ -470,7 +471,7 @@ const headers = ref<Array<ITableHeader>>([
           class="overflow-hidden"
           v-model:show="showPop"
           round
-          position="bottom" 
+          position="bottom"
         >
           <IRow col="4" col-lg="4" col-md="2" col-sm="1" col-xs="1">
             <ICol span="1" span-lg="1" span-md="1" span-sm="1" span-xs="1">
@@ -566,18 +567,18 @@ const headers = ref<Array<ITableHeader>>([
                 <ICol span="1">
                   <ILabel :title="t('Code')">
                     {{ VoucherItemTemp.Item.code }}</ILabel
-                  ></ICol
-                >
+                  >
+                </ICol>
                 <ICol span="1">
                   <ILabel :title="t('Category')">
                     {{ VoucherItemTemp.Item.Category.name }}</ILabel
                   >
                 </ICol>
-                <ICol span="3"
-                  ><ILabel :title="t('Description')">
+                <ICol span="3">
+                  <ILabel :title="t('Description')">
                     {{ VoucherItemTemp.Item.description }}</ILabel
-                  ></ICol
-                >
+                  >
+                </ICol>
               </IRow>
             </ICol>
           </IRow>
@@ -606,23 +607,24 @@ const headers = ref<Array<ITableHeader>>([
                     v-model="VoucherItemTemp.serialNumber"
                   />
                 </ICol>
-                <ICol span="1"
-                  ><IInput
+                <ICol span="1">
+                  <IInput
                     :label="t('Count')"
                     :on-input="ChangeValueTotal"
                     type="number"
                     v-model="VoucherItemTemp.count"
                   />
                 </ICol>
-                <ICol span="1"
-                  ><IInput
+                <ICol span="1">
+                  <IInput
                     :label="t('Price')"
                     :on-input="ChangeValueTotal"
                     type="number"
                     v-model="VoucherItemTemp.price"
-                /></ICol>
-                <ICol span="1"
-                  ><IInput
+                  />
+                </ICol>
+                <ICol span="1">
+                  <IInput
                     :label="t('Total')"
                     type="number"
                     v-model="VoucherItemTemp.value"
@@ -631,30 +633,24 @@ const headers = ref<Array<ITableHeader>>([
               </IRow>
             </ICol>
           </IRow>
-
-          <!-- add close form -->
-          <div
-            class="w-full p-2 rounded-lg flex items-center fixed bottom-1 right-3"
-          >
-            <div class="flex justify-between">
-              <div class="items-center ml-2">
-                {{ IsAdd }}
-                <button
-                  v-if="IsAdd"
-                  @click="AddItem()"
-                  class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-gray-300"
-                >
-                  {{ t("Add") }}
-                </button>
-                <button
-                  v-else
-                  @click="EditItem()"
-                  class="bg-update hover:bg-updateHover ml-2 duration-500 h-10 w-32 rounded-lg text-gray-300"
-                  is-link
-                >
-                  {{ t("Update") }}
-                </button>
-              </div>
+          <IRow>
+            <ICol>
+              <IButton
+                :text="t('Add')"
+                color="blue"
+                type="default"
+                :on-click="AddItem"
+                v-if="IsAdd"
+              />
+              <IButton
+                :text="t('Update')"
+                color="blue"
+                type="default"
+                :on-click="EditItem"
+                v-else
+              />
+            </ICol>
+            <ICol>
               <van-button
                 class="ml-4 border-none left-0 bg-back duration-500 h-10 w-32 text-gray-300 hover:bg-backHover rounded-lg"
                 type="primary"
@@ -662,13 +658,8 @@ const headers = ref<Array<ITableHeader>>([
                 @click="showPop = false"
                 >{{ t("Close") }}</van-button
               >
-            </div>
-          </div>
-          <div class="outer w-px h-full m-auto relative overflow-hidden ml-2">
-            <div
-              class="inner absolute w-full h-3/5 bg-gray-500 top-[20%]"
-            ></div>
-          </div>
+            </ICol>
+          </IRow>
         </van-popup>
       </IContainer>
     </IPageContent>
