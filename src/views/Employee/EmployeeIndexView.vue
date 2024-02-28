@@ -155,6 +155,9 @@ const headers = ref<Array<ITableHeader>>([
               <li>
                 <EditButton @click="update(row.id)" />
               </li>
+              <li>
+                <EditButton title="تاريخ الموظف" @click="history(row.id)" />
+              </li>
             </IDropdown>
           </template>
         </ITable>
