@@ -1,23 +1,20 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
-import moment from "moment";
-
-import { useI18n } from "@/stores/i18n/useI18n";
 import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
 import { useVacationStore } from "@/stores/vacations/vacationStore";
+
 import { now } from "@vueuse/core";
 import type { IVacation } from "@/types/vacation/IVacation";
 import { useVacationReasonStore } from "@/stores/vacations/vacationReasonStore";
 import type { IVacationReason } from "@/types/vacation/IVacationDaily";
-import type { IEmployee } from "@/types/IEmployee";
 import ISelect from "@/components/inputs/ISelect.vue";
-const { t } = useI18n();
+import { EnumPermission } from "@/utils/EnumSystem";
+import { t } from "@/utils/I18nPlugin";
 
 //region"Drag and Drop"
 
@@ -40,14 +37,14 @@ const { addHours } = useVacationTimeStore();
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 const times = reactive([
-  { name: "نصف ساعة", value: 0.5, selected: true },
-  { name: "1 ساعة", value: 1, selected: false },
-  { name: "ساعة ونصف", value: 1.5, selected: false },
-  { name: "2 ساعة", value: 2, selected: false },
-  { name: "ساعتان ونصف", value: 2.5, selected: false },
-  { name: "3 ساعة", value: 3, selected: false },
+  { name: "نصف ساعة", id: 0.5, selected: true },
+  { name: "1 ساعة", id: 1, selected: false },
+  { name: "ساعة ونصف", id: 1.5, selected: false },
+  { name: "2 ساعة", id: 2, selected: false },
+  { name: "ساعتان ونصف", id: 2.5, selected: false },
+  { name: "3 ساعة", id: 3, selected: false },
 ]);
 //#endregion
 //#region CURD
@@ -193,56 +190,42 @@ const back = () => {
   });
 };
 onMounted(async () => {
-  //console.log(can("show items1"));
-  checkPermissionAccessArray(["show vacations time"]);
+  checkPermissionAccessArray([EnumPermission.ShowVacationsTime]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("VacationTimeAdd");
+    namePage.value = "VacationTimeAdd";
     vacationTime.value.id = 0;
+    reset();
   } else {
     await showData();
     vacationTime.value.id = id.value;
-    namePage.value = t("VacationTimeUpdate");
+    namePage.value = "VacationTimeUpdate";
   }
   await useVacationStore().get_vacations();
   await useVacationReasonStore().get();
 });
-const ChangeDate = () => {
-  //console.log("ChangeDate");
-  if (vacationTime.value.timeFrom.length == 5)
-    vacationTime.value.timeFrom = vacationTime.value.timeFrom + ":00";
-  if (vacationTime.value.timeTo.length == 5)
-    vacationTime.value.timeTo = vacationTime.value.timeTo + ":00";
+// const ChangeDate = () => {
+//   if (vacationTime.value.timeFrom.length == 5)
+//     vacationTime.value.timeFrom = vacationTime.value.timeFrom + ":00";
+//   if (vacationTime.value.timeTo.length == 5)
+//     vacationTime.value.timeTo = vacationTime.value.timeTo + ":00";
 
-  const currentDate = new Date(now());
-  const timeFrom =
-    currentDate.getFullYear() +
-    "-" +
-    currentDate.getMonth() +
-    "-" +
-    currentDate.getDay() +
+//   const currentDate = new Date(vacationTime.value.date);
+//   const timeFrom =
+//     currentDate.getFullYear() +
+//     "-" +
+//     currentDate.getMonth() +
+//     "-" +
+//     currentDate.getDay() +
+//     " " +
+//     vacationTime.value.timeFrom;
+//   vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
+// };
+const ChangeDateRecord = () => {
+  const DateTimeFrom =
+    new Date(vacationTime.value.date).toISOString().split("T")[0] +
     " " +
     vacationTime.value.timeFrom;
-  vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
-  console.log(vacationTime.value.timeTo);
-  // if (vacationTime.value.timeFrom >= vacationTime.value.timeTo) {
-  //   vacationTime.value.record = 0.5;
-  //   ChangeDateRecord();
-  //   return;
-  // }
-  // const oneDay = 24 * 60 * 60 * 1000;
-  // const days = Math.round(
-  //   (new Date(vacationTime.value.timeTo).valueOf() -
-  //     new Date(vacationTime.value.timeFrom).valueOf()) /
-  //     oneDay
-  // );
-  // vacationTime.value.record = days;
-};
-const ChangeDateRecord = () => {
-  console.log("ChangeDateRecord");
-  const timeFrom =
-    new Date().toISOString().split("T")[0] + " " + vacationTime.value.timeFrom;
-  vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
-  console.log(vacationTime.value.timeTo);
+  vacationTime.value.timeTo = addHours(vacationTime.value.record, DateTimeFrom);
 };
 </script>
 <template>
@@ -267,7 +250,7 @@ const ChangeDateRecord = () => {
                 name="dayFrom"
                 v-model="vacationTime.date"
                 type="date"
-                @change="ChangeDate()"
+                @change="ChangeDateRecord()"
             /></ICol>
             <ICol span="1" span-md="2" span-sm="4">
               <ISelect
@@ -284,7 +267,7 @@ const ChangeDateRecord = () => {
                 :label="t('DateFrom')"
                 v-model="vacationTime.timeFrom"
                 type="time"
-                @input="ChangeDate()"
+                @input="ChangeDateRecord()"
                 :IsRequire="true"
             /></ICol>
             <ICol span="1" span-md="2" span-sm="4">
@@ -292,7 +275,7 @@ const ChangeDateRecord = () => {
                 :label="t('DateTo')"
                 v-model="vacationTime.timeTo"
                 type="time"
-                @input="ChangeDate()"
+                @input="ChangeDateRecord()"
                 :IsRequire="true"
             /></ICol>
             <ICol span="1" span-md="2" span-sm="4">
@@ -307,7 +290,9 @@ const ChangeDateRecord = () => {
                 :options="vacations"
                 :reduce="(vacation: IVacation) => vacation"
                 label="name"
-                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
+                :getOptionLabel="
+                  (vacation: IVacation) => vacation.Employee.name
+                "
               >
                 <template #option="{ Employee }">
                   <div>

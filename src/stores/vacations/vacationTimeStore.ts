@@ -44,7 +44,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       name: "",
     },
   });
-  const addHours = (Hour: number = 0, _date: string = "") => {
+  const addHours = (Hour: number = 0.5, _date: string = "") => {
     if (_date == "")
       _date = new Date().toISOString().split("T")[0] + " 08:00:00";
     const currentDate = new Date(_date);
@@ -55,16 +55,16 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       ("0" + currentDate.getMinutes()).slice(-2) +
       ":" +
       "00";
+    console.log(_date);
+    console.log(Hour);
+    console.log(currentDate);
+    console.log(dateTimeTo);
     return dateTimeTo;
   };
   function resetData() {
     vacationTime.timeFrom = addHours();
     vacationTime.record = 0.5;
     vacationTime.timeTo = addHours(vacationTime.record);
-
-    // console.log("timeFrom : " + vacationTime.timeFrom);
-    // console.log("timeTo : " + vacationTime.timeTo);
-    //currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + "00";
 
     vacationTime.id = 0;
 
@@ -98,7 +98,6 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       id: 0,
       name: "",
     };
-    console.log(vacationTime);
   }
   const pathBase = "/vacationSys";
   const pathUrl = `${pathBase}/vacationTime`;
