@@ -19,6 +19,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  max: {
+    type: Number,
+    default: null,
+  },
+  min: {
+    type: Number,
+    default: null,
+  },
   disabled: {
     type: Boolean,
     default: false,
@@ -55,6 +63,8 @@ const keydown = () => {
       :placeholder="placeholder"
       :style="{ direction: dir }"
       @input="onInput()"
+      :max="max"
+      :min="min"
     />
   </div>
 </template>
