@@ -12,7 +12,7 @@ import type {
 } from "@/types/IInputVoucher";
 
 export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
-  const inputVoucher = reactive<IInputVoucher>({
+  const inputVoucher = ref<IInputVoucher>({
     id: 0,
     number: "",
     date: new Date().toISOString().split("T")[0],
@@ -118,27 +118,27 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       });
   }
   function addItem(item: IInputVoucherItem) {
-    inputVoucher.Items = [item].concat(inputVoucher.Items);
+    inputVoucher.value.Items = [item].concat(inputVoucher.value.Items);
   }
   function editItem(index: number, item: IInputVoucherItem) {
-    inputVoucher.Items[index] = item;
+    inputVoucher.value.Items[index] = item;
   }
   async function removeItem(index: number) {
     if (
-      String(inputVoucher.Items[index]?.id) == undefined ||
-      inputVoucher.Items[index]?.id === undefined ||
-      inputVoucher.Items[index].id === undefined
+      String(inputVoucher.value.Items[index]?.id) == undefined ||
+      inputVoucher.value.Items[index]?.id === undefined ||
+      inputVoucher.value.Items[index].id === undefined
     ) {
-      inputVoucher.Items?.splice(index, 1);
+      inputVoucher.value.Items?.splice(index, 1);
       return false;
     }
     return await Api.delete(
       `${pathBase}/inputVoucherItem/delete/` +
-        String(inputVoucher.Items[index]?.id)
+        String(inputVoucher.value.Items[index]?.id)
     )
       .then((response) => {
         if (response.status == 200) {
-          inputVoucher.Items?.splice(index, 1);
+          inputVoucher.value.Items?.splice(index, 1);
           return true;
         }
       })
@@ -147,14 +147,16 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       });
   }
   function resetData() {
-    inputVoucher.id = 0;
-    inputVoucher.number = "";
-    inputVoucher.date = "";
-    inputVoucher.notes = "";
-    inputVoucher.State = { name: "", id: 1 };
-    inputVoucher.Items = [];
-    inputVoucher.signaturePerson = "";
-    inputVoucher.requestedBy = "";
+    inputVoucher.value = {
+      id: 0,
+      number: "",
+      date: new Date().toISOString().split("T")[0],
+      notes: "",
+      State: { name: "", id: 1 },
+      Items: [],
+      signaturePerson: "",
+      requestedBy: "",
+    };
   }
   return {
     inputVoucher,
