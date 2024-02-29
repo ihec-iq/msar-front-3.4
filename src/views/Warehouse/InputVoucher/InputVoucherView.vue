@@ -478,15 +478,15 @@ const headers = ref<Array<ITableHeader>>([
           position="bottom"
         >
           <!-- for search Item -->
-          <IRow col="4" col-lg="4" col-md="2" col-sm="1" col-xs="1">
+          <IRow col-lg="4" col-md="1" col-sm="1" col-xs="1">
             <ICol>
               <div
                 class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
               >
                 {{ t("Item") }}
-              </div>s
+              </div>
               <vSelect
-                class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-300 mb-10"
+                class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
                 v-model="VoucherItemTemp.Item"
                 :options="items"
                 :reduce="(_item: IItem) => _item"
@@ -559,7 +559,15 @@ const headers = ref<Array<ITableHeader>>([
                 </div>
               </div>
             </ICol>
-            <ICol span="3" v-else-if="VoucherItemTemp.Item.name != ''">
+            <ICol
+              :span="3"
+              span-xl="3"
+              span-lg="3"
+              span-md="1"
+              span-sm="1"
+              span-xs="1"
+              v-else-if="VoucherItemTemp.Item.name != ''"
+            >
               <IRow col="4">
                 <ICol span="1">
                   <ILabel :title="t('Code')">
@@ -598,8 +606,8 @@ const headers = ref<Array<ITableHeader>>([
             </ICol>
           </IRow>
           <!-- for insert item proparties -->
-          <IRow col="5" col-lg="5" col-xl="5" col-md="5">
-            <ICol span="1" span-lg="1" span-xl="1" span-md="1">
+          <IRow   col-lg="4" col-xl="4" col-md="2" col-sm="1" col-xs="1">
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
               <div class="mb-2">
                 <label class="_inputLabel">
                   <span class="text-red-600">*</span> {{ t("Stock") }}
@@ -615,13 +623,13 @@ const headers = ref<Array<ITableHeader>>([
                 </select>
               </div>
             </ICol>
-            <ICol span="1">
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
               <IInput
                 :label="t('SerialNumber')"
                 v-model="VoucherItemTemp.serialNumber"
               />
             </ICol>
-            <ICol span="1">
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
               <IInput
                 :label="t('Count')"
                 :on-input="ChangeValueTotal"
@@ -629,7 +637,7 @@ const headers = ref<Array<ITableHeader>>([
                 v-model="VoucherItemTemp.count"
               />
             </ICol>
-            <ICol span="1">
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
               <IInput
                 :label="t('Price')"
                 :on-input="ChangeValueTotal"
@@ -637,7 +645,7 @@ const headers = ref<Array<ITableHeader>>([
                 v-model="VoucherItemTemp.price"
               />
             </ICol>
-            <ICol span="1">
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
               <IInput
                 :label="t('Total')"
                 type="number"
