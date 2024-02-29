@@ -220,8 +220,8 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <SimpleLoading v-if="isLoading">.</SimpleLoading></IRow
-      >
+        <SimpleLoading v-if="isLoading">.</SimpleLoading>
+      </IRow>
       <IRow><div id="PageDataEnd"></div></IRow>
     </IPageContent>
   </IPage>

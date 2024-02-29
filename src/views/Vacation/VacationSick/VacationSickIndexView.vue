@@ -2,11 +2,9 @@
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
-import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import EditButton from "@/components/dropDown/EditButton.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type {
@@ -22,7 +20,10 @@ const dataBase = ref<Array<IVacationSick>>([]);
 const vacationSick = useVacationSickStore();
 
 import { limits } from "@/utils/defaultParams";
-import IDropdown from "@/components/ihec/IDropdown.vue";
+import IRow from "@/components/ihec/IRow.vue";
+import ICol from "@/components/ihec/ICol.vue";
+import ISearchBar from "@/components/ihec/ISearchBar.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -103,7 +104,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show vacations sick"]);
+  checkPermissionAccessArray([EnumPermission.ShowVacationsSick]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
 
@@ -122,66 +123,50 @@ onMounted(async () => {
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" type="text" />
+            <IInput
+              :label="t('Search')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              type="text"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow>
-        <div class="flex flex-col">
-          <div class="py-4 inline-block min-w-full lg:px-8">
-            <!-- card -->
-            <div class="rounded-xl" v-if="isLoading == false">
-              <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-                :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
-                <div class="max-w-full relative">
-                  <div class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3">
-                    <!-- card -->
-                    <div
-                      class="bg-cardLight font-Tajawal dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                      v-for="item in data" :key="item.id">
-                      <div class="w-3/4 overflow-hidden">
-                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
-                          <div class="text-2xl text-text dark:text-textLight mb-2">
-                            {{ item.Vacation.Employee.name }}
-                          </div>
-                        </div>
-                        <div class="flex justify-betweens">
-                          اجازة لمدة
-                          <div
-                            class="text-text dark:text-red-900 border-sky-100 border-2 pl-2 pr-2 ml-2 mr-2 bg-slate-300"
-                            v-html="item.record"></div>
-                          يوم من تاريخ
-                          <div class="text-text dark:text-textGray ml-2 mr-2" v-html="item.dayFrom"></div>
-                          الى
-                          <div class="text-text dark:text-textGray ml-2 mr-2" v-html="item.dayTo"></div>
-                        </div>
-                      </div>
-
-                      <IDropdown>
-                        <li>
-                          <EditButton @click="update(item.id)" />
-                        </li>
-                      </IDropdown>
-                    </div>
-                    <!-- end card -->
-                  </div>
-                  <div class="w-full flex flex-row">
-                    <div class="basis-4/5 hidden">
-                      <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                        @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-                    </div>
-                    <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                      <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-                        :IsRequire="true" @onChange="getFilterData()" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
-            <!-- end card -->
+      <IRow :col="2" :col-lg="2" :col-md="2">
+        <ICol
+          :span="1"
+          :span-lg="1"
+          :span-md="1"
+          v-for="item in data"
+          :key="item.id"
+        >
+          <!-- card -->
+          <CardVactionSickIndex :item="item" />
+          <!-- end card -->
+        </ICol>
+      </IRow>
+      <IRow v-if="data.length > 0">
+        <div class="w-full flex flex-row">
+          <div class="basis-4/5 hidden">
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
+          </div>
+          <div class="basis-1/5" v-if="data.length >= limits[0].id">
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
           </div>
         </div>
+        <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
     </IPageContent>
   </IPage>

@@ -32,6 +32,7 @@ export default {
   Code: "Code",
   Category: "Category",
   Item: "Item",
+  AddItem: "Add Item",
   Items: "Items",
   ItemCode: "Item Code",
   ItemUnit: "Unit Item",
