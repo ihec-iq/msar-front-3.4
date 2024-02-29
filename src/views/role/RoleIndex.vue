@@ -18,6 +18,7 @@ const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 import { t } from "@/utils/I18nPlugin";
 import IDropdown from "@/components/ihec/IDropdown.vue";
+import IPageContent from "@/components/ihec/archive/IPageContent.vue";
 
 const router = useRouter();
 const roleData = ref<Array<IRole>>([]);
@@ -106,90 +107,81 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="w-full mb-12">
-    <PageTitle> {{ t("Role") }} </PageTitle>
-
-    <div class="w-full">
-      <div class="flex flex-col">
-        <div class="py-4 inline-block min-w-full lg:px-8">
-          <!-- card -->
-
-          <div class="rounded-xl" v-if="isLoadingData == false">
-            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="roleData.length > 0">
-              <div class="max-w-full relative">
-                <div class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3">
-                  <!-- card -->
-                  <div
-                    class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                    v-for="role in roleData" :key="role.id">
-                    <div class="w-3/4 overflow-hidden">
-                      <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
-                        <div class="text-2xl text-text dark:text-textLight mb-2">
-                          {{ role.name }}
-                        </div>
-                        <div class="text-text dark:text-textGray mb-2 justify-between"></div>
-                        <div class="transition-all m-auto justify-center rounded-md p-2 text-text dark:text-textLight">
-                          {{ t("Permissions Count") }}:
-                          {{ role.permissions.length }}
-                        </div>
-                        <div class="text-text dark:text-textLight flex">
-                          <div v-for="item in role.permissions.slice(0, 3)" :key="item.id"
-                            class="text-text dark:text-textLight w-36 text-center capitalize m-auto ml-2 rounded-md p-1 bg-blue-500 hover:bg-backHover transition-all">
-                            {{ item.name }}
-                          </div>
-                          <!-- {{ role.permissions.slice(0, 2) }} -->
-                        </div>
-                      </div>
+  <IPage :HeaderTitle="t('Role')">
+    <template #HeaderButtons>
+      <IButton2
+        preIcon="add"
+        :text="t('Add')"
+        :onClick="permissions"
+      ></IButton2>
+    </template>
+    <IPageContent>
+      <!-- card -->
+      <div class="rounded-xl" v-if="isLoadingData == false">
+        <div
+          v-motion
+          :initial="{ opacity: 0, y: -15 }"
+          :enter="{ opacity: 1, y: 0 }"
+          :variants="{ custom: { scale: 2 } }"
+          :delay="200"
+          v-if="roleData.length > 0"
+        >
+          <div class="max-w-full relative">
+            <div
+              class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
+            >
+              <!-- card -->
+              <div
+                class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+                v-for="role in roleData"
+                :key="role.id"
+              >
+                <div class="w-3/4 overflow-hidden">
+                  <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
+                    <div class="text-2xl text-text dark:text-textLight mb-2">
+                      {{ role.name }}
                     </div>
-                    <div class="w-1/4">
-                      <IDropdown>
-                        <li>
-                          <EditButton @click="update(role.id)" :title="t('Edit')" />
-                        </li>
-                        <li>
-                          <DeleteButton @click="Delete(role.id)" />
-                        </li>
-                      </IDropdown>
+                    <div
+                      class="text-text dark:text-textGray mb-2 justify-between"
+                    ></div>
+                    <div
+                      class="transition-all m-auto justify-center rounded-md p-2 text-text dark:text-textLight"
+                    >
+                      {{ t("Permissions Count") }}:
+                      {{ role.permissions.length }}
+                    </div>
+                    <div class="text-text dark:text-textLight flex">
+                      <div
+                        v-for="item in role.permissions.slice(0, 3)"
+                        :key="item.id"
+                        class="text-text dark:text-textLight w-36 text-center capitalize m-auto ml-2 rounded-md p-1 bg-blue-500 hover:bg-backHover transition-all"
+                      >
+                        {{ item.name }}
+                      </div>
+                      <!-- {{ role.permissions.slice(0, 2) }} -->
                     </div>
                   </div>
-                  <!-- end card -->
+                </div>
+                <div class="w-1/4">
+                  <IDropdown>
+                    <li>
+                      <EditButton @click="update(role.id)" :title="t('Edit')" />
+                    </li>
+                    <li>
+                      <DeleteButton @click="Delete(role.id)" />
+                    </li>
+                  </IDropdown>
                 </div>
               </div>
+              <!-- end card -->
             </div>
           </div>
-          <SimpleLoading v-if="isLoadingData"></SimpleLoading>
-          <!-- end card -->
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- bottom tool bar -->
-  <div :class="{
-    'w-[95%] bottom': isClose,
-    'w-10/12 bottom': !isClose,
-  }"
-    class="dark:bg-bottomTool duration-700 bg-sideNavLight p-2 rounded-lg flex items-center justify-between fixed bottom-0">
-    <!-- back button -->
-    <div class="backBtn">
-      <button @click="back()" class="bg-back hover:bg-backHover h-10 duration-500 w-32 p-2 rounded-md text-white">
-        {{ t("Back") }}
-      </button>
-    </div>
-    <!-- create -->
-    <div class="flex">
-      <div class="items-center ml-2">
-        <button @click="permissions()"
-          class="flex p-2.5 float-right items-center bg-create rounded-xl hover:rounded-3xl transition-all duration-300 text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-            class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
+      <SimpleLoading v-if="isLoadingData"></SimpleLoading>
+      <!-- end card -->
+    </IPageContent>
+  </IPage>
 </template>
 <style scoped>
 @media (max-width: 390px) {
