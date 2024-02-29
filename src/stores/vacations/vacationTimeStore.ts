@@ -61,9 +61,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
     vacationTime.timeFrom = addHours();
     vacationTime.record = 0.5;
     vacationTime.timeTo = addHours(vacationTime.record);
-
     vacationTime.id = 0;
-
     vacationTime.date = new Date().toISOString().split("T")[0];
     vacationTime.Vacation = {
       Employee: {
