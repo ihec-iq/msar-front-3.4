@@ -1,23 +1,20 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
-import moment from "moment";
-
-import { useI18n } from "@/stores/i18n/useI18n";
 import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
 import { useVacationStore } from "@/stores/vacations/vacationStore";
+
 import { now } from "@vueuse/core";
 import type { IVacation } from "@/types/vacation/IVacation";
 import { useVacationReasonStore } from "@/stores/vacations/vacationReasonStore";
 import type { IVacationReason } from "@/types/vacation/IVacationDaily";
-import type { IEmployee } from "@/types/IEmployee";
 import ISelect from "@/components/inputs/ISelect.vue";
-const { t } = useI18n();
+import { EnumPermission } from "@/utils/EnumSystem";
+import { t } from "@/utils/I18nPlugin";
 
 //region"Drag and Drop"
 
@@ -40,14 +37,14 @@ const { addHours } = useVacationTimeStore();
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 const times = reactive([
-  { name: "نصف ساعة", value: 0.5, selected: true },
-  { name: "1 ساعة", value: 1, selected: false },
-  { name: "ساعة ونصف", value: 1.5, selected: false },
-  { name: "2 ساعة", value: 2, selected: false },
-  { name: "ساعتان ونصف", value: 2.5, selected: false },
-  { name: "3 ساعة", value: 3, selected: false },
+  { name: "نصف ساعة", id: 0.5, selected: true },
+  { name: "1 ساعة", id: 1, selected: false },
+  { name: "ساعة ونصف", id: 1.5, selected: false },
+  { name: "2 ساعة", id: 2, selected: false },
+  { name: "ساعتان ونصف", id: 2.5, selected: false },
+  { name: "3 ساعة", id: 3, selected: false },
 ]);
 //#endregion
 //#region CURD
@@ -193,56 +190,42 @@ const back = () => {
   });
 };
 onMounted(async () => {
-  //console.log(can("show items1"));
-  checkPermissionAccessArray(["show vacations time"]);
+  checkPermissionAccessArray([EnumPermission.ShowVacationsTime]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("VacationTimeAdd");
+    namePage.value = "VacationTimeAdd";
     vacationTime.value.id = 0;
+    reset();
   } else {
     await showData();
     vacationTime.value.id = id.value;
-    namePage.value = t("VacationTimeUpdate");
+    namePage.value = "VacationTimeUpdate";
   }
   await useVacationStore().get_vacations();
   await useVacationReasonStore().get();
 });
-const ChangeDate = () => {
-  //console.log("ChangeDate");
-  if (vacationTime.value.timeFrom.length == 5)
-    vacationTime.value.timeFrom = vacationTime.value.timeFrom + ":00";
-  if (vacationTime.value.timeTo.length == 5)
-    vacationTime.value.timeTo = vacationTime.value.timeTo + ":00";
+// const ChangeDate = () => {
+//   if (vacationTime.value.timeFrom.length == 5)
+//     vacationTime.value.timeFrom = vacationTime.value.timeFrom + ":00";
+//   if (vacationTime.value.timeTo.length == 5)
+//     vacationTime.value.timeTo = vacationTime.value.timeTo + ":00";
 
-  const currentDate = new Date(now());
-  const timeFrom =
-    currentDate.getFullYear() +
-    "-" +
-    currentDate.getMonth() +
-    "-" +
-    currentDate.getDay() +
+//   const currentDate = new Date(vacationTime.value.date);
+//   const timeFrom =
+//     currentDate.getFullYear() +
+//     "-" +
+//     currentDate.getMonth() +
+//     "-" +
+//     currentDate.getDay() +
+//     " " +
+//     vacationTime.value.timeFrom;
+//   vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
+// };
+const ChangeDateRecord = () => {
+  const DateTimeFrom =
+    new Date(vacationTime.value.date).toISOString().split("T")[0] +
     " " +
     vacationTime.value.timeFrom;
-  vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
-  console.log(vacationTime.value.timeTo);
-  // if (vacationTime.value.timeFrom >= vacationTime.value.timeTo) {
-  //   vacationTime.value.record = 0.5;
-  //   ChangeDateRecord();
-  //   return;
-  // }
-  // const oneDay = 24 * 60 * 60 * 1000;
-  // const days = Math.round(
-  //   (new Date(vacationTime.value.timeTo).valueOf() -
-  //     new Date(vacationTime.value.timeFrom).valueOf()) /
-  //     oneDay
-  // );
-  // vacationTime.value.record = days;
-};
-const ChangeDateRecord = () => {
-  console.log("ChangeDateRecord");
-  const timeFrom =
-    new Date().toISOString().split("T")[0] + " " + vacationTime.value.timeFrom;
-  vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
-  console.log(vacationTime.value.timeTo);
+  vacationTime.value.timeTo = addHours(vacationTime.value.record, DateTimeFrom);
 };
 </script>
 <template>
@@ -261,15 +244,15 @@ const ChangeDateRecord = () => {
       <IRow>
         <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('Date')"
                 name="dayFrom"
                 v-model="vacationTime.date"
                 type="date"
-                @change="ChangeDate()"
+                @change="ChangeDateRecord()"
             /></ICol>
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="1" span-sm="1">
               <ISelect
                 :label="t('VacationTimeRecord')"
                 v-model="vacationTime.record"
@@ -279,23 +262,23 @@ const ChangeDateRecord = () => {
                 @change="ChangeDateRecord()"
             /></ICol>
 
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('DateFrom')"
                 v-model="vacationTime.timeFrom"
                 type="time"
-                @input="ChangeDate()"
+                @input="ChangeDateRecord()"
                 :IsRequire="true"
             /></ICol>
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('DateTo')"
                 v-model="vacationTime.timeTo"
                 type="time"
-                @input="ChangeDate()"
+                @input="ChangeDateRecord()"
                 :IsRequire="true"
             /></ICol>
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="1" span-sm="1">
               <div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
               >
@@ -307,7 +290,9 @@ const ChangeDateRecord = () => {
                 :options="vacations"
                 :reduce="(vacation: IVacation) => vacation"
                 label="name"
-                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
+                :getOptionLabel="
+                  (vacation: IVacation) => vacation.Employee.name
+                "
               >
                 <template #option="{ Employee }">
                   <div>
@@ -351,70 +336,4 @@ const ChangeDateRecord = () => {
       />
     </template>
   </IPage>
-</template>
-<style scoped>
-.drop-area {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 50px;
-  background: rgba(255, 255, 255, 0.333);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: 0.2s ease;
-}
-.drop-area[data-active="true"] {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background: rgba(255, 255, 255, 0.8);
-}
-label {
-  font-size: 36px;
-  cursor: pointer;
-  display: block;
-}
-label span {
-  display: block;
-}
-label input[type="file"]:not(:focus-visible) {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-label .smaller {
-  font-size: 16px;
-}
-.image-list {
-  display: flex;
-  list-style: none;
-  flex-wrap: wrap;
-  padding: 0;
-  margin-bottom: 35px;
-}
-.preview-card {
-  display: flex;
-  border: 1px solid #a2a2a2;
-  padding: 5px;
-  margin: 5px;
-}
-.upload-button {
-  display: block;
-  appearance: none;
-  border: 0;
-  border-radius: 50px;
-  padding: 0.75rem 3rem;
-  margin: 1rem auto;
-  font-size: 1.25rem;
-  font-weight: bold;
-  background: #369;
-  color: #fff;
-  text-transform: uppercase;
-}
-button {
-  cursor: pointer;
-}
-</style>
+</template> 

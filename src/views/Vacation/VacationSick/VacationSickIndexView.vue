@@ -120,6 +120,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
+      <!-- Search Bar -->
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
@@ -132,7 +133,8 @@ onMounted(async () => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :col="2" :col-lg="2" :col-md="2">
+      <!-- Show Data -->
+      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
         <ICol
           :span="1"
           :span-lg="1"
@@ -145,6 +147,7 @@ onMounted(async () => {
           <!-- end card -->
         </ICol>
       </IRow>
+      <!-- Pagination -->
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-4/5 hidden">
