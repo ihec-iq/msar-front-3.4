@@ -22,6 +22,7 @@ const { get_filter } = useVacationStore();
 
 import { limits } from "@/utils/defaultParams";
 import { ITableHeader } from "@/types/core/components/ITable";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -102,7 +103,7 @@ const ExportExcel = async (event: KeyboardEvent) => {
 };
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["vacation Report"]);
+  checkPermissionAccessArray([EnumPermission.VacationReport]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);

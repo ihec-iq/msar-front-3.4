@@ -32,6 +32,7 @@ import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
 //#region Data
 import { limits } from "@/utils/defaultParams";
 import { TailwindPagination } from "laravel-vue-pagination";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const limit = ref(6);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
@@ -163,7 +164,7 @@ const OpenVacationDaily = (id: number) => {
 };
 onMounted(async () => {
   //console.log(can("show employees1"));
-  checkPermissionAccessArray(["vacation Report"]);
+  checkPermissionAccessArray([EnumPermission.VacationReport]);
   await sectionStore.get_sections();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("EmployeeAdd");
@@ -181,25 +182,38 @@ onMounted(async () => {
   <div class="w-full">
     <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
       <div class="w-11/12 mr-2">
-        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
           {{ t("Name") }}
         </div>
-        <input v-model="employee.name" type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+        <input
+          v-model="employee.name"
+          type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
       </div>
       <div class="w-11/12 mr-2">
-        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
           {{ t("EmployeeSection") }}
         </div>
-        <input v-model="employee.Section.name" type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+        <input
+          v-model="employee.Section.name"
+          type="text"
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        />
       </div>
       <div class="w-11/12 mr-2">
-        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        >
           {{ t("EmployeeIsPerson") }}
         </div>
         <div
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight">
+          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+        >
           {{ isIn ? "شخص" : "شعبة" }}
         </div>
       </div>
@@ -211,40 +225,70 @@ onMounted(async () => {
           <!-- card -->
 
           <div class="rounded-xl" v-if="isLoadingTime == false">
-            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="dataVacationTime.length > 0">
+            <div
+              v-motion
+              :initial="{ opacity: 0, y: -15 }"
+              :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }"
+              :delay="200"
+              v-if="dataVacationTime.length > 0"
+            >
               <div class="max-w-full relative">
                 <div
-                  class="w-full outline-none font-bold h-10 px-3 py-2 mb-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight">
+                  class="w-full outline-none font-bold h-10 px-3 py-2 mb-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                >
                   الاجازات الزمنية
                 </div>
-                <div class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3">
+                <div
+                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
+                >
                   <!-- card -->
                   <div
                     class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                    v-for="vacation in dataVacationTime" :key="vacation.id">
+                    v-for="vacation in dataVacationTime"
+                    :key="vacation.id"
+                  >
                     <div class="w-3/4 overflow-hidden">
                       <div class="flex justify-betweens">
                         اجازة لمدة
-                        <div class="text-text dark:text-textGray pr-2 pl-2" v-html="vacation.record" />
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.record"
+                        />
                         ساعة من
-                        <div class="text-text dark:text-textGray pr-2 pl-2" v-html="vacation.timeFrom" />
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.timeFrom"
+                        />
                         الى
-                        <div class="text-text dark:text-textGray pr-2 pl-2" v-html="vacation.timeTo" />
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.timeTo"
+                        />
                         بتاريخ
-                        <div class="text-text dark:text-textGray pr-2 pl-2" v-html="vacation.date" />
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.date"
+                        />
                       </div>
                     </div>
 
-                    <button class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white" is-link
-                      @click="OpenVacationTime(vacation.id)">
+                    <button
+                      class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
+                      is-link
+                      @click="OpenVacationTime(vacation.id)"
+                    >
                       Open
                     </button>
                   </div>
                   <!-- end card -->
                 </div>
-                <TailwindPagination class="flex justify-center mt-10" :data="dataPageVacationTime"
-                  @pagination-change-page="getDataTime" :limit="10" />
+                <TailwindPagination
+                  class="flex justify-center mt-10"
+                  :data="dataPageVacationTime"
+                  @pagination-change-page="getDataTime"
+                  :limit="10"
+                />
               </div>
             </div>
           </div>
@@ -260,38 +304,65 @@ onMounted(async () => {
           <!-- card -->
 
           <div class="rounded-xl" v-if="isLoadingDaily == false">
-            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="dataVacationDaily.length > 0">
+            <div
+              v-motion
+              :initial="{ opacity: 0, y: -15 }"
+              :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }"
+              :delay="200"
+              v-if="dataVacationDaily.length > 0"
+            >
               <div class="max-w-full relative">
                 <div
-                  class="w-full outline-none font-bold h-10 px-3 py-2 mb-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight">
+                  class="w-full outline-none font-bold h-10 px-3 py-2 mb-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                >
                   الاجازات الاعتيادية
                 </div>
-                <div class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3">
+                <div
+                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
+                >
                   <!-- card -->
                   <div
                     class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                    v-for="vacation in dataVacationDaily" :key="vacation.id">
+                    v-for="vacation in dataVacationDaily"
+                    :key="vacation.id"
+                  >
                     <div class="w-3/4 overflow-hidden">
                       <div class="flex justify-betweens">
                         اجازة لمدة
-                        <div class="text-text dark:text-textGray pr-2 pl-2" v-html="vacation.record" />
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.record"
+                        />
                         يوم من
-                        <div class="text-text dark:text-textGray pr-2 pl-2" v-html="vacation.dayFrom" />
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.dayFrom"
+                        />
                         الى
-                        <div class="text-text dark:text-textGray pr-2 pl-2" v-html="vacation.dayTo" />
+                        <div
+                          class="text-text dark:text-textGray pr-2 pl-2"
+                          v-html="vacation.dayTo"
+                        />
                       </div>
                     </div>
 
-                    <button class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white" is-link
-                      @click="OpenVacationDaily(vacation.id)">
+                    <button
+                      class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
+                      is-link
+                      @click="OpenVacationDaily(vacation.id)"
+                    >
                       Open
                     </button>
                   </div>
                   <!-- end card -->
                 </div>
-                <TailwindPagination class="flex justify-center mt-10" :data="dataPageVacationDaily"
-                  @pagination-change-page="getDataDaily" :limit="10" />
+                <TailwindPagination
+                  class="flex justify-center mt-10"
+                  :data="dataPageVacationDaily"
+                  @pagination-change-page="getDataDaily"
+                  :limit="10"
+                />
               </div>
             </div>
           </div>
@@ -301,22 +372,29 @@ onMounted(async () => {
       </div>
     </div>
     <!-- bottom tool bar -->
-    <div :class="{
-      'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-      'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-        !is,
-    }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden">
+    <div
+      :class="{
+        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+          !is,
+      }"
+      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
+    >
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3"></div>
       </div>
     </div>
-    <div :class="{
-      'ltr:left-4 rtl:right-4': is,
-      'ltr:left-28 rtl:right-28': !is,
-    }" class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden">
-      <button @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white">
+    <div
+      :class="{
+        'ltr:left-4 rtl:right-4': is,
+        'ltr:left-28 rtl:right-28': !is,
+      }"
+      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
+    >
+      <button
+        @click="back()"
+        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
+      >
         {{ t("Back") }}
       </button>
     </div>
