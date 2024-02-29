@@ -55,10 +55,6 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       ("0" + currentDate.getMinutes()).slice(-2) +
       ":" +
       "00";
-    console.log(_date);
-    console.log(Hour);
-    console.log(currentDate);
-    console.log(dateTimeTo);
     return dateTimeTo;
   };
   function resetData() {
