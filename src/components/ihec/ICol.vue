@@ -50,6 +50,6 @@ const debugClass = computed(() => {
 <template>
   <div :class="[colClass, debugClass]" class="ltr:mr-2 rtl:ml-2">
     <div v-if="debug" class="">{{ colClass }}</div>
-    <slot></slot>
+    <slot ></slot>
   </div>
 </template>
