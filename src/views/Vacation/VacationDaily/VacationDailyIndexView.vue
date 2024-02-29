@@ -27,6 +27,7 @@ import IBtnSearch from "@/components/ihec/IBtnSearch.vue";
 const { vacationDaily } = useVacationDailyStore();
 
 import { limits } from "@/utils/defaultParams";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -100,7 +101,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show vacations daily"]);
+  checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   if (inputRefSearch.value) {

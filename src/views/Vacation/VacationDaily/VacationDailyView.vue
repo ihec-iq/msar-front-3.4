@@ -279,10 +279,11 @@ function getImageUrl(name: string, ext: string) {
 import imageHeaderPath from "@/assets/ihec_logo_header1.png";
 import imageFooterPath from "@/assets/ihec_logo_footer1.png";
 import { useAuthStore } from "@/stores/authStore";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show vacations daily"]);
+  checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("VacationDailyAdd");
     vacationDaily.value.id = 0;
@@ -370,7 +371,9 @@ const reset = () => {
                 :options="vacations"
                 :reduce="(vacation: IVacation) => vacation"
                 label="name"
-                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
+                :getOptionLabel="
+                  (vacation: IVacation) => vacation.Employee.name
+                "
               >
                 <template #option="{ Employee }">
                   <div>
