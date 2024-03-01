@@ -88,14 +88,14 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="flex fixed h-full z-[999] bg-white dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
+    class="flex fixed h-full z-[999] bg-sideNav dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
     :class="[isClose ? 'lg:w-20 xs:w-[68px]' : 'lg:w-64  ']"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <div class="LeftNav z-50 bg-white dark:bg-darkNav flex flex-col h-full">
+    <div class="LeftNav z-50 bg-sideNav dark:bg-darkNav flex flex-col h-full">
       <div
-        class="bg-white dark:bg-darkNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
+        class=" dark:bg-darkNav bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
         <!-- little circule -->
         <div
@@ -167,7 +167,7 @@ onMounted(() => {
             <li
               v-for="Link in filteredLinks"
               :key="Link.routerName"
-              class="overflow-hidden flex items-center"
+              class="overflow-hidden flex items-center "
             >
               <router-link
                 :to="{ name: Link.routerName }"
@@ -176,7 +176,7 @@ onMounted(() => {
                 class=""
               >
                 <button
-                  class="hover:text-[#444] btn-outline hover:rounded-2xl p-3 rounded-full bg-gray border-solid border-[#aaa] border-2 m-1 dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark duration-500"
+                  class="hover:text-[#444] bg-[#FFFFFF] btn-outline hover:rounded-2xl p-3 rounded-full bg-gray border-solid border-[#aaa] border-2 m-1 dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark duration-500"
                   :title="Link.title"
                   v-html="Link.icon"
                 ></button
@@ -429,7 +429,8 @@ li:hover > button svg {
   display: flex;
   position: relative;
   background-color: #6b7280;
-  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15),
+  box-shadow:
+    0 0 1px 0 rgba(24, 94, 224, 0.15),
     0 6px 12px 0 rgba(24, 94, 224, 0.15);
   padding: 0.75rem;
   border-radius: 20px;
@@ -501,4 +502,3 @@ input[id="radio-3"]:checked ~ .glider {
   }
 } */
 </style>
-@/stores/permissionStore

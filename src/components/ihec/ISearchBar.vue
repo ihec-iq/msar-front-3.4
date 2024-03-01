@@ -11,7 +11,7 @@ const props = defineProps({
 <template>
   <slot></slot>
   <!-- search button -->
-  <div class="ml-4 lg:mt-0 xs:mt-2">
+  <div class="rtl:ml-2 ltr:mr-2 lg:mt-0 xs:mt-2">
     <IButton2
       color="green"
       type="outlined"

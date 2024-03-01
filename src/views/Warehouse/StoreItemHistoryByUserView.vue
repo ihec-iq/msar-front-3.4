@@ -23,13 +23,15 @@ const dataBase = ref<Array<IStoreItemHistory>>([]);
 const { get_item } = useStoringStore();
 
 import { limits } from "@/utils/defaultParams";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -98,7 +100,7 @@ const openItem = (id: number, billType: string) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show storage"]);
+  checkPermissionAccessArray([EnumPermission.ShowStorage]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
   await outputVoucherStore.getEmployees().then(() => {});
@@ -113,7 +115,9 @@ onMounted(async () => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
+      <div
+        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
+      >
         <label for="table-search" class="sr-only">{{ t("Search") }}</label>
         <div class="relative flex">
           <div
@@ -142,31 +146,9 @@ onMounted(async () => {
             :placeholder="t('SearchForItem')"
           />
         </div>
-        <!-- limit -->
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-          >
-            <p>{{ t("Limit") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.limit"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData()"
-            >
-              <option
-                v-for="limit in limits"
-                :key="limit.val"
-                :value="limit.val"
-                :selected="limit.selected == true"
-                class="text-sm text-indigo-800"
-              >
-                {{ limit.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
+        <div
+          class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
+        >
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
@@ -297,16 +279,48 @@ onMounted(async () => {
                     </table>
                   </div>
 
-                  <TailwindPagination
-                    class="flex justify-center mt-10"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="10"
-                  />
+                  <div class="py-4 min-w-full w-full h-full lg:px-8">
+                    <!-- card -->
+                    <div class="rounded-xl" v-if="isLoading == false">
+                      <div
+                        v-motion
+                        :initial="{ opacity: 0, y: -15 }"
+                        :enter="{ opacity: 1, y: 0 }"
+                        :variants="{ custom: { scale: 2 } }"
+                        :delay="200"
+                        v-if="data.length > 0"
+                      >
+                        <div class="w-full flex flex-row">
+                          <div class="basis-4/5 overflow-x-auto font-Tajawal">
+                            <TailwindPagination
+                              class="flex justify-center mt-6"
+                              :data="dataPage"
+                              @pagination-change-page="getFilterData"
+                              :limit="searchFilter.limit"
+                            />
+                          </div>
+                          <div
+                            class="basis-1/5"
+                            v-if="data.length >= limits[0].id"
+                          >
+                            <ISelect
+                              :label="t('Limit')"
+                              v-model="searchFilter.limit"
+                              name="archiveTypeId"
+                              :options="limits"
+                              :IsRequire="true"
+                              @onChange="getFilterData()"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <SimpleLoading v-if="isLoading"></SimpleLoading>
+                    <!-- end card -->
+                  </div>
                 </div>
               </div>
             </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
             <!-- end card -->
           </div>
         </div>
@@ -315,4 +329,3 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
-@/stores/warehouse/outputVoucher

@@ -26,6 +26,7 @@ import { limits } from "@/utils/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
+import { ITableHeader } from "@/types/core/components/ITable";
 
 const route = useRoute();
 const router = useRouter();
@@ -108,6 +109,12 @@ onMounted(async () => {
 
   await getFilterData(1);
 });
+
+const headers = ref<Array<ITableHeader>>([
+  { caption: t("Employee"), value: "name" },
+  { caption: t("Section"), value: "section" },
+  { caption: t("Details"), value: "actions" },
+]);
 </script>
 <template>
   <IPage :HeaderTitle="t('EmployeeIndex')">
@@ -139,103 +146,27 @@ onMounted(async () => {
         </ISearchBar>
       </IRow>
       <IRow>
-        <div class="rounded-xl" v-if="isLoading == false">
-          <div
-            v-motion
-            :initial="{ opacity: 0, y: -15 }"
-            :enter="{ opacity: 1, y: 0 }"
-            :variants="{ custom: { scale: 2 } }"
-            :delay="200"
-            v-if="data.length > 0"
-          >
-            <div class="w-12/12 mx-2 overflow-x-auto font-Tajawal">
-              <div
-                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              ></div>
-              <table
-                class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
-              >
-                <thead
-                  class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableNew text-text dark:text-blue-300 bg-blue-300"
-                >
-                  <tr>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("Name") }}
-                    </th>
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("Section") }}
-                    </th>
+        <ITable :items="data" :headers="headers">
+          <template v-slot:section="{ row }">
+            <span>{{ row.Section.name }}</span>
+          </template>
+          <template v-slot:actions="{ row }">
+            <IDropdown>
+              <li>
+                <EditButton @click="update(row.id)" />
+              </li>
+              <li>
+                <EditButton title="تاريخ الموظف" @click="history(row.id)" />
+              </li>
+            </IDropdown>
+          </template>
+        </ITable>
 
-                    <th scope="col" class="text-sm font-medium px-6 py-4">
-                      {{ t("Details") }}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody
-                  class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
-                >
-                  <tr
-                    v-for="row in data"
-                    :key="row.id"
-                    class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
-                  >
-                    <th>{{ row.name }}</th>
-                    <th style="direction: ltr">{{ row.Section.name }}</th>
-                    <th class="p-2 z-999">
-                      <div class="dropdown">
-                        <button
-                          class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                          type="button"
-                          id="dropdownMenuButton2"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <img
-                            src="https://img.icons8.com/office/344/menu--v1.png "
-                            class="w-8 float-left"
-                            alt=""
-                          />
-                        </button>
-
-                        <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
-                          aria-labelledby="dropdownMenuButton2"
-                        >
-                          <li>
-                            <EditButton @click="update(row.id)" />
-                          </li>
-                        </ul>
-                      </div>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="w-full flex flex-row">
-              <div class="basis-4/5 hidden">
-                <TailwindPagination
-                  class="flex justify-center mt-6"
-                  :data="dataPage"
-                  @pagination-change-page="getFilterData"
-                  :limit="searchFilter.limit"
-                />
-              </div>
-              <div class="basis-1/5" v-if="searchFilter.limit > 1">
-                <ISelect
-                  :label="t('Limit')"
-                  v-model="searchFilter.limit"
-                  name="archiveTypeId"
-                  :options="limits"
-                  :IsRequire="true"
-                  @onChange="getFilterData()"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
-      <IRow><div id="PageDataEnd"></div></IRow>
+      <IRow>
+        <div id="PageDataEnd"></div>
+      </IRow>
     </IPageContent>
   </IPage>
 </template>

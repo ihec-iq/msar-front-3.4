@@ -5,12 +5,13 @@ import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import { VacationLinks } from "./VacationLinks";
 import { usePermissionStore } from "@/stores/permissionStore";
+import { EnumPermission } from "@/utils/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["vacation Report"]);
+  checkPermissionAccessArray([EnumPermission.VacationReport]);
 });
 </script>
 <template>
@@ -77,4 +78,3 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
-@/stores/permissionStore

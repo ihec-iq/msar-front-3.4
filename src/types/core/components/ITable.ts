@@ -1,7 +1,9 @@
-export interface ITableItem {
+import { object } from "yup";
+
+export type ITableItem {
   [key: string]: any;
 }
-export interface ITableHeader {
+export type ITableHeader {
   caption: string;
-  value: string;
+  value: any;
 }

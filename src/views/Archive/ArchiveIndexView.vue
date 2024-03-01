@@ -206,7 +206,7 @@ onMounted(async () => {
                     :limit="searchFilter.limit"
                   />
                 </div>
-                <div class="basis-1/5" v-if="searchFilter.limit > 1">
+                <div class="basis-1/5" v-if="data.length >= limits[0].id">
                   <ISelect
                     :label="t('Limit')"
                     v-model="searchFilter.limit"
@@ -220,8 +220,8 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <SimpleLoading v-if="isLoading">.</SimpleLoading></IRow
-      >
+        <SimpleLoading v-if="isLoading">.</SimpleLoading>
+      </IRow>
       <IRow><div id="PageDataEnd"></div></IRow>
     </IPageContent>
   </IPage>

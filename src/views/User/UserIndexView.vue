@@ -1,6 +1,7 @@
 <script setup lang="ts">
 //region"Basic Import"
 import SimpleLoading from "@/components/general/loading.vue";
+import type { ITableHeader } from "@/types/core/components/ITable";
 import { useUserStore } from "@/stores/userStore";
 import { usePermissionStore } from "@/stores/permissionStore";
 import type { IUser, IUserFilter } from "@/types/core/IUser";
@@ -8,7 +9,6 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { EnumPermission } from "@/utils/EnumSystem";
-import JsonExcel from "vue-json-excel3";
 import { t } from "@/utils/I18nPlugin";
 
 //#region Vars
@@ -34,7 +34,7 @@ watch(
     if (route.params.search != undefined)
       fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
-  },
+  }
 );
 //#endregion
 
@@ -118,10 +118,12 @@ onMounted(async () => {
   await getFilterData(1);
 });
 import { getCurrentInstance } from "vue";
-import type { ITableHeader } from "@/types/core/components/ITable";
+
 import ITable from "@/components/ihec/ITable.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IInput from "@/components/inputs/IInput.vue";
+import { Icon } from "@iconify/vue";
+import IDropdown from "@/components/ihec/IDropdown.vue";
 const app = getCurrentInstance();
 const trns = app?.appContext.config.globalProperties.$trns;
 </script>
@@ -133,14 +135,12 @@ const trns = app?.appContext.config.globalProperties.$trns;
     <IPageContent>
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
-          <!-- date -->
           <ICol :span-lg="1" :span-md="2" :span="1">
             <IInput
-              :label="t('UserSearch')"
+              :label="t('Search')"
               v-model="fastSearch"
               name="Name"
               type="text"
-              :IsRequire="true"
               :getDataByInter="getFilterData"
             />
           </ICol>
@@ -149,39 +149,18 @@ const trns = app?.appContext.config.globalProperties.$trns;
       <IRow>
         <ITable :items="data" :headers="headers">
           <template v-slot:actions="{ row }">
-            <div class="dropdown">
-              <button
-                class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                type="button"
-                id="dropdownMenuButton2"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img
-                  src="https://img.icons8.com/office/344/menu--v1.png "
-                  class="w-8 float-left"
-                  alt=""
-                />
-              </button>
-
-              <ul
-                class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-lightDropDown dark:bg-dropDown"
-                aria-labelledby="dropdownMenuButton2"
-              >
-                <li>
-                  <EditButton @click="update(row.id)" />
-                </li>
-              </ul></div
-          ></template>
-          <template v-slot:email="{ row }">
-            <span style="direction: ltr">{{ row.email }}</span>
+            <IDropdown>
+              <li>
+                <EditButton @click="update(row.id)" />
+              </li>
+            </IDropdown>
           </template>
           <template v-slot:roles="{ row }">
-            <span v-if="row.roles.length > 0">
+            <span v-if="row.roles != '[]'" class="flex justify-center">
               <p
                 v-for="role in row.roles.slice(0, 3)"
                 :key="role.id"
-                class="text-sm leading-none text-text dark:text-textLight ml-2"
+                class="text-sm leading-none text-text dark:text-textLight ml-2 flex-shrink"
               >
                 <IBadge>{{ role.name }}</IBadge>
               </p>
@@ -208,7 +187,7 @@ const trns = app?.appContext.config.globalProperties.$trns;
                     :limit="searchFilter.limit"
                   />
                 </div>
-                <div class="basis-1/5" v-if="searchFilter.limit > 1">
+                <div class="basis-1/5" v-if="data.length >= limits[0].id">
                   <ISelect
                     :label="t('Limit')"
                     v-model="searchFilter.limit"
@@ -228,4 +207,3 @@ const trns = app?.appContext.config.globalProperties.$trns;
     </IPageContent>
   </IPage>
 </template>
-<style></style>

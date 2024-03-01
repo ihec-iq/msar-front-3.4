@@ -31,6 +31,8 @@ import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
 
 //#region Data
 import { limits } from "@/utils/defaultParams";
+import { TailwindPagination } from "laravel-vue-pagination";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const limit = ref(6);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
@@ -162,7 +164,7 @@ const OpenVacationDaily = (id: number) => {
 };
 onMounted(async () => {
   //console.log(can("show employees1"));
-  checkPermissionAccessArray(["vacation Report"]);
+  checkPermissionAccessArray([EnumPermission.VacationReport]);
   await sectionStore.get_sections();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("EmployeeAdd");
@@ -213,42 +215,6 @@ onMounted(async () => {
           class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         >
           {{ isIn ? "شخص" : "شعبة" }}
-        </div>
-      </div>
-    </div>
-    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
-      <!-- limit -->
-      <div
-        class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]"
-      >
-        <div
-          class="py-3 px-4 flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-        >
-          <p>{{ t("Limit") }}:</p>
-          <select
-            aria-label="select"
-            v-model="limit"
-            class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-            @change="getFilterData(1)"
-          >
-            <option
-              v-for="limit in limits"
-              :key="limit.val"
-              :value="limit.val"
-              :selected="limit.selected == true"
-              class="text-sm text-indigo-800"
-            >
-              {{ limit.name }}
-            </option>
-          </select>
-        </div>
-        <div class="ml-4 lg:mt-0 xs:mt-2 left-1">
-          <button
-            @click="getFilterData(1)"
-            class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
-          >
-            {{ t("Search") }}
-          </button>
         </div>
       </div>
     </div>
@@ -445,18 +411,22 @@ onMounted(async () => {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   transition: 0.2s ease;
 }
+
 .drop-area[data-active="true"] {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   background: rgba(255, 255, 255, 0.8);
 }
+
 label {
   font-size: 36px;
   cursor: pointer;
   display: block;
 }
+
 label span {
   display: block;
 }
+
 label input[type="file"]:not(:focus-visible) {
   position: absolute !important;
   width: 1px !important;
@@ -468,9 +438,11 @@ label input[type="file"]:not(:focus-visible) {
   white-space: nowrap !important;
   border: 0 !important;
 }
+
 label .smaller {
   font-size: 16px;
 }
+
 .image-list {
   display: flex;
   list-style: none;
@@ -478,12 +450,14 @@ label .smaller {
   padding: 0;
   margin-bottom: 35px;
 }
+
 .preview-card {
   display: flex;
   border: 1px solid #a2a2a2;
   padding: 5px;
   margin: 5px;
 }
+
 .upload-button {
   display: block;
   appearance: none;
@@ -497,8 +471,8 @@ label .smaller {
   color: #fff;
   text-transform: uppercase;
 }
+
 button {
   cursor: pointer;
 }
 </style>
-@/stores/vacations/vacationTimeStore@/stores/permissionStore@/stores/sectionStore

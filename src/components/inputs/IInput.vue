@@ -19,6 +19,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  max: {
+    type: Number,
+    default: null,
+  },
+  min: {
+    type: Number,
+    default: null,
+  },
   disabled: {
     type: Boolean,
     default: false,
@@ -28,6 +36,10 @@ const props = defineProps({
     default: EnumDirection.Auto, // Default value (optional)
   },
   getDataByInter: {
+    type: Function, // Cast to the enum type
+    default: () => {}, // Default value (optional)
+  },
+   onInput: {
     type: Function, // Cast to the enum type
     default: () => {}, // Default value (optional)
   },
@@ -50,6 +62,9 @@ const keydown = () => {
       v-model="modelValue"
       :placeholder="placeholder"
       :style="{ direction: dir }"
+      @input="onInput()"
+      :max="max"
+      :min="min"
     />
   </div>
 </template>

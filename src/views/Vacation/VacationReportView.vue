@@ -8,7 +8,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "@/stores/vacations/vacationStore";
 import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
 import { usePermissionStore } from "@/stores/permissionStore";
-import { isNumber } from "@vueuse/core";
+import { isNumber } from "@/utils/tools";
 const { checkPermissionAccessArray } = usePermissionStore();
 import JsonExcel from "vue-json-excel3";
 
@@ -21,6 +21,8 @@ const dataBase = ref<Array<IVacation>>([]);
 const { get_filter } = useVacationStore();
 
 import { limits } from "@/utils/defaultParams";
+import { ITableHeader } from "@/types/core/components/ITable";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -101,7 +103,7 @@ const ExportExcel = async (event: KeyboardEvent) => {
 };
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["vacation Report"]);
+  checkPermissionAccessArray([EnumPermission.VacationReport]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -118,6 +120,23 @@ const ToNumberShow = (val: any) => {
   if (isNaN(val) || isNumber(val) == false || val == 0) return;
   else return round(val, 2);
 };
+
+const headers = ref<Array<ITableHeader>>([
+  { caption: t("Employee"), value: "name" },
+
+  { caption: "الرصيد المستحق", value: "deservedRecord" },
+
+  { caption: "مجموع المستنفذ", value: "totalTaken" },
+  { caption: "الرصيد المتبقي", value: "remaining" },
+  { caption: "اجازات هذه السنة", value: "currentYearVacations" },
+  { caption: t("VacationSumTimeReport"), value: "temporalVacations" },
+  { caption: t("VacationSumDailyReport"), value: "normalVacations" },
+  { caption: "رصيد المرضية", value: "sickVacations" },
+  { caption: "مستنفذ المرضية", value: "takenSick" },
+  { caption: "متبقي المرضية", value: "totalSick" },
+  { caption: t("VacationSumSickReport"), value: "col11" },
+  { caption: t("Details"), value: "actions" },
+]);
 </script>
 <template>
   <IPage :HeaderTitle="t('VacationIndex')">
@@ -158,150 +177,80 @@ const ToNumberShow = (val: any) => {
                 v-if="data.length > 0"
               >
                 <div class="mb-5">
-                  <div class="w-12/12 mx-2 overflow-x-auto font-Tajawal">
-                    <div
-                      class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-                    ></div>
-                    <table
-                      class="min-w-full w-full text-center text-text dark:text-textLight shadow-md shadow-gray-400 dark:shadow-gray-800"
-                    >
-                      <thead
-                        class="sticky top-0 font-semibold font-Tajawal_bold dark:bg-tableHeaderNew text-text dark:text-blue-300 bg-blue-300"
+                  <ITable :items="data" :headers="headers">
+                    <template v-slot:name="{ row }">
+                      <span>{{ row.Employee.name }}</span>
+                    </template>
+                    <template v-slot:deservedRecord="{ row }">
+                      <span> {{ ToNumberShow(row.oldRecord) }}</span>
+                    </template>
+                    <template v-slot:totalTaken="{ row }">
+                      <span>
+                        {{
+                          ToNumberShow(
+                            ToNumber(row.newRecord) +
+                              ToNumber(row.sumTime / 7) +
+                              ToNumber(row.sumDaily)
+                          )
+                        }}</span
                       >
-                        <tr>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Employee") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            <!-- {{ t("VacationRecordReport") }} -->
-                            الرصيد المستحق
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            <!-- {{ t("VacationOldRecordReport") }} -->
-                            مجموع المستنفذ
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            <!-- {{ t("VacationOldRecordReport") }} -->
-                            الرصيد المتبقي
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            <!-- {{ t("VacationOldRecordReport") }} -->
-                            اجازات هذه السنة
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("VacationSumTimeReport") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("VacationSumDailyReport") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            <!-- {{ t("VacationRecordReport") }} -->
-                            رصيد المرضية
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            <!-- {{ t("VacationOldRecordReport") }} -->
-                            مستنفذ المرضية
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            <!-- {{ t("VacationOldRecordReport") }} -->
-                            متبقي المرضية
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("VacationSumSickReport") }}
-                          </th>
-                          <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("Details") }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        class="dark:bg-designTableHead bg-white print:bg-white print:dark:bg-white mt-10 overflow-auto"
-                      >
-                        <tr
-                          v-for="row in data"
-                          :key="row.id"
-                          class="print:text-text print:dark:text-text text-text dark:text-textLight print:bg-white print:dark:bg-white dark:hover:bg-tableBodyHover bg-white dark:bg-tableNew h-16 duration-300 border-gray-500 border-t"
-                        >
-                          <th>{{ row.Employee.name }}</th>
-                          <th>
-                            {{ ToNumberShow(row.oldRecord) }}
-                          </th>
-                          <th>
-                            {{
-                              ToNumberShow(
+                    </template>
+                    <template v-slot:remaining="{ row }">
+                      <span>
+                        {{
+                          ToNumberShow(
+                            row.oldRecord -
+                              ToNumber(
                                 ToNumber(row.newRecord) +
                                   ToNumber(row.sumTime / 7) +
                                   ToNumber(row.sumDaily)
                               )
-                            }}
-                          </th>
-                          <th>
-                            {{
-                              ToNumberShow(
-                                row.oldRecord -
-                                  ToNumber(
-                                    ToNumber(row.newRecord) +
-                                      ToNumber(row.sumTime / 7) +
-                                      ToNumber(row.sumDaily)
-                                  )
-                              )
-                            }}
-                          </th>
-                          <th>
-                            {{
-                              ToNumberShow(
-                                ToNumber(row.sumTime / 7) + row.sumDaily
-                              )
-                            }}
-                          </th>
-                          <th>
-                            {{
-                              ToNumberShow(row.sumTime) == undefined
-                                ? ""
-                                : ToNumber(row.sumTime, false) + " Hours"
-                            }}
-                          </th>
-                          <th>{{ ToNumberShow(row.sumDaily) }}</th>
-
-                          <th>
-                            {{ ToNumberShow(row.oldRecordSick) }}
-                          </th>
-                          <th>
-                            {{
-                              ToNumberShow(
-                                ToNumber(row.newRecordSick) +
-                                  ToNumber(row.sumSick)
-                              )
-                            }}
-                          </th>
-                          <th>
-                            {{
-                              ToNumberShow(
-                                row.oldRecordSick -
-                                  ToNumber(
-                                    ToNumber(row.newRecordSick) +
-                                      ToNumber(row.sumSick)
-                                  )
-                              )
-                            }}
-                          </th>
-
-                          <th>{{ ToNumberShow(row.sumSick) }}</th>
-
-                          <th class="p-2">
-                            <button
-                              class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
-                              is-link
-                              @click="openItem(row.id)"
-                            >
-                              {{ t("Details") }}
-                            </button>
-                          </th>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
+                          )
+                        }}</span
+                      >
+                    </template>
+                    <template v-slot:currentYearVacations="{ row }">
+                      <span>
+                        {{
+                          ToNumberShow(ToNumber(row.sumTime / 7) + row.sumDaily)
+                        }}</span
+                      >
+                    </template>
+                    <template v-slot:temporalVacations="{ row }">
+                      <span>
+                        {{
+                          ToNumberShow(row.sumTime) == undefined
+                            ? ""
+                            : ToNumber(row.sumTime, false) + " Hours"
+                        }}</span
+                      >
+                    </template>
+                    <template v-slot:normalVacations="{ row }">
+                      <span> {{ ToNumberShow(row.sumDaily) }}</span>
+                    </template>
+                    <template v-slot:sickVacations="{ row }">
+                      <span> {{ ToNumberShow(row.oldRecordSick) }}</span>
+                    </template>
+                    <template v-slot:takenSick="{ row }">
+                      <span>
+                        {{
+                          ToNumberShow(
+                            ToNumber(row.newRecordSick) + ToNumber(row.sumSick)
+                          )
+                        }}</span
+                      >
+                    </template>
+                    <template v-slot:totalSick="{ row }">
+                      <span> {{ ToNumberShow(row.sumSick) }}</span>
+                    </template>
+                    <template v-slot:actions="{ row }">
+                      <IDropdown>
+                        <li>
+                          <EditButton @click="openItem(row.id)" />
+                        </li>
+                      </IDropdown>
+                    </template>
+                  </ITable>
                   <TailwindPagination
                     class="flex justify-center mt-10"
                     :data="dataPage"

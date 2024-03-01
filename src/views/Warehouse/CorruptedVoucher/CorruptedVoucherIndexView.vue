@@ -19,13 +19,15 @@ const dataBase = ref<Array<ICorruptedVoucher>>([]);
 const { corruptedVoucher, get_filter } = useCorruptedVoucherStore();
 
 import { limits } from "@/utils/defaultParams";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
 watch(
   () => route.params.search,
   async (newValue) => {
-    if (route.params.search != undefined) fastSearch.value = newValue.toString() || "";
+    if (route.params.search != undefined)
+      fastSearch.value = newValue.toString() || "";
     await getFilterData(1);
   }
 );
@@ -44,7 +46,10 @@ const addItem = () => {
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (item: ICorruptedVoucher) => {
-  if (item.number.includes(fastSearch.value) || item.notes.includes(fastSearch.value)) {
+  if (
+    item.number.includes(fastSearch.value) ||
+    item.notes.includes(fastSearch.value)
+  ) {
     return true;
   } else return false;
 };
@@ -88,7 +93,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show corruptedVouchers"]);
+  checkPermissionAccessArray([EnumPermission.ShowCorruptedVouchers]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -101,7 +106,9 @@ onMounted(async () => {
   <div class="flex">
     <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
-      <div class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6">
+      <div
+        class="flex lg:flex-row xs:flex-col lg:justify-around xs:items-center mt-6"
+      >
         <label for="table-search" class="sr-only">{{ t("Search") }}</label>
         <div class="relative flex">
           <div
@@ -129,30 +136,6 @@ onMounted(async () => {
             class="block p-2 pl-10 w-80 text-sm text-text dark:text-textLight bg-lightInput dark:bg-input rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             :placeholder="t('SearchForItem')"
           />
-        </div>
-        <!-- limit -->
-        <div class="limit flex items-center lg:ml-10 xs:ml-3 lg:w-[10%] xs:w-[81.5%]">
-          <div
-            class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
-          >
-            <p>{{ t("Limit") }}:</p>
-            <select
-              aria-label="select"
-              v-model="searchFilter.limit"
-              class="focus:text-indigo-600 focus:outline-none bg-transparent ml-1"
-              @change="getFilterData()"
-            >
-              <option
-                v-for="limit in limits"
-                :key="limit.val"
-                :value="limit.val"
-                :selected="limit.selected == true"
-                class="text-sm text-indigo-800"
-              >
-                {{ limit.name }}
-              </option>
-            </select>
-          </div>
         </div>
         <div class="ml-4 lg:mt-0 xs:mt-2">
           <button
@@ -188,11 +171,17 @@ onMounted(async () => {
                       :key="item.id"
                     >
                       <div class="w-3/4 overflow-hidden">
-                        <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
-                          <div class="text-2xl text-text dark:text-textLight mb-2">
+                        <div
+                          class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right"
+                        >
+                          <div
+                            class="text-2xl text-text dark:text-textLight mb-2"
+                          >
                             {{ item.number }}
                           </div>
-                          <div class="text-text dark:text-textGray mb-2 justify-between">
+                          <div
+                            class="text-text dark:text-textGray mb-2 justify-between"
+                          >
                             <span>{{ t("Date") }}: {{ item.date }}</span>
                             <span class="float-left flex" title="Items count">
                               {{ item.itemsCount }}
@@ -218,48 +207,56 @@ onMounted(async () => {
                           </div>
                         </div>
                       </div>
-
-                      <div class="dropdown">
-                        <button
-                          class="dropdown-toggle peer mr-45 px-6 py-2.5 text-white font-medium rounded-md text-xs leading-tight uppercase transition duration-150 ease-in-out flex items-center whitespace-nowrap"
-                          type="button"
-                          id="dropdownMenuButton2"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <img
-                            src="https://img.icons8.com/office/344/menu--v1.png "
-                            class="w-8 float-left"
-                            alt=""
-                          />
-                        </button>
-
-                        <ul
-                          class="dropdown-menu top-8 peer-hover:block hover:block min-w-max absolute text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 hidden m-0 bg-clip-padding border-none bg-gray-800"
-                          aria-labelledby="dropdownMenuButton2"
-                        >
-                          <li>
-                            <EditButton @click="update(item.id)" />
-                          </li>
-                          <!-- <li>
-                            <ShowButton @click="show(item.id)" />
-                          </li> -->
-                          <!-- <li><BlockButton /></li> -->
-                        </ul>
-                      </div>
+                      <IDropdown>
+                        <li>
+                          <EditButton @click="update(item.id)" />
+                        </li>
+                      </IDropdown>
                     </div>
                     <!-- end card -->
                   </div>
-                  <TailwindPagination
-                    class="flex justify-center mt-10"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="10"
-                  />
+                  <div class="py-4 min-w-full w-full h-full lg:px-8">
+                    <!-- card -->
+                    <div class="rounded-xl" v-if="isLoading == false">
+                      <div
+                        v-motion
+                        :initial="{ opacity: 0, y: -15 }"
+                        :enter="{ opacity: 1, y: 0 }"
+                        :variants="{ custom: { scale: 2 } }"
+                        :delay="200"
+                        v-if="data.length > 0"
+                      >
+                        <div class="w-full flex flex-row">
+                          <div class="basis-4/5 overflow-x-auto font-Tajawal">
+                            <TailwindPagination
+                              class="flex justify-center mt-6"
+                              :data="dataPage"
+                              @pagination-change-page="getFilterData"
+                              :limit="searchFilter.limit"
+                            />
+                          </div>
+                          <div
+                            class="basis-1/5"
+                            v-if="data.length >= limits[0].id"
+                          >
+                            <ISelect
+                              :label="t('Limit')"
+                              v-model="searchFilter.limit"
+                              name="archiveTypeId"
+                              :options="limits"
+                              :IsRequire="true"
+                              @onChange="getFilterData()"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <SimpleLoading v-if="isLoading"></SimpleLoading>
+                    <!-- end card -->
+                  </div>
                 </div>
               </div>
             </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
             <!-- end card -->
           </div>
         </div>

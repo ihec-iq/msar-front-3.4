@@ -6,12 +6,11 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
-import { useStockStore } from "@/stores/voucher/stock";
+import { useStockStore } from "@/stores/warehouse/stockStore";
 import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 import { useInputVoucherStore } from "@/stores/warehouse/inputVoucherStore";
-import type { IOutputVoucherItem } from "@/types/IOutputVoucher";
 import { t } from "@/utils/I18nPlugin";
-import type { IInputVoucherItem } from "@/types/IInputVoucher";
+import { EnumPermission } from "@/utils/EnumSystem";
 const { stocks } = storeToRefs(useStockStore());
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 //region"Drag and Drop"
@@ -62,7 +61,7 @@ const showData = async (id: number) => {
   Loading.value = false;
 };
 onMounted(async () => {
-  checkPermissionAccessArray(["show corruptedVouchers"]);
+  checkPermissionAccessArray([EnumPermission.ShowCorruptedVouchers]);
   await corruptedVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
@@ -141,7 +140,8 @@ onMounted(async () => {
     <div
       :class="{
         'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+          !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >
@@ -268,4 +268,3 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/voucher1/stock@/stores/voucher1/corruptedVoucher@/stores/voucher1/inputVoucher@/stores/permissionStore@/stores/warehouse/stock@/stores/warehouse/corruptedVoucher@/stores/warehouse/inputVoucher

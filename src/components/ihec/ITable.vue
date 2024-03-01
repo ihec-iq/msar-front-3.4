@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ITableItem, ITableHeader } from "@/types/core/components/ITable";
-import { defineProps } from "vue";
 
 defineProps({
   headers: {
@@ -24,10 +23,10 @@ defineProps({
     v-if="items.length > 0"
   >
     <table class="min-w-full text-center">
-      <thead class="dark:bg-tableHead bg-LightTableHead shadow">
+      <thead class="dark:bg-tableHead bg-[#7192AD] text-[#fff] shadow">
         <tr>
           <th
-            class="text-lg font-medium text-gray-800 dark:text-white px-6 py-4"
+            class="text-lg font-medium text-gray-50 dark:text-white px-2 py-2"
             v-for="(header, index) in headers"
             :key="index"
           >
@@ -42,7 +41,8 @@ defineProps({
           :key="rowIndex"
         >
           <td
-            class="text-sm font-light px-6 py-4 whitespace-nowrap"
+            class="text-sm font-light px-3 py-0 whitespace-nowrap"
+            dir="auto"
             v-for="(header, index) in headers"
             :key="index"
           >
@@ -55,9 +55,6 @@ defineProps({
             >
               {{ row[header.value] }}
             </slot>
-          </td>
-          <td>
-            <slot name="buttons"></slot>
           </td>
         </tr>
       </tbody>

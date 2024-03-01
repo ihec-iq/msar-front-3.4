@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+import { ref, watch } from "vue";
+
+const tab = ref(1);
+watch(tab, (newTab, oldTab) => {
+  console.log(newTab);
+});
+</script>
 <template>
   <div class="min-h-screen py-6 flex flex-col justify-center sm:py-12">
     <section class="py-20 mx-auto space-y-8 sm:py-20">
@@ -297,11 +305,3 @@
           / |   |____)
           |_/ -->
 </template>
-<script lang="ts" setup>
-import { ref, watch } from "vue";
-
-const tab = ref(1);
-watch(tab, (newTab, oldTab) => {
-  console.log(newTab);
-});
-</script>
