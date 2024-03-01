@@ -18,6 +18,7 @@ const { get_filter, resetData } = useInputVoucherStore();
 import { limits } from "@/utils/defaultParams";
 import CardInputVoucherIndex from "./CardInputVoucherIndex.vue";
 import IPageContent from "@/components/ihec/archive/IPageContent.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -88,7 +89,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show inputVouchers"]);
+  checkPermissionAccessArray([EnumPermission.ShowInputVouchers]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);

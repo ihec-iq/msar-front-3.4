@@ -10,6 +10,7 @@ import { useStockStore } from "@/stores/warehouse/stockStore";
 import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 import { useInputVoucherStore } from "@/stores/warehouse/inputVoucherStore";
 import { t } from "@/utils/I18nPlugin";
+import { EnumPermission } from "@/utils/EnumSystem";
 const { stocks } = storeToRefs(useStockStore());
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 //region"Drag and Drop"
@@ -60,8 +61,8 @@ const showData = async (id: number) => {
   Loading.value = false;
 };
 onMounted(async () => {
-  checkPermissionAccessArray(["show corruptedVouchers"]);
-  await corruptedVoucherStore.getEmployees().then(() => { });
+  checkPermissionAccessArray([EnumPermission.ShowCorruptedVouchers]);
+  await corruptedVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
     corruptedVoucher.value.id = 0;
@@ -82,7 +83,9 @@ onMounted(async () => {
 
     <div class="mt-10 p-6">
       <div class="w-12/12 mx-2">
-        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"></div>
+        <div
+          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+        ></div>
         <table class="min-w-full text-center">
           <thead class="border-b bg-[#0003] text-gray-300">
             <tr>
@@ -105,8 +108,11 @@ onMounted(async () => {
             </tr>
           </thead>
           <tbody class="bg-[#1f2937]">
-            <tr v-for="(row, index) in SelectedOutItemCorrupted" :key="row.id"
-              class="border-b border-black h-14 text-gray-100">
+            <tr
+              v-for="(row, index) in SelectedOutItemCorrupted"
+              :key="row.id"
+              class="border-b border-black h-14 text-gray-100"
+            >
               <th>{{ row.id }}</th>
               <th>{{ row.Voucher.Item.name }}</th>
               <th>{{ row.Voucher.serialNumber }}</th>
@@ -117,8 +123,12 @@ onMounted(async () => {
                 <input type="text" class="w-[50px]" :value="row.notes" />
               </th>
               <th>
-                <van-button class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover" type="success"
-                  is-link @click="console.log('delete' + index)">Delete
+                <van-button
+                  class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
+                  type="success"
+                  is-link
+                  @click="console.log('delete' + index)"
+                  >Delete
                 </van-button>
               </th>
             </tr>
@@ -127,34 +137,51 @@ onMounted(async () => {
       </div>
     </div>
     <!-- bottom tool bar -->
-    <div :class="{
-      'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-      'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
-    }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden">
+    <div
+      :class="{
+        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+          !is,
+      }"
+      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
+    >
       <div class="flex ltr:ml-8 rtl:mr-8">
         <div class="items-center mr-3">
-          <button v-if="corruptedVoucher.id == 0" @click="console.log('store')"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white">
+          <button
+            v-if="corruptedVoucher.id == 0"
+            @click="console.log('store')"
+            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+          >
             {{ t("Create") }}
           </button>
-          <button v-else @click="console.log('update')"
-            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white">
+          <button
+            v-else
+            @click="console.log('update')"
+            class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
+          >
             {{ t("Update") }}
           </button>
-          <button v-if="corruptedVoucher.id != 0" @click="console.log('delete Bill')"
-            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2">
+          <button
+            v-if="corruptedVoucher.id != 0"
+            @click="console.log('delete Bill')"
+            class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
+          >
             {{ t("Delete") }}
           </button>
         </div>
       </div>
     </div>
-    <div :class="{
-      'ltr:left-4 rtl:right-4': is,
-      'ltr:left-28 rtl:right-28': !is,
-    }" class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden">
-      <button @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white">
+    <div
+      :class="{
+        'ltr:left-4 rtl:right-4': is,
+        'ltr:left-28 rtl:right-28': !is,
+      }"
+      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
+    >
+      <button
+        @click="back()"
+        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
+      >
         {{ t("Back") }}
       </button>
     </div>

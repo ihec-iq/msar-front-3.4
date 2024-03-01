@@ -8,6 +8,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 //region"Drag and Drop"
 
@@ -156,7 +157,7 @@ const back = () => {
 };
 onMounted(async () => {
   //console.log(can("show items1"));
-  checkPermissionAccessArray(["show categories item"]);
+  checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
   await itemCategoryStore.getFast();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("Add") + " " + t("ItemCategory");
