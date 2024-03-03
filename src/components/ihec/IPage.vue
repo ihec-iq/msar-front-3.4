@@ -1,6 +1,4 @@
 <script setup lang="ts">
-
-
 defineProps({
   HeaderTitle: {
     type: String,
@@ -12,8 +10,9 @@ defineProps({
   },
 });
 </script>
+
 <template>
-  <div class="container mx-auto p-3">
+  <div class="mx-auto p-3 m-3 w-[99%]">
     <nav
       class="rounded-t-lg relative flex w-full items-center justify-between h-full bg-[#D7D9DC] dark:bg-darkNav py-2 text-neutral-600 hover:text-neutral-700 focus:text-neutral-700 dark:text-neutral-200 md:flex-wrap md:justify-start"
       data-te-navbar-ref

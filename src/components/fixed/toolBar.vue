@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
@@ -42,19 +42,6 @@ const changeDark = () => {
   themeDark.value = !themeDark.value;
   toggleDark(themeDark.value);
 };
-// const user = ref<IUser>({
-//   name: "Loading ...",
-//   email: "",
-//   last_login: "",
-//   password: "",
-//   any_device: 0,
-//   active: 0,
-//   roles: [],
-//   permissions: [],
-//   id: 0,
-//   value: undefined,
-//   user: undefined,
-// });
 const { user } = storeToRefs(useAuthStore());
 const change = () => {
   ChangeDirection();
@@ -106,10 +93,10 @@ onMounted(async () => {
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-white dark:bg-darkNav shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-2 rtl:mr-2 mb-5"
+    class="print:hidden flex text-white bg-white dark:bg-darkNav shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[98%] box-border ltr:ml-2 rtl:mr-2 mb-5"
   >
     <div
-      class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4 xs:w-full"
+      class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 xs:w-full"
     >
       <div class="flex items-center">
         <div class="text-gray-500 text-2xl">#</div>
@@ -117,20 +104,6 @@ onMounted(async () => {
           <!-- {{ t("General") }} -->
           {{ Organization }} - {{ user?.Employee?.name }}
         </div>
-        <!-- <div
-          class="border-l flex-grow xs:hidden sm:hidden lg:block pl-3 ml-3 border-gray-600 text-xs text-gray-400"
-        >
-          <van-notice-bar
-            class="bg-transparent text-lg text-text dark:text-textLight"
-            scrollable
-            >رفعك <span class="text-red-700"> على البرانج الخاص فيك </span>ومن
-            ثمه رفعه ع الستيجنك يقيك من ضياع البيانات واعاده<span
-              class="text-red-500"
-            >
-              العمل مرة ثانيه
-            </span></van-notice-bar
-          >
-        </div> -->
       </div>
       <div
         class="relative w-56 duration-500 ease-in-out"
@@ -199,7 +172,7 @@ onMounted(async () => {
     </div>
   </div>
   <van-popup
-    class="bg-customer h-screen z-[999999] lg:w-[30%] md:w-full xs:w-full dark:bg-content flex"
+    class="bg-customer h-screen z-[999999] lg:w-[30%] md:w-full xs:w-full dark:bg-content flex overflow-hidden"
     v-model:show="showPop"
     round
     ><div class="dark:text-textLight w-full">
@@ -219,7 +192,11 @@ onMounted(async () => {
           </div>
           <div class="switch4">
             <label class="switch">
-              <input type="checkbox" @input="changeDark()" v-model="themeDark" />
+              <input
+                type="checkbox"
+                @input="changeDark()"
+                v-model="themeDark"
+              />
               <span class="slider"></span>
             </label>
           </div>
@@ -229,8 +206,9 @@ onMounted(async () => {
             {{ t("Change Direction") }}
           </div>
           <div class="flex items-center">
-            <!-- :class="{ 'rtl; bg-red-900 ': isLtr, 'bg-green-900': !isLtr }" -->
-            <div class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3">
+            <div
+              class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3"
+            >
               {{ isRtl ? "RTL" : "LTR" }}
             </div>
             <input
@@ -256,7 +234,10 @@ onMounted(async () => {
                   class="dropdown-content ltr:right-0 rtl:left-0 menu p-2 shadow bg-settingLight dark:bg-setting text-text dark:text-textLight rounded-box mt-5"
                 >
                   <li v-for="language in Languages" :key="language.code">
-                    <button @click="setLocale(language)" class="flex justify-between">
+                    <button
+                      @click="setLocale(language)"
+                      class="flex justify-between"
+                    >
                       {{ language.name }}
                     </button>
                   </li>
@@ -453,7 +434,9 @@ onMounted(async () => {
   position: absolute;
   top: 4px;
   left: 2px;
-  transition: transform 0.8s, background-color 1s;
+  transition:
+    transform 0.8s,
+    background-color 1s;
 }
 input:checked + .slider {
   background-color: black;

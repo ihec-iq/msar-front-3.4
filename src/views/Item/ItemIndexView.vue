@@ -135,7 +135,7 @@ onMounted(async () => {
                                 <span>{{ t("ItemCode") }}: {{ item.code }}</span>
                                 <span class="float-left flex">
                                   {{ item.Category.name }}
-                                  <img src="@/assets/svg/bag.svg" />
+                                  <img src="@/assets/svg/bag.svg" :alt="item.name"/>
                                 </span>
                               </div>
                               <div class="flex justify-betweens">

@@ -4,7 +4,7 @@
     data-te-navbar-ref
     
   >
-    <div class="flex w-full flex-wrap items-center justify-between px-2">
+    <div class="flex w-full flex-wrap items-center justify-between">
       <slot></slot>
     </div>
   </nav>

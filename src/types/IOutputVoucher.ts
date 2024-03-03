@@ -17,7 +17,7 @@ export interface IOutputVoucherItem {
   outputVoucherId?: number;
   Item?: IItem;
   inputVoucherItemId: number;
-  inputVoucherItem?: IInputVoucherItem;
+  inputVoucherItem: IInputVoucherItem;
   Employee: IOutputVoucherEmployee;
   Stock: IStock;
   serialNumber: string;
