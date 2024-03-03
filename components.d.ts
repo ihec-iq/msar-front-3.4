@@ -19,6 +19,7 @@ declare module 'vue' {
     CardArchiveTypeIndex: typeof import('./src/components/ihec/archive/CardArchiveTypeIndex.vue')['default']
     CardsArchiveTypeindex: typeof import('./src/components/ihec/archive/CardsArchiveTypeindex.vue')['default']
     CardSkeleton: typeof import('./src/components/general/CardSkeleton.vue')['default']
+    CardVacationDailyIndex: typeof import('./src/components/ihec/vacation/CardVacationDailyIndex.vue')['default']
     CardVactionSickIndex: typeof import('./src/components/ihec/vacation/CardVactionSickIndex.vue')['default']
     CardVactionTimeIndex: typeof import('./src/components/ihec/vacation/CardVactionTimeIndex.vue')['default']
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
