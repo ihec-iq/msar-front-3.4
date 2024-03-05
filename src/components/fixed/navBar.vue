@@ -144,11 +144,13 @@ const { user } = storeToRefs(useAuthStore());
           :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
         >
           <div class="flex items-center">
+            <!-- ! the image in the assets is not rounded -->
+            <!-- *Old source: @/assets/logo-512x512.png -->
             <img
               @click="isClose = !isClose"
-              src="@/assets/logo-512x512.png"
-              alt=""
-              class="w-12 h-12 rounded-full border-2 align-middle"
+              src="https://avatars.githubusercontent.com/u/131960256?s=200&v=4"
+              alt="Profile Picture"
+              class="w-14 h-14 rounded-full align-middle"
             />
             <div
               class="text-lg mt-1 ml-1 duration-700 w-28 dark:text-textLight text-text"
@@ -157,10 +159,11 @@ const { user } = storeToRefs(useAuthStore());
               {{ user?.Employee?.name }}
             </div>
           </div>
-          <hr
+          <!-- !Bug: the line displayed over the photo (current: IHEC logo) -->
+          <!-- <hr
             class="absolute top-14 left-5 duration-500"
             :class="{ 'lg:w-52 xs:w-40': !isClose, 'w-[40px] ': isClose }"
-          />
+          /> -->
         </div>
         <!-- main list -->
         <nav class="flex flex-col">
@@ -183,7 +186,7 @@ const { user } = storeToRefs(useAuthStore());
                   v-html="Link.icon"
                 ></button
               ></router-link>
-              <!-- childrens -->
+              <!-- children -->
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
@@ -211,7 +214,7 @@ const { user } = storeToRefs(useAuthStore());
         <!-- setting -->
         <div class="">
           <!-- #region setting icon -->
-          <button
+          <!-- <button
             @click="settingPop = !settingPop"
             class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
             :class="{
@@ -231,7 +234,7 @@ const { user } = storeToRefs(useAuthStore());
                 clip-rule="evenodd"
               />
             </svg>
-          </button>
+          </button> -->
           <!-- #endregion -->
         </div>
       </div>
