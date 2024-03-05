@@ -110,7 +110,7 @@ onMounted(async () => {
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4 xs:w-full"
     >
       <div class="flex items-center">
-        <div class="text-gray-500 text-2xl rtl:mr-2 ltr:ml-2">#</div>
+        <div class="text-gray-500 text-2xl rtl:mr-2 ltr:ml-2"><!-- # --></div>
         <div class="text-sm text-text dark:text-textLight">
           {{ Organization }}
         </div>
@@ -151,7 +151,9 @@ onMounted(async () => {
         </span>
       </div>
       <div class="flex items-center">
-        <button
+        <SettingsComponent />
+        <!-- Old Settings -->
+        <!-- <button
           is-link
           @click="showPopup"
           class="dark:text-textGray z-50 mx-2 dark:hover:text-iconHover dark:bg-sideNavSetting bg-transparent hover:bg-transparent text-iconLight hover:text-iconHoverLight inline-flex justify-center rounded-md smooth-hover"
@@ -177,7 +179,7 @@ onMounted(async () => {
               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
