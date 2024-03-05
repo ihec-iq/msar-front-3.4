@@ -55,7 +55,6 @@ const changeDark = () => {
 //   value: undefined,
 //   user: undefined,
 // });
-const { user } = storeToRefs(useAuthStore());
 const change = () => {
   ChangeDirection();
 };
@@ -101,36 +100,20 @@ onMounted(async () => {
   if (inputRefSearch.value) {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
-  //user.value = await useAuthStore().getUser();
 });
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-white dark:bg-darkNav shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[97%] box-border ltr:ml-2 rtl:mr-2 mb-5"
+    class="print:hidden flex text-white bg-white dark:bg-darkNav h-12 max-w-full bg-navLight box-border mb-5 mx-0"
   >
     <div
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 px-4 xs:w-full"
     >
       <div class="flex items-center">
-        <div class="text-gray-500 text-2xl">#</div>
-        <div class="ml-2 text-sm text-text dark:text-textLight">
-          <!-- {{ t("General") }} -->
-          {{ Organization }} - {{ user?.Employee?.name }}
+        <div class="text-gray-500 text-2xl rtl:mr-2 ltr:ml-2"><!-- # --></div>
+        <div class="text-sm text-text dark:text-textLight">
+          {{ Organization }}
         </div>
-        <!-- <div
-          class="border-l flex-grow xs:hidden sm:hidden lg:block pl-3 ml-3 border-gray-600 text-xs text-gray-400"
-        >
-          <van-notice-bar
-            class="bg-transparent text-lg text-text dark:text-textLight"
-            scrollable
-            >رفعك <span class="text-red-700"> على البرانج الخاص فيك </span>ومن
-            ثمه رفعه ع الستيجنك يقيك من ضياع البيانات واعاده<span
-              class="text-red-500"
-            >
-              العمل مرة ثانيه
-            </span></van-notice-bar
-          >
-        </div> -->
       </div>
       <div
         class="relative w-56 duration-500 ease-in-out"
@@ -168,7 +151,9 @@ onMounted(async () => {
         </span>
       </div>
       <div class="flex items-center">
-        <button
+        <SettingsComponent />
+        <!-- Old Settings -->
+        <!-- <button
           is-link
           @click="showPopup"
           class="dark:text-textGray z-50 mx-2 dark:hover:text-iconHover dark:bg-sideNavSetting bg-transparent hover:bg-transparent text-iconLight hover:text-iconHoverLight inline-flex justify-center rounded-md smooth-hover"
@@ -194,7 +179,7 @@ onMounted(async () => {
               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
@@ -219,7 +204,11 @@ onMounted(async () => {
           </div>
           <div class="switch4">
             <label class="switch">
-              <input type="checkbox" @input="changeDark()" v-model="themeDark" />
+              <input
+                type="checkbox"
+                @input="changeDark()"
+                v-model="themeDark"
+              />
               <span class="slider"></span>
             </label>
           </div>
@@ -230,7 +219,9 @@ onMounted(async () => {
           </div>
           <div class="flex items-center">
             <!-- :class="{ 'rtl; bg-red-900 ': isLtr, 'bg-green-900': !isLtr }" -->
-            <div class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3">
+            <div
+              class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3"
+            >
               {{ isRtl ? "RTL" : "LTR" }}
             </div>
             <input
@@ -256,7 +247,10 @@ onMounted(async () => {
                   class="dropdown-content ltr:right-0 rtl:left-0 menu p-2 shadow bg-settingLight dark:bg-setting text-text dark:text-textLight rounded-box mt-5"
                 >
                   <li v-for="language in Languages" :key="language.code">
-                    <button @click="setLocale(language)" class="flex justify-between">
+                    <button
+                      @click="setLocale(language)"
+                      class="flex justify-between"
+                    >
                       {{ language.name }}
                     </button>
                   </li>
@@ -453,7 +447,9 @@ onMounted(async () => {
   position: absolute;
   top: 4px;
   left: 2px;
-  transition: transform 0.8s, background-color 1s;
+  transition:
+    transform 0.8s,
+    background-color 1s;
 }
 input:checked + .slider {
   background-color: black;
