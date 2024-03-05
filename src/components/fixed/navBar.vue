@@ -85,6 +85,8 @@ const setting = () => {
 onMounted(() => {
   userData.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
 });
+
+const { user } = storeToRefs(useAuthStore());
 </script>
 <template>
   <div
@@ -95,7 +97,7 @@ onMounted(() => {
   >
     <div class="LeftNav z-50 bg-sideNav dark:bg-darkNav flex flex-col h-full">
       <div
-        class=" dark:bg-darkNav bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
+        class="dark:bg-darkNav bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
         <!-- little circule -->
         <div
@@ -152,7 +154,7 @@ onMounted(() => {
               class="text-lg mt-1 ml-1 duration-700 w-28 dark:text-textLight text-text"
               :class="{ hidden: isClose, block: !isClose }"
             >
-              IHEC
+              {{ user?.Employee?.name }}
             </div>
           </div>
           <hr
@@ -167,7 +169,7 @@ onMounted(() => {
             <li
               v-for="Link in filteredLinks"
               :key="Link.routerName"
-              class="overflow-hidden flex items-center "
+              class="overflow-hidden flex items-center"
             >
               <router-link
                 :to="{ name: Link.routerName }"
