@@ -10,12 +10,13 @@ import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
 import { useInputVoucherStore } from "@/stores/warehouse/inputVoucherStore";
 import type { IOutputVoucherItem } from "@/types/IOutputVoucher";
 import { t } from "@/utils/I18nPlugin";
-import { IInputVoucherItem } from "@/types/IInputVoucher";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { IInputVoucherItem } from "@/types/IInputVoucher";
+import type { ITableHeader } from "@/types/core/components/ITable";
+;
 import { EnumPermission } from "@/utils/EnumSystem";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
-import { IEmployee } from "@/types/IEmployee";
+import type { IEmployee } from "@/types/IEmployee";
 import IBasis from "@/components/ihec/IBasis.vue";
 import IFlex from "@/components/ihec/IFlex.vue";
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
@@ -211,7 +212,7 @@ const errors = ref<string | null>();
 const reset = () => {
   outputVoucherStore.resetData();
 };
-const getFormData = (object: Object) =>
+const getFormData = (object: any) =>
   Object.keys(object).reduce((formData, key) => {
     let value = object[key];
     if (typeof value === "object" && value !== null)
@@ -495,18 +496,15 @@ const headers = ref<Array<ITableHeader>>([
     </IPageContent>
     <IContainer class="w-full">
       <van-popup
-        class="overflow-hidden"
+        class="overflow-hidden dark:bg-darkNav"
         v-model:show="showPop"
         round
         position="bottom"
       >
         <!-- for search Item -->
-        <IFlex class="w-full">
-          <IBasis base="1/4"  >1/4</IBasis>
-          <IBasis base="3/4" :debug="true">3/4</IBasis>
-        </IFlex>
+
         <IFlex>
-          <IBasis base="1/4" :debug="true">
+          <IBasis base="1/4">
             <div
               class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
             >
@@ -625,7 +623,7 @@ const headers = ref<Array<ITableHeader>>([
               :label="t('Stock')"
               v-model="VoucherItem.inputVoucherItem.Stock.name"
               :disabled="true"
-            />
+            />ي
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput

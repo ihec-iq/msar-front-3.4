@@ -13,7 +13,8 @@ import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "@/types/IItem";
 import AddItemPopup from "@/components/AddItemPopup.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { ITableHeader } from "@/types/core/components/ITable";
+;
 import ICol from "@/components/ihec/ICol.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ILabel from "@/components/ihec/ILabel.vue";
@@ -476,7 +477,7 @@ const headers = ref<Array<ITableHeader>>([
     </IPageContent>
  <IContainer>
         <van-popup
-          class="overflow-hidden"
+        class="overflow-hidden dark:bg-darkNav"
           v-model:show="showPop"
           round
           position="bottom"

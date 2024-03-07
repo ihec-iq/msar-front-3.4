@@ -234,7 +234,7 @@ const back = () => {
 
 onMounted(async () => {
   //console.log(can("show archives1"));
-  checkPermissionAccessArray(["show archives"]);
+  checkPermissionAccessArray([EnumPermission.ShowArchives]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "ArchiveAdd";
     archive.value.id = 0;
@@ -247,6 +247,7 @@ onMounted(async () => {
   await useArchiveStore().getArchiveTypes();
 });
 import IButton2 from "@/components/ihec/IButton2.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">

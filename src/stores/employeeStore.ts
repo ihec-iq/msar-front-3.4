@@ -17,6 +17,16 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     initVacationSick: 0,
     takeVacationSick: 0,
     dateWork: new Date().toLocaleDateString(),
+    Postion: {
+      id: 0,
+      name: "",
+      level: "",
+      code: "",
+    },
+    Type: {
+      id: 0,
+      name: "",
+    },
   });
   const employees = ref<Array<IEmployee>>([]);
   const pathBase = "";
@@ -48,10 +58,26 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       initVacationSick: 0,
       takeVacationSick: 0,
       dateWork: new Date().toLocaleDateString(),
+      Postion: {
+        id: 0,
+        name: "",
+        level: "",
+        code: "",
+      },
+      Type: {
+        id: 0,
+        name: "",
+      },
     };
   }
   async function get_filter(params: IEmployeeFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
+  }
+  async function get_employee_positions() {
+    return await Api.get(`employee_position/`);
+  }
+  async function get_employee_types() {
+    return await Api.get(`employee_position/`);
   }
   async function getItemHistory(params: IEmployeeFilter, page: number) {
     return await Api.get(`stockSys/voucherItemHistory/filter?page=${page}`, {
@@ -78,6 +104,8 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     get_filter,
     getItemHistory,
     get_employees,
+    get_employee_positions,
+    get_employee_types,
     show,
     store,
     update,

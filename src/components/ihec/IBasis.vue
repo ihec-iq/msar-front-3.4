@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, computed } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
   base: {
@@ -34,28 +34,28 @@ const props = defineProps({
 const colClass = computed(() => {
   let classStyle = "";
   let baseV: String = "";
-  if (props.base != null) classStyle += ` basis-${props.base}`;
+  if (props.base != null) classStyle += ` w-${props.base}`;
 
   if (props.baseXl != null) baseV = props.baseXl;
   else baseV = props.base;
 
-  classStyle += ` xl:basis-${baseV}`;
+  classStyle += ` xl:w-${baseV}`;
 
   if (props.baseLg != null) baseV = props.baseLg;
   else baseV = props.base;
-  classStyle += ` lg:basis-${baseV}`;
+  classStyle += ` lg:w-${baseV}`;
 
   if (props.baseMd != null) baseV = props.baseMd;
   else baseV = props.base;
-  classStyle += ` md:basis-${baseV}`;
+  classStyle += ` md:w-${baseV}`;
 
   if (props.baseSm != null) baseV = props.baseSm;
   else baseV = props.base;
-  classStyle += ` sm:basis-${baseV}`;
+  classStyle += ` sm:w-${baseV}`;
 
   if (props.baseXs != null) baseV = props.baseXs;
   else baseV = props.base;
-  classStyle += ` xs:basis-${baseV}`;
+  classStyle += ` xs:w-${baseV}`;
   return  classStyle;
 });
 const debugClass = computed(() => {

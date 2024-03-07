@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
@@ -21,7 +20,10 @@ const dataBase = ref<Array<IVacation>>([]);
 const { get_filter } = useVacationStore();
 
 import { limits } from "@/utils/defaultParams";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { ITableHeader } from "@/types/core/components/ITable";
+import { EnumPermission } from "@/utils/EnumSystem";
+import ITable from "@/components/ihec/ITable.vue";
+import IDropdown from "@/components/ihec/IDropdown.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -102,7 +104,7 @@ const ExportExcel = async (event: KeyboardEvent) => {
 };
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["vacation Report"]);
+  checkPermissionAccessArray([EnumPermission.VacationReport]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -136,6 +138,19 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("VacationSumSickReport"), value: "col11" },
   { caption: t("Details"), value: "actions" },
 ]);
+const headersExcel = {
+  الاسم: "name",
+  "الرصيد المستحق": "deservedRecord",
+  "مجموع المستنفذ": "totalTaken",
+  "الرصيد المتبقي": "remaining",
+  "اجازات هذه السنة": "currentYearVacations",
+  "الاجزات الزمنية": "temporalVacations",
+  "الاجازات الاعتيادية": "normalVacations",
+  "رصيد المرضية": "sickVacations",
+  "مستنفذ المرضية": "takenSick",
+  "متبقي المرضية": "totalSick",
+  "الاجازات المرضية": "col11",
+};
 </script>
 <template>
   <IPage :HeaderTitle="t('VacationIndex')">
@@ -144,7 +159,12 @@ const headers = ref<Array<ITableHeader>>([
         @click="getFilterData()"
         class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
       >
-        <JsonExcel :data="data" type="xlsx" name="filename.xls">
+        <JsonExcel
+          :data="data"
+          :fields="headersExcel"
+          type="xlsx"
+          name="filename.xlsx"
+        >
           Download Excel
         </JsonExcel>
       </button>

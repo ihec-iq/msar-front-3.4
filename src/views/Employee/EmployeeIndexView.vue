@@ -26,7 +26,8 @@ import { limits } from "@/utils/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { ITableHeader } from "@/types/core/components/ITable";
+;
 
 const route = useRoute();
 const router = useRouter();

@@ -24,8 +24,10 @@ const { get_item } = useStoringStore();
 
 import { limits } from "@/utils/defaultParams";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { ITableHeader } from "@/types/core/components/ITable";
+;
 import ISelect from "@/components/inputs/ISelect.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -102,7 +104,7 @@ const openItem = (id: number, billType: string) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray(["show storage"]);
+  checkPermissionAccessArray([EnumPermission.ShowStorage]);
 
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";

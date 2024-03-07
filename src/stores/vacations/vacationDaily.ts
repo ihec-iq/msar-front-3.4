@@ -16,7 +16,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       Employee: {
         id: 1,
         name: "",
-        section: { id: 0, name: "" },
+        Section: { id: 0, name: "" },
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -40,7 +40,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     EmployeeAlter: {
       id: 1,
       name: "",
-      section: { id: 0, name: "" },
+      Section: { id: 0, name: "" },
       isPerson: 1,
       dateWork: "",
       number: "",
@@ -67,7 +67,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       Employee: {
         id: 1,
         name: "",
-        section: { id: 0, name: "" },
+        Section: { id: 0, name: "" },
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -91,7 +91,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
     vacationDaily.EmployeeAlter = {
       id: 1,
       name: "",
-      section: { id: 0, name: "" },
+      Section: { id: 0, name: "" },
       isPerson: 1,
       dateWork: "",
       number: "",

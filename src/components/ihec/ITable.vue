@@ -21,8 +21,10 @@ defineProps({
     :variants="{ custom: { scale: 2 } }"
     :delay="200"
     v-if="items.length > 0"
+    class="overflow-auto"
   >
-    <table class="min-w-full text-center">
+    <table class="w-full">
+      <caption></caption>
       <thead class="dark:bg-tableHead bg-[#7192AD] text-[#fff] shadow">
         <tr>
           <th

@@ -9,10 +9,11 @@ import { usePermissionStore } from "@/stores/permissionStore";
 import { useDirectVoucherStore } from "@/stores/warehouse/directVoucherStore";
 import type { IDirectVoucherItem } from "@/types/IDirectVoucher";
 import { t } from "@/utils/I18nPlugin";
+import { EnumPermission } from "@/utils/EnumSystem";
 const { directVoucherItemsVSelect } = storeToRefs(useDirectVoucherStore());
 const directVoucherStore = useDirectVoucherStore();
 const { directVoucher, directVoucherEmployees } = storeToRefs(
-  useDirectVoucherStore(),
+  useDirectVoucherStore()
 );
 //region"Drag and Drop"
 
@@ -107,7 +108,7 @@ const EditItem = () => {
   ChangeValueTotal();
   directVoucherStore.editItem(
     indexSelectedVoucherItem.value,
-    VoucherItem.value,
+    VoucherItem.value
   );
   resetVoucherItem();
   showPop.value = false;
@@ -128,11 +129,11 @@ const store = () => {
   formData.append("items", JSON.stringify(directVoucher.value.Items));
   formData.append(
     "employeeRequestId",
-    directVoucher.value.Employee.id.toString(),
+    directVoucher.value.Employee.id.toString()
   );
   formData.append(
     "signaturePerson",
-    String(directVoucher.value.signaturePerson),
+    String(directVoucher.value.signaturePerson)
   );
   directVoucherStore
     .store(formData)
@@ -168,11 +169,11 @@ function update() {
   formData.append("items", JSON.stringify(directVoucher.value.Items));
   formData.append(
     "employeeRequestId",
-    directVoucher.value.Employee.id.toString(),
+    directVoucher.value.Employee.id.toString()
   );
   formData.append(
     "signaturePerson",
-    String(directVoucher.value.signaturePerson),
+    String(directVoucher.value.signaturePerson)
   );
   directVoucherStore
     .update(directVoucher.value.id, formData)
@@ -224,7 +225,7 @@ const Delete = async () => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
-            "success",
+            "success"
           );
           router.go(-1);
         });
@@ -267,7 +268,7 @@ const back = () => {
 };
 
 onMounted(async () => {
-  checkPermissionAccessArray(["show directVouchers"]);
+  checkPermissionAccessArray([EnumPermission.ShowDirectVouchers]);
   await directVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("DirectVoucher");
