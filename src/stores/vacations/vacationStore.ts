@@ -11,7 +11,7 @@ export const useVacationStore = defineStore("vacationStore", () => {
     Employee: {
       id: 0,
       name: "",
-      section: { id: 0, name: "" },
+      Section: { id: 0, name: "" },
       isPerson: 1,
       dateWork: Date.now().toLocaleString(),
       idCard: "",
@@ -39,7 +39,7 @@ export const useVacationStore = defineStore("vacationStore", () => {
     vacation.Employee = {
       id: 0,
       name: "",
-      section: { id: 0, name: "" },
+      Section: { id: 0, name: "" },
       isPerson: 1,
       dateWork: Date.now().toLocaleString(),
       idCard: "",

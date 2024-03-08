@@ -18,6 +18,7 @@ const dataBase = ref<Array<IOutputVoucher>>([]);
 const { resetData, get_filter } = useOutputVoucherStore();
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
+import CardOutputVoucherIndex from "./CardOutputVoucherIndex.vue";
 
 const route = useRoute();
 const router = useRouter();

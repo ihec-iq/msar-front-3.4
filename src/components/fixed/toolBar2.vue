@@ -42,19 +42,7 @@ const changeDark = () => {
   themeDark.value = !themeDark.value;
   toggleDark(themeDark.value);
 };
-// const user = ref<IUser>({
-//   name: "Loading ...",
-//   email: "",
-//   last_login: "",
-//   password: "",
-//   any_device: 0,
-//   active: 0,
-//   roles: [],
-//   permissions: [],
-//   id: 0,
-//   value: undefined,
-//   user: undefined,
-// });
+const { user } = storeToRefs(useAuthStore());
 const change = () => {
   ChangeDirection();
 };
@@ -100,19 +88,21 @@ onMounted(async () => {
   if (inputRefSearch.value) {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
+  //user.value = await useAuthStore().getUser();
 });
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-white dark:bg-darkNav h-12 max-w-full bg-navLight box-border mb-5 mx-0"
+    class="print:hidden flex text-white bg-white dark:bg-darkNav shadow-md h-12 xs:mt-2 lg:mt-0 rounded-md bg-navLight sm:max-w-fit md:max-w-full xs:w-[98%] box-border ltr:ml-2 rtl:mr-2 mb-5"
   >
     <div
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 xs:w-full"
     >
       <div class="flex items-center">
-        <div class="text-gray-500 text-2xl rtl:mr-2 ltr:ml-2"><!-- # --></div>
-        <div class="text-sm text-text dark:text-textLight">
-          {{ Organization }}
+        <div class="text-gray-500 text-2xl">#</div>
+        <div class="ml-2 text-sm text-text dark:text-textLight">
+          <!-- {{ t("General") }} -->
+          {{ Organization }} - {{ user?.Employee?.name }}
         </div>
       </div>
       <div
@@ -151,7 +141,6 @@ onMounted(async () => {
         </span>
       </div>
       <div class="flex items-center">
-        <!-- Old Settings -->
         <button
           is-link
           @click="showPopup"

@@ -1,3 +1,43 @@
+
+<script setup lang="ts">
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import { ChevronDownIcon } from "@heroicons/vue/20/solid";
+import { t, setLocale, Languages, currentLocale } from "@/utils/I18nPlugin";
+import { useDark, useToggle, useColorMode } from "@vueuse/core";
+import { ref } from "vue";
+import { useRtlStore } from "@/stores/i18n/rtlPi";
+const { ChangeDirection } = useRtlStore();
+import { useAuthStore } from "@/stores/authStore"; 
+import type { ILanguage } from "@/stores/i18n/useI18n";
+
+const authStore = useAuthStore();
+
+const logout = () => {
+  authStore.logout();
+};
+
+const changeDir = () => {
+  ChangeDirection();
+};
+
+const changeLanguage = () => {
+  const lang = Languages.find(
+    (x) => x.code !== currentLocale.value.code
+  ) as ILanguage;
+  setLocale(lang);
+};
+
+//#region Dark Mode
+let isDark = useDark();
+let themeDark = ref(false);
+const toggleDark = useToggle(isDark);
+const changeDark = () => {
+  themeDark.value = !themeDark.value;
+  toggleDark(themeDark.value);
+};
+//#endregion
+</script>
+
 <template>
   <Menu as="div" class="relative inline-block rtl:text-right ltr:text-left">
     <div>
@@ -112,39 +152,3 @@
     </transition>
   </Menu>
 </template>
-
-<script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { ChevronDownIcon } from "@heroicons/vue/20/solid";
-import { t, setLocale, Languages, currentLocale } from "@/utils/I18nPlugin";
-import { useDark, useToggle, useColorMode } from "@vueuse/core";
-import { ref } from "vue";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
-const { ChangeDirection } = useRtlStore();
-import { useAuthStore } from "@/stores/authStore";
-
-const authStore = useAuthStore();
-
-const logout = () => {
-  authStore.logout();
-};
-
-const changeDir = () => {
-  ChangeDirection();
-};
-
-const changeLanguage = () => {
-  var lang = Languages.find((x) => x.code !== currentLocale.value.code);
-  setLocale(lang);
-};
-
-//#region Dark Mode
-let isDark = useDark();
-let themeDark = ref(false);
-const toggleDark = useToggle(isDark);
-const changeDark = () => {
-  themeDark.value = !themeDark.value;
-  toggleDark(themeDark.value);
-};
-//#endregion
-</script>

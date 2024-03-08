@@ -191,7 +191,7 @@ const trns = app?.appContext.config.globalProperties.$trns;
                   <ISelect
                     :label="t('Limit')"
                     v-model="searchFilter.limit"
-                    name="archiveTypeId"
+                    name="Limit"
                     :options="limits"
                     :IsRequire="true"
                     @onChange="getFilterData()"

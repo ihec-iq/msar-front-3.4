@@ -45,6 +45,8 @@ export default {
   InputVoucherEmployeeRequest: "Employee Request",
   InputVoucherSignaturePerson: "Signature Person",
   OutputVoucher: "Output Voucher",
+  AddOutputVoucher: "Add Output Voucher",
+  UpdateOutputVoucher: "Update Output Voucher",
   OutputVoucherSignaturePerson: "Signature Person",
   OutputVoucherNumber: "Voucher Number",
   OutputVoucherEmployeeRequest: "Employee Request",
