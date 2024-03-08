@@ -85,6 +85,8 @@ const setting = () => {
 onMounted(() => {
   userData.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
 });
+
+const { user } = storeToRefs(useAuthStore());
 </script>
 <template>
   <div
@@ -95,7 +97,7 @@ onMounted(() => {
   >
     <div class="LeftNav z-50 bg-sideNav dark:bg-darkNav flex flex-col h-full">
       <div
-        class=" dark:bg-darkNav bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
+        class="dark:bg-darkNav bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
         <!-- little circule -->
         <div
@@ -142,23 +144,26 @@ onMounted(() => {
           :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
         >
           <div class="flex items-center">
+            <!-- ! the image in the assets is not rounded -->
+            <!-- *Old source: @/assets/logo-512x512.png -->
             <img
               @click="isClose = !isClose"
-              src="@/assets/logo-512x512.png"
-              alt=""
-              class="w-12 h-12 rounded-full border-2 align-middle"
+              src="https://avatars.githubusercontent.com/u/131960256?s=200&v=4"
+              alt="Profile Picture"
+              class="w-14 h-14 rounded-full align-middle"
             />
             <div
               class="text-lg mt-1 ml-1 duration-700 w-28 dark:text-textLight text-text"
               :class="{ hidden: isClose, block: !isClose }"
             >
-              IHEC
+              {{ user?.Employee?.name }}
             </div>
           </div>
-          <hr
+          <!-- !Bug: the line displayed over the photo (current: IHEC logo) -->
+          <!-- <hr
             class="absolute top-14 left-5 duration-500"
             :class="{ 'lg:w-52 xs:w-40': !isClose, 'w-[40px] ': isClose }"
-          />
+          /> -->
         </div>
         <!-- main list -->
         <nav class="flex flex-col">
@@ -167,7 +172,7 @@ onMounted(() => {
             <li
               v-for="Link in filteredLinks"
               :key="Link.routerName"
-              class="overflow-hidden flex items-center "
+              class="overflow-hidden flex items-center"
             >
               <router-link
                 :to="{ name: Link.routerName }"
@@ -181,7 +186,7 @@ onMounted(() => {
                   v-html="Link.icon"
                 ></button
               ></router-link>
-              <!-- childrens -->
+              <!-- children -->
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
@@ -209,7 +214,7 @@ onMounted(() => {
         <!-- setting -->
         <div class="">
           <!-- #region setting icon -->
-          <button
+          <!-- <button
             @click="settingPop = !settingPop"
             class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
             :class="{
@@ -229,7 +234,7 @@ onMounted(() => {
                 clip-rule="evenodd"
               />
             </svg>
-          </button>
+          </button> -->
           <!-- #endregion -->
         </div>
       </div>

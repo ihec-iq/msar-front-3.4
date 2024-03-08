@@ -52,6 +52,8 @@ export default {
   InputVoucherEmployeeRequest: "طلب من",
   InputVoucherSignaturePerson: "توقيع الموظف",
   OutputVoucher: "الاخراج المخزني",
+  AddOutputVoucher: "اضافة سند الاخراج المخزني",
+  UpdateOutputVoucher: "تعديل سند الاخراج المخزني",
   OutputVoucherSignaturePerson: "توقيع الموظف",
   OutputVoucherNumber: " رقم السند",
   OutputVoucherEmployeeRequest: "طلبت من",
