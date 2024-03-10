@@ -13,13 +13,16 @@ import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "@/types/IItem";
 import AddItemPopup from "@/components/AddItemPopup.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { ITableHeader } from "@/types/core/components/ITable";
+;
 import ICol from "@/components/ihec/ICol.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ILabel from "@/components/ihec/ILabel.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton from "@/components/ihec/IButton2.vue";
 import IContainer from "@/components/ihec/IContainer.vue";
+import IPageContent from "@/components/ihec/archive/IPageContent.vue";
+import IPage from "@/components/ihec/IPage.vue";
 
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
@@ -470,13 +473,15 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
         </IForm>
       </IContainer>
-      <IContainer>
+     
+    </IPageContent>
+ <IContainer>
         <van-popup
-          class="overflow-hidden"
+        class="overflow-hidden dark:bg-darkNav"
           v-model:show="showPop"
           round
           position="bottom"
-        >
+        > 
           <!-- for search Item -->
           <IRow col-lg="4" col-md="1" col-sm="1" col-xs="1">
             <ICol>
@@ -492,7 +497,6 @@ const headers = ref<Array<ITableHeader>>([
                 :reduce="(_item: IItem) => _item"
                 :get-option-label="(_item: IItem) => _item.name"
                 @keydown.enter="handleEnter"
-                @option:clear="clearSelected"
                 :create-option="
                   (_item: IItem) => ({
                     input_voucher_id: 0,
@@ -680,8 +684,6 @@ const headers = ref<Array<ITableHeader>>([
           </IContainer>
         </van-popup>
       </IContainer>
-    </IPageContent>
-
     <template #Footer>
       <IFooterCrud
         :isAdd="inputVoucher.id == 0"

@@ -1,9 +1,8 @@
-import { object } from "yup";
 
-export type ITableItem {
+export interface ITableItem   {
   [key: string]: any;
 }
-export type ITableHeader {
+export interface ITableHeader   {
   caption: string;
   value: any;
 }

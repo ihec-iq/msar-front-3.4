@@ -30,7 +30,7 @@ const dataBase = ref<Array<IEmployeeHistory>>([]);
 
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { ITableHeader } from "@/types/core/components/ITable";
 
 const CorruptedVoucher = ref<{
   number: string;

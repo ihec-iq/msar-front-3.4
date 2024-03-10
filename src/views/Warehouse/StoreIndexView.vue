@@ -20,7 +20,8 @@ import ICol from "@/components/ihec/ICol.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { ITableHeader } from "@/types/core/components/ITable";
+;
 
 const route = useRoute();
 const router = useRouter();

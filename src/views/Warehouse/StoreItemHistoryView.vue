@@ -24,7 +24,8 @@ const { get_item } = useStoringStore();
 
 import { limits } from "@/utils/defaultParams";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
-import { ITableHeader } from "@/types/core/components/ITable";
+import type { ITableHeader } from "@/types/core/components/ITable";
+;
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 

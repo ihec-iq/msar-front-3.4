@@ -1,26 +1,20 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
-import type { IUser } from "@/types/core/IUser";
-import { useRoleStore } from "@/stores/roles/roleStore";
 import { t } from "@/utils/I18nPlugin";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/userStore";
+import loadingFull from "@/components/general/loadingFull.vue";
+import { EnumPermission } from "@/utils/EnumSystem";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
+import type IRole from "@/types/role/IRole";
+import type { IUser } from "@/types/core/IUser";
+
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-import loadingFull from "@/components/general/loadingFull.vue";
-const rtlStore = useRtlStore();
-import { EnumDirection, EnumPermission } from "@/utils/EnumSystem";
-import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 
+import { useRoleStore } from "@/stores/roles/roleStore";
 const roleStore = useRoleStore();
-const permissions = () => {
-  router.push({
-    name: "permissions",
-  });
-};
 
 //#endregion
 const check_any_device = ref(false);

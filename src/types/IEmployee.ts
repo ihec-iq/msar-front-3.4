@@ -14,6 +14,8 @@ export interface IEmployee {
   dateWork: string;
   number: string;
   idCard: string;
+  Postion: IEmployeePostion;
+  Type: IEmployeeType;
   initVacation: number;
   takeVacation: number;
   initVacationSick: number;
@@ -69,4 +71,14 @@ export interface IEmployeeFilter {
   limit: number;
   checked?: boolean;
   employeeId?: number;
+}
+export interface IEmployeeType {
+  id: number; 
+  name: string; 
+}
+export interface IEmployeePostion {
+  id: number; 
+  name: string; 
+  level: string; 
+  code: string; 
 }
