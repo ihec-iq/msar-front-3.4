@@ -21,6 +21,9 @@ export const useUserStore = defineStore("userStore", () => {
   async function get(params: object) {
     return await Api.get(`${pathUrl}`, { params: params });
   }
+   async function get_lite() {
+    return await Api.get(`${pathUrl}/get_lite`);
+  }
   async function get_filter(params: object, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }

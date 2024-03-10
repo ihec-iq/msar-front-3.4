@@ -95,6 +95,8 @@ export default {
   Employee: "الموظف",
   EmployeeNumber: "الرقم الوظيفي",
   EmployeeIdCard: "رقم الهوية",
+  EmployeePosition: "المنصب",
+  EmployeeType: "المكان",
   UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",

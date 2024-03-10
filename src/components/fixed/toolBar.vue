@@ -8,11 +8,14 @@ import router from "@/router";
 import { useRoute } from "vue-router";
 import { t, setLocale, Languages } from "@/utils/I18nPlugin";
 
+const AuthStore = useAuthStore();
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
 const route = useRoute();
 import { useConfigStore } from "@/stores/configStore";
+import IButton from "../ihec/IButton.vue";
+import IButton2 from "../ihec/IButton2.vue";
 const { Organization } = storeToRefs(useConfigStore());
 const colorMode = useColorMode({
   modes: {
@@ -23,7 +26,6 @@ const colorMode = useColorMode({
     amber: "amber",
   },
 });
-
 //#region Pops
 const showPop = ref(false);
 const showPopup = () => {
@@ -58,7 +60,9 @@ const changeDark = () => {
 const change = () => {
   ChangeDirection();
 };
-
+const logout = () => {
+  AuthStore.logout();
+};
 //#endregion
 //#region Search
 const searchInput = ref(false);
@@ -298,6 +302,22 @@ onMounted(async () => {
             </div>
           </div>
         </div> -->
+      </div>
+
+      <div class="flex w-full mt-2">
+        <div class="flex items-center justify-around mx-6 w-full">
+          <div class="text-text dark:text-textLight font-bold text-lg">
+            {{ t("Logout") }}
+          </div>
+        </div>
+        <div class="w-full">
+          <IButton2
+            type="default"
+            text="Logout"
+            pre-icon="logout"
+            :on-click="logout"
+          ></IButton2>
+        </div>
       </div>
       <div class="flex absolute bottom-14 w-full">
         <div
