@@ -115,8 +115,9 @@ onMounted(async () => {
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
-      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
+      <IRow :col="4" :col-lg="4" :col-md="3" :col-sm="1" :col-xs="1">
         <ICol
+          class="my-2"
           :span="1"
           :span-lg="1"
           :span-md="1"
