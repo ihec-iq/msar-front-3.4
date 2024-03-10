@@ -29,6 +29,11 @@ import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import CardsArchiveTypeindex from "@/components/ihec/archive/CardsArchiveTypeindex.vue";
+import * as moment from "moment";
+
+const dateTime = (value) => {
+  return moment.monthsShort(value);
+};
 
 const route = useRoute();
 const router = useRouter();
@@ -177,8 +182,27 @@ onMounted(async () => {
       <IRow>
         <CardsArchiveTypeindex :OnClick="getFilterData"></CardsArchiveTypeindex>
       </IRow>
-      <IRow
-        ><div class="rounded-xl" v-if="isLoading == false">
+      <IRow>
+        <div
+          v-for="(item, index) in data"
+          class="w-full bg-white flex h-16 px-4 box-border border hover:bg-gray-100 transition-all duration-200 ease-in-out cursor-pointer"
+        >
+          <span
+            class="flex-none w-auto min-w-96 rtl:text-right ltr:text-left font-bold text-xl p-4"
+            >{{ item.title }}</span
+          >
+          <span
+            class="flex-1 w-96 min-w-96 rtl:text-right ltr:text-left text-xl p-4"
+            >{{ item.number }}</span
+          >
+          <span
+            class="w-36 min-w-36 rtl:text-right ltr:text-left text-md p-4"
+            >{{ item.issueDate }}</span
+          >
+        </div>
+        <!--  -->
+        <!--  -->
+        <div class="rounded-xl" v-if="isLoading == false">
           <div
             v-motion
             :initial="{ opacity: 0, y: -15 }"
