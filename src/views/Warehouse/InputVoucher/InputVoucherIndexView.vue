@@ -154,5 +154,6 @@ onMounted(async () => {
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>

@@ -27,8 +27,6 @@ import IButton from "@/components/ihec/IButton.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
-;
-
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -169,5 +167,6 @@ const headers = ref<Array<ITableHeader>>([
         <div id="PageDataEnd"></div>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>

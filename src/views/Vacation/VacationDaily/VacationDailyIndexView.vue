@@ -28,6 +28,7 @@ const { vacationDaily } = useVacationDailyStore();
 
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -111,7 +112,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('VacationDaily')">
+  <IPage :HeaderTitle="t('VacationDaily')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -165,5 +166,6 @@ onMounted(async () => {
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>

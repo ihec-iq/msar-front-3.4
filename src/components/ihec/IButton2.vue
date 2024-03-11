@@ -30,7 +30,7 @@ const props = defineProps({
   },
   onClick: {
     type: Function,
-    required: true,
+    default: () => {},
   },
   width: {
     type: String,

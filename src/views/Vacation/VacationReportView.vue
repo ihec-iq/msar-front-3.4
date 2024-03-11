@@ -24,6 +24,8 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 import { EnumPermission } from "@/utils/EnumSystem";
 import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
+import EditButton from "@/components/dropDown/EditButton.vue";
+import ShowButton from "@/components/dropDown/ShowButton.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -265,7 +267,7 @@ const headersExcel = {
                     <template v-slot:actions="{ row }">
                       <IDropdown>
                         <li>
-                          <EditButton @click="openItem(row.id)" />
+                          <ShowButton @click="openItem(row.id)" />
                         </li>
                       </IDropdown>
                     </template>
