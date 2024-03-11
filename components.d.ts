@@ -32,6 +32,7 @@ declare module 'vue' {
     IBtnSearch: typeof import('./src/components/ihec/IBtnSearch.vue')['default']
     IButton: typeof import('./src/components/ihec/IButton.vue')['default']
     IButton2: typeof import('./src/components/ihec/IButton2.vue')['default']
+    ICard: typeof import('./src/components/ihec/ICard.vue')['default']
     ICheckbox: typeof import('./src/components/inputs/ICheckbox.vue')['default']
     ICol: typeof import('./src/components/ihec/ICol.vue')['default']
     ICol2: typeof import('./src/components/ihec/test/ICol2.vue')['default']

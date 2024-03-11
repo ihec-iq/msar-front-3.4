@@ -316,7 +316,7 @@ const reset = () => {
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col="3" col-lg="3" col-md="1" col-sm="1">
+          <IRow col="4" col-lg="4" col-md="2" col-sm="1">
             <ICol
               ><div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -358,7 +358,7 @@ const reset = () => {
               />
             </ICol>
           </IRow>
-          <IRow col="3" col-lg="3" col-md="1" col-sm="1">
+          <IRow col="4" col-lg="4" col-md="2" col-sm="1">
             <ICol>
               <div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
