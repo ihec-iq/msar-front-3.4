@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { useRouter } from "vue-router";
 const router = useRouter();
 import { t } from "@/utils/I18nPlugin";
@@ -53,9 +52,7 @@ const goBack = () => {
 };
 </script>
 <template>
-  <div
-    class="max-w-screen-xl flex flex-wrap flex-row-reverse justify-between p-4"
-  >
+  <div class="flex flex-wrap flex-row-reverse justify-between p-4">
     <div class="flex gap-3">
       <IButton
         v-if="props.isAdd && props.showAdd"
