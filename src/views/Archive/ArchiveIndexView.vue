@@ -1,26 +1,14 @@
 <script setup lang="ts">
 import SimpleLoading from "@/components/general/loading.vue";
 import { useArchiveStore } from "@/stores/archives/archiveStore";
-
 import { t } from "@/utils/I18nPlugin";
 import { usePermissionStore } from "@/stores/permissionStore";
 import type { IArchive, IArchiveFilter } from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import CardArchiveIndex from "@/components/ihec/archive/CardArchiveIndex.vue";
-
 import IPage from "@/components/ihec/IPage.vue";
 import IButton from "@/components/ihec/IButton.vue";
-
-const { checkPermissionAccessArray } = usePermissionStore();
-const isLoading = ref(false);
-const data = ref<Array<IArchive>>([]);
-const dataPage = ref();
-const dataBase = ref<Array<IArchive>>([]);
-const { archive } = useArchiveStore();
-const { get_filter } = useArchiveStore();
-
 import { limits } from "@/utils/defaultParams";
 import IInput from "@/components/inputs/IInput.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
@@ -29,14 +17,27 @@ import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import CardsArchiveTypeindex from "@/components/ihec/archive/CardsArchiveTypeindex.vue";
-import * as moment from "moment";
+import EmailCardArchiveIndex from "@/components/ihec/archive/EmailCardArchiveIndex.vue";
 
-const dateTime = (value) => {
-  return moment.monthsShort(value);
-};
-
+const { checkPermissionAccessArray } = usePermissionStore();
+const isLoading = ref(false);
+const data = ref<Array<IArchive>>([]);
+const dataPage = ref();
+const dataBase = ref<Array<IArchive>>([]);
+const { archive } = useArchiveStore();
+const { get_filter } = useArchiveStore();
 const route = useRoute();
 const router = useRouter();
+const fastSearch = ref("");
+
+onMounted(async () => {
+  checkPermissionAccessArray([EnumPermission.ShowArchives]);
+  if (route.params.search != undefined)
+    fastSearch.value = route.params.search.toString() || "";
+
+  await getFilterData(1, -1);
+});
+
 watch(
   () => route.params.search,
   async (newValue) => {
@@ -45,6 +46,7 @@ watch(
     await getFilterData(1, -1);
   }
 );
+
 const addArchive = () => {
   archive.id = 0;
   archive.title = "";
@@ -60,25 +62,6 @@ const addArchive = () => {
   });
 };
 
-//#region Fast Search
-const fastSearch = ref("");
-const filterByIDName = (item: IArchive) => {
-  if (
-    item.title.includes(fastSearch.value) ||
-    item.way.includes(fastSearch.value) ||
-    item.number.includes(fastSearch.value)
-  ) {
-    return true;
-  } else return false;
-};
-const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
-  if (fastSearch.value == "") data.value = dataBase.value;
-  else {
-    data.value = dataBase.value.filter(filterByIDName);
-  }
-};
-//#endregion
 //#region Search
 const searchFilter = ref<IArchiveFilter>({
   title: "",
@@ -130,17 +113,6 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
   isLoading.value = false;
 };
 //#endregion
-
-//#region Pagination
-//#endregion
-
-onMounted(async () => {
-  checkPermissionAccessArray([EnumPermission.ShowArchives]);
-  if (route.params.search != undefined)
-    fastSearch.value = route.params.search.toString() || "";
-
-  await getFilterData(1, -1);
-});
 </script>
 <template>
   <IPage :HeaderTitle="t('Archive')">
@@ -183,26 +155,14 @@ onMounted(async () => {
         <CardsArchiveTypeindex :OnClick="getFilterData"></CardsArchiveTypeindex>
       </IRow>
       <IRow>
-        <div
+        <EmailCardArchiveIndex
           v-for="(item, index) in data"
-          class="w-full bg-white flex h-16 px-4 box-border border hover:bg-gray-100 transition-all duration-200 ease-in-out cursor-pointer"
-        >
-          <span
-            class="flex-none w-auto min-w-96 rtl:text-right ltr:text-left font-bold text-xl p-4"
-            >{{ item.title }}</span
-          >
-          <span
-            class="flex-1 w-96 min-w-96 rtl:text-right ltr:text-left text-xl p-4"
-            >{{ item.number }}</span
-          >
-          <span
-            class="w-36 min-w-36 rtl:text-right ltr:text-left text-md p-4"
-            >{{ item.issueDate }}</span
-          >
-        </div>
-        <!--  -->
-        <!--  -->
-        <div class="rounded-xl" v-if="isLoading == false">
+          :key="index"
+          :item="item"
+        />
+      </IRow>
+      <IRow>
+        <div class="rounded-xl py-5" v-if="isLoading == false">
           <div
             v-motion
             :initial="{ opacity: 0, y: -15 }"
@@ -212,15 +172,6 @@ onMounted(async () => {
             v-if="data.length > 0"
           >
             <div class="max-w-full relative">
-              <div
-                class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-5 lg:m-0 xs:mx-3"
-              >
-                <CardArchiveIndex
-                  v-for="item in data"
-                  :key="item.id"
-                  :item="item"
-                ></CardArchiveIndex>
-              </div>
               <div class="w-full flex flex-row">
                 <div class="basis-4/5 hidden">
                   <TailwindPagination
@@ -244,9 +195,9 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
       <IRow><div id="PageDataEnd"></div></IRow>
     </IPageContent>
   </IPage>
+  <SimpleLoading v-if="isLoading">.</SimpleLoading>
 </template>
