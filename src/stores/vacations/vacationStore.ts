@@ -20,6 +20,16 @@ export const useVacationStore = defineStore("vacationStore", () => {
       takeVacation: 0,
       initVacationSick: 0,
       takeVacationSick: 0,
+      Position : {
+        id: 0,
+        name: "",
+        level: "",
+        code: ""
+      } ,
+      Type : {
+        id: 0,
+        name: ""
+      }
     },
     oldRecord: 0,
     newRecord: 0,
@@ -48,6 +58,16 @@ export const useVacationStore = defineStore("vacationStore", () => {
       takeVacation: 0,
       initVacationSick: 0,
       takeVacationSick: 0,
+      Position : {
+        id: 0,
+        name: "",
+        level: "",
+        code: ""
+      } ,
+      Type : {
+        id: 0,
+        name: ""
+      }
     };
   }
   const pathBase = "/vacationSys";
