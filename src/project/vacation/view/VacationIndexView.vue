@@ -19,7 +19,6 @@ onMounted(async () => {
     <PageTitle> {{ t("VacationIndex") }} </PageTitle>
   </div>
   <div class="flex">
-    <!-- <Nav class="w-[5%]" /> -->
     <div class="lg:w-[95%] mb-12 lg:ml-[5%] xs:w-full md:mr-[2%]">
       <div class="w-full">
         <div class="flex flex-col">
@@ -78,3 +77,4 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
+../VacationLinks

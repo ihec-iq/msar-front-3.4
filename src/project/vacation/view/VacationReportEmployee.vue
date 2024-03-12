@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "@/stores/employeeStore";
 import { useSectionStore } from "@/stores/sectionStore";
@@ -14,18 +14,18 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import type {
   IVacationTime,
   IVacationTimeFilter,
-} from "@/types/vacation/IVacationTime";
+} from "../vacationTime/IVacationTime";
 import type {
   IVacationDaily,
   IVacationDailyFilter,
-} from "@/types/vacation/IVacationDaily";
-import type { IVacationSick } from "@/types/vacation/IVacationSick";
+} from "../vacationDaily/IVacationDaily";
+import type { IVacationSick } from "../vacationSick/IVacationSick";
 
 const { t } = useI18n();
 //#region Stores
-import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
-import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
+import { useVacationTimeStore } from "../vacationTime/vacationTimeStore";
+import { useVacationDailyStore } from "../vacationDaily/vacationDailyStore";
+import { useVacationSickStore } from "../vacationSick/vacationSickStore";
 
 //endregion
 
@@ -34,7 +34,7 @@ import { limits } from "@/utils/defaultParams";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { EnumPermission } from "@/utils/EnumSystem";
 
-const limit = ref(6);
+const limit = ref(10);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
 const dataVacationDaily = ref<Array<IVacationDaily>>([]);
 const dataVacationSick = ref<Array<IVacationSick>>([]);
@@ -126,8 +126,8 @@ const showData = async () => {
       if (response.status == 200) {
         employee.value.id = response.data.data.id;
         employee.value.name = response.data.data.name;
-        employee.value.Section.id = response.data.data.section.id;
-        employee.value.Section.name = response.data.data.section.name;
+        employee.value.Section.id = response.data.data.Section.id;
+        employee.value.Section.name = response.data.data.Section.name;
         employee.value.isPerson = response.data.data.isPerson;
         isIn.value = response.data.data.isPerson == 0 ? false : true;
       }
@@ -476,3 +476,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/vacations/vacationDailyStore@/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationDaily/IVacationDaily@/project/vacation/vacationSick/IVacationSick@/project/vacation/vacationSick/IVacationTime

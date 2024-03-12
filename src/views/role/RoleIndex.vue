@@ -18,7 +18,7 @@ const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
 import { t } from "@/utils/I18nPlugin";
 import IDropdown from "@/components/ihec/IDropdown.vue";
-import IPageContent from "@/components/ihec/archive/IPageContent.vue";
+import IPageContent from "@/components/ihec/IPageContent.vue";
 
 const router = useRouter();
 const roleData = ref<Array<IRole>>([]);

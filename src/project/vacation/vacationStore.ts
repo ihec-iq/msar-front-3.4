@@ -2,7 +2,7 @@ import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IVacation, IVacationFilter } from "@/types/vacation/IVacation";
+import type { IVacation, IVacationFilter } from "@/project/vacation/IVacation";
 
 export const useVacationStore = defineStore("vacationStore", () => {
   const vacations = ref<IVacation[]>([]);
@@ -20,6 +20,16 @@ export const useVacationStore = defineStore("vacationStore", () => {
       takeVacation: 0,
       initVacationSick: 0,
       takeVacationSick: 0,
+      Position : {
+        id: 0,
+        name: "",
+        level: "",
+        code: ""
+      } ,
+      Type : {
+        id: 0,
+        name: ""
+      }
     },
     oldRecord: 0,
     newRecord: 0,
@@ -48,6 +58,16 @@ export const useVacationStore = defineStore("vacationStore", () => {
       takeVacation: 0,
       initVacationSick: 0,
       takeVacationSick: 0,
+      Position : {
+        id: 0,
+        name: "",
+        level: "",
+        code: ""
+      } ,
+      Type : {
+        id: 0,
+        name: ""
+      }
     };
   }
   const pathBase = "/vacationSys";

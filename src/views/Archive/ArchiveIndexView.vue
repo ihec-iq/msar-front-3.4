@@ -12,12 +12,12 @@ import IButton from "@/components/ihec/IButton.vue";
 import { limits } from "@/utils/defaultParams";
 import IInput from "@/components/inputs/IInput.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
-import IPageContent from "@/components/ihec/archive/IPageContent.vue";
+import IPageContent from "@/components/ihec/IPageContent.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
-import CardsArchiveTypeindex from "@/components/ihec/archive/CardsArchiveTypeindex.vue";
-import EmailCardArchiveIndex from "@/components/ihec/archive/EmailCardArchiveIndex.vue";
+import CardsArchiveTypeIndex from "./CardsArchiveTypeIndex.vue";
+import EmailCardArchiveIndex from "./EmailCardArchiveIndex.vue";
 
 const { checkPermissionAccessArray } = usePermissionStore();
 const isLoading = ref(false);
@@ -152,7 +152,7 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
         </ISearchBar>
       </IRow>
       <IRow>
-        <CardsArchiveTypeindex :OnClick="getFilterData"></CardsArchiveTypeindex>
+        <CardsArchiveTypeIndex :OnClick="getFilterData"></CardsArchiveTypeIndex>
       </IRow>
       <IRow>
         <EmailCardArchiveIndex
@@ -200,4 +200,4 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
     </IPageContent>
   </IPage>
   <SimpleLoading v-if="isLoading">.</SimpleLoading>
-</template>
+</template>./CardsArchiveTypeIndex.vue

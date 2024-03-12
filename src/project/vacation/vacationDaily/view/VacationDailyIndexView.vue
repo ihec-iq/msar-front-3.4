@@ -1,33 +1,30 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref ,watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import PageTitle from "@/components/general/namePage.vue";
+import { useVacationDailyStore } from "../vacationDailyStore";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import EditButton from "@/components/dropDown/EditButton.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type {
   IVacationDaily,
   IVacationDailyFilter,
-} from "@/types/vacation/IVacationDaily";
+} from "../IVacationDaily";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IVacationDaily>>([]);
 const dataBase = ref<Array<IVacationDaily>>([]);
 const dataPage = ref();
 import IPage from "@/components/ihec/IPage.vue";
-import IPageHeader from "@/components/ihec/IPageHeader.vue";
-import IRow from "@/components/ihec/IRow.vue";
+ import IRow from "@/components/ihec/IRow.vue";
 import IButton from "@/components/ihec/IButton.vue";
-import IBtnSearch from "@/components/ihec/IBtnSearch.vue";
-
+ 
 const { vacationDaily } = useVacationDailyStore();
 
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -111,7 +108,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('VacationDaily')">
+  <IPage :HeaderTitle="t('VacationDaily')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -165,5 +162,7 @@ onMounted(async () => {
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
+@/project/vacation/vacationDaily/vacationDailyStore@/project/vacation/vacationDaily/IVacationDaily

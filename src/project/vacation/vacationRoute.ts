@@ -1,10 +1,10 @@
-import authMiddleware from "../middleware/authMiddleware";
+import authMiddleware from "@/router/middleware/authMiddleware";
 
 export default [
   {
     path: "/vacation",
     name: "vacationIndex",
-    component: () => import("@/views/Vacation/VacationIndexView.vue"),
+    component: () => import("@/project/vacation/view/VacationIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -12,7 +12,7 @@ export default [
   {
     path: "/vacation/report",
     name: "vacationReport",
-    component: () => import("@/views/Vacation/VacationReportView.vue"),
+    component: () => import("@/project/vacation/view/VacationReportView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -20,7 +20,7 @@ export default [
   {
     path: "/vacation/report/:id",
     name: "vacationReportEmployee",
-    component: () => import("@/views/Vacation/VacationReportEmployee.vue"),
+    component: () => import("@/project/vacation/view/VacationReportEmployee.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -29,7 +29,7 @@ export default [
     path: "/vacation/times/:search?",
     name: "vacationTimeIndex",
     component: () =>
-      import("@/views/Vacation/VacationTime/VacationTimeIndexView.vue"),
+      import("@/project/vacation/vacationTime/view/VacationTimeIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -38,7 +38,7 @@ export default [
     path: "/vacation/time",
     name: "vacationTimeAdd",
     component: () =>
-      import("@/views/Vacation/VacationTime/VacationTimeView.vue"),
+      import("@/project/vacation/vacationTime/view/VacationTimeView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -47,7 +47,7 @@ export default [
     path: "/vacation/time/:id",
     name: "vacationTimeUpdate",
     component: () =>
-      import("@/views/Vacation/VacationTime/VacationTimeView.vue"),
+      import("@/project/vacation/vacationTime/view/VacationTimeView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -56,7 +56,7 @@ export default [
     path: "/vacation/dailies/:search?",
     name: "vacationDailyIndex",
     component: () =>
-      import("@/views/Vacation/VacationDaily/VacationDailyIndexView.vue"),
+      import("@/project/vacation/vacationDaily/view/VacationDailyIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -65,7 +65,7 @@ export default [
     path: "/vacation/daily",
     name: "vacationDailyAdd",
     component: () =>
-      import("@/views/Vacation/VacationDaily/VacationDailyView.vue"),
+      import("@/project/vacation/vacationDaily/view/VacationDailyView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -74,7 +74,7 @@ export default [
     path: "/vacation/daily/:id",
     name: "vacationDailyUpdate",
     component: () =>
-      import("@/views/Vacation/VacationDaily/VacationDailyView.vue"),
+      import("@/project/vacation/vacationDaily/view/VacationDailyView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -83,7 +83,7 @@ export default [
     path: "/vacation/sicks/:search?",
     name: "vacationSickIndex",
     component: () =>
-      import("@/views/Vacation/VacationSick/VacationSickIndexView.vue"),
+      import("@/project/vacation/vacationSick/view/VacationSickIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -92,7 +92,7 @@ export default [
     path: "/vacation/sick",
     name: "vacationSickAdd",
     component: () =>
-      import("@/views/Vacation/VacationSick/VacationSickView.vue"),
+      import("@/project/vacation/vacationSick/view/VacationSickView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -101,7 +101,7 @@ export default [
     path: "/vacation/sick/:id",
     name: "vacationSickUpdate",
     component: () =>
-      import("@/views/Vacation/VacationSick/VacationSickView.vue"),
+      import("@/project/vacation/vacationSick/view/VacationSickView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

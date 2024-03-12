@@ -3,22 +3,21 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
-import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import { useVacationStore } from "@/stores/vacations/vacationStore";
+import { useVacationDailyStore } from "../vacationDailyStore";
+import { useVacationStore } from "../../vacationStore";
 import type { IEmployee } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useVacationReasonStore } from "@/stores/vacations/vacationReasonStore";
+import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
 
-import type { IVacation } from "@/types/vacation/IVacation";
+import type { IVacation } from "../../IVacation";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-import type { IVacationReason } from "@/types/vacation/IVacationDaily";
+import type { IVacationReason } from "../../IVacation";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -38,6 +37,9 @@ const router = useRouter();
 const errors = ref<String | null>();
 //#endregion
 //#region CURD
+const storeWithPrint = () => {
+  store(true);
+};
 const store = (withPrint: boolean = false) => {
   errors.value = null;
   const formData = new FormData();
@@ -276,10 +278,14 @@ function getImageUrl(name: string, ext: string) {
   console.log(new URL(`@/assets/${name}.${ext}`, import.meta.url).href);
   return new URL(`@/assets/${name}.${ext}`, import.meta.url).href;
 }
-import imageHeaderPath from "@/assets/ihec_logo_header1.png";
-import imageFooterPath from "@/assets/ihec_logo_footer1.png";
+import imageHeaderPath from "@/assets/image/ihec_logo_header1.png";
+import imageFooterPath from "@/assets/image/ihec_logo_footer1.png";
 import { useAuthStore } from "@/stores/authStore";
 import { EnumPermission } from "@/utils/EnumSystem";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
+import IPageContent from "@/components/ihec/IPageContent.vue";
+import IPage from "@/components/ihec/IPage.vue";
 
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -316,7 +322,7 @@ const reset = () => {
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col="3" col-lg="3" col-md="1" col-sm="1">
+          <IRow col="4" col-lg="4" col-md="2" col-sm="1">
             <ICol
               ><div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -357,8 +363,6 @@ const reset = () => {
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
               />
             </ICol>
-          </IRow>
-          <IRow col="3" col-lg="3" col-md="1" col-sm="1">
             <ICol>
               <div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -429,72 +433,29 @@ const reset = () => {
       </IRow>
     </IPageContent>
     <template #Footer>
-      <div class="w-full">
-        <!-- bottom tool bar -->
-        <div
-          :class="{
-            'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-            'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-              !is,
-          }"
-          class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-        >
-          <div class="flex ltr:ml-8 rtl:mr-8">
-            <div class="items-center mr-3">
-              <button
-                @click="print()"
-                class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-              >
-                {{ t("Print") }}
-              </button>
-              <button
-                v-if="vacationDaily.id == 0"
-                @click="store(true)"
-                class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-              >
-                {{ t("CreateWithPrint") }}
-              </button>
-              <button
-                v-if="vacationDaily.id == 0"
-                @click="store()"
-                class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-              >
-                {{ t("Create") }}
-              </button>
-
-              <button
-                v-else
-                @click="update()"
-                class="bg-update hover:bg-updateHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-              >
-                {{ t("Update") }}
-              </button>
-              <button
-                v-if="vacationDaily.id != 0"
-                @click="Delete()"
-                class="bg-delete hover:bg-deleteHover duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white ml-2"
-              >
-                {{ t("Delete") }}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div
-          :class="{
-            'ltr:left-4 rtl:right-4': is,
-            'ltr:left-28 rtl:right-28': !is,
-          }"
-          class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-        >
-          <button
-            @click="back()"
-            class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-          >
-            {{ t("Back") }}
-          </button>
-        </div>
-      </div></template
-    >
+      <IFooterCrud
+        :isAdd="vacationDaily.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      >
+        <template #Pre>
+          <IButton2
+            :text="t('Print')"
+            pre-icon="printer"
+            type="outlined"
+            :onClick="print"
+          />
+          <IButton2
+            v-if="vacationDaily.id == 0"
+            :text="t('CreateWithPrint')"
+            type="outlined"
+            pre-icon="printer-pos-plus"
+            :onClick="storeWithPrint"
+          />
+        </template>
+      </IFooterCrud>
+    </template>
   </IPage>
 
   <div
@@ -592,6 +553,7 @@ const reset = () => {
         </tr>
       </table>
       <img
+        alt=""
         :src="imageFooterPath"
         class="w-[903px] print:w-[903px]"
         style="margin-right: -10"
@@ -703,3 +665,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/vacations/vacationDailyStore@/project/vacation/vacationStore@/project/vacation/vacationReasonStore@/project/vacation/IVacation@/project/vacation/vacationDaily/IVacationDaily

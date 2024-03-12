@@ -95,6 +95,8 @@ export default {
   Employee: "Employee",
   EmployeeNumber: "Employee Number",
   EmployeeIdCard: "Employee IdCard",
+  EmployeePosition: "Position",
+  EmployeeType: "Type",
   UserIndex: "User System",
 
   Help: "Help",

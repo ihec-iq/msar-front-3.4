@@ -2,9 +2,9 @@ import type { IItem } from "./IItem";
 import type { ISection } from "./ISection";
 import type { IStock } from "./IStock";
 import type { IUser } from "./core/IUser";
-import type { IVacationDaily } from "./vacation/IVacationDaily";
-import type { IVacationSick } from "./vacation/IVacationSick";
-import type { IVacationTime } from "./vacation/IVacationTime";
+import type { IVacationDaily } from "../project/vacation/vacationDaily/IVacationDaily";
+import type { IVacationSick } from "../project/vacation/vacationSick/IVacationSick";
+import type { IVacationTime } from "../project/vacation/vacationTime/IVacationTime";
 
 export interface IEmployee {
   id: number;
@@ -14,7 +14,7 @@ export interface IEmployee {
   dateWork: string;
   number: string;
   idCard: string;
-  Postion: IEmployeePostion;
+  Position: IEmployeePosition;
   Type: IEmployeeType;
   initVacation: number;
   takeVacation: number;
@@ -76,7 +76,7 @@ export interface IEmployeeType {
   id: number; 
   name: string; 
 }
-export interface IEmployeePostion {
+export interface IEmployeePosition {
   id: number; 
   name: string; 
   level: string; 

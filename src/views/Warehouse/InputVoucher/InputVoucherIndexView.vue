@@ -17,7 +17,7 @@ const { get_filter, resetData } = useInputVoucherStore();
 
 import { limits } from "@/utils/defaultParams";
 import CardInputVoucherIndex from "./CardInputVoucherIndex.vue";
-import IPageContent from "@/components/ihec/archive/IPageContent.vue";
+import IPageContent from "@/components/ihec/IPageContent.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
@@ -154,5 +154,6 @@ onMounted(async () => {
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>

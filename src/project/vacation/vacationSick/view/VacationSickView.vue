@@ -3,18 +3,18 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 
-import { useI18n } from "@/stores/i18n/useI18n";
-import type { IVacationSick } from "@/types/vacation/IVacationSick";
-import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
-import { useVacationStore } from "@/stores/vacations/vacationStore";
-import type { IVacation } from "@/types/vacation/IVacation";
-import { EnumPermission } from "@/utils/EnumSystem";
 
-const { t } = useI18n();
+import type { IVacationSick } from "../IVacationSick";
+import { useVacationSickStore } from "../vacationSickStore";
+import { useVacationStore } from "../../vacationStore";
+import type { IVacation } from "../../IVacation";
+import { EnumPermission } from "@/utils/EnumSystem";
+import { t } from "@/utils/I18nPlugin";
+
+
 
 //region"Drag and Drop"
 
@@ -295,3 +295,4 @@ const ChangeDateRecord = () => {
     </template>
   </IPage>
 </template>
+@/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationStore@/project/vacation/IVacation@/project/vacation/vacationSick/IVacationSick

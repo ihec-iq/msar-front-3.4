@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
+import { useVacationTimeStore } from "../vacationTimeStore";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import EditButton from "@/components/dropDown/EditButton.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type {
   IVacationTime,
   IVacationTimeFilter,
-} from "@/types/vacation/IVacationTime";
+} from "../IVacationTime";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IVacationTime>>([]);
@@ -158,5 +157,7 @@ onMounted(async () => {
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
+@/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationSick/IVacationTime

@@ -2,7 +2,7 @@ import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IVacationReason } from "@/types/vacation/IVacationDaily";
+import type { IVacationReason } from "@/project/vacation/vacationDaily/IVacationDaily";
 
 export const useVacationReasonStore = defineStore("vacationReasonStore", () => {
   const vacationReason = reactive<IVacationReason>({
