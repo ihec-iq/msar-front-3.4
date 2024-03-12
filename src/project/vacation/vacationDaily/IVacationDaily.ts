@@ -1,5 +1,5 @@
-import type { IEmployee } from "../IEmployee";
-import type { IVacation } from "./IVacation";
+import type { IEmployee } from "../../../types/IEmployee";
+import type { IVacation, IVacationReason } from "../IVacation";
 
 export interface IVacationDaily {
   id: number;
@@ -10,14 +10,7 @@ export interface IVacationDaily {
   EmployeeAlter: IEmployee;
   Reason: IVacationReason;
 }
-export interface IVacationType {
-  id: number;
-  name: string;
-}
-export interface IVacationReason {
-  id: number;
-  name: string;
-}
+
 export interface IVacationDailyFilter {
   limit: number;
   employeeId?: number;

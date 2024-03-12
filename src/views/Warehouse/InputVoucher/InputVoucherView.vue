@@ -21,7 +21,7 @@ import ILabel from "@/components/ihec/ILabel.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton from "@/components/ihec/IButton2.vue";
 import IContainer from "@/components/ihec/IContainer.vue";
-import IPageContent from "@/components/ihec/archive/IPageContent.vue";
+import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
 
 const { stocks } = storeToRefs(useStockStore());

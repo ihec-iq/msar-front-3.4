@@ -5,13 +5,12 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
-import { useVacationTimeStore } from "@/stores/vacations/vacationTimeStore";
-import { useVacationStore } from "@/stores/vacations/vacationStore";
+import { useVacationTimeStore } from "../vacationTimeStore";
+import { useVacationStore } from "../../vacationStore";
 
 import { now } from "@vueuse/core";
-import type { IVacation } from "@/types/vacation/IVacation";
-import { useVacationReasonStore } from "@/stores/vacations/vacationReasonStore";
-import type { IVacationReason } from "@/types/vacation/IVacationDaily";
+import type { IVacation, IVacationReason } from "../../IVacation";
+import { useVacationReasonStore } from "../../vacationReasonStore";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import { t } from "@/utils/I18nPlugin";
@@ -336,4 +335,4 @@ const ChangeDateRecord = () => {
       />
     </template>
   </IPage>
-</template> 
+</template> @/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationStore@/project/vacation/vacationReasonStore@/project/vacation/IVacation@/project/vacation/vacationDaily/IVacationDaily

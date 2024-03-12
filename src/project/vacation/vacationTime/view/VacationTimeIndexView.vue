@@ -1,34 +1,25 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import PageTitle from "@/components/general/namePage.vue";
+import { useVacationTimeStore } from "../vacationTimeStore";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import EditButton from "@/components/dropDown/EditButton.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type {
-  IVacationDaily,
-  IVacationDailyFilter,
-} from "@/types/vacation/IVacationDaily";
+  IVacationTime,
+  IVacationTimeFilter,
+} from "../IVacationTime";
 const { t } = useI18n();
 const isLoading = ref(false);
-const data = ref<Array<IVacationDaily>>([]);
-const dataBase = ref<Array<IVacationDaily>>([]);
+const data = ref<Array<IVacationTime>>([]);
 const dataPage = ref();
-import IPage from "@/components/ihec/IPage.vue";
-import IPageHeader from "@/components/ihec/IPageHeader.vue";
-import IRow from "@/components/ihec/IRow.vue";
-import IButton from "@/components/ihec/IButton.vue";
-import IBtnSearch from "@/components/ihec/IBtnSearch.vue";
-
-const { vacationDaily } = useVacationDailyStore();
+const dataBase = ref<Array<IVacationTime>>([]);
+const { vacationTime } = useVacationTimeStore();
 
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
-import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -43,20 +34,16 @@ watch(
   }
 );
 const addItem = () => {
-  useVacationDailyStore().resetData();
+  useVacationTimeStore().resetData();
   router.push({
-    name: "vacationDailyAdd",
+    name: "vacationTimeAdd",
   });
 };
-const Search = async (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    await getFilterData(1);
-  }
-};
+
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (_vacationDaily: IVacationDailyFilter) => {
-  if (_vacationDaily.dayFrom?.toString().includes(fastSearch.value)) {
+const filterByIDName = (_vacationTime: IVacationTimeFilter) => {
+  if (_vacationTime.dayFrom?.toString().includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -69,15 +56,14 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IVacationDailyFilter>({
+const searchFilter = ref<IVacationTimeFilter>({
   dayFrom: "",
   limit: 10,
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-  searchFilter.value.limit = 0;
-  searchFilter.value.employeeName = fastSearch.value.toString();
-  await useVacationDailyStore()
+  searchFilter.value.record = Number(fastSearch.value);
+  await useVacationTimeStore()
     .get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -94,15 +80,19 @@ const getFilterData = async (page: number = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "vacationDailyUpdate",
+    name: "vacationTimeUpdate",
     params: { id: id },
   });
 };
-
+const Search = async (event: KeyboardEvent) => {
+  if (event.key === "Enter") {
+    await getFilterData(1);
+  }
+};
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
+  checkPermissionAccessArray([EnumPermission.ShowVacationsTime]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   if (inputRefSearch.value) {
@@ -112,7 +102,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('VacationDaily')" :is-loading="isLoading">
+  <IPage :HeaderTitle="t('VacationTime')">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -129,7 +119,7 @@ onMounted(async () => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :col="2" :col-lg="2" :col-md="2">
+      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
         <ICol
           :span="1"
           :span-lg="1"
@@ -138,10 +128,11 @@ onMounted(async () => {
           :key="item.id"
         >
           <!-- card -->
-          <CardVacationDailyIndex :item="item" />
+          <CardVactionTimeIndex :item="item" />
           <!-- end card -->
         </ICol>
       </IRow>
+      <!-- Pagination -->
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-4/5 hidden">
@@ -169,3 +160,4 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
+@/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationSick/IVacationTime

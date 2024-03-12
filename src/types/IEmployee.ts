@@ -2,9 +2,9 @@ import type { IItem } from "./IItem";
 import type { ISection } from "./ISection";
 import type { IStock } from "./IStock";
 import type { IUser } from "./core/IUser";
-import type { IVacationDaily } from "./vacation/IVacationDaily";
-import type { IVacationSick } from "./vacation/IVacationSick";
-import type { IVacationTime } from "./vacation/IVacationTime";
+import type { IVacationDaily } from "../project/vacation/vacationDaily/IVacationDaily";
+import type { IVacationSick } from "../project/vacation/vacationSick/IVacationSick";
+import type { IVacationTime } from "../project/vacation/vacationTime/IVacationTime";
 
 export interface IEmployee {
   id: number;

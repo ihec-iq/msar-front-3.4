@@ -1,17 +1,15 @@
-import type { IVacation } from "./IVacation";
-import type { IVacationReason } from "./IVacationDaily";
+import type { IVacation, IVacationReason } from "../IVacation";
 
-export interface IVacationTime {
+export interface IVacationSick {
   id: number;
-  date: string;
-  timeFrom: string;
-  timeTo: string;
+  dayFrom: string;
+  dayTo: string;
   record: number;
   Vacation: IVacation;
   Reason: IVacationReason;
 }
 
-export interface IVacationTimeFilter {
+export interface IVacationSickFilter {
   limit: number;
   employeeId?: number;
   employeeName?: string;

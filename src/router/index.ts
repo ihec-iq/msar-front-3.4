@@ -12,7 +12,7 @@ import outputVoucherRoute from "./warehouse/outputVoucherRoute";
 import corruptedVoucherRoute from "./warehouse/corruptedVoucherRoute";
 import directVoucherRoute from "./warehouse/directVoucherRoute";
 import itemCategoryRoute from "./item/itemCategoryRoute";
-import vacationRoute from "./vacation/vacationRoute";
+import vacationRoute from "@/project/vacation/vacationRoute";
 import userRoute from "./user/userRoute";
 import roleRoute from "./role/roleRoute";
 import warehouseRoute from "./warehouse/warehouseRoute";

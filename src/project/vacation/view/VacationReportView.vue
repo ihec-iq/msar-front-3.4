@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import { useVacationStore } from "@/stores/vacations/vacationStore";
-import type { IVacationFilter, IVacation } from "@/types/vacation/IVacation";
+import { useVacationStore } from "../vacationStore";
+import type { IVacationFilter, IVacation } from "../IVacation";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { isNumber } from "@/utils/tools";
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -24,7 +24,6 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 import { EnumPermission } from "@/utils/EnumSystem";
 import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
-import EditButton from "@/components/dropDown/EditButton.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
 
 const route = useRoute();
@@ -294,3 +293,4 @@ const headersExcel = {
     </div>
   </div>
 </template>
+@/project/vacation/vacationStore@/project/vacation/IVacation

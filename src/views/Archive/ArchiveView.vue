@@ -5,8 +5,8 @@ import { useArchiveStore } from "@/stores/archives/archiveStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/stores/permissionStore";
-import FilePreview from "@/components/FilePreview.vue";
-import DragDrop from "@/components/DragDrop.vue";
+import FilePreview from "./FilePreview.vue";
+import DragDrop from "./DragDrop.vue";
 import { useDragDropStore } from "@/compositions/dragDrop";
 import { t } from "@/utils/I18nPlugin";
 
