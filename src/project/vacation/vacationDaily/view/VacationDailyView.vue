@@ -3,22 +3,21 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
-import { useVacationDailyStore } from "@/stores/vacations/vacationDaily";
-import { useVacationStore } from "@/stores/vacations/vacationStore";
+import { useVacationDailyStore } from "../vacationDailyStore";
+import { useVacationStore } from "../../vacationStore";
 import type { IEmployee } from "@/types/IEmployee";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useVacationReasonStore } from "@/stores/vacations/vacationReasonStore";
+import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
 
-import type { IVacation } from "@/types/vacation/IVacation";
+import type { IVacation } from "../../IVacation";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-import type { IVacationReason } from "@/types/vacation/IVacationDaily";
+import type { IVacationReason } from "../../IVacation";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -279,8 +278,8 @@ function getImageUrl(name: string, ext: string) {
   console.log(new URL(`@/assets/${name}.${ext}`, import.meta.url).href);
   return new URL(`@/assets/${name}.${ext}`, import.meta.url).href;
 }
-import imageHeaderPath from "@/assets/ihec_logo_header1.png";
-import imageFooterPath from "@/assets/ihec_logo_footer1.png";
+import imageHeaderPath from "@/assets/image/ihec_logo_header1.png";
+import imageFooterPath from "@/assets/image/ihec_logo_footer1.png";
 import { useAuthStore } from "@/stores/authStore";
 import { EnumPermission } from "@/utils/EnumSystem";
 import IButton2 from "@/components/ihec/IButton2.vue";
@@ -441,11 +440,17 @@ const reset = () => {
         :onDelete="Delete"
       >
         <template #Pre>
-          <IButton2 :text="t('Print')" pre-icon="printer" type="outlined" :onClick="print" />
+          <IButton2
+            :text="t('Print')"
+            pre-icon="printer"
+            type="outlined"
+            :onClick="print"
+          />
           <IButton2
             v-if="vacationDaily.id == 0"
             :text="t('CreateWithPrint')"
-            type="outlined" pre-icon="printer-pos-plus" 
+            type="outlined"
+            pre-icon="printer-pos-plus"
             :onClick="storeWithPrint"
           />
         </template>
@@ -660,3 +665,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/stores/vacations/vacationDailyStore@/project/vacation/vacationStore@/project/vacation/vacationReasonStore@/project/vacation/IVacation@/project/vacation/vacationDaily/IVacationDaily

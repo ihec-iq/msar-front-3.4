@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useVacationSickStore } from "@/stores/vacations/vacationSickStore";
+import { useVacationSickStore } from "../vacationSickStore";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-import type {
-  IVacationSick,
-  IVacationSickFilter,
-} from "@/types/vacation/IVacationSick";
+import type { IVacationSick, IVacationSickFilter } from "../IVacationSick";
 import { isNumeric } from "vant/lib/utils";
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -175,3 +172,4 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
+@/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationSick/IVacationSick

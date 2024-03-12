@@ -2,7 +2,7 @@ import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IVacation, IVacationFilter } from "@/types/vacation/IVacation";
+import type { IVacation, IVacationFilter } from "@/project/vacation/IVacation";
 
 export const useVacationStore = defineStore("vacationStore", () => {
   const vacations = ref<IVacation[]>([]);

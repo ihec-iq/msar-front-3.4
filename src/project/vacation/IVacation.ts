@@ -1,4 +1,4 @@
-import type { IEmployee } from "../IEmployee";
+import type { IEmployee } from "../../types/IEmployee";
 
 export interface IVacation {
   id: number;
@@ -22,4 +22,12 @@ export interface IVacationFilter {
   dayFrom?: string;
   dayTo?: string;
   record?: number;
+}
+export interface IVacationType {
+  id: number;
+  name: string;
+}
+export interface IVacationReason {
+  id: number;
+  name: string;
 }
