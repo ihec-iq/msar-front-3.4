@@ -285,7 +285,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { EnumPermission } from "@/utils/EnumSystem";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
-import IPageContent from "@/components/ihec/archive/IPageContent.vue";
+import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
 
 onMounted(async () => {

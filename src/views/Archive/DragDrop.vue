@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DragDropFilePreview from "@/components/DragDropFilePreview.vue";
+import DragDropFilePreview from "./DragDropFilePreview.vue";
 import { t } from "@/utils/I18nPlugin";
 import { storeToRefs } from "pinia";
 import { useDragDropStore } from "@/compositions/dragDrop";

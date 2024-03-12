@@ -50,7 +50,7 @@ declare module 'vue' {
     InputNumber: typeof import('./src/components/inputs/InputNumber.vue')['default']
     InputText: typeof import('./src/components/inputs/InputText.vue')['default']
     IPage: typeof import('./src/components/ihec/IPage.vue')['default']
-    IPageContent: typeof import('./src/components/ihec/archive/IPageContent.vue')['default']
+    IPageContent: typeof import('./src/components/ihec/IPageContent.vue')['default']
     IPageFooter: typeof import('./src/components/ihec/IPageFooter.vue')['default']
     IPageHeader: typeof import('./src/components/ihec/IPageHeader.vue')['default']
     IRow: typeof import('./src/components/ihec/IRow.vue')['default']
