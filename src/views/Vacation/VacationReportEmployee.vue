@@ -34,7 +34,7 @@ import { limits } from "@/utils/defaultParams";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { EnumPermission } from "@/utils/EnumSystem";
 
-const limit = ref(6);
+const limit = ref(10);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
 const dataVacationDaily = ref<Array<IVacationDaily>>([]);
 const dataVacationSick = ref<Array<IVacationSick>>([]);
@@ -126,8 +126,8 @@ const showData = async () => {
       if (response.status == 200) {
         employee.value.id = response.data.data.id;
         employee.value.name = response.data.data.name;
-        employee.value.Section.id = response.data.data.section.id;
-        employee.value.Section.name = response.data.data.section.name;
+        employee.value.Section.id = response.data.data.Section.id;
+        employee.value.Section.name = response.data.data.Section.name;
         employee.value.isPerson = response.data.data.isPerson;
         isIn.value = response.data.data.isPerson == 0 ? false : true;
       }

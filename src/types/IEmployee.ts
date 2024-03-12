@@ -14,7 +14,7 @@ export interface IEmployee {
   dateWork: string;
   number: string;
   idCard: string;
-  Postion: IEmployeePostion;
+  Position: IEmployeePosition;
   Type: IEmployeeType;
   initVacation: number;
   takeVacation: number;
@@ -76,7 +76,7 @@ export interface IEmployeeType {
   id: number; 
   name: string; 
 }
-export interface IEmployeePostion {
+export interface IEmployeePosition {
   id: number; 
   name: string; 
   level: string; 

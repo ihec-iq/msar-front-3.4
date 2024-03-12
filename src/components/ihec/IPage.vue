@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import loading from "../general/loading.vue";
+
 defineProps({
   HeaderTitle: {
     type: String,
@@ -7,6 +9,10 @@ defineProps({
   Color: {
     type: String,
     default: "blue",
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>
@@ -26,16 +32,26 @@ defineProps({
           </div>
         </div>
 
-        <div>
-          <slot name="HeaderButtons"></slot>
+        <div class="flex flex-row">
+          <div
+           v-if="isLoading"
+            class="h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+            role="status"
+          >
+            <span  
+              class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+              >Loading...</span
+            >
+          </div>
+          <slot v-if="isLoading==false" name="HeaderButtons"></slot>
         </div>
       </div>
     </nav>
 
-    <div class="bg-slate-50 dark:bg-slate-800">
+    <div  class="bg-slate-50 dark:bg-slate-800">
       <slot></slot>
     </div>
-    <div class="bg-slate-100 dark:bg-slate-800">
+    <div  v-if="isLoading==false" class="bg-slate-100 dark:bg-slate-800">
       <slot name="Footer"></slot>
     </div>
   </div>

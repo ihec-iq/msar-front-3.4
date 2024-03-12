@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
+import type { IEmployee, IEmployeeFilter, IEmployeePosition, IEmployeeType } from "@/types/IEmployee";
 
 export const useEmployeeStore = defineStore("employeeStore", () => {
   const employee = ref<IEmployee>({
@@ -17,7 +17,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     initVacationSick: 0,
     takeVacationSick: 0,
     dateWork: new Date().toLocaleDateString(),
-    Postion: {
+    Position: {
       id: 0,
       name: "",
       level: "",
@@ -29,6 +29,9 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     },
   });
   const employees = ref<Array<IEmployee>>([]);
+  const employees_positions = ref<Array<IEmployeePosition>>([]);
+  const employees_types = ref<Array<IEmployeeType>>([]);
+
   const pathBase = "";
   const pathUrl = `${pathBase}/employee`;
   async function get() {
@@ -58,7 +61,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       initVacationSick: 0,
       takeVacationSick: 0,
       dateWork: new Date().toLocaleDateString(),
-      Postion: {
+      Position: {
         id: 0,
         name: "",
         level: "",
@@ -74,10 +77,24 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function get_employee_positions() {
-    return await Api.get(`employee_position/`);
+    return await Api.get(`employee_position`).then((response: any) => {
+        if (response.status == 200) {
+          employees_positions.value = response.data.data;
+        }
+      })
+      .catch((errors: any) => {
+        console.log("in get employees_positions : " + errors);
+      });
   }
   async function get_employee_types() {
-    return await Api.get(`employee_position/`);
+    return await Api.get(`employee_type`).then((response: any) => {
+        if (response.status == 200) {
+          employees_types.value = response.data.data;
+        }
+      })
+      .catch((errors: any) => {
+        console.log("in get employees_positions : " + errors);
+      });;
   }
   async function getItemHistory(params: IEmployeeFilter, page: number) {
     return await Api.get(`stockSys/voucherItemHistory/filter?page=${page}`, {
@@ -100,6 +117,8 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     employee,
     resetData,
     employees,
+    employees_types,
+    employees_positions,
     get,
     get_filter,
     getItemHistory,

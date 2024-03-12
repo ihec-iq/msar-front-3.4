@@ -36,7 +36,6 @@ const Change = () => {
     <select
       class="_input"
       :name="name"
-      :id="name"
       v-model="modelValue"
       @change="Change"
     >

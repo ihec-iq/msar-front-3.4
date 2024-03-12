@@ -205,5 +205,6 @@ const trns = app?.appContext.config.globalProperties.$trns;
         </div>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>

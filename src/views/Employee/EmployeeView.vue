@@ -11,6 +11,8 @@ import { t } from "@/utils/I18nPlugin";
 import type { IUser } from "@/types/core/IUser";
 import { useUserStore } from "@/stores/userStore";
 import { EnumPermission } from "@/utils/EnumSystem";
+import ISelect from "@/components/inputs/ISelect.vue";
+import IPage from "@/components/ihec/IPage.vue";
 
 //region"Drag and Drop"
 
@@ -24,7 +26,8 @@ const id = ref(Number(route.params.id));
 const isPerson = ref(false);
 
 const employeeStore = useEmployeeStore();
-const { employee } = storeToRefs(useEmployeeStore());
+const { employee, employees_types, employees_positions } =
+  storeToRefs(useEmployeeStore());
 const sectionStore = useSectionStore();
 const { sections } = storeToRefs(useSectionStore());
 
@@ -46,18 +49,20 @@ const store = () => {
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
+  formData.append("positionId", employee.value.Position.id.toString());
+  formData.append("typeId", employee.value.Type.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
-  formData.append("number", employee.value.number.toString());
+  formData.append("number", String(employee.value.number));
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
   formData.append(
     "initVacationSick",
-    employee.value.initVacationSick.toString(),
+    employee.value.initVacationSick.toString()
   );
   formData.append(
     "takeVacationSick",
-    employee.value.takeVacationSick.toString(),
+    employee.value.takeVacationSick.toString()
   );
 
   employeeStore
@@ -92,18 +97,20 @@ function update() {
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
+  formData.append("positionId", employee.value.Position.id.toString());
+  formData.append("typeId", employee.value.Type.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
-  formData.append("number", employee.value.number.toString());
+  formData.append("number", String(employee.value.number));
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
   formData.append(
     "initVacationSick",
-    employee.value.initVacationSick.toString(),
+    employee.value.initVacationSick.toString()
   );
   formData.append(
     "takeVacationSick",
-    employee.value.takeVacationSick.toString(),
+    employee.value.takeVacationSick.toString()
   );
   employeeStore
     .update(employee.value.id, formData)
@@ -154,7 +161,7 @@ const Delete = async () => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
-            "success",
+            "success"
           );
           router.go(-1);
         });
@@ -174,6 +181,8 @@ const showData = async () => {
         employee.value.Section.id = response.data.data.Section.id;
         employee.value.Section.name = response.data.data.Section.name;
         employee.value.User = response.data.data.User;
+        employee.value.Type = response.data.data.Type;
+        employee.value.Position = response.data.data.Position;
         employee.value.isPerson = response.data.data.isPerson;
         isPerson.value = response.data.data.isPerson == 0 ? false : true;
       }
@@ -198,10 +207,19 @@ const back = () => {
     name: "employeeIndex",
   });
 };
+const isLoading = ref(false);
 onMounted(async () => {
+  isLoading.value = true;
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   await sectionStore.get_sections();
+  await employeeStore.get_employee_types();
+  await employeeStore.get_employee_positions();
+  await useUserStore()
+    .get({})
+    .then((response) => {
+      SelectedUsers.value = response.data.data;
+    });
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "EmployeeAdd";
     employee.value.id = 0;
@@ -210,15 +228,11 @@ onMounted(async () => {
     employee.value.id = id.value;
     namePage.value = "EmployeeUpdate";
   }
-  await useUserStore()
-    .get({})
-    .then((response) => {
-      SelectedUsers.value = response.data.data;
-    });
+  isLoading.value = false;
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)">
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton2
         color="green"
@@ -231,30 +245,31 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <IRow>
-        <IForm>
+        <IForm
+          >
           <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('Name')"
                 name="Name"
                 v-model="employee.name"
                 type="text"
             /></ICol>
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('EmployeeNumber')"
                 name="EmployeeNumer"
                 v-model="employee.number"
                 type="text"
             /></ICol>
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('EmployeeIdCard')"
                 name="EmployeeIdCard"
                 v-model="employee.idCard"
                 type="text"
             /></ICol>
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="1" span-md="1" span-sm="1">
               <ISelect
                 :label="t('Section')"
                 v-model="employee.Section.id"
@@ -262,7 +277,23 @@ onMounted(async () => {
                 :options="sections"
                 :IsRequire="true"
             /></ICol>
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="1" span-sm="1">
+              <ISelect
+                :label="t('EmployeePosition')"
+                v-model="employee.Position.id"
+                name="PostionId"
+                :options="employees_positions"
+                :IsRequire="true"
+            /></ICol>
+            <ICol span="1" span-md="1" span-sm="1">
+              <ISelect
+                :label="t('EmployeeType')"
+                v-model="employee.Type.id"
+                name="TypeId"
+                :options="employees_types"
+                :IsRequire="true"
+            /></ICol>
+            <ICol span="1" span-md="1" span-sm="1">
               <IVSelect
                 :label="t('User')"
                 v-model="employee.User"
@@ -271,7 +302,7 @@ onMounted(async () => {
                 :IsRequire="true"
               />
             </ICol>
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="1" span-sm="1">
               <ICheckbox v-model="isPerson" :checked="isPerson">
                 {{ t("EmployeeIsPerson") }} :
                 {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
