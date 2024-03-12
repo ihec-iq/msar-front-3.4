@@ -13,11 +13,10 @@ import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
 
-import type { IVacation } from "../../IVacation";
+import type { IVacation , IVacationReason } from "../../IVacation";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-import type { IVacationReason } from "../../IVacation";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -27,14 +26,14 @@ const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const { is } = storeToRefs(rtlStore);
 
-const itemStore = useVacationDailyStore();
+const vacationDailyStore = useVacationDailyStore();
 const { vacationDaily } = storeToRefs(useVacationDailyStore());
 const { vacations } = storeToRefs(useVacationStore());
 const { reasons } = storeToRefs(useVacationReasonStore());
 const { employees } = storeToRefs(useEmployeeStore());
-const Loading = ref(false);
+const isLoading = ref(false);
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const storeWithPrint = () => {
@@ -52,7 +51,7 @@ const store = (withPrint: boolean = false) => {
     JSON.stringify(vacationDaily.value.EmployeeAlter)
   );
   formData.append("Reason", JSON.stringify(vacationDaily.value.Reason));
-  itemStore
+  vacationDailyStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -69,7 +68,7 @@ const store = (withPrint: boolean = false) => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemStore.getError(error);
+      errors.value = vacationDailyStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -91,7 +90,7 @@ function update() {
   );
   formData.append("Reason", JSON.stringify(vacationDaily.value.Reason));
 
-  itemStore
+  vacationDailyStore
     .update(vacationDaily.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
@@ -107,7 +106,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemStore.getError(error);
+      errors.value = vacationDailyStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -136,7 +135,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemStore._delete(vacationDaily.value.id).then(() => {
+        await vacationDailyStore._delete(vacationDaily.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -148,7 +147,7 @@ const Delete = async () => {
     });
 };
 const showData = async () => {
-  Loading.value = true;
+  isLoading.value = true;
   await useVacationDailyStore()
     .show(id.value)
     .then((response) => {
@@ -174,7 +173,7 @@ const showData = async () => {
         router.go(-1);
       });
     });
-  Loading.value = false;
+  isLoading.value = false;
 };
 //#endregion
 const back = () => {
@@ -245,19 +244,29 @@ const ChangeDateRecord = () => {
   vacationDaily.value.dayTo = d.toISOString().split("T")[0];
 };
 //#region filters"
+
 const SelectedEmployees = ref<Array<IEmployee>>([]);
 
 const SelectEmployeeSection = () => {
   if (
-    vacationDaily.value.Vacation.id == 0 ||
-    vacationDaily.value.Vacation.id == undefined
+    vacationDaily.value.Vacation.id == undefined ||
+    vacationDaily.value.Vacation.id == 0
   ) {
     SelectedEmployees.value = employees.value;
   } else {
+    isLoading.value = true;
     SelectedEmployees.value = employees.value.filter(filterEmployeesBySection);
+    isLoading.value = false;
   }
 };
 const filterEmployeesBySection = (_employee: IEmployee) => {
+  if (
+    (vacationDaily.value.Vacation.Employee.Position.level == "0" ||
+      vacationDaily.value.Vacation.Employee.Position.level == "1") &&
+    _employee.id != vacationDaily.value.Vacation.Employee.id
+  ) {
+    return true;
+  }
   if (
     _employee.Section.id
       .toString()
@@ -268,7 +277,7 @@ const filterEmployeesBySection = (_employee: IEmployee) => {
   } else return false;
 };
 watch(
-  () => vacationDaily.value.Vacation,
+  () => vacationDaily.value.Vacation.Employee,
   () => {
     SelectEmployeeSection();
   }
@@ -308,7 +317,7 @@ const reset = () => {
 };
 </script>
 <template>
-  <IPage :HeaderTitle="namePage">
+  <IPage :HeaderTitle="namePage" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton2
         color="green"
@@ -319,7 +328,8 @@ const reset = () => {
         :text="t('New')"
       />
     </template>
-    <IPageContent>
+    <IPageContent
+      >{{ vacationDaily.Vacation.Employee }}
       <IRow>
         <IForm>
           <IRow col="4" col-lg="4" col-md="2" col-sm="1">
@@ -369,6 +379,7 @@ const reset = () => {
               >
                 {{ t("OutputVoucherEmployeeRequest") }}
               </div>
+              {{ isLoading }}
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                 v-model="vacationDaily.Vacation"
@@ -665,4 +676,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/vacations/vacationDailyStore@/project/vacation/vacationStore@/project/vacation/vacationReasonStore@/project/vacation/IVacation@/project/vacation/vacationDaily/IVacationDaily
