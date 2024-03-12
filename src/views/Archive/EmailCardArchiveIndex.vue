@@ -57,7 +57,10 @@ const formatArchiveDate = (value) => {
         >{{ formatArchiveDate(item.issueDate) }}</span
       >
     </div>
+
     <div v-if="item.files.length != 0" class="flex px-6 pb-2">
+      <!-- empty div -->
+      <div class="flex basis-96"></div>
       <!-- chip -->
       <div
         v-if="item.files.length < 3"
