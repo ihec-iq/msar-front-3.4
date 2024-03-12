@@ -25,6 +25,7 @@ declare module 'vue' {
     DragDropFilePreview: typeof import('./src/components/DragDropFilePreview.vue')['default']
     DuplicateButton: typeof import('./src/components/dropDown/DuplicateButton.vue')['default']
     EditButton: typeof import('./src/components/dropDown/EditButton.vue')['default']
+    EmailCardArchiveIndex: typeof import('./src/components/ihec/archive/EmailCardArchiveIndex.vue')['default']
     FilePreview: typeof import('./src/components/FilePreview.vue')['default']
     I2BtnSearch: typeof import('./src/components/v2/I2BtnSearch.vue')['default']
     IBadge: typeof import('./src/components/inputs/IBadge.vue')['default']
