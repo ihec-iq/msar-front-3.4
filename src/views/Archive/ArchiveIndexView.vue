@@ -16,8 +16,8 @@ import IPageContent from "@/components/ihec/archive/IPageContent.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
-import CardsArchiveTypeindex from "@/components/ihec/archive/CardsArchiveTypeindex.vue";
-import EmailCardArchiveIndex from "@/components/ihec/archive/EmailCardArchiveIndex.vue";
+import CardsArchiveTypeIndex from "./CardsArchiveTypeIndex1.vue";
+import EmailCardArchiveIndex from "./EmailCardArchiveIndex.vue";
 
 const { checkPermissionAccessArray } = usePermissionStore();
 const isLoading = ref(false);
@@ -152,7 +152,7 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
         </ISearchBar>
       </IRow>
       <IRow>
-        <CardsArchiveTypeindex :OnClick="getFilterData"></CardsArchiveTypeindex>
+        <CardsArchiveTypeIndex :OnClick="getFilterData"></CardsArchiveTypeIndex>
       </IRow>
       <IRow>
         <EmailCardArchiveIndex
