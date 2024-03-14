@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import moment from "moment";
 import { useDragDropStore } from "@/compositions/dragDrop";
 
@@ -14,7 +14,7 @@ const props = defineProps<{
     number: string;
     description: string;
     issueDate: string;
-    files: { title: string; path: string }[];
+    files: { title: string; path: string; extension: string }[];
   };
 }>();
 

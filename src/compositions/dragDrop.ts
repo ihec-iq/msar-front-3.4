@@ -71,7 +71,7 @@ export const useDragDropStore = defineStore("DragDrop", () => {
       extension == "xls" ||
       extension == "xlsx"
     )
-      return "https://img.icons8.com/color/48/microsoft-excel-2019--v1.png";
+      return "@assets/image/microsoft-excel.png";
     else if (
       extension ==
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||

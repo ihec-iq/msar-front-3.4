@@ -22,6 +22,7 @@ const { vacationDaily } = useVacationDailyStore();
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
+import IInput from "@/components/inputs/IInput.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -118,7 +119,7 @@ onMounted(async () => {
               :placeholder="t('Search')"
               v-model="fastSearch"
               type="text"
-              :getDataByInter="getFilterData"
+              :OnKeyEnter="getFilterData"
             />
           </ICol>
         </ISearchBar>
