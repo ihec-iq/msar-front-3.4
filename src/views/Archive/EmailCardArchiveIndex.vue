@@ -20,7 +20,7 @@ const openFile = (path: string) => {
   window.open(fileUrl, "_blank");
 };
 
-const formatArchiveDate = (value) => {
+const formatArchiveDate = (value: string) => {
   const currentDayCondition =
     moment(new Date()).format("YYYY-MM-DD") ==
     moment(value).format("YYYY-MM-DD");

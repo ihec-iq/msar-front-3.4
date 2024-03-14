@@ -133,6 +133,7 @@ const headers = ref<Array<ITableHeader>>([
               :placeholder="t('Search')"
               v-model="fastSearch"
               type="text"
+              :getDataByInter="getFilterData"
             />
           </ICol>
           <!-- report type -->

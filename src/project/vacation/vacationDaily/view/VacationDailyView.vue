@@ -13,7 +13,7 @@ import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
 
-import type { IVacation , IVacationReason } from "../../IVacation";
+import type { IVacation, IVacationReason } from "../../IVacation";
 
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
@@ -62,8 +62,9 @@ const store = (withPrint: boolean = false) => {
           showConfirmButton: false,
           timer: 1500,
         });
+        console.log(response.data);
         if (withPrint) print();
-        router.go(-1);
+        //router.go(-1);
       }
     })
     .catch((error) => {
@@ -249,8 +250,8 @@ const SelectedEmployees = ref<Array<IEmployee>>([]);
 
 const SelectEmployeeSection = () => {
   if (
-    vacationDaily.value.Vacation.id == undefined ||
-    vacationDaily.value.Vacation.id == 0
+    vacationDaily.value.Vacation?.id == undefined ||
+    vacationDaily.value.Vacation?.id == 0
   ) {
     SelectedEmployees.value = employees.value;
   } else {
@@ -261,23 +262,24 @@ const SelectEmployeeSection = () => {
 };
 const filterEmployeesBySection = (_employee: IEmployee) => {
   if (
-    (vacationDaily.value.Vacation.Employee.Position.level == "0" ||
-      vacationDaily.value.Vacation.Employee.Position.level == "1") &&
-    _employee.id != vacationDaily.value.Vacation.Employee.id
+    (vacationDaily.value.Vacation.Employee?.Position.level === "1" ||
+      vacationDaily.value.Vacation.Employee?.Position.level === "0") &&
+    (_employee.Position.level === "0" || _employee.Position.level === "1") &&
+    _employee.id != vacationDaily.value.Vacation.Employee?.id
   ) {
     return true;
   }
   if (
     _employee.Section.id
       .toString()
-      .includes(vacationDaily.value.Vacation.Employee.Section.id.toString()) &&
-    _employee.id != vacationDaily.value.Vacation.Employee.id
+      .includes(vacationDaily.value.Vacation.Employee?.Section.id.toString()) &&
+    _employee.id != vacationDaily.value.Vacation.Employee?.id
   ) {
     return true;
   } else return false;
 };
 watch(
-  () => vacationDaily.value.Vacation.Employee,
+  () => vacationDaily.value.Vacation?.Employee.id,
   () => {
     SelectEmployeeSection();
   }
@@ -328,8 +330,7 @@ const reset = () => {
         :text="t('New')"
       />
     </template>
-    <IPageContent
-      >{{ vacationDaily.Vacation.Employee }}
+    <IPageContent>
       <IRow>
         <IForm>
           <IRow col="4" col-lg="4" col-md="2" col-sm="1">
@@ -379,7 +380,6 @@ const reset = () => {
               >
                 {{ t("OutputVoucherEmployeeRequest") }}
               </div>
-              {{ isLoading }}
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                 v-model="vacationDaily.Vacation"
@@ -500,13 +500,13 @@ const reset = () => {
         <tr class="RowTable">
           <td class="RowHeader w-[50%]">اسم الموظف</td>
           <td class="RowContent w-[50%]">
-            {{ vacationDaily.Vacation.Employee.name }}
+            {{ vacationDaily.Vacation?.Employee.name }}
           </td>
         </tr>
         <tr class="RowTable">
           <td class="RowHeader w-[50%]">الشعبة</td>
           <td class="RowContent w-[50%]">
-            {{ vacationDaily.Vacation.Employee.Section?.name }}
+            {{ vacationDaily.Vacation?.Employee.Section?.name }}
           </td>
         </tr>
         <tr class="RowTable">

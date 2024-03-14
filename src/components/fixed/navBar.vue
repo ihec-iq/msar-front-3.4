@@ -148,7 +148,7 @@ const { user } = storeToRefs(useAuthStore());
             <!-- *Old source: @/assets/logo-512x512.png -->
             <img
               @click="isClose = !isClose"
-              src="https://avatars.githubusercontent.com/u/131960256?s=200&v=4"
+              src="@/assets/ihec-logo.jpg"
               alt="Profile Picture"
               class="w-14 h-14 rounded-full align-middle"
             />
