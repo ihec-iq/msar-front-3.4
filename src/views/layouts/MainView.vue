@@ -28,6 +28,6 @@ const { isClose } = storeToRefs(rtlStore);
   background-image: none;
 }
 .image-bg {
-  background-image: url("./assets/image/beams-home@95.jpg");
+  background-image: url("@/assets/image/beams-home@95.jpg");
 }
 </style>

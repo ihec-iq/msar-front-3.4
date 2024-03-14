@@ -135,6 +135,7 @@ const headers = ref<Array<ITableHeader>>([
               :placeholder="t('Search')"
               v-model="fastSearch"
               type="text"
+              :getDataByInter="getFilterData"
             />
           </ICol>
           <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
