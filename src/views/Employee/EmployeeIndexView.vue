@@ -129,7 +129,7 @@ const headers = ref<Array<ITableHeader>>([
               :placeholder="t('SearchForUser')"
               v-model="fastSearch"
               type="text"
-              :getDataByInter="getFilterData"
+              :OnKeyEnter="getFilterData"
             />
           </ICol>
           <!-- date -->

@@ -173,7 +173,7 @@ const headers = ref<Array<ITableHeader>>([
               v-model="fastSearch"
               name="Name"
               type="text"
-              :getDataByInter="getFilterData"
+              :OnKeyEnter="getFilterData"
             />
           </ICol>
           <ICol :span-lg="1" :span-md="2" :span="1"

@@ -35,7 +35,7 @@ const props = defineProps({
     type: String as () => EnumDirection, // Cast to the enum type
     default: EnumDirection.Auto, // Default value (optional)
   },
-  getDataByInter: {
+  OnKeyEnter: {
     type: Function, // Cast to the enum type
     default: () => {}, // Default value (optional)
   },
@@ -46,7 +46,7 @@ const props = defineProps({
 });
 
 const keydown = () => {
-  props.getDataByInter();
+  props.OnKeyEnter();
 };
 </script>
 <template>
