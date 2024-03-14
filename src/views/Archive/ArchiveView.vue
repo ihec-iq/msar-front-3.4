@@ -9,7 +9,6 @@ import FilePreview from "./FilePreview.vue";
 import DragDrop from "./DragDrop.vue";
 import { useDragDropStore } from "@/compositions/dragDrop";
 import { t } from "@/utils/I18nPlugin";
-
 import IPage from "@/components/ihec/IPage.vue";
 import { crud_delete } from "@/utils/crudTool";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
@@ -264,8 +263,8 @@ import { EnumPermission } from "@/utils/EnumSystem";
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col="2" col-lg="2" col-md="1" col-sm="1">
-            <ICol>
+          <IRow>
+            <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('Title')"
                 v-model="archive.title"
@@ -273,23 +272,16 @@ import { EnumPermission } from "@/utils/EnumSystem";
                 type="text"
                 :IsRequire="true"
             /></ICol>
-            <ICol>
-              <ICheckbox
-                :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
-                v-model="isIn"
-                :checked="true"
-                :IsRequire="true"
-            /></ICol>
           </IRow>
           <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('NumberBook')"
                 v-model="archive.number"
                 name="number"
                 type="text"
             /></ICol>
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('Date')"
                 v-model="archive.issueDate"
@@ -297,8 +289,7 @@ import { EnumPermission } from "@/utils/EnumSystem";
                 type="date"
                 :IsRequire="true"
             /></ICol>
-
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="2" span-sm="1">
               <ISelect
                 :label="t('ArchiveType')"
                 v-model="archive.archiveTypeId"
@@ -306,16 +297,14 @@ import { EnumPermission } from "@/utils/EnumSystem";
                 :options="archiveTypes"
                 :IsRequire="true"
             /></ICol>
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('way')"
                 v-model="archive.way"
                 name="way"
                 type="text"
             /></ICol>
-          </IRow>
-          <IRow>
-            <ICol>
+            <ICol span="4" span-md="4" span-sm="4">
               <IInput
                 :label="t('Description')"
                 v-model="archive.description"
@@ -324,10 +313,21 @@ import { EnumPermission } from "@/utils/EnumSystem";
                 class="w-full"
             /></ICol>
           </IRow>
-          <!-- file -->
           <IRow>
+            <ICol span="1" span-md="2" span-sm="1">
+              <ICheckbox
+                :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
+                v-model="isIn"
+                :checked="true"
+                :IsRequire="true"
+            /></ICol>
+          </IRow>
+          <!-- file -->
+          <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol
-              :col="4"
+              span="1"
+              span-md="2"
+              span-sm="1"
               class=""
               v-for="document in archive.files"
               :key="document.name"
