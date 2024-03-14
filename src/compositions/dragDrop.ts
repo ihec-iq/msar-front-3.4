@@ -55,6 +55,33 @@ export const useDragDropStore = defineStore("DragDrop", () => {
       ).toString();
   };
 
+  const generateIcon = (extension: string | undefined = ""): string => {
+    if (
+      extension == "png" ||
+      extension == "jpg" ||
+      extension == "image/png" ||
+      extension == "image/jpeg"
+    )
+      return "https://img.icons8.com/fluency/48/image--v1.png";
+    else if (extension == "pdf" || extension == "application/pdf")
+      return "https://img.icons8.com/office/16/pdf.png";
+    else if (
+      extension ==
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+      extension == "xls" ||
+      extension == "xlsx"
+    )
+      return "https://img.icons8.com/color/48/microsoft-excel-2019--v1.png";
+    else if (
+      extension ==
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+      extension == "doc" ||
+      extension == "docx"
+    )
+      return "https://img.icons8.com/color/48/microsoft-word-2019--v1.png";
+    else return "https://img.icons8.com/color/48/file.png";
+  };
+
   const CheckFileType = (type: string): string => {
     if (
       type ==
@@ -125,5 +152,6 @@ export const useDragDropStore = defineStore("DragDrop", () => {
     formatFileSize,
     CheckFileType,
     removeFile,
+    generateIcon,
   };
 });
