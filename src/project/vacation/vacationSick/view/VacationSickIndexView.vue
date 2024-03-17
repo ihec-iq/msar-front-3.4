@@ -74,7 +74,6 @@ const CNumber = (val: any = 0): number => {
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.limit = 0;
-  searchFilter.value.record = CNumber(fastSearch.value);
   searchFilter.value.employeeName = fastSearch.value;
   await vacationSick
     .get_filter(searchFilter.value, page)
