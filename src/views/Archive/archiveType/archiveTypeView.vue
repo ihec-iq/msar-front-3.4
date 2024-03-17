@@ -8,29 +8,27 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 import { EnumPermission } from "@/utils/EnumSystem";
+import { useArchiveStore } from "@/stores/archives/archiveStore";
 
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref(".....");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
-const { category } = storeToRefs(useItemCategoryStore());
 const itemCategoryStore = useItemCategoryStore();
+const archiveStore = useArchiveStore();
+const { archiveType } = storeToRefs(useArchiveStore());
 const Loading = ref(false);
 const router = useRouter();
 const errors = ref<String | null>();
 
 onMounted(async () => {
-  //console.log(can("show items1"));
-  checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
-  await itemCategoryStore.getFast();
+  checkPermissionAccessArray([EnumPermission.ShowArchiveTypes]);
+
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("Add") + " " + t("archiveType");
-    category.value.id = 0;
   } else {
     await showData();
-    category.value.id = id.value;
     namePage.value = t("Update") + " " + t("archiveType");
   }
 });
@@ -39,12 +37,12 @@ onMounted(async () => {
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("id", category.value.id.toString());
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
+  formData.append("id", archiveType.value.id.toString());
+  formData.append("name", archiveType.value.name.toString());
+  formData.append("description", String(archiveType.value.description));
 
-  itemCategoryStore
-    .store(formData)
+  archiveStore
+    .storeArchiveType(formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -54,7 +52,7 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        //router.go(-1);
+        router.go(-1);
       }
     })
     .catch((error) => {
@@ -72,10 +70,11 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
-  itemCategoryStore
-    .update(category.value.id, formData)
+  formData.append("name", archiveType.value.name.toString());
+  formData.append("description", String(archiveType.value.description));
+
+  archiveStore
+    .updateArchiveType(archiveType.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -85,12 +84,12 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
-        showData();
+        router.go(-1);
       }
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemCategoryStore.getError(error);
+      //errors.value = itemCategoryStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -120,7 +119,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemCategoryStore._delete(category.value.id).then(() => {
+        await archiveStore._deleteArchiveType(archiveType.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -134,8 +133,10 @@ const Delete = async () => {
 
 const showData = async () => {
   Loading.value = true;
-  await itemCategoryStore
-    .show(id.value)
+  await archiveStore.getArchiveTypeById(id.value);
+
+  /* await archiveStore
+    .getArchiveTypeById(id.value)
     .then((response) => {
       if (response.status == 200) {
         category.value.id = response.data.data.id;
@@ -154,13 +155,13 @@ const showData = async () => {
       }).then(() => {
         router.go(-1);
       });
-    });
+    }); */
   Loading.value = false;
 };
 //#endregion
 
 const reset = () => {
-  useItemCategoryStore().resetData();
+  useArchiveStore().resetArchiveType();
 };
 </script>
 <template>
@@ -183,19 +184,19 @@ const reset = () => {
               <IInput
                 :label="t('Name')"
                 name="name"
-                v-model="category.name"
+                v-model="archiveStore.archiveType.name"
                 type="text"
             /></ICol>
             <ICol>
               <IInput
                 :label="t('Description')"
                 name="description"
-                v-model="category.description"
+                v-model="archiveStore.archiveType.description"
                 type="text"
             /></ICol>
           </IRow>
           <IFooterCrud
-            :isAdd="category.id == 0"
+            :isAdd="archiveStore.archiveType.id == 0"
             :onCreate="store"
             :onUpdate="update"
             :onDelete="Delete"

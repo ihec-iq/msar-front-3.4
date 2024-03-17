@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
-import type { IItemCategory, IItemCategoryFilter } from "@/types/IItem";
+import { useArchiveStore } from "@/stores/archives/archiveStore";
+import type { IItemCategoryFilter } from "@/types/IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
@@ -10,20 +10,22 @@ import { usePermissionStore } from "@/stores/permissionStore";
 import ArchiveTypeCard from "./archiveTypeCardComponent.vue";
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
+import { IArchiveType } from "@/types/archives/IArchive";
 
+/**
+ * ! should change the data and dataPage
+ */
 const { checkPermissionAccessArray } = usePermissionStore();
 const isLoading = ref(false);
-const data = ref<Array<IItemCategory>>([]);
+const data = ref<Array<IArchiveType>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IItemCategory>>([]);
-const { category } = useItemCategoryStore();
-const itemCategoryStore = useItemCategoryStore();
+const archiveStore = useArchiveStore();
 const route = useRoute();
 const router = useRouter();
 
 //#region LifeCycle
 onMounted(async () => {
-  checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
+  checkPermissionAccessArray([EnumPermission.ShowArchiveTypes]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
 
@@ -43,20 +45,6 @@ watch(
 //#region Search and filtering
 const fastSearch = ref("");
 
-const filterByIDName = (item: IItemCategory) => {
-  if (item.name.includes(fastSearch.value)) {
-    return true;
-  } else return false;
-};
-
-const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
-  if (fastSearch.value == "") data.value = dataBase.value;
-  else {
-    data.value = dataBase.value.filter(filterByIDName);
-  }
-};
-
 const searchFilter = ref<IItemCategoryFilter>({
   name: "",
   limit: 10,
@@ -64,27 +52,14 @@ const searchFilter = ref<IItemCategoryFilter>({
 
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-  searchFilter.value.name = fastSearch.value;
-  await itemCategoryStore
-    .get_filter(searchFilter.value, page)
-    .then((response) => {
-      if (response.status == 200) {
-        dataPage.value = response.data.data;
-        data.value = response.data.data.data;
-        dataBase.value = response.data.data.data;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  await archiveStore.getArchiveTypes();
   isLoading.value = false;
 };
 //#endregion
 
 //#region Add and Update
 const addItem = () => {
-  category.id = 0;
-  category.name = "";
+  archiveStore.resetArchiveType();
   router.push({
     name: "archiveTypeAdd",
   });
@@ -110,10 +85,19 @@ const addItem = () => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :col="2" :colMd="2" :colLg="2">
-        <ICol class="p-3" :span="2" v-for="item in data" :key="item.id">
+
+      <IRow :col="4" :col-lg="4" :col-md="3" :col-sm="1" :col-xs="1">
+        <ICol
+          class="my-2"
+          :span="1"
+          :span-lg="1"
+          :span-md="1"
+          v-for="item in archiveStore.archiveTypes"
+          :key="item.id"
+        >
+          <!-- card -->
           <ArchiveTypeCard :item="item" />
-          <SimpleLoading v-if="isLoading"></SimpleLoading>
+          <!-- end card -->
         </ICol>
       </IRow>
       <IRow>
@@ -156,4 +140,5 @@ const addItem = () => {
       </IRow>
     </IPageContent>
   </IPage>
+  <SimpleLoading v-if="isLoading"></SimpleLoading>
 </template>
