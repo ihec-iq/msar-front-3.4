@@ -156,9 +156,7 @@ const back = () => {
   });
 };
 onMounted(async () => {
-  //console.log(can("show items1"));
   checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
-  await itemCategoryStore.getFast();
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("Add") + " " + t("ItemCategory");
     category.value.id = 0;
