@@ -20,8 +20,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     isIn: 1,
     isInWord: "",
     archiveType: { id: 0, name: "" },
-    archiveTypeId: 0,
-    sectionId: 1,
+    archiveTypeId: 0
   });
   const archiveTypes = ref<IArchiveType[]>([]);
 
@@ -63,7 +62,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     return await Api.delete(path);
   }
   async function getArchiveTypes() {
-    return await Api.get(`${pathBase}/archiveType`)
+    return await Api.get(`${pathBase}/archiveType/by/section`)
       .then((response) => {
         if (response.status == 200) {
           archiveTypes.value = response.data.data;
@@ -85,8 +84,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
       isIn: 1,
       isInWord: "",
       archiveType: { id: 0, name: "" },
-      archiveTypeId: 0,
-      sectionId: 1,
+      archiveTypeId: 1,
     };
   };
   return {

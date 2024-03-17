@@ -66,6 +66,7 @@ const makeFastSearch = () => {
 const searchFilter = ref<IVacationDailyFilter>({
   dayFrom: "",
   limit: 10,
+  employeeName: "",
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;

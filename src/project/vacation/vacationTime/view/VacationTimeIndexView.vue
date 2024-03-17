@@ -7,10 +7,7 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
-import type {
-  IVacationTime,
-  IVacationTimeFilter,
-} from "../IVacationTime";
+import type { IVacationTime, IVacationTimeFilter } from "../IVacationTime";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IVacationTime>>([]);
@@ -59,10 +56,11 @@ const makeFastSearch = () => {
 const searchFilter = ref<IVacationTimeFilter>({
   dayFrom: "",
   limit: 10,
+  employeeName: "",
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-  searchFilter.value.record = Number(fastSearch.value);
+  searchFilter.value.employeeName = fastSearch.value;
   await useVacationTimeStore()
     .get_filter(searchFilter.value, page)
     .then((response) => {
