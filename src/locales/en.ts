@@ -198,4 +198,5 @@ export default {
   Section: "Section",
   Save: "Save",
   New: "New",
+  archiveType: "Archive Type",
 };
