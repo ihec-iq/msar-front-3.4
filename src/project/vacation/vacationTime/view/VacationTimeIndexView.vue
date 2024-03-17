@@ -107,7 +107,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :col="2" :col-md="2" :col-lg="2" :sm="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -115,6 +115,7 @@ onMounted(async () => {
               :placeholder="t('Search')"
               v-model="fastSearch"
               type="text"
+              :OnKeyEnter="getFilterData"
             />
           </ICol>
         </ISearchBar>

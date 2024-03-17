@@ -141,7 +141,7 @@ const trns = app?.appContext.config.globalProperties.$trns;
               v-model="fastSearch"
               name="Name"
               type="text"
-              :getDataByInter="getFilterData"
+              :OnKeyEnter="getFilterData"
             />
           </ICol>
         </ISearchBar>

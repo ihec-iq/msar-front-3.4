@@ -114,6 +114,7 @@ onMounted(async () => {
               :placeholder="t('Search')"
               v-model="fastSearch"
               type="text"
+              :OnKeyEnter="getFilterData"
             />
           </ICol>
         </ISearchBar>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import moment from "moment";
 import { useDragDropStore } from "@/compositions/dragDrop";
 
@@ -14,7 +14,7 @@ const props = defineProps<{
     number: string;
     description: string;
     issueDate: string;
-    files: { title: string; path: string }[];
+    files: { title: string; path: string; extension: string }[];
   };
 }>();
 
@@ -23,7 +23,7 @@ const openFile = (path: string) => {
   window.open(fileUrl, "_blank");
 };
 
-const formatArchiveDate = (value) => {
+const formatArchiveDate = (value: string) => {
   const currentDayCondition =
     moment(new Date()).format("YYYY-MM-DD") ==
     moment(value).format("YYYY-MM-DD");

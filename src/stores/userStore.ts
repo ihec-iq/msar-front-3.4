@@ -48,6 +48,7 @@ export const useUserStore = defineStore("userStore", () => {
   return {
     user,
     get,
+    get_lite,
     get_filter,
     _delete,
     store,

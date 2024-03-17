@@ -216,7 +216,7 @@ onMounted(async () => {
   await employeeStore.get_employee_types();
   await employeeStore.get_employee_positions();
   await useUserStore()
-    .get({})
+    .get_lite()
     .then((response) => {
       SelectedUsers.value = response.data.data;
     });
