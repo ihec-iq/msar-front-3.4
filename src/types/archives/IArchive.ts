@@ -10,8 +10,6 @@ export interface IArchive {
   isInWord?: string;
   archiveTypeId: number;
   archiveType?: IArchiveType;
-  sectionId: number;
-  section?: number;
 }
 export interface IArchiveType {
   id: number;

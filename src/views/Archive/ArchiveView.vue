@@ -55,7 +55,6 @@ const store = () => {
   formData.append("issueDate", archive.value.issueDate.toString());
   formData.append("number", archive.value.number.toString());
   formData.append("way", archive.value.way.toString());
-  formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
   const files = filesDataInput.value;
@@ -112,7 +111,6 @@ function update() {
     "way",
     archive.value.way == null ? "" : archive.value.way.toString()
   );
-  formData.append("sectionId", archive.value.sectionId.toString());
   formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
   formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
 
@@ -199,7 +197,6 @@ const showData = async () => {
         archive.value.issueDate = response.data.data.issueDate.split(" ")[0];
         archive.value.number = response.data.data.number;
         archive.value.way = response.data.data.way;
-        archive.value.sectionId = response.data.data.sectionId;
         archive.value.archiveTypeId = response.data.data.archiveTypeId;
         archive.value.isIn = response.data.data.isIn;
         archive.value.files = response.data.data.files;

@@ -55,7 +55,6 @@ const addArchive = () => {
   archive.number = "";
   archive.description = "";
   archive.isIn = 1;
-  archive.sectionId = 1;
   archive.archiveTypeId = 0;
   router.push({
     name: "archiveAdd",
