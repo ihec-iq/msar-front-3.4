@@ -3,18 +3,16 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 
-
+import type { IVacation } from "../../IVacation";
 import type { IVacationSick } from "../IVacationSick";
 import { useVacationSickStore } from "../vacationSickStore";
 import { useVacationStore } from "../../vacationStore";
-import type { IVacation } from "../../IVacation";
+
 import { EnumPermission } from "@/utils/EnumSystem";
 import { t } from "@/utils/I18nPlugin";
-
-
+import IInput from "@/components/inputs/IInput.vue";
 
 //region"Drag and Drop"
 
@@ -22,24 +20,22 @@ import { t } from "@/utils/I18nPlugin";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("VacationSick");
 const route = useRoute();
 const id = ref(Number(route.params.id));
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
 
-const itemStore = useVacationSickStore();
+const objectStore = useVacationSickStore();
 const { vacationSick } = storeToRefs(useVacationSickStore());
 const { vacations } = storeToRefs(useVacationStore());
 
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const reset = () => {
-  itemStore.resetData();
+  objectStore.resetData();
 };
 const store = () => {
   errors.value = null;
@@ -48,7 +44,7 @@ const store = () => {
   formData.append("dayTo", vacationSick.value.dayTo);
   formData.append("record", vacationSick.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
-  itemStore
+  objectStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -64,7 +60,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemStore.getError(error);
+      errors.value = objectStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -81,7 +77,7 @@ function update() {
   formData.append("record", vacationSick.value.record.toString());
   formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
 
-  itemStore
+  objectStore
     .update(vacationSick.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
@@ -97,7 +93,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemStore.getError(error);
+      errors.value = objectStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -126,7 +122,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemStore._delete(vacationSick.value.id).then(() => {
+        await objectStore._delete(vacationSick.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -147,8 +143,6 @@ const showData = async () => {
         vacationSick.value.dayTo = response.data.data.dayTo;
         vacationSick.value.record = response.data.data.record;
         vacationSick.value.Vacation = response.data.data.Vacation;
-
-        vacationSick.value = response.data.data as IVacationSick;
       }
     })
     .catch((errors) => {
@@ -171,16 +165,24 @@ const back = () => {
     name: "vacationSickIndex",
   });
 };
+function isNumber(value?: string | number): boolean {
+  return value != null && value !== "" && !isNaN(Number(value.toString()));
+}
+const CNumber = (val: any = 0): number => {
+  if (!isNumber(val)) return 0;
+  return Number(val);
+};
 onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray([EnumPermission.ShowVacationsSick]);
+
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("VacationSickAdd");
+    namePage.value = "VacationSickAdd";
     vacationSick.value.id = 0;
   } else {
     await showData();
-    vacationSick.value.id = id.value;
-    namePage.value = t("VacationSickUpdate");
+    vacationSick.value.id = CNumber(id.value);
+    namePage.value = "VacationSickUpdate";
   }
   await useVacationStore().get_vacations();
 });
@@ -220,7 +222,7 @@ const ChangeDateRecord = () => {
       <IRow>
         <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="2" span-md="1" span-sm="1">
               <IInput
                 :label="t('DateFrom')"
                 name="dayFrom"
@@ -229,7 +231,7 @@ const ChangeDateRecord = () => {
                 @change="ChangeDate()"
               />
             </ICol>
-            <ICol span="1" span-md="2" span-sm="4">
+            <ICol span="2" span-md="2" span-sm="4">
               <IInput
                 :label="t('DateTo')"
                 v-model="vacationSick.dayTo"
@@ -245,18 +247,16 @@ const ChangeDateRecord = () => {
                 v-model="vacationSick.record"
                 type="number"
                 @input="ChangeDateRecord()"
-                min="1"
+                :min="1"
                 :IsRequire="true"
               />
             </ICol>
-            <ICol span="1" span-md="2" span-sm="4">
-              <div
-                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              >
+            <ICol span="2" span-lg="2" span-md="2" span-sm="4">
+              <div class="">
                 {{ t("OutputVoucherEmployeeRequest") }}
               </div>
               <vSelect
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                class="_input"
                 v-model="vacationSick.Vacation"
                 :options="vacations"
                 :reduce="(vacation: IVacation) => vacation"
@@ -264,22 +264,8 @@ const ChangeDateRecord = () => {
                 :getOptionLabel="
                   (vacation: IVacation) => vacation.Employee.name
                 "
-              >
-                <template #option="{ Employee }">
-                  <div>
-                    <span>{{ Employee.name }}</span>
-                  </div>
-                </template>
-              </vSelect>
+              />
             </ICol>
-            <!-- <ICol span="1" span-md="2" span-sm="4">
-              <ISelect
-                :label="t('ArchiveType')"
-                v-model="archive.archiveTypeId"
-                name="archiveTypeId"
-                :options="archiveTypes"
-                :IsRequire="true"
-            /></ICol> -->
           </IRow>
         </IForm>
       </IRow>
@@ -295,4 +281,3 @@ const ChangeDateRecord = () => {
     </template>
   </IPage>
 </template>
-@/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationStore@/project/vacation/IVacation@/project/vacation/vacationSick/IVacationSick

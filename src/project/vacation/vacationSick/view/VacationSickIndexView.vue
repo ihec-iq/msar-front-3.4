@@ -8,7 +8,6 @@ import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type { IVacationSick, IVacationSickFilter } from "../IVacationSick";
-import { isNumeric } from "vant/lib/utils";
 const { t } = useI18n();
 const isLoading = ref(false);
 const data = ref<Array<IVacationSick>>([]);
@@ -21,6 +20,7 @@ import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
+import CardVactionSickIndex from "./CardVactionSickIndex.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -64,16 +64,19 @@ const Search = async (event: KeyboardEvent) => {
 //#region Search
 const searchFilter = ref<IVacationSickFilter>({
   dayFrom: "",
+  employeeName: "",
   limit: 10,
 });
+function isNumber(value?: string | number): boolean {
+  return value != null && value !== "" && !isNaN(Number(value.toString()));
+}
 const CNumber = (val: any = 0): number => {
-  if (isNumeric(val) == false) return 0;
+  if (!isNumber(val)) return 0;
   return Number(val);
 };
 
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-  searchFilter.value.limit = 0;
   searchFilter.value.employeeName = fastSearch.value;
   await vacationSick
     .get_filter(searchFilter.value, page)
@@ -90,12 +93,6 @@ const getFilterData = async (page: number = 1) => {
   isLoading.value = false;
 };
 //#endregion
-const update = (id: number) => {
-  router.push({
-    name: "vacationSickUpdate",
-    params: { id: id },
-  });
-};
 
 //#region Pagination
 //#endregion

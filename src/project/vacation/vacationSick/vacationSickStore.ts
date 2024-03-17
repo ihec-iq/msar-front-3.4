@@ -47,7 +47,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       newRecordSick: 0,
       recordSick: 0,
     },
-    record: 0,
+    record: 1,
     Reason: {
       id: 1,
       name: "",
