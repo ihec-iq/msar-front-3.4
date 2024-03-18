@@ -1,4 +1,4 @@
-import type { IEmployee } from "../../types/IEmployee";
+import type { IEmployee } from "../employee/IEmployee";
 
 export interface IVacation {
   id: number;

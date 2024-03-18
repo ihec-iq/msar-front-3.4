@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Links } from "@/components/fixed/FixedMenu";
 import { t } from "@/utils/I18nPlugin";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 //#region nav menu
@@ -117,4 +117,4 @@ const filteredLinks = computed(() =>
     </router-link>
   </div> -->
 </template>
-@/stores/permissionStore
+@/stores/permissionStore@/project/user/permissionStore

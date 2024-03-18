@@ -3,25 +3,21 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import { useVacationDailyStore } from "../vacationDailyStore";
 import { useVacationStore } from "../../vacationStore";
-import type { IEmployee } from "@/types/IEmployee";
-import { useEmployeeStore } from "@/stores/employeeStore";
+import type { IEmployee } from "@/project/employee/IEmployee";
+import { useEmployeeStore } from "@/project/employee/employeeStore";
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
 
 import type { IVacation, IVacationReason } from "../../IVacation";
-
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
-
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("VacationDaily");
 const route = useRoute();
-const id = ref(Number(route.params.id)); 
+const id = ref(Number(route.params.id));
 
 const vacationDailyStore = useVacationDailyStore();
 const { vacationDaily } = storeToRefs(useVacationDailyStore());
@@ -61,7 +57,7 @@ const store = (withPrint: boolean = false) => {
         });
         console.log(response.data);
         if (withPrint) print();
-        //router.go(-1);
+        router.go(-1);
       }
     })
     .catch((error) => {
@@ -294,6 +290,7 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import { t } from "@/utils/I18nPlugin";
 
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -449,6 +446,7 @@ const reset = () => {
       >
         <template #Pre>
           <IButton2
+            v-if="vacationDaily.id != 0"
             :text="t('Print')"
             pre-icon="printer"
             type="outlined"

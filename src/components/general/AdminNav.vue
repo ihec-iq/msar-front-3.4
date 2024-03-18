@@ -2,7 +2,7 @@
 import { onMounted, ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import useLanguage from "@/stores/i18n/languageStore";
 const { t } = useLanguage();
 //#region authorization
@@ -336,4 +336,4 @@ li:hover > button svg {
             </van-collapse>
           </li> -->
 <!-- end vant -->
-@/stores/permissionStore
+@/stores/permissionStore@/project/user/permissionStore

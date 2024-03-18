@@ -8,15 +8,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     _ITable: typeof import('./src/components/ihec/_ITable.vue')['default']
-    AddItemPopup: typeof import('./src/components/AddItemPopup.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
     BlockButton: typeof import('./src/components/dropDown/BlockButton.vue')['default']
     BottomToolBarView: typeof import('./src/components/general/BottomToolBarView.vue')['default']
     CardSkeleton: typeof import('./src/components/general/CardSkeleton.vue')['default']
-    CardVacationDailyIndex: typeof import('./src/components/ihec/vacation/CardVacationDailyIndex.vue')['default']
-    CardVactionSickIndex: typeof import('./src/components/ihec/vacation/CardVactionSickIndex.vue')['default']
-    CardVactionTimeIndex: typeof import('./src/components/ihec/vacation/CardVactionTimeIndex.vue')['default']
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DuplicateButton: typeof import('./src/components/dropDown/DuplicateButton.vue')['default']
     EditButton: typeof import('./src/components/dropDown/EditButton.vue')['default']
