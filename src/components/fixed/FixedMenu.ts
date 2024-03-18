@@ -47,6 +47,19 @@ export const Links: Array<IconLink> = [
     description: "نظام ارشيف الكتب الرسمية",
     permissions: [EnumPermission.ShowArchives],
     isActive: true,
+    children: [
+      {
+        routerName: "archiveTypeIndex",
+        title: "انواع الارشيف",
+        icon: '<svg    xmlns="http://www.w3.org/2000/svg"    width="32"    height="32" class="h-5 w-5 sm:h-6 sm:w-6"   viewBox="0 0 24 24"    stroke="currentColor"    >    <path  fill="currentColor"  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"    />  </svg>',
+        iconX:
+          '<svg    xmlns="http://www.w3.org/2000/svg"    width="64" height="64"    viewBox="0 0 24 24"    stroke="currentColor"    >    <path  fill="currentColor"  d="M22 4V2H2v2h9v14.17l-5.5-5.5l-1.42 1.41L12 22l7.92-7.92l-1.42-1.41l-5.5 5.5V4h9Z"    />  </svg>',
+        tab: "Active",
+        description: "انواع الكتب الرسمية والمستندات الرسمية",
+        permissions: [EnumPermission.ShowCategoriesItem],
+        isActive: true,
+      },
+    ],
   },
   {
     routerName: "itemIndex",
@@ -137,7 +150,7 @@ export const Links: Array<IconLink> = [
       ' <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 3.25L5.16 6.72L4 5.34l4.14-3.47l1.15 1.38M22 5.35l-1.16 1.38l-4.14-3.48l1.16-1.38L22 5.35M13 4a8 8 0 0 1 8 8a8 8 0 0 1-8 8a8 8 0 0 1-8-8a8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6a6 6 0 0 0 6 6a6 6 0 0 0 6-6a6 6 0 0 0-6-6m-1 1.5h1.5v4.53l3.22 1.47l-.62 1.36L12 13V7.5M1 14c0-2.5 1.13-4.7 2.91-6.17A9.975 9.975 0 0 0 3 12l.06 1.13L3 14c0 2.28 1.27 4.26 3.14 5.28c1.3 1.22 2.93 2.11 4.75 2.5c-.61.14-1.24.22-1.89.22a8 8 0 0 1-8-8Z"/></svg>',
     tab: "general1",
     description: "الاجازات الزمنية والدورية والمرضية الخاصة بالموظفين",
-    permissions: [EnumPermission.VacationCenter,EnumPermission.VacationOffice],
+    permissions: [EnumPermission.VacationCenter, EnumPermission.VacationOffice],
     isActive: true,
   },
   {

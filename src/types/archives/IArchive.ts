@@ -14,6 +14,8 @@ export interface IArchive {
 export interface IArchiveType {
   id: number;
   name: string;
+
+  description?: string;
   archives?: number;
 }
 export interface IDocument {

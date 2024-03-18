@@ -519,4 +519,5 @@ export default {
   Section: "القسم",
   Save: "حفظ",
   New: "جديد",
+  archiveType: "نوع الارشيف",
 };

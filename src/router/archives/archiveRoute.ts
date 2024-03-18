@@ -25,4 +25,29 @@ export default [
       middleware: [authMiddleware],
     },
   },
+  {
+    path: "/archiveTypes",
+    name: "archiveTypeIndex",
+    component: () =>
+      import("@/views/Archive/archiveType/archiveTypeIndexView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
+    path: "/archiveType/:id",
+    name: "archiveTypeUpdate",
+    component: () => import("@/views/Archive/archiveType/archiveTypeView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
+    path: "/archiveType",
+    name: "archiveTypeAdd",
+    component: () => import("@/views/Archive/archiveType/archiveTypeView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
 ];
