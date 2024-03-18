@@ -17,7 +17,7 @@ const { get_filter, resetData } = useInputVoucherStore();
 
 import { limits } from "@/utils/defaultParams";
 import CardInputVoucherIndex from "./CardInputVoucherIndex.vue";
-import IPageContent from "@/components/ihec/IPageContent.vue";
+import IPageContent from "@/components/ihec/IPageContent.vue" ;
 import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();

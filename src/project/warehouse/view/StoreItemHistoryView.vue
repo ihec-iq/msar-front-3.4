@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
-import SimpleLoading from "@/components/general/loading.vue";
-import type { IStoreItemHistory, IStoreItemFilter } from "@/types/IStore";
-import { useStoringStore } from "@/stores/warehouse/storingStore";
-import { useOutputVoucherStore } from import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";;
+import type { IStoreItemHistory, IStoreItemFilter } from "../IStore";
+import { useStoringStore } from "../storingStore";
+import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -25,7 +23,6 @@ const { get_item } = useStoringStore();
 import { limits } from "@/utils/defaultParams";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import type { ITableHeader } from "@/types/core/components/ITable";
-;
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 

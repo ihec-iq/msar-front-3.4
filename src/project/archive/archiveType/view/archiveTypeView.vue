@@ -2,10 +2,10 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 import { EnumPermission } from "@/utils/EnumSystem";
-import { useArchiveTypeStore } from "@/views/Archive/archiveType/archiveTypeStore";
+import { useArchiveTypeStore } from "../archiveTypeStore";
 
 const archiveTypeStore = useArchiveTypeStore();
 const { archiveType } = useArchiveTypeStore();
@@ -15,7 +15,7 @@ const route = useRoute();
 const id = ref(Number(route.params.id));
 const Loading = ref(false);
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowArchiveTypes]);

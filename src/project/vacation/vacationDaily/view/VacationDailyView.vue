@@ -6,16 +6,15 @@ import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { useVacationDailyStore } from "../vacationDailyStore";
 import { useVacationStore } from "../../vacationStore";
-import type { IEmployee } from "@/types/IEmployee";
-import { useEmployeeStore } from "@/stores/employeeStore";
+import type { IEmployee } from "@/project/employee/IEmployee";
+import { useEmployeeStore } from "@/project/employee/employeeStore";
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
 
 import type { IVacation, IVacationReason } from "../../IVacation";
 
-import { useI18n } from "@/stores/i18n/useI18n";
-const { t } = useI18n();
+
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -294,6 +293,7 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import { t } from "@/utils/I18nPlugin";
 
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -673,4 +673,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/project/Employee/employeeStore@/project/Employee/IEmployee@/project/user/permissionStore

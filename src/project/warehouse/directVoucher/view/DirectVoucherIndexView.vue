@@ -10,8 +10,8 @@ const { checkPermissionAccessArray, can } = usePermissionStore();
 import type {
   IDirectVoucher,
   IDirectVoucherFilter,
-} from "@/types/IDirectVoucher";
-import { useDirectVoucherStore } from "@/stores/warehouse/directVoucherStore";
+} from "../IDirectVoucher";
+import { useDirectVoucherStore } from "../directVoucherStore";
 
 const isLoading = ref(false);
 const data = ref<Array<IDirectVoucher>>([]);

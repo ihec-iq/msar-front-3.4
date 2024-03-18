@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useItemStore } from "@/stores/item/itemStore";
-import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
+import { useItemStore } from "../itemStore";
+import { useItemCategoryStore } from "../itemCategoryStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { t } from "@/utils/I18nPlugin";

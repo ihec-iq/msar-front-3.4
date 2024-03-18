@@ -1,10 +1,10 @@
-import authMiddleware from "../middleware/authMiddleware";
+import authMiddleware from "@/router/middleware/authMiddleware";
 
 export default [
   {
     path: "/archives/:search?",
     name: "archiveIndex",
-    component: () => import("@/views/Archive/ArchiveIndexView.vue"),
+    component: () => import("@/project/archive/view/ArchiveIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -12,7 +12,7 @@ export default [
   {
     path: "/archive",
     name: "archiveAdd",
-    component: () => import("@/views/Archive/ArchiveView.vue"),
+    component: () => import("@/project/archive/view/ArchiveView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -20,7 +20,7 @@ export default [
   {
     path: "/archive/:id",
     name: "archiveUpdate",
-    component: () => import("@/views/Archive/ArchiveView.vue"),
+    component: () => import("@/project/archive/view/ArchiveView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -29,7 +29,7 @@ export default [
     path: "/archiveTypes",
     name: "archiveTypeIndex",
     component: () =>
-      import("@/views/Archive/archiveType/archiveTypeIndexView.vue"),
+      import("@/project/archive/archiveType/view/archiveTypeIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -37,7 +37,7 @@ export default [
   {
     path: "/archiveType/:id",
     name: "archiveTypeUpdate",
-    component: () => import("@/views/Archive/archiveType/archiveTypeView.vue"),
+    component: () => import("@/project/archive/archiveType/view/archiveTypeView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -45,7 +45,7 @@ export default [
   {
     path: "/archiveType",
     name: "archiveTypeAdd",
-    component: () => import("@/views/Archive/archiveType/archiveTypeView.vue"),
+    component: () => import("@/project/archive/archiveType/view/archiveTypeView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

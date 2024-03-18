@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useArchiveStore } from "@/stores/archives/archiveStore";
+import { useArchiveStore } from "../archiveStore";
 import { storeToRefs } from "pinia";
 import { onMounted, defineEmits, ref, type PropType } from "vue";
 import { Icon } from "@iconify/vue";
@@ -53,3 +53,4 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+@/views/Archive/archiveStore

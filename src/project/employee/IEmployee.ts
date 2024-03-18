@@ -1,5 +1,5 @@
 import type { IItem } from "../item/IItem";
-import type { ISection } from "../../types/ISection";
+import type { ISection } from "@/project/section/ISection";
 import type { IStock } from "../warehouse/IStock";
 import type { IUser } from "../user/IUser";
 import type { IVacationDaily } from "../vacation/vacationDaily/IVacationDaily";

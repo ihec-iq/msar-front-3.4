@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { t } from "@/utils/I18nPlugin";
 import { truncateString } from "@/utils/tools";
 
-import { useArchiveStore } from "@/stores/archives/archiveStore";
+import { useArchiveStore } from "../archiveStore";
 const { _deleteDocument } = useArchiveStore();
 
 const props = defineProps({
@@ -241,3 +241,4 @@ const openFile = (path: string) => {
   }
 }
 </style>
+@/views/Archive/archiveStore

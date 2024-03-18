@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useArchiveStore } from "@/stores/archives/archiveStore";
+import { useArchiveStore } from "../archiveStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import FilePreview from "./FilePreview.vue";
 import DragDrop from "./DragDrop.vue";
-import { useDragDropStore } from "@/compositions/dragDrop";
+import { useDragDropStore } from "../dragDrop";
 import { t } from "@/utils/I18nPlugin";
 import IPage from "@/components/ihec/IPage.vue";
 import { crud_delete } from "@/utils/crudTool";
@@ -439,4 +439,4 @@ html.dark {
   /* ...others... */
 }
 </style>
-@/project/user/permissionStore
+@/project/user/permissionStore@/views/Archive/archiveStore@/project/archive/dragDrop
