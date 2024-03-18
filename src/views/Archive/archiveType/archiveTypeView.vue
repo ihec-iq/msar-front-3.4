@@ -1,23 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
 import Swal from "sweetalert2";
-import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 import { EnumPermission } from "@/utils/EnumSystem";
-import { useArchiveStore } from "@/stores/archives/archiveStore";
+import { useArchiveTypeStore } from "@/views/Archive/archiveType/archiveTypeStore";
 
+const archiveTypeStore = useArchiveTypeStore();
+const { archiveType } = useArchiveTypeStore();
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));
-const rtlStore = useRtlStore();
-const itemCategoryStore = useItemCategoryStore();
-const archiveStore = useArchiveStore();
-const { archiveType } = storeToRefs(useArchiveStore());
 const Loading = ref(false);
 const router = useRouter();
 const errors = ref<String | null>();
@@ -28,21 +23,21 @@ onMounted(async () => {
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("Add") + " " + t("archiveType");
   } else {
-    await showData();
+    await getObject();
     namePage.value = t("Update") + " " + t("archiveType");
   }
 });
 
 //#region CURD
-const store = () => {
+const storeObject = () => {
   errors.value = null;
   const formData = new FormData();
-  formData.append("id", archiveType.value.id.toString());
-  formData.append("name", archiveType.value.name.toString());
-  formData.append("description", String(archiveType.value.description));
+  formData.append("id", archiveType.id.toString());
+  formData.append("name", archiveType.name.toString());
+  formData.append("description", String(archiveType.description));
 
-  archiveStore
-    .storeArchiveType(formData)
+  archiveTypeStore
+    .store(formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -56,8 +51,6 @@ const store = () => {
       }
     })
     .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = itemCategoryStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -67,14 +60,14 @@ const store = () => {
     });
 };
 
-function update() {
+function updateObject() {
   errors.value = null;
   const formData = new FormData();
-  formData.append("name", archiveType.value.name.toString());
-  formData.append("description", String(archiveType.value.description));
+  formData.append("name", archiveType.name.toString());
+  formData.append("description", String(archiveType.description));
 
-  archiveStore
-    .updateArchiveType(archiveType.value.id, formData)
+  archiveTypeStore
+    .update(archiveType.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -88,8 +81,6 @@ function update() {
       }
     })
     .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
-      //errors.value = itemCategoryStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -99,7 +90,7 @@ function update() {
     });
 }
 
-const Delete = async () => {
+const deleteObject = async () => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn m-2 bg-red-700",
@@ -119,7 +110,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await archiveStore._deleteArchiveType(archiveType.value.id).then(() => {
+        await archiveTypeStore._delete(archiveType.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -131,17 +122,15 @@ const Delete = async () => {
     });
 };
 
-const showData = async () => {
+const getObject = async () => {
   Loading.value = true;
-  await archiveStore.getArchiveTypeById(id.value);
-
-  /* await archiveStore
-    .getArchiveTypeById(id.value)
+  await archiveTypeStore
+    .getById(id.value)
     .then((response) => {
-      if (response.status == 200) {
-        category.value.id = response.data.data.id;
-        category.value.name = response.data.data.name;
-        category.value.description = response.data.data.description;
+      if (response.status === 200) {
+        archiveType.id = response.data.data.id;
+        archiveType.name = response.data.data.name;
+        archiveType.description = response.data.data.description;
       }
     })
     .catch((errors) => {
@@ -155,13 +144,14 @@ const showData = async () => {
       }).then(() => {
         router.go(-1);
       });
-    }); */
+    });
+
   Loading.value = false;
 };
 //#endregion
 
 const reset = () => {
-  useArchiveStore().resetArchiveType();
+  useArchiveTypeStore().resetData();
 };
 </script>
 <template>
@@ -184,22 +174,22 @@ const reset = () => {
               <IInput
                 :label="t('Name')"
                 name="name"
-                v-model="archiveStore.archiveType.name"
+                v-model="archiveType.name"
                 type="text"
             /></ICol>
             <ICol>
               <IInput
                 :label="t('Description')"
                 name="description"
-                v-model="archiveStore.archiveType.description"
+                v-model="archiveType.description"
                 type="text"
             /></ICol>
           </IRow>
           <IFooterCrud
-            :isAdd="archiveStore.archiveType.id == 0"
-            :onCreate="store"
-            :onUpdate="update"
-            :onDelete="Delete"
+            :isAdd="archiveType.id == 0"
+            :onCreate="storeObject"
+            :onUpdate="updateObject"
+            :onDelete="deleteObject"
           />
         </IForm>
       </IRow>
