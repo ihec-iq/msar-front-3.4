@@ -4,7 +4,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useItemCategoryStore } from "../itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { t } from "@/utils/I18nPlugin";
@@ -16,7 +15,7 @@ import { EnumPermission } from "@/utils/EnumSystem";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("ItemCategory");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
@@ -28,7 +27,7 @@ const itemCategoryStore = useItemCategoryStore();
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const store = () => {
