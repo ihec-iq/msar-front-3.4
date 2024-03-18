@@ -2,7 +2,7 @@
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "../employeeStore";
-import { useSectionStore } from "@/stores/sectionStore";
+import { useSectionStore } from "@/project/section/sectionStore";
 
 import { storeToRefs } from "pinia";
 
@@ -15,7 +15,6 @@ const { checkPermissionAccessArray } = usePermissionStore();
 const isLoading = ref(false);
 const { employee } = storeToRefs(useEmployeeStore());
 const { sections } = storeToRefs(useSectionStore());
-const namePage = ref(t("EmployeeIndex"));
 
 const data = ref<Array<IEmployee>>([]);
 const dataPage = ref();
@@ -170,4 +169,5 @@ const headers = ref<Array<ITableHeader>>([
     </IPageContent>
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
-</template>@/project/user/permissionStore
+</template>
+@/project/user/permissionStore@/project/section/sectionStore

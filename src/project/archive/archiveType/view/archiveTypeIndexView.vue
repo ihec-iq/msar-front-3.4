@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useArchiveTypeStore } from "@/views/Archive/archiveType/archiveTypeStore";
+import { useArchiveTypeStore } from "../archiveTypeStore";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import ArchiveTypeCard from "./archiveTypeCardComponent.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 
@@ -60,3 +60,4 @@ const addObject = () => {
   </IPage>
   <SimpleLoading v-if="isLoading"></SimpleLoading>
 </template>
+./view/archiveTypeCardComponent.vue

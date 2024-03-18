@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IArchiveType } from "@/types/archives/IArchive";
+import type { IArchiveType } from "../IArchive";
 
 const pathBase = "/archiveSys/archiveType";
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useDragDropStore } from "@/compositions/dragDrop";
+import { useDragDropStore } from "../dragDrop";
 const {
   removeFile,
   generateURL,
@@ -136,3 +136,4 @@ const document = ref(props.file);
   }
 }
 </style>
+@/project/archive/dragDrop

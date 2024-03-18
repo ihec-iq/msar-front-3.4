@@ -2,7 +2,7 @@ import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { ISection } from "@/types/ISection";
+import type { ISection } from "@/project/section/ISection";
 
 export const useSectionStore = defineStore("sectionStore", () => {
   const section = reactive<ISection>({

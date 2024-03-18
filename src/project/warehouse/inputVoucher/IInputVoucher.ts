@@ -1,5 +1,5 @@
-import type { IItem } from "../../../project/item/IItem";
-import type { ISection } from "../../../types/ISection";
+import type { IItem } from "@/project/item/IItem";
+import type { ISection } from "@/project/section/ISection"; 
 import type { IStock } from "../IStock";
 
 export interface IInputVoucher {

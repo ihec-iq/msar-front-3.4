@@ -1,11 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
 //#endregion
-
 //#region RouteArray
-import archiveRoute from "./archives/archiveRoute";
+import archiveRoute from "@/project/archive/archiveRoute";
 import itemRoute from "@/project/item/itemRoute";
 import itemCategoryRoute from "@/project/item/itemCategoryRoute";
 import vacationRoute from "@/project/vacation/vacationRoute";
@@ -14,7 +12,6 @@ import roleRoute from "@/project/role/roleRoute";
 import warehouseRoute from "@/project/warehouse/warehouseRoute";
 import employeeRoute from "@/project/employee/employeeRoute";
 //#endregion
-
 import DefaultLayout from "@/views/layouts/MainView.vue";
 const router = createRouter({
   history: createWebHistory(

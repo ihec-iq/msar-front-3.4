@@ -11,7 +11,7 @@ import { useItemStore } from "@/project/item/itemStore";
 import type { IInputVoucherItem } from "../IInputVoucher";
 import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "@/project/item/IItem";
-import AddItemPopup from "@/components/AddItemPopup.vue";
+import AddItemPopup from "@/project/item/view/AddItemPopup.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 ;

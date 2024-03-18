@@ -2,7 +2,7 @@
 import DragDropFilePreview from "./DragDropFilePreview.vue";
 import { t } from "@/utils/I18nPlugin";
 import { storeToRefs } from "pinia";
-import { useDragDropStore } from "@/compositions/dragDrop";
+import { useDragDropStore } from "../dragDrop";
 import { ref } from "vue";
 import { useDropZone } from "@vueuse/core";
 
@@ -110,3 +110,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/project/archive/dragDrop

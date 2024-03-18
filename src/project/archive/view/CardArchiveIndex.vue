@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import type { IDocument } from "@/types/archives/IArchive";
+import type { IDocument } from "../IArchive";
 import { t } from "@/utils/I18nPlugin";
 const router = useRouter();
 const update = (id: number) => {

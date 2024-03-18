@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 import Swal from "sweetalert2";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import type { IUser } from "../IUser";
-import { useRoleStore } from "@/stores/roles/roleStore";
+import { useRoleStore } from "@/project/role/roleStore";
 import { t } from "@/utils/I18nPlugin";
 import { useUserStore } from "../userStore";
 import { useAuthStore } from "@/stores/authStore";
@@ -173,4 +173,5 @@ onMounted(async () => {
       />
     </template>
   </IPage>
-</template>@/views/role/role/roles/roleStore
+</template>
+@/views/role/role/roles/roleStore

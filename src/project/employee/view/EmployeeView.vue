@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "../employeeStore";
-import { useSectionStore } from "@/stores/sectionStore";
+import { useSectionStore } from "@/project/section/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
@@ -342,4 +342,4 @@ onMounted(async () => {
       />
     </template>
   </IPage>
-</template>@/project/user/IUser@/project/user/userStore@/project/user/permissionStore
+</template>@/project/user/IUser@/project/user/userStore@/project/user/permissionStore@/project/section/sectionStore

@@ -1,4 +1,4 @@
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
@@ -6,7 +6,7 @@ import type {
   IArchive,
   IArchiveFilter,
   IArchiveType,
-} from "@/types/archives/IArchive";
+} from "./IArchive";
 
 export const useArchiveStore = defineStore("archiveStore", () => {
   const archive = ref<IArchive>({

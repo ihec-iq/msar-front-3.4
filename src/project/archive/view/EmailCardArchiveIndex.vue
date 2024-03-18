@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import moment from "moment";
-import { useDragDropStore } from "@/compositions/dragDrop";
+import { useDragDropStore } from "../dragDrop";
 
 const { generateIcon } = useDragDropStore();
 
@@ -108,3 +108,4 @@ const formatArchiveDate = (value: string) => {
     </div>
   </div>
 </template>
+@/project/archive/dragDrop
