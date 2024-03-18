@@ -35,5 +35,9 @@ function isNumber(value?: string | number): boolean
            (value !== '') &&
            !isNaN(Number(value.toString())));
 }
+const CNumber = (val: any = 0): number => {
+  if (!isNumber(val)) return 0;
+  return Number(val);
+};
 
-export { truncateString, formatFileSize, makeRandom, isNumber };
+export { truncateString, formatFileSize, makeRandom, isNumber, CNumber };

@@ -1,4 +1,4 @@
-import type { IEmployee } from "@/types/IEmployee";
+import type { IEmployee } from "@/project/employee/IEmployee";
 import type { IVacation, IVacationReason } from "../IVacation";
 
 export interface IVacationDaily {

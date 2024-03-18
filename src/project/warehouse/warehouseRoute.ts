@@ -1,0 +1,27 @@
+import authMiddleware from "@/router/middleware/authMiddleware";
+import inputVoucherRoute from "./inputVoucher/inputVoucherRoute";
+import outputVoucherRoute from "./outputVoucher/outputVoucherRoute";
+import corruptedVoucherRoute from "./corruptedVoucher/corruptedVoucherRoute";
+import directVoucherRoute from "./directVoucher/directVoucherRoute";
+export default [
+  ...inputVoucherRoute,
+  ...outputVoucherRoute,
+  ...corruptedVoucherRoute,
+  ...directVoucherRoute,
+  {
+    path: "/storeIndex",
+    name: "storeIndex",
+    component: () => import("./view/StoreIndexView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
+    path: "/ItemHistory/:id",
+    name: "ItemHistory",
+    component: () => import("./view/StoreItemHistoryView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+];
