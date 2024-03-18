@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useItemCategoryStore } from "../itemCategoryStore";
 import type { IItemCategory, IItemCategoryFilter } from "../IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const isLoading = ref(false);
@@ -159,4 +159,3 @@ onMounted(async () => {
     </IPageContent>
   </IPage>
 </template>
-@/project/item/itemCategoryStore@/project/item/IItem./CardItemCategoryIndex.vue@/project/user/permissionStore

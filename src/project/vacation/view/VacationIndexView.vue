@@ -4,7 +4,7 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import { VacationLinks } from "./VacationLinks";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import { EnumPermission } from "@/utils/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionStore();
 

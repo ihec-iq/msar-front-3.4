@@ -1,26 +1,23 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "../IEmployee";
 import { useEmployeeStore } from "../employeeStore";
-import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
-import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
+import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
+import { useCorruptedVoucherStore } from "@/project/warehouse/corruptedVoucher/corruptedVoucherStore";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const outputVoucherStore = useOutputVoucherStore();
 const corruptedVoucherStore = useCorruptedVoucherStore();
 
 const { employees } = storeToRefs(useEmployeeStore());
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
+
 
 const isLoading = ref(false);
 const IsShowCorrupted = ref(false);
@@ -518,21 +515,8 @@ const headers = ref<Array<ITableHeader>>([
             </div>
           </div>
         </div>
-        <div
-          :class="{
-            'ltr:left-4 rtl:right-4': is,
-            'ltr:left-28 rtl:right-28': !is,
-          }"
-          class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-        >
-          <button
-            @click="back()"
-            class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-          >
-            {{ t("Back") }}
-          </button>
-        </div>
+        
       </IRow>
     </IPageContent>
   </IPage>
-</template>@/project/user/permissionStore
+</template>

@@ -7,13 +7,13 @@ import { useUserStore } from "../userStore";
 import loadingFull from "@/components/general/loadingFull.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
-import type IRole from "@/types/role/IRole";
+import type IRole from "@/project/role/IRole";
 import type { IUser } from "../IUser";
 
 import { usePermissionStore } from "../permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
-import { useRoleStore } from "@/stores/roles/roleStore";
+import { useRoleStore } from "@/project/role/roleStore";
 const roleStore = useRoleStore();
 
 //#endregion

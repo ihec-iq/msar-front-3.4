@@ -1,4 +1,4 @@
-import type { ICategoryItem } from "../../types/ICategoryItem";
+import type { ICategoryItem } from "./ICategoryItem";
 
 export interface IItem {
   id: number;

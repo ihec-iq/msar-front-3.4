@@ -6,7 +6,7 @@ import { useItemCategoryStore } from "../itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
 import type { IItem } from "../IItem";

@@ -5,7 +5,7 @@ import { storeToRefs } from "pinia";
 import envConfig from "@/api/envConfig";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 const rtlStore = useRtlStore();
 import { useConfigStore } from "@/stores/configStore";

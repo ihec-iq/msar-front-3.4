@@ -5,11 +5,11 @@ import { useEmployeeStore } from "../employeeStore";
 import { useSectionStore } from "@/stores/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
-import type { IUser } from "@/types/core/IUser";
-import { useUserStore } from "@/stores/userStore";
+import type { IUser } from "@/project/user/IUser";
+import { useUserStore } from "@/project/user/userStore";
 import { EnumPermission } from "@/utils/EnumSystem";
 import ISelect from "@/components/inputs/ISelect.vue";
 import IPage from "@/components/ihec/IPage.vue";

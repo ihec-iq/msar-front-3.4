@@ -5,7 +5,7 @@ import { useVacationTimeStore } from "../vacationTimeStore";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type { IVacationTime, IVacationTimeFilter } from "../IVacationTime";
 const { t } = useI18n();

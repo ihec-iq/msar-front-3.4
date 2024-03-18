@@ -10,7 +10,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployee, IEmployeeFilter } from "../IEmployee";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 const isLoading = ref(false);
 const { employee } = storeToRefs(useEmployeeStore());

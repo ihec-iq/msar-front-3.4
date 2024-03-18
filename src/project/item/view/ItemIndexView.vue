@@ -6,8 +6,7 @@ import type { IItem, IItemFilter } from "../IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import EditButton from "@/components/dropDown/EditButton.vue";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const isLoading = ref(false);
