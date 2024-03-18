@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 const router = useRouter();
-const update = (id: number) => {
+const update = () => {
   router.push({
     name: "vacationTimeUpdate",
-    params: { id: id },
+    params: { id: props.item.id },
   });
 };
 const props = defineProps({
@@ -44,7 +44,7 @@ const props = defineProps({
     </div>
     <IDropdown>
       <li>
-        <EditButton @click="update(item.id)" />
+        <EditButton @click="update()" />
       </li>
     </IDropdown>
   </div>

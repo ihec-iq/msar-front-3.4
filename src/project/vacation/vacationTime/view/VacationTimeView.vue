@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
+
+import type { IVacation, IVacationReason } from "../../IVacation";
 import { useVacationTimeStore } from "../vacationTimeStore";
 import { useVacationStore } from "../../vacationStore";
 
-import { now } from "@vueuse/core";
-import type { IVacation, IVacationReason } from "../../IVacation";
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
@@ -21,13 +20,11 @@ import { t } from "@/utils/I18nPlugin";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("VacationTime");
 const route = useRoute();
 const id = ref(Number(route.params.id));
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
 
-const vacationTimeStore = useVacationTimeStore();
+const objectStore = useVacationTimeStore();
 const { vacationTime } = storeToRefs(useVacationTimeStore());
 const { vacations } = storeToRefs(useVacationStore());
 const { reasons } = storeToRefs(useVacationReasonStore());
@@ -37,7 +34,7 @@ const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<string | null>();
-const times = reactive([
+const times = ref([
   { name: "نصف ساعة", id: 0.5, selected: true },
   { name: "1 ساعة", id: 1, selected: false },
   { name: "ساعة ونصف", id: 1.5, selected: false },
@@ -48,7 +45,7 @@ const times = reactive([
 //#endregion
 //#region CURD
 const reset = () => {
-  vacationTimeStore.resetData();
+  objectStore.resetData();
 };
 const store = () => {
   console.log(vacationTime.value);
@@ -61,7 +58,7 @@ const store = () => {
   formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
   formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
 
-  vacationTimeStore
+  objectStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -77,7 +74,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = vacationTimeStore.getError(error);
+      errors.value = objectStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -96,7 +93,7 @@ function update() {
   formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
   formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
 
-  vacationTimeStore
+  objectStore
     .update(vacationTime.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
@@ -112,7 +109,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = vacationTimeStore.getError(error);
+      errors.value = objectStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -141,7 +138,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await vacationTimeStore._delete(vacationTime.value.id).then(() => {
+        await objectStore._delete(vacationTime.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -158,13 +155,11 @@ const showData = async () => {
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        console.log(response.data.data);
         vacationTime.value.timeFrom = response.data.data.timeFrom;
         vacationTime.value.timeTo = response.data.data.timeTo;
         vacationTime.value.record = response.data.data.record;
         vacationTime.value.Vacation = response.data.data.Vacation;
         vacationTime.value.Reason = response.data.data.Reason;
-
         //vacationTime.value = response.data.data as IVacationTime;
       }
     })
@@ -335,4 +330,4 @@ const ChangeDateRecord = () => {
       />
     </template>
   </IPage>
-</template> @/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationStore@/project/vacation/vacationReasonStore@/project/vacation/IVacation@/project/vacation/vacationDaily/IVacationDaily
+</template>

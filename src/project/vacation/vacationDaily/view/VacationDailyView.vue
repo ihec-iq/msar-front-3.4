@@ -3,7 +3,6 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 import { useVacationDailyStore } from "../vacationDailyStore";
 import { useVacationStore } from "../../vacationStore";
@@ -20,11 +19,9 @@ const { t } = useI18n();
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("VacationDaily");
 const route = useRoute();
-const id = ref(Number(route.params.id));
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
+const id = ref(Number(route.params.id)); 
 
 const vacationDailyStore = useVacationDailyStore();
 const { vacationDaily } = storeToRefs(useVacationDailyStore());
@@ -302,12 +299,12 @@ onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("VacationDailyAdd");
+    namePage.value = "VacationDailyAdd";
     vacationDaily.value.id = 0;
   } else {
     await showData();
     vacationDaily.value.id = id.value;
-    namePage.value = t("VacationDailyUpdate");
+    namePage.value = "VacationDailyUpdate";
   }
   await useVacationStore().get_vacations();
   await useVacationReasonStore().get();
