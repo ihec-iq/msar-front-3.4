@@ -65,6 +65,7 @@ const addArchive = () => {
 const searchFilter = ref<IArchiveFilter>({
   title: "",
   limit: 10,
+  hasDate : false,
   issueDateFrom: new Date(new Date().setDate(new Date().getDate() - 360))
     .toISOString()
     .split("T")[0],

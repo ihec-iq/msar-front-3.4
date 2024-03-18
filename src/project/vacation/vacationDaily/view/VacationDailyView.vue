@@ -13,14 +13,11 @@ import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
 
 import type { IVacation, IVacationReason } from "../../IVacation";
-
-
-
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("VacationDaily");
 const route = useRoute();
-const id = ref(Number(route.params.id)); 
+const id = ref(Number(route.params.id));
 
 const vacationDailyStore = useVacationDailyStore();
 const { vacationDaily } = storeToRefs(useVacationDailyStore());
@@ -60,7 +57,7 @@ const store = (withPrint: boolean = false) => {
         });
         console.log(response.data);
         if (withPrint) print();
-        //router.go(-1);
+        router.go(-1);
       }
     })
     .catch((error) => {
@@ -449,6 +446,7 @@ const reset = () => {
       >
         <template #Pre>
           <IButton2
+            v-if="vacationDaily.id != 0"
             :text="t('Print')"
             pre-icon="printer"
             type="outlined"
