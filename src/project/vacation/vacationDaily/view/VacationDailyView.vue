@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import { useVacationDailyStore } from "../vacationDailyStore";
 import { useVacationStore } from "../../vacationStore";
 import type { IEmployee } from "@/types/IEmployee";
@@ -673,3 +673,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/project/Employee/employeeStore@/project/Employee/IEmployee@/project/user/permissionStore

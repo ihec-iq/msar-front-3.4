@@ -6,17 +6,13 @@ import authMiddleware from "./middleware/authMiddleware";
 
 //#region RouteArray
 import archiveRoute from "./archives/archiveRoute";
-import itemRoute from "./item/itemRoute";
-import inputVoucherRoute from "./warehouse/inputVoucherRoute";
-import outputVoucherRoute from "./warehouse/outputVoucherRoute";
-import corruptedVoucherRoute from "./warehouse/corruptedVoucherRoute";
-import directVoucherRoute from "./warehouse/directVoucherRoute";
-import itemCategoryRoute from "./item/itemCategoryRoute";
+import itemRoute from "@/project/item/itemRoute";
+import itemCategoryRoute from "@/project/item/itemCategoryRoute";
 import vacationRoute from "@/project/vacation/vacationRoute";
-import userRoute from "./user/userRoute";
-import roleRoute from "./role/roleRoute";
-import warehouseRoute from "./warehouse/warehouseRoute";
-import employeeRoute from "./user/employeeRoute";
+import userRoute from "@/project/user/userRoute";
+import roleRoute from "@/project/role/roleRoute";
+import warehouseRoute from "@/project/warehouse/warehouseRoute";
+import employeeRoute from "@/project/employee/employeeRoute";
 //#endregion
 
 import DefaultLayout from "@/views/layouts/MainView.vue";
@@ -59,10 +55,6 @@ const router = createRouter({
         ...archiveRoute,
         ...itemRoute,
         ...itemCategoryRoute,
-        ...inputVoucherRoute,
-        ...outputVoucherRoute,
-        ...corruptedVoucherRoute,
-        ...directVoucherRoute,
         ...vacationRoute,
         ...userRoute,
         ...roleRoute,

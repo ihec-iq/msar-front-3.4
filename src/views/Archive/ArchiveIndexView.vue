@@ -2,7 +2,7 @@
 import SimpleLoading from "@/components/general/loading.vue";
 import { useArchiveStore } from "@/stores/archives/archiveStore";
 import { t } from "@/utils/I18nPlugin";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import type { IArchive, IArchiveFilter } from "@/types/archives/IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
@@ -200,3 +200,4 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
   </IPage>
   <SimpleLoading v-if="isLoading">.</SimpleLoading>
 </template>./CardsArchiveTypeIndex.vue
+@/project/user/permissionStore

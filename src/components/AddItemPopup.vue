@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useItemStore } from "@/stores/item/itemStore";
 import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import { t } from "@/utils/I18nPlugin";
 import { EnumPermission } from "@/utils/EnumSystem";
 const emit = defineEmits(["setItem"]);
@@ -164,3 +164,4 @@ onMounted(async () => {
     >
   </div>
 </template>
+@/project/item/itemStore@/project/item/itemCategoryStore@/project/user/permissionStore
