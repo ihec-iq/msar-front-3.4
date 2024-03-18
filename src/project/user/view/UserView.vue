@@ -3,14 +3,14 @@ import { onMounted, ref } from "vue";
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
 import { t } from "@/utils/I18nPlugin";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "../userStore";
 import loadingFull from "@/components/general/loadingFull.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import type IRole from "@/types/role/IRole";
-import type { IUser } from "@/types/core/IUser";
+import type { IUser } from "../IUser";
 
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionStore } from "../permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 import { useRoleStore } from "@/stores/roles/roleStore";

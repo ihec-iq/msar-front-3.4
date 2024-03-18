@@ -1,10 +1,10 @@
-import type { IItem } from "./IItem";
-import type { ISection } from "./ISection";
-import type { IStock } from "./IStock";
-import type { IUser } from "./core/IUser";
-import type { IVacationDaily } from "../project/vacation/vacationDaily/IVacationDaily";
-import type { IVacationSick } from "../project/vacation/vacationSick/IVacationSick";
-import type { IVacationTime } from "../project/vacation/vacationTime/IVacationTime";
+import type { IItem } from "../item/IItem";
+import type { ISection } from "../../types/ISection";
+import type { IStock } from "../../types/IStock";
+import type { IUser } from "../user/IUser";
+import type { IVacationDaily } from "../vacation/vacationDaily/IVacationDaily";
+import type { IVacationSick } from "../vacation/vacationSick/IVacationSick";
+import type { IVacationTime } from "../vacation/vacationTime/IVacationTime";
 
 export interface IEmployee {
   id: number;

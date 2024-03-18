@@ -1,5 +1,5 @@
 import type { IInputVoucherItem } from "./IInputVoucher";
-import type { IItem } from "./IItem";
+import type { IItem } from "../project/item/IItem";
 import type { IStock } from "./IStock";
 
 export interface IOutputVoucher {

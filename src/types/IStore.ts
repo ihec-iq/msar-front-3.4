@@ -1,4 +1,4 @@
-import type { IEmployee } from "./IEmployee";
+import type { IEmployee } from "../project/employee/IEmployee";
 
 export interface IStore {
   itemId: number;

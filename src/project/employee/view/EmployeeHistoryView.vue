@@ -5,8 +5,8 @@ import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IEmployeeHistory, IEmployeeFilter } from "@/types/IEmployee";
-import { useEmployeeStore } from "@/stores/employeeStore";
+import type { IEmployeeHistory, IEmployeeFilter } from "../IEmployee";
+import { useEmployeeStore } from "../employeeStore";
 import { useOutputVoucherStore } from "@/stores/warehouse/outputVoucherStore";
 import { useCorruptedVoucherStore } from "@/stores/warehouse/corruptedVoucherStore";
 import { storeToRefs } from "pinia";
@@ -535,4 +535,4 @@ const headers = ref<Array<ITableHeader>>([
       </IRow>
     </IPageContent>
   </IPage>
-</template>
+</template>@/project/user/permissionStore

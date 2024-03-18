@@ -1,9 +1,9 @@
-import authMiddleware from "../middleware/authMiddleware";
+import authMiddleware from "@/router/middleware/authMiddleware";
 export default [
   {
     path: "/user/portal",
     name: "userPortal",
-    component: () => import("@/views/User/UserPortalView.vue"),
+    component: () => import("./view/UserPortalView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -11,7 +11,7 @@ export default [
   {
     path: "/user/profile",
     name: "Profile",
-    component: () => import("@/views/User/ProfileView.vue"),
+    component: () => import("./view/ProfileView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -19,7 +19,7 @@ export default [
   {
     path: "/user",
     name: "userIndex",
-    component: () => import("@/views/User/UserIndexView.vue"),
+    component: () => import("./view/UserIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -27,7 +27,7 @@ export default [
   {
     path: "/user/add",
     name: "userAdd",
-    component: () => import("@/views/User/UserView.vue"),
+    component: () => import("./view/UserView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -35,7 +35,7 @@ export default [
   {
     path: "/user/:id/update",
     name: "userUpdate",
-    component: () => import("@/views/User/UserView.vue"),
+    component: () => import("./view/UserView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -43,7 +43,7 @@ export default [
   {
     path: "/user/:id/show",
     name: "userShow",
-    component: () => import("@/views/User/UserView.vue"),
+    component: () => import("./view/UserView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

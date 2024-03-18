@@ -158,3 +158,4 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
+@/project/user/permissionStore

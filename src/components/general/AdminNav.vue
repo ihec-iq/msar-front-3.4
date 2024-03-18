@@ -336,4 +336,4 @@ li:hover > button svg {
             </van-collapse>
           </li> -->
 <!-- end vant -->
-@/stores/permissionStore
+@/stores/permissionStore@/project/user/permissionStore

@@ -9,7 +9,7 @@ import type {
   ICorruptedVoucherItem,
   ICorruptedVoucherState,
 } from "@/types/ICorruptedVoucher";
-import type { IEmployeeHistory } from "@/types/IEmployee";
+import type { IEmployeeHistory } from "@/project/employee/IEmployee";
 
 export const useCorruptedVoucherStore = defineStore(
   "CorruptedVoucherStore",

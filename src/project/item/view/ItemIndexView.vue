@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/item/itemStore";
-import type { IItem, IItemFilter } from "@/types/IItem";
+import { useItemStore } from "../itemStore";
+import type { IItem, IItemFilter } from "../IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
@@ -19,7 +19,7 @@ const { item, get_filter } = useItemStore();
 import { limits } from "@/utils/defaultParams";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
-import ItemCardComponent from "./ItemCardComponent.vue";
+import CardItemIndex from "./CardItemIndex.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -121,7 +121,7 @@ onMounted(async () => {
       </IRow>
       <IRow :col="2" :colMd="2" :colLg="2">
         <ICol class="p-3" :span="2" v-for="item in data" :key="item.id">
-          <ItemCardComponent :item="item" />
+          <CardItemIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
         </ICol>
       </IRow>
@@ -160,4 +160,4 @@ onMounted(async () => {
       </IRow>
     </IPageContent>
   </IPage>
-</template>
+</template>./CardItemIndex.vue@/project/user/permissionStore

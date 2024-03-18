@@ -288,3 +288,4 @@ onMounted(async () => {
   </div>
 </template>
 @/stores/voucher1/corruptedVoucher@/stores/voucher1/corruptedVoucher@/stores/permissionStore@/stores/warehouse/corruptedVoucher
+@/project/user/permissionStore

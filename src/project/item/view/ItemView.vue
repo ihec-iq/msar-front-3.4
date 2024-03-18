@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemStore } from "@/stores/item/itemStore";
-import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
+import { useItemStore } from "../itemStore";
+import { useItemCategoryStore } from "../itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/stores/permissionStore";
 
 import { t } from "@/utils/I18nPlugin";
-import type { IItem } from "@/types/IItem";
+import type { IItem } from "../IItem";
 import { EnumPermission } from "@/utils/EnumSystem";
 
 //region"Drag and Drop"
@@ -264,4 +264,4 @@ const reset = () => {
       </IRow>
     </IPageContent>
   </IPage>
-</template>
+</template>@/project/user/permissionStore

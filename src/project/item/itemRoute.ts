@@ -1,10 +1,10 @@
-import authMiddleware from "../middleware/authMiddleware";
+import authMiddleware from "@/router/middleware/authMiddleware";
 
 export default [
   {
     path: "/items/:search?",
     name: "itemIndex",
-    component: () => import("@/views/Item/ItemIndexView.vue"),
+    component: () => import("./view/ItemIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -12,7 +12,7 @@ export default [
   {
     path: "/item",
     name: "itemAdd",
-    component: () => import("@/views/Item/ItemView.vue"),
+    component: () => import("./view/ItemView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -20,7 +20,7 @@ export default [
   {
     path: "/item/:id",
     name: "itemUpdate",
-    component: () => import("@/views/Item/ItemView.vue"),
+    component: () => import("./view/ItemView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

@@ -476,4 +476,4 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/vacations/vacationDailyStore@/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationDaily/IVacationDaily@/project/vacation/vacationSick/IVacationSick@/project/vacation/vacationSick/IVacationTime
+@/stores/vacations/vacationDailyStore@/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationDaily/IVacationDaily@/project/vacation/vacationSick/IVacationSick@/project/vacation/vacationSick/IVacationTime@/project/Employee/employeeStore@/project/user/permissionStore

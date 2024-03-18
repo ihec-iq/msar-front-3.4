@@ -170,3 +170,4 @@ onMounted(async () => {
   </IPage>
 </template>
 @/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationSick/IVacationSick
+@/project/user/permissionStore

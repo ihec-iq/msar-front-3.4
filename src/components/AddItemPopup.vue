@@ -164,3 +164,4 @@ onMounted(async () => {
     >
   </div>
 </template>
+@/project/item/itemStore@/project/item/itemCategoryStore@/project/user/permissionStore

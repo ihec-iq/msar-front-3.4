@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
-import PageTitle from "@/components/general/namePage.vue";
-import type { IItemCategory, IItemCategoryFilter } from "@/types/IItem";
+import { useItemCategoryStore } from "../itemCategoryStore";
+import type { IItemCategory, IItemCategoryFilter } from "../IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import EditButton from "@/components/dropDown/EditButton.vue";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
@@ -17,10 +15,9 @@ const dataPage = ref();
 const dataBase = ref<Array<IItemCategory>>([]);
 const { category } = useItemCategoryStore();
 const itemCategoryStore = useItemCategoryStore();
-import ItemCategoryCardComponent from "./ItemCategoryCardComponent.vue";
+import CardItemCategoryIndex from "./CardItemCategoryIndex.vue";
 
 import { limits } from "@/utils/defaultParams";
-import IDropdown from "@/components/ihec/IDropdown.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 
 const route = useRoute();
@@ -117,7 +114,7 @@ onMounted(async () => {
       </IRow>
       <IRow :col="2" :colMd="2" :colLg="2">
         <ICol class="p-3" :span="2" v-for="item in data" :key="item.id">
-          <ItemCategoryCardComponent :item="item" />
+          <CardItemCategoryIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
         </ICol>
       </IRow>
@@ -162,3 +159,4 @@ onMounted(async () => {
     </IPageContent>
   </IPage>
 </template>
+@/project/item/itemCategoryStore@/project/item/IItem./CardItemCategoryIndex.vue@/project/user/permissionStore

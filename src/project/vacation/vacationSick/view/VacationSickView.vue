@@ -13,6 +13,7 @@ import { useVacationStore } from "../../vacationStore";
 import { EnumPermission } from "@/utils/EnumSystem";
 import { t } from "@/utils/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
+import { CNumber } from "@/utils/tools";
 
 //region"Drag and Drop"
 
@@ -165,13 +166,7 @@ const back = () => {
     name: "vacationSickIndex",
   });
 };
-function isNumber(value?: string | number): boolean {
-  return value != null && value !== "" && !isNaN(Number(value.toString()));
-}
-const CNumber = (val: any = 0): number => {
-  if (!isNumber(val)) return 0;
-  return Number(val);
-};
+ 
 onMounted(async () => {
   //console.log(can("show items1"));
   checkPermissionAccessArray([EnumPermission.ShowVacationsSick]);
@@ -281,3 +276,4 @@ const ChangeDateRecord = () => {
     </template>
   </IPage>
 </template>
+@/project/user/permissionStore

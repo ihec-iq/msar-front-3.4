@@ -293,3 +293,4 @@ onMounted(async () => {
   </div>
 </template>
 @/stores/voucher/directVoucher@/stores/permissionStore
+@/project/user/permissionStore

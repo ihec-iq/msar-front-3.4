@@ -117,4 +117,4 @@ const filteredLinks = computed(() =>
     </router-link>
   </div> -->
 </template>
-@/stores/permissionStore
+@/stores/permissionStore@/project/user/permissionStore

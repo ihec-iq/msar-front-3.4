@@ -2,12 +2,10 @@
 import { onMounted, reactive, ref } from "vue";
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
-import type { IUser } from "@/types/core/IUser";
+import type { IUser } from "../IUser";
 import { useRoleStore } from "@/stores/roles/roleStore";
 import { t } from "@/utils/I18nPlugin";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { storeToRefs } from "pinia";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "../userStore";
 import { useAuthStore } from "@/stores/authStore";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";

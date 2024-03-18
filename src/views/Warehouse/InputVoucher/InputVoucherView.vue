@@ -694,3 +694,4 @@ const headers = ref<Array<ITableHeader>>([
     </template>
   </IPage>
 </template>
+@/project/item/itemStore@/project/item/IItem@/project/user/permissionStore

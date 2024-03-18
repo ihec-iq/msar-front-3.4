@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utils/helpers";
-import type { IItem, IItemFilter } from "@/types/IItem";
+import type { IItem, IItemFilter } from "@/project/item/IItem";
 
 export const useItemStore = defineStore("itemStore", () => {
   const item = ref<IItem>({

@@ -1,5 +1,5 @@
 import type IRole from "@/types/role/IRole";
-import type { IEmployee } from "../IEmployee";
+import type { IEmployee } from "../employee/IEmployee";
 export interface IUser {
   id: number;
   name: string;

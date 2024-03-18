@@ -1,4 +1,4 @@
-import type { IItem } from "./IItem";
+import type { IItem } from "../project/item/IItem";
 import type { IOutputVoucherItem } from "./IOutputVoucher";
 
 export interface ICorruptedVoucher {

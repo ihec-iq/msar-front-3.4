@@ -2,9 +2,9 @@
 //region"Basic Import"
 import SimpleLoading from "@/components/general/loading.vue";
 import type { ITableHeader } from "@/types/core/components/ITable";
-import { useUserStore } from "@/stores/userStore";
-import { usePermissionStore } from "@/stores/permissionStore";
-import type { IUser, IUserFilter } from "@/types/core/IUser";
+import { useUserStore } from "../userStore";
+import { usePermissionStore } from "../permissionStore";
+import type { IUser, IUserFilter } from "../IUser";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";

@@ -200,3 +200,4 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
   </IPage>
   <SimpleLoading v-if="isLoading">.</SimpleLoading>
 </template>./CardsArchiveTypeIndex.vue
+@/project/user/permissionStore

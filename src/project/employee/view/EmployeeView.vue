@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/employeeStore";
+import { useEmployeeStore } from "../employeeStore";
 import { useSectionStore } from "@/stores/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
@@ -245,8 +245,7 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <IRow>
-        <IForm
-          >
+        <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
@@ -343,4 +342,4 @@ onMounted(async () => {
       />
     </template>
   </IPage>
-</template>
+</template>@/project/user/IUser@/project/user/userStore@/project/user/permissionStore

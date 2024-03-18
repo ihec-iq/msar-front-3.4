@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useItemCategoryStore } from "@/stores/item/itemCategoryStore";
+import { useItemCategoryStore } from "../itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
@@ -214,3 +214,4 @@ const reset = () => {
     </IPageContent>
   </IPage>
 </template>
+@/project/item/itemCategoryStore@/project/user/permissionStore

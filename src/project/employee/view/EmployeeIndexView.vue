@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/employeeStore";
+import { useEmployeeStore } from "../employeeStore";
 import { useSectionStore } from "@/stores/sectionStore";
 
 import { storeToRefs } from "pinia";
@@ -9,7 +9,7 @@ import { storeToRefs } from "pinia";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utils/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IEmployee, IEmployeeFilter } from "@/types/IEmployee";
+import type { IEmployee, IEmployeeFilter } from "../IEmployee";
 import { usePermissionStore } from "@/stores/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 const isLoading = ref(false);
@@ -170,4 +170,4 @@ const headers = ref<Array<ITableHeader>>([
     </IPageContent>
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
-</template>
+</template>@/project/user/permissionStore
