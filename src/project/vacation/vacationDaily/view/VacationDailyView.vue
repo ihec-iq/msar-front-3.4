@@ -313,7 +313,7 @@ const reset = () => {
 };
 </script>
 <template>
-  <IPage :HeaderTitle="namePage" :is-loading="isLoading">
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton2
         color="green"
