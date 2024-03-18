@@ -119,6 +119,14 @@ const deleteObject = async () => {
           router.go(-1);
         });
       }
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        title: "deleting data fails!!!",
+        text: error.response.data.message,
+        footer: "",
+      });
     });
 };
 

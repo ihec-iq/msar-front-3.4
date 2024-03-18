@@ -32,7 +32,7 @@ const getObjects = async () => {
 };
 
 const addObject = () => {
-  //archiveTypeStore.resetData();
+  archiveTypeStore.resetData();
   router.push({
     name: "archiveTypeAdd",
   });
