@@ -23,6 +23,7 @@ import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
+import CardVacationDailyIndex from "./CardVacationDailyIndex.vue";
 
 const route = useRoute();
 const router = useRouter();

@@ -17,6 +17,7 @@ const { vacationTime } = useVacationTimeStore();
 
 import { limits } from "@/utils/defaultParams";
 import { EnumPermission } from "@/utils/EnumSystem";
+import CardVactionTimeIndex from "./CardVactionTimeIndex.vue";
 
 const route = useRoute();
 const router = useRouter();

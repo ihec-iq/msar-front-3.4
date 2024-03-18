@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 const router = useRouter();
-const update = (id: number) => {
+const update = () => {
   router.push({
-    name: "vacationSickUpdate",
-    params: { id: id },
+    name: "vacationDailyUpdate",
+    params: { id: props.item.id },
   });
 };
 const props = defineProps({
@@ -16,7 +16,7 @@ const props = defineProps({
 </script>
 <template>
   <div
-    class="bg-cardLight font-Tajawal dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
+    class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
   >
     <div class="w-3/4 overflow-hidden">
       <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
@@ -42,10 +42,9 @@ const props = defineProps({
         ></div>
       </div>
     </div>
-
     <IDropdown>
       <li>
-        <EditButton @click="update(item.id)" />
+        <EditButton @click="update()" />
       </li>
     </IDropdown>
   </div>
