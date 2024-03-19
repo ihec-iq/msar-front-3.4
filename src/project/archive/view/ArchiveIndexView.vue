@@ -65,7 +65,7 @@ const addArchive = () => {
 const searchFilter = ref<IArchiveFilter>({
   title: "",
   limit: 10,
-  hasDate : false,
+  hasDate: false,
   issueDateFrom: new Date(new Date().setDate(new Date().getDate() - 360))
     .toISOString()
     .split("T")[0],
@@ -141,13 +141,19 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
             />
           </ICol>
           <ICol :span-lg="1" :span-md="2">
-            <IInput
-              :label="t('DateTo')"
-              v-model="searchFilter.issueDateTo"
-              name="issueDateTo"
-              type="date"
-              :IsRequire="true"
+            <input
+              id="default-checkbox"
+              type="checkbox"
+              v-model="searchFilter.hasDate"
+              value=""
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
+            <label
+              for="default-checkbox"
+              class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              بحث مع تاريخ</label
+            >
           </ICol>
         </ISearchBar>
       </IRow>
@@ -200,5 +206,4 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
     </IPageContent>
   </IPage>
   <SimpleLoading v-if="isLoading">.</SimpleLoading>
-</template>./CardsArchiveTypeIndex.vue
-@/project/user/permissionStore@/views/Archive/archiveStore
+</template>

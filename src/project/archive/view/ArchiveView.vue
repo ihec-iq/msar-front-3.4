@@ -313,7 +313,7 @@ import { EnumPermission } from "@/utils/EnumSystem";
           <IRow>
             <ICol span="1" span-md="2" span-sm="1">
               <ICheckbox
-                :label="`${t('TypeBook')}: ${isIn ? t('Out') : t('In')}`"
+                :label="`${t('TypeBook')}: ${isIn ? t('In') : t('Out')}`"
                 v-model="isIn"
                 :checked="true"
                 :IsRequire="true"
