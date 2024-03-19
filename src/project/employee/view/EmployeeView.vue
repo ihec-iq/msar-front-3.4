@@ -34,7 +34,7 @@ const { sections } = storeToRefs(useSectionStore());
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 const SelectedUsers = ref<Array<IUser>>([]);
 //#endregion
 //#region CURD
