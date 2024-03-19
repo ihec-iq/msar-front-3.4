@@ -16,7 +16,7 @@ const { isClose } = storeToRefs(rtlStore);
           isClose,
         'lg:rtl:mr-[256px] lg:ltr:ml-[256px] opacity-100': !isClose,
       }"
-      class="flex-1 bg-mainBG overflow-hidden dark:bg-[#25293c] flex flex-col min-h-screen h-full print:ltr:ml-0 print:rtl:mr-0 duration-500"
+      class="flex-1 bg-white overflow-hidden dark:bg-[#25293c] flex flex-col min-h-screen h-full print:ltr:ml-0 print:rtl:mr-0 duration-500"
     >
       <Toolbar />
       <RouterView />

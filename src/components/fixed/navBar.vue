@@ -190,18 +190,18 @@ const { user } = storeToRefs(useAuthStore());
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
-                  class="p-2 text-base whitespace-pre-wrap cursor-pointer duration-500"
+                  class="p-2 text-gray-800 dark:text-gray-200 whitespace-pre-wrap cursor-pointer duration-500"
                 >
                   <div
                     v-for="child in Link.children"
                     :key="child.routerName"
                     :class="{ 'flex ': !isClose, hidden: isClose }"
-                    class="rounded-md border-2 my-2 hover:bg-gray-200"
+                    class="rounded-md border-2 my-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
                   >
                     <router-link
                       :to="{ name: child.routerName }"
                       v-if="tab == Link.tab"
-                      class="cursor-pointer rounded-md p-2"
+                      class="cursor-pointer rounded-md  p-2"
                     >
                       {{ child.title }}
                     </router-link>

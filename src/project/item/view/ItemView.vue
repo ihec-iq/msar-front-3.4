@@ -18,11 +18,9 @@ import { EnumPermission } from "@/utils/EnumSystem";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("Item");
 const route = useRoute();
-const id = ref(Number(route.params.id));
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
+const id = ref(Number(route.params.id)); 
 
 const itemStore = useItemStore();
 const { item } = storeToRefs(useItemStore());
@@ -168,12 +166,12 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowItems]);
   await itemCategoryStore.getFast();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("ItemAdd");
+    namePage.value = "ItemAdd";
     item.value.id = 0;
   } else {
     await showData();
     item.value.id = id.value;
-    namePage.value = t("ItemUpdate");
+    namePage.value = "ItemUpdate";
   }
 });
 const reset = () => {
@@ -181,7 +179,7 @@ const reset = () => {
 };
 </script>
 <template>
-  <IPage :HeaderTitle="namePage">
+  <IPage :HeaderTitle="t(namePage)">
     <template #HeaderButtons>
       <IButton2
         color="green"
@@ -195,24 +193,22 @@ const reset = () => {
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col-lg="2" col-md="2" col-sm="1">
-            <ICol span="3" span-md="2" span-sm="1">
+          <IRow col-lg="4" col-md="2" col-sm="1">
+            <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('Name')"
                 name="name"
                 v-model="item.name"
                 type="text"
             /></ICol>
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('ItemCode')"
                 name="code"
                 v-model="item.code"
                 type="text"
             /></ICol>
-          </IRow>
-          <IRow col-lg="2" col-md="2" col-sm="1">
-            <ICol span="3" span-md="2" span-sm="1">
+             <ICol span="1" span-md="1" span-sm="1">
               <!-- <ISelect
                 :label="t('ItemCategory')"
                 v-model="item.Category.id"
@@ -235,14 +231,14 @@ const reset = () => {
                 </option>
               </select>
             </ICol>
-            <ICol span="3" span-md="2" span-sm="1">
+            <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('ItemUnit')"
                 name="ItemUnit"
                 v-model="item.measuringUnit"
                 type="text"
             /></ICol>
-          </IRow>
+          </IRow> 
           <IRow>
             <ICol>
               <IInput
