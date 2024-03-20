@@ -42,6 +42,7 @@ declare module 'vue' {
     IPageContent: typeof import('./src/components/ihec/IPageContent.vue')['default']
     IPageFooter: typeof import('./src/components/ihec/IPageFooter.vue')['default']
     IPageHeader: typeof import('./src/components/ihec/IPageHeader.vue')['default']
+    IPagination: typeof import('./src/components/ihec/IPagination.vue')['default']
     IRow: typeof import('./src/components/ihec/IRow.vue')['default']
     IRow2: typeof import('./src/components/ihec/test/IRow2.vue')['default']
     ISearchBar: typeof import('./src/components/ihec/ISearchBar.vue')['default']

@@ -93,7 +93,7 @@ export default {
   EmployeeIsPerson: "نوع البيانات",
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
-  Employee: "الموظف",
+  Employee: { Title: "الموظف", HistoryReport: "كشف ذمة" },
   EmployeeNumber: "الرقم الوظيفي",
   EmployeeIdCard: "رقم الهوية",
   EmployeePosition: "المنصب",

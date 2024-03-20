@@ -109,7 +109,7 @@ onMounted(async () => {
 });
 
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Employee"), value: "name" },
+  { caption: t("Employee.Title"), value: "name" },
   { caption: t("Section"), value: "section" },
   { caption: t("Details"), value: "actions" },
 ]);
@@ -155,12 +155,43 @@ const headers = ref<Array<ITableHeader>>([
                 <EditButton @click="update(row.id)" />
               </li>
               <li>
-                <EditButton title="تاريخ الموظف" @click="history(row.id)" />
+                <EditButton
+                  :title="t('Employee.HistoryReport')"
+                  @click="history(row.id)"
+                />
               </li>
             </IDropdown>
           </template>
         </ITable>
-
+        <IRow v-if="data.length > 0">
+          <!-- <IPagination
+            :data="data"
+            :data-page="dataPage"
+            :limits="limits"
+            :get-filter-data="getFilterData"
+            :searchFilter="searchFilter"
+          ></IPagination> -->
+          <div class="w-full flex flex-row">
+            <div class="basis-4/5 overflow-auto">
+              <TailwindPagination
+                class="flex justify-center mt-6"
+                :data="dataPage"
+                @pagination-change-page="getFilterData"
+                :limit="searchFilter.limit"
+              />
+            </div>
+            <div class="basis-1/5" v-if="data.length >= limits[0].id">
+              <ISelect
+                :label="t('Limit')"
+                v-model="searchFilter.limit"
+                :options="limits"
+                :IsRequire="true"
+                @onChange="getFilterData()"
+              />
+            </div>
+          </div>
+          <SimpleLoading v-if="isLoading">.</SimpleLoading>
+        </IRow>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
       <IRow>
@@ -170,4 +201,3 @@ const headers = ref<Array<ITableHeader>>([
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-@/project/user/permissionStore@/project/section/sectionStore
