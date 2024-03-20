@@ -207,10 +207,6 @@ const print1 = () => {
     WinPrint?.print(); // change window to winPrint
     WinPrint?.close(); // change window to winPrint
   }, 250);
-  // WinPrint?.document.close();
-  // WinPrint?.focus();
-  // WinPrint?.print();
-  // WinPrint?.close();
 };
 const print = () => {
   // Pass the element id here
@@ -282,8 +278,6 @@ function getImageUrl(name: string, ext: string) {
   console.log(new URL(`@/assets/${name}.${ext}`, import.meta.url).href);
   return new URL(`@/assets/${name}.${ext}`, import.meta.url).href;
 }
-import imageHeaderPath from "@/assets/image/ihec_logo_header1.png";
-import imageFooterPath from "@/assets/image/ihec_logo_footer1.png";
 import { useAuthStore } from "@/stores/authStore";
 import { EnumPermission } from "@/utils/EnumSystem";
 import IButton2 from "@/components/ihec/IButton2.vue";
@@ -479,8 +473,9 @@ const reset = () => {
       <br />
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
       <img
-        :src="imageHeaderPath"
+        src="@/assets/image/ihec_logo_header1.png"
         class="downHeader w-[900px] print:w-[900px]"
+        alt=""
       />
     </div>
     <div id="body">
@@ -539,6 +534,7 @@ const reset = () => {
           text-align: right;
         "
       >
+        <caption></caption>
         <tr class="RowTable margin15" style="align-content: center !important">
           <td class="font-bold text-xl text-text dark:text-textLight p-10">
             موافقة مسؤول الشعبة
@@ -560,7 +556,7 @@ const reset = () => {
       </table>
       <img
         alt=""
-        :src="imageFooterPath"
+        src="@/assets/image/ihec_logo_footer1.png"
         class="w-[903px] print:w-[903px]"
         style="margin-right: -10"
       />

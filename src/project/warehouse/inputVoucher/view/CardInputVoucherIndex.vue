@@ -17,7 +17,7 @@ const props = defineProps({
 });
 
 const truncatedNotes = computed(() => {
-  if (props.item.notes) return props.item.notes.slice(0, 10) + "...";
+  if (props.item.notes) return props.item.notes.slice(0, 20) + "...";
   else return "";
 });
 </script>
@@ -104,6 +104,7 @@ const truncatedNotes = computed(() => {
       <span class="text-sm text-gray-500 dark:text-gray-400">{{
         truncatedNotes
       }}</span>
+      <div class="badge badge-primary badge-outline">{{ item.itemsCount }}</div>
     </div>
   </div>
 </template>
