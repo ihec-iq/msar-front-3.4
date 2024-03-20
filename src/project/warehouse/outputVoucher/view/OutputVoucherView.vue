@@ -167,7 +167,7 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
   VoucherItem.value = itemX;
-  VoucherItem.value.inputVoucherItemId = itemX.inputVoucherItem?.id;
+  VoucherItem.value.inputVoucherItemId = itemX.inputVoucherItem.id;
 };
 const AddItem = () => {
   VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;

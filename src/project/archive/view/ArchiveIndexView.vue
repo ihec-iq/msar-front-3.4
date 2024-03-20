@@ -55,14 +55,14 @@ const addArchive = () => {
 };
 
 //#region Search
+
+/**
+ * new Date(new Date().setDate(new Date().getDate() - 360)).toISOString().split("T")[0]
+ * new Date().toISOString().split("T")[0]
+ */
 const searchFilter = ref<IArchiveFilter>({
   title: "",
   limit: 10,
-  hasDate: false,
-  issueDateFrom: new Date(new Date().setDate(new Date().getDate() - 360))
-    .toISOString()
-    .split("T")[0],
-  issueDateTo: new Date().toISOString().split("T")[0],
   description: "",
   way: "",
   number: "",
@@ -138,10 +138,17 @@ onMounted(async () => {
               v-model="searchFilter.issueDateFrom"
               name="issueDateFrom"
               type="date"
-              :IsRequire="true"
             />
           </ICol>
-          <ICol :span-lg="1" :span-md="2">
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <IInput
+              :label="t('DateTo')"
+              v-model="searchFilter.issueDateTo"
+              name="issueDateTo"
+              type="date"
+            />
+          </ICol>
+          <!-- <ICol :span-lg="1" :span-md="2">
             <input
               id="default-checkbox"
               type="checkbox"
@@ -155,7 +162,7 @@ onMounted(async () => {
             >
               بحث مع تاريخ</label
             >
-          </ICol>
+          </ICol> -->
         </ISearchBar>
       </IRow>
       <IRow>

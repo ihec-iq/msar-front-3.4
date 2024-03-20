@@ -108,7 +108,7 @@ onMounted(async () => {
 </script>
 <template>
   <div
-    class="print:hidden flex text-white bg-[#F2F3F5] dark:bg-darkNav h-14 max-w-full bg-navLight box-border mb-5 mx-0"
+    class="print:hidden flex text-white bg-[#F2F3F5] dark:bg-darkNav h-14 max-w-full bg-navLight box-border mx-0"
   >
     <div
       class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 xs:w-full"
@@ -131,7 +131,7 @@ onMounted(async () => {
           :placeholder="t('Search')"
           @focus="searchInput = true"
           @blur="searchInput = false"
-          class="rounded w-full text-gray-800 border-[1px] dark:border-[#505051] dark:hover:border-[#686869] dark:bg-[#3C3C3D] dark:hover:bg-[#424243] bg-LightTableHead  px-2 py-1 duration-300"
+          class="rounded w-full text-gray-800 border-[1px] dark:border-[#505051] dark:hover:border-[#686869] dark:bg-[#3C3C3D] dark:hover:bg-[#424243] bg-LightTableHead px-2 py-1 duration-300"
           :class="{
             'lg:py-2 xs:py-1 placeholder:text-sm text-lg': searchInput,
           }"
