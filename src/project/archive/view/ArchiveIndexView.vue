@@ -65,7 +65,7 @@ const addArchive = () => {
 
 /**
  * new Date(new Date().setDate(new Date().getDate() - 360)).toISOString().split("T")[0]
- * new Date().toISOString().split("T")[0]
+ * 
  */
 const searchFilter = ref<IArchiveFilter>({
   title: "",
@@ -74,8 +74,11 @@ const searchFilter = ref<IArchiveFilter>({
   way: "",
   number: "",
   isIn: -1,
-  sectionId: -1,
   archiveTypeId: -1,
+  issueDateFrom : new Date().toISOString().split("T")[0],
+  issueDateTo : new Date().toISOString().split("T")[0],
+  hasDate : false
+
 });
 const scrollPageTo = (navEl: string) => {
   let element = document.getElementById(navEl);
@@ -131,23 +134,7 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
             />
           </ICol>
           <!-- date -->
-          <ICol :span-lg="1" :span-md="2" :span="1">
-            <IInput
-              :label="t('DateFrom')"
-              v-model="searchFilter.issueDateFrom"
-              name="issueDateFrom"
-              type="date"
-            />
-          </ICol>
-          <ICol :span-lg="1" :span-md="2" :span="1">
-            <IInput
-              :label="t('DateTo')"
-              v-model="searchFilter.issueDateTo"
-              name="issueDateTo"
-              type="date"
-            />
-          </ICol>
-          <!-- <ICol :span-lg="1" :span-md="2">
+          <ICol :span-lg="1" :span-md="2">
             <input
               id="default-checkbox"
               type="checkbox"
@@ -159,9 +146,27 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
               for="default-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              بحث مع تاريخ</label
+              {{ t("SearhFilter.enableDateFilter") }}</label
             >
-          </ICol> -->
+          </ICol>
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <IInput
+              :label="t('DateFrom')"
+              v-model="searchFilter.issueDateFrom"
+              name="issueDateFrom"
+              type="date"
+              :disabled="!searchFilter.hasDate"
+            />
+          </ICol>
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <IInput
+              :label="t('DateTo')"
+              v-model="searchFilter.issueDateTo"
+              name="issueDateTo"
+              type="date"
+              :disabled="!searchFilter.hasDate"
+            />
+          </ICol>
         </ISearchBar>
       </IRow>
       <IRow>

@@ -1,4 +1,5 @@
 export default {
+  SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
   ID: "المعرف",
   Profile: "الملف الشخصي",
   Archive: "الارشيف",
