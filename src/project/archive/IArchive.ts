@@ -31,7 +31,7 @@ export interface IArchiveFilter {
   limit: number;
   title: string;
   way?: string;
-  hasDate: boolean;
+  hasDate: Boolean;
   issueDateFrom?: string;
   issueDateTo?: string;
   number?: string;

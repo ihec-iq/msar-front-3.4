@@ -30,13 +30,6 @@ const route = useRoute();
 const router = useRouter();
 const fastSearch = ref("");
 
-onMounted(async () => {
-  checkPermissionAccessArray([EnumPermission.ShowArchives]);
-  if (route.params.search != undefined)
-    fastSearch.value = route.params.search.toString() || "";
-
-  await getFilterData(1, -1);
-});
 
 watch(
   () => route.params.search,
@@ -112,6 +105,14 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
     });
   isLoading.value = false;
 };
+
+onMounted(async () => {
+  checkPermissionAccessArray([EnumPermission.ShowArchives]);
+  if (route.params.search != undefined)
+    fastSearch.value = route.params.search.toString() || "";
+
+  await getFilterData(1, -1);
+});
 //#endregion
 </script>
 <template>
