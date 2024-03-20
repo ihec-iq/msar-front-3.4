@@ -16,7 +16,6 @@ const dataBase = ref<Array<IItem>>([]);
 const { item, get_filter } = useItemStore();
 
 import { limits } from "@/utils/defaultParams";
-import IDropdown from "@/components/ihec/IDropdown.vue";
 import { EnumPermission } from "@/utils/EnumSystem";
 import CardItemIndex from "./CardItemIndex.vue";
 

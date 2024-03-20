@@ -6,13 +6,12 @@ import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { useStockStore } from "../../stockStore";
-import { useOutputVoucherStore } from "./../outputVoucherStore";;
+import { useOutputVoucherStore } from "./../outputVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import type { IOutputVoucherItem } from "../IOutputVoucher";
 import { t } from "@/utils/I18nPlugin";
 import type { IInputVoucherItem } from "../../inputVoucher/IInputVoucher";
 import type { ITableHeader } from "@/types/core/components/ITable";
-;
 import { EnumPermission } from "@/utils/EnumSystem";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
@@ -28,9 +27,7 @@ const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("OutputVoucher");
 const route = useRoute();
-const id = ref(Number(route.params.id));
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
+const id = ref(Number(route.params.id)); 
 
 const outputVoucherStore = useOutputVoucherStore();
 const { outputVoucher, outputVoucherEmployees } = storeToRefs(
@@ -59,8 +56,8 @@ const VoucherItem = ref<IOutputVoucherItem>({
   },
   serialNumber: "",
   count: 1,
-  price: 0,
-  value: 0,
+  price: 1,
+  value: 1,
   notes: "",
   Employee: { id: 1, name: "" },
   inputVoucherItemId: 0,
@@ -81,9 +78,9 @@ const VoucherItem = ref<IOutputVoucherItem>({
       name: "",
     },
     serialNumber: "",
-    count: 0,
-    price: 0,
-    value: 0,
+    count: 1,
+    price: 1,
+    value: 1,
   },
 });
 const AddPopup = () => {
@@ -112,8 +109,8 @@ const resetVoucherItem = () => {
     },
     serialNumber: "",
     count: 1,
-    price: 0,
-    value: 0,
+    price: 1,
+    value: 1,
     notes: "",
     Employee: { id: 1, name: "" },
     inputVoucherItemId: 0,
@@ -134,9 +131,9 @@ const resetVoucherItem = () => {
         name: "",
       },
       serialNumber: "",
-      count: 0,
-      price: 0,
-      value: 0,
+      count: 1,
+      price: 1,
+      value: 1,
     },
   };
 };
@@ -170,7 +167,7 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
   VoucherItem.value = itemX;
-  console.log(VoucherItem.value);
+  VoucherItem.value.inputVoucherItemId = itemX.inputVoucherItem?.id;
 };
 const AddItem = () => {
   VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
@@ -183,7 +180,9 @@ const AddItem = () => {
   );
   VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
+  VoucherItem.value.inputVoucherItemId = VoucherItem.value.inputVoucherItem?.id;
   outputVoucherStore.addItem(VoucherItem.value);
+  
   resetVoucherItem();
   showPop.value = false;
 };
@@ -193,7 +192,6 @@ const ChangeValueTotal = () => {
 };
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
-  console.log(VoucherItem.value);
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
   outputVoucherStore.editItem(
     indexSelectedVoucherItem.value,
@@ -503,7 +501,7 @@ const headers = ref<Array<ITableHeader>>([
       >
         <!-- for search Item -->
 
-        <IFlex>
+        <IFlex class="p-2">
           <IBasis base="1/4">
             <div
               class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
@@ -623,7 +621,7 @@ const headers = ref<Array<ITableHeader>>([
               :label="t('Stock')"
               v-model="VoucherItem.inputVoucherItem.Stock.name"
               :disabled="true"
-            />ي
+            />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
