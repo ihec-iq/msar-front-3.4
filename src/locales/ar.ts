@@ -521,4 +521,5 @@ export default {
   Save: "حفظ",
   New: "جديد",
   archiveType: "نوع الارشيف",
+  RequiredField: "هذا الحقل مطلوب",
 };

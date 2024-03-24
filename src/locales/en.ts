@@ -200,4 +200,5 @@ export default {
   Save: "Save",
   New: "New",
   archiveType: "Archive Type",
+  RequiredField: "This field is required",
 };
