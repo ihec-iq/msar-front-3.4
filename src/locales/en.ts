@@ -1,4 +1,5 @@
 export default {
+  SearhFilter: { enableDateFilter: "Enable Date Filter" },
   ID: "ID",
   Profile: "Profile",
   Archive: "Archive",
@@ -92,7 +93,7 @@ export default {
   EmployeeIsPerson: "Type Info",
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
-  Employee: "Employee",
+  Employee: { Title: "Employee", HistoryReport: "History Report" },
   EmployeeNumber: "Employee Number",
   EmployeeIdCard: "Employee IdCard",
   EmployeePosition: "Position",

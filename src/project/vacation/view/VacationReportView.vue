@@ -124,7 +124,7 @@ const ToNumberShow = (val: any) => {
 };
 
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Employee"), value: "name" },
+  { caption: t("Employee.Title"), value: "name" },
 
   { caption: "الرصيد المستحق", value: "deservedRecord" },
 

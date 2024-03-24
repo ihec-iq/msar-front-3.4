@@ -38,5 +38,4 @@ export interface IArchiveFilter {
   description?: string;
   isIn?: number;
   archiveTypeId?: number;
-  sectionId?: number;
 }

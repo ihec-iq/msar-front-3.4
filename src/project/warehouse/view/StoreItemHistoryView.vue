@@ -117,7 +117,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("AvailableInStock"), value: "count" },
   { caption: t("Price"), value: "price" },
   { caption: t("Stock"), value: "stockName" },
-  { caption: t("Employee"), value: "name" },
+  { caption: t("Employee.Title"), value: "name" },
   { caption: t("Details"), value: "actions" },
 ]);
 </script>

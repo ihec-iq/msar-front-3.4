@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
@@ -27,7 +27,7 @@ const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("OutputVoucher");
 const route = useRoute();
-const id = ref(Number(route.params.id)); 
+const id = ref(Number(route.params.id));
 
 const outputVoucherStore = useOutputVoucherStore();
 const { outputVoucher, outputVoucherEmployees } = storeToRefs(
@@ -167,7 +167,7 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
   VoucherItem.value = itemX;
-  VoucherItem.value.inputVoucherItemId = itemX.inputVoucherItem?.id;
+  VoucherItem.value.inputVoucherItemId = itemX.inputVoucherItem.id;
 };
 const AddItem = () => {
   VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
@@ -179,10 +179,10 @@ const AddItem = () => {
     VoucherItem.value.inputVoucherItem?.serialNumber
   );
   VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
-  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  VoucherItem.value.inputVoucherItemId = VoucherItem.value.inputVoucherItem?.id;
+  ChangeValueTotal();
+  VoucherItem.value.inputVoucherItemId = VoucherItem.value.inputVoucherItem.id;
   outputVoucherStore.addItem(VoucherItem.value);
-  
+
   resetVoucherItem();
   showPop.value = false;
 };
@@ -190,6 +190,14 @@ const ChangeValueTotal = () => {
   VoucherItem.value.value =
     VoucherItem.value.count * Number(VoucherItem.value.inputVoucherItem?.price);
 };
+
+// for change the value of total in form item
+watch(
+  () => VoucherItem.value.inputVoucherItem.price,
+  (newX) => {
+    ChangeValueTotal();
+  }
+)
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
@@ -515,7 +523,7 @@ const headers = ref<Array<ITableHeader>>([
               :reduce="(_item: IInputVoucherItem) => _item"
               :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
             >
-              <template #option="{ Item }">
+              <template #option="{ Item, outValue, inValue }">
                 <div class="rtl:text-right border-2 p-2 rounded-md">
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
@@ -545,7 +553,7 @@ const headers = ref<Array<ITableHeader>>([
                       class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
                     >
                       {{ t("Available") }}:
-                      {{ Number(Item.inValue) - Number(Item.outValue) }}
+                      {{ Number(inValue) - Number(outValue) }}
                     </div>
                     <cite class="flex flex-wrap text-left text-xs w-fit">
                       {{ Item.notes }}

@@ -71,7 +71,6 @@ const searchFilter = ref<IVacationDailyFilter>({
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-  searchFilter.value.limit = 0;
   searchFilter.value.employeeName = fastSearch.value.toString();
   await useVacationDailyStore()
     .get_filter(searchFilter.value, page)
@@ -140,8 +139,8 @@ onMounted(async () => {
         </ICol>
       </IRow>
       <IRow v-if="data.length > 0">
-        <div class="w-full flex flex-row">
-          <div class="basis-4/5 hidden">
+        <div class="w-full flex flex-row ">
+          <div class="basis-4/5 overflow-auto">
             <TailwindPagination
               class="flex justify-center mt-6"
               :data="dataPage"
@@ -153,7 +152,6 @@ onMounted(async () => {
             <ISelect
               :label="t('Limit')"
               v-model="searchFilter.limit"
-              name="archiveTypeId"
               :options="limits"
               :IsRequire="true"
               @onChange="getFilterData()"
