@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { EnumDirection } from "@/utils/EnumSystem";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 const modelValue = defineModel<any>();
+import { t } from "@/utils/I18nPlugin";
 
 const props = defineProps({
   type: {
@@ -39,7 +40,7 @@ const props = defineProps({
     type: Function, // Cast to the enum type
     default: () => {}, // Default value (optional)
   },
-   onInput: {
+  onInput: {
     type: Function, // Cast to the enum type
     default: () => {}, // Default value (optional)
   },
@@ -47,6 +48,21 @@ const props = defineProps({
 
 const keydown = () => {
   props.OnKeyEnter();
+};
+
+const inputClasses = ref("_input");
+const customPlaceholder = ref(props.placeholder);
+
+const checkRequired = () => {
+  if (!props.IsRequire) return;
+
+  if (modelValue.value) {
+    inputClasses.value = "_input";
+    customPlaceholder.value = props.placeholder;
+  } else {
+    inputClasses.value = "_input border border-red-500";
+    customPlaceholder.value = t("RequiredField");
+  }
 };
 </script>
 <template>
@@ -56,11 +72,12 @@ const keydown = () => {
     </label>
     <input
       @change="keydown"
+      @focusout="checkRequired"
       :disabled="disabled"
-      class="_input"
+      :class="inputClasses"
       :type="type"
       v-model="modelValue"
-      :placeholder="placeholder"
+      :placeholder="customPlaceholder"
       :style="{ direction: dir }"
       @input="onInput()"
       :max="max"
