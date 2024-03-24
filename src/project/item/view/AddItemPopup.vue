@@ -4,8 +4,8 @@ import { useItemStore } from "../itemStore";
 import { useItemCategoryStore } from "../itemCategoryStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
-import { t } from "@/utils/I18nPlugin";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
+import { EnumPermission } from "@/utilities/EnumSystem";
 const emit = defineEmits(["setItem"]);
 //region"Props"
 
@@ -164,4 +164,4 @@ onMounted(async () => {
     >
   </div>
 </template>
-@/project/item/itemStore@/project/item/itemCategoryStore@/project/user/permissionStore
+@/project/item/itemStore@/project/item/itemCategoryStore@/project/user/permissionStore@/utilities/I18nPlugin@/utilities/EnumSystem

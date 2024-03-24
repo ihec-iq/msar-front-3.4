@@ -11,8 +11,8 @@ import { useVacationStore } from "../../vacationStore";
 
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import ISelect from "@/components/inputs/ISelect.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
-import { t } from "@/utils/I18nPlugin";
+import { EnumPermission } from "@/utilities/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
 
 //region"Drag and Drop"
 
@@ -157,6 +157,7 @@ const showData = async () => {
       if (response.status == 200) {
         vacationTime.value.timeFrom = response.data.data.timeFrom;
         vacationTime.value.timeTo = response.data.data.timeTo;
+        vacationTime.value.date = response.data.data.date;
         vacationTime.value.record = response.data.data.record;
         vacationTime.value.Vacation = response.data.data.Vacation;
         vacationTime.value.Reason = response.data.data.Reason;
@@ -330,4 +331,4 @@ const ChangeDateRecord = () => {
       />
     </template>
   </IPage>
-</template>@/project/user/permissionStore
+</template>@/project/user/permissionStore@/utilities/EnumSystem@/utilities/I18nPlugin

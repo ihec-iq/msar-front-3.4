@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useItemStore } from "../itemStore";
 import type { IItem, IItemFilter } from "../IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -15,8 +15,8 @@ const dataPage = ref();
 const dataBase = ref<Array<IItem>>([]);
 const { item, get_filter } = useItemStore();
 
-import { limits } from "@/utils/defaultParams";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { limits } from "@/utilities/defaultParams";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import CardItemIndex from "./CardItemIndex.vue";
 
 const route = useRoute();
@@ -159,3 +159,4 @@ onMounted(async () => {
     </IPageContent>
   </IPage>
 </template>./CardItemIndex.vue@/project/user/permissionStore
+@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

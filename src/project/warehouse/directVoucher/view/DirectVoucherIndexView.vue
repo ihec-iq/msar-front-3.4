@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray, can } = usePermissionStore();
@@ -18,9 +18,9 @@ const data = ref<Array<IDirectVoucher>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IDirectVoucher>>([]);
 const { directVoucher, get_filter } = useDirectVoucherStore();
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import IDropdown from "@/components/ihec/IDropdown.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -293,4 +293,4 @@ onMounted(async () => {
   </div>
 </template>
 @/stores/voucher/directVoucher@/stores/permissionStore
-@/project/user/permissionStore@/views/Warehouse/DirectVoucher/IDirectVoucher@/views/Warehouse/DirectVoucher/directVoucherStore
+@/project/user/permissionStore@/views/Warehouse/DirectVoucher/IDirectVoucher@/views/Warehouse/DirectVoucher/directVoucherStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

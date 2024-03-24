@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import IButton2 from "./IButton2.vue";
 const props = defineProps({
   getDataButton: {
@@ -23,3 +23,4 @@ const props = defineProps({
     />
   </div>
 </template>
+@/utilities/I18nPlugin

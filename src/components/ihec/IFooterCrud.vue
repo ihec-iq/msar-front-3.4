@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 const router = useRouter();
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import IButton from "./IButton.vue";
 import IButton2 from "./IButton2.vue";
 
@@ -85,3 +85,4 @@ const goBack = () => {
     />
   </div>
 </template>
+@/utilities/I18nPlugin

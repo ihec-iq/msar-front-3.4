@@ -5,9 +5,9 @@ import { Form } from "vee-validate";
 import * as Yup from "yup";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "vue-router";
-import { getError } from "@/utils/helpers";
+import { getError } from "@/utilities/helpers";
 import TextInput from "@/components/general/TextInputGeneral.vue";
-import { t, setLocale, Languages } from "@/utils/I18nPlugin";
+import { t, setLocale, Languages } from "@/utilities/I18nPlugin";
 import { useConfigStore } from "@/stores/configStore";
 import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
@@ -823,4 +823,4 @@ input:checked + .slider::before {
       </div>
   </div>
 </div></template> -->
-@/stores/configStore
+@/stores/configStore@/utilities/helpers@/utilities/I18nPlugin

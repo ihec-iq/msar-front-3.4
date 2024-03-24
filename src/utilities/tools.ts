@@ -1,4 +1,4 @@
-const truncateString = (text?: string, maxLength?: number): string => {
+const truncateFileName = (text?: string, maxLength?: number): string => {
   if (text == null || text == undefined) return "";
   if (maxLength == null || maxLength == undefined) return "";
   if (text.length <= maxLength) {
@@ -7,6 +7,15 @@ const truncateString = (text?: string, maxLength?: number): string => {
     const truncated = text.substring(0, maxLength - 4);
     const extension = text.substring(text.length - 4);
     return truncated + "..." + extension;
+  }
+};
+const truncateString = (text?: string, maxLength?: number): string => {
+  if (text == null || text == undefined) return "";
+  if (maxLength == null || maxLength == undefined) return "";
+  if (text.length <= maxLength) {
+    return text;
+  } else { 
+    return text.substring(0, maxLength);
   }
 };
 const formatFileSize = (fileSize?: number): string => {
@@ -40,4 +49,4 @@ const CNumber = (val: any = 0): number => {
   return Number(val);
 };
 
-export { truncateString, formatFileSize, makeRandom, isNumber, CNumber };
+export { truncateString, truncateFileName, formatFileSize, makeRandom, isNumber, CNumber };

@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
 import type { IUser } from "../IUser";
 import { useRoleStore } from "@/project/role/roleStore";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { useUserStore } from "../userStore";
 import { useAuthStore } from "@/stores/authStore";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
@@ -175,3 +175,4 @@ onMounted(async () => {
   </IPage>
 </template>
 @/views/role/role/roles/roleStore
+@/utilities/I18nPlugin

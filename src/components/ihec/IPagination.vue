@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { TailwindPagination } from "laravel-vue-pagination";
 
 const props = defineProps({
@@ -46,4 +46,4 @@ const props = defineProps({
       />
     </div>
   </div>
-</template>
+</template>@/utilities/I18nPlugin

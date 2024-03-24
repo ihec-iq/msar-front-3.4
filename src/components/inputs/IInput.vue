@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EnumDirection } from "@/utils/EnumSystem";
+import { EnumDirection } from "@/utilities/EnumSystem";
 import { onMounted, ref } from "vue";
 const modelValue = defineModel<any>();
 
@@ -68,3 +68,4 @@ const keydown = () => {
     />
   </div>
 </template>
+@/utilities/EnumSystem

@@ -14,7 +14,7 @@ export interface IOutputVoucher {
 }
 export interface IOutputVoucherItem {
   id?: number;
-  outputVoucherId?: number;
+  outputVoucherId: number;
   Item?: IItem;
   inputVoucherItemId: number;
   inputVoucherItem: IInputVoucherItem;

@@ -15,11 +15,11 @@ const dataPage = ref();
 const dataBase = ref<Array<IVacationSick>>([]);
 const vacationSick = useVacationSickStore();
 
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import CardVactionSickIndex from "./CardVactionSickIndex.vue";
 
 const route = useRoute();
@@ -170,4 +170,4 @@ onMounted(async () => {
   </IPage>
 </template>
 @/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationSick/IVacationSick
-@/project/user/permissionStore
+@/project/user/permissionStore@/utilities/defaultParams@/utilities/EnumSystem

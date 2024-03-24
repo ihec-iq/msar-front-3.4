@@ -6,7 +6,7 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/authStore";
 import router from "@/router";
 import { useRoute } from "vue-router";
-import { t, setLocale, Languages } from "@/utils/I18nPlugin";
+import { t, setLocale, Languages } from "@/utilities/I18nPlugin";
 
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
@@ -467,3 +467,4 @@ input:checked + .slider::before {
   color: yellow;
 }
 </style>
+@/utilities/I18nPlugin

@@ -6,10 +6,10 @@ import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { useStockStore } from "../../stockStore";
-import { useCorruptedVoucherStore } from "@/project/warehouse/corruptedVoucher/corruptedVoucherStore";
+import { useRetrievalVoucherStore } from "@/project/warehouse/retrievalVoucher/retrievalVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
-import { t } from "@/utils/I18nPlugin";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
+import { EnumPermission } from "@/utilities/EnumSystem";
 const { stocks } = storeToRefs(useStockStore());
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 
@@ -19,9 +19,9 @@ const namePage = ref(".....");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
-const corruptedVoucherStore = useCorruptedVoucherStore();
-const { corruptedVoucher } = storeToRefs(useCorruptedVoucherStore());
-const { SelectedOutItemCorrupted } = storeToRefs(corruptedVoucherStore);
+const retrievalVoucherStore = useRetrievalVoucherStore();
+const { retrievalVoucher } = storeToRefs(useRetrievalVoucherStore());
+const { SelectedOutItemRetrieval } = storeToRefs(retrievalVoucherStore);
 
 const Loading = ref(false);
 const router = useRouter();
@@ -33,7 +33,7 @@ const back = () => {
 };
 const showData = async (id: number) => {
   Loading.value = true;
-  await corruptedVoucherStore
+  await retrievalVoucherStore
     .show(id)
     .then((response) => {
       if (response.status == 200) {
@@ -55,14 +55,14 @@ const showData = async (id: number) => {
   Loading.value = false;
 };
 onMounted(async () => {
-  checkPermissionAccessArray([EnumPermission.ShowCorruptedVouchers]);
-  await corruptedVoucherStore.getEmployees().then(() => {});
+  checkPermissionAccessArray([EnumPermission.ShowRetrievalVouchers]);
+  await retrievalVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("OutputVoucher");
-    corruptedVoucher.value.id = 0;
-    corruptedVoucher.value.date = new Date().toISOString().split("T")[0];
+    retrievalVoucher.value.id = 0;
+    retrievalVoucher.value.date = new Date().toISOString().split("T")[0];
   } else {
-    corruptedVoucher.value.id = id.value;
+    retrievalVoucher.value.id = id.value;
     await showData(id.value);
     namePage.value = t("OutputVoucher");
   }
@@ -103,7 +103,7 @@ onMounted(async () => {
           </thead>
           <tbody class="bg-[#1f2937]">
             <tr
-              v-for="(row, index) in SelectedOutItemCorrupted"
+              v-for="(row, index) in SelectedOutItemRetrieval"
               :key="row.id"
               class="border-b border-black h-14 text-gray-100"
             >
@@ -192,3 +192,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/utilities/I18nPlugin@/utilities/EnumSystem

@@ -8,9 +8,9 @@ import { usePermissionStore } from "@/project/user/permissionStore";
 import FilePreview from "./FilePreview.vue";
 import DragDrop from "./DragDrop.vue";
 import { useDragDropStore } from "../dragDrop";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import IPage from "@/components/ihec/IPage.vue";
-import { crud_delete } from "@/utils/crudTool";
+import { crud_delete } from "@/utilities/crudTool";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
@@ -243,7 +243,7 @@ onMounted(async () => {
   await useArchiveStore().getArchiveTypes();
 });
 import IButton2 from "@/components/ihec/IButton2.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">
@@ -439,4 +439,4 @@ html.dark {
   /* ...others... */
 }
 </style>
-@/project/user/permissionStore@/views/Archive/archiveStore@/project/archive/dragDrop
+@/project/user/permissionStore@/views/Archive/archiveStore@/project/archive/dragDrop@/utilities/I18nPlugin@/utilities/crudTool@/utilities/EnumSystem

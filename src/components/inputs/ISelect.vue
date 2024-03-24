@@ -25,8 +25,6 @@ defineProps({
 const Change = () => {
   emits("onChange");
 };
-// import { useI18n } from "@/stores/i18n/useI18n";
-// const { t } = useI18n();
 </script>
 <template>
   <div class="mb-2 mx-1">

@@ -1,7 +1,7 @@
 import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
-import { getError } from "@/utils/helpers";
+import { getError } from "@/utilities/helpers";
 import type { IItemCategory, IItemCategoryFilter } from "@/project/item/IItem";
 
 export const useItemCategoryStore = defineStore("itemCategoryStore", () => {

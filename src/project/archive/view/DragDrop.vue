@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DragDropFilePreview from "./DragDropFilePreview.vue";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { storeToRefs } from "pinia";
 import { useDragDropStore } from "../dragDrop";
 import { ref } from "vue";
@@ -110,4 +110,4 @@ button {
   cursor: pointer;
 }
 </style>
-@/project/archive/dragDrop
+@/project/archive/dragDrop@/utilities/I18nPlugin

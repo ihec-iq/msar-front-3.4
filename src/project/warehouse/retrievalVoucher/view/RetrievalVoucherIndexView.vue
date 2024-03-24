@@ -3,23 +3,23 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 import type {
-  ICorruptedVoucher,
-  ICorruptedVoucherFilter,
-} from "../ICorruptedVoucher";
-import { useCorruptedVoucherStore } from "@/project/warehouse/corruptedVoucher/corruptedVoucherStore";
+  IRetrievalVoucher,
+  IRetrievalVoucherFilter,
+} from "../IRetrievalVoucher";
+import { useRetrievalVoucherStore } from "@/project/warehouse/retrievalVoucher/retrievalVoucherStore";
 const isLoading = ref(false);
-const data = ref<Array<ICorruptedVoucher>>([]);
+const data = ref<Array<IRetrievalVoucher>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<ICorruptedVoucher>>([]);
-const { corruptedVoucher, get_filter } = useCorruptedVoucherStore();
+const dataBase = ref<Array<IRetrievalVoucher>>([]);
+const { retrievalVoucher, get_filter } = useRetrievalVoucherStore();
 
-import { limits } from "@/utils/defaultParams";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { limits } from "@/utilities/defaultParams";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -32,20 +32,20 @@ watch(
   }
 );
 const addItem = () => {
-  corruptedVoucher.id = 0;
-  corruptedVoucher.number = "";
-  corruptedVoucher.date = "";
-  corruptedVoucher.notes = "";
-  corruptedVoucher.items = [];
-  corruptedVoucher.signaturePerson = "";
+  retrievalVoucher.id = 0;
+  retrievalVoucher.number = "";
+  retrievalVoucher.date = "";
+  retrievalVoucher.notes = "";
+  retrievalVoucher.items = [];
+  retrievalVoucher.signaturePerson = "";
   router.push({
-    name: "corruptedVoucherAdd",
+    name: "retrievalVoucherAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: ICorruptedVoucher) => {
+const filterByIDName = (item: IRetrievalVoucher) => {
   if (
     item.number.includes(fastSearch.value) ||
     item.notes.includes(fastSearch.value)
@@ -61,7 +61,7 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<ICorruptedVoucherFilter>({
+const searchFilter = ref<IRetrievalVoucherFilter>({
   name: "",
   limit: 10,
   description: "",
@@ -85,7 +85,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "corruptedVoucherUpdate",
+    name: "retrievalVoucherUpdate",
     params: { id: id },
   });
 };
@@ -93,7 +93,7 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray([EnumPermission.ShowCorruptedVouchers]);
+  checkPermissionAccessArray([EnumPermission.ShowRetrievalVouchers]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -287,3 +287,4 @@ onMounted(async () => {
     </button>
   </div>
 </template>
+@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem
