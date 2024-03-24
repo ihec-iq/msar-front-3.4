@@ -152,7 +152,7 @@ onMounted(async () => {
           <div
             class="py-3 px-4 w-full flex items-center justify-between text-sm font-medium leading-none bg-sortByLight text-text dark:text-textLight dark:bg-button cursor-pointer rounded"
           >
-            <p>{{ t("Employee") }}:</p>
+            <p>{{ t("Employee.Title") }}:</p>
             <select
               aria-label="select"
               v-model="searchFilter.employeeId"
