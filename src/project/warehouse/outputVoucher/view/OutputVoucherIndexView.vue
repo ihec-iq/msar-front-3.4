@@ -10,14 +10,14 @@ import type {
   IOutputVoucherFilter,
 } from "../IOutputVoucher";
  import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 const isLoading = ref(false);
 const data = ref<Array<IOutputVoucher>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IOutputVoucher>>([]);
 const { resetData, get_filter } = useOutputVoucherStore();
-import { limits } from "@/utils/defaultParams";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { limits } from "@/utilities/defaultParams";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import CardOutputVoucherIndex from "./CardOutputVoucherIndex.vue";
 
 const route = useRoute();
@@ -156,4 +156,4 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-@/project/user/permissionStore@/views/Warehouse/OutputVoucher/IOutputVoucher@/views/Warehouse/OutputVoucher/outputVoucherStore
+@/project/user/permissionStore@/views/Warehouse/OutputVoucher/IOutputVoucher@/views/Warehouse/OutputVoucher/outputVoucherStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

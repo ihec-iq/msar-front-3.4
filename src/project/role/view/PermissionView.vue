@@ -8,7 +8,7 @@ import type IPermission from "../IPermission";
 import { useRoute, useRouter } from "vue-router";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
 const rtlStore = useRtlStore();
 const { isClose } = storeToRefs(rtlStore);
@@ -268,3 +268,4 @@ onMounted(() => {
   visibility: visible;
 }
 </style>
+@/utilities/I18nPlugin

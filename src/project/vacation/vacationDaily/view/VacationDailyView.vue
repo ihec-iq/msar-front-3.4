@@ -279,12 +279,12 @@ function getImageUrl(name: string, ext: string) {
   return new URL(`@/assets/${name}.${ext}`, import.meta.url).href;
 }
 import { useAuthStore } from "@/stores/authStore";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -667,3 +667,4 @@ button {
   cursor: pointer;
 }
 </style>
+@/utilities/EnumSystem@/utilities/I18nPlugin

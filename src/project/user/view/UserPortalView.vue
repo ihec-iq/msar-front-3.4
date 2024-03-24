@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { UserLinks } from "../UserLinks";
 import { usePermissionStore } from "../permissionStore";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 //#region Pagination
@@ -70,3 +70,4 @@ onMounted(async () => {
     </IPageContent>
   </IPage>
 </template>@/project/user/permissionStore
+@/utilities/I18nPlugin@/utilities/EnumSystem

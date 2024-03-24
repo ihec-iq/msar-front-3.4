@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 const router = useRouter();
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 
 const update = (id: number) => {
   router.push({
@@ -48,3 +48,4 @@ const props = defineProps({
     </IDropdown>
   </div>
 </template>
+@/utilities/I18nPlugin

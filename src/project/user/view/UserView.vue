@@ -2,10 +2,10 @@
 import { onMounted, ref } from "vue";
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { useUserStore } from "../userStore";
 import loadingFull from "@/components/general/loadingFull.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import type IRole from "@/project/role/IRole";
 import type { IUser } from "../IUser";
@@ -276,3 +276,4 @@ onMounted(async () => {
     <loadingFull v-if="isLoading == true" />
   </IPage>
 </template>
+@/utilities/I18nPlugin@/utilities/EnumSystem

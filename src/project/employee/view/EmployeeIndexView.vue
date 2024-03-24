@@ -7,7 +7,7 @@ import { useSectionStore } from "@/project/section/sectionStore";
 import { storeToRefs } from "pinia";
 
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployee, IEmployeeFilter } from "../IEmployee";
 import { usePermissionStore } from "@/project/user/permissionStore";
@@ -21,10 +21,10 @@ const dataPage = ref();
 const dataBase = ref<Array<IEmployee>>([]);
 const { get_filter } = useEmployeeStore();
 
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 const route = useRoute();
 const router = useRouter();
@@ -111,6 +111,8 @@ onMounted(async () => {
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
   { caption: t("Section"), value: "section" },
+  { caption: t("EmployeePosition"), value: "position" },
+  { caption: t("EmployeeType"), value: "type" },
   { caption: t("Details"), value: "actions" },
 ]);
 </script>
@@ -149,6 +151,12 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:section="{ row }">
             <span>{{ row.Section.name }}</span>
           </template>
+          <template v-slot:position="{ row }">
+            <span>{{ row.Position.name }}</span>
+          </template>
+          <template v-slot:type="{ row }">
+            <span>{{ row.Type.name }}</span>
+          </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
@@ -182,6 +190,7 @@ const headers = ref<Array<ITableHeader>>([
             </div>
             <div class="basis-1/5" v-if="data.length >= limits[0].id">
               <ISelect
+                name="limit"
                 :label="t('Limit')"
                 v-model="searchFilter.limit"
                 :options="limits"
@@ -201,3 +210,4 @@ const headers = ref<Array<ITableHeader>>([
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
+@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

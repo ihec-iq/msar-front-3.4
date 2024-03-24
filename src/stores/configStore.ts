@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
-import { DefaultURL } from "@/utils/defualts";
+import { DefaultURL } from "@/utilities/defualts";
 
 export const useConfigStore = defineStore("ConfigStore", () => {
   const Organization = ref<string | null>("");

@@ -1,4 +1,4 @@
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 interface IconLink {
   routerName: string;
@@ -120,7 +120,7 @@ export const Links: Array<IconLink> = [
       },
 
       // {
-      //   routerName: "corruptedVoucherIndex",
+      //   routerName: "retrievalVoucherIndex",
       //   title: "مستند استرجاع",
       //   icon: '<svg    xmlns="http://www.w3.org/2000/svg"    width="32"    height="32"  class="h-5 w-5 sm:h-6 sm:w-6"   viewBox="0 0 24 24"    stroke="currentColor"    >    <path  fill="currentColor"  d="M2 20v2h20v-2h-9V5.83l5.5 5.5l1.42-1.41L12 2L4.08 9.92l1.42 1.41l5.5-5.5V20H2Z"    />  </svg>',
       //   iconX:

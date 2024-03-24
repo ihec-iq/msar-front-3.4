@@ -2,8 +2,8 @@
 import { onMounted, ref } from "vue";
 
 import Swal from "sweetalert2";
-import { t } from "@/utils/I18nPlugin";
-import { truncateString } from "@/utils/tools";
+import { t } from "@/utilities/I18nPlugin";
+import { truncateFileName } from "@/utilities/tools";
 
 import { useArchiveStore } from "../archiveStore";
 const { _deleteDocument } = useArchiveStore();
@@ -103,7 +103,7 @@ const openFile = (path: string) => {
       :alt="document.title"
       :title="document.title"
     >
-      {{ truncateString(document.title, 15) }}
+      {{ truncateFileName(document.title, 15) }}
     </div>
     <span style="color: darkkhaki" class="info">
       {{ document.extension }}
@@ -241,4 +241,4 @@ const openFile = (path: string) => {
   }
 }
 </style>
-@/views/Archive/archiveStore
+@/views/Archive/archiveStore@/utilities/I18nPlugin@/utilities/tools

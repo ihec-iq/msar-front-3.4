@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { t } from '@/utils/I18nPlugin';
+import { t } from '@/utilities/I18nPlugin';
 
  
 </script>
@@ -30,3 +30,4 @@ import { t } from '@/utils/I18nPlugin';
     </svg>
   </button>
 </template>
+@/utilities/I18nPlugin

@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { useRouter } from "vue-router";
 const router = useRouter();
 

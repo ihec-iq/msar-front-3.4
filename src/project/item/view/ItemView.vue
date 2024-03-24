@@ -8,9 +8,9 @@ import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
 
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import type { IItem } from "../IItem";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 //region"Drag and Drop"
 
@@ -260,4 +260,4 @@ const reset = () => {
       </IRow>
     </IPageContent>
   </IPage>
-</template>@/project/user/permissionStore
+</template>@/project/user/permissionStore@/utilities/I18nPlugin@/utilities/EnumSystem

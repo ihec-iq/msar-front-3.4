@@ -11,7 +11,7 @@ import EditButton from "@/components/dropDown/EditButton.vue";
 import DeleteButton from "@/components/dropDown/DeleteButton.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 
 const router = useRouter();
 const roleData = ref<Array<IRole>>([]);
@@ -191,3 +191,4 @@ onMounted(async () => {
   }
 }
 </style>
+@/utilities/I18nPlugin

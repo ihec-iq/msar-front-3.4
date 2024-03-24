@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import Swal from "sweetalert2";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 
 export const useDragDropStore = defineStore("DragDrop", () => {
   const count = ref(0);

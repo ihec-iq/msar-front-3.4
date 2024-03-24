@@ -8,8 +8,8 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { useDirectVoucherStore } from "../directVoucherStore";
 import type { IDirectVoucherItem } from "../IDirectVoucher";
-import { t } from "@/utils/I18nPlugin";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
+import { EnumPermission } from "@/utilities/EnumSystem";
 const { directVoucherItemsVSelect } = storeToRefs(useDirectVoucherStore());
 const directVoucherStore = useDirectVoucherStore();
 const { directVoucher, directVoucherEmployees } = storeToRefs(
@@ -728,4 +728,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/project/user/permissionStore@/views/Warehouse/DirectVoucher/IDirectVoucher@/views/Warehouse/DirectVoucher/directVoucherStore
+@/project/user/permissionStore@/views/Warehouse/DirectVoucher/IDirectVoucher@/views/Warehouse/DirectVoucher/directVoucherStore@/utilities/I18nPlugin@/utilities/EnumSystem

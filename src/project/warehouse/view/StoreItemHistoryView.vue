@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import type { IStoreItemHistory, IStoreItemFilter } from "../IStore";
 import { useStoringStore } from "../storingStore";
 import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
@@ -20,11 +20,11 @@ const dataBase = ref<Array<IStoreItemHistory>>([]);
 
 const { get_item } = useStoringStore();
 
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import ISelect from "@/components/inputs/ISelect.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -191,4 +191,4 @@ const headers = ref<Array<ITableHeader>>([
     </IPageContent>
   </IPage>
 </template>
-@/project/user/permissionStore@/views/Warehouse/OutputVoucher/outputVoucherStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore
+@/project/user/permissionStore@/views/Warehouse/OutputVoucher/outputVoucherStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

@@ -8,8 +8,8 @@ import type { IUser, IUserFilter } from "../IUser";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { EnumPermission } from "@/utils/EnumSystem";
-import { t } from "@/utils/I18nPlugin";
+import { EnumPermission } from "@/utilities/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
 
 //#region Vars
 //#region Vars
@@ -25,7 +25,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Details"), value: "actions" },
 ]);
 const { get_filter } = useUserStore();
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -208,3 +208,4 @@ const trns = app?.appContext.config.globalProperties.$trns;
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
+@/utilities/EnumSystem@/utilities/I18nPlugin@/utilities/defaultParams

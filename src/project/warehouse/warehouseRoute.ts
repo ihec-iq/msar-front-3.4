@@ -1,12 +1,12 @@
 import authMiddleware from "@/router/middleware/authMiddleware";
 import inputVoucherRoute from "./inputVoucher/inputVoucherRoute";
 import outputVoucherRoute from "./outputVoucher/outputVoucherRoute";
-import corruptedVoucherRoute from "./corruptedVoucher/corruptedVoucherRoute";
+import retrievalVoucherRoute from "./retrievalVoucher/retrievalVoucherRoute";
 import directVoucherRoute from "./directVoucher/directVoucherRoute";
 export default [
   ...inputVoucherRoute,
   ...outputVoucherRoute,
-  ...corruptedVoucherRoute,
+  ...retrievalVoucherRoute,
   ...directVoucherRoute,
   {
     path: "/storeIndex",

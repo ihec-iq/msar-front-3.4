@@ -6,8 +6,8 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
-import { t } from "@/utils/I18nPlugin";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 //region"Drag and Drop"
 
@@ -211,4 +211,4 @@ const reset = () => {
     </IPageContent>
   </IPage>
 </template>
-@/project/item/itemCategoryStore@/project/user/permissionStore
+@/project/item/itemCategoryStore@/project/user/permissionStore@/utilities/I18nPlugin@/utilities/EnumSystem

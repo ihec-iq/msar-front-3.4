@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
-import { t, setLocale, Languages, currentLocale } from "@/utils/I18nPlugin";
+import { t, setLocale, Languages, currentLocale } from "@/utilities/I18nPlugin";
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { ref } from "vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
@@ -152,3 +152,4 @@ const changeDark = () => {
     </transition>
   </Menu>
 </template>
+@/utilities/I18nPlugin

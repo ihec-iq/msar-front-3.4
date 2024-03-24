@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const update = (id: number) => {
@@ -54,3 +54,4 @@ const props = defineProps({
     </IDropdown>
   </div>
 </template>
+@/utilities/I18nPlugin

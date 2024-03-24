@@ -26,7 +26,7 @@ const props = defineProps({
 });
 const Change = () => {
   emits("onChange");
-};
+};  
 // import { useI18n } from "@/stores/i18n/useI18n";
 // const { t } = useI18n();
 
@@ -40,7 +40,7 @@ const checkRequired = () => {
   } else {
     inputClasses.value = "_input border border-red-500";
   }
-};
+}; 
 </script>
 <template>
   <div class="mb-2 mx-1">

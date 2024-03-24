@@ -1,6 +1,6 @@
 import { ref, onMounted, reactive } from "vue";
 import { defineStore } from "pinia";
-import { getError } from "@/utils/helpers";
+import { getError } from "@/utilities/helpers";
 import Api from "@/api/apiConfig";
 import type INotification from "@/types/core/INotification";
 export const useNotificationStore = defineStore("notificationStore", () => {

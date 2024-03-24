@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script setup lang="ts"> 
 import { EnumDirection } from "@/utils/EnumSystem";
-import { ref } from "vue";
+import { ref } from "vue"; 
 const modelValue = defineModel<any>();
 import { t } from "@/utils/I18nPlugin";
 
@@ -85,3 +85,4 @@ const checkRequired = () => {
     />
   </div>
 </template>
+@/utilities/EnumSystem
