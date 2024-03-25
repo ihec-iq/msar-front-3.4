@@ -211,4 +211,3 @@ const reset = () => {
     </IPageContent>
   </IPage>
 </template>
-@/project/item/itemCategoryStore@/project/user/permissionStore@/utilities/I18nPlugin@/utilities/EnumSystem

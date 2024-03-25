@@ -439,4 +439,3 @@ html.dark {
   /* ...others... */
 }
 </style>
-@/project/user/permissionStore@/views/Archive/archiveStore@/project/archive/dragDrop@/utilities/I18nPlugin@/utilities/crudTool@/utilities/EnumSystem

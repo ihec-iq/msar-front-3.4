@@ -1,5 +1,7 @@
 export default {
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
+  Warehouse: { Index: "Warehouse System" },
+  RetrievalVoucher: { Index: "Retrieval Voucher", Add: "Add Retrieval" , Update:"Update Retrieval" },
   ID: "ID",
   Profile: "Profile",
   Archive: "Archive",

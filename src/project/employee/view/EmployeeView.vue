@@ -342,5 +342,4 @@ onMounted(async () => {
       />
     </template>
   </IPage>
-</template>@/project/user/IUser@/project/user/userStore@/project/user/permissionStore@/project/section/sectionStore
-@/utilities/I18nPlugin@/utilities/EnumSystem
+</template>

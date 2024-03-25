@@ -156,4 +156,4 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-@/project/user/permissionStore@/views/Warehouse/OutputVoucher/IOutputVoucher@/views/Warehouse/OutputVoucher/outputVoucherStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem
+ 
