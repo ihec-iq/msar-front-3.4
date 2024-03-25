@@ -2,34 +2,34 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IEmployeeHistory, IEmployeeFilter } from "../IEmployee";
 import { useEmployeeStore } from "../employeeStore";
 import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
-import { useCorruptedVoucherStore } from "@/project/warehouse/corruptedVoucher/corruptedVoucherStore";
+import { useRetrievalVoucherStore } from "@/project/warehouse/retrievalVoucher/retrievalVoucherStore";
 import { storeToRefs } from "pinia";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
 import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 const outputVoucherStore = useOutputVoucherStore();
-const corruptedVoucherStore = useCorruptedVoucherStore();
+const retrievalVoucherStore = useRetrievalVoucherStore();
 
 const { employees } = storeToRefs(useEmployeeStore());
 
 
 const isLoading = ref(false);
-const IsShowCorrupted = ref(false);
+const IsShowRetrieval = ref(false);
 const data = ref<Array<IEmployeeHistory>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IEmployeeHistory>>([]);
 
-import { limits } from "@/utils/defaultParams";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { limits } from "@/utilities/defaultParams";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 
-const CorruptedVoucher = ref<{
+const RetrievalVoucher = ref<{
   number: string;
   date: string;
   signaturePerson: string;
@@ -73,7 +73,7 @@ const makeFastSearch = () => {
   }
 };
 //#endregion
-const { SelectedOutItemCorrupted } = storeToRefs(corruptedVoucherStore);
+const { SelectedOutItemRetrieval } = storeToRefs(retrievalVoucherStore);
 //#region Search
 const searchFilter = ref<IEmployeeFilter>({
   limit: 10,
@@ -118,16 +118,16 @@ const openItem = (id: number, billType: string) => {
   }
 };
 const deleteItem = (index: number) => {
-  SelectedOutItemCorrupted.value.splice(index, 1);
+  SelectedOutItemRetrieval.value.splice(index, 1);
 };
 //#region Pagination
-const createCorruptedVoucher = () => {
-  //router.push({ name: "corruptedVoucherAdd" });
-  CorruptedVoucher.value.items = SelectedOutItemCorrupted.value;
-  console.log(CorruptedVoucher.value);
+const createRetrievalVoucher = () => {
+  //router.push({ name: "retrievalVoucherAdd" });
+  RetrievalVoucher.value.items = SelectedOutItemRetrieval.value;
+  console.log(RetrievalVoucher.value);
 
-  corruptedVoucherStore
-    .store(CorruptedVoucher.value)
+  retrievalVoucherStore
+    .store(RetrievalVoucher.value)
     .then(async (response) => {
       if (response.status == 200) {
         alert("Operation successful");
@@ -149,7 +149,7 @@ onMounted(async () => {
   await getFilterData(1);
 });
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Employee"), value: "name" },
+  { caption: t("Employee.Title"), value: "name" },
   { caption: t("Section"), value: "serialNumber" },
   { caption: t("Section"), value: "voucherDate" },
   { caption: t("Section"), value: "type" },
@@ -199,7 +199,7 @@ const headers = ref<Array<ITableHeader>>([
         <WindowsDesign
           :width="250"
           class="col-11 shadow-lg rounded-2xl border-red-700"
-          v-if="SelectedOutItemCorrupted.length > 0"
+          v-if="SelectedOutItemRetrieval.length > 0"
         >
           <template v-slot:header>
             <div class="">انشاء سند شطب</div>
@@ -229,7 +229,7 @@ const headers = ref<Array<ITableHeader>>([
                 </thead>
                 <tbody class="bg-[#1f2937]">
                   <tr
-                    v-for="(row, index) in SelectedOutItemCorrupted"
+                    v-for="(row, index) in SelectedOutItemRetrieval"
                     :key="row.id"
                     class="border-b border-black h-14 text-gray-100"
                   >
@@ -270,7 +270,7 @@ const headers = ref<Array<ITableHeader>>([
                   >
                     {{ t("NumberVoucher") }}
                     <input
-                      v-model="CorruptedVoucher.number"
+                      v-model="RetrievalVoucher.number"
                       type="text"
                       class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                     />
@@ -282,7 +282,7 @@ const headers = ref<Array<ITableHeader>>([
                   >
                     {{ t("Date") }}
                     <input
-                      v-model="CorruptedVoucher.date"
+                      v-model="RetrievalVoucher.date"
                       type="date"
                       class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                     />
@@ -294,7 +294,7 @@ const headers = ref<Array<ITableHeader>>([
                   >
                     {{ t("InputVoucherSignaturePerson") }}
                     <input
-                      v-model="CorruptedVoucher.signaturePerson"
+                      v-model="RetrievalVoucher.signaturePerson"
                       type="text"
                       class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                     />
@@ -307,7 +307,7 @@ const headers = ref<Array<ITableHeader>>([
                     {{ t("InputVoucherEmployeeRequest") }}
 
                     <select
-                      v-model="CorruptedVoucher.requestEmployeeId"
+                      v-model="RetrievalVoucher.requestEmployeeId"
                       class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                     >
                       <option
@@ -330,7 +330,7 @@ const headers = ref<Array<ITableHeader>>([
                 class="border-1 border-b border-black h-14 text-gray-100 duration-500 rounded-lg bg-amber-600 font-bold hover:bg-createHover"
                 type="success"
                 is-link
-                @click="createCorruptedVoucher()"
+                @click="createRetrievalVoucher()"
                 >انشاء سند شطب
               </van-button>
             </div>
@@ -355,7 +355,7 @@ const headers = ref<Array<ITableHeader>>([
                       <div
                         class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                       >
-                        <input type="checkbox" v-model="IsShowCorrupted" />
+                        <input type="checkbox" v-model="IsShowRetrieval" />
                         تفعيل سند اتلاف
                       </div>
                       <table class="min-w-full text-center">
@@ -364,7 +364,7 @@ const headers = ref<Array<ITableHeader>>([
                             <th
                               scope="col"
                               class="text-sm font-medium px-6 py-4"
-                              v-if="IsShowCorrupted"
+                              v-if="IsShowRetrieval"
                             >
                               {{ t("Selected") }}
                             </th>
@@ -428,10 +428,10 @@ const headers = ref<Array<ITableHeader>>([
                               'bg-[#d7000017]': row.count < 0,
                             }"
                           >
-                            <th v-if="IsShowCorrupted">
+                            <th v-if="IsShowRetrieval">
                               <input
                                 type="checkbox"
-                                v-model="SelectedOutItemCorrupted"
+                                v-model="SelectedOutItemRetrieval"
                                 :value="row"
                               />
                             </th>
@@ -519,4 +519,4 @@ const headers = ref<Array<ITableHeader>>([
       </IRow>
     </IPageContent>
   </IPage>
-</template>
+</template>@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

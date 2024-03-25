@@ -7,7 +7,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "../vacationStore";
 import type { IVacationFilter, IVacation } from "../IVacation";
 import { usePermissionStore } from "@/project/user/permissionStore";
-import { isNumber } from "@/utils/tools";
+import { isNumber } from "@/utilities/tools";
 const { checkPermissionAccessArray } = usePermissionStore();
 import JsonExcel from "vue-json-excel3";
 
@@ -19,9 +19,9 @@ const dataBase = ref<Array<IVacation>>([]);
 
 const { get_filter } = useVacationStore();
 
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import type { ITableHeader } from "@/types/core/components/ITable";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
@@ -294,4 +294,4 @@ const headersExcel = {
     </div>
   </div>
 </template>
-@/project/vacation/vacationStore@/project/vacation/IVacation@/project/user/permissionStore
+@/project/vacation/vacationStore@/project/vacation/IVacation@/project/user/permissionStore@/utilities/tools@/utilities/defaultParams@/utilities/EnumSystem

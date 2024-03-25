@@ -1,4 +1,4 @@
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 export const getError = (error: {
   response: {
     data: { errors: { [s: string]: unknown } | ArrayLike<unknown> };

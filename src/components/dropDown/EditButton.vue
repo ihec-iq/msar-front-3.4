@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 const props = defineProps({
   title: { type: String, default: "تعديل" },
 });
@@ -28,3 +28,4 @@ onMounted(() => {});
     </svg>
   </button>
 </template>
+@/utilities/I18nPlugin

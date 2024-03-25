@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 
 const props = defineProps({
   getData: {
@@ -22,3 +22,4 @@ const props = defineProps({
     />
   </div>
 </template>
+@/utilities/I18nPlugin

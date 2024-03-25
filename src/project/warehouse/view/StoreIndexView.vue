@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import type { IStore, IStoreFilter } from "../IStore";
 import { useStoringStore } from "../storingStore";
 import { usePermissionStore } from "@/project/user/permissionStore";
@@ -14,11 +14,11 @@ const dataBase = ref<Array<IStore>>([]);
 
 const { get_filter, get_summation } = useStoringStore();
 
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import ICol from "@/components/ihec/ICol.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 ;
 
@@ -184,4 +184,4 @@ const headers = ref<Array<ITableHeader>>([
   </IPage>
 </template>
 <style></style>
-@/project/user/permissionStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore
+@/project/user/permissionStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

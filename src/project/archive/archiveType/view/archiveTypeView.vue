@@ -3,8 +3,8 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { usePermissionStore } from "@/project/user/permissionStore";
-import { t } from "@/utils/I18nPlugin";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import { useArchiveTypeStore } from "../archiveTypeStore";
 
 const archiveTypeStore = useArchiveTypeStore();
@@ -204,3 +204,4 @@ const reset = () => {
     </IPageContent>
   </IPage>
 </template>
+@/utilities/I18nPlugin@/utilities/EnumSystem

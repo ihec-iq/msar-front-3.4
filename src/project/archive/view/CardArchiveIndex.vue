@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import type { IDocument } from "../IArchive";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 const router = useRouter();
 const update = (id: number) => {
   router.push({
@@ -63,3 +63,4 @@ const getPath = (files: Array<IDocument>) => {
     </div>
   </div>
 </template>
+@/utilities/I18nPlugin

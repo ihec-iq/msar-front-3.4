@@ -5,7 +5,7 @@ import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import { VacationLinks } from "./VacationLinks";
 import { usePermissionStore } from "@/project/user/permissionStore";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionStore();
 
 //#region Pagination
@@ -78,4 +78,4 @@ onMounted(async () => {
 </template>
 <style></style>
 ../VacationLinks
-@/project/user/permissionStore
+@/project/user/permissionStore@/utilities/EnumSystem

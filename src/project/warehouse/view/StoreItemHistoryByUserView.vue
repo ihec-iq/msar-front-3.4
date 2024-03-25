@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import PageTitle from "@/components/general/namePage.vue";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStoreItemHistory, IStoreItemFilter } from "../IStore";
 import { useStoringStore } from "../storingStore";
@@ -22,8 +22,8 @@ const dataBase = ref<Array<IStoreItemHistory>>([]);
 
 const { get_item } = useStoringStore();
 
-import { limits } from "@/utils/defaultParams";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { limits } from "@/utilities/defaultParams";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -329,4 +329,4 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
-@/project/user/permissionStore@/views/Warehouse/OutputVoucher/outputVoucherStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore
+@/project/user/permissionStore@/views/Warehouse/OutputVoucher/outputVoucherStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

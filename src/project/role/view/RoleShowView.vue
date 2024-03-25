@@ -6,7 +6,7 @@ import type IRole from "../IRole.js";
 import { useRouter } from "vue-router";
 import { usePermissionsStore } from "../permissionStore";
 import PageTitle from "@/components/general/namePage.vue";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
  
  
 const permissionsStore = usePermissionsStore();
@@ -210,3 +210,4 @@ onMounted(async () => {
   visibility: visible;
 }
 </style>
+@/utilities/I18nPlugin

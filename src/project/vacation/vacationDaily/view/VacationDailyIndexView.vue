@@ -19,8 +19,8 @@ import IButton from "@/components/ihec/IButton.vue";
 
 const { vacationDaily } = useVacationDailyStore();
 
-import { limits } from "@/utils/defaultParams";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { limits } from "@/utilities/defaultParams";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import CardVacationDailyIndex from "./CardVacationDailyIndex.vue";
@@ -164,4 +164,4 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-@/project/user/permissionStore
+@/project/user/permissionStore@/utilities/defaultParams@/utilities/EnumSystem

@@ -6,7 +6,7 @@ import envConfig from "@/api/envConfig";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 const rtlStore = useRtlStore();
 import { useConfigStore } from "@/stores/configStore";
 import { ref, getCurrentInstance, onMounted } from "vue";
@@ -208,4 +208,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/project/user/permissionStore
+@/project/user/permissionStore@/utilities/I18nPlugin

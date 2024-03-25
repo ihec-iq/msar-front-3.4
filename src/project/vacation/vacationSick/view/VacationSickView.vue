@@ -10,10 +10,10 @@ import type { IVacationSick } from "../IVacationSick";
 import { useVacationSickStore } from "../vacationSickStore";
 import { useVacationStore } from "../../vacationStore";
 
-import { EnumPermission } from "@/utils/EnumSystem";
-import { t } from "@/utils/I18nPlugin";
+import { EnumPermission } from "@/utilities/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
-import { CNumber } from "@/utils/tools";
+import { CNumber } from "@/utilities/tools";
 
 //region"Drag and Drop"
 
@@ -276,4 +276,4 @@ const ChangeDateRecord = () => {
     </template>
   </IPage>
 </template>
-@/project/user/permissionStore
+@/project/user/permissionStore@/utilities/EnumSystem@/utilities/I18nPlugin@/utilities/tools

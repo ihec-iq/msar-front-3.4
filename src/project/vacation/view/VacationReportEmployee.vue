@@ -30,9 +30,9 @@ import { useVacationSickStore } from "../vacationSick/vacationSickStore";
 //endregion
 
 //#region Data
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 const limit = ref(10);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
@@ -476,4 +476,4 @@ button {
   cursor: pointer;
 }
 </style>
-@/stores/vacations/vacationDailyStore@/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationDaily/IVacationDaily@/project/vacation/vacationSick/IVacationSick@/project/vacation/vacationSick/IVacationTime@/project/Employee/employeeStore@/project/user/permissionStore@/project/section/sectionStore
+@/stores/vacations/vacationDailyStore@/project/vacation/vacationSick/vacationSickStore@/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationDaily/IVacationDaily@/project/vacation/vacationSick/IVacationSick@/project/vacation/vacationSick/IVacationTime@/project/Employee/employeeStore@/project/user/permissionStore@/project/section/sectionStore@/utilities/defaultParams@/utilities/EnumSystem

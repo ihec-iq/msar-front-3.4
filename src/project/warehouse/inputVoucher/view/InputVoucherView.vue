@@ -9,10 +9,10 @@ import { useStockStore } from "../../stockStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import { useItemStore } from "@/project/item/itemStore";
 import type { IInputVoucherItem } from "../IInputVoucher";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import type { IItem } from "@/project/item/IItem";
 import AddItemPopup from "@/project/item/view/AddItemPopup.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import ICol from "@/components/ihec/ICol.vue";
 import IRow from "@/components/ihec/IRow.vue";
@@ -693,4 +693,4 @@ const headers = ref<Array<ITableHeader>>([
     </template>
   </IPage>
 </template>
-@/project/item/itemStore@/project/item/IItem@/project/user/permissionStore@/views/Warehouse/InputVoucher/IInputVoucher@/views/Warehouse/InputVoucher/inputVoucherStore@/views/Warehouse/warehouse/stockStore@/views/Warehouse/stockStore
+@/project/item/itemStore@/project/item/IItem@/project/user/permissionStore@/views/Warehouse/InputVoucher/IInputVoucher@/views/Warehouse/InputVoucher/inputVoucherStore@/views/Warehouse/warehouse/stockStore@/views/Warehouse/stockStore@/utilities/I18nPlugin@/utilities/EnumSystem

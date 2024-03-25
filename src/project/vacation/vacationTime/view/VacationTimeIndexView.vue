@@ -15,8 +15,8 @@ const dataPage = ref();
 const dataBase = ref<Array<IVacationTime>>([]);
 const { vacationTime } = useVacationTimeStore();
 
-import { limits } from "@/utils/defaultParams";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { limits } from "@/utilities/defaultParams";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import CardVactionTimeIndex from "./CardVactionTimeIndex.vue";
 
 const route = useRoute();
@@ -161,4 +161,4 @@ onMounted(async () => {
   </IPage>
 </template>
 @/project/vacation/vacationTime/vacationTimeStore@/project/vacation/vacationSick/IVacationTime
-@/project/user/permissionStore
+@/project/user/permissionStore@/utilities/defaultParams@/utilities/EnumSystem

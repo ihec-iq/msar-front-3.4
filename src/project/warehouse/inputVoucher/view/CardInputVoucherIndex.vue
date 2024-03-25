@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 const router = useRouter();
@@ -107,4 +107,4 @@ const truncatedNotes = computed(() => {
       <div class="badge badge-primary badge-outline">{{ item.itemsCount }}</div>
     </div>
   </div>
-</template>
+</template>@/utilities/I18nPlugin

@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IInputVoucher, IInputVoucherFilter } from "../IInputVoucher";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
@@ -15,10 +15,10 @@ const dataPage = ref();
 const dataBase = ref<Array<IInputVoucher>>([]);
 const { get_filter, resetData } = useInputVoucherStore();
 
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import CardInputVoucherIndex from "./CardInputVoucherIndex.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue" ;
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -158,4 +158,4 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-@/project/user/permissionStore@/views/Warehouse/InputVoucher/IInputVoucher@/views/Warehouse/InputVoucher/inputVoucherStore
+@/project/user/permissionStore@/views/Warehouse/InputVoucher/IInputVoucher@/views/Warehouse/InputVoucher/inputVoucherStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SimpleLoading from "@/components/general/loading.vue";
 import { useArchiveStore } from "../archiveStore";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import type { IArchive, IArchiveFilter } from "../IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
@@ -9,13 +9,13 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import IPage from "@/components/ihec/IPage.vue";
 import IButton from "@/components/ihec/IButton.vue";
-import { limits } from "@/utils/defaultParams";
+import { limits } from "@/utilities/defaultParams";
 import IInput from "@/components/inputs/IInput.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import CardsArchiveTypeIndex from "./CardsArchiveTypeIndex.vue";
 import EmailCardArchiveIndex from "./EmailCardArchiveIndex.vue";
 
@@ -218,4 +218,4 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
     </IPageContent>
   </IPage>
   <SimpleLoading v-if="isLoading">.</SimpleLoading>
-</template>
+</template>@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

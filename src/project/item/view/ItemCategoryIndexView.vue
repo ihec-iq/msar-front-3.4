@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useItemCategoryStore } from "../itemCategoryStore";
 import type { IItemCategory, IItemCategoryFilter } from "../IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -17,8 +17,8 @@ const { category } = useItemCategoryStore();
 const itemCategoryStore = useItemCategoryStore();
 import CardItemCategoryIndex from "./CardItemCategoryIndex.vue";
 
-import { limits } from "@/utils/defaultParams";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { limits } from "@/utilities/defaultParams";
+import { EnumPermission } from "@/utilities/EnumSystem";
 
 const route = useRoute();
 const router = useRouter();
@@ -159,3 +159,4 @@ onMounted(async () => {
     </IPageContent>
   </IPage>
 </template>
+@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

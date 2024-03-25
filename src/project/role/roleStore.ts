@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
-import { getError } from "@/utils/helpers";
+import { getError } from "@/utilities/helpers";
 import type IRole from "./IRole";
 export const useRoleStore = defineStore("roleStore", () => {
   const roles = ref([]);

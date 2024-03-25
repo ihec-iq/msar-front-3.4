@@ -7,10 +7,10 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
 
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import type { IUser } from "@/project/user/IUser";
 import { useUserStore } from "@/project/user/userStore";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import ISelect from "@/components/inputs/ISelect.vue";
 import IPage from "@/components/ihec/IPage.vue";
 
@@ -343,3 +343,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>@/project/user/IUser@/project/user/userStore@/project/user/permissionStore@/project/section/sectionStore
+@/utilities/I18nPlugin@/utilities/EnumSystem

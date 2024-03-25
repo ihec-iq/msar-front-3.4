@@ -9,10 +9,10 @@ import { useStockStore } from "../../stockStore";
 import { useOutputVoucherStore } from "./../outputVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import type { IOutputVoucherItem } from "../IOutputVoucher";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import type { IInputVoucherItem } from "../../inputVoucher/IInputVoucher";
 import type { ITableHeader } from "@/types/core/components/ITable";
-import { EnumPermission } from "@/utils/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import type { IEmployee } from "@/project/employee/IEmployee";
@@ -82,6 +82,7 @@ const VoucherItem = ref<IOutputVoucherItem>({
     price: 1,
     value: 1,
   },
+  outputVoucherId: 0
 });
 const AddPopup = () => {
   showPop.value = true;
@@ -114,6 +115,7 @@ const resetVoucherItem = () => {
     notes: "",
     Employee: { id: 1, name: "" },
     inputVoucherItemId: 0,
+    outputVoucherId: 0,
     inputVoucherItem: {
       Item: {
         id: 0,
@@ -167,7 +169,7 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
   VoucherItem.value = itemX;
-  VoucherItem.value.inputVoucherItemId = itemX.inputVoucherItem.id;
+  VoucherItem.value.inputVoucherItemId =Number(itemX.inputVoucherItem.id) ;
 };
 const AddItem = () => {
   VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
@@ -180,7 +182,7 @@ const AddItem = () => {
   );
   VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
   ChangeValueTotal();
-  VoucherItem.value.inputVoucherItemId = VoucherItem.value.inputVoucherItem.id;
+  VoucherItem.value.inputVoucherItemId = Number(VoucherItem.value.inputVoucherItem.id);
   outputVoucherStore.addItem(VoucherItem.value);
 
   resetVoucherItem();
@@ -709,4 +711,4 @@ const headers = ref<Array<ITableHeader>>([
       />
     </template>
   </IPage>
-</template>
+</template>@/utilities/I18nPlugin@/utilities/EnumSystem
