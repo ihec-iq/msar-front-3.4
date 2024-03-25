@@ -5,34 +5,163 @@ export interface fieldValidation {
   roles: Array<RegExp>;
 }
 
-export function useValidation() {
-  const roles2 = {
-    required: {
-      regex: /^(?!undefined$|^$).{1,}$/,
-      message: t(""),
-    },
-    email: {
-      regex: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
-      message: t(""),
-    },
-    number: {
-      regex: /^-?\d*\.?\d+$/,
-      message: t(""),
-    },
-    min: (value: Number) => {
-      return {
-        regex: new RegExp(`^.{${value},}$`),
-        message: t(""),
-      };
-    },
-    max: (value: Number) => {
-      return {
-        regex: new RegExp(`^.{0,${value}}$`),
-        message: t(""),
-      };
-    },
-  };
+export interface IValidator {
+  regexp: RegExp;
+  message: String;
+}
 
+export interface IValidationResult {
+  success: Boolean;
+  errors: Array<IValidatorError>;
+}
+
+export interface IFieldValidation {
+  name: string;
+  rules: Array<IValidator>;
+}
+
+export interface IValidatorError {
+  fieldName: String;
+  messages: Array<String>;
+}
+
+export function useValidation() {
+  class validators {
+    validatorsList: Array<IValidator> = [];
+
+    constructor() {
+      this.validatorsList = [];
+    }
+
+    required() {
+      const validator: IValidator = {
+        regexp: /^(?!undefined$|^$).{1,}$/,
+        message: t("FieldRequired"),
+      };
+
+      this.validatorsList.push(validator);
+      return this;
+    }
+
+    email() {
+      const validator: IValidator = {
+        regexp: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
+        message: t("FieldMustBeEmail"),
+      };
+
+      this.validatorsList.push(validator);
+      return this;
+    }
+
+    number() {
+      const validator: IValidator = {
+        regexp: /^-?\d*\.?\d+$/,
+        message: t("FieldMustBeNumber"),
+      };
+
+      this.validatorsList.push(validator);
+      return this;
+    }
+
+    integer() {
+      const validator: IValidator = {
+        regexp: /^-?\d+$/,
+        message: t("FieldMustBeDecimal"),
+      };
+
+      this.validatorsList.push(validator);
+      return this;
+    }
+
+    float() {
+      const validator: IValidator = {
+        regexp: /^-?\d+(\.\d+)?$/,
+        message: t("FieldMustBeFloat"),
+      };
+
+      this.validatorsList.push(validator);
+      return this;
+    }
+
+    min(value: Number) {
+      const validator: IValidator = {
+        regexp: new RegExp(`^.{${value},}$`),
+        message: t("FiledLengthIsTooShort"),
+      };
+
+      this.validatorsList.push(validator);
+      return this;
+    }
+
+    max(value: Number) {
+      const validator: IValidator = {
+        regexp: new RegExp(`^.{0,${value}}$`),
+        message: t("FiledLengthIsTooLong"),
+      };
+
+      this.validatorsList.push(validator);
+      return this;
+    }
+
+    toList() {
+      return this.validatorsList;
+    }
+  }
+  function validate(
+    object: any,
+    validators: Array<IFieldValidation>
+  ): IValidationResult {
+    let result: IValidationResult = {
+      success: false,
+      errors: [],
+    };
+
+    if (!object) return result;
+
+    let objectKeys = Object.keys(object);
+
+    if (objectKeys.length == 0) return result;
+
+    if (validators.length == 0) return result;
+
+    try {
+      let success = true;
+      let errors: Array<IValidatorError> = [];
+
+      validators.forEach((validator) => {
+        let keyValue = object[validator.name];
+
+        let error: IValidatorError = {
+          fieldName: validator.name,
+          messages: [],
+        };
+
+        validator.rules.forEach((rule) => {
+          let regex = new RegExp(rule.regexp);
+
+          if (!regex.test(keyValue)) {
+            success = false;
+            let errorMessage = `${rule.message}`;
+            error.messages.push(errorMessage);
+          }
+        });
+
+        if (error.messages.length > 0) errors.push(error);
+      });
+
+      result.success = success;
+      result.errors = errors;
+    } catch (error) {
+      console.log("validate function in Validation composable:", error);
+    }
+
+    return result;
+  }
+
+  return { validate, validators };
+}
+
+export function useSimpleValidation() {
   const roles = {
     required: /^(?!undefined$|^$).{1,}$/,
     email: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
@@ -69,32 +198,5 @@ export function useValidation() {
     }
   }
 
-  function isValid2(obj: any, fields: Array<any>) {
-    try {
-      let isValidList: Array<String> = [];
-
-      /* if (!obj) return false; */
-      let keys = Object.keys(obj);
-      /* if (keys.length == 0) return false; */
-
-      for (let i = 0; i < keys.length; i++) {
-        let field = fields.find((item) => item.name == keys[i]);
-
-        if (field == undefined) continue;
-
-        field.roles.forEach((role: any) => {
-          let regex = new RegExp(role.regex);
-          if (!regex.test(obj[keys[i]])) {
-            isValidList.push(role.message + ": " + field.name);
-          }
-        });
-      }
-
-      return isValidList;
-    } catch (error) {
-      console.log("isValid function in Validation composable:", error);
-    }
-  }
-
-  return { roles, roles2, isValid2, isValid };
+  return { roles, isValid };
 }

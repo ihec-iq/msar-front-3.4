@@ -18,6 +18,18 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
+import { useValidation, type IValidationResult } from "@/utils/Validation";
+
+const { validate, validators } = useValidation();
+
+const validatorsObject = new validators();
+
+const rules = [
+  {
+    name: "title",
+    rules: validatorsObject.required().min(3).toList(),
+  },
+];
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
 
@@ -45,7 +57,21 @@ const errors = ref<String | null>();
 const reset = () => {
   archiveStore.resetData();
 };
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
 const store = () => {
+  validationResult.value = validate(archive.value, rules);
+
+  if (!validationResult.value.success) {
+    Swal.fire({
+      icon: "error",
+      title: "Validation fails",
+      timer: 2500,
+    });
+    return;
+  }
+
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
   const formData = new FormData();
@@ -352,6 +378,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
           </div>
         </IForm>
       </IRow>
+      <IErrorMessages :validationResult="validationResult" />
     </IPageContent>
 
     <template #Footer>
@@ -439,4 +466,3 @@ html.dark {
   /* ...others... */
 }
 </style>
-@/project/user/permissionStore@/views/Archive/archiveStore@/project/archive/dragDrop@/utilities/I18nPlugin@/utilities/crudTool@/utilities/EnumSystem
