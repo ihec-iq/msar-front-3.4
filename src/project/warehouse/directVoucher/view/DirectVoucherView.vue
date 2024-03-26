@@ -140,7 +140,6 @@ const store = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your item has been saved",
           showConfirmButton: false,
@@ -180,7 +179,6 @@ function update() {
     .then(async (response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Item has been updated",
           showConfirmButton: false,
@@ -251,7 +249,6 @@ const showData = async (id: number) => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Item file not exist !!!",
         showConfirmButton: false,

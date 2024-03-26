@@ -99,7 +99,6 @@ const store = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your archive has been saved",
           showConfirmButton: false,
@@ -166,7 +165,6 @@ function update() {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Archive has been updated",
           showConfirmButton: false,
@@ -250,7 +248,6 @@ const showData = async () => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Archive file not exist !!!",
         showConfirmButton: false,

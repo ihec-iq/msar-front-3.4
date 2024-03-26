@@ -71,7 +71,6 @@ const store = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Role has been saved",
           showConfirmButton: false,
@@ -100,7 +99,6 @@ const update = () => {
       // console.log(response.data.data);
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your group has been Update",
           showConfirmButton: false,

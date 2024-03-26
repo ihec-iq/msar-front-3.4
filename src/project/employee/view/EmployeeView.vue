@@ -70,7 +70,6 @@ const store = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your employee has been saved",
           showConfirmButton: false,
@@ -117,7 +116,6 @@ function update() {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your employee has been updated",
           showConfirmButton: false,
@@ -190,7 +188,6 @@ const showData = async () => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your employee file not exist !!!",
         showConfirmButton: false,
@@ -342,5 +339,6 @@ onMounted(async () => {
       />
     </template>
   </IPage>
-</template>@/project/user/IUser@/project/user/userStore@/project/user/permissionStore@/project/section/sectionStore
+</template>
+@/project/user/IUser@/project/user/userStore@/project/user/permissionStore@/project/section/sectionStore
 @/utilities/I18nPlugin@/utilities/EnumSystem

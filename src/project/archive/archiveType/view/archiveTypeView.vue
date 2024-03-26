@@ -104,7 +104,6 @@ function updateObject() {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Category has been updated",
           showConfirmButton: false,
@@ -177,7 +176,6 @@ const getObject = async () => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Item file not exist !!!",
         showConfirmButton: false,

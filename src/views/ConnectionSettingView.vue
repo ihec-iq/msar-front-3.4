@@ -35,7 +35,6 @@ const store = async () => {
     .store(String(ConnectionString.value), String(Organization.value))
     .then(() => {
       Swal.fire({
-        position: "top-end",
         icon: "success",
         title: "Your configuration has been updated",
         showConfirmButton: false,
