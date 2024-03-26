@@ -1,4 +1,4 @@
-import { t } from "./I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 
 export interface fieldValidation {
   name: string;
@@ -36,7 +36,7 @@ export function useValidation() {
     required() {
       const validator: IValidator = {
         regexp: /^(?!undefined$|^$).{1,}$/,
-        message: t("FieldRequired"),
+        message: t("ValidationErrors.FieldRequired"),
       };
 
       this.validatorsList.push(validator);
@@ -46,7 +46,7 @@ export function useValidation() {
     email() {
       const validator: IValidator = {
         regexp: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
-        message: t("FieldMustBeEmail"),
+        message: t("ValidationErrors.FieldMustBeEmail"),
       };
 
       this.validatorsList.push(validator);
@@ -56,7 +56,7 @@ export function useValidation() {
     number() {
       const validator: IValidator = {
         regexp: /^-?\d*\.?\d+$/,
-        message: t("FieldMustBeNumber"),
+        message: t("ValidationErrors.FieldMustBeNumber"),
       };
 
       this.validatorsList.push(validator);
@@ -66,7 +66,7 @@ export function useValidation() {
     integer() {
       const validator: IValidator = {
         regexp: /^-?\d+$/,
-        message: t("FieldMustBeDecimal"),
+        message: t("ValidationErrors.FieldMustBeInteger"),
       };
 
       this.validatorsList.push(validator);
@@ -76,7 +76,7 @@ export function useValidation() {
     float() {
       const validator: IValidator = {
         regexp: /^-?\d+(\.\d+)?$/,
-        message: t("FieldMustBeFloat"),
+        message: t("ValidationErrors.FieldMustBeFloat"),
       };
 
       this.validatorsList.push(validator);
@@ -86,7 +86,7 @@ export function useValidation() {
     min(value: Number) {
       const validator: IValidator = {
         regexp: new RegExp(`^.{${value},}$`),
-        message: t("FiledLengthIsTooShort"),
+        message: t("ValidationErrors.FiledLengthIsTooShort"),
       };
 
       this.validatorsList.push(validator);
@@ -96,7 +96,7 @@ export function useValidation() {
     max(value: Number) {
       const validator: IValidator = {
         regexp: new RegExp(`^.{0,${value}}$`),
-        message: t("FiledLengthIsTooLong"),
+        message: t("ValidationErrors.FiledLengthIsTooLong"),
       };
 
       this.validatorsList.push(validator);
