@@ -24,7 +24,7 @@ const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref("RetrievalVoucher");
+const namePage = ref("RetrievalVoucher.Index");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
@@ -364,16 +364,16 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowRetrievalVouchers]);
   await retrievalVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "AddRetrievalVoucher";
+    namePage.value = "RetrievalVoucher.Add";
     retrievalVoucher.value.id = 0;
     retrievalVoucher.value.date = new Date().toISOString().split("T")[0];
   } else {
     retrievalVoucher.value.id = id.value;
     await showData(id.value);
-    namePage.value = "UpdateRetrievalVoucher";
+    namePage.value = "RetrievalVoucher.Update";
   }
   await useStockStore().get_stocks();
-  await useInputVoucherStore().getItemsVSelect();
+  await useInputVoucherStore().getAllItemsVSelect();
 });
 
 const headers = ref<Array<ITableHeader>>([
@@ -406,7 +406,7 @@ const headers = ref<Array<ITableHeader>>([
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
-                :label="t('RetrievalVoucherNumber')"
+                :label="t('RetrievalVoucher.Number')"
                 name="Number"
                 v-model="retrievalVoucher.number"
                 type="text"
@@ -415,7 +415,7 @@ const headers = ref<Array<ITableHeader>>([
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('Date')"
-                name="InputVoucherNumer"
+                name="InputVoucherNumber"
                 v-model="retrievalVoucher.date"
                 type="date"
               />
@@ -424,7 +424,7 @@ const headers = ref<Array<ITableHeader>>([
               <div
                 class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
               >
-                {{ t("RetrievalVoucherEmployeeRequest") }}
+                {{ t("RetrievalVoucher.Employee") }}
               </div>
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -467,7 +467,7 @@ const headers = ref<Array<ITableHeader>>([
                 type="success"
                 is-link
                 @click="AddPopup()"
-                >{{ t("AddItem") }}
+                >{{ t("Item.Add") }}
               </van-button>
             </ICol>
           </IRow>
@@ -559,6 +559,13 @@ const headers = ref<Array<ITableHeader>>([
                     >
                       {{ t("Available") }}:
                       {{ Number(inValue) - Number(outValue) }}
+                    </div>
+                    
+                    <div
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
+                    >
+                      {{ t("Item.Out") }}:
+                      {{ Number(outValue) }}
                     </div>
                     <cite class="flex flex-wrap text-left text-xs w-fit">
                       {{ Item.notes }}

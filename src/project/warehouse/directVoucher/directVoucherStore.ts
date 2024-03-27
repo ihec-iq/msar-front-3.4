@@ -54,7 +54,7 @@ export const useDirectVoucherStore = defineStore("DirectVoucherStore", () => {
   //       console.log("in get Categories : " + errors);
   //     });
   // }
-  async function getItemsVSelect() {
+  async function getAvailableItemsVSelect() {
     directVoucherItemsVSelect.value = [];
     return await Api.get(`${pathBase}/directVoucherItem/getItemsForVSelect`)
       .then((response) => {
@@ -125,7 +125,7 @@ export const useDirectVoucherStore = defineStore("DirectVoucherStore", () => {
     get,
     get_filter,
     getEmployees,
-    getItemsVSelect,
+    getAvailableItemsVSelect,
     show,
     store,
     update,

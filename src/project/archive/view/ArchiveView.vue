@@ -18,22 +18,29 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
-import { useValidation, type IValidationResult } from "@/utils/Validation";
+import {
+  useValidation,
+  type IValidationResult, 
+  IFieldValidation,
+} from "@/utilities/Validation";
+import { min, required } from "@/utilities/ValidationRole";
+const { validate } = useValidation();
 
-const { validate, validators } = useValidation();
-
-const rules = [
+const rules: Array<IFieldValidation> = [
   {
-    name: "title",
-    rules: new validators().required().toList(),
+    field: "title",
+    rules: [
+      required({ message: t("ValidationErrors.FieldRequired") }),
+      min(3, { message: " يجب ان يكون طول الكلمة اكثر من :val احرف" }),
+    ],
   },
   {
-    name: "archiveTypeId",
-    rules: new validators().required().toList(),
+    field: "archiveTypeId",
+    rules: [required()],
   },
   {
-    name: "issueDate",
-    rules: new validators().required().toList(),
+    field: "issueDate",
+    rules: [required()],
   },
 ];
 
@@ -284,6 +291,7 @@ onMounted(async () => {
 });
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
+
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">
@@ -478,5 +486,6 @@ html.dark {
   --w-e-textarea-bg-color: #333;
   --w-e-textarea-color: #fff;
   /* ...others... */
-} 
-</style> 
+}
+</style>
+@/utilities/Validation

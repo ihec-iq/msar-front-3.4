@@ -16,7 +16,7 @@ export interface IValidationResult {
 }
 
 export interface IFieldValidation {
-  name: string;
+  field: string;
   rules: Array<IValidator>;
 }
 
@@ -24,7 +24,6 @@ export interface IValidatorError {
   fieldName: String;
   messages: Array<String>;
 }
-
 export function useValidation() {
   class validators {
     validatorsList: Array<IValidator> = [];
@@ -129,10 +128,10 @@ export function useValidation() {
       let errors: Array<IValidatorError> = [];
 
       validators.forEach((validator) => {
-        let keyValue = object[validator.name];
+        let keyValue = object[validator.field];
 
         let error: IValidatorError = {
-          fieldName: validator.name,
+          fieldName: validator.field,
           messages: [],
         };
 
