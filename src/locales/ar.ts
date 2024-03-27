@@ -1,5 +1,7 @@
 export default {
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
+  Warehouse: { Index: "نظام المخازن" },
+  RetrievalVoucher: { Index: "مستند ارجاع", Add: "اضافة مستند ارجاع", Update: "تعديل مستند ارجاع" },
   ID: "المعرف",
   Profile: "الملف الشخصي",
   Archive: "الارشيف",

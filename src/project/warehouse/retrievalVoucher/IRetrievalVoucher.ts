@@ -1,20 +1,26 @@
 import type { IItem } from "@/project/item/IItem";
+import type { IInputVoucherItem } from "../inputVoucher/IInputVoucher";
+import type { IStock } from "../IStock";
 
 export interface IRetrievalVoucher {
   id: number;
   number: string;
   date: string;
   notes: string;
-  items: Array<IRetrievalVoucherItem>;
+  Items: Array<IRetrievalVoucherItem>;
   signaturePerson: string;
-  employeeRequest: IRetrievalVoucherEmployee;
+  Employee: IRetrievalVoucherEmployee;
   itemsCount?: number;
 }
 export interface IRetrievalVoucherItem {
   id?: number;
-  outputVoucherId?: number;
-  item: IItem;
-  employeeRequest: IRetrievalVoucherEmployee;
+  retrievalVoucherId: number;
+  Item?: IItem;
+  inputVoucherItemId: number;
+  inputVoucherItem: IInputVoucherItem;
+  Employee: IRetrievalVoucherEmployee;
+  Stock: IStock;
+  serialNumber: string;
   count: number;
   countWord?: string;
   price: number;

@@ -478,5 +478,5 @@ html.dark {
   --w-e-textarea-bg-color: #333;
   --w-e-textarea-color: #fff;
   /* ...others... */
-}
-</style>
+} 
+</style> 

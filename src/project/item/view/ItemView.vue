@@ -256,6 +256,5 @@ const reset = () => {
         />
       </IRow>
     </IPageContent>
-  </IPage>
-</template>
-@/project/user/permissionStore@/utilities/I18nPlugin@/utilities/EnumSystem
+  </IPage> 
+</template>  

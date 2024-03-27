@@ -57,6 +57,7 @@ declare module 'vue' {
     MovingList: typeof import('./src/components/MovingList.vue')['default']
     NamePage: typeof import('./src/components/general/namePage.vue')['default']
     NavBar: typeof import('./src/components/fixed/navBar.vue')['default']
+    PopSetting: typeof import('./src/components/fixed/PopSetting.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SettingsComponent: typeof import('./src/components/fixed/SettingsComponent.vue')['default']
