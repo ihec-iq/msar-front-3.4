@@ -201,4 +201,15 @@ export default {
   New: "New",
   archiveType: "Archive Type",
   RequiredField: "This field is required",
+  ErrorsMustResolve: "Errors must resolve",
+  ValidationFails: "Validation Fails",
+  ValidationErrors: {
+    FieldRequired: "Field Required",
+    FieldMustBeEmail: "Field Must Be an Email",
+    FieldMustBeNumber: "Field Must Be a Number",
+    FieldMustBeInteger: "Field Must Be an Integer",
+    FieldMustBeFloat: "Field Must Be a Float",
+    FiledLengthIsTooShort: "Filed Length Is Too Short",
+    FiledLengthIsTooLong: "Filed Length Is Too Long",
+  },
 };

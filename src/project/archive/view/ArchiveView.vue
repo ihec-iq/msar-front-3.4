@@ -22,12 +22,18 @@ import { useValidation, type IValidationResult } from "@/utils/Validation";
 
 const { validate, validators } = useValidation();
 
-const validatorsObject = new validators();
-
 const rules = [
   {
     name: "title",
-    rules: validatorsObject.required().min(3).toList(),
+    rules: new validators().required().toList(),
+  },
+  {
+    name: "archiveTypeId",
+    rules: new validators().required().toList(),
+  },
+  {
+    name: "issueDate",
+    rules: new validators().required().toList(),
   },
 ];
 
@@ -66,7 +72,7 @@ const store = () => {
   if (!validationResult.value.success) {
     Swal.fire({
       icon: "error",
-      title: "Validation fails",
+      title: t("ValidationFails"),
       timer: 2500,
     });
     return;
@@ -93,7 +99,6 @@ const store = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your archive has been saved",
           showConfirmButton: false,
@@ -115,6 +120,17 @@ const store = () => {
     });
 };
 function update() {
+  validationResult.value = validate(archive.value, rules);
+
+  if (!validationResult.value.success) {
+    Swal.fire({
+      icon: "error",
+      title: t("ValidationFails"),
+      timer: 2500,
+    });
+    return;
+  }
+
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
   const formData = new FormData();
@@ -149,7 +165,6 @@ function update() {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Archive has been updated",
           showConfirmButton: false,
@@ -233,7 +248,6 @@ const showData = async () => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Archive file not exist !!!",
         showConfirmButton: false,

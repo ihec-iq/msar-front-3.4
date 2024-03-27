@@ -43,7 +43,6 @@ const showData = async (id: number) => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Item file not exist !!!",
         showConfirmButton: false,

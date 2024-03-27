@@ -135,7 +135,6 @@ const showData = async () => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your employee file not exist !!!",
         showConfirmButton: false,

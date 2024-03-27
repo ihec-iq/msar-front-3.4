@@ -82,7 +82,7 @@ const VoucherItem = ref<IOutputVoucherItem>({
     price: 1,
     value: 1,
   },
-  outputVoucherId: 0
+  outputVoucherId: 0,
 });
 const AddPopup = () => {
   showPop.value = true;
@@ -169,7 +169,7 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
   VoucherItem.value = itemX;
-  VoucherItem.value.inputVoucherItemId =Number(itemX.inputVoucherItem.id) ;
+  VoucherItem.value.inputVoucherItemId = Number(itemX.inputVoucherItem.id);
 };
 const AddItem = () => {
   VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
@@ -182,7 +182,9 @@ const AddItem = () => {
   );
   VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
   ChangeValueTotal();
-  VoucherItem.value.inputVoucherItemId = Number(VoucherItem.value.inputVoucherItem.id);
+  VoucherItem.value.inputVoucherItemId = Number(
+    VoucherItem.value.inputVoucherItem.id
+  );
   outputVoucherStore.addItem(VoucherItem.value);
 
   resetVoucherItem();
@@ -199,7 +201,7 @@ watch(
   (newX) => {
     ChangeValueTotal();
   }
-)
+);
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
@@ -241,7 +243,6 @@ const store = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your item has been saved",
           showConfirmButton: false,
@@ -274,7 +275,6 @@ function update() {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Item has been updated",
           showConfirmButton: false,
@@ -344,7 +344,6 @@ const showData = async (id: number) => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Item file not exist !!!",
         showConfirmButton: false,
@@ -711,4 +710,5 @@ const headers = ref<Array<ITableHeader>>([
       />
     </template>
   </IPage>
-</template>@/utilities/I18nPlugin@/utilities/EnumSystem
+</template>
+@/utilities/I18nPlugin@/utilities/EnumSystem

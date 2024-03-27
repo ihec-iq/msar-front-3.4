@@ -34,7 +34,6 @@ const errorComposer = (error: any) => {
   // request unAuthorize
   if (statusCode === 401) {
     Swal.fire({
-      position: "top-end",
       icon: "warning",
       title:
         "Your session has expired. Would you like to be redirected to the login page.",

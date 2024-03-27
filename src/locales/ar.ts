@@ -522,4 +522,15 @@ export default {
   New: "جديد",
   archiveType: "نوع الارشيف",
   RequiredField: "هذا الحقل مطلوب",
+  ErrorsMustResolve: "الأخطاء التي يجب معالجتها",
+  ValidationFails: "البيانات غير صحيحة",
+  ValidationErrors: {
+    FieldRequired: "الحقل لا يجب ان يكون فارغ",
+    FieldMustBeEmail: "الحقل يجب ان يكون بريد الكتروني",
+    FieldMustBeNumber: "الحقل يجب ان يكون رقم",
+    FieldMustBeInteger: "الحقل يجب ان يكون رقم عشري صحيح",
+    FieldMustBeFloat: "الحقل يجب ان يكون رقم كسري",
+    FiledLengthIsTooShort: "طول الحقل اقصر من المتوقع",
+    FiledLengthIsTooLong: "طول الحقل اطول من المتوقع",
+  },
 };
