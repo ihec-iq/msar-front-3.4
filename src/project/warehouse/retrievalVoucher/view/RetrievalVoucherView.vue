@@ -3,10 +3,9 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { useStockStore } from "../../stockStore";
-import { useRetrievalVoucherStore } from "./../RetrievalVoucherStore";
+import { useRetrievalVoucherStore } from "./../retrievalVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import type { IRetrievalVoucherItem } from "../IRetrievalVoucher";
 import { t } from "@/utilities/I18nPlugin";
@@ -29,8 +28,8 @@ const namePage = ref("RetrievalVoucher");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
-const VoucherStore = useRetrievalVoucherStore();
-const { Voucher, VoucherEmployees } = storeToRefs(
+const retrievalVoucherStore = useRetrievalVoucherStore();
+const { retrievalVoucher, retrievalVoucherEmployees } = storeToRefs(
   useRetrievalVoucherStore()
 );
 //#region popUp
@@ -82,7 +81,7 @@ const VoucherItem = ref<IRetrievalVoucherItem>({
     price: 1,
     value: 1,
   },
-  VoucherId: 0
+  retrievalVoucherId: 0,
 });
 const AddPopup = () => {
   showPop.value = true;
@@ -115,7 +114,7 @@ const resetVoucherItem = () => {
     notes: "",
     Employee: { id: 1, name: "" },
     inputVoucherItemId: 0,
-    VoucherId: 0,
+    retrievalVoucherId: 0,
     inputVoucherItem: {
       Item: {
         id: 0,
@@ -160,7 +159,7 @@ const deleteItem = (index: number) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        VoucherStore.removeItem(index);
+        retrievalVoucherStore.removeItem(index);
       }
     });
 };
@@ -169,7 +168,7 @@ const updatePopup = (index: number, itemX: IRetrievalVoucherItem) => {
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
   VoucherItem.value = itemX;
-  VoucherItem.value.inputVoucherItemId =Number(itemX.inputVoucherItem.id) ;
+  VoucherItem.value.inputVoucherItemId = Number(itemX.inputVoucherItem.id);
 };
 const AddItem = () => {
   VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
@@ -182,8 +181,10 @@ const AddItem = () => {
   );
   VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
   ChangeValueTotal();
-  VoucherItem.value.inputVoucherItemId = Number(VoucherItem.value.inputVoucherItem.id);
-  VoucherStore.addItem(VoucherItem.value);
+  VoucherItem.value.inputVoucherItemId = Number(
+    VoucherItem.value.inputVoucherItem.id
+  );
+  retrievalVoucherStore.addItem(VoucherItem.value);
 
   resetVoucherItem();
   showPop.value = false;
@@ -199,11 +200,11 @@ watch(
   (newX) => {
     ChangeValueTotal();
   }
-)
+);
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
   VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
-  VoucherStore.editItem(
+  retrievalVoucherStore.editItem(
     indexSelectedVoucherItem.value,
     VoucherItem.value
   );
@@ -218,7 +219,7 @@ const errors = ref<string | null>();
 
 //#region CURD
 const reset = () => {
-  VoucherStore.resetData();
+  retrievalVoucherStore.resetData();
 };
 const getFormData = (object: any) =>
   Object.keys(object).reduce((formData, key) => {
@@ -231,12 +232,12 @@ const getFormData = (object: any) =>
 
 const store = () => {
   errors.value = null;
-  const sendData = getFormData(Voucher.value);
+  const sendData = getFormData(retrievalVoucher.value);
   sendData.append(
     "employeeRequestId",
-    Voucher.value.Employee.id.toString()
+    retrievalVoucher.value.Employee.id.toString()
   );
-  VoucherStore
+  retrievalVoucherStore
     .store(sendData)
     .then((response) => {
       if (response.status === 200) {
@@ -252,7 +253,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = VoucherStore.getError(error);
+      errors.value = retrievalVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -263,14 +264,14 @@ const store = () => {
 };
 function update() {
   errors.value = null;
-  const sendData = getFormData(Voucher.value);
+  const sendData = getFormData(retrievalVoucher.value);
   sendData.append(
     "employeeRequestId",
-    Voucher.value.Employee.id.toString()
+    retrievalVoucher.value.Employee.id.toString()
   );
 
-  VoucherStore
-    .update(Voucher.value.id, sendData)
+  retrievalVoucherStore
+    .update(retrievalVoucher.value.id, sendData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -280,12 +281,12 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
-        showData(Voucher.value.id);
+        showData(retrievalVoucher.value.id);
       }
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = VoucherStore.getError(error);
+      errors.value = retrievalVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -314,30 +315,32 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await VoucherStore._delete(Voucher.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        });
+        await retrievalVoucherStore
+          ._delete(retrievalVoucher.value.id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          });
       }
     });
 };
 const showData = async (id: number) => {
   Loading.value = true;
-  await VoucherStore
+  await retrievalVoucherStore
     .show(id)
     .then((response) => {
       if (response.status == 200) {
-        Voucher.value.id = response.data.data.id;
-        Voucher.value.date = response.data.data.date;
-        Voucher.value.number = response.data.data.number;
-        Voucher.value.notes = response.data.data.notes;
-        Voucher.value.Items = response.data.data.Items;
-        Voucher.value.Employee = response.data.data.Employee;
-        Voucher.value.signaturePerson =
+        retrievalVoucher.value.id = response.data.data.id;
+        retrievalVoucher.value.date = response.data.data.date;
+        retrievalVoucher.value.number = response.data.data.number;
+        retrievalVoucher.value.notes = response.data.data.notes;
+        retrievalVoucher.value.Items = response.data.data.Items;
+        retrievalVoucher.value.Employee = response.data.data.Employee;
+        retrievalVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
       }
     })
@@ -359,13 +362,13 @@ const showData = async (id: number) => {
 
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowRetrievalVouchers]);
-  await VoucherStore.getEmployees().then(() => {});
+  await retrievalVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "AddRetrievalVoucher";
-    Voucher.value.id = 0;
-    Voucher.value.date = new Date().toISOString().split("T")[0];
+    retrievalVoucher.value.id = 0;
+    retrievalVoucher.value.date = new Date().toISOString().split("T")[0];
   } else {
-    Voucher.value.id = id.value;
+    retrievalVoucher.value.id = id.value;
     await showData(id.value);
     namePage.value = "UpdateRetrievalVoucher";
   }
@@ -405,7 +408,7 @@ const headers = ref<Array<ITableHeader>>([
               <IInput
                 :label="t('RetrievalVoucherNumber')"
                 name="Number"
-                v-model="Voucher.number"
+                v-model="retrievalVoucher.number"
                 type="text"
               />
             </ICol>
@@ -413,7 +416,7 @@ const headers = ref<Array<ITableHeader>>([
               <IInput
                 :label="t('Date')"
                 name="InputVoucherNumer"
-                v-model="Voucher.date"
+                v-model="retrievalVoucher.date"
                 type="date"
               />
             </ICol>
@@ -425,8 +428,8 @@ const headers = ref<Array<ITableHeader>>([
               </div>
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="Voucher.Employee"
-                :options="VoucherEmployees"
+                v-model="retrievalVoucher.Employee"
+                :options="retrievalVoucherEmployees"
                 :reduce="(employee: IEmployee) => employee"
                 label="name"
                 :getOptionLabel="(employee: IEmployee) => employee.name"
@@ -442,7 +445,7 @@ const headers = ref<Array<ITableHeader>>([
               <IInput
                 :label="t('InputVoucherSignaturePerson')"
                 name="InputVoucherNumer"
-                v-model="Voucher.signaturePerson"
+                v-model="retrievalVoucher.signaturePerson"
                 type="text"
               />
             </ICol>
@@ -452,7 +455,7 @@ const headers = ref<Array<ITableHeader>>([
               <IInput
                 :label="t('Notes')"
                 name="InputVoucherNumer"
-                v-model="Voucher.notes"
+                v-model="retrievalVoucher.notes"
                 type="text"
               />
             </ICol>
@@ -470,7 +473,7 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
           <IRow>
             <ICol>
-              <ITable :items="Voucher.Items" :headers="headers">
+              <ITable :items="retrievalVoucher.Items" :headers="headers">
                 <template v-slot:Item="{ row }">
                   {{ row.Item.name }}
                 </template>
@@ -704,11 +707,11 @@ const headers = ref<Array<ITableHeader>>([
     </IContainer>
     <template #Footer>
       <IFooterCrud
-        :isAdd="Voucher.id == 0"
+        :isAdd="retrievalVoucher.id == 0"
         :onCreate="store"
         :onUpdate="update"
         :onDelete="Delete"
       />
     </template>
   </IPage>
-</template>@/utilities/I18nPlugin@/utilities/EnumSystem
+</template>
