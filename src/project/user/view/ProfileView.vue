@@ -57,7 +57,6 @@ const update = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: t("OperationSuccessfully"),
           showConfirmButton: false,
@@ -174,5 +173,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
-@/views/role/role/roles/roleStore
-@/utilities/I18nPlugin
+@/views/role/role/roles/roleStore @/utilities/I18nPlugin

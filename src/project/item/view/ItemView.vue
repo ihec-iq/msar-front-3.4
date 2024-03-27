@@ -20,7 +20,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("Item");
 const route = useRoute();
-const id = ref(Number(route.params.id)); 
+const id = ref(Number(route.params.id));
 
 const itemStore = useItemStore();
 const { item } = storeToRefs(useItemStore());
@@ -47,7 +47,6 @@ const store = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your item has been saved",
           showConfirmButton: false,
@@ -80,7 +79,6 @@ function update() {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Item has been updated",
           showConfirmButton: false,
@@ -144,7 +142,6 @@ const showData = async () => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Item file not exist !!!",
         showConfirmButton: false,
@@ -208,7 +205,7 @@ const reset = () => {
                 v-model="item.code"
                 type="text"
             /></ICol>
-             <ICol span="1" span-md="1" span-sm="1">
+            <ICol span="1" span-md="1" span-sm="1">
               <!-- <ISelect
                 :label="t('ItemCategory')"
                 v-model="item.Category.id"
@@ -238,7 +235,7 @@ const reset = () => {
                 v-model="item.measuringUnit"
                 type="text"
             /></ICol>
-          </IRow> 
+          </IRow>
           <IRow>
             <ICol>
               <IInput
@@ -259,5 +256,5 @@ const reset = () => {
         />
       </IRow>
     </IPageContent>
-  </IPage>
-</template> 
+  </IPage> 
+</template>  

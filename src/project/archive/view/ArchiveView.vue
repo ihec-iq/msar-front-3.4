@@ -18,6 +18,24 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
+import { useValidation, type IValidationResult } from "@/utils/Validation";
+
+const { validate, validators } = useValidation();
+
+const rules = [
+  {
+    name: "title",
+    rules: new validators().required().toList(),
+  },
+  {
+    name: "archiveTypeId",
+    rules: new validators().required().toList(),
+  },
+  {
+    name: "issueDate",
+    rules: new validators().required().toList(),
+  },
+];
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
 
@@ -45,7 +63,21 @@ const errors = ref<String | null>();
 const reset = () => {
   archiveStore.resetData();
 };
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
 const store = () => {
+  validationResult.value = validate(archive.value, rules);
+
+  if (!validationResult.value.success) {
+    Swal.fire({
+      icon: "error",
+      title: t("ValidationFails"),
+      timer: 2500,
+    });
+    return;
+  }
+
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
   const formData = new FormData();
@@ -67,7 +99,6 @@ const store = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your archive has been saved",
           showConfirmButton: false,
@@ -89,6 +120,17 @@ const store = () => {
     });
 };
 function update() {
+  validationResult.value = validate(archive.value, rules);
+
+  if (!validationResult.value.success) {
+    Swal.fire({
+      icon: "error",
+      title: t("ValidationFails"),
+      timer: 2500,
+    });
+    return;
+  }
+
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
   const formData = new FormData();
@@ -123,7 +165,6 @@ function update() {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Archive has been updated",
           showConfirmButton: false,
@@ -207,7 +248,6 @@ const showData = async () => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Archive file not exist !!!",
         showConfirmButton: false,
@@ -352,6 +392,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
           </div>
         </IForm>
       </IRow>
+      <IErrorMessages :validationResult="validationResult" />
     </IPageContent>
 
     <template #Footer>
@@ -437,5 +478,5 @@ html.dark {
   --w-e-textarea-bg-color: #333;
   --w-e-textarea-color: #fff;
   /* ...others... */
-}
-</style>
+} 
+</style> 

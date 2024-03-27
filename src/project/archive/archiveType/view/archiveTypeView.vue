@@ -6,6 +6,16 @@ import { usePermissionStore } from "@/project/user/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { useArchiveTypeStore } from "../archiveTypeStore";
+import { useValidation, type IValidationResult } from "@/utils/Validation";
+
+const { validate, validators } = useValidation();
+
+const rules = [
+  {
+    name: "name",
+    rules: new validators().required().toList(),
+  },
+];
 
 const archiveTypeStore = useArchiveTypeStore();
 const { archiveType } = useArchiveTypeStore();
@@ -28,8 +38,21 @@ onMounted(async () => {
   }
 });
 
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
 //#region CURD
 const storeObject = () => {
+  validationResult.value = validate(archiveType, rules);
+
+  if (!validationResult.value.success) {
+    Swal.fire({
+      icon: "error",
+      title: t("ValidationFails"),
+      timer: 2500,
+    });
+    return;
+  }
+
   errors.value = null;
   const formData = new FormData();
   formData.append("id", archiveType.id.toString());
@@ -41,7 +64,6 @@ const storeObject = () => {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your item has been saved",
           showConfirmButton: false,
@@ -61,6 +83,17 @@ const storeObject = () => {
 };
 
 function updateObject() {
+  validationResult.value = validate(archiveType, rules);
+
+  if (!validationResult.value.success) {
+    Swal.fire({
+      icon: "error",
+      title: t("ValidationFails"),
+      timer: 2500,
+    });
+    return;
+  }
+
   errors.value = null;
   const formData = new FormData();
   formData.append("name", archiveType.name.toString());
@@ -71,7 +104,6 @@ function updateObject() {
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
-          position: "top-end",
           icon: "success",
           title: "Your Category has been updated",
           showConfirmButton: false,
@@ -144,7 +176,6 @@ const getObject = async () => {
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
-        position: "top-end",
         icon: "warning",
         title: "Your Item file not exist !!!",
         showConfirmButton: false,
@@ -193,6 +224,8 @@ const reset = () => {
                 type="text"
             /></ICol>
           </IRow>
+          <IErrorMessages :validationResult="validationResult" />
+
           <IFooterCrud
             :isAdd="archiveType.id == 0"
             :onCreate="storeObject"
@@ -204,4 +237,3 @@ const reset = () => {
     </IPageContent>
   </IPage>
 </template>
-@/utilities/I18nPlugin@/utilities/EnumSystem
