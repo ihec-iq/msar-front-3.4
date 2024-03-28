@@ -27,7 +27,7 @@ const props = defineProps({
           {{ item.name }}
         </div>
         <div class="text-text dark:text-textGray mb-2 justify-between">
-          <span>{{ t("ItemCode") }}: {{ item.code }}</span>
+          <span>{{ t("Item.Code") }}: {{ item.code }}</span>
           <span class="float-left flex">
             {{ item.Category.name }}
             <img src="@/assets/svg/bag.svg" />

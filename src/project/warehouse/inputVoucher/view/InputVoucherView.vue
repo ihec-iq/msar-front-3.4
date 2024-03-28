@@ -434,7 +434,7 @@ const headers = ref<Array<ITableHeader>>([
                 type="success"
                 is-link
                 @click="AddPopup()"
-                >{{ t("AddItem") }}
+                >{{ t("Item.Add") }}
               </van-button>
             </ICol>
           </IRow>
@@ -658,7 +658,7 @@ const headers = ref<Array<ITableHeader>>([
             :text="t('Add')"
             color="blue"
             type="default"
-            :on-click="AddItem"
+            :on-click="Item.Add"
             v-if="IsAdd"
           />
           <IButton
