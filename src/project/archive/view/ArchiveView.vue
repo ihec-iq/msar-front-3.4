@@ -21,7 +21,7 @@ import ICol from "@/components/ihec/ICol.vue";
 import {
   useValidation,
   type IValidationResult, 
-  IFieldValidation,
+  type IFieldValidation,
 } from "@/utilities/Validation";
 import { min, required } from "@/utilities/ValidationRole";
 const { validate } = useValidation();
@@ -29,6 +29,7 @@ const { validate } = useValidation();
 const rules: Array<IFieldValidation> = [
   {
     field: "title",
+    caption : t('Title'),
     rules: [
       required({ message: t("ValidationErrors.FieldRequired") }),
       min(3, { message: " يجب ان يكون طول الكلمة اكثر من :val احرف" }),
@@ -36,10 +37,12 @@ const rules: Array<IFieldValidation> = [
   },
   {
     field: "archiveTypeId",
+    caption : t('ArchiveType'),
     rules: [required()],
   },
   {
     field: "issueDate",
+    caption : t('Issue Date'),
     rules: [required()],
   },
 ];

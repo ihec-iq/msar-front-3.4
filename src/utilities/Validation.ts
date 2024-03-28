@@ -17,7 +17,9 @@ export interface IValidationResult {
 
 export interface IFieldValidation {
   field: string;
+  caption?: string;
   rules: Array<IValidator>;
+
 }
 
 export interface IValidatorError {
@@ -131,7 +133,7 @@ export function useValidation() {
         let keyValue = object[validator.field];
 
         let error: IValidatorError = {
-          fieldName: validator.field,
+          fieldName: validator.caption ? validator.caption : validator.field,
           messages: [],
         };
 
