@@ -2,7 +2,6 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "../archiveStore";
-import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import FilePreview from "./FilePreview.vue";
@@ -18,42 +17,34 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
+import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast";
 import {
   useValidation,
-  type IValidationResult, 
+  type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { min, required } from "@/utilities/ValidationRole";
-const { validate } = useValidation();
+const { validate, min, required, foreignKey } = useValidation();
 
 const rules: Array<IFieldValidation> = [
   {
     field: "title",
-    caption : t('Title'),
-    rules: [
-      required({ message: t("ValidationErrors.FieldRequired") }),
-      min(3, { message: " يجب ان يكون طول الكلمة اكثر من :val احرف" }),
-    ],
+    caption: t("Title"),
+    rules: [required(), min(3)],
   },
   {
     field: "archiveTypeId",
-    caption : t('ArchiveType'),
-    rules: [required()],
+    caption: t("ArchiveType"),
+    rules: [foreignKey()],
   },
   {
     field: "issueDate",
-    caption : t('Issue Date'),
+    caption: t("Issue Date"),
     rules: [required()],
   },
 ];
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
-
-//region"Drag and Drop"
-
 const { filesDataInput } = storeToRefs(useDragDropStore());
-
-//#endregion
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -80,11 +71,7 @@ const store = () => {
   validationResult.value = validate(archive.value, rules);
 
   if (!validationResult.value.success) {
-    Swal.fire({
-      icon: "error",
-      title: t("ValidationFails"),
-      timer: 2500,
-    });
+    WarningToast(t("ValidationFails"));
     return;
   }
 
@@ -103,41 +90,27 @@ const store = () => {
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
-  //console.log([...formData]);
+
   archiveStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your archive has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        SuccessToast();
         filesDataInput.value = [];
         router.go(-1);
       }
     })
     .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
       errors.value = archiveStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "create new data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
+      ErrorToast();
     });
 };
+
 function update() {
   validationResult.value = validate(archive.value, rules);
 
   if (!validationResult.value.success) {
-    Swal.fire({
-      icon: "error",
-      title: t("ValidationFails"),
-      timer: 2500,
-    });
+    WarningToast(t("ValidationFails"));
     return;
   }
 
@@ -174,25 +147,14 @@ function update() {
     .update(archive.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your Archive has been updated",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        SuccessToast();
         filesDataInput.value = [];
         showData();
       }
     })
     .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
       errors.value = archiveStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "updating data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
+      ErrorToast();
     });
 }
 
@@ -204,37 +166,7 @@ const Delete = () => {
     router.go(-1);
   });
 };
-// const Delete = async () => {
-//   const swalWithBootstrapButtons = Swal.mixin({
-//     customClass: {
-//       confirmButton: "btn m-2 bg-red-700",
-//       cancelButton: "btn bg-grey-400",
-//     },
-//     buttonsStyling: false,
-//   });
-//   swalWithBootstrapButtons
-//     .fire({
-//       title: t("Are You Sure?"),
-//       text: t("You Won't Be Able To Revert This!"),
-//       icon: "warning",
-//       showCancelButton: true,
-//       confirmButtonText: t("Yes, delete it!"),
-//       cancelButtonText: t("No, cancel!"),
-//       reverseButtons: true,
-//     })
-//     .then(async (result) => {
-//       if (result.isConfirmed) {
-//         await archiveStore._delete(archive.value.id).then(() => {
-//           swalWithBootstrapButtons.fire(
-//             t("Deleted!"),
-//             t("Deleted successfully ."),
-//             "success"
-//           );
-//           router.go(-1);
-//         });
-//       }
-//     });
-// };
+
 const showData = async () => {
   Loading.value = true;
   archive.value.files = [];
@@ -257,29 +189,19 @@ const showData = async () => {
     })
     .catch((errors) => {
       console.log(errors);
-      Swal.fire({
-        icon: "warning",
-        title: "Your Archive file not exist !!!",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        router.go(-1);
-      });
+      ErrorToast();
+      router.go(-1);
     });
   Loading.value = false;
 };
+
 const updateList = () => {
   showData();
 };
+
 //#endregion
-const back = () => {
-  router.push({
-    name: "archiveIndex",
-  });
-};
 
 onMounted(async () => {
-  //console.log(can("show archives1"));
   checkPermissionAccessArray([EnumPermission.ShowArchives]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "ArchiveAdd";
@@ -294,7 +216,7 @@ onMounted(async () => {
 });
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
-
+import { useToast } from "vue-toastification";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">
@@ -488,7 +410,5 @@ button {
 html.dark {
   --w-e-textarea-bg-color: #333;
   --w-e-textarea-color: #fff;
-  /* ...others... */
 }
 </style>
-@/utilities/Validation

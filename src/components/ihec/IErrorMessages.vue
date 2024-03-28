@@ -13,12 +13,12 @@ defineProps({
 </script>
 <template>
   <div
-    class="w-full border border-red-500 mx-auto rtl:text-right ltr:text-left p-5 rounded-lg"
+    class="w-full border border-red-500 m-2 rtl:text-right ltr:text-left p-5 rounded-lg"
     v-if="!validationResult.success"
   >
     <p class="font-semibold">{{ t("ErrorsMustResolve") }}</p>
     <ul v-for="(error, index) in validationResult.errors" :key="index">
-      <h2 class="text-xl font-bold text-black py-2">
+      <h2 class="text-xl font-bold text-black dark:text-white py-2">
         {{ t(error.fieldName) }}
       </h2>
       <li
