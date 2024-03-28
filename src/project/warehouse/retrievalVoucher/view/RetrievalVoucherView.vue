@@ -1,35 +1,332 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import PageTitle from "@/components/general/namePage.vue";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { useStockStore } from "../../stockStore";
-import { useRetrievalVoucherStore } from "@/project/warehouse/retrievalVoucher/retrievalVoucherStore";
+import { useRetrievalVoucherStore } from "./../retrievalVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
+import type { IRetrievalVoucherItem } from "../IRetrievalVoucher";
 import { t } from "@/utilities/I18nPlugin";
+import type { IInputVoucherItem } from "../../inputVoucher/IInputVoucher";
+import type { ITableHeader } from "@/types/core/components/ITable";
 import { EnumPermission } from "@/utilities/EnumSystem";
-const { stocks } = storeToRefs(useStockStore());
+import IInput from "@/components/inputs/IInput.vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import type { IEmployee } from "@/project/employee/IEmployee";
+import IBasis from "@/components/ihec/IBasis.vue";
+import IFlex from "@/components/ihec/IFlex.vue";
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
+//region"Drag and Drop"
+
+//#endregion
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("RetrievalVoucher.Index");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
 const retrievalVoucherStore = useRetrievalVoucherStore();
-const { retrievalVoucher } = storeToRefs(useRetrievalVoucherStore());
-const { SelectedOutItemRetrieval } = storeToRefs(retrievalVoucherStore);
+const { retrievalVoucher, retrievalVoucherEmployees } = storeToRefs(
+  useRetrievalVoucherStore()
+);
+//#region popUp
+const showPop = ref(false);
+const IsAdd = ref(false);
+
+const VoucherItem = ref<IRetrievalVoucherItem>({
+  id: 0,
+  Item: {
+    id: 1,
+    name: "",
+    code: "",
+    description: "",
+    Category: {
+      id: 1,
+      name: "",
+    },
+    measuringUnit: "",
+  },
+  Stock: {
+    id: 1,
+    name: "",
+  },
+  serialNumber: "",
+  count: 1,
+  price: 1,
+  value: 1,
+  notes: "",
+  Employee: { id: 1, name: "" },
+  inputVoucherItemId: 0,
+  inputVoucherItem: {
+    Item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      Category: {
+        id: 0,
+        name: "",
+      },
+      measuringUnit: "",
+    },
+    Stock: {
+      id: 0,
+      name: "",
+    },
+    serialNumber: "",
+    count: 1,
+    price: 1,
+    value: 1,
+  },
+  retrievalVoucherId: 0,
+});
+const AddPopup = () => {
+  showPop.value = true;
+  resetVoucherItem();
+};
+const resetVoucherItem = () => {
+  IsAdd.value = true;
+  indexSelectedVoucherItem.value = 0;
+  VoucherItem.value = {
+    id: 0,
+    Item: {
+      id: 1,
+      name: "",
+      code: "",
+      description: "",
+      Category: {
+        id: 1,
+        name: "",
+      },
+      measuringUnit: "",
+    },
+    Stock: {
+      id: 1,
+      name: "",
+    },
+    serialNumber: "",
+    count: 1,
+    price: 1,
+    value: 1,
+    notes: "",
+    Employee: { id: 1, name: "" },
+    inputVoucherItemId: 0,
+    retrievalVoucherId: 0,
+    inputVoucherItem: {
+      Item: {
+        id: 0,
+        name: "",
+        code: "",
+        description: "",
+        Category: {
+          id: 0,
+          name: "",
+        },
+        measuringUnit: "",
+      },
+      Stock: {
+        id: 0,
+        name: "",
+      },
+      serialNumber: "",
+      count: 1,
+      price: 1,
+      value: 1,
+    },
+  };
+};
+//#region Item Row
+const deleteItem = (index: number) => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn m-2 bg-red-700",
+      cancelButton: "btn bg-grey-400",
+    },
+    buttonsStyling: false,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      title: t("Are You Sure?"),
+      text: t("You Won't Be Able To Revert This!"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: t("Yes, delete it!"),
+      cancelButtonText: t("No, cancel!"),
+      reverseButtons: true,
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        retrievalVoucherStore.removeItem(index);
+      }
+    });
+};
+const updatePopup = (index: number, itemX: IRetrievalVoucherItem) => {
+  showPop.value = true;
+  IsAdd.value = false;
+  indexSelectedVoucherItem.value = index;
+  VoucherItem.value = itemX;
+  VoucherItem.value.inputVoucherItemId = Number(itemX.inputVoucherItem.id);
+};
+const AddItem = () => {
+  VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
+  VoucherItem.value.Stock = VoucherItem.value.inputVoucherItem?.Stock || {
+    id: 1,
+    name: "",
+  };
+  VoucherItem.value.serialNumber = String(
+    VoucherItem.value.inputVoucherItem?.serialNumber
+  );
+  VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
+  ChangeValueTotal();
+  VoucherItem.value.inputVoucherItemId = Number(
+    VoucherItem.value.inputVoucherItem.id
+  );
+  retrievalVoucherStore.addItem(VoucherItem.value);
+
+  resetVoucherItem();
+  showPop.value = false;
+};
+const ChangeValueTotal = () => {
+  VoucherItem.value.value =
+    VoucherItem.value.count * Number(VoucherItem.value.inputVoucherItem?.price);
+};
+
+// for change the value of total in form item
+watch(
+  () => VoucherItem.value.inputVoucherItem.price,
+  (newX) => {
+    ChangeValueTotal();
+  }
+);
+const indexSelectedVoucherItem = ref(0);
+const EditItem = () => {
+  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
+  retrievalVoucherStore.editItem(
+    indexSelectedVoucherItem.value,
+    VoucherItem.value
+  );
+  resetVoucherItem();
+  showPop.value = false;
+};
+//#endregion
 
 const Loading = ref(false);
 const router = useRouter();
 const errors = ref<string | null>();
 
-//#endregion
-const back = () => {
-  router.back();
+//#region CURD
+const reset = () => {
+  retrievalVoucherStore.resetData();
+};
+const getFormData = (object: any) =>
+  Object.keys(object).reduce((formData, key) => {
+    let value = object[key];
+    if (typeof value === "object" && value !== null)
+      value = JSON.stringify(value);
+    formData.append(key, value);
+    return formData;
+  }, new FormData());
+
+const store = () => {
+  errors.value = null;
+  const sendData = getFormData(retrievalVoucher.value);
+  sendData.append(
+    "employeeRequestId",
+    retrievalVoucher.value.Employee.id.toString()
+  );
+  retrievalVoucherStore
+    .store(sendData)
+    .then((response) => {
+      if (response.status === 200) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your item has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        router.go(-1);
+      }
+    })
+    .catch((error) => {
+      //errors.value = Object.values(error.response.data.errors).flat().join();
+      errors.value = retrievalVoucherStore.getError(error);
+      Swal.fire({
+        icon: "error",
+        title: "create new data fails!!!",
+        text: error.response.data.message,
+        footer: "",
+      });
+    });
+};
+function update() {
+  errors.value = null;
+  const sendData = getFormData(retrievalVoucher.value);
+  sendData.append(
+    "employeeRequestId",
+    retrievalVoucher.value.Employee.id.toString()
+  );
+
+  retrievalVoucherStore
+    .update(retrievalVoucher.value.id, sendData)
+    .then((response) => {
+      if (response.status === 200) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your Item has been updated",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        showData(retrievalVoucher.value.id);
+      }
+    })
+    .catch((error) => {
+      //errors.value = Object.values(error.response.data.errors).flat().join();
+      errors.value = retrievalVoucherStore.getError(error);
+      Swal.fire({
+        icon: "error",
+        title: "updating data fails!!!",
+        text: error.response.data.message,
+        footer: "",
+      });
+    });
+}
+const Delete = async () => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn m-2 bg-red-700",
+      cancelButton: "btn bg-grey-400",
+    },
+    buttonsStyling: false,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      title: t("Are You Sure?"),
+      text: t("You Won't Be Able To Revert This!"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: t("Yes, delete it!"),
+      cancelButtonText: t("No, cancel!"),
+      reverseButtons: true,
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        await retrievalVoucherStore
+          ._delete(retrievalVoucher.value.id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          });
+      }
+    });
 };
 const showData = async (id: number) => {
   Loading.value = true;
@@ -37,12 +334,20 @@ const showData = async (id: number) => {
     .show(id)
     .then((response) => {
       if (response.status == 200) {
-        console.log(response.data.data);
+        retrievalVoucher.value.id = response.data.data.id;
+        retrievalVoucher.value.date = response.data.data.date;
+        retrievalVoucher.value.number = response.data.data.number;
+        retrievalVoucher.value.notes = response.data.data.notes;
+        retrievalVoucher.value.Items = response.data.data.Items;
+        retrievalVoucher.value.Employee = response.data.data.Employee;
+        retrievalVoucher.value.signaturePerson =
+          response.data.data.signaturePerson;
       }
     })
     .catch((errors) => {
       console.log(errors);
       Swal.fire({
+        position: "top-end",
         icon: "warning",
         title: "Your Item file not exist !!!",
         showConfirmButton: false,
@@ -53,142 +358,367 @@ const showData = async (id: number) => {
     });
   Loading.value = false;
 };
+//#endregion
+
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowRetrievalVouchers]);
   await retrievalVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("OutputVoucher");
+    namePage.value = "RetrievalVoucher.Add";
     retrievalVoucher.value.id = 0;
     retrievalVoucher.value.date = new Date().toISOString().split("T")[0];
   } else {
     retrievalVoucher.value.id = id.value;
     await showData(id.value);
-    namePage.value = t("OutputVoucher");
+    namePage.value = "RetrievalVoucher.Update";
   }
   await useStockStore().get_stocks();
-  await useInputVoucherStore().getItemsVSelect();
+  await useInputVoucherStore().getAllItemsVSelect();
 });
+
+const headers = ref<Array<ITableHeader>>([
+  { caption: t("ID"), value: "id" },
+  { caption: t("Item"), value: "Item" },
+  { caption: t("SerialNumber"), value: "serialNumber" },
+  { caption: t("Count"), value: "count" },
+  { caption: t("Price"), value: "price" },
+  { caption: t("Total"), value: "Total" },
+  { caption: t("Stock"), value: "Stock" },
+  { caption: t("Notes"), value: "notes" },
+  { caption: t("Actions"), value: "Actions" },
+]);
 </script>
 <template>
-  <PageTitle> {{ namePage }}</PageTitle>
-  <div class="w-full">
-    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2"></div>
+  <IPage :HeaderTitle="t(namePage)">
+    <template #HeaderButtons>
+      <IButton2
+        color="green"
+        width="28"
+        type="outlined"
+        pre-icon="autorenew"
+        :onClick="reset"
+        :text="t('New')"
+      />
+    </template>
+    <IPageContent>
+      <IContainer>
+        <IForm>
+          <IRow col-lg="4" col-md="2" col-sm="1">
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('RetrievalVoucher.Number')"
+                name="Number"
+                v-model="retrievalVoucher.number"
+                type="text"
+              />
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('Date')"
+                name="InputVoucherNumber"
+                v-model="retrievalVoucher.date"
+                type="date"
+              />
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
+              <div
+                class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
+                {{ t("RetrievalVoucher.Employee") }}
+              </div>
+              <vSelect
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                v-model="retrievalVoucher.Employee"
+                :options="retrievalVoucherEmployees"
+                :reduce="(employee: IEmployee) => employee"
+                label="name"
+                :getOptionLabel="(employee: IEmployee) => employee.name"
+              >
+                <template #option="{ name }">
+                  <div>
+                    <span>{{ name }}</span>
+                  </div>
+                </template>
+              </vSelect>
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucherSignaturePerson')"
+                name="InputVoucherNumer"
+                v-model="retrievalVoucher.signaturePerson"
+                type="text"
+              />
+            </ICol>
+          </IRow>
+          <IRow>
+            <ICol>
+              <IInput
+                :label="t('Notes')"
+                name="InputVoucherNumer"
+                v-model="retrievalVoucher.notes"
+                type="text"
+              />
+            </ICol>
+          </IRow>
+          <IRow>
+            <ICol>
+              <van-button
+                class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
+                type="success"
+                is-link
+                @click="AddPopup()"
+                >{{ t("Item.Add") }}
+              </van-button>
+            </ICol>
+          </IRow>
+          <IRow>
+            <ICol>
+              <ITable :items="retrievalVoucher.Items" :headers="headers">
+                <template v-slot:Item="{ row }">
+                  {{ row.Item.name }}
+                </template>
+                <template v-slot:Stock="{ row }">
+                  {{ row.Stock.name }}
+                </template>
+                <template v-slot:Total="{ row }">
+                  {{ row.count * row.price }}
+                </template>
+                <template v-slot:Actions="{ row, rowIndex }">
+                  <van-button
+                    class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"
+                    type="success"
+                    is-link
+                    @click="updatePopup(rowIndex, row)"
+                    >{{ t("Edit") }}
+                  </van-button>
+                  |
+                  <van-button
+                    class="duration-500 rounded-lg m-2 bg-white hover:bg-deleteHover border-red-700 border-2"
+                    is-link
+                    @click="deleteItem(rowIndex)"
+                    >{{ t("Delete") }}
+                  </van-button>
+                </template>
+              </ITable>
+            </ICol>
+          </IRow>
+        </IForm>
+      </IContainer>
+    </IPageContent>
+    <IContainer class="w-full">
+      <van-popup
+        class="overflow-hidden dark:bg-darkNav"
+        v-model:show="showPop"
+        round
+        position="bottom"
+      >
+        <!-- for search Item -->
 
-    <div class="mt-10 p-6">
-      <div class="w-12/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        ></div>
-        <table class="min-w-full text-center">
-          <thead class="border-b bg-[#0003] text-gray-300">
-            <tr>
-              <th scope="col" class="text-sm font-medium px-2 py-2">ID</th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                {{ t("Item") }}
-              </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                {{ t("SerialNumber") }}
-              </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                {{ t("Count") }}
-              </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                {{ t("Notes") }}
-              </th>
-              <th scope="col" class="text-sm font-medium px-6 py-4">
-                {{ t("Actions") }}
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-[#1f2937]">
-            <tr
-              v-for="(row, index) in SelectedOutItemRetrieval"
-              :key="row.id"
-              class="border-b border-black h-14 text-gray-100"
+        <IFlex class="p-2">
+          <IBasis base="1/4">
+            <div
+              class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
             >
-              <th>{{ row.id }}</th>
-              <th>{{ row.Voucher.Item.name }}</th>
-              <th>{{ row.Voucher.serialNumber }}</th>
-              <th>
-                <input class="w-[50px]" type="number" :value="row.count" />
-              </th>
-              <th>
-                <input type="text" class="w-[50px]" :value="row.notes" />
-              </th>
-              <th>
-                <van-button
-                  class="border-none duration-500 rounded-lg bg-delete hover:bg-deleteHover"
-                  type="success"
-                  is-link
-                  @click="console.log('delete' + index)"
-                  >Delete
-                </van-button>
-              </th>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+              {{ t("Item") }}
+            </div>
+            <vSelect
+              class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
+              v-model="VoucherItem.inputVoucherItem"
+              :options="inputVoucherItemsVSelect"
+              :reduce="(_item: IInputVoucherItem) => _item"
+              :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
+            >
+              <template #option="{ Item, outValue, inValue }">
+                <div class="rtl:text-right border-2 p-2 rounded-md">
+                  <div
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
+                  >
+                    {{ Item.name.toString() }}
+                  </div>
+                  <cite>
+                    <div
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                    >
+                      {{ t("Code") }}: {{ Item.code.toString() }}
+                    </div>
+                    <div
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                    >
+                      {{ t("Category") }}:
+                      {{ Item.Category.name.toString() }}
+                    </div>
+                    <div
+                      v-if="Item.serialNumber"
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                    >
+                      {{ t("SerialNumber") }}:
+                      {{ Item.serialNumber.toString() }}
+                    </div>
+                    <div
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
+                    >
+                      {{ t("Available") }}:
+                      {{ Number(inValue) - Number(outValue) }}
+                    </div>
+                    
+                    <div
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
+                    >
+                      {{ t("Item.Out") }}:
+                      {{ Number(outValue) }}
+                    </div>
+                    <cite class="flex flex-wrap text-left text-xs w-fit">
+                      {{ Item.notes }}
+                    </cite>
+                  </cite>
+                  <br />
+                  <cite>
+                    {{ Item.description }}
+                  </cite>
+                </div>
+              </template>
+            </vSelect>
+          </IBasis>
+          <IBasis
+            base="3/4"
+            v-if="VoucherItem.inputVoucherItem == null"
+            class="border-2 border-dotted border-gray-600"
+            ><div class="w-full text-center align-middle border-gray-600">
+              <div
+                class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
+              >
+                قم بأختيار مادة
+              </div>
+            </div>
+          </IBasis>
+          <IBasis
+            base="3/4"
+            v-else-if="VoucherItem.inputVoucherItem.Item?.Category.name != ''"
+          >
+            <IFlex>
+              <IBasis base="1/4">
+                <ILabel :title="t('Code')">
+                  {{ VoucherItem.inputVoucherItem.Item?.code }}</ILabel
+                >
+              </IBasis>
+              <IBasis base="1/4">
+                <ILabel :title="t('Category')">
+                  {{ VoucherItem.inputVoucherItem.Item?.Category.name }}</ILabel
+                >
+              </IBasis>
+              <IBasis base="1/2"
+                ><ILabel :title="t('Description')">
+                  {{ VoucherItem.inputVoucherItem.Item?.description }}</ILabel
+                >
+              </IBasis>
+            </IFlex>
+          </IBasis>
+          <IBasis
+            base="3/4"
+            v-else
+            class="border-2 border-dotted border-gray-600"
+            ><div class="w-full text-center align-middle border-gray-600">
+              <div
+                class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
+              >
+                قم بأختيار مادة
+              </div>
+            </div></IBasis
+          >
+        </IFlex>
+
+        <!-- for insert item proparties -->
+        <IRow
+          col-lg="4"
+          col-xl="4"
+          col-md="2"
+          col-sm="1"
+          col-xs="1"
+          v-if="VoucherItem.inputVoucherItem != null"
+        >
+          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+            <IInput
+              :label="t('Stock')"
+              v-model="VoucherItem.inputVoucherItem.Stock.name"
+              :disabled="true"
+            />
+          </ICol>
+          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+            <IInput
+              :label="t('SerialNumber')"
+              v-model="VoucherItem.inputVoucherItem.serialNumber"
+            />
+          </ICol>
+          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+            <IInput
+              :label="t('Count')"
+              :on-input="ChangeValueTotal"
+              type="number"
+              v-model="VoucherItem.count"
+              :max="
+                Number(VoucherItem.inputVoucherItem.inValue) -
+                Number(VoucherItem.inputVoucherItem.outValue)
+              "
+              :min="1"
+            />
+          </ICol>
+          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+            <IInput
+              :label="t('Price')"
+              :on-input="ChangeValueTotal"
+              type="number"
+              v-model="VoucherItem.inputVoucherItem.price"
+            />
+          </ICol>
+          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+            <IInput
+              :label="t('Total')"
+              type="number"
+              v-model="VoucherItem.value"
+            />
+          </ICol>
+          <ICol :span="2" :span-lg="2" :span-md="2" :span-xl="1">
+            <IInput
+              :label="t('Note')"
+              type="text"
+              v-model="VoucherItem.notes"
+            />
+          </ICol>
+        </IRow>
+        <!-- buttons -->
+        <IContainer class="flex flex-row my-10">
+          <IButton2
+            :text="t('Add')"
+            color="blue"
+            type="default"
+            :on-click="AddItem"
+            v-if="IsAdd"
+          />
+          <IButton2
+            :text="t('Update')"
+            color="blue"
+            type="default"
+            :on-click="EditItem"
+            v-else
+          />
+          <IButton2
+            class=""
+            pre-icon="close-box"
+            :text="t('Close')"
+            color="blue"
+            type="text"
+            :on-click="() => (showPop = false)"
+          />
+        </IContainer>
+      </van-popup>
+    </IContainer>
+    <template #Footer>
+      <IFooterCrud
+        :isAdd="retrievalVoucher.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
+    </template>
+  </IPage>
 </template>
-<style scoped>
-label {
-  font-size: 36px;
-  cursor: pointer;
-  display: block;
-}
-
-label span {
-  display: block;
-}
-
-label input[type="file"]:not(:focus-visible) {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-label .smaller {
-  font-size: 16px;
-}
-
-.image-list {
-  display: flex;
-  list-style: none;
-  flex-wrap: wrap;
-  padding: 0;
-  margin-bottom: 35px;
-}
-
-.preview-card {
-  display: flex;
-  border: 1px solid #a2a2a2;
-  padding: 5px;
-  margin: 5px;
-}
-
-.upload-button {
-  display: block;
-  appearance: none;
-  border: 0;
-  border-radius: 50px;
-  padding: 0.75rem 3rem;
-  margin: 1rem auto;
-  font-size: 1.25rem;
-  font-weight: bold;
-  background: #369;
-  color: #fff;
-  text-transform: uppercase;
-}
-
-button {
-  cursor: pointer;
-}
-</style>
-@/utilities/I18nPlugin@/utilities/EnumSystem

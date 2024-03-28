@@ -1,5 +1,10 @@
 export default {
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
+  Warehouse: { Index: "نظام المخازن" },
+  RetrievalVoucher: {
+    Index: "مستند ارجاع", Add: "اضافة مستند ارجاع", Update: "تعديل مستند ارجاع",
+    Number: "رقم مستند", Employee: "الموظف"
+  },
   ID: "المعرف",
   Profile: "الملف الشخصي",
   Archive: "الارشيف",
@@ -37,12 +42,10 @@ export default {
   UserSearch: "ابحث عن اسم المستخدم او الاميل",
   Code: "الرمز",
   Category: "الصنف",
-  Item: "مادة",
-  AddItem: "اضف مادة",
+  Item: {
+    Index: "مادة", Add: "اضف مادة", Out: 'الصادر', Code: "كود المادة", Unit: "الوحدة", Category: "صنف المادة"
+  },
   Items: "مواد",
-  ItemCode: "كود المادة",
-  ItemUnit: "الوحدة",
-  ItemCategory: "صنف المادة",
   SearchForItem: "ابحث عن اسم او وصف المادة",
   SearchForUser: "ابحث عن اسم الموظف",
   ItemUpdate: "تحديث المادة",

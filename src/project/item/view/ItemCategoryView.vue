@@ -15,7 +15,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref("ItemCategory");
+const namePage = ref("Item.Category");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
@@ -154,12 +154,12 @@ const back = () => {
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("Add") + " " + t("ItemCategory");
+    namePage.value = t("Add") + " " + t("Item.Category");
     category.value.id = 0;
   } else {
     await showData();
     category.value.id = id.value;
-    namePage.value = t("Update") + " " + t("ItemCategory");
+    namePage.value = t("Update") + " " + t("Item.Category");
   }
 });
 const reset = () => {
@@ -207,5 +207,4 @@ const reset = () => {
       </IRow>
     </IPageContent>
   </IPage>
-</template>
-@/project/item/itemCategoryStore@/project/user/permissionStore@/utilities/I18nPlugin@/utilities/EnumSystem
+</template> 

@@ -9,6 +9,14 @@ export default [
   ...retrievalVoucherRoute,
   ...directVoucherRoute,
   {
+    path: "/warehouseIndex",
+    name: "warehouseIndex",
+    component: () => import("./view/WarehouseIndexView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
     path: "/storeIndex",
     name: "storeIndex",
     component: () => import("./view/StoreIndexView.vue"),

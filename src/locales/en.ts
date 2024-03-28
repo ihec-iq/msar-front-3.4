@@ -1,5 +1,10 @@
 export default {
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
+  Warehouse: { Index: "Warehouse System" },
+  RetrievalVoucher: {
+    Index: "Retrieval Voucher", Add: "Add Retrieval", Update: "Update Retrieval",
+    Number: "Number", Employee: "Employee"
+  },
   ID: "ID",
   Profile: "Profile",
   Archive: "Archive",
@@ -32,12 +37,10 @@ export default {
   UserSearch: "Search by User name or Email",
   Code: "Code",
   Category: "Category",
-  Item: "Item",
-  AddItem: "Add Item",
+  Item: {
+    Index: "Item", Add: "Add Item", Out: 'Item Out', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
+  },
   Items: "Items",
-  ItemCode: "Item Code",
-  ItemUnit: "Unit Item",
-  ItemCategory: "Category Item",
   InputVoucher: "Input Voucher",
   InputVoucherAdd: "Add Input Voucher",
   InputVoucherUpdate: "Edit Input Voucher",

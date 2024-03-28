@@ -6,7 +6,7 @@ import { usePermissionStore } from "@/project/user/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { useArchiveTypeStore } from "../archiveTypeStore";
-import { useValidation, type IValidationResult } from "@/utils/Validation";
+import { useValidation, type IValidationResult } from "@/utilities/Validation";
 
 const { validate, validators } = useValidation();
 
@@ -237,3 +237,4 @@ const reset = () => {
     </IPageContent>
   </IPage>
 </template>
+@/utilities/Validation

@@ -37,7 +37,7 @@ const name = toRef(props, "name");
 // we don't provide any rules here because we are using form-level validation
 // https://vee-validate.logaretm.com/v4/guide/validation#form-level-validation
 const {
-  value: value,
+  value,
   errorMessage,
   handleBlur,
   handleChange,

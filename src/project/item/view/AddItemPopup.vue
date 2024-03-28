@@ -88,7 +88,7 @@ onMounted(async () => {
           <div
             class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
           >
-            {{ t("ItemCategory") }}
+            {{ t("Item.Category") }}
           </div>
 
           <select
@@ -108,7 +108,7 @@ onMounted(async () => {
           <div
             class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
           >
-            {{ t("ItemCode") }}
+            {{ t("Item.Code") }}
           </div>
           <input
             v-model="item.code"
@@ -120,7 +120,7 @@ onMounted(async () => {
           <div
             class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
           >
-            {{ t("ItemUnit") }}
+            {{ t("Item.Unit") }}
           </div>
           <input
             v-model="item.measuringUnit"
@@ -164,4 +164,3 @@ onMounted(async () => {
     >
   </div>
 </template>
-@/project/item/itemStore@/project/item/itemCategoryStore@/project/user/permissionStore@/utilities/I18nPlugin@/utilities/EnumSystem

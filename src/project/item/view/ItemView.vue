@@ -209,14 +209,14 @@ const reset = () => {
               <!-- <ISelect
                 :label="t('ItemCategory')"
                 v-model="item.Category.id"
-                name="ItemCategory"
+                name="Item.Category"
                 :options="categories"
                 :IsRequire="true"
               /> -->
               <div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight _inputLabel"
               >
-                {{ t("ItemCategory") }}
+                {{ t("Item.Category") }}
               </div>
               <select v-model="item.Category.id" class="_input">
                 <option
@@ -231,7 +231,7 @@ const reset = () => {
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('ItemUnit')"
-                name="ItemUnit"
+                name="Item.Unit"
                 v-model="item.measuringUnit"
                 type="text"
             /></ICol>
@@ -256,6 +256,5 @@ const reset = () => {
         />
       </IRow>
     </IPageContent>
-  </IPage>
-</template>
-@/project/user/permissionStore@/utilities/I18nPlugin@/utilities/EnumSystem
+  </IPage> 
+</template>  

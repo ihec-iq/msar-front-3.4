@@ -185,7 +185,7 @@ function update() {
           timer: 1500,
         });
         showData(directVoucher.value.id);
-        await useDirectVoucherStore().getItemsVSelect();
+        await useDirectVoucherStore().getAvailableItemsVSelect();
       }
     })
     .catch((error) => {
@@ -276,7 +276,7 @@ onMounted(async () => {
     await showData(id.value);
     namePage.value = t("DirectVoucher");
   }
-  await useDirectVoucherStore().getItemsVSelect();
+  await useDirectVoucherStore().getAvailableItemsVSelect();
 });
 </script>
 <template>
