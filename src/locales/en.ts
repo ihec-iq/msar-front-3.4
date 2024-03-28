@@ -2,8 +2,11 @@ export default {
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
   Warehouse: { Index: "Warehouse System" },
   RetrievalVoucher: {
-    Index: "Retrieval Voucher", Add: "Add Retrieval", Update: "Update Retrieval",
-    Number: "Number", Employee: "Employee"
+    Index: "Retrieval Voucher",
+    Add: "Add Retrieval",
+    Update: "Update Retrieval",
+    Number: "Number",
+    Employee: "Employee",
   },
   ID: "ID",
   Profile: "Profile",
@@ -38,7 +41,12 @@ export default {
   Code: "Code",
   Category: "Category",
   Item: {
-    Index: "Item", Add: "Add Item", Out: 'Item Out', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
+    Index: "Item",
+    Add: "Add Item",
+    Out: "Item Out",
+    Code: "Item Code",
+    Unit: "Unit Item",
+    Category: "Category Item",
   },
   Items: "Items",
   InputVoucher: "Input Voucher",
@@ -208,6 +216,7 @@ export default {
   ValidationFails: "Validation Fails",
   ValidationErrors: {
     FieldRequired: "Field Required",
+    ForeignKey: "Field Required",
     FieldMustBeEmail: "Field Must Be an Email",
     FieldMustBeNumber: "Field Must Be a Number",
     FieldMustBeInteger: "Field Must Be an Integer",

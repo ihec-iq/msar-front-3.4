@@ -6,14 +6,18 @@ import { usePermissionStore } from "@/project/user/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { useArchiveTypeStore } from "../archiveTypeStore";
-import { useValidation, type IValidationResult } from "@/utilities/Validation";
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+const { validate, min, required, foreignKey } = useValidation();
 
-const { validate, validators } = useValidation();
-
-const rules = [
+const rules: Array<IFieldValidation> = [
   {
-    name: "name",
-    rules: new validators().required().toList(),
+    field: "name",
+    caption: t("Name"),
+    rules: [required(), min(3)],
   },
 ];
 

@@ -20,29 +20,25 @@ import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
 import {
   useValidation,
-  type IValidationResult, 
+  type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { min, required } from "@/utilities/ValidationRole";
-const { validate } = useValidation();
+const { validate, min, required, foreignKey } = useValidation();
 
 const rules: Array<IFieldValidation> = [
   {
     field: "title",
-    caption : t('Title'),
-    rules: [
-      required({ message: t("ValidationErrors.FieldRequired") }),
-      min(3, { message: " يجب ان يكون طول الكلمة اكثر من :val احرف" }),
-    ],
+    caption: t("Title"),
+    rules: [required(), min(3)],
   },
   {
     field: "archiveTypeId",
-    caption : t('ArchiveType'),
-    rules: [required()],
+    caption: t("ArchiveType"),
+    rules: [foreignKey()],
   },
   {
     field: "issueDate",
-    caption : t('Issue Date'),
+    caption: t("Issue Date"),
     rules: [required()],
   },
 ];
@@ -103,7 +99,7 @@ const store = () => {
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
   }
-  //console.log([...formData]);
+
   archiveStore
     .store(formData)
     .then((response) => {
@@ -129,6 +125,7 @@ const store = () => {
       });
     });
 };
+
 function update() {
   validationResult.value = validate(archive.value, rules);
 
@@ -268,15 +265,12 @@ const showData = async () => {
     });
   Loading.value = false;
 };
+
 const updateList = () => {
   showData();
 };
+
 //#endregion
-const back = () => {
-  router.push({
-    name: "archiveIndex",
-  });
-};
 
 onMounted(async () => {
   //console.log(can("show archives1"));
@@ -294,7 +288,6 @@ onMounted(async () => {
 });
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
-
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">
