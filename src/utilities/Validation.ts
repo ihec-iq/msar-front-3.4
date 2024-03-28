@@ -19,7 +19,6 @@ export interface IFieldValidation {
   field: string;
   caption?: string;
   rules: Array<IValidator>;
-
 }
 
 export interface IValidatorError {

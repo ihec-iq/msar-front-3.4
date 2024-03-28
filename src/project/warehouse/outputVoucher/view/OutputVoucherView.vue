@@ -59,9 +59,8 @@ const VoucherItem = ref<IOutputVoucherItem>({
   price: 1,
   value: 1,
   notes: "",
-  Employee: { id: 1, name: "" },
   inputVoucherItemId: 0,
-  inputVoucherItem: {
+  InputVoucherItem: {
     Item: {
       id: 0,
       name: "",
@@ -113,10 +112,9 @@ const resetVoucherItem = () => {
     price: 1,
     value: 1,
     notes: "",
-    Employee: { id: 1, name: "" },
     inputVoucherItemId: 0,
     outputVoucherId: 0,
-    inputVoucherItem: {
+    InputVoucherItem: {
       Item: {
         id: 0,
         name: "",
@@ -169,21 +167,21 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
   VoucherItem.value = itemX;
-  VoucherItem.value.inputVoucherItemId = Number(itemX.inputVoucherItem.id);
+  VoucherItem.value.inputVoucherItemId = Number(itemX.InputVoucherItem.id);
 };
 const AddItem = () => {
-  VoucherItem.value.Item = VoucherItem.value.inputVoucherItem?.Item;
-  VoucherItem.value.Stock = VoucherItem.value.inputVoucherItem?.Stock || {
+  VoucherItem.value.Item = VoucherItem.value.InputVoucherItem?.Item;
+  VoucherItem.value.Stock = VoucherItem.value.InputVoucherItem?.Stock || {
     id: 1,
     name: "",
   };
   VoucherItem.value.serialNumber = String(
-    VoucherItem.value.inputVoucherItem?.serialNumber
+    VoucherItem.value.InputVoucherItem?.serialNumber
   );
-  VoucherItem.value.price = Number(VoucherItem.value.inputVoucherItem?.price);
+  VoucherItem.value.price = Number(VoucherItem.value.InputVoucherItem?.price);
   ChangeValueTotal();
   VoucherItem.value.inputVoucherItemId = Number(
-    VoucherItem.value.inputVoucherItem.id
+    VoucherItem.value.InputVoucherItem.id
   );
   outputVoucherStore.addItem(VoucherItem.value);
 
@@ -192,12 +190,12 @@ const AddItem = () => {
 };
 const ChangeValueTotal = () => {
   VoucherItem.value.value =
-    VoucherItem.value.count * Number(VoucherItem.value.inputVoucherItem?.price);
+    VoucherItem.value.count * Number(VoucherItem.value.InputVoucherItem?.price);
 };
 
 // for change the value of total in form item
 watch(
-  () => VoucherItem.value.inputVoucherItem.price,
+  () => VoucherItem.value.InputVoucherItem.price,
   (newX) => {
     ChangeValueTotal();
   }
@@ -518,8 +516,8 @@ const headers = ref<Array<ITableHeader>>([
               {{ t("Item") }}
             </div>
             <vSelect
-              class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
-              v-model="VoucherItem.inputVoucherItem"
+              class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 dark:text-gray-200 mb-10"
+              v-model="VoucherItem.InputVoucherItem"
               :options="inputVoucherItemsVSelect"
               :reduce="(_item: IInputVoucherItem) => _item"
               :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
@@ -570,7 +568,7 @@ const headers = ref<Array<ITableHeader>>([
           </IBasis>
           <IBasis
             base="3/4"
-            v-if="VoucherItem.inputVoucherItem == null"
+            v-if="VoucherItem.InputVoucherItem == null"
             class="border-2 border-dotted border-gray-600"
             ><div class="w-full text-center align-middle border-gray-600">
               <div
@@ -582,22 +580,22 @@ const headers = ref<Array<ITableHeader>>([
           </IBasis>
           <IBasis
             base="3/4"
-            v-else-if="VoucherItem.inputVoucherItem.Item?.Category.name != ''"
+            v-else-if="VoucherItem.InputVoucherItem.Item?.Category.name != ''"
           >
             <IFlex>
               <IBasis base="1/4">
                 <ILabel :title="t('Code')">
-                  {{ VoucherItem.inputVoucherItem.Item?.code }}</ILabel
+                  {{ VoucherItem.InputVoucherItem.Item?.code }}</ILabel
                 >
               </IBasis>
               <IBasis base="1/4">
                 <ILabel :title="t('Category')">
-                  {{ VoucherItem.inputVoucherItem.Item?.Category.name }}</ILabel
+                  {{ VoucherItem.InputVoucherItem.Item?.Category.name }}</ILabel
                 >
               </IBasis>
               <IBasis base="1/2"
                 ><ILabel :title="t('Description')">
-                  {{ VoucherItem.inputVoucherItem.Item?.description }}</ILabel
+                  {{ VoucherItem.InputVoucherItem.Item?.description }}</ILabel
                 >
               </IBasis>
             </IFlex>
@@ -623,19 +621,19 @@ const headers = ref<Array<ITableHeader>>([
           col-md="2"
           col-sm="1"
           col-xs="1"
-          v-if="VoucherItem.inputVoucherItem != null"
+          v-if="VoucherItem.InputVoucherItem != null"
         >
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
               :label="t('Stock')"
-              v-model="VoucherItem.inputVoucherItem.Stock.name"
+              v-model="VoucherItem.InputVoucherItem.Stock.name"
               :disabled="true"
             />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
               :label="t('SerialNumber')"
-              v-model="VoucherItem.inputVoucherItem.serialNumber"
+              v-model="VoucherItem.InputVoucherItem.serialNumber"
             />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
@@ -645,8 +643,8 @@ const headers = ref<Array<ITableHeader>>([
               type="number"
               v-model="VoucherItem.count"
               :max="
-                Number(VoucherItem.inputVoucherItem.inValue) -
-                Number(VoucherItem.inputVoucherItem.outValue)
+                Number(VoucherItem.InputVoucherItem.inValue) -
+                Number(VoucherItem.InputVoucherItem.outValue)
               "
               :min="1"
             />
@@ -656,7 +654,7 @@ const headers = ref<Array<ITableHeader>>([
               :label="t('Price')"
               :on-input="ChangeValueTotal"
               type="number"
-              v-model="VoucherItem.inputVoucherItem.price"
+              v-model="VoucherItem.InputVoucherItem.price"
             />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
@@ -680,7 +678,7 @@ const headers = ref<Array<ITableHeader>>([
             :text="t('Add')"
             color="blue"
             type="default"
-            :on-click="Item.Add"
+            :on-click="AddItem"
             v-if="IsAdd"
           />
           <IButton2
@@ -711,4 +709,3 @@ const headers = ref<Array<ITableHeader>>([
     </template>
   </IPage>
 </template>
-@/utilities/I18nPlugin@/utilities/EnumSystem

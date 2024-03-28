@@ -38,7 +38,7 @@ export default {
   Code: "Code",
   Category: "Category",
   Item: {
-    Index: "Item", Add: "Add Item", Out: 'Item Out', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
+    Name: "Name", Index: "Item", Add: "Add Item", Out: 'Item Out', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
   },
   Items: "Items",
   InputVoucher: "Input Voucher",

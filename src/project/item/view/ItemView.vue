@@ -172,6 +172,8 @@ onMounted(async () => {
   }
 });
 const reset = () => {
+  namePage.value = "ItemAdd";
+
   itemStore.resetData();
 };
 </script>
@@ -193,44 +195,30 @@ const reset = () => {
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
-                :label="t('Name')"
+                :label="t('Item.Name')"
                 name="name"
                 v-model="item.name"
                 type="text"
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
-                :label="t('ItemCode')"
+                :label="t('Item.Code')"
                 name="code"
                 v-model="item.code"
                 type="text"
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
-              <!-- <ISelect
-                :label="t('ItemCategory')"
+              <ISelect
+                :label="t('Item.Category')"
                 v-model="item.Category.id"
                 name="Item.Category"
                 :options="categories"
                 :IsRequire="true"
-              /> -->
-              <div
-                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight _inputLabel"
-              >
-                {{ t("Item.Category") }}
-              </div>
-              <select v-model="item.Category.id" class="_input">
-                <option
-                  v-for="category in categories"
-                  :key="category.id"
-                  :value="category.id"
-                >
-                  {{ category.name }}
-                </option>
-              </select>
+              />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
-                :label="t('ItemUnit')"
+                :label="t('Item.Unit')"
                 name="Item.Unit"
                 v-model="item.measuringUnit"
                 type="text"
@@ -256,5 +244,5 @@ const reset = () => {
         />
       </IRow>
     </IPageContent>
-  </IPage> 
-</template>  
+  </IPage>
+</template>

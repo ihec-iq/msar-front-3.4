@@ -43,7 +43,7 @@ export default {
   Code: "الرمز",
   Category: "الصنف",
   Item: {
-    Index: "مادة", Add: "اضف مادة", Out: 'الصادر', Code: "كود المادة", Unit: "الوحدة", Category: "صنف المادة"
+    Name: "اسم", Index: "مادة", Add: "اضف مادة", Out: 'الصادر', Code: "كود المادة", Unit: "الوحدة", Category: "صنف المادة"
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",

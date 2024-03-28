@@ -7,6 +7,7 @@ import type {
   IRetrievalVoucherEmployee,
   IRetrievalVoucherFilter,
   IRetrievalVoucherItem,
+  IRetrievalVoucherItemType,
   IRetrievalVoucherState,
 } from "./IRetrievalVoucher";
 
@@ -19,9 +20,12 @@ export const useRetrievalVoucherStore = defineStore("RetrievalVoucherStore", () 
     Items: [],
     signaturePerson: "",
     Employee: { name: "", id: 0 },
+    Type: { name: "", id: 0 },
+    TypeId: 0
   });
   const retrievalVouchers = ref<IRetrievalVoucher[]>([]);
   const retrievalVoucherStates = ref<IRetrievalVoucherState[]>([]);
+  const retrievalVoucherItemTypes = ref<IRetrievalVoucherItemType[]>([]);
   const retrievalVoucherEmployees = ref<IRetrievalVoucherEmployee[]>([]);
   const pathBase = "/stockSys";
   const pathUrl = `${pathBase}/retrievalVoucher`;
@@ -48,6 +52,17 @@ export const useRetrievalVoucherStore = defineStore("RetrievalVoucherStore", () 
       .then((response) => {
         if (response.status == 200) {
           retrievalVoucherStates.value = response.data.data;
+        }
+      })
+      .catch((errors) => {
+        console.log("in get Categories : " + errors);
+      });
+  }
+  async function getTypes() {
+    return await Api.get(`${pathBase}/retrievalVoucherItemType`)
+      .then((response) => {
+        if (response.status == 200) {
+          retrievalVoucherItemTypes.value = response.data.data;
         }
       })
       .catch((errors) => {
@@ -99,18 +114,22 @@ export const useRetrievalVoucherStore = defineStore("RetrievalVoucherStore", () 
     retrievalVoucher.Items = [];
     retrievalVoucher.signaturePerson = "";
     retrievalVoucher.Employee = { name: "", id: 0 };
+    retrievalVoucher.Type = { name: "", id: 0 };
+    retrievalVoucher.TypeId = 0;
   }
   return {
     retrievalVoucher,
     retrievalVouchers,
     retrievalVoucherStates,
     retrievalVoucherEmployees,
+    retrievalVoucherItemTypes,
     addItem,
     editItem,
     removeItem,
     get,
     get_filter,
     getState,
+    getTypes,
     getEmployees,
     show,
     store,
