@@ -50,7 +50,7 @@ export function useValidation() {
     options: { message: string } = { message: "" }
   ): IValidator {
     const validator: IValidator = {
-      regexp: /^(?!null$)(?!undefined$)(?!.)(?!0$).*$/,
+      regexp: /^(?!null$|undefined$|0$|$)/,
       message:
         options.message != ""
           ? options.message

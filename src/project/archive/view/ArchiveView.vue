@@ -2,7 +2,6 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "../archiveStore";
-import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import FilePreview from "./FilePreview.vue";
@@ -35,7 +34,7 @@ const rules: Array<IFieldValidation> = [
   {
     field: "archiveTypeId",
     caption: t("ArchiveType"),
-    rules: [required()],
+    rules: [foreignKey()],
   },
   {
     field: "issueDate",
@@ -45,12 +44,7 @@ const rules: Array<IFieldValidation> = [
 ];
 
 const { archiveTypes } = storeToRefs(useArchiveStore());
-
-//region"Drag and Drop"
-
 const { filesDataInput } = storeToRefs(useDragDropStore());
-
-//#endregion
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -172,37 +166,7 @@ const Delete = () => {
     router.go(-1);
   });
 };
-// const Delete = async () => {
-//   const swalWithBootstrapButtons = Swal.mixin({
-//     customClass: {
-//       confirmButton: "btn m-2 bg-red-700",
-//       cancelButton: "btn bg-grey-400",
-//     },
-//     buttonsStyling: false,
-//   });
-//   swalWithBootstrapButtons
-//     .fire({
-//       title: t("Are You Sure?"),
-//       text: t("You Won't Be Able To Revert This!"),
-//       icon: "warning",
-//       showCancelButton: true,
-//       confirmButtonText: t("Yes, delete it!"),
-//       cancelButtonText: t("No, cancel!"),
-//       reverseButtons: true,
-//     })
-//     .then(async (result) => {
-//       if (result.isConfirmed) {
-//         await archiveStore._delete(archive.value.id).then(() => {
-//           swalWithBootstrapButtons.fire(
-//             t("Deleted!"),
-//             t("Deleted successfully ."),
-//             "success"
-//           );
-//           router.go(-1);
-//         });
-//       }
-//     });
-// };
+
 const showData = async () => {
   Loading.value = true;
   archive.value.files = [];
@@ -238,7 +202,6 @@ const updateList = () => {
 //#endregion
 
 onMounted(async () => {
-  //console.log(can("show archives1"));
   checkPermissionAccessArray([EnumPermission.ShowArchives]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "ArchiveAdd";
@@ -447,7 +410,5 @@ button {
 html.dark {
   --w-e-textarea-bg-color: #333;
   --w-e-textarea-color: #fff;
-  /* ...others... */
 }
 </style>
-@/utilities/Validation
