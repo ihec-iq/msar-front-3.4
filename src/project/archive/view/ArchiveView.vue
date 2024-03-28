@@ -18,6 +18,7 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
+import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast";
 import {
   useValidation,
   type IValidationResult,
@@ -34,7 +35,7 @@ const rules: Array<IFieldValidation> = [
   {
     field: "archiveTypeId",
     caption: t("ArchiveType"),
-    rules: [foreignKey()],
+    rules: [required()],
   },
   {
     field: "issueDate",
@@ -76,11 +77,7 @@ const store = () => {
   validationResult.value = validate(archive.value, rules);
 
   if (!validationResult.value.success) {
-    Swal.fire({
-      icon: "error",
-      title: t("ValidationFails"),
-      timer: 2500,
-    });
+    WarningToast(t("ValidationFails"));
     return;
   }
 
@@ -104,25 +101,14 @@ const store = () => {
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your archive has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        SuccessToast();
         filesDataInput.value = [];
         router.go(-1);
       }
     })
     .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
       errors.value = archiveStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "create new data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
+      ErrorToast();
     });
 };
 
@@ -130,11 +116,7 @@ function update() {
   validationResult.value = validate(archive.value, rules);
 
   if (!validationResult.value.success) {
-    Swal.fire({
-      icon: "error",
-      title: t("ValidationFails"),
-      timer: 2500,
-    });
+    WarningToast(t("ValidationFails"));
     return;
   }
 
@@ -171,25 +153,14 @@ function update() {
     .update(archive.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your Archive has been updated",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        SuccessToast();
         filesDataInput.value = [];
         showData();
       }
     })
     .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
       errors.value = archiveStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "updating data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
+      ErrorToast();
     });
 }
 
@@ -254,14 +225,8 @@ const showData = async () => {
     })
     .catch((errors) => {
       console.log(errors);
-      Swal.fire({
-        icon: "warning",
-        title: "Your Archive file not exist !!!",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        router.go(-1);
-      });
+      ErrorToast();
+      router.go(-1);
     });
   Loading.value = false;
 };
@@ -288,6 +253,7 @@ onMounted(async () => {
 });
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { useToast } from "vue-toastification";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">

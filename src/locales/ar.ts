@@ -545,4 +545,9 @@ export default {
     FiledLengthIsTooShort: "طول الحقل اقصر من المتوقع",
     FiledLengthIsTooLong: "طول الحقل اطول من المتوقع",
   },
+  ToastMessages: {
+    Success: "تمت العملية بنجاح",
+    Error: "حدث خطأ ما",
+    Warning: "توجد مشكلة ما",
+  },
 };

@@ -1,6 +1,7 @@
 import Swal from "sweetalert2";
 import { t } from "@/utilities/I18nPlugin";
 import { useRouter } from "vue-router";
+import { SuccessToast } from "./Toast";
 const router = useRouter();
 
 interface DeleteParams {
@@ -30,11 +31,7 @@ export const crud_delete = async ({ store, id }: DeleteParams) => {
 
     if (result.isConfirmed) {
       await store._delete(id);
-      swalWithBootstrapButtons.fire(
-        t("Deleted!"),
-        t("Deleted successfully."),
-        "success"
-      );
+      SuccessToast();
     }
   } catch (error) {
     console.error("Error during deletion:", error);

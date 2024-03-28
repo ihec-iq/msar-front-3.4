@@ -224,4 +224,9 @@ export default {
     FiledLengthIsTooShort: "Filed Length Is Too Short",
     FiledLengthIsTooLong: "Filed Length Is Too Long",
   },
+  ToastMessages: {
+    Success: "Complete Successfully",
+    Error: "Error Occurred",
+    Warning: "Warning",
+  },
 };
