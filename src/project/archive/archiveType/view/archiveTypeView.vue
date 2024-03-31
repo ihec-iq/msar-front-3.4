@@ -11,13 +11,14 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-const { validate, min, required, foreignKey } = useValidation();
+import { ErrorToast, SuccessToast, WarningToast } from "@/utilities/Toast";
+const { validate, min, required, max } = useValidation();
 
 const rules: Array<IFieldValidation> = [
   {
     field: "name",
     caption: t("Name"),
-    rules: [required(), min(3)],
+    rules: [required(), min(3), max(32)],
   },
 ];
 
@@ -49,11 +50,7 @@ const storeObject = () => {
   validationResult.value = validate(archiveType, rules);
 
   if (!validationResult.value.success) {
-    Swal.fire({
-      icon: "error",
-      title: t("ValidationFails"),
-      timer: 2500,
-    });
+    WarningToast(t("ValidationFails"));
     return;
   }
 
@@ -67,22 +64,12 @@ const storeObject = () => {
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your item has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        SuccessToast();
         router.go(-1);
       }
     })
     .catch((error) => {
-      Swal.fire({
-        icon: "error",
-        title: "create new data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
+      ErrorToast();
     });
 };
 
@@ -90,11 +77,7 @@ function updateObject() {
   validationResult.value = validate(archiveType, rules);
 
   if (!validationResult.value.success) {
-    Swal.fire({
-      icon: "error",
-      title: t("ValidationFails"),
-      timer: 2500,
-    });
+    WarningToast(t("ValidationFails"));
     return;
   }
 
@@ -107,22 +90,12 @@ function updateObject() {
     .update(archiveType.id, formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your Category has been updated",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        SuccessToast();
         router.go(-1);
       }
     })
     .catch((error) => {
-      Swal.fire({
-        icon: "error",
-        title: "updating data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
+      ErrorToast();
     });
 }
 
@@ -157,12 +130,7 @@ const deleteObject = async () => {
       }
     })
     .catch((error) => {
-      Swal.fire({
-        icon: "error",
-        title: "deleting data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
+      ErrorToast();
     });
 };
 
