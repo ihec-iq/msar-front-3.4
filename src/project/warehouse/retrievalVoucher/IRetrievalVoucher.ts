@@ -16,13 +16,14 @@ export interface IRetrievalVoucher {
 }
 export interface IRetrievalVoucherItem {
   id?: number;
-  retrievalVoucherId: number; 
+  Item?: IItem;
+  retrievalVoucherId: number;
   inputVoucherItemId: number;
   InputVoucherItem: IInputVoucherItem;
   Employee: IRetrievalVoucherEmployee;
   Type: IRetrievalVoucherItemType;
   TypeId: number;
-  employeeRequestId : number;
+  employeeRequestId: number;
   Stock: IStock;
   serialNumber: string;
   count: number;
@@ -30,16 +31,7 @@ export interface IRetrievalVoucherItem {
   value: number;
   notes: string;
 }
-// export interface IRetrievalVoucherItem {
-//   id?: number;
-//   outputVoucherId?: number;
-//   outputVoucherItemId: number;
-//   count: number;
-//   countWord?: string;
-//   price: number;
-//   value: number;
-//   notes: string;
-// }
+
 export interface IRetrievalVoucherEmployee {
   id: number;
   name: string;

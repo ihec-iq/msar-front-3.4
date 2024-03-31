@@ -27,6 +27,7 @@ const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("RetrievalVoucher.Index");
 const route = useRoute();
 const id = ref(Number(route.params.id));
+const isLoading = ref(false);
 
 const retrievalVoucherStore = useRetrievalVoucherStore();
 const {
@@ -355,6 +356,8 @@ const showData = async (id: number) => {
 
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowRetrievalVouchers]);
+  isLoading.value = true;
+
   await retrievalVoucherStore.getEmployees().then(() => {});
   await retrievalVoucherStore.getTypes().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -368,6 +371,7 @@ onMounted(async () => {
   }
   await useStockStore().get_stocks();
   await useInputVoucherStore().getAllItemsVSelect();
+  isLoading.value = false;
 });
 
 const headers = ref<Array<ITableHeader>>([
@@ -383,7 +387,7 @@ const headers = ref<Array<ITableHeader>>([
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)">
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton2
         color="green"
@@ -476,10 +480,10 @@ const headers = ref<Array<ITableHeader>>([
             <ICol>
               <ITable :items="retrievalVoucher.Items" :headers="headers">
                 <template v-slot:Item="{ row }">
-                  {{ row.Item.name }}
+                  {{ row.InputVoucherItem.Item.name }}
                 </template>
                 <template v-slot:Stock="{ row }">
-                  {{ row.Stock.name }}
+                  {{ row.InputVoucherItem.Stock.name }}
                 </template>
                 <template v-slot:Total="{ row }">
                   {{ row.count * row.price }}
@@ -540,33 +544,24 @@ const headers = ref<Array<ITableHeader>>([
                     <div
                       class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                     >
-                      {{ t("Code") }}: {{ Item.code.toString() }}
-                    </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
-                    >
-                      {{ t("Category") }}:
+                      <b>{{ t("Code") }} :</b>{{ Item.code.toString() }}
+                      <b>{{ t("Category") }} :</b>
                       {{ Item.Category.name.toString() }}
                     </div>
                     <div
                       v-if="Item.serialNumber"
                       class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                     >
-                      {{ t("SerialNumber") }}:
+                      <b>{{ t("SerialNumber") }} :</b>
                       {{ Item.serialNumber.toString() }}
-                    </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
-                    >
-                      {{ t("Available") }}:
+                      <b>{{ t("Available") }} :</b>
                       {{ Number(inValue) - Number(outValue) }}
                     </div>
-
                     <div
                       class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
                     >
-                      {{ t("Item.Out") }}:
-                      {{ Number(outValue) }}
+                      <b>{{ t("Item.Out") }} :</b> {{ Number(outValue) }}
+                      <b>{{ t("Item.In") }} :</b> {{ Number(inValue) }}
                     </div>
                     <cite class="flex flex-wrap text-left text-xs w-fit">
                       {{ Item.notes }}

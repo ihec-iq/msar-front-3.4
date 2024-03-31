@@ -1,4 +1,4 @@
-const truncateFileName = (text?: string, maxLength?: number): string => {
+export const truncateFileName = (text?: string, maxLength?: number): string => {
   if (text == null || text == undefined) return "";
   if (maxLength == null || maxLength == undefined) return "";
   if (text.length <= maxLength) {
@@ -9,7 +9,7 @@ const truncateFileName = (text?: string, maxLength?: number): string => {
     return truncated + "..." + extension;
   }
 };
-const truncateString = (text?: string, maxLength?: number): string => {
+export const truncateString = (text?: string, maxLength?: number): string => {
   if (text == null || text == undefined) return "";
   if (maxLength == null || maxLength == undefined) return "";
   if (text.length <= maxLength) {
@@ -18,7 +18,7 @@ const truncateString = (text?: string, maxLength?: number): string => {
     return text.substring(0, maxLength);
   }
 };
-const formatFileSize = (fileSize?: number): string => {
+export const formatFileSize = (fileSize?: number): string => {
   if (fileSize == null || fileSize == undefined) return "";
 
   if (fileSize < 1024) {
@@ -31,22 +31,29 @@ const formatFileSize = (fileSize?: number): string => {
     return `${(fileSize / (1024 * 1024 * 1024)).toFixed(2)} GB`;
   }
 };
-const makeRandom = (length?: number): string => {
+export const makeRandom = (length?: number): string => {
   if (length == null || length == undefined) return "";
 
   return Math.floor(Math.random() * 10)
     .toString()
     .repeat(length);
 };
-function isNumber(value?: string | number): boolean
+export function isNumber(value?: string | number): boolean
 {
    return ((value != null) &&
            (value !== '') &&
            !isNaN(Number(value.toString())));
 }
-const CNumber = (val: any = 0): number => {
+export const CNumber = (val: any = 0): number => {
   if (!isNumber(val)) return 0;
   return Number(val);
 };
-
-export { truncateString, truncateFileName, formatFileSize, makeRandom, isNumber, CNumber };
+export const dateWithoutTime = function (date :  string) {
+  return date ? date.split("T")[0] : ""
+}
+export const timeWithoutDate = function (date: string) {
+  return date ? date.split("T")[0] : ""
+}
+export const ConvertToMoney = function (number: string) {
+  return (number).toLocaleString().replace(/,/g, ",",)
+}

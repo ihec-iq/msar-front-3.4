@@ -469,10 +469,10 @@ const headers = ref<Array<ITableHeader>>([
             <ICol>
               <ITable :items="outputVoucher.Items" :headers="headers">
                 <template v-slot:Item="{ row }">
-                  {{ row.Item.name }}
+                  {{ row.InputVoucherItem.Item.name }}
                 </template>
                 <template v-slot:Stock="{ row }">
-                  {{ row.Stock.name }}
+                  {{ row.InputVoucherItem.Stock.name }}
                 </template>
                 <template v-slot:Total="{ row }">
                   {{ row.count * row.price }}

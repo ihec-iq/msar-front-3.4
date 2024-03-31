@@ -54,4 +54,3 @@ const props = defineProps({
     </IDropdown>
   </div>
 </template>
-@/utilities/I18nPlugin
