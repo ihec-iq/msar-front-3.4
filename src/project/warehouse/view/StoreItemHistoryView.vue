@@ -25,6 +25,7 @@ import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import ShowButton from "@/components/dropDown/ShowButton.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -122,7 +123,7 @@ const headers = ref<Array<ITableHeader>>([
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('StoreIndex')">
+  <IPage :HeaderTitle="t('Store.ItemHistory')"  :isLoading="isLoading">
     <IPageContent>
       <IRow :col="4" :col-md="4" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
@@ -182,7 +183,7 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
-                <EditButton @click="openItem(row.voucherId, row.billType)" />
+                <ShowButton @click="openItem(row.voucherId, row.billType)" />
               </li>
             </IDropdown>
           </template>
@@ -191,4 +192,3 @@ const headers = ref<Array<ITableHeader>>([
     </IPageContent>
   </IPage>
 </template>
-@/project/user/permissionStore@/views/Warehouse/OutputVoucher/outputVoucherStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

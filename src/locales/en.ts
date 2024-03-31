@@ -40,13 +40,8 @@ export default {
   UserSearch: "Search by User name or Email",
   Code: "Code",
   Category: "Category",
-  Item: {
-    Index: "Item",
-    Add: "Add Item",
-    Out: "Item Out",
-    Code: "Item Code",
-    Unit: "Unit Item",
-    Category: "Category Item",
+  Item: { 
+    Name: "Name", Index: "Item", Add: "Add Item", Out: 'Item Out', In: 'Item In', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
   },
   Items: "Items",
   InputVoucher: "Input Voucher",
@@ -90,9 +85,9 @@ export default {
 
   VacationSearch: "Search by Employee name",
   VacationReason: "Vacation Reason",
-
-  StoreIndex: "Store",
-  StoreTypeReport: "Type Report",
+  Store: { Index: "Store", ItemHistory: "Store Histoy Item", TypeReport: "Type Report" },
+  StoreIndex: "",
+  StoreTypeReport: "",
   SearchForItem: "Search by name or description",
   SearchForUser: "Search by Name",
   ConfigServer: "Server Configuration",

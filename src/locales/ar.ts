@@ -45,13 +45,9 @@ export default {
   UserSearch: "ابحث عن اسم المستخدم او الاميل",
   Code: "الرمز",
   Category: "الصنف",
-  Item: {
-    Index: "مادة",
-    Add: "اضف مادة",
-    Out: "الصادر",
-    Code: "كود المادة",
-    Unit: "الوحدة",
-    Category: "صنف المادة",
+  Item: {  
+    Name: "اسم", Index: "مادة", Add: "اضف مادة", Out: 'الصادر', In: 'الداخل', Code: "كود المادة", Unit: "الوحدة", Category: "صنف المادة"
+ 
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -93,8 +89,7 @@ export default {
   VacationSumSickReport: "الاجازات المرضية",
   VacationSearch: "ابحث عن اسم الموظف",
   VacationReason: "سبب الاجازة",
-  StoreIndex: "المخزنية",
-  StoreTypeReport: "نوع التقرير",
+  Store: { Index: "المخزنية", ItemHistory: "مخزنية المادة المحددة", TypeReport: "نوع التقرير" },
   ConfigServer: "اعدادات الاتصال بالسيرفر",
   ConnectionString: "عنوان السيرفر",
   Organization: "المؤوسسة",

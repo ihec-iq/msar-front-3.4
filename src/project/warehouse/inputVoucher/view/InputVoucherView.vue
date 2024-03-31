@@ -658,7 +658,7 @@ const headers = ref<Array<ITableHeader>>([
             :text="t('Add')"
             color="blue"
             type="default"
-            :on-click="Item.Add"
+            :on-click="AddItem"
             v-if="IsAdd"
           />
           <IButton

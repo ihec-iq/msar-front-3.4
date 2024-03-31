@@ -1,15 +1,19 @@
-import type { S } from "@vueuse/motion/dist/shared/motion.5ee44005";
 import type { IEmployee } from "../employee/IEmployee";
 
 export interface IStore {
   itemId: number;
   itemName: string;
-  stockName: string;
   serialNumber: string;
+  code: string;
+  description: string;
+  stockName: string;
+  categoryName: string;
   price?: number;
   count: number;
   in?: number;
   out?: number;
+  reIn?: number;
+  reOut?: number;
 }
 export interface IStoreItemHistory {
   voucherId: number;

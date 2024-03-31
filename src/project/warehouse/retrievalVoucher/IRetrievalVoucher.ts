@@ -8,36 +8,35 @@ export interface IRetrievalVoucher {
   date: string;
   notes: string;
   Items: Array<IRetrievalVoucherItem>;
+  Type: IRetrievalVoucherItemType;
+  TypeId: number;
   signaturePerson: string;
   Employee: IRetrievalVoucherEmployee;
   itemsCount?: number;
 }
 export interface IRetrievalVoucherItem {
   id?: number;
-  retrievalVoucherId: number;
   Item?: IItem;
+  retrievalVoucherId: number;
   inputVoucherItemId: number;
-  inputVoucherItem: IInputVoucherItem;
+  InputVoucherItem: IInputVoucherItem;
   Employee: IRetrievalVoucherEmployee;
+  Type: IRetrievalVoucherItemType;
+  TypeId: number;
+  employeeRequestId: number;
   Stock: IStock;
   serialNumber: string;
   count: number;
-  countWord?: string;
   price: number;
   value: number;
   notes: string;
 }
-// export interface IRetrievalVoucherItem {
-//   id?: number;
-//   outputVoucherId?: number;
-//   outputVoucherItemId: number;
-//   count: number;
-//   countWord?: string;
-//   price: number;
-//   value: number;
-//   notes: string;
-// }
+
 export interface IRetrievalVoucherEmployee {
+  id: number;
+  name: string;
+}
+export interface IRetrievalVoucherItemType {
   id: number;
   name: string;
 }

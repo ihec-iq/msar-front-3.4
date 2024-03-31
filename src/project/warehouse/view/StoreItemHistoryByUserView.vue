@@ -7,7 +7,7 @@ import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IStoreItemHistory, IStoreItemFilter } from "../IStore";
 import { useStoringStore } from "../storingStore";
-import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";;
+import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { storeToRefs } from "pinia";
 import { usePermissionStore } from "@/project/user/permissionStore";
 const { checkPermissionAccessArray } = usePermissionStore();
@@ -329,4 +329,3 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
-@/project/user/permissionStore@/views/Warehouse/OutputVoucher/outputVoucherStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

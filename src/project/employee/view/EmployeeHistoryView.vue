@@ -160,7 +160,7 @@ const headers = ref<Array<ITableHeader>>([
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('StoreIndex')">
+  <IPage :HeaderTitle="t('Store.Index')">
     <IPageContent>
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">

@@ -20,6 +20,7 @@ const { retrievalVoucher, get_filter } = useRetrievalVoucherStore();
 import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardRetrievalVoucherIndex from "./CardRetrievalVoucherIndex.vue";
+import IPage from "@/components/ihec/IPage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -36,7 +37,7 @@ const addItem = () => {
   retrievalVoucher.number = "";
   retrievalVoucher.date = "";
   retrievalVoucher.notes = "";
-  retrievalVoucher.items = [];
+  retrievalVoucher.Items = [];
   retrievalVoucher.signaturePerson = "";
   router.push({
     name: "retrievalVoucherAdd",
@@ -100,7 +101,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('RetrievalVoucher.Index')">
+  <IPage :HeaderTitle="t('RetrievalVoucher.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
