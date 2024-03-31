@@ -23,13 +23,13 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-const { validate, min, required, foreignKey } = useValidation();
+const { validate, min, required, foreignKey, max } = useValidation();
 
 const rules: Array<IFieldValidation> = [
   {
     field: "title",
     caption: t("Title"),
-    rules: [required(), min(3)],
+    rules: [required(), min(3), max(100)],
   },
   {
     field: "archiveTypeId",
