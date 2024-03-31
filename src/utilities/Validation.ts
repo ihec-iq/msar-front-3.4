@@ -1,10 +1,5 @@
 import { t } from "@/utilities/I18nPlugin";
 
-export interface fieldValidation {
-  name: string;
-  roles: Array<RegExp>;
-}
-
 export interface IValidator {
   regexp: RegExp;
   message: String;
@@ -25,88 +20,108 @@ export interface IValidatorError {
   fieldName: String;
   messages: Array<String>;
 }
+
 export function useValidation() {
-  class validators {
-    validatorsList: Array<IValidator> = [];
-
-    constructor() {
-      this.validatorsList = [];
-    }
-
-    required() {
-      const validator: IValidator = {
-        regexp: /^(?!undefined$|^$).{1,}$/,
-        message: t("ValidationErrors.FieldRequired"),
-      };
-
-      this.validatorsList.push(validator);
-      return this;
-    }
-
-    email() {
-      const validator: IValidator = {
-        regexp: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
-        message: t("ValidationErrors.FieldMustBeEmail"),
-      };
-
-      this.validatorsList.push(validator);
-      return this;
-    }
-
-    number() {
-      const validator: IValidator = {
-        regexp: /^-?\d*\.?\d+$/,
-        message: t("ValidationErrors.FieldMustBeNumber"),
-      };
-
-      this.validatorsList.push(validator);
-      return this;
-    }
-
-    integer() {
-      const validator: IValidator = {
-        regexp: /^-?\d+$/,
-        message: t("ValidationErrors.FieldMustBeInteger"),
-      };
-
-      this.validatorsList.push(validator);
-      return this;
-    }
-
-    float() {
-      const validator: IValidator = {
-        regexp: /^-?\d+(\.\d+)?$/,
-        message: t("ValidationErrors.FieldMustBeFloat"),
-      };
-
-      this.validatorsList.push(validator);
-      return this;
-    }
-
-    min(value: Number) {
-      const validator: IValidator = {
-        regexp: new RegExp(`^.{${value},}$`),
-        message: t("ValidationErrors.FiledLengthIsTooShort"),
-      };
-
-      this.validatorsList.push(validator);
-      return this;
-    }
-
-    max(value: Number) {
-      const validator: IValidator = {
-        regexp: new RegExp(`^.{0,${value}}$`),
-        message: t("ValidationErrors.FiledLengthIsTooLong"),
-      };
-
-      this.validatorsList.push(validator);
-      return this;
-    }
-
-    toList() {
-      return this.validatorsList;
-    }
+  function email(options: { message: string } = { message: "" }) {
+    const validator: IValidator = {
+      regexp: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
+      message:
+        options.message != ""
+          ? options.message
+          : t("ValidationErrors.FieldMustBeEmail"),
+    };
+    return validator;
   }
+
+  function required(
+    options: { message: string } = { message: "" }
+  ): IValidator {
+    const validator: IValidator = {
+      regexp: /^(?!undefined$|^$).{1,}$/,
+      message:
+        options.message != ""
+          ? options.message
+          : t("ValidationErrors.FieldRequired"),
+    };
+    return validator;
+  }
+
+  function foreignKey(
+    options: { message: string } = { message: "" }
+  ): IValidator {
+    const validator: IValidator = {
+      regexp: /^(?!null$|undefined$|0$|$)/,
+      message:
+        options.message != ""
+          ? options.message
+          : t("ValidationErrors.ForeignKey"),
+    };
+    return validator;
+  }
+
+  function number(options: { message: string } = { message: "" }): IValidator {
+    const validator: IValidator = {
+      regexp: /^-?\d*\.?\d+$/,
+      message:
+        options.message != ""
+          ? options.message
+          : t("ValidationErrors.FieldMustBeNumber"),
+    };
+    return validator;
+  }
+
+  function integer(options: { message: string } = { message: "" }): IValidator {
+    const validator: IValidator = {
+      regexp: /^-?\d+$/,
+      message:
+        options.message != ""
+          ? options.message
+          : t("ValidationErrors.FieldMustBeInteger"),
+    };
+    return validator;
+  }
+
+  function float(options: { message: string } = { message: "" }): IValidator {
+    const validator: IValidator = {
+      regexp: /^-?\d+(\.\d+)?$/,
+      message:
+        options.message != ""
+          ? options.message
+          : t("ValidationErrors.FieldMustBeFloat"),
+    };
+    return validator;
+  }
+
+  function min(
+    value: Number,
+    options: { message: string } = { message: "" }
+  ): IValidator {
+    let message = t("ValidationErrors.FiledLengthIsTooShort");
+    if (options.message != "") {
+      message = options.message.replace(":val", value.toString());
+    }
+    const validator: IValidator = {
+      regexp: new RegExp(`^.{${value},}$`),
+      message: message,
+    };
+    return validator;
+  }
+
+  function max(
+    value: Number,
+    options: { message: string } = { message: "" }
+  ): IValidator {
+    let message = t("ValidationErrors.FiledLengthIsTooLong");
+    if (options.message != "") {
+      message = options.message.replace(":val", value.toString());
+    }
+    const validator: IValidator = {
+      regexp: new RegExp(`^.{0,${value}}$`),
+      message: message,
+    };
+    return validator;
+  }
+
   function validate(
     object: any,
     validators: Array<IFieldValidation>
@@ -158,45 +173,15 @@ export function useValidation() {
     return result;
   }
 
-  return { validate, validators };
-}
-
-export function useSimpleValidation() {
-  const roles = {
-    required: /^(?!undefined$|^$).{1,}$/,
-    email: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
-    number: /^-?\d*\.?\d+$/,
-    min: (value: Number) => {
-      return new RegExp(`^.{${value},}$`);
-    },
-    max: (value: Number) => {
-      return new RegExp(`^.{0,${value}}$`);
-    },
+  return {
+    validate,
+    email,
+    required,
+    foreignKey,
+    number,
+    integer,
+    float,
+    min,
+    max,
   };
-
-  function isValid(obj: any, fields: Array<fieldValidation>) {
-    try {
-      let isValid = true;
-      if (!obj) return false;
-      let keys = Object.keys(obj);
-      if (keys.length == 0) return false;
-
-      for (let i = 0; i < keys.length; i++) {
-        let field = fields.find((item) => item.name == keys[i]);
-
-        if (field == undefined) continue;
-
-        field.roles.forEach((role: RegExp) => {
-          let regex = new RegExp(role);
-          if (!regex.test(obj[keys[i]])) isValid = false;
-        });
-      }
-
-      return isValid;
-    } catch (error) {
-      console.log("isValid function in Validation composable:", error);
-    }
-  }
-
-  return { roles, isValid };
 }

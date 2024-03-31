@@ -2,8 +2,11 @@ export default {
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
   Warehouse: { Index: "نظام المخازن" },
   RetrievalVoucher: {
-    Index: "مستند ارجاع", Add: "اضافة مستند ارجاع", Update: "تعديل مستند ارجاع",
-    Number: "رقم مستند", Employee: "الموظف"
+    Index: "مستند ارجاع",
+    Add: "اضافة مستند ارجاع",
+    Update: "تعديل مستند ارجاع",
+    Number: "رقم مستند",
+    Employee: "الموظف",
   },
   ID: "المعرف",
   Profile: "الملف الشخصي",
@@ -42,8 +45,9 @@ export default {
   UserSearch: "ابحث عن اسم المستخدم او الاميل",
   Code: "الرمز",
   Category: "الصنف",
-  Item: {
+  Item: {  
     Name: "اسم", Index: "مادة", Add: "اضف مادة", Out: 'الصادر', In: 'الداخل', Code: "كود المادة", Unit: "الوحدة", Category: "صنف المادة"
+ 
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -528,11 +532,17 @@ export default {
   ValidationFails: "البيانات غير صحيحة",
   ValidationErrors: {
     FieldRequired: "الحقل لا يجب ان يكون فارغ",
+    ForeignKey: "الحقل لا يجب ان يكون فارغ",
     FieldMustBeEmail: "الحقل يجب ان يكون بريد الكتروني",
     FieldMustBeNumber: "الحقل يجب ان يكون رقم",
     FieldMustBeInteger: "الحقل يجب ان يكون رقم عشري صحيح",
     FieldMustBeFloat: "الحقل يجب ان يكون رقم كسري",
     FiledLengthIsTooShort: "طول الحقل اقصر من المتوقع",
     FiledLengthIsTooLong: "طول الحقل اطول من المتوقع",
+  },
+  ToastMessages: {
+    Success: "تمت العملية بنجاح",
+    Error: "حدث خطأ ما",
+    Warning: "توجد مشكلة ما",
   },
 };

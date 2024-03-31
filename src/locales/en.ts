@@ -2,8 +2,11 @@ export default {
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
   Warehouse: { Index: "Warehouse System" },
   RetrievalVoucher: {
-    Index: "Retrieval Voucher", Add: "Add Retrieval", Update: "Update Retrieval",
-    Number: "Number", Employee: "Employee"
+    Index: "Retrieval Voucher",
+    Add: "Add Retrieval",
+    Update: "Update Retrieval",
+    Number: "Number",
+    Employee: "Employee",
   },
   ID: "ID",
   Profile: "Profile",
@@ -37,7 +40,7 @@ export default {
   UserSearch: "Search by User name or Email",
   Code: "Code",
   Category: "Category",
-  Item: {
+  Item: { 
     Name: "Name", Index: "Item", Add: "Add Item", Out: 'Item Out', In: 'Item In', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
   },
   Items: "Items",
@@ -208,11 +211,17 @@ export default {
   ValidationFails: "Validation Fails",
   ValidationErrors: {
     FieldRequired: "Field Required",
+    ForeignKey: "Field Required",
     FieldMustBeEmail: "Field Must Be an Email",
     FieldMustBeNumber: "Field Must Be a Number",
     FieldMustBeInteger: "Field Must Be an Integer",
     FieldMustBeFloat: "Field Must Be a Float",
     FiledLengthIsTooShort: "Filed Length Is Too Short",
     FiledLengthIsTooLong: "Filed Length Is Too Long",
+  },
+  ToastMessages: {
+    Success: "Complete Successfully",
+    Error: "Error Occurred",
+    Warning: "Warning",
   },
 };
