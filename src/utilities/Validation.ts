@@ -1,8 +1,9 @@
 import { t } from "@/utilities/I18nPlugin";
 
 export interface IValidator {
-  regexp: RegExp;
+  regexp: RegExp | String | Function;
   message: String;
+  typeRule?: string | "RegExp";
 }
 
 export interface IValidationResult {
@@ -22,102 +23,84 @@ export interface IValidatorError {
 }
 
 export function useValidation() {
-  function email(options: { message: string } = { message: "" }) {
+  function sameAs( field2 :string,
+    options: { message: string } = { message: t("ValidationErrors.FieldRequired") }
+  ): IValidator {
+    
+    return validator;
+  }
+  function email(options: { message: string } = { message: t("ValidationErrors.FieldMustBeEmail") }) {
     const validator: IValidator = {
       regexp: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
-      message:
-        options.message != ""
-          ? options.message
-          : t("ValidationErrors.FieldMustBeEmail"),
+      message: options.message
     };
     return validator;
   }
 
   function required(
-    options: { message: string } = { message: "" }
+    options: { message: string } = { message: t("ValidationErrors.FieldRequired") }
   ): IValidator {
     const validator: IValidator = {
       regexp: /^(?!undefined$|^$).{1,}$/,
-      message:
-        options.message != ""
-          ? options.message
-          : t("ValidationErrors.FieldRequired"),
+      message: options.message
     };
     return validator;
   }
 
   function foreignKey(
-    options: { message: string } = { message: "" }
+    options: { message: string } = { message: t("ValidationErrors.ForeignKey") }
   ): IValidator {
     const validator: IValidator = {
       regexp: /^(?!null$|undefined$|0$|$)/,
-      message:
-        options.message != ""
-          ? options.message
-          : t("ValidationErrors.ForeignKey"),
+      message: options.message
     };
     return validator;
   }
 
-  function number(options: { message: string } = { message: "" }): IValidator {
+  function number(options: { message: string } = { message: t("ValidationErrors.FieldMustBeNumber") }): IValidator {
     const validator: IValidator = {
       regexp: /^-?\d*\.?\d+$/,
-      message:
-        options.message != ""
-          ? options.message
-          : t("ValidationErrors.FieldMustBeNumber"),
+      message: options.message
     };
     return validator;
   }
 
-  function integer(options: { message: string } = { message: "" }): IValidator {
+  function integer(options: { message: string } = { message: t("ValidationErrors.FieldMustBeInteger") }): IValidator {
     const validator: IValidator = {
       regexp: /^-?\d+$/,
-      message:
-        options.message != ""
-          ? options.message
-          : t("ValidationErrors.FieldMustBeInteger"),
+      message: options.message
     };
     return validator;
   }
 
-  function float(options: { message: string } = { message: "" }): IValidator {
+  function float(options: { message: string } = { message: t("ValidationErrors.FieldMustBeFloat") }): IValidator {
     const validator: IValidator = {
       regexp: /^-?\d+(\.\d+)?$/,
-      message:
-        options.message != ""
-          ? options.message
-          : t("ValidationErrors.FieldMustBeFloat"),
+      message: options.message
     };
     return validator;
   }
 
   function min(
     value: Number,
-    options: { message: string } = { message: "" }
+    options: { message: string } = { message: t("ValidationErrors.FiledLengthIsTooShort") }
   ): IValidator {
-    let message = t("ValidationErrors.FiledLengthIsTooShort");
-    if (options.message != "") {
-      message = options.message.replace(":val", value.toString());
-    }
+    options.message = options.message.replace(":val", value.toString());
     const validator: IValidator = {
       regexp: new RegExp(`^.{${value},}$`),
-      message: message,
+      message: options.message,
     };
     return validator;
   }
 
   function max(
     value: Number,
-    options: { message: string } = { message: "" }
+    options: { message: string } = { message: t("ValidationErrors.FiledLengthIsTooLong") }
   ): IValidator {
-    let message = t("ValidationErrors.FiledLengthIsTooLong");
-    if (options.message != "") {
-      message = options.message.replace(":val", value.toString());
-    }
+    options.message = options.message.replace(":val", value.toString());
     const validator: IValidator = {
       regexp: new RegExp(`^.{0,${value}}$`),
-      message: message,
+      message: options.message,
     };
     return validator;
   }
@@ -152,13 +135,17 @@ export function useValidation() {
         };
 
         validator.rules.forEach((rule) => {
-          let regex = new RegExp(rule.regexp);
+          // for RegExp Rule
+          if (rule.typeRule == undefined) { 
+            let regex = new RegExp(rule.regexp as RegExp);
+            if (!regex.test(keyValue)) {
+              success = false;
+              let errorMessage = `${rule.message}`;
+              error.messages.push(errorMessage);
+            }
+          }else{
 
-          if (!regex.test(keyValue)) {
-            success = false;
-            let errorMessage = `${rule.message}`;
-            error.messages.push(errorMessage);
-          }
+          } 
         });
 
         if (error.messages.length > 0) errors.push(error);
