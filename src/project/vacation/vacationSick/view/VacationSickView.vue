@@ -14,6 +14,39 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
 import { CNumber } from "@/utilities/tools";
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+import { WarningToast } from "@/utilities/Toast";
+
+const { validate, min, required, foreignKey, max, number } = useValidation();
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
+const rules: Array<IFieldValidation> = [
+  {
+    field: "dayFrom",
+    caption: t("DayFrom"),
+    rules: [required()],
+  },
+  {
+    field: "dayTo",
+    caption: t("DayTo"),
+    rules: [required()],
+  },
+  {
+    field: "record",
+    caption: t("Record"),
+    rules: [required(), number()],
+  },
+  {
+    field: "Vacation",
+    caption: t("Vacation"),
+    rules: [required()],
+  },
+];
 
 //region"Drag and Drop"
 
@@ -39,6 +72,13 @@ const reset = () => {
   objectStore.resetData();
 };
 const store = () => {
+  validationResult.value = validate(vacationSick.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+
   errors.value = null;
   const formData = new FormData();
   formData.append("dayFrom", vacationSick.value.dayFrom);
@@ -70,6 +110,12 @@ const store = () => {
     });
 };
 function update() {
+  validationResult.value = validate(vacationSick.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
   const formData = new FormData();
   formData.append("dayFrom", vacationSick.value.dayFrom);
@@ -261,6 +307,7 @@ const ChangeDateRecord = () => {
           </IRow>
         </IForm>
       </IRow>
+      <IErrorMessages :validationResult="validationResult" />
     </IPageContent>
 
     <template #Footer>
