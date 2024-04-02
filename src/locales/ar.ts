@@ -539,6 +539,7 @@ export default {
     FieldMustBeFloat: "الحقل يجب ان يكون رقم كسري",
     FiledLengthIsTooShort: "طول الحقل اقصر من المتوقع",
     FiledLengthIsTooLong: "طول الحقل اطول من المتوقع",
+    FieldNotSame:  "تحقق من الحقول يجب ان تكون متطابقة",
   },
   ToastMessages: {
     Success: "تمت العملية بنجاح",
