@@ -20,8 +20,8 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
-;
-
+import IPage from "@/components/ihec/IPage.vue";
+import { ConvertToMoney } from "@/utilities/tools";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -122,7 +122,7 @@ const headers = ref<Array<ITableHeader>>([
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('StoreIndex')">
+  <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
     <IPageContent>
       <IRow :col="4" :col-md="4" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
@@ -153,35 +153,61 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
-                <EditButton @click="openItem(row.itemId)" />
+                <ShowButton @click="openItem(row.itemId)" />
               </li>
             </IDropdown>
           </template>
           <template v-slot:in="{ row }">
             <span
-              v-if="Number(row.in) > 0"
               class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-              >↓{{ row.in }}</span
+              >↓{{ Number(row.in) + Number(row.reIn) }}</span
             >
+          </template>
+          <template v-slot:price="{ row }">
+            <span> {{ ConvertToMoney(row.price) }}</span>
           </template>
           <template v-slot:out="{ row }">
             <span
-              v-if="Number(row.out) > 0"
               class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-              >↑{{ row.out }}</span
+              >↑{{ Number(row.out) + Number(row.reOut) }}</span
             ></template
           >
           <template v-slot:count="{ row }">
             <span
               class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
-              >{{ row.count }}</span
-            ></template
+              >{{
+                (Number(row.in) + Number(row.reIn)) -
+                (Number(row.out) + Number(row.reOut))
+              }} 
+            </span></template
           >
         </ITable>
+      </IRow>
+      <IRow v-if="data.length > 0">
+        <div class="w-full flex flex-row">
+          <div class="basis-4/5 hidden">
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
+          </div>
+          <div class="basis-1/5" v-if="data.length >= limits[0].id">
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </div>
+        </div>
+        <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
       <IRow><div id="PageDataEnd"></div></IRow>
     </IPageContent>
   </IPage>
 </template>
 <style></style>
-@/project/user/permissionStore@/views/Warehouse/warehouse/storingStore@/views/Warehouse/storingStore@/project/warehouse/IStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

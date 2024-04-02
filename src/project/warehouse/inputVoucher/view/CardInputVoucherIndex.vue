@@ -107,4 +107,5 @@ const truncatedNotes = computed(() => {
       <div class="badge badge-primary badge-outline">{{ item.itemsCount }}</div>
     </div>
   </div>
-</template>@/utilities/I18nPlugin
+</template>
+

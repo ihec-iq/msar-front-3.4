@@ -17,12 +17,10 @@ export interface IOutputVoucherItem {
   outputVoucherId: number;
   Item?: IItem;
   inputVoucherItemId: number;
-  inputVoucherItem: IInputVoucherItem;
-  Employee: IOutputVoucherEmployee;
+  InputVoucherItem: IInputVoucherItem; 
   Stock: IStock;
   serialNumber: string;
-  count: number;
-  countWord?: string;
+  count: number; 
   price: number;
   value: number;
   notes: string;
