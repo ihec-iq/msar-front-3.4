@@ -21,7 +21,7 @@ import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
-import { ConvertToMoney } from "@/utilities/tools";
+import { ConvertToMoneyFormat } from "@/utilities/tools";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -142,7 +142,7 @@ const headers = ref<Array<ITableHeader>>([
               :checked="searchFilter.summation"
               @change="getFilterData()"
             >
-              {{ t("StoreTypeReport") }} :
+              {{ t("Store.TypeReport") }} :
               {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</ICheckbox
             >
           </ICol>
@@ -164,7 +164,7 @@ const headers = ref<Array<ITableHeader>>([
             >
           </template>
           <template v-slot:price="{ row }">
-            <span> {{ ConvertToMoney(row.price) }}</span>
+            <span> {{ ConvertToMoneyFormat(row.price) }}</span>
           </template>
           <template v-slot:out="{ row }">
             <span

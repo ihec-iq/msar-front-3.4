@@ -218,6 +218,7 @@ export default {
     FieldMustBeFloat: "Field Must Be a Float",
     FiledLengthIsTooShort: "Filed Length Is Too Short",
     FiledLengthIsTooLong: "Filed Length Is Too Long",
+    FieldNotSame: "Filed Matching with ", 
   },
   ToastMessages: {
     Success: "Complete Successfully",
