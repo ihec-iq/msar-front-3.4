@@ -13,6 +13,49 @@ import { useVacationReasonStore } from "../../vacationReasonStore";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+import { WarningToast } from "@/utilities/Toast";
+
+const { validate, min, required, foreignKey, max, number } = useValidation();
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
+const rules: Array<IFieldValidation> = [
+  {
+    field: "date",
+    caption: t("Date"),
+    rules: [required()],
+  },
+  {
+    field: "timeFrom",
+    caption: t("TimeFrom"),
+    rules: [required()],
+  },
+  {
+    field: "timeTo",
+    caption: t("TimeTo"),
+    rules: [required()],
+  },
+  {
+    field: "record",
+    caption: t("Record"),
+    rules: [required(), number()],
+  },
+  {
+    field: "Vacation",
+    caption: t("Vacation"),
+    rules: [required()],
+  },
+  {
+    field: "Reason",
+    caption: t("Reason"),
+    rules: [required()],
+  },
+];
 
 //region"Drag and Drop"
 
@@ -48,7 +91,13 @@ const reset = () => {
   objectStore.resetData();
 };
 const store = () => {
-  console.log(vacationTime.value);
+  validationResult.value = validate(vacationTime.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+
   errors.value = null;
   const formData = new FormData();
   formData.append("date", vacationTime.value.date);
@@ -317,6 +366,7 @@ const ChangeDateRecord = () => {
           </IRow>
         </IForm>
       </IRow>
+      <IErrorMessages :validationResult="validationResult" />
     </IPageContent>
 
     <template #Footer>
