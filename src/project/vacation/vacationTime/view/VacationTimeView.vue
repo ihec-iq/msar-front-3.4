@@ -132,6 +132,11 @@ const store = () => {
     });
 };
 function update() {
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+
   errors.value = null;
   const formData = new FormData();
   formData.append("date", vacationTime.value.date);
