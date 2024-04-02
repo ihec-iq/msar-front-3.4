@@ -11,6 +11,49 @@ import { useEmployeeStore } from "@/project/employee/employeeStore";
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+import { WarningToast } from "@/utilities/Toast";
+
+const { validate, min, required, foreignKey, max, number } = useValidation();
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
+const rules: Array<IFieldValidation> = [
+  {
+    field: "dayFrom",
+    caption: t("DayFrom"),
+    rules: [required()],
+  },
+  {
+    field: "dayTo",
+    caption: t("DayTo"),
+    rules: [required()],
+  },
+  {
+    field: "record",
+    caption: t("Record"),
+    rules: [required(), number()],
+  },
+  {
+    field: "Vacation",
+    caption: t("Vacation"),
+    rules: [required()],
+  },
+  {
+    field: "Reason",
+    caption: t("Reason"),
+    rules: [required()],
+  },
+  {
+    field: "EmployeeAlter",
+    caption: t("EmployeeAlter"),
+    rules: [required()],
+  },
+];
 
 import type { IVacation, IVacationReason } from "../../IVacation";
 //#region Vars
@@ -33,6 +76,13 @@ const storeWithPrint = () => {
   store(true);
 };
 const store = (withPrint: boolean = false) => {
+  validationResult.value = validate(vacationDaily.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+
   errors.value = null;
   const formData = new FormData();
   formData.append("dayFrom", vacationDaily.value.dayFrom);
@@ -71,6 +121,12 @@ const store = (withPrint: boolean = false) => {
     });
 };
 function update() {
+  validationResult.value = validate(vacationDaily.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
   const formData = new FormData();
   formData.append("dayFrom", vacationDaily.value.dayFrom);
@@ -427,6 +483,7 @@ const reset = () => {
           </IRow>
         </IForm>
       </IRow>
+      <IErrorMessages :validationResult="validationResult" />
     </IPageContent>
     <template #Footer>
       <IFooterCrud
@@ -664,4 +721,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/utilities/EnumSystem@/utilities/I18nPlugin
