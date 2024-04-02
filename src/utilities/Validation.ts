@@ -1,9 +1,11 @@
 import { t } from "@/utilities/I18nPlugin";
 
 export interface IValidator {
-  regexp: RegExp | String | Function;
-  message: String;
-  typeRule?: string | "RegExp";
+  name: string
+  regexp: RegExp | string | undefined;
+  message: string;
+  check: Function
+  field2?: string
 }
 
 export interface IValidationResult {
@@ -23,16 +25,30 @@ export interface IValidatorError {
 }
 
 export function useValidation() {
-  function sameAs( field2 :string,
-    options: { message: string } = { message: t("ValidationErrors.FieldRequired") }
+  function sameAs(field2: { field: string, caption: string } = { field: "", caption: "" },
+    options: { message: string } = {
+      message: t("ValidationErrors.FieldNotSame") + " " +
+        (field2.caption != "" ? t(field2.caption) : t(field2.field))
+    }
   ): IValidator {
-    
+    const validator: IValidator = {
+      name: 'sameAs',
+      message: options.message,
+      regexp: undefined,
+      field2: field2.field,
+      check: (field1: string, field2: string) => {
+        return field1 == field2 ? true : false
+      }
+    };
+
     return validator;
   }
   function email(options: { message: string } = { message: t("ValidationErrors.FieldMustBeEmail") }) {
     const validator: IValidator = {
+      name: 'email',
       regexp: /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/,
-      message: options.message
+      message: options.message,
+      check: () => { }
     };
     return validator;
   }
@@ -41,8 +57,10 @@ export function useValidation() {
     options: { message: string } = { message: t("ValidationErrors.FieldRequired") }
   ): IValidator {
     const validator: IValidator = {
+      name: 'required',
       regexp: /^(?!undefined$|^$).{1,}$/,
-      message: options.message
+      message: options.message,
+      check: () => { }
     };
     return validator;
   }
@@ -51,32 +69,40 @@ export function useValidation() {
     options: { message: string } = { message: t("ValidationErrors.ForeignKey") }
   ): IValidator {
     const validator: IValidator = {
+      name: 'foreignKey',
       regexp: /^(?!null$|undefined$|0$|$)/,
-      message: options.message
+      message: options.message,
+      check: () => { }
     };
     return validator;
   }
 
   function number(options: { message: string } = { message: t("ValidationErrors.FieldMustBeNumber") }): IValidator {
     const validator: IValidator = {
+      name: 'number',
       regexp: /^-?\d*\.?\d+$/,
-      message: options.message
+      message: options.message,
+      check: () => { }
     };
     return validator;
   }
 
   function integer(options: { message: string } = { message: t("ValidationErrors.FieldMustBeInteger") }): IValidator {
     const validator: IValidator = {
+      name: 'integer',
       regexp: /^-?\d+$/,
-      message: options.message
+      message: options.message,
+      check: () => { }
     };
     return validator;
   }
 
   function float(options: { message: string } = { message: t("ValidationErrors.FieldMustBeFloat") }): IValidator {
     const validator: IValidator = {
+      name: 'float',
       regexp: /^-?\d+(\.\d+)?$/,
-      message: options.message
+      message: options.message,
+      check: () => { }
     };
     return validator;
   }
@@ -87,8 +113,10 @@ export function useValidation() {
   ): IValidator {
     options.message = options.message.replace(":val", value.toString());
     const validator: IValidator = {
+      name: 'min',
       regexp: new RegExp(`^.{${value},}$`),
       message: options.message,
+      check: () => { }
     };
     return validator;
   }
@@ -99,8 +127,10 @@ export function useValidation() {
   ): IValidator {
     options.message = options.message.replace(":val", value.toString());
     const validator: IValidator = {
+      name: 'max',
       regexp: new RegExp(`^.{0,${value}}$`),
       message: options.message,
+      check: () => { }
     };
     return validator;
   }
@@ -133,19 +163,32 @@ export function useValidation() {
           fieldName: validator.caption ? validator.caption : validator.field,
           messages: [],
         };
-
+        //console.log(validator.rules)
         validator.rules.forEach((rule) => {
           // for RegExp Rule
-          if (rule.typeRule == undefined) { 
+          if (rule.regexp != undefined) {
             let regex = new RegExp(rule.regexp as RegExp);
             if (!regex.test(keyValue)) {
               success = false;
               let errorMessage = `${rule.message}`;
               error.messages.push(errorMessage);
             }
-          }else{
-
-          } 
+          } else {
+            if (rule.name == 'sameAs') {
+              let field2 = object[String(rule.field2)]
+              if (rule.check(keyValue, field2) == false) {
+                success = false;
+                let errorMessage = `${rule.message}`;
+                error.messages.push(errorMessage);
+              }
+            } else {
+              if (rule.check(keyValue, keyValue) == false) {
+                success = false;
+                let errorMessage = `${rule.message}`;
+                error.messages.push(errorMessage);
+              }
+            }
+          }
         });
 
         if (error.messages.length > 0) errors.push(error);
@@ -170,5 +213,6 @@ export function useValidation() {
     float,
     min,
     max,
+    sameAs
   };
 }

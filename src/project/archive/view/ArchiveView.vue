@@ -23,13 +23,22 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-const { validate, min, required, foreignKey, max } = useValidation();
+const { validate, min, required, foreignKey, max, sameAs } = useValidation();
+
+const archiveStore = useArchiveStore();
+const { archive } = storeToRefs(useArchiveStore());
+const Loading = ref(false);
 
 const rules: Array<IFieldValidation> = [
   {
     field: "title",
     caption: t("Title"),
-    rules: [required(), min(3), max(100)],
+    rules: [
+      required(),
+      min(3),
+      max(100),
+      sameAs({ field: "number", caption: "NumberBook" }),
+    ],
   },
   {
     field: "archiveTypeId",
@@ -52,10 +61,6 @@ const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isIn = ref(true);
-
-const archiveStore = useArchiveStore();
-const { archive } = storeToRefs(useArchiveStore());
-const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<String | null>();
@@ -216,7 +221,6 @@ onMounted(async () => {
 });
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import { useToast } from "vue-toastification";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">

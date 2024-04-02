@@ -19,7 +19,7 @@ defineProps({
     <p class="font-semibold">{{ t("ErrorsMustResolve") }}</p>
     <ul v-for="(error, index) in validationResult.errors" :key="index">
       <h2 class="text-xl font-bold text-black dark:text-white py-2">
-        {{ t(error.fieldName) }}
+        {{ error.fieldName }}
       </h2>
       <li
         v-for="(message, index) in error.messages"
