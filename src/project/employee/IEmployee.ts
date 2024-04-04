@@ -14,6 +14,7 @@ export interface IEmployee {
   dateWork: string;
   number: string;
   idCard: string;
+  telegramId?: string;
   Position: IEmployeePosition;
   Type: IEmployeeType;
   initVacation: number;

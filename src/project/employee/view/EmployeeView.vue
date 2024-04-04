@@ -53,6 +53,7 @@ const store = () => {
   formData.append("typeId", employee.value.Type.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
+  formData.append("telegramId", String(employee.value.telegramId));
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
@@ -100,6 +101,7 @@ function update() {
   formData.append("typeId", employee.value.Type.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
+  formData.append("telegramId", String(employee.value.telegramId));
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
@@ -176,6 +178,7 @@ const showData = async () => {
         employee.value.name = response.data.data.name;
         employee.value.idCard = response.data.data.idCard;
         employee.value.number = response.data.data.number;
+        employee.value.telegramId = response.data.data.telegramId;
         employee.value.Section.id = response.data.data.Section.id;
         employee.value.Section.name = response.data.data.Section.name;
         employee.value.User = response.data.data.User;
@@ -253,14 +256,21 @@ onMounted(async () => {
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
-                :label="t('EmployeeNumber')"
-                name="EmployeeNumer"
+                :label="t('Employee.Number')"
+                name="Employee.Number"
                 v-model="employee.number"
                 type="text"
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
-                :label="t('EmployeeIdCard')"
+                :label="t('Employee.Telegram')"
+                name="EmployeeTelegram"
+                v-model="employee.telegramId"
+                type="text"
+            /></ICol>
+            <ICol span="1" span-md="1" span-sm="1">
+              <IInput
+                :label="t('Employee.IdCard')"
                 name="EmployeeIdCard"
                 v-model="employee.idCard"
                 type="text"
@@ -283,7 +293,7 @@ onMounted(async () => {
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <ISelect
-                :label="t('EmployeeType')"
+                :label="t('Employee.Type')"
                 v-model="employee.Type.id"
                 name="TypeId"
                 :options="employees_types"
@@ -300,7 +310,7 @@ onMounted(async () => {
             </ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <ICheckbox v-model="isPerson" :checked="isPerson">
-                {{ t("EmployeeIsPerson") }} :
+                {{ t("Employee.IsPerson") }} :
                 {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
               >
             </ICol>

@@ -40,7 +40,7 @@ export default {
   UserSearch: "Search by User name or Email",
   Code: "Code",
   Category: "Category",
-  Item: { 
+  Item: {
     Name: "Name", Index: "Item", Add: "Add Item", Out: 'Item Out', In: 'Item In', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
   },
   Items: "Items",
@@ -99,11 +99,8 @@ export default {
   EmployeeIsPerson: "Type Info",
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
-  Employee: { Title: "Employee", HistoryReport: "History Report" },
-  EmployeeNumber: "Employee Number",
-  EmployeeIdCard: "Employee IdCard",
-  EmployeePosition: "Position",
-  EmployeeType: "Type",
+  Employee: { Title: "Employee", HistoryReport: "History Report", Telegram: "TelegramId ", Number: "Employee Number", IdCard: "Employee IdCard", Position: "Position", Type: "Type" },
+
   UserIndex: "User System",
 
   Help: "Help",
@@ -218,7 +215,7 @@ export default {
     FieldMustBeFloat: "Field Must Be a Float",
     FiledLengthIsTooShort: "Filed Length Is Too Short",
     FiledLengthIsTooLong: "Filed Length Is Too Long",
-    FieldNotSame: "Filed Matching with ", 
+    FieldNotSame: "Filed Matching with ",
   },
   ToastMessages: {
     Success: "Complete Successfully",
