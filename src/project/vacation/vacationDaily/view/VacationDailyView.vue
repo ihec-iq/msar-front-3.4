@@ -84,7 +84,7 @@ const store = (withPrint: boolean = false) => {
   }
 
   errors.value = null;
-  const formData = new FormData();
+  const formData = new FormData();console.log(vacationDaily.value)
   formData.append("dayFrom", vacationDaily.value.dayFrom);
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());

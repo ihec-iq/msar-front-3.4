@@ -9,7 +9,6 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
 
-import { useI18n } from "@/stores/i18n/useI18n";
 
 import type {
   IVacationTime,
@@ -21,7 +20,7 @@ import type {
 } from "../vacationDaily/IVacationDaily";
 import type { IVacationSick } from "../vacationSick/IVacationSick";
 
-const { t } = useI18n();
+
 //#region Stores
 import { useVacationTimeStore } from "../vacationTime/vacationTimeStore";
 import { useVacationDailyStore } from "../vacationDaily/vacationDailyStore";
@@ -33,6 +32,7 @@ import { useVacationSickStore } from "../vacationSick/vacationSickStore";
 import { limits } from "@/utilities/defaultParams";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
 
 const limit = ref(10);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
@@ -100,7 +100,7 @@ const getDataDaily = async (page: number = 1) => {
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();

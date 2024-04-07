@@ -125,18 +125,15 @@ const ToNumberShow = (val: any) => {
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
-
   { caption: "الرصيد المستحق", value: "deservedRecord" },
-
   { caption: "مجموع المستنفذ", value: "totalTaken" },
   { caption: "الرصيد المتبقي", value: "remaining" },
   { caption: "اجازات هذه السنة", value: "currentYearVacations" },
-  { caption: t("VacationSumTimeReport"), value: "temporalVacations" },
-  { caption: t("VacationSumDailyReport"), value: "normalVacations" },
-  { caption: "رصيد المرضية", value: "sickVacations" },
+  { caption: t("VacationSumTimeReport"), value: "currentYearTimeVacations" },
+  { caption: t("VacationSumDailyReport"), value: "currentYearDailyVacations" },
+  { caption: "رصيد المرضية", value: "deservedSickRecord" },
   { caption: "مستنفذ المرضية", value: "takenSick" },
-  { caption: "متبقي المرضية", value: "totalSick" },
-  { caption: t("VacationSumSickReport"), value: "col11" },
+  { caption: "متبقي المرضية", value: "remainingSick" },
   { caption: t("Details"), value: "actions" },
 ]);
 const headersExcel = {
@@ -145,12 +142,11 @@ const headersExcel = {
   "مجموع المستنفذ": "totalTaken",
   "الرصيد المتبقي": "remaining",
   "اجازات هذه السنة": "currentYearVacations",
-  "الاجزات الزمنية": "temporalVacations",
-  "الاجازات الاعتيادية": "normalVacations",
-  "رصيد المرضية": "sickVacations",
+  "الاجزات الزمنية": "currentYearTimeVacations",
+  "الاجازات الاعتيادية": "currentYearDailyVacations",
+  "رصيد المرضية": "deservedSickRecord",
   "مستنفذ المرضية": "takenSick",
-  "متبقي المرضية": "totalSick",
-  "الاجازات المرضية": "col11",
+  "متبقي المرضية": "remainingSick",
 };
 </script>
 <template>
@@ -203,66 +199,33 @@ const headersExcel = {
                       <span>{{ row.Employee.name }}</span>
                     </template>
                     <template v-slot:deservedRecord="{ row }">
-                      <span> {{ ToNumberShow(row.oldRecord) }}</span>
+                      <span> {{ ToNumberShow(row.deservedRecord) }}</span>
                     </template>
                     <template v-slot:totalTaken="{ row }">
-                      <span>
-                        {{
-                          ToNumberShow(
-                            ToNumber(row.newRecord) +
-                              ToNumber(row.sumTime / 7) +
-                              ToNumber(row.sumDaily)
-                          )
-                        }}</span
-                      >
+                      <span> {{ ToNumberShow(row.totalTaken) }}</span>
                     </template>
                     <template v-slot:remaining="{ row }">
-                      <span>
-                        {{
-                          ToNumberShow(
-                            row.oldRecord -
-                              ToNumber(
-                                ToNumber(row.newRecord) +
-                                  ToNumber(row.sumTime / 7) +
-                                  ToNumber(row.sumDaily)
-                              )
-                          )
-                        }}</span
-                      >
+                      <span> {{ ToNumberShow(row.remaining) }}</span>
                     </template>
                     <template v-slot:currentYearVacations="{ row }">
+                      <span> {{ ToNumberShow(row.currentYearVacations) }}</span>
+                    </template>
+                    <template v-slot:currentYearTimeVacations="{ row }">
+                      <span> {{ row.currentYearTimeVacations }}</span>
+                    </template>
+                    <template v-slot:currentYearDailyVacations="{ row }">
                       <span>
-                        {{
-                          ToNumberShow(ToNumber(row.sumTime / 7) + row.sumDaily)
-                        }}</span
+                        {{ ToNumberShow(row.currentYearDailyVacations) }}</span
                       >
                     </template>
-                    <template v-slot:temporalVacations="{ row }">
-                      <span>
-                        {{
-                          ToNumberShow(row.sumTime) == undefined
-                            ? ""
-                            : ToNumber(row.sumTime, false) + " Hours"
-                        }}</span
-                      >
-                    </template>
-                    <template v-slot:normalVacations="{ row }">
-                      <span> {{ ToNumberShow(row.sumDaily) }}</span>
-                    </template>
-                    <template v-slot:sickVacations="{ row }">
-                      <span> {{ ToNumberShow(row.oldRecordSick) }}</span>
+                    <template v-slot:deservedSickRecord="{ row }">
+                      <span> {{ ToNumberShow(row.deservedSickRecord) }}</span>
                     </template>
                     <template v-slot:takenSick="{ row }">
-                      <span>
-                        {{
-                          ToNumberShow(
-                            ToNumber(row.newRecordSick) + ToNumber(row.sumSick)
-                          )
-                        }}</span
-                      >
+                      <span> {{ ToNumberShow(row.takenSick) }}</span>
                     </template>
-                    <template v-slot:totalSick="{ row }">
-                      <span> {{ ToNumberShow(row.sumSick) }}</span>
+                    <template v-slot:remainingSick="{ row }">
+                      <span> {{ ToNumberShow(row.remainingSick) }}</span>
                     </template>
                     <template v-slot:actions="{ row }">
                       <IDropdown>
