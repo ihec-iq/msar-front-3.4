@@ -651,6 +651,13 @@ const headers = ref<Array<ITableHeader>>([
               v-model="VoucherItemTemp.value"
             />
           </ICol>
+          <ICol :span="3" span-lg="3" span-xl="1" span-md="1">
+            <IInput
+              :label="t('Notes')"
+              type="text"
+              v-model="VoucherItemTemp.notes"
+            />
+          </ICol>
         </IRow>
         <!-- buttons -->
         <IContainer class="flex flex-row my-10">
@@ -689,4 +696,3 @@ const headers = ref<Array<ITableHeader>>([
     </template>
   </IPage>
 </template>
-@/project/item/itemStore@/project/item/IItem@/project/user/permissionStore@/views/Warehouse/InputVoucher/IInputVoucher@/views/Warehouse/InputVoucher/inputVoucherStore@/views/Warehouse/warehouse/stockStore@/views/Warehouse/stockStore@/utilities/I18nPlugin@/utilities/EnumSystem

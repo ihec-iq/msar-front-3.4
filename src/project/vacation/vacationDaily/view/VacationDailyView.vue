@@ -85,6 +85,7 @@ const store = (withPrint: boolean = false) => {
 
   errors.value = null;
   const formData = new FormData();
+  console.log(vacationDaily.value);
   formData.append("dayFrom", vacationDaily.value.dayFrom);
   formData.append("dayTo", vacationDaily.value.dayTo);
   formData.append("record", vacationDaily.value.record.toString());
@@ -183,14 +184,19 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await vacationDailyStore._delete(vacationDaily.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        });
+        await vacationDailyStore
+          ._delete(vacationDaily.value.id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          })
+          .catch((error) => {
+            swalWithBootstrapButtons.fire(t("Deleted!"), error, "error");
+          });
       }
     });
 };

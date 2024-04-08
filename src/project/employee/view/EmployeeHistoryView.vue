@@ -179,7 +179,7 @@ const headers = ref<Array<ITableHeader>>([
                 <span
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
-                  {{ t("StoreTypeReport") }} :
+                  {{ t("Store.TypeReport") }} :
                   {{ searchFilter.checked ? " تجميعي " : " مفصل " }}</span
                 >
                 <input

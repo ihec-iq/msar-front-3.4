@@ -3,15 +3,18 @@ import type { IEmployee } from "../employee/IEmployee";
 export interface IVacation {
   id: number;
   Employee: IEmployee;
+  deservedRecord: number;
+  totalTaken: number;
+  remaining: number;
+  currentYearVacations: number;
+  currentYearTimeVacations: number;
+  currentYearDailyVacations: number;
+  deservedSickRecord: number;
+  takenSick: number;
+  remainingSick: number;
+  currentYearSickVacations: number;
   record: number;
-  oldRecord: number;
-  newRecord: number;
-  sumDaily: number;
-  sumTime: number;
-  oldRecordSick: number;
-  newRecordSick: number;
   recordSick: number;
-  sumSick: number;
 }
 
 export interface IVacationFilter {

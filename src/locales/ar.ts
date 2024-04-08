@@ -45,9 +45,9 @@ export default {
   UserSearch: "ابحث عن اسم المستخدم او الاميل",
   Code: "الرمز",
   Category: "الصنف",
-  Item: {  
+  Item: {
     Name: "اسم", Index: "مادة", Add: "اضف مادة", Out: 'الصادر', In: 'الداخل', Code: "كود المادة", Unit: "الوحدة", Category: "صنف المادة"
- 
+
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -99,11 +99,7 @@ export default {
   EmployeeIsPerson: "نوع البيانات",
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
-  Employee: { Title: "الموظف", HistoryReport: "كشف ذمة" },
-  EmployeeNumber: "الرقم الوظيفي",
-  EmployeeIdCard: "رقم الهوية",
-  EmployeePosition: "المنصب",
-  EmployeeType: "المكان",
+  Employee: { Title: "الموظف", HistoryReport: "كشف ذمة", Telegram: "معرف التلكرام", Number: "الرقم الوظيفي", IdCard: "رقم الهوية", Position: "المنصب", Type: "المكان" },
   UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",
@@ -539,7 +535,7 @@ export default {
     FieldMustBeFloat: "الحقل يجب ان يكون رقم كسري",
     FiledLengthIsTooShort: "طول الحقل اقصر من المتوقع",
     FiledLengthIsTooLong: "طول الحقل اطول من المتوقع",
-    FieldNotSame:  "تحقق من الحقول يجب ان تكون متطابقة",
+    FieldNotSame: "تحقق من الحقول يجب ان تكون متطابقة",
   },
   ToastMessages: {
     Success: "تمت العملية بنجاح",

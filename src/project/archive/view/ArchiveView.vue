@@ -37,7 +37,6 @@ const rules: Array<IFieldValidation> = [
       required(),
       min(3),
       max(100),
-      sameAs({ field: "number", caption: "NumberBook" }),
     ],
   },
   {
@@ -221,6 +220,7 @@ onMounted(async () => {
 });
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)">

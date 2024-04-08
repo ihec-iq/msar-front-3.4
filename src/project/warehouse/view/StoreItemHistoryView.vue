@@ -26,6 +26,7 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
+import { ConvertToMoneyFormat } from "@/utilities/tools";
 
 const route = useRoute();
 const router = useRouter();
@@ -71,6 +72,8 @@ const getFilterData = async (page = 1) => {
   isLoading.value = true;
   searchFilter.value.serialNumber = fastSearch.value;
   searchFilter.value.itemId = route.params.id.toString();
+  console.log(searchFilter.value);
+  
   await get_item(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -103,16 +106,18 @@ const openItem = (id: number, billType: string) => {
 //#endregion
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowStorage]);
-
+  isLoading.value = true;
   if (route.params.search != undefined)
     fastSearch.value = route.params.id.toString() || "";
   await outputVoucherStore.getEmployees().then(() => {});
 
   await getFilterData(1);
+  isLoading.value = false;
+
 });
 
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Item"), value: "itemName" },
+  { caption: t("Item.Name"), value: "itemName" },
   { caption: t("SerialNumber"), value: "serialNumber" },
   { caption: t("BillType"), value: "billType" },
   { caption: t("AvailableInStock"), value: "count" },
@@ -123,7 +128,7 @@ const headers = ref<Array<ITableHeader>>([
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('Store.ItemHistory')"  :isLoading="isLoading">
+  <IPage :HeaderTitle="t('Store.ItemHistory')" :isLoading="isLoading">
     <IPageContent>
       <IRow :col="4" :col-md="4" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
@@ -152,7 +157,7 @@ const headers = ref<Array<ITableHeader>>([
               :checked="searchFilter.summation"
               @change="getFilterData()"
             >
-              {{ t("StoreTypeReport") }} :
+              {{ t("Store.TypeReport") }} :
               {{ searchFilter.summation ? " تجميعي " : " مفصل " }}</ICheckbox
             >
           </ICol>
@@ -167,6 +172,9 @@ const headers = ref<Array<ITableHeader>>([
             <span>{{
               row.billType == "in" ? t("In") : t("Out")
             }}</span></template
+          >
+          <template v-slot:price="{ row }">
+            <span>{{ ConvertToMoneyFormat(row.price) }}</span></template
           >
           <template v-slot:count="{ row }">
             <span

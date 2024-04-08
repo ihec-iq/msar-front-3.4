@@ -522,7 +522,7 @@ const headers = ref<Array<ITableHeader>>([
               :reduce="(_item: IInputVoucherItem) => _item"
               :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
             >
-              <template #option="{ Item, outValue, inValue }">
+              <template #option="{ Item, outValue, inValue, notes }">
                 <div class="rtl:text-right border-2 p-2 rounded-md">
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
@@ -555,7 +555,7 @@ const headers = ref<Array<ITableHeader>>([
                       {{ Number(inValue) - Number(outValue) }}
                     </div>
                     <cite class="flex flex-wrap text-left text-xs w-fit">
-                      {{ Item.notes }}
+                      {{ notes }}
                     </cite>
                   </cite>
                   <br />
@@ -595,7 +595,8 @@ const headers = ref<Array<ITableHeader>>([
               </IBasis>
               <IBasis base="1/2"
                 ><ILabel :title="t('Description')">
-                  {{ VoucherItem.InputVoucherItem.Item?.description }}</ILabel
+                  {{ VoucherItem.InputVoucherItem.Item?.description
+                  }} - {{ VoucherItem.InputVoucherItem.notes }}</ILabel
                 >
               </IBasis>
             </IFlex>
@@ -664,7 +665,7 @@ const headers = ref<Array<ITableHeader>>([
               v-model="VoucherItem.value"
             />
           </ICol>
-          <ICol :span="2" :span-lg="2" :span-md="2" :span-xl="1">
+          <ICol :span="3" :span-lg="3" :span-md="2" :span-xl="1">
             <IInput
               :label="t('Note')"
               type="text"
