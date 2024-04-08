@@ -57,6 +57,7 @@ const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("VacationSick");
 const route = useRoute();
 const id = ref(Number(route.params.id));
+const isLoading = ref(false);
 
 const objectStore = useVacationSickStore();
 const { vacationSick } = storeToRefs(useVacationSickStore());
@@ -212,6 +213,7 @@ const back = () => {
 
 onMounted(async () => {
   //console.log(can("show items1"));
+  isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowVacationsSick]);
 
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -223,6 +225,7 @@ onMounted(async () => {
     namePage.value = "VacationSickUpdate";
   }
   await useVacationStore().get_vacations();
+  isLoading.value = false;
 });
 const ChangeDate = () => {
   if (vacationSick.value.dayFrom >= vacationSick.value.dayTo) {
@@ -245,7 +248,7 @@ const ChangeDateRecord = () => {
 };
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)">
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton2
         color="green"

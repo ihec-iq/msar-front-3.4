@@ -55,11 +55,7 @@ const makeFastSearch = () => {
     //data.value = dataBase.value.filter(filterByIDName);
   }
 };
-const Search = async (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    await getFilterData(1);
-  }
-};
+
 //#endregion
 //#region Search
 const searchFilter = ref<IVacationSickFilter>({
@@ -78,6 +74,7 @@ const CNumber = (val: any = 0): number => {
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
+
   await vacationSick
     .get_filter(searchFilter.value, page)
     .then((response) => {
@@ -100,15 +97,13 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsSick]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-
+  // must to wait fastSearch to get init value from localStorage.getItem
+  await fastSearch.value;
   await getFilterData(1);
-  if (inputRefSearch.value) {
-    inputRefSearch.value.addEventListener("keydown", Search);
-  }
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('VacationSick')">
+  <IPage :HeaderTitle="t('VacationSick')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -123,6 +118,8 @@ onMounted(async () => {
               v-model="fastSearch"
               type="text"
               :OnKeyEnter="getFilterData"
+              :cached="true"
+              cached-name="searchVacationSick"
             />
           </ICol>
         </ISearchBar>

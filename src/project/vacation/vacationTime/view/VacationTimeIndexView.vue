@@ -18,6 +18,7 @@ const { vacationTime } = useVacationTimeStore();
 import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardVactionTimeIndex from "./CardVactionTimeIndex.vue";
+import IPage from "@/components/ihec/IPage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -83,25 +84,20 @@ const update = (id: number) => {
     params: { id: id },
   });
 };
-const Search = async (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    await getFilterData(1);
-  }
-};
 //#region Pagination
 //#endregion
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsTime]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  if (inputRefSearch.value) {
-    inputRefSearch.value.addEventListener("keydown", Search);
-  }
+
+  // must to wait fastSearch to get init value from localStorage.getItem
+  await fastSearch.value;
   await getFilterData(1);
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('VacationTime')">
+  <IPage :HeaderTitle="t('VacationTime')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -115,6 +111,8 @@ onMounted(async () => {
               v-model="fastSearch"
               type="text"
               :OnKeyEnter="getFilterData"
+              :cached="true"
+              cached-name="searchVacationTime"
             />
           </ICol>
         </ISearchBar>

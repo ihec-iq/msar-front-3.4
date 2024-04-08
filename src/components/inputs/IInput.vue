@@ -1,6 +1,6 @@
-<script setup lang="ts"> 
+<script setup lang="ts">
 import { EnumDirection } from "@/utilities/EnumSystem";
-import { ref } from "vue";  
+import { ref, onMounted } from "vue";
 const modelValue = defineModel<any>();
 import { t } from "@/utilities/I18nPlugin";
 
@@ -44,9 +44,20 @@ const props = defineProps({
     type: Function, // Cast to the enum type
     default: () => {}, // Default value (optional)
   },
+  cached: {
+    type: Boolean,
+    default: false,
+  },
+  cachedName: {
+    type: String,
+    default: "",
+  },
 });
 
 const keydown = () => {
+  if (props.cached && props.cachedName != "")
+    localStorage.setItem(props.cachedName, modelValue.value);
+
   props.OnKeyEnter();
 };
 
@@ -64,13 +75,19 @@ const checkRequired = () => {
     customPlaceholder.value = t("RequiredField");
   }
 };
+onMounted(async () => {
+  if (props.cached && props.cachedName != "")
+    modelValue.value = await localStorage.getItem(props.cachedName);
+  //await props.OnKeyEnter();
+});
 </script>
 <template>
   <div class="mb-2">
-    <label class="_inputLabel">
+    <label class="_inputLabel" for="Control1">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
     <input
+      id="Control1"
       @change="keydown"
       @focusout="checkRequired"
       :disabled="disabled"

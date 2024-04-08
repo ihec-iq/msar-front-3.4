@@ -45,6 +45,7 @@ const addItem = () => {
 };
 const Search = async (event: KeyboardEvent) => {
   if (event.key === "Enter") {
+    console.log(fastSearch.value);
     await getFilterData(1);
   }
 };
@@ -72,6 +73,7 @@ const searchFilter = ref<IVacationDailyFilter>({
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value.toString();
+
   await useVacationDailyStore()
     .get_filter(searchFilter.value, page)
     .then((response) => {
@@ -100,11 +102,10 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  if (inputRefSearch.value) {
-    inputRefSearch.value.addEventListener("keydown", Search);
-  }
+  // must to wait fastSearch to get init value from localStorage.getItem
+  await fastSearch.value;
   await getFilterData(1);
-});
+ });
 </script>
 <template>
   <IPage :HeaderTitle="t('VacationDaily')" :is-loading="isLoading">
@@ -121,6 +122,8 @@ onMounted(async () => {
               v-model="fastSearch"
               type="text"
               :OnKeyEnter="getFilterData"
+              :cached="true"
+              cached-name="searchVacationDaily"
             />
           </ICol>
         </ISearchBar>
@@ -139,7 +142,7 @@ onMounted(async () => {
         </ICol>
       </IRow>
       <IRow v-if="data.length > 0">
-        <div class="w-full flex flex-row ">
+        <div class="w-full flex flex-row">
           <div class="basis-4/5 overflow-auto">
             <TailwindPagination
               class="flex justify-center mt-6"
@@ -163,4 +166,4 @@ onMounted(async () => {
     </IPageContent>
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
-</template> 
+</template>

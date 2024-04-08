@@ -64,6 +64,8 @@ const rules: Array<IFieldValidation> = [
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
 const namePage = ref("VacationTime");
+const isLoading = ref(false);
+
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
@@ -236,6 +238,7 @@ const back = () => {
   });
 };
 onMounted(async () => {
+  isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowVacationsTime]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "VacationTimeAdd";
@@ -248,6 +251,7 @@ onMounted(async () => {
   }
   await useVacationStore().get_vacations();
   await useVacationReasonStore().get();
+  isLoading.value = false;
 });
 // const ChangeDate = () => {
 //   if (vacationTime.value.timeFrom.length == 5)
@@ -275,7 +279,7 @@ const ChangeDateRecord = () => {
 };
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)">
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton2
         color="green"
