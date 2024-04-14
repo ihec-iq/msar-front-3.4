@@ -41,7 +41,15 @@ export default {
   Code: "Code",
   Category: "Category",
   Item: {
-    Name: "Name", Index: "Item", Add: "Add Item", Out: 'Item Out', In: 'Item In', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
+    Name: "Name",
+    Index: "Item",
+    Add: "Add Item",
+    Out: 'Item Out',
+    In: 'Item In',
+    Code: "Item Code",
+    Unit: "Unit Item",
+    Category: "Category Item",
+    Sum: "Items"
   },
   Items: "Items",
   InputVoucher: "Input Voucher",
@@ -216,6 +224,8 @@ export default {
     FiledLengthIsTooShort: "Filed Length Is Too Short",
     FiledLengthIsTooLong: "Filed Length Is Too Long",
     FieldNotSame: "Filed Matching with ",
+    isObject: "Filed not Selected !!!",
+    isArray: "Must to have at least one item",
   },
   ToastMessages: {
     Success: "Complete Successfully",

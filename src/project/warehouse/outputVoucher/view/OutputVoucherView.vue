@@ -18,9 +18,38 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 import type { IEmployee } from "@/project/employee/IEmployee";
 import IBasis from "@/components/ihec/IBasis.vue";
 import IFlex from "@/components/ihec/IFlex.vue";
+import { makeFormDataFromObject } from "@/utilities/tools";
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
-//region"Drag and Drop"
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+import { WarningToast } from "@/utilities/Toast";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 
+const { validate, isArray, required, isObject } = useValidation();
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
+const rules: Array<IFieldValidation> = [
+  {
+    field: "number",
+    caption: t("OutputVoucherNumber"),
+    rules: [required()],
+  },
+  {
+    field: "Employee",
+    caption: t("OutputVoucherEmployeeRequest"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "Items",
+    caption: t("Item.Sum"),
+    rules: [isArray()],
+  },
+];
 //#endregion
 
 //#region Vars
@@ -220,18 +249,17 @@ const errors = ref<string | null>();
 const reset = () => {
   outputVoucherStore.resetData();
 };
-const getFormData = (object: any) =>
-  Object.keys(object).reduce((formData, key) => {
-    let value = object[key];
-    if (typeof value === "object" && value !== null)
-      value = JSON.stringify(value);
-    formData.append(key, value);
-    return formData;
-  }, new FormData());
 
 const store = () => {
+  validationResult.value = validate(outputVoucher.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+
   errors.value = null;
-  const sendData = getFormData(outputVoucher.value);
+  const sendData = makeFormDataFromObject(outputVoucher.value);
   sendData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -261,8 +289,14 @@ const store = () => {
     });
 };
 function update() {
+  validationResult.value = validate(outputVoucher.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
-  const sendData = getFormData(outputVoucher.value);
+  const sendData = makeFormDataFromObject(outputVoucher.value);
   sendData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -372,7 +406,7 @@ onMounted(async () => {
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("ID"), value: "id" },
-  { caption: t("Item"), value: "Item" },
+  { caption: t("Item.Index"), value: "Item" },
   { caption: t("SerialNumber"), value: "serialNumber" },
   { caption: t("Count"), value: "count" },
   { caption: t("Price"), value: "price" },
@@ -496,6 +530,9 @@ const headers = ref<Array<ITableHeader>>([
               </ITable>
             </ICol>
           </IRow>
+          <IRow>
+            <ICol><IErrorMessages :validationResult="validationResult" /></ICol>
+          </IRow>
         </IForm>
       </IContainer>
     </IPageContent>
@@ -595,8 +632,8 @@ const headers = ref<Array<ITableHeader>>([
               </IBasis>
               <IBasis base="1/2"
                 ><ILabel :title="t('Description')">
-                  {{ VoucherItem.InputVoucherItem.Item?.description
-                  }} - {{ VoucherItem.InputVoucherItem.notes }}</ILabel
+                  {{ VoucherItem.InputVoucherItem.Item?.description }} -
+                  {{ VoucherItem.InputVoucherItem.notes }}</ILabel
                 >
               </IBasis>
             </IFlex>

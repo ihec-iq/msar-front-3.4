@@ -46,8 +46,15 @@ export default {
   Code: "الرمز",
   Category: "الصنف",
   Item: {
-    Name: "اسم", Index: "مادة", Add: "اضف مادة", Out: 'الصادر', In: 'الداخل', Code: "كود المادة", Unit: "الوحدة", Category: "صنف المادة"
-
+    Name: "اسم",
+    Index: "مادة",
+    Add: "اضف مادة",
+    Out: 'الصادر',
+    In: 'الداخل',
+    Code: "كود المادة",
+    Unit: "الوحدة",
+    Category: "صنف المادة",
+    Sum : "المواد"
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -524,7 +531,7 @@ export default {
   New: "جديد",
   archiveType: "نوع الارشيف",
   RequiredField: "هذا الحقل مطلوب",
-  ErrorsMustResolve: "الأخطاء التي يجب معالجتها",
+  ErrorsMustResolve: "يجب الانتباه الى الملاحظات التالية وتصحيحها",
   ValidationFails: "البيانات غير صحيحة",
   ValidationErrors: {
     FieldRequired: "الحقل لا يجب ان يكون فارغ",
@@ -536,6 +543,8 @@ export default {
     FiledLengthIsTooShort: "طول الحقل اقصر من المتوقع",
     FiledLengthIsTooLong: "طول الحقل اطول من المتوقع",
     FieldNotSame: "تحقق من الحقول يجب ان تكون متطابقة",
+    isObject: "يجب ان تختار البيانات المحددة",
+    isArray:  "يجب ان تحتوي على عنصر واحد على الاقل",
   },
   ToastMessages: {
     Success: "تمت العملية بنجاح",

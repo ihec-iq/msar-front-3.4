@@ -14,7 +14,7 @@ export const truncateString = (text?: string, maxLength?: number): string => {
   if (maxLength == null || maxLength == undefined) return "";
   if (text.length <= maxLength) {
     return text;
-  } else { 
+  } else {
     return text.substring(0, maxLength);
   }
 };
@@ -38,17 +38,16 @@ export const makeRandom = (length?: number): string => {
     .toString()
     .repeat(length);
 };
-export function isNumber(value?: string | number): boolean
-{
-   return ((value != null) &&
-           (value !== '') &&
-           !isNaN(Number(value.toString())));
+export function isNumber(value?: string | number): boolean {
+  return ((value != null) &&
+    (value !== '') &&
+    !isNaN(Number(value.toString())));
 }
 export const CNumber = (val: any = 0): number => {
   if (!isNumber(val)) return 0;
   return Number(val);
 };
-export const dateWithoutTime = function (date :  string) {
+export const dateWithoutTime = function (date: string) {
   return date ? date.split("T")[0] : ""
 }
 export const timeWithoutDate = function (date: string) {
@@ -57,3 +56,22 @@ export const timeWithoutDate = function (date: string) {
 export const ConvertToMoneyFormat = function (number: string) {
   return (number).toLocaleString().replace(/,/g, ",",)
 }
+
+export const makeFormDataFromObject = (object: any, keys: Array<string> = []) =>
+  Object.keys(object).reduce((formData, key) => {
+    if (keys.length>0){
+      if (keys.includes(key)) {
+        let value = object[key];
+        if (typeof value === "object" && value !== null)
+          value = JSON.stringify(value);
+        formData.append(key, value);
+      }
+    }else{
+      let value = object[key];
+      if (typeof value === "object" && value !== null)
+        value = JSON.stringify(value);
+      formData.append(key, value);
+    }
+    
+    return formData;
+  }, new FormData());

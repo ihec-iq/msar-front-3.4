@@ -13,7 +13,7 @@ import { useVacationStore } from "../../vacationStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
-import { CNumber } from "@/utilities/tools";
+import { CNumber, makeFormDataFromObject } from "@/utilities/tools";
 import {
   useValidation,
   type IValidationResult,
@@ -21,7 +21,7 @@ import {
 } from "@/utilities/Validation";
 import { WarningToast } from "@/utilities/Toast";
 
-const { validate, min, required, foreignKey, max, number } = useValidation();
+const { validate, min, required, isObject, max, number } = useValidation();
 
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
@@ -43,8 +43,8 @@ const rules: Array<IFieldValidation> = [
   },
   {
     field: "Vacation",
-    caption: t("Vacation"),
-    rules: [required()],
+    caption: t("OutputVoucherEmployeeRequest"),
+    rules: [isObject({ key: "id", message: "" })],
   },
 ];
 
@@ -81,11 +81,8 @@ const store = () => {
   }
 
   errors.value = null;
-  const formData = new FormData();
-  formData.append("dayFrom", vacationSick.value.dayFrom);
-  formData.append("dayTo", vacationSick.value.dayTo);
-  formData.append("record", vacationSick.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
+  const formData = makeFormDataFromObject(vacationSick.value);
+
   objectStore
     .store(formData)
     .then((response) => {
@@ -118,11 +115,11 @@ function update() {
     return;
   }
   errors.value = null;
-  const formData = new FormData();
-  formData.append("dayFrom", vacationSick.value.dayFrom);
-  formData.append("dayTo", vacationSick.value.dayTo);
-  formData.append("record", vacationSick.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
+  // formData.append("dayFrom", vacationSick.value.dayFrom);
+  // formData.append("dayTo", vacationSick.value.dayTo);
+  // formData.append("record", vacationSick.value.record.toString());
+  // formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
+  const formData = makeFormDataFromObject(vacationSick.value);
 
   objectStore
     .update(vacationSick.value.id, formData)

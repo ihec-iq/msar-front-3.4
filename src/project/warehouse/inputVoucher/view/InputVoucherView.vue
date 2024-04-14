@@ -26,8 +26,37 @@ import IPage from "@/components/ihec/IPage.vue";
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
 const { item } = storeToRefs(useItemStore());
-//region"Drag and Drop"
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+import { WarningToast } from "@/utilities/Toast";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { makeFormDataFromObject } from "@/utilities/tools";
 
+const { validate, isArray, required, isObject } = useValidation();
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
+const rules: Array<IFieldValidation> = [
+  {
+    field: "number",
+    caption: t("OutputVoucherNumber"),
+    rules: [required()],
+  },
+  {
+    field: "Employee",
+    caption: t("OutputVoucherEmployeeRequest"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "Items",
+    caption: t("Item.Sum"),
+    rules: [isArray()],
+  },
+];
 //#endregion
 
 //#region Vars
@@ -155,20 +184,17 @@ const reset = () => {
   inputVoucherStore.resetData();
 };
 const store = () => {
+  validationResult.value = validate(inputVoucher.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
-  const formData = new FormData();
-  formData.append("number", inputVoucher.value.number);
-  formData.append("notes", inputVoucher.value.notes);
-  formData.append("date", inputVoucher.value.date);
-  formData.append("items", JSON.stringify(inputVoucher.value.Items));
-  formData.append("State", JSON.stringify(inputVoucher.value.State));
-  formData.append("requestedBy", inputVoucher.value.requestedBy);
-  formData.append(
-    "signaturePerson",
-    String(inputVoucher.value.signaturePerson)
-  );
+  const sendData = makeFormDataFromObject(inputVoucher.value);
+
   inputVoucherStore
-    .store(formData)
+    .store(sendData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -192,20 +218,29 @@ const store = () => {
     });
 };
 function update() {
+  validationResult.value = validate(inputVoucher.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
-  const formData = new FormData();
-  formData.append("number", inputVoucher.value.number);
-  formData.append("notes", inputVoucher.value.notes);
-  formData.append("date", inputVoucher.value.date);
-  formData.append("items", JSON.stringify(inputVoucher.value.Items));
-  formData.append("State", JSON.stringify(inputVoucher.value.State));
-  formData.append("requestedBy", inputVoucher.value.requestedBy);
-  formData.append(
-    "signaturePerson",
-    String(inputVoucher.value.signaturePerson)
-  );
+  const sendData = makeFormDataFromObject(inputVoucher.value);
+  //#region Old Schema
+  // const formData = new FormData();
+  // formData.append("number", inputVoucher.value.number);
+  // formData.append("notes", inputVoucher.value.notes);
+  // formData.append("date", inputVoucher.value.date);
+  // formData.append("items", JSON.stringify(inputVoucher.value.Items));
+  // formData.append("State", JSON.stringify(inputVoucher.value.State));
+  // formData.append("requestedBy", inputVoucher.value.requestedBy);
+  // formData.append(
+  //   "signaturePerson",
+  //   String(inputVoucher.value.signaturePerson)
+  // );
+  //#endregion
   inputVoucherStore
-    .update(inputVoucher.value.id, formData)
+    .update(inputVoucher.value.id, sendData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -468,6 +503,9 @@ const headers = ref<Array<ITableHeader>>([
                 </template>
               </ITable>
             </ICol>
+          </IRow>
+          <IRow>
+            <ICol><IErrorMessages :validationResult="validationResult" /></ICol>
           </IRow>
         </IForm>
       </IContainer>
