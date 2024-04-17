@@ -72,8 +72,7 @@ const searchFilter = ref<IVacationDailyFilter>({
 });
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-  searchFilter.value.employeeName = fastSearch.value.toString();
-
+  searchFilter.value.employeeName = fastSearch.value;
   await useVacationDailyStore()
     .get_filter(searchFilter.value, page)
     .then((response) => {

@@ -107,7 +107,15 @@ export default {
   EmployeeIsPerson: "Type Info",
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
-  Employee: { Title: "Employee", HistoryReport: "History Report", Telegram: "TelegramId ", Number: "Employee Number", IdCard: "Employee IdCard", Position: "Position", Type: "Type" },
+  Employee: {
+    Title: "Employee",
+    HistoryReport: "History Report",
+    Telegram: "TelegramId ",
+    Number: "Employee Number",
+    IdCard: "Employee IdCard",
+    Position: "Position",
+    IsPerson: "Type Account"
+  },
 
   UserIndex: "User System",
 

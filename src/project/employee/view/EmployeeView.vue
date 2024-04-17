@@ -285,7 +285,7 @@ onMounted(async () => {
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <ISelect
-                :label="t('EmployeePosition')"
+                :label="t('Employee.Position')"
                 v-model="employee.Position.id"
                 name="PostionId"
                 :options="employees_positions"

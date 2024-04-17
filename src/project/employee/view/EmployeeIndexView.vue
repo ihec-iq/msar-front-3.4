@@ -111,8 +111,8 @@ onMounted(async () => {
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
   { caption: t("Section"), value: "section" },
-  { caption: t("EmployeePosition"), value: "position" },
-  { caption: t("EmployeeType"), value: "type" },
+  { caption: t("Employee.Position"), value: "position" },
+  { caption: t("Employee.Type"), value: "type" },
   { caption: t("Details"), value: "actions" },
 ]);
 </script>

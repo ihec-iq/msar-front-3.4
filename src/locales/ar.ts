@@ -54,7 +54,7 @@ export default {
     Code: "كود المادة",
     Unit: "الوحدة",
     Category: "صنف المادة",
-    Sum : "المواد"
+    Sum: "المواد"
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -106,7 +106,16 @@ export default {
   EmployeeIsPerson: "نوع البيانات",
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
-  Employee: { Title: "الموظف", HistoryReport: "كشف ذمة", Telegram: "معرف التلكرام", Number: "الرقم الوظيفي", IdCard: "رقم الهوية", Position: "المنصب", Type: "المكان" },
+  Employee: {
+    Title: "الموظف",
+    HistoryReport: "كشف ذمة",
+    Telegram: "معرف التلكرام",
+    Number: "الرقم الوظيفي",
+    IdCard: "رقم الهوية",
+    Position: "المنصب",
+    Type: "المكان",
+    IsPerson: "نوع الحساب"
+  },
   UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",
@@ -544,7 +553,7 @@ export default {
     FiledLengthIsTooLong: "طول الحقل اطول من المتوقع",
     FieldNotSame: "تحقق من الحقول يجب ان تكون متطابقة",
     isObject: "يجب ان تختار البيانات المحددة",
-    isArray:  "يجب ان تحتوي على عنصر واحد على الاقل",
+    isArray: "يجب ان تحتوي على عنصر واحد على الاقل",
   },
   ToastMessages: {
     Success: "تمت العملية بنجاح",
