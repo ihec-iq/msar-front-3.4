@@ -77,5 +77,3 @@ onMounted(async () => {
   </div>
 </template>
 <style></style>
-../VacationLinks
-@/project/user/permissionStore@/utilities/EnumSystem

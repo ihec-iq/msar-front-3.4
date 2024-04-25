@@ -21,32 +21,33 @@ export const useVacationStore = defineStore("vacationStore", () => {
       takeVacation: 0,
       initVacationSick: 0,
       takeVacationSick: 0,
-      Position : {
+      Position: {
         id: 0,
         name: "",
         level: "",
         code: ""
-      } ,
-      Type : {
+      },
+      Type: {
         id: 0,
         name: ""
       }
     },
-    oldRecord: 0,
-    newRecord: 0,
     record: 0,
-    oldRecordSick: 0,
-    newRecordSick: 0,
     recordSick: 0,
-    sumDaily: 0,
-    sumTime: 0,
-    sumSick: 0,
+    deservedRecord: 0,
+    totalTaken: 0,
+    remaining: 0,
+    currentYearVacations: 0,
+    currentYearTimeVacations: 0,
+    currentYearDailyVacations: 0,
+    deservedSickRecord: 0,
+    takenSick: 0,
+    remainingSick: 0,
+    currentYearSickVacations: 0
   });
   function reset() {
     vacation.id = 0;
-    vacation.record = 1;
-    vacation.oldRecord = 0;
-    vacation.newRecord = 0;
+    vacation.record = 1; 
     vacation.Employee = {
       id: 0,
       name: "",
@@ -60,13 +61,13 @@ export const useVacationStore = defineStore("vacationStore", () => {
       takeVacation: 0,
       initVacationSick: 0,
       takeVacationSick: 0,
-      Position : {
+      Position: {
         id: 0,
         name: "",
         level: "",
         code: ""
-      } ,
-      Type : {
+      },
+      Type: {
         id: 0,
         name: ""
       }

@@ -5,8 +5,12 @@ import type { IStock } from "../IStock";
 export interface IInputVoucher {
   id: number;
   number: string;
+  numberBill: string;
   date: string;
+  dateBill: string;
+  dateReceive: string;
   notes: string;
+  Stock: IStock;
   State: IInputVoucherState;
   Items: Array<IInputVoucherItem>;
   signaturePerson: string;
@@ -17,8 +21,7 @@ export interface IInputVoucherItem {
   id?: number;
   inputVoucherId?: number;
   Item: IItem;
-  Stock: IStock;
-  serialNumber: string;
+  description: string;
   count: number;
   price: number;
   value: number;
@@ -30,7 +33,7 @@ export interface IInputVoucherItemVSelect {
   id?: number;
   itemName: string;
   stockName?: string;
-  serialNumber?: string;
+  description?: string;
   code?: string;
   itemCategory?: string;
   inValue: number;

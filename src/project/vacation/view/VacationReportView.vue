@@ -211,7 +211,7 @@ const headersExcel = {
                       <span> {{ ToNumberShow(row.currentYearVacations) }}</span>
                     </template>
                     <template v-slot:currentYearTimeVacations="{ row }">
-                      <span> {{ row.currentYearTimeVacations }}</span>
+                      <span> {{ row.currentYearTimeVacations }} Hours</span>
                     </template>
                     <template v-slot:currentYearDailyVacations="{ row }">
                       <span>

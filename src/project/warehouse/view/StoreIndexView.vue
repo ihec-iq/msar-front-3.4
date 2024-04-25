@@ -67,7 +67,7 @@ const getFilterData = async (page = 1) => {
 
   if (searchFilter.value.summation == true) {
     await get_summation(searchFilter.value, page)
-      .then((response) => {
+      .then((response) => { console.log(response);
         if (response.status == 200) {
           dataPage.value = response.data.data;
           data.value = dataPage.value.data;

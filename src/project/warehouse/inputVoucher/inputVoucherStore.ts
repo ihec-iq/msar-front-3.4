@@ -21,6 +21,10 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     Items: [],
     signaturePerson: "",
     requestedBy: "",
+    Stock: { name: "", id: 0 },
+    numberBill: "",
+    dateBill: new Date().toISOString().split("T")[0],
+    dateReceive: new Date().toISOString().split("T")[0],
   });
   const inputVouchers = ref<IInputVoucher[]>([]);
   const inputVoucherItem = ref<IInputVoucherItem>({
@@ -36,10 +40,6 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         name: "",
       },
       measuringUnit: "",
-    },
-    Stock: {
-      id: 0,
-      name: "",
     },
     serialNumber: "",
     count: 0,
@@ -162,12 +162,16 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucher.value = {
       id: 0,
       number: "",
+      numberBill: "",
       date: new Date().toISOString().split("T")[0],
+      dateBill: new Date().toISOString().split("T")[0],
+      dateReceive: new Date().toISOString().split("T")[0],
       notes: "",
       State: { name: "", id: 1 },
       Items: [],
       signaturePerson: "",
       requestedBy: "",
+      Stock: { name: "", id: 0 },
     };
   }
   return {

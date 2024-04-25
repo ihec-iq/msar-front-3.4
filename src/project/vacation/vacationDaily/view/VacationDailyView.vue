@@ -11,6 +11,8 @@ import { useEmployeeStore } from "@/project/employee/employeeStore";
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
+import printJS from "print-js";
+
 import {
   useValidation,
   type IValidationResult,
@@ -57,7 +59,7 @@ const rules: Array<IFieldValidation> = [
 
 import type { IVacation, IVacationReason } from "../../IVacation";
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray, can } = usePermissionStore();
 const namePage = ref("VacationDaily");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -106,7 +108,7 @@ const store = (withPrint: boolean = false) => {
           timer: 1500,
         });
         console.log(response.data);
-        if (withPrint) print();
+        if (withPrint) printWindow();
         router.go(-1);
       }
     })
@@ -234,7 +236,47 @@ const back = () => {
     name: "vacationDailyIndex",
   });
 };
-const print1 = () => {
+const printDirect = () => {
+printJS({ printable: 'printMe', type: 'html', header: 'PrintJS - Form Element Selection' })
+  return ;
+};
+const printWindow = () => {
+  // Pass the element id here
+  //paperize();
+  
+
+  const prtHtml = document.getElementById("printMe")?.innerHTML;
+  // Get all stylesheets HTML
+  let stylesHtml = "";
+  for (const node of [
+    ...document.querySelectorAll('link[rel="stylesheet"], style'),
+  ]) {
+    stylesHtml += node.outerHTML;
+  }
+  // Open the print window
+  const WinPrint = window.open(
+    "",
+    "",
+    "left=0,top=0, toolbar=0,scrollbars=0,status=0"
+  );
+
+  WinPrint?.document.write(`<!DOCTYPE html>
+<html>
+  <head>
+    ${stylesHtml}
+  </head>
+  <body>
+    ${prtHtml}
+  </body>
+</html>`);
+  setTimeout(function () {
+    // wait until all resources loaded
+    WinPrint?.document.close(); // necessary for IE >= 10
+    WinPrint?.focus(); // necessary for IE >= 10
+    WinPrint?.print(); // change window to winPrint
+    WinPrint?.close(); // change window to winPrint
+  }, 250);  
+};
   const prtHtml = document.getElementById("printMe")?.innerHTML;
   // Get all stylesheets HTML
   let stylesHtml = "";
@@ -266,12 +308,6 @@ const print1 = () => {
     WinPrint?.print(); // change window to winPrint
     WinPrint?.close(); // change window to winPrint
   }, 250);
-};
-const print = () => {
-  // Pass the element id here
-  //paperize();
-  print1();
-};
 
 const ChangeDate = () => {
   if (vacationDaily.value.dayFrom >= vacationDaily.value.dayTo) {
@@ -497,6 +533,9 @@ const reset = () => {
         :onCreate="store"
         :onUpdate="update"
         :onDelete="Delete"
+        :showAdd="can(EnumPermission.AddVacationDaily) == 1"
+        :showUpdate="can(EnumPermission.EditVacationDaily) == 1"
+        :showDelete="can(EnumPermission.DeleteVacationDaily) == 1"
       >
         <template #Pre>
           <IButton2
@@ -504,7 +543,7 @@ const reset = () => {
             :text="t('Print')"
             pre-icon="printer"
             type="outlined"
-            :onClick="print"
+            :onClick="printWindow"
           />
           <IButton2
             v-if="vacationDaily.id == 0"

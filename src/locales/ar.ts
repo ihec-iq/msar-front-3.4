@@ -60,7 +60,15 @@ export default {
   SearchForItem: "ابحث عن اسم او وصف المادة",
   SearchForUser: "ابحث عن اسم الموظف",
   ItemUpdate: "تحديث المادة",
-  InputVoucher: "ادخال مخزني",
+  InputVoucher: {
+    Index: "ادخال مخزني",
+    Date: "تاريخ الادخال",
+    DateReceive: "تاريخ الاستلام",
+    DateBill: "تاريخ الطلبية",
+    NumberBill: "رقم الطلبية" ,
+    State:"من قبل",
+    Number: "الرقم"
+  },
   InputVoucherAdd: "اضافة الادخال مخزني",
   InputVoucherUpdate: "تعديل الادخال مخزني",
   InputVoucherNumber: "رقم العام",

@@ -6,7 +6,9 @@
     "cypress.config.*"
   ],
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "composite": true,
+    "verbatimModuleSyntax": true,
     "types": [
       "node"
     ]

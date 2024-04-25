@@ -46,9 +46,14 @@ const rules: Array<IFieldValidation> = [
     caption: t("OutputVoucherNumber"),
     rules: [required()],
   },
+  // {
+  //   field: "Employee",
+  //   caption: t("OutputVoucherEmployeeRequest"),
+  //   rules: [isObject({ key: "id", message: "" })],
+  // },
   {
-    field: "Employee",
-    caption: t("OutputVoucherEmployeeRequest"),
+    field: "Stock",
+    caption: t("Stock"),
     rules: [isObject({ key: "id", message: "" })],
   },
   {
@@ -83,8 +88,7 @@ const VoucherItemTemp = ref<IInputVoucherItem>({
     Category: { id: 0, name: "" },
     measuringUnit: "",
   },
-  Stock: { name: "", id: 0 },
-  serialNumber: "",
+  description: "",
   count: 1,
   price: 1,
   value: 1,
@@ -184,12 +188,12 @@ const reset = () => {
   inputVoucherStore.resetData();
 };
 const store = () => {
-  validationResult.value = validate(inputVoucher.value, rules);
+  // validationResult.value = validate(inputVoucher.value, rules);
 
-  if (!validationResult.value.success) {
-    WarningToast(t("ValidationFails"));
-    return;
-  }
+  // if (!validationResult.value.success) {
+  //   WarningToast(t("ValidationFails"));
+  //   return;
+  // }
   errors.value = null;
   const sendData = makeFormDataFromObject(inputVoucher.value);
 
@@ -369,8 +373,7 @@ function clearSelected(event: { target: { value: string } }) {
         Category: { id: 0, name: "" },
         measuringUnit: "",
       },
-      Stock: { name: "", id: 0 },
-      serialNumber: "",
+      description: "",
       count: 0,
       price: 0,
       value: 0,
@@ -412,8 +415,8 @@ const headers = ref<Array<ITableHeader>>([
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
-                :label="t('InputVoucherNumber')"
-                name="InputVoucherNumber"
+                :label="t('InputVoucher.Number')"
+                name="InputVoucher.Number"
                 v-model="inputVoucher.number"
                 type="text"
               />
@@ -421,14 +424,54 @@ const headers = ref<Array<ITableHeader>>([
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('Date')"
-                name="InputVoucherNumer"
+                name="InputVoucher.Date"
                 v-model="inputVoucher.date"
                 type="date"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucher.DateReceive')"
+                name="InputVoucher.DateReceive"
+                v-model="inputVoucher.dateReceive"
+                type="date"
+              />
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucher.DateBill')"
+                name="InputVoucherNumer"
+                v-model="inputVoucher.dateBill"
+                type="date"
+              />
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucher.NumberBill')"
+                name="InputVoucher.NumberBill"
+                v-model="inputVoucher.numberBill"
+                type="text"
+              />
+            </ICol>
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+              <div class="mb-2">
+                <label class="_inputLabel">
+                  <span class="text-red-600">*</span> {{ t("Stock") }}
+                </label>
+                <select v-model="inputVoucher.Stock" class="_input">
+                  <option
+                    v-for="stock in stocks"
+                    :key="stock.id"
+                    :value="stock"
+                  >
+                    {{ stock.name }}
+                  </option>
+                </select>
+              </div>
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
               <ISelect
-                :label="t('Section')"
+                :label="t('InputVoucher.State')"
                 v-model="inputVoucher.State.id"
                 name="inputVoucherStateId"
                 :options="inputVoucherStates"
@@ -646,18 +689,6 @@ const headers = ref<Array<ITableHeader>>([
         </IRow>
         <!-- for insert item proparties -->
         <IRow col-lg="4" :col="4" col-xl="4" col-md="2" col-sm="1" col-xs="1">
-          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <div class="mb-2">
-              <label class="_inputLabel">
-                <span class="text-red-600">*</span> {{ t("Stock") }}
-              </label>
-              <select v-model="VoucherItemTemp.Stock" class="_input">
-                <option v-for="stock in stocks" :key="stock.id" :value="stock">
-                  {{ stock.name }}
-                </option>
-              </select>
-            </div>
-          </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
               :label="t('SerialNumber')"

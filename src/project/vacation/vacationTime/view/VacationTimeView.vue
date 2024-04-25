@@ -64,7 +64,7 @@ const rules: Array<IFieldValidation> = [
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray,can } = usePermissionStore();
 const namePage = ref("VacationTime");
 const isLoading = ref(false);
 
@@ -384,8 +384,10 @@ const ChangeDateRecord = () => {
         :onCreate="store"
         :onUpdate="update"
         :onDelete="Delete"
+                :showAdd="can(EnumPermission.AddVacationTime) == 1"
+        :showUpdate="can(EnumPermission.EditVacationTime) == 1"
+        :showDelete="can(EnumPermission.DeleteVacationTime) == 1"
       />
     </template>
   </IPage>
-</template>
-@/project/user/permissionStore@/utilities/EnumSystem@/utilities/I18nPlugin
+</template> 

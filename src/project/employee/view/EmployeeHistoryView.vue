@@ -34,7 +34,7 @@ const RetrievalVoucher = ref<{
   date: string;
   signaturePerson: string;
   requestEmployeeId: string;
-  items?: Array<IEmployeeHistory>;
+  Items?: Array<IEmployeeHistory>;
 }>({
   number: "",
   date: new Date().toISOString().split("T")[0],
@@ -123,7 +123,7 @@ const deleteItem = (index: number) => {
 //#region Pagination
 const createRetrievalVoucher = () => {
   //router.push({ name: "retrievalVoucherAdd" });
-  RetrievalVoucher.value.items = SelectedOutItemRetrieval.value;
+  RetrievalVoucher.value.Items = SelectedOutItemRetrieval.value;
   console.log(RetrievalVoucher.value);
 
   retrievalVoucherStore

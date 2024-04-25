@@ -13,8 +13,6 @@ const emit = defineEmits(["setItem"]);
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(t("ItemAdd"));
-
 const itemStore = useItemStore();
 const { item } = storeToRefs(useItemStore());
 const itemCategoryStore = useItemCategoryStore();

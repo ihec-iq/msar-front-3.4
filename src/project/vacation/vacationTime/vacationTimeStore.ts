@@ -37,16 +37,19 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
           name: ""
         }
       },
-      record: 0,
-      newRecord: 0,
-      oldRecord: 0,
-      id: 0,
-      sumDaily: 0,
-      sumTime: 0,
-      sumSick: 0,
-      oldRecordSick: 0,
-      newRecordSick: 0,
+      record: 0, 
+      id: 0, 
       recordSick: 0,
+      deservedRecord: 0,
+      totalTaken: 0,
+      remaining: 0,
+      currentYearVacations: 0,
+      currentYearTimeVacations: 0,
+      currentYearDailyVacations: 0,
+      deservedSickRecord: 0,
+      takenSick: 0,
+      remainingSick: 0,
+      currentYearSickVacations: 0
     },
     record: 0.5,
     Reason: {
@@ -98,19 +101,18 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
         }
       },
       record: 0,
-      newRecord: 0,
-      oldRecord: 0,
       id: 0,
-      sumDaily: 0,
-      sumTime: 0,
-      sumSick: 0,
-      oldRecordSick: 0,
-      newRecordSick: 0,
       recordSick: 0,
-    };
-    vacationTime.Reason = {
-      id: 0,
-      name: "",
+      deservedRecord: 0,
+      totalTaken: 0,
+      remaining: 0,
+      currentYearVacations: 0,
+      currentYearTimeVacations: 0,
+      currentYearDailyVacations: 0,
+      deservedSickRecord: 0,
+      takenSick: 0,
+      remainingSick: 0,
+      currentYearSickVacations: 0
     };
   }
   const pathBase = "/vacationSys";

@@ -10,6 +10,7 @@ import type {
   IRetrievalVoucherItemType,
   IRetrievalVoucherState,
 } from "./IRetrievalVoucher";
+import type { IEmployeeHistory } from "@/project/employee/IEmployee";
 
 export const useRetrievalVoucherStore = defineStore("RetrievalVoucherStore", () => {
   const retrievalVoucher = reactive<IRetrievalVoucher>({
@@ -23,6 +24,8 @@ export const useRetrievalVoucherStore = defineStore("RetrievalVoucherStore", () 
     Type: { name: "", id: 0 },
     TypeId: 0
   });
+  
+  const SelectedOutItemRetrieval = ref<IEmployeeHistory[]>([]);
   const retrievalVouchers = ref<IRetrievalVoucher[]>([]);
   const retrievalVoucherStates = ref<IRetrievalVoucherState[]>([]);
   const retrievalVoucherItemTypes = ref<IRetrievalVoucherItemType[]>([]);
@@ -118,6 +121,7 @@ export const useRetrievalVoucherStore = defineStore("RetrievalVoucherStore", () 
     retrievalVoucher.TypeId = 0;
   }
   return {
+    SelectedOutItemRetrieval,
     retrievalVoucher,
     retrievalVouchers,
     retrievalVoucherStates,
