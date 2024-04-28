@@ -3,7 +3,6 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionStore } from "@/project/user/permissionStore";
 import { useStockStore } from "../../stockStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
@@ -35,6 +34,7 @@ import {
 import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
+import type { describe } from "node:test";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -112,8 +112,7 @@ const resetVoucherItemTemp = () => {
       Category: { id: 1, name: "" },
       measuringUnit: "",
     },
-    Stock: { id: 1, name: "" },
-    serialNumber: "",
+    description: "",
     count: 1,
     price: 1,
     value: 1,
@@ -312,6 +311,7 @@ const showData = async (id: number) => {
         inputVoucher.value.requestedBy = response.data.data.requestedBy;
         inputVoucher.value.signaturePerson = response.data.data.signaturePerson;
         inputVoucher.value.State = response.data.data.State;
+        inputVoucher.value.Stock = response.data.data.Stock;
       }
     })
     .catch((errors) => {
@@ -357,6 +357,9 @@ const handleEnter = (event: KeyboardEvent) => {
     let btn = document.getElementById("my_modal_7");
     item.value.name = enteredValue;
     btn?.click();
+    let NameItemEnterNew = document.getElementById("NameItemEnterNew");
+    NameItemEnterNew?.focus();
+    //xxx
   }
 };
 function clearSelected(event: { target: { value: string } }) {
@@ -386,12 +389,11 @@ const setItemFromChild = (_item: IItem) => {
 };
 const headers = ref<Array<ITableHeader>>([
   { caption: t("ID"), value: "id" },
-  { caption: t("Item"), value: "Item" },
-  { caption: t("SerialNumber"), value: "serialNumber" },
+  { caption: t("Item.Name"), value: "Item" },
+  { caption: t("Item.Description"), value: "description" },
   { caption: t("Count"), value: "count" },
   { caption: t("Price"), value: "price" },
   { caption: t("Total"), value: "Total" },
-  { caption: t("Stock"), value: "Stock" },
   { caption: t("Notes"), value: "notes" },
   { caption: t("Details"), value: "Actions" },
 ]);
@@ -522,9 +524,6 @@ const headers = ref<Array<ITableHeader>>([
                 <template v-slot:Item="{ row }">
                   {{ row.Item.name }}
                 </template>
-                <template v-slot:Stock="{ row }">
-                  {{ row.Stock.name }}
-                </template>
                 <template v-slot:Total="{ row }">
                   {{ row.count * row.price }}
                 </template>
@@ -586,8 +585,7 @@ const headers = ref<Array<ITableHeader>>([
                     Category: { id: 0, name: '' },
                     measuringUnit: '',
                   },
-                  Stock: { name: '', id: 0 },
-                  serialNumber: '',
+                  describtion: '',
                   count: 0,
                   price: 0,
                   value: 0,
@@ -691,8 +689,8 @@ const headers = ref<Array<ITableHeader>>([
         <IRow col-lg="4" :col="4" col-xl="4" col-md="2" col-sm="1" col-xs="1">
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
-              :label="t('SerialNumber')"
-              v-model="VoucherItemTemp.serialNumber"
+              :label="t('Item.Description')"
+              v-model="VoucherItemTemp.description"
             />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
@@ -720,7 +718,7 @@ const headers = ref<Array<ITableHeader>>([
               v-model="VoucherItemTemp.value"
             />
           </ICol>
-          <ICol :span="3" span-lg="3" span-xl="1" span-md="1">
+          <ICol :span="4" span-lg="4" span-xl="1" span-md="1">
             <IInput
               :label="t('Notes')"
               type="text"

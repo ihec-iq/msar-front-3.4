@@ -49,7 +49,8 @@ export default {
     Code: "Item Code",
     Unit: "Unit Item",
     Category: "Category Item",
-    Sum: "Items"
+    Sum: "Items",
+    Description: "Description"
   },
   Items: "Items",
   InputVoucher: "Input Voucher",

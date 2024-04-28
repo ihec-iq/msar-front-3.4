@@ -9,6 +9,7 @@ export interface IOutputVoucher {
   notes: string;
   Items: Array<IOutputVoucherItem>;
   signaturePerson: string;
+  Stock: IStock;
   Employee: IOutputVoucherEmployee;
   itemsCount?: number;
 }
@@ -18,8 +19,7 @@ export interface IOutputVoucherItem {
   Item?: IItem;
   inputVoucherItemId: number;
   InputVoucherItem: IInputVoucherItem; 
-  Stock: IStock;
-  serialNumber: string;
+  description: string;
   count: number; 
   price: number;
   value: number;

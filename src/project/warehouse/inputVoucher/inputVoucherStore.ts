@@ -1,5 +1,5 @@
 import { reactive, ref } from "vue";
-import { defineStore } from "pinia";
+import { defineStore, type StoreOnActionListener } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
 import type {
@@ -41,7 +41,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       },
       measuringUnit: "",
     },
-    serialNumber: "",
+    description: "",
     count: 0,
     price: 0,
     value: 0,
@@ -94,12 +94,13 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         console.log("in get input Voucher Items : " + errors);
       });
   }
-  async function getAvailableItemsVSelect() {
+  async function getAvailableItemsVSelect(storeId : string = "0") {
     inputVoucherItemsVSelect.value = [];
-    return await Api.get(`${pathBase}/inputVoucherItem/getAvailableItemsVSelect`)
+    return await Api.get(`${pathBase}/inputVoucherItem/getAvailableItemsVSelect/${storeId}`)
       .then((response) => {
         if (response.status == 200) {
           inputVoucherItemsVSelect.value = response.data.data;
+          
         }
       })
       .catch((errors) => {
@@ -191,7 +192,8 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     getState,
     getItems,
     getEmployees,
-    getAvailableItemsVSelect, getAllItemsVSelect,
+    getAvailableItemsVSelect,
+    getAllItemsVSelect,
     show,
     store,
     update,

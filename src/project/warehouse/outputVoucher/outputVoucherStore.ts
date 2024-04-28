@@ -19,6 +19,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     Items: [],
     signaturePerson: "",
     Employee: { name: "", id: 0 },
+    Stock: { name: "", id: 0 },
   });
   const outputVouchers = ref<IOutputVoucher[]>([]);
   const outputVoucherStates = ref<IOutputVoucherState[]>([]);
@@ -99,6 +100,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     outputVoucher.Items = [];
     outputVoucher.signaturePerson = "";
     outputVoucher.Employee = { name: "", id: 0 };
+    outputVoucher.Stock = { name: "", id: 0 };
   }
   return {
     outputVoucher,

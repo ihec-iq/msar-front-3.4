@@ -54,7 +54,8 @@ export default {
     Code: "كود المادة",
     Unit: "الوحدة",
     Category: "صنف المادة",
-    Sum: "المواد"
+    Sum: "المواد",
+    Description : "الوصف"
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -62,6 +63,8 @@ export default {
   ItemUpdate: "تحديث المادة",
   InputVoucher: {
     Index: "ادخال مخزني",
+    Add : "",
+    Update : "",
     Date: "تاريخ الادخال",
     DateReceive: "تاريخ الاستلام",
     DateBill: "تاريخ الطلبية",
