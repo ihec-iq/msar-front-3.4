@@ -236,14 +236,24 @@ const back = () => {
     name: "vacationDailyIndex",
   });
 };
-const printDirect = () => {
-printJS({ printable: 'printMe', type: 'html', header: 'PrintJS - Form Element Selection' })
-  return ;
+const printDirect222 = () => {
+  printJS("printMe1", "html");
+  return;
+};
+import printDirect from "@thiagoelg/node-printer";
+
+const printWindow2 = () => {
+  const options = {
+    media: "A4",
+    n: 1,
+  };
+  const prtHtml = document.getElementById("printMe")?.innerHTML;
+
+ // printDirect.printDirect(prtHtml, options);
 };
 const printWindow = () => {
   // Pass the element id here
   //paperize();
-  
 
   const prtHtml = document.getElementById("printMe")?.innerHTML;
   // Get all stylesheets HTML
@@ -264,43 +274,31 @@ const printWindow = () => {
 <html>
   <head>
     ${stylesHtml}
+    <style>
+         body {
+         -webkit-print-color-adjust: exact; /*Chrome,Safari,Edge*/
+         color-adjust: exact;              /* firefox*/
+         }
+    </style>
   </head>
-  <body>
+  <body style="background-color: white">
     ${prtHtml}
   </body>
 </html>`);
-  setTimeout(function () {
-    // wait until all resources loaded
-    WinPrint?.document.close(); // necessary for IE >= 10
-    WinPrint?.focus(); // necessary for IE >= 10
-    WinPrint?.print(); // change window to winPrint
-    WinPrint?.close(); // change window to winPrint
-  }, 250);  
-};
-  const prtHtml = document.getElementById("printMe")?.innerHTML;
-  // Get all stylesheets HTML
-  let stylesHtml = "";
-  for (const node of [
-    ...document.querySelectorAll('link[rel="stylesheet"], style'),
-  ]) {
-    stylesHtml += node.outerHTML;
-  }
-  // Open the print window
-  const WinPrint = window.open(
-    "",
-    "",
-    "left=0,top=0, toolbar=0,scrollbars=0,status=0"
-  );
-
-  WinPrint?.document.write(`<!DOCTYPE html>
-<html>
-  <head>
-    ${stylesHtml}
-  </head>
-  <body>
-    ${prtHtml}
-  </body>
-</html>`);
+  var options = {
+    silent: false,
+    printBackground: true,
+    color: false,
+    margin: {
+      marginType: "printableArea",
+    },
+    landscape: false,
+    pagesPerSheet: 1,
+    collate: false,
+    copies: 1,
+    header: "Header of the Page",
+    footer: "Footer of the Page",
+  };
   setTimeout(function () {
     // wait until all resources loaded
     WinPrint?.document.close(); // necessary for IE >= 10
@@ -308,6 +306,7 @@ const printWindow = () => {
     WinPrint?.print(); // change window to winPrint
     WinPrint?.close(); // change window to winPrint
   }, 250);
+};
 
 const ChangeDate = () => {
   if (vacationDaily.value.dayFrom >= vacationDaily.value.dayTo) {
@@ -402,7 +401,7 @@ const reset = () => {
 };
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading" id="printMe1">
     <template #HeaderButtons>
       <IButton2
         color="green"
@@ -552,17 +551,25 @@ const reset = () => {
             pre-icon="printer-pos-plus"
             :onClick="storeWithPrint"
           />
+          <IButton2
+            v-if="vacationDaily.id == 0"
+            text="Test"
+            type="outlined"
+            pre-icon="printer-pos-plus"
+            :onClick="printWindow"
+          />
         </template>
       </IFooterCrud>
     </template>
   </IPage>
 
   <div
-    class="hidden print:w-[900px] w-[900px] tablePrint m-2"
+    class="hidden print:w-[900px] w-[900px] tablePrint m-2 print:bg-white bg-white"
     id="printMe"
+    style="background-color: white !important"
     print:rtl
   >
-    <div id="Header" class="w-[900px] print:w-[900px]">
+    <div id="Header" class="w-[900px] print:w-[900px] print:bg-white bg-white">
       <br />
       <br />
       <br />
@@ -577,9 +584,9 @@ const reset = () => {
         alt=""
       />
     </div>
-    <div id="body">
+    <div id="body" class="print:bg-white bg-white">
       <table
-        class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+        class="w-[900px] print:bg-white bg-white float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
         style="
           width: 890px !important ;
           margin: 3px !important ;
@@ -623,10 +630,12 @@ const reset = () => {
       </table>
     </div>
 
-    <div class="divFooter1 z-0 w-[900px] print:w-[900px]">
+    <div
+      class="divFooter1 z-0 w-[900px] print:w-[900px] print:bg-white bg-white"
+    >
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
       <table
-        class="float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+        class="print:bg-white bg-white float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
         style="
           width: 890px !important ;
           margin: 3px !important ;
@@ -675,6 +684,7 @@ const reset = () => {
 @media screen {
 }
 @media print {
+  
   table {
     direction: rtl;
     width: 80%;

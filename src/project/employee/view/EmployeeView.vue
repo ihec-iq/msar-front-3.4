@@ -24,6 +24,7 @@ const namePage = ref("EmployeeAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isPerson = ref(false);
+const isMovingSection = ref(false);
 
 const employeeStore = useEmployeeStore();
 const { employee, employees_types, employees_positions } =
@@ -45,9 +46,11 @@ const store = () => {
   errors.value = null;
   const formData = new FormData();
   employee.value.isPerson = isPerson.value ? 1 : 0;
+  employee.value.isMovingSection = isMovingSection.value ? 1 : 0;
   formData.append("id", employee.value.id.toString());
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
+  formData.append("isMovingSection", employee.value.isMovingSection.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
   formData.append("positionId", employee.value.Position.id.toString());
   formData.append("typeId", employee.value.Type.id.toString());
@@ -283,6 +286,7 @@ onMounted(async () => {
                 :options="sections"
                 :IsRequire="true"
             /></ICol>
+
             <ICol span="1" span-md="1" span-sm="1">
               <ISelect
                 :label="t('Employee.Position')"
@@ -314,6 +318,20 @@ onMounted(async () => {
                 {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
               >
             </ICol>
+            <ICol span="1" span-md="1" span-sm="1">
+              <ICheckbox v-model="isMovingSection" :checked="isMovingSection">
+                {{ t("Employee.IsPerson") }} :
+                {{ isMovingSection ? " نعم " : " لا " }}</ICheckbox
+              >
+            </ICol>
+            <ICol span="1" span-md="1" span-sm="1">
+              <ISelect
+                :label="t('MovingSection')"
+                v-model="employee.MovingSection.id"
+                name="MovingSectionId"
+                :options="sections"
+                :IsRequire="true"
+            /></ICol>
             <!-- <ICol span="1" span-md="2" span-sm="4">
               <div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"

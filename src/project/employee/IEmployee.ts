@@ -10,6 +10,8 @@ export interface IEmployee {
   id: number;
   name: string;
   Section: ISection;
+  MovingSection: ISection;
+  isMovingSection : number;
   isPerson: number;
   dateWork: string;
   number: string;

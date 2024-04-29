@@ -22,7 +22,11 @@ export const useRetrievalVoucherStore = defineStore("RetrievalVoucherStore", () 
     signaturePerson: "",
     Employee: { name: "", id: 0 },
     Type: { name: "", id: 0 },
-    TypeId: 0
+    TypeId: 0,
+    Stock: {
+      id: 0,
+      name: ""
+    }
   });
   
   const SelectedOutItemRetrieval = ref<IEmployeeHistory[]>([]);
