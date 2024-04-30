@@ -12,6 +12,11 @@ export const useVacationStore = defineStore("vacationStore", () => {
       id: 0,
       name: "",
       Section: { id: 0, name: "" },
+      MoveSection: {
+        id: 0,
+        name: ""
+      },
+      isMoveSection: 0,
       isPerson: 1,
       dateWork: Date.now().toLocaleString(),
       idCard: "",
@@ -52,6 +57,11 @@ export const useVacationStore = defineStore("vacationStore", () => {
       id: 0,
       name: "",
       Section: { id: 0, name: "" },
+      MoveSection: {
+        id: 0,
+        name: ""
+      },
+      isMoveSection: 0,
       isPerson: 1,
       dateWork: Date.now().toLocaleString(),
       idCard: "",

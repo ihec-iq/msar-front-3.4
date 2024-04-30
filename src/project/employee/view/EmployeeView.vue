@@ -24,7 +24,7 @@ const namePage = ref("EmployeeAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isPerson = ref(false);
-const isMovingSection = ref(false);
+const isMoveSection = ref(false);
 
 const employeeStore = useEmployeeStore();
 const { employee, employees_types, employees_positions } =
@@ -46,11 +46,12 @@ const store = () => {
   errors.value = null;
   const formData = new FormData();
   employee.value.isPerson = isPerson.value ? 1 : 0;
-  employee.value.isMovingSection = isMovingSection.value ? 1 : 0;
+  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
   formData.append("id", employee.value.id.toString());
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("isMovingSection", employee.value.isMovingSection.toString());
+  formData.append("isMoveSection", employee.value.isMoveSection.toString());
+  formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
   formData.append("positionId", employee.value.Position.id.toString());
   formData.append("typeId", employee.value.Type.id.toString());
@@ -97,15 +98,19 @@ function update() {
   errors.value = null;
   const formData = new FormData();
   employee.value.isPerson = isPerson.value ? 1 : 0;
+  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
+
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
+  formData.append("isMoveSection", employee.value.isMoveSection.toString());
+  formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
   formData.append("positionId", employee.value.Position.id.toString());
   formData.append("typeId", employee.value.Type.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
   formData.append("telegramId", String(employee.value.telegramId));
-  formData.append("idCard", employee.value.idCard.toString());
+  formData.append("idCard", String(employee.value.idCard));
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
   formData.append(
@@ -182,13 +187,15 @@ const showData = async () => {
         employee.value.idCard = response.data.data.idCard;
         employee.value.number = response.data.data.number;
         employee.value.telegramId = response.data.data.telegramId;
-        employee.value.Section.id = response.data.data.Section.id;
-        employee.value.Section.name = response.data.data.Section.name;
+        employee.value.Section = response.data.data.Section;
+        employee.value.MoveSection = response.data.data.MoveSection;
         employee.value.User = response.data.data.User;
         employee.value.Type = response.data.data.Type;
         employee.value.Position = response.data.data.Position;
         employee.value.isPerson = response.data.data.isPerson;
         isPerson.value = response.data.data.isPerson == 0 ? false : true;
+        isMoveSection.value =
+          response.data.data.isMoveSection == 0 ? false : true;
       }
     })
     .catch((errors) => {
@@ -280,7 +287,7 @@ onMounted(async () => {
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <ISelect
-                :label="t('Section')"
+                :label="t('Employee.Section')"
                 v-model="employee.Section.id"
                 name="archiveTypeId"
                 :options="sections"
@@ -319,18 +326,19 @@ onMounted(async () => {
               >
             </ICol>
             <ICol span="1" span-md="1" span-sm="1">
-              <ICheckbox v-model="isMovingSection" :checked="isMovingSection">
-                {{ t("Employee.IsPerson") }} :
-                {{ isMovingSection ? " نعم " : " لا " }}</ICheckbox
+              <ICheckbox v-model="isMoveSection" :checked="isMoveSection">
+                {{ t("Employee.isMoveSection") }} :
+                {{ isMoveSection ? " نعم " : " لا " }}</ICheckbox
               >
             </ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <ISelect
-                :label="t('MovingSection')"
-                v-model="employee.MovingSection.id"
-                name="MovingSectionId"
+                :label="t('Employee.MoveSection')"
+                v-model="employee.MoveSection.id"
+                name="MoveSectionId"
                 :options="sections"
                 :IsRequire="true"
+                :IsDisabled="!isMoveSection"
             /></ICol>
             <!-- <ICol span="1" span-md="2" span-sm="4">
               <div
@@ -366,5 +374,5 @@ onMounted(async () => {
         :onDelete="Delete"
       />
     </template>
-  </IPage>  
-</template> 
+  </IPage>
+</template>

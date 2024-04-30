@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const modelValue = defineModel<any>();
 const emits = defineEmits<{
@@ -23,10 +23,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  IsDisabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 const Change = () => {
   emits("onChange");
-};  
+};
 // import { useI18n } from "@/stores/i18n/useI18n";
 // const { t } = useI18n();
 
@@ -40,14 +44,14 @@ const checkRequired = () => {
   } else {
     inputClasses.value = "_input border border-red-500";
   }
-}; 
+};
 </script>
-<template>
-  <div class="mb-2 mx-1">
+<template>  
+  <div class="mb-2 mx-1" :class="{ disabled: IsDisabled }">
     <label class="_inputLabel" :for="name">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
-    <select
+    <select 
       :class="inputClasses"
       :name="name"
       v-model="modelValue"
@@ -64,3 +68,9 @@ const checkRequired = () => {
     </select>
   </div>
 </template>
+<style scoped>
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
+</style>

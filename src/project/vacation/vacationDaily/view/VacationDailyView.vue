@@ -249,7 +249,7 @@ const printWindow2 = () => {
   };
   const prtHtml = document.getElementById("printMe")?.innerHTML;
 
- // printDirect.printDirect(prtHtml, options);
+  // printDirect.printDirect(prtHtml, options);
 };
 const printWindow = () => {
   // Pass the element id here
@@ -332,16 +332,16 @@ const ChangeDateRecord = () => {
 const SelectedEmployees = ref<Array<IEmployee>>([]);
 
 const SelectEmployeeSection = () => {
+  isLoading.value = true;
   if (
     vacationDaily.value.Vacation?.id == undefined ||
     vacationDaily.value.Vacation?.id == 0
   ) {
     SelectedEmployees.value = employees.value;
   } else {
-    isLoading.value = true;
     SelectedEmployees.value = employees.value.filter(filterEmployeesBySection);
-    isLoading.value = false;
   }
+  isLoading.value = false;
 };
 const filterEmployeesBySection = (_employee: IEmployee) => {
   if (
@@ -353,13 +353,22 @@ const filterEmployeesBySection = (_employee: IEmployee) => {
     return true;
   }
   if (
-    _employee.Section.id
-      .toString()
-      .includes(vacationDaily.value.Vacation.Employee?.Section.id.toString()) &&
+    vacationDaily.value.Vacation.Employee.isMoveSection == 1 &&
+    vacationDaily.value.Vacation?.Employee.MoveSection.id != 1 &&
+    _employee.Section.id ==
+      vacationDaily.value.Vacation?.Employee.MoveSection.id &&
     _employee.id != vacationDaily.value.Vacation.Employee?.id
   ) {
     return true;
-  } else return false;
+  } else {
+    if (
+      _employee.Section.id ==
+        vacationDaily.value.Vacation?.Employee.Section.id &&
+      _employee.id != vacationDaily.value.Vacation.Employee?.id
+    ) {
+      return true;
+    }
+  }
 };
 watch(
   () => vacationDaily.value.Vacation?.Employee.id,
@@ -369,7 +378,6 @@ watch(
 );
 //#endregion
 function getImageUrl(name: string, ext: string) {
-  console.log(new URL(`@/assets/${name}.${ext}`, import.meta.url).href);
   return new URL(`@/assets/${name}.${ext}`, import.meta.url).href;
 }
 import { useAuthStore } from "@/stores/authStore";
@@ -382,6 +390,8 @@ import { t } from "@/utilities/I18nPlugin";
 
 onMounted(async () => {
   //console.log(can("show items1"));
+  isLoading.value = true;
+
   checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "VacationDailyAdd";
@@ -393,14 +403,20 @@ onMounted(async () => {
   }
   await useVacationStore().get_vacations();
   await useVacationReasonStore().get();
-  await useEmployeeStore().get_employees();
-  SelectedEmployees.value = employees.value;
+  await useEmployeeStore()
+    .get_employees()
+    .then(() => {
+      SelectEmployeeSection();
+    });
+  isLoading.value = false;
 });
 const reset = () => {
   useVacationDailyStore().resetData();
 };
 </script>
 <template>
+  {{ vacationDaily.Vacation?.Employee.MoveSection }} -
+  {{ vacationDaily.Vacation?.Employee.isMoveSection }}
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading" id="printMe1">
     <template #HeaderButtons>
       <IButton2
@@ -474,7 +490,11 @@ const reset = () => {
               >
                 <template #option="{ Employee }">
                   <div>
-                    <span>{{ Employee.name }}</span>
+                    <span>{{ Employee.name }}</span
+                    ><br />
+                    <span class="text-xs align-super text-gray-400">
+                      ({{ Employee.Section.name }})</span
+                    >
                   </div>
                 </template>
               </vSelect>
@@ -493,9 +513,13 @@ const reset = () => {
                 label="name"
                 :getOptionLabel="(employee: IEmployee) => employee.name"
               >
-                <template #option="{ name }">
+                <template #option="{ name, Section }">
                   <div>
                     <span>{{ name }}</span>
+                    <br />
+                    <span class="text-xs align-super text-gray-400">
+                      ({{ Section.name }})</span
+                    >
                   </div>
                 </template>
               </vSelect>
@@ -684,7 +708,6 @@ const reset = () => {
 @media screen {
 }
 @media print {
-  
   table {
     direction: rtl;
     width: 80%;

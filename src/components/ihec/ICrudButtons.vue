@@ -37,4 +37,3 @@ const hasType = (buttonType: string): boolean => {
     />
   </div>
 </template>
-@/utilities/I18nPlugin

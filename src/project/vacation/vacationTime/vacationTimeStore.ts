@@ -18,6 +18,11 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
         id: 0,
         name: "",
         Section: { id: 0, name: "" },
+        MoveSection: {
+          id: 0,
+          name: ""
+        },
+        isMoveSection: 0,
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -37,8 +42,8 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
           name: ""
         }
       },
-      record: 0, 
-      id: 0, 
+      record: 0,
+      id: 0,
       recordSick: 0,
       deservedRecord: 0,
       totalTaken: 0,
@@ -81,6 +86,11 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
         id: 0,
         name: "",
         Section: { id: 0, name: "" },
+        MoveSection: {
+          id: 0,
+          name: ""
+        },
+        isMoveSection: 0,
         isPerson: 1,
         dateWork: "",
         number: "",

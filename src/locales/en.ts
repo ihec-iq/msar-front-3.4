@@ -115,7 +115,10 @@ export default {
     Number: "Employee Number",
     IdCard: "Employee IdCard",
     Position: "Position",
-    IsPerson: "Type Account"
+    Section: "Section",
+    IsPerson: "Type Account",
+    isMoveSection: "Move to Section",
+    MoveSection : "Section Moved"
   },
 
   UserIndex: "User System",

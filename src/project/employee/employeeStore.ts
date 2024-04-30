@@ -27,6 +27,11 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       id: 0,
       name: "",
     },
+    MoveSection: {
+      id: 0,
+      name: ""
+    },
+    isMoveSection: 0
   });
   const employees = ref<Array<IEmployee>>([]);
   const employees_positions = ref<Array<IEmployeePosition>>([]);
@@ -53,6 +58,8 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       id: 0,
       name: "",
       Section: { name: "", id: 0 },
+      MoveSection: { name: "", id: 0 },
+      isMoveSection: 0,
       isPerson: 1,
       number: "",
       idCard: "",

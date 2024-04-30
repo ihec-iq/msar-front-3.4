@@ -124,8 +124,11 @@ export default {
     Number: "الرقم الوظيفي",
     IdCard: "رقم الهوية",
     Position: "المنصب",
+    Section: "الشعبة",
     Type: "المكان",
-    IsPerson: "نوع الحساب"
+    IsPerson: "نوع الحساب",
+    isMoveSection : "منسب الى شعبة",
+    MoveSection: "شعبة التنسيب"
   },
   UserIndex: "بيانات المستخدمين",
 

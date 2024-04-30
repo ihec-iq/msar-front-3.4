@@ -17,6 +17,11 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         id: 0,
         name: "",
         Section: { id: 0, name: "" },
+        MoveSection: {
+          id: 0,
+          name: ""
+        },
+        isMoveSection: 0,
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -69,6 +74,11 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         id: 0,
         name: "",
         Section: { id: 0, name: "" },
+        MoveSection: {
+          id: 0,
+          name: ""
+        },
+        isMoveSection: 0,
         isPerson: 1,
         dateWork: "",
         number: "",
