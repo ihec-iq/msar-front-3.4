@@ -71,6 +71,8 @@ const searchFilter = ref<IVacationDailyFilter>({
   employeeName: "",
 });
 const getFilterData = async (page: number = 1) => {
+  localStorage.setItem("indexVacationDaily", page.toString());
+
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
   await useVacationDailyStore()
@@ -101,10 +103,15 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+  let index = 1;
+
+  if (localStorage.getItem("indexVacationDaily") != undefined)
+    index = Number(localStorage.getItem("indexVacationDaily"));
+
   // must to wait fastSearch to get init value from localStorage.getItem
   await fastSearch.value;
-  await getFilterData(1);
- });
+  await getFilterData(index);
+});
 </script>
 <template>
   <IPage :HeaderTitle="t('VacationDaily')" :is-loading="isLoading">

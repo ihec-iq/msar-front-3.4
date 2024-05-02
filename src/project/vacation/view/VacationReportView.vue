@@ -57,6 +57,8 @@ const searchFilter = ref<IVacationFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
+  localStorage.setItem("indexVacationReport", page.toString());
+
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
@@ -108,7 +110,14 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.VacationReport]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  await getFilterData(1);
+  let index = 1;
+
+  if (localStorage.getItem("indexVacationReport") != undefined)
+    index = Number(localStorage.getItem("indexVacationReport"));
+
+  // must to wait fastSearch to get init value from localStorage.getItem
+  await fastSearch.value;
+  await getFilterData(index);
   if (inputRefSearch.value) {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
@@ -180,8 +189,8 @@ const headersExcel = {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow
-        ><div class="flex flex-col">
+      <IRow>
+        <div class="flex flex-col">
           <div class="inline-block min-w-full">
             <!-- card -->
             <div class="rounded-xl" v-if="isLoading == false">
@@ -235,20 +244,37 @@ const headersExcel = {
                       </IDropdown>
                     </template>
                   </ITable>
-                  <TailwindPagination
-                    class="flex justify-center mt-10"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="10"
-                  />
                 </div>
               </div>
             </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
+
             <!-- end card -->
           </div>
-        </div></IRow
-      >
+        </div>
+      </IRow>
+      <IRow v-if="data.length > 0">
+        <div class="w-full flex flex-row">
+          <div class="basis-4/5">
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
+          </div>
+          <div class="basis-1/5" v-if="data.length >= limits[0].id">
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </div>
+        </div>
+        <SimpleLoading v-if="isLoading">.</SimpleLoading>
+      </IRow>
     </IPageContent>
   </IPage>
   <div class="flex">

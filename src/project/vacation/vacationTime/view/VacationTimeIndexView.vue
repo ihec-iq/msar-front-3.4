@@ -61,6 +61,8 @@ const searchFilter = ref<IVacationTimeFilter>({
   employeeName: "",
 });
 const getFilterData = async (page: number = 1) => {
+    localStorage.setItem("indexVacationTime", page.toString());
+
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
   await useVacationTimeStore()
@@ -90,10 +92,12 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsTime]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+  let index = 1;
+  if (await localStorage.getItem("indexVacationTime") != undefined) index = Number(localStorage.getItem("indexVacationTime"));
 
   // must to wait fastSearch to get init value from localStorage.getItem
   await fastSearch.value;
-  await getFilterData(1);
+  await getFilterData(index);
 });
 </script>
 <template>
@@ -133,7 +137,7 @@ onMounted(async () => {
       <!-- Pagination -->
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
-          <div class="basis-4/5 hidden">
+          <div class="basis-4/5">
             <TailwindPagination
               class="flex justify-center mt-6"
               :data="dataPage"

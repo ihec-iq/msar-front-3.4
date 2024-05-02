@@ -72,6 +72,8 @@ const CNumber = (val: any = 0): number => {
 };
 
 const getFilterData = async (page: number = 1) => {
+    localStorage.setItem("indexVacationSick", page.toString());
+
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
 
@@ -97,9 +99,14 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsSick]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+let index = 1;
+
+  if (localStorage.getItem("indexVacationSick") != undefined)
+    index = Number(localStorage.getItem("indexVacationSick"));
+
   // must to wait fastSearch to get init value from localStorage.getItem
   await fastSearch.value;
-  await getFilterData(1);
+  await getFilterData(index);
 });
 </script>
 <template>
