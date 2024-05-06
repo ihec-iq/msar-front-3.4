@@ -22,6 +22,8 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
+import ITable from "@/components/ihec/ITable.vue";
+import IDropdown from "@/components/ihec/IDropdown.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -37,7 +39,7 @@ const fastSearch = ref("");
 const filterByIDName = (item: IStore) => {
   if (
     item.itemName.includes(fastSearch.value) ||
-    item.serialNumber.includes(fastSearch.value)
+    item.description.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -54,7 +56,7 @@ const makeFastSearch = () => {
 const searchFilter = ref<IStoreFilter>({
   item: "",
   limit: 10,
-  serialNumber: "",
+  description: "",
   summation: true,
 });
 const getFilterData = async (page = 1) => {
@@ -63,7 +65,7 @@ const getFilterData = async (page = 1) => {
   dataBase.value = [];
   isLoading.value = true;
   searchFilter.value.item = fastSearch.value;
-  searchFilter.value.serialNumber = fastSearch.value;
+  searchFilter.value.description = fastSearch.value;
 
   if (searchFilter.value.summation == true) {
     await get_summation(searchFilter.value, page)
@@ -112,13 +114,13 @@ onMounted(async () => {
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Item"), value: "itemName" },
-  { caption: t("SerialNumber"), value: "serialNumber" },
+  { caption: t("Details"), value: "actions" },
+  { caption: t("Description"), value: "description" },
   { caption: t("In"), value: "in" },
   { caption: t("Out"), value: "out" },
   { caption: t("AvailableInStock"), value: "count" },
   { caption: t("Price"), value: "price" },
   { caption: t("Stock"), value: "stockName" },
-  { caption: t("Details"), value: "actions" },
 ]);
 </script>
 <template>
@@ -152,7 +154,7 @@ const headers = ref<Array<ITableHeader>>([
         <ITable :items="data" :headers="headers">
           <template v-slot:actions="{ row }">
             <IDropdown>
-              <li>
+              <li >
                 <ShowButton @click="openItem(row.itemId)" />
               </li>
             </IDropdown>

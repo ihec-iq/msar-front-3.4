@@ -23,7 +23,7 @@ defineProps({
     v-if="items.length > 0"
     class="overflow-auto"
   >
-    <table class="w-full">
+    <table class="w-full pb-5">
       <caption></caption>
       <thead class="dark:bg-tableHead bg-[#7192AD] text-[#fff] shadow">
         <tr>

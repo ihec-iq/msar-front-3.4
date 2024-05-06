@@ -328,7 +328,7 @@ onMounted(async () => {
             <ICol span="1" span-md="1" span-sm="1">
               <ICheckbox v-model="isMoveSection" :checked="isMoveSection">
                 {{ t("Employee.isMoveSection") }} :
-                {{ isMoveSection ? " نعم " : " لا " }}</ICheckbox
+                {{ isMoveSection ? " نعم " : " كلا  " }}</ICheckbox
               >
             </ICol>
             <ICol span="1" span-md="1" span-sm="1">

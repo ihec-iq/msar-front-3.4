@@ -388,9 +388,17 @@ import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import { t } from "@/utilities/I18nPlugin";
 
+import printer from "@thiagoelg/node-printer";
+import util from "util";
+
 onMounted(async () => {
   //console.log(can("show items1"));
   isLoading.value = true;
+
+  // console.log(
+  //   "installed printers:\n" +
+  //     util.inspect(printer.getPrinters(), { colors: true, depth: 10 })
+  // );
 
   checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (Number.isNaN(id.value) || id.value === undefined) {

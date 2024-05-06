@@ -91,7 +91,7 @@ const getFilterData = async (page = 1) => {
   await useEmployeeStore()
     .getItemHistory(searchFilter.value, page)
     .then((response) => {
-      if (response.status == 200) {
+      if (response.status == 200) {console.log(response.data.data,searchFilter.value)
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
         dataBase.value = dataPage.value.data;
@@ -234,7 +234,7 @@ const headers = ref<Array<ITableHeader>>([
                     class="border-b border-black h-14 text-gray-100"
                   >
                     <th>{{ row.Voucher.Item.name }}</th>
-                    <th>{{ row.Voucher.serialNumber }}</th>
+                    <th>{{ row.Voucher.description }}</th>
                     <th>
                       <input
                         class="w-[50px] p-2"
@@ -437,7 +437,7 @@ const headers = ref<Array<ITableHeader>>([
                             </th>
                             <th>{{ row.Voucher.Item.name }}</th>
                             <th>{{ row.Voucher.date }}</th>
-                            <th>{{ row.Voucher.serialNumber }}</th>
+                            <th>{{ row.Voucher.description }}</th>
                             <th>{{ row.type }}</th>
                             <th>
                               <span
@@ -452,7 +452,7 @@ const headers = ref<Array<ITableHeader>>([
                               >
                             </th>
                             <th>{{ row.price.toLocaleString() }}</th>
-                            <th>{{ row.Voucher.Stock.name }}</th>
+                            <th>{{ row.Voucher?.Stock?.name }}</th>
                             <th>
                               <van-button
                                 class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"

@@ -64,7 +64,7 @@ export interface IEmployeeHistory {
     date: string;
     Item: IItem;
     Stock: IStock;
-    serialNumber: string;
+    description: string;
   };
 }
 export interface IEmployeeFilter {

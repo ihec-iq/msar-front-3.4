@@ -135,7 +135,8 @@ export default defineConfig({
   base: process.env.NODE_ENV === "production" ? "/10/" : "/",
   server: {
     watch: {
-      usePolling: true,
+      usePolling: true
     },
+    port: 1990
   },
 });

@@ -81,6 +81,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     };
   }
   async function get_filter(params: IEmployeeFilter, page: number) {
+    console.log(`${ pathUrl } / filter ? page = ${ page }`)
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function get_employee_positions() {

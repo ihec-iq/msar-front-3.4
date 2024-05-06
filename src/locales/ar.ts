@@ -72,6 +72,17 @@ export default {
     State:"من قبل",
     Number: "الرقم"
   },
+  DirectVoucher: {
+    Index: "الصرف المباشر",
+    Add : "",
+    Update : "",
+    Date: "تاريخ الادخال",
+    DateReceive: "تاريخ الاستلام",
+    DateBill: "تاريخ الطلبية",
+    NumberBill: "رقم الطلبية" ,
+    State:"من قبل",
+    Number: "الرقم"
+  },
   InputVoucherAdd: "اضافة الادخال مخزني",
   InputVoucherUpdate: "تعديل الادخال مخزني",
   InputVoucherNumber: "رقم العام",
@@ -85,7 +96,6 @@ export default {
   OutputVoucherEmployeeRequest: "طلبت من",
   OutputVoucherEmployeeAlter: "البديل",
   NumberVoucher: "رقم المستند",
-  DirectVoucher: "سند صرف مباشر",
   AvailableInStock: "المتوفر",
   RecordDaily: "عدد الايام",
   RecordSick: "عدد الايام",

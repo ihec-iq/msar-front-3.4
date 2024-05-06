@@ -110,10 +110,10 @@ onMounted(async () => {
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
+  { caption: t("Details"), value: "actions" },
   { caption: t("Section"), value: "section" },
   { caption: t("Employee.Position"), value: "position" },
   { caption: t("Employee.Type"), value: "type" },
-  { caption: t("Details"), value: "actions" },
 ]);
 </script>
 <template>
@@ -164,7 +164,7 @@ const headers = ref<Array<ITableHeader>>([
               </li>
               <li>
                 <EditButton
-                  :title="t('Employee.HistoryReport')"
+                  title="'Employee.HistoryReport'"
                   @click="history(row.id)"
                 />
               </li>

@@ -8,6 +8,28 @@ export default {
     Number: "Number",
     Employee: "Employee",
   },
+  InputVoucher: {
+    Index: "Input Voucher",
+    Add: "",
+    Update: "",
+    Date: "Date",
+    DateReceive: "Receive Date",
+    DateBill: "Bill Date",
+    NumberBill: "Number Bill",
+    State: "State",
+    Number: "Number"
+  },
+  DirectVoucher: {
+    Index: "Direct Voucher",
+    Add: "",
+    Update: "",
+    Date: "Date",
+    DateReceive: "Receive Date",
+    DateBill: "Bill Date",
+    NumberBill: "Number Bill",
+    State: "State",
+    Number: "Number"
+  },
   ID: "ID",
   Profile: "Profile",
   Archive: "Archive",
@@ -53,9 +75,6 @@ export default {
     Description: "Description"
   },
   Items: "Items",
-  InputVoucher: "Input Voucher",
-  InputVoucherAdd: "Add Input Voucher",
-  InputVoucherUpdate: "Edit Input Voucher",
   ItemAdd: "Add Item",
   InputVoucherNumber: "Number",
   InputVoucherEmployeeRequest: "Employee Request",
@@ -69,7 +88,6 @@ export default {
   OutputVoucherEmployeeAlter: "Employee Alter",
 
   NumberVoucher: "Number Voucher",
-  DirectVoucher: "Direct Voucher",
   AvailableInStock: "Available",
   RecordDaily: "Days",
   RecordSick: "Days",
@@ -118,7 +136,7 @@ export default {
     Section: "Section",
     IsPerson: "Type Account",
     isMoveSection: "Move to Section",
-    MoveSection : "Section Moved"
+    MoveSection: "Section Moved"
   },
 
   UserIndex: "User System",

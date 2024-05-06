@@ -2,7 +2,7 @@
 import { onMounted } from "vue";
 import { t } from "@/utilities/I18nPlugin";
 const props = defineProps({
-  title: { type: String, default: "تعديل" },
+  title: { type: String, default: "Edit" },
 });
 onMounted(() => {});
 </script>
@@ -11,7 +11,7 @@ onMounted(() => {});
     class="flex justify-between dropdown-item text-sm py-2 px-4 font-normal w-full whitespace-nowrap bg-transparent text-text dark:text-textLight hover:bg-gray-300 dark:hover:bg-gray-700"
     href="#"
   >
-    <div class="mr-4 text-lg">{{ title }}</div>
+    <div class="mr-4 text-lg"> {{ t(title) }} </div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -28,4 +28,3 @@ onMounted(() => {});
     </svg>
   </button>
 </template>
-@/utilities/I18nPlugin

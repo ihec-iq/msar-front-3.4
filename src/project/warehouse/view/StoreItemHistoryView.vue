@@ -27,6 +27,7 @@ import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
+import EditButton from "@/components/dropDown/EditButton.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -43,7 +44,7 @@ const fastSearch = ref("");
 const filterByIDName = (item: IStoreItemHistory) => {
   if (
     item.itemName.includes(fastSearch.value) ||
-    item.serialNumber.includes(fastSearch.value)
+    item.description.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -60,7 +61,7 @@ const makeFastSearch = () => {
 const searchFilter = ref<IStoreItemFilter>({
   itemId: "0",
   limit: 10,
-  serialNumber: "",
+  description: "",
   summation: true,
   isEmployee: false,
   employeeId: 0,
@@ -70,10 +71,10 @@ const getFilterData = async (page = 1) => {
   data.value = [];
   dataBase.value = [];
   isLoading.value = true;
-  searchFilter.value.serialNumber = fastSearch.value;
+  searchFilter.value.description = fastSearch.value;
   searchFilter.value.itemId = route.params.id.toString();
   console.log(searchFilter.value);
-  
+
   await get_item(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -102,6 +103,12 @@ const openItem = (id: number, billType: string) => {
     });
   }
 };
+const history = (id: number) => {
+  router.push({
+    name: "employeeHistory",
+    params: { id: id },
+  });
+};
 //#region Pagination
 //#endregion
 onMounted(async () => {
@@ -113,18 +120,17 @@ onMounted(async () => {
 
   await getFilterData(1);
   isLoading.value = false;
-
 });
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Item.Name"), value: "itemName" },
-  { caption: t("SerialNumber"), value: "serialNumber" },
+  { caption: t("Details"), value: "actions" },
+  { caption: t("Description"), value: "Description" },
   { caption: t("BillType"), value: "billType" },
   { caption: t("AvailableInStock"), value: "count" },
   { caption: t("Price"), value: "price" },
   { caption: t("Stock"), value: "stockName" },
   { caption: t("Employee.Title"), value: "name" },
-  { caption: t("Details"), value: "actions" },
 ]);
 </script>
 <template>
@@ -192,6 +198,12 @@ const headers = ref<Array<ITableHeader>>([
             <IDropdown>
               <li>
                 <ShowButton @click="openItem(row.voucherId, row.billType)" />
+              </li>
+              <li v-if="row.Employee.id > 0">
+                <EditButton
+                  :title="t('Employee.HistoryReport')"
+                  @click="history(row.Employee.id)"
+                />
               </li>
             </IDropdown>
           </template>
