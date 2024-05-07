@@ -60,7 +60,7 @@ const fastSearch = ref("");
 const filterByIDName = (item: IEmployeeHistory) => {
   if (
     item.Voucher.Item.name.includes(fastSearch.value) ||
-    item.Voucher.serialNumber.includes(fastSearch.value)
+    item.Voucher.description.includes(fastSearch.value)
   ) {
     return true;
   } else return false;

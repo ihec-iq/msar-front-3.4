@@ -27,17 +27,13 @@ const { validate, min, required, foreignKey, max, sameAs } = useValidation();
 
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
-const Loading = ref(false);
+const isLoading = ref(false);
 
 const rules: Array<IFieldValidation> = [
   {
     field: "title",
     caption: t("Title"),
-    rules: [
-      required(),
-      min(3),
-      max(100),
-    ],
+    rules: [required(), min(3), max(100)],
   },
   {
     field: "archiveTypeId",
@@ -51,7 +47,7 @@ const rules: Array<IFieldValidation> = [
   },
 ];
 
-const { archiveTypes } = storeToRefs(useArchiveStore());
+const { archiveTypes } = storeToRefs(useArchiveTypeStore());
 const { filesDataInput } = storeToRefs(useDragDropStore());
 
 //#region Vars
@@ -172,7 +168,7 @@ const Delete = () => {
 };
 
 const showData = async () => {
-  Loading.value = true;
+  isLoading.value = true;
   archive.value.files = [];
   await archiveStore
     .show(id.value)
@@ -196,7 +192,7 @@ const showData = async () => {
       ErrorToast();
       router.go(-1);
     });
-  Loading.value = false;
+  isLoading.value = false;
 };
 
 const updateList = () => {
@@ -204,8 +200,13 @@ const updateList = () => {
 };
 
 //#endregion
-
+window.onerror = function (msg, url, line, col, error) {
+     //code to handle or report error goes here
+     console.log(msg)
+     
+ }
 onMounted(async () => {
+  isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowArchives]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "ArchiveAdd";
@@ -216,20 +217,30 @@ onMounted(async () => {
     namePage.value = "ArchiveUpdate";
   }
   filesDataInput.value = [];
-  await useArchiveStore().getArchiveTypes();
+  await useArchiveTypeStore().getBySection();
+  isLoading.value = false;
 });
+const chackArchiveTypeLoad = async () => {
+  if (
+    archiveTypes.value.length == 0 ||
+    archiveTypes.value == undefined ||
+    archiveTypes.value == null
+  )
+  await useArchiveTypeStore().getBySection();
+};
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)">
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton2
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
@@ -270,6 +281,7 @@ import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
                 name="archiveTypeId"
                 :options="archiveTypes"
                 :IsRequire="true"
+                @click=chackArchiveTypeLoad()
             /></ICol>
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
@@ -313,7 +325,7 @@ import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
           <DragDrop></DragDrop>
           <div class="px-6">
             <div id="showFiles" class="p-0 flex flex-col w-full list-none">
-              <div class="w-64 content-center" v-if="Loading">
+              <div class="w-64 content-center" v-if="isLoading">
                 <div
                   class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
                   role="status"

@@ -1,15 +1,7 @@
-interface IconUserLink {
-  routerName: string;
-  title: string;
-  icon: string;
-  iconX: string;
-  tab: string;
-  description: string;
-  isActive: boolean;
-  children?: Array<IconUserLink>;
-}
-
-export const UserLinks: Array<IconUserLink> = [
+import type { IconLink } from "@/components/fixed/FixedMenu";
+import { EnumPermission } from "@/utilities/EnumSystem";
+ 
+export const UserLinks: Array<IconLink> = [
   {
     routerName: "userIndex",
     title: "المستخدمين",
@@ -19,6 +11,7 @@ export const UserLinks: Array<IconUserLink> = [
     tab: "Feature Admin",
     description: "التحكم في معلومات المستخدمين",
     isActive: true,
+    permissions: [EnumPermission.ShowUsers]
   },
   {
     routerName: "roleIndex",
@@ -29,5 +22,7 @@ export const UserLinks: Array<IconUserLink> = [
     tab: "Company",
     description: "كروبات الصلاحيات والتعديل عليها",
     isActive: true,
+    permissions: [EnumPermission.ShowUsers]
+
   },
 ];

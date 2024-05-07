@@ -23,11 +23,10 @@ const { directVoucher, directVoucherEmployees } = storeToRefs(
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(".....");
+const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
 const Loading = ref(false);
 const router = useRouter();
 const errors = ref<String | null>();
@@ -52,7 +51,6 @@ const VoucherItemTemp = ref<IDirectVoucherItem>({
   price: 0,
   value: 0,
   notes: "",
-  Employee: { id: 1, name: "" },
 });
 const AddPopup = () => {
   showPop.value = true;
@@ -76,7 +74,6 @@ const resetVoucherItem = () => {
     price: 0,
     value: 0,
     notes: "",
-    Employee: { id: 1, name: "" },
   };
 };
 //#endregion
@@ -377,7 +374,7 @@ onMounted(async () => {
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />

@@ -63,6 +63,13 @@ const filteredLinks = computed(() =>
     );
   })
 );
+const checkPermission = (per: string) => {
+  permissions.value.filter((permission) => {
+    // Check if any of the link's permissions are included in userPermissions
+    if (permission == per) return true;
+  });
+  return false;
+};
 // watch(nav, newSearchQuery => {
 //   if(nav.value != "undefined" || nav.value != undefined ){
 //     tab.value=nav.value?.toString()
@@ -198,12 +205,13 @@ const { user } = storeToRefs(useAuthStore());
                     :class="{ 'flex ': !isClose, hidden: isClose }"
                     class="rounded-md border-2 my-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
                   >
-                    <router-link
+                    <router-link 
                       :to="{ name: child.routerName }"
                       v-if="tab == Link.tab"
-                      class="cursor-pointer rounded-md  p-2"
+                      class="cursor-pointer rounded-md p-2"
                     >
-                      {{ child.title }}
+                     <span v-if="checkPermission(child.permissions[0])">{{ child.title }}</span> 
+                     {{ child.title }}
                     </router-link>
                   </div>
                 </div>
@@ -507,5 +515,4 @@ input[id="radio-3"]:checked ~ .glider {
   }
 } */
 </style>
-@/project/user/permissionStore
-@/utilities/I18nPlugin
+@/project/user/permissionStore @/utilities/I18nPlugin

@@ -10,6 +10,14 @@ export default [
     },
   },
   {
+    path: "/archivesPortal",
+    name: "archivePortal",
+    component: () => import("@/project/archive/view/ArchivePortalView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
     path: "/archive",
     name: "archiveAdd",
     component: () => import("@/project/archive/view/ArchiveView.vue"),

@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { t } from "@/utilities/I18nPlugin";
-import { UserLinks } from "../UserLinks";
-import { usePermissionStore } from "../permissionStore";
+import { ItemLinks } from "../ItemLinks";
+import { usePermissionStore } from "@/project/user/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import type CardPortalComponent from "@/components/CardPortalComponent.vue";
 const { checkPermissionAccessArray } = usePermissionStore();
-
+import CardPortalComponent from "@/components/CardPortalComponent.vue";
 //#region Pagination
 //#endregion
 onMounted(async () => {
@@ -16,7 +15,7 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('UserIndex')">
     <IPageContent>
-      <CardPortalComponent :links="UserLinks"></CardPortalComponent>
+      <CardPortalComponent :links="ItemLinks"></CardPortalComponent>
     </IPageContent>
   </IPage>
 </template>

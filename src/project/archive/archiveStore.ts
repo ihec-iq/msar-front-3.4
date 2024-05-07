@@ -62,45 +62,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     const path = `${pathBase}/document/delete/${id}`;
     return await Api.delete(path);
   }
-  async function getArchiveTypes() {
-    return await Api.get(`${pathBase}/archiveType/by/section`)
-      .then((response) => {
-        if (response.status == 200) {
-          archiveTypes.value = response.data.data;
-        }
-      })
-      .catch((errors) => {
-        console.log("in get ArchiveTypes : " + errors);
-      });
-  }
-
-  async function getArchiveTypeById(id: number) {
-    return await Api.get(`${pathBase}/archiveType/${id}`)
-      .then((response) => {
-        if (response.status == 200) {
-          archiveType.value = response.data.data;
-        }
-      })
-      .catch((errors) => {
-        console.log("in get ArchiveType by id : " + errors);
-      });
-  }
-
-  async function storeArchiveType(prams: object) {
-    return await Api.post(`${pathBase}/archiveType/store`, prams);
-  }
-
-  async function updateArchiveType(id: number, prams: object) {
-    return await Api.post(`${pathBase}/archiveType/update/${id}`, prams);
-  }
-
-  async function _deleteArchiveType(id: number) {
-    return await Api.delete(`${pathBase}/archiveType/delete/${id}`);
-  }
-
-  const resetArchiveType = () => {
-    archiveType.value = { id: 0, name: "", description: "" };
-  };
+  
 
   const resetData = () => {
     archive.value = {
@@ -120,15 +82,9 @@ export const useArchiveStore = defineStore("archiveStore", () => {
   return {
     archive,
     archiveTypes,
-    archiveType,
-    storeArchiveType,
-    updateArchiveType,
-    _deleteArchiveType,
-    resetArchiveType,
-    getArchiveTypeById,
+    archiveType, 
     get,
     get_filter,
-    getArchiveTypes,
     show,
     store,
     update,

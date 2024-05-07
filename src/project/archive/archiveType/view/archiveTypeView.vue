@@ -12,6 +12,8 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 import { ErrorToast, SuccessToast, WarningToast } from "@/utilities/Toast";
+import IForm from "@/components/ihec/IForm.vue";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 const { validate, min, required, max } = useValidation();
 
 const rules: Array<IFieldValidation> = [
@@ -172,14 +174,14 @@ const reset = () => {
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
     </template>
     <IPageContent>
       <IRow>
-        <IForm>
+        
           <IRow col-lg="2" col="2" col-md="2">
             <ICol>
               <IInput
@@ -204,7 +206,7 @@ const reset = () => {
             :onUpdate="updateObject"
             :onDelete="deleteObject"
           />
-        </IForm>
+         
       </IRow>
     </IPageContent>
   </IPage>

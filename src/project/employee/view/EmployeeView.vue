@@ -248,7 +248,7 @@ onMounted(async () => {
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />

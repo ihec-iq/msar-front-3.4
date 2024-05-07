@@ -2,9 +2,9 @@ import authMiddleware from "@/router/middleware/authMiddleware";
 
 export default [
   {
-    path: "/vacation",
-    name: "vacationIndex",
-    component: () => import("@/project/vacation/view/VacationIndexView.vue"),
+    path: "/vacationPortal",
+    name: "vacationPortal",
+    component: () => import("@/project/vacation/view/VacationPortalView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
