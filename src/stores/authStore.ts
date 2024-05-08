@@ -44,6 +44,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     localStorage.setItem("isAuthenticated", "1");
     localStorage.setItem("token", _token);
     Api.defaults.headers.common["Authorization"] = `Bearer ${_token}`;
+    isAuthenticated.value = true
   };
   //const PermissionStore = usePermissionStore();
   const setUser = (_user: IUser) => {

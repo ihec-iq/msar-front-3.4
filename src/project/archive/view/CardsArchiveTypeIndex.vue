@@ -23,7 +23,7 @@ const onClick = (index: number) => {
   ischecked.value = false;
 };
 onMounted(async () => {
-  await archiveTypeStore.getBySection();
+  await archiveTypeStore.getBySectionUser();
 });
 </script>
 <template>

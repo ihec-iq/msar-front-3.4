@@ -211,13 +211,14 @@ onMounted(async () => {
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "ArchiveAdd";
     archive.value.id = 0;
+    reset()
   } else {
     await showData();
     archive.value.id = id.value;
     namePage.value = "ArchiveUpdate";
   }
   filesDataInput.value = [];
-  await useArchiveTypeStore().getBySection();
+  await useArchiveTypeStore().getBySectionUser();
   isLoading.value = false;
 });
 const chackArchiveTypeLoad = async () => {
@@ -226,7 +227,7 @@ const chackArchiveTypeLoad = async () => {
     archiveTypes.value == undefined ||
     archiveTypes.value == null
   )
-  await useArchiveTypeStore().getBySection();
+  await useArchiveTypeStore().getBySectionUser();
 };
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";

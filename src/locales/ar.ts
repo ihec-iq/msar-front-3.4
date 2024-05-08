@@ -1,4 +1,5 @@
 export default {
+  Logout : "تسجيل الخروج",
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
   Warehouse: { Index: "نظام المخازن" },
   RetrievalVoucher: {

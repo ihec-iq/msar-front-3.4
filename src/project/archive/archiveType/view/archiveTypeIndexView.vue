@@ -21,7 +21,7 @@ onMounted(async () => {
      isLoading.value = true;
 
   checkPermissionAccessArray([EnumPermission.ShowArchiveTypes]);
-  await archiveTypeStore.getBySection();
+  await archiveTypeStore.getBySectionUser();
   isLoading.value = false;
 });
 

@@ -1,4 +1,5 @@
 export default {
+  Logout: "Logout",
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
   Warehouse: { Index: "Warehouse System" },
   RetrievalVoucher: {

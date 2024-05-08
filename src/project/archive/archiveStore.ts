@@ -21,6 +21,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     isInWord: "",
     archiveType: { id: 0, name: "" },
     archiveTypeId: 0,
+    archiveTypeName: ""
   });
   const archiveType = ref<IArchiveType>({ id: 0, name: "", description: "" });
   const archiveTypes = ref<IArchiveType[]>([]);
@@ -76,7 +77,8 @@ export const useArchiveStore = defineStore("archiveStore", () => {
       isIn: 1,
       isInWord: "",
       archiveType: { id: 0, name: "" },
-      archiveTypeId: 1,
+      archiveTypeId: 0,
+      archiveTypeName: ""
     };
   };
   return {

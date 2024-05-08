@@ -14,6 +14,7 @@ const props = defineProps<{
     number: string;
     description: string;
     issueDate: string;
+    archiveTypeName: string;
     files: { title: string; path: string; extension: string }[];
   };
 }>();
@@ -38,7 +39,7 @@ const formatArchiveDate = (value: string) => {
 
 <template>
   <div
-    class="grid grid-flow-row auto-rows-max box-border border dark:bg-darkNav dark:border-slate-700 dark:hover:bg-slate-900 bg-white transition-all duration-200 ease-in-out hover:shadow-inner"
+    class="grid grid-flow-row auto-rows-max box-border hover:bg-gray-100 border dark:bg-darkNav dark:border-slate-700 dark:hover:bg-slate-900 bg-white transition-all duration-200 ease-in-out hover:shadow-inner"
   >
     <div
       @click="router.push({ name: 'archiveUpdate', params: { id: item.id } })"
@@ -51,19 +52,26 @@ const formatArchiveDate = (value: string) => {
       <span
         class="flex-1 w-96 min-w-96 rtl:text-right font-semibold ltr:text-left text-xl p-4"
         >{{ item.number }}
-        <span v-if="item.description" class="font-thin">
+        <span v-if="item.description" class="font-thin text-sm">
           - {{ item.description }}</span
-        ></span
-      >
+        >
+        
+      </span>
+
       <span
         class="w-36 min-w-36 rtl:text-end ltr:text-start text-md p-4 justify-self-end"
-        >{{ formatArchiveDate(item.issueDate) }}</span
+      >
+        {{ formatArchiveDate(item.issueDate) }}</span
       >
     </div>
 
     <div v-if="item.files.length != 0" class="flex px-6 pb-2">
       <!-- empty div -->
       <div class="flex basis-96"></div>
+      <span
+          class="text-gray text-sm rounded-lg opacity-80 bg-orange-100 border-1 border border-orange-300 p-1 px-2 mx-2"
+          >{{ item.archiveTypeName }}</span
+        >
       <!-- chip -->
       <div
         v-if="item.files.length < 3"
