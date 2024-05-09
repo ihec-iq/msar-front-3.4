@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useStockStore } from "../../stockStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import { useItemStore } from "@/project/item/itemStore";
@@ -34,7 +34,7 @@ import {
 import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
- 
+
 const { validate, isArray, required, isObject } = useValidation();
 
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });
@@ -42,7 +42,7 @@ let validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "number",
-    caption: t("OutputVoucherNumber"),
+    caption: t("InputVoucherNumber"),
     rules: [required()],
   },
   // {
@@ -64,7 +64,7 @@ const rules: Array<IFieldValidation> = [
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("InputVoucherAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -355,6 +355,9 @@ const handleEnter = (event: KeyboardEvent) => {
   if (matchingOption === undefined && enteredValue.length > 0) {
     let btn = document.getElementById("my_modal_7");
     item.value.name = enteredValue;
+    item.value.code = "";
+    item.value.description = "";
+    item.value.measuringUnit = "";
     btn?.click();
     let NameItemEnterNew = document.getElementById("NameItemEnterNew");
     NameItemEnterNew?.focus();
@@ -384,6 +387,9 @@ function clearSelected(event: { target: { value: string } }) {
   }
 }
 const setItemFromChild = (_item: IItem) => {
+  _item.code = "";
+  _item.description = "";
+  _item.measuringUnit = "";
   VoucherItemTemp.value.Item = _item;
 };
 const headers = ref<Array<ITableHeader>>([

@@ -6,9 +6,9 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "../vacationStore";
 import type { IVacationFilter, IVacation } from "../IVacation";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { isNumber } from "@/utilities/tools";
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 import JsonExcel from "vue-json-excel3";
 
 const { t } = useI18n();

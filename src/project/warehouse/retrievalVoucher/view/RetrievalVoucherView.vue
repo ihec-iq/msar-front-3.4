@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useStockStore } from "../../stockStore";
 import { useRetrievalVoucherStore } from "./../retrievalVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
@@ -23,7 +23,7 @@ const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("RetrievalVoucher.Index");
 const route = useRoute();
 const id = ref(Number(route.params.id));

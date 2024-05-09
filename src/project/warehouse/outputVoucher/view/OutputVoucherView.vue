@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useStockStore } from "../../stockStore";
 import { useOutputVoucherStore } from "./../outputVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
@@ -54,7 +54,7 @@ const rules: Array<IFieldValidation> = [
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("OutputVoucher");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -412,7 +412,6 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Count"), value: "count" },
   { caption: t("Price"), value: "price" },
   { caption: t("Total"), value: "Total" },
-  { caption: t("Stock"), value: "Stock" },
   { caption: t("Notes"), value: "notes" },
   { caption: t("Actions"), value: "Actions" },
 ]);
@@ -526,8 +525,8 @@ const headers = ref<Array<ITableHeader>>([
                 <template v-slot:Item="{ row }">
                   {{ row.InputVoucherItem.Item.name }}
                 </template>
-                <template v-slot:Stock="{ row }">
-                  {{ row.InputVoucherItem.Stock.name }}
+                <template v-slot:Description="{ row }">
+                  {{ row.InputVoucherItem.description }}
                 </template>
                 <template v-slot:Total="{ row }">
                   {{ row.count * row.price }}
@@ -580,8 +579,8 @@ const headers = ref<Array<ITableHeader>>([
               :reduce="(_item: IInputVoucherItem) => _item"
               :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
             >
-              <template #option="{ Item, outValue, inValue, notes }">
-                <div class="rtl:text-right border-2 p-2 rounded-md">
+              <template #option="{ Item, outValue, inValue, notes,description }">
+                <div class="rtl:text-right border-2 p-2 rounded-md bg-gray-800 dark:bg-gray-100">
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
                   >
@@ -600,11 +599,12 @@ const headers = ref<Array<ITableHeader>>([
                       {{ Item.Category.name.toString() }}
                     </div>
                     <div
-                      v-if="Item.description"
+                      v-if="description"
                       class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                     >
                       {{ t("Item.Description") }}:
-                      {{ Item.description.toString() }}
+                      {{ description.toString() }}
+                     
                     </div>
                     <div
                       class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
@@ -616,10 +616,10 @@ const headers = ref<Array<ITableHeader>>([
                       {{ notes }}
                     </cite>
                   </cite>
-                  <br />
+                  <!-- <br />
                   <cite>
                     {{ Item.description }}
-                  </cite>
+                  </cite> -->
                 </div>
               </template>
             </vSelect>

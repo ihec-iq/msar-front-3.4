@@ -10,8 +10,8 @@ import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputV
 import { useRetrievalVoucherStore } from "@/project/warehouse/retrievalVoucher/retrievalVoucherStore";
 import { storeToRefs } from "pinia";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 const outputVoucherStore = useOutputVoucherStore();
 const retrievalVoucherStore = useRetrievalVoucherStore();

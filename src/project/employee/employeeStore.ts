@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IEmployee, IEmployeeFilter, IEmployeePosition, IEmployeeType } from "@/project/employee/IEmployee";
+import type { IEmployee, IEmployeeCenter, IEmployeeFilter, IEmployeePosition, IEmployeeType } from "@/project/employee/IEmployee";
 
 export const useEmployeeStore = defineStore("employeeStore", () => {
   const employee = ref<IEmployee>({
@@ -31,11 +31,17 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       id: 0,
       name: ""
     },
-    isMoveSection: 0
+    isMoveSection: 0,
+    Center: {
+      id: 0,
+      name: "",
+      code: ""
+    }
   });
   const employees = ref<Array<IEmployee>>([]);
   const employees_positions = ref<Array<IEmployeePosition>>([]);
   const employees_types = ref<Array<IEmployeeType>>([]);
+  const employees_centers = ref<Array<IEmployeeCenter>>([]);
 
   const pathBase = "";
   const pathUrl = `${pathBase}/employee`;
@@ -74,34 +80,50 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
         level: "",
         code: "",
       },
+      Center: {
+        id: 0,
+        name: "",
+        code: "",
+      },
       Type: {
         id: 0,
         name: "",
       },
+
     };
   }
   async function get_filter(params: IEmployeeFilter, page: number) {
-    console.log(`${ pathUrl } / filter ? page = ${ page }`)
+    console.log(`${pathUrl} / filter ? page = ${page}`)
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function get_employee_positions() {
     return await Api.get(`employee_position`).then((response: any) => {
-        if (response.status == 200) {
-          employees_positions.value = response.data.data;
-        }
-      })
+      if (response.status == 200) {
+        employees_positions.value = response.data.data;
+      }
+    })
       .catch((errors: any) => {
         console.log("in get employees_positions : " + errors);
       });
   }
   async function get_employee_types() {
     return await Api.get(`employee_type`).then((response: any) => {
-        if (response.status == 200) {
-          employees_types.value = response.data.data;
-        }
-      })
+      if (response.status == 200) {
+        employees_types.value = response.data.data;
+      }
+    })
       .catch((errors: any) => {
-        console.log("in get employees_positions : " + errors);
+        console.log("in get employee_type : " + errors);
+      });;
+  }
+  async function get_employee_centers() {
+    return await Api.get(`employee_center`).then((response: any) => {
+      if (response.status == 200) {
+        employees_centers.value = response.data.data;
+      }
+    })
+      .catch((errors: any) => {
+        console.log("in get employee_center : " + errors);
       });;
   }
   async function getItemHistory(params: IEmployeeFilter, page: number) {
@@ -126,6 +148,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     resetData,
     employees,
     employees_types,
+    employees_centers,
     employees_positions,
     get,
     get_filter,
@@ -133,6 +156,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     get_employees,
     get_employee_positions,
     get_employee_types,
+    get_employee_centers,
     show,
     store,
     update,

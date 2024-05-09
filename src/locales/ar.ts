@@ -137,6 +137,7 @@ export default {
     Position: "المنصب",
     Section: "الشعبة",
     Type: "المكان",
+    Center: "المركز",
     IsPerson: "نوع الحساب",
     isMoveSection : "منسب الى شعبة",
     MoveSection: "شعبة التنسيب"

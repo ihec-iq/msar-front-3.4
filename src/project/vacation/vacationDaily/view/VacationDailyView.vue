@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useVacationDailyStore } from "../vacationDailyStore";
 import { useVacationStore } from "../../vacationStore";
 import type { IEmployee } from "@/project/employee/IEmployee";
@@ -59,7 +59,7 @@ const rules: Array<IFieldValidation> = [
 
 import type { IVacation, IVacationReason } from "../../IVacation";
 //#region Vars
-const { checkPermissionAccessArray, can } = usePermissionStore();
+const { checkPermissionAccessArray, can } = usePermissionsStore();
 const namePage = ref("VacationDaily");
 const route = useRoute();
 const id = ref(Number(route.params.id));

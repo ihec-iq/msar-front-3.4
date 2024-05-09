@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 
 
 import type {
@@ -99,7 +99,7 @@ const getDataDaily = async (page: number = 1) => {
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));

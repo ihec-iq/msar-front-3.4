@@ -4,8 +4,8 @@ import { useRoute, useRouter } from "vue-router";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 import type {
   IRetrievalVoucher,
   IRetrievalVoucherFilter,

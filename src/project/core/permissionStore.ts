@@ -1,9 +1,23 @@
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { defineStore } from "pinia";
 import router from "@/router";
+import Api from "@/api/apiConfig";
 
-export const usePermissionStore = defineStore("PermissionStore", () => {
+export const usePermissionsStore = defineStore("PermissionStore", () => {
   const permissions = ref<string[]>([]);
+  const permissionsBase = ref<Array<string>>([]);
+  const UserPermissions = ref<Array<string>>([]);
+  async function get() {
+    if (permissions.value.length < 1) {
+      console.log('Get Permssions from DB')
+      await Api.get("/permission").then((response) => {
+        permissions.value = response.data.data;
+        permissionsBase.value = response.data.data;
+      });
+    }
+  }
+
+
   //const doubleCount = computed(() => count.value * 2);
   const can = (name: string) => {
     if (permissions.value?.length == 0) return 0;
@@ -31,10 +45,13 @@ export const usePermissionStore = defineStore("PermissionStore", () => {
     router.push("/unauthorized");
   };
   const setPermissions = (_permission: string[]) => {
-    permissions.value = _permission;
+    UserPermissions.value = _permission;
   };
   return {
     permissions,
+    permissionsBase,
+    UserPermissions,
+    get,
     can,
     canRedirect,
     checkPermissionAccess,

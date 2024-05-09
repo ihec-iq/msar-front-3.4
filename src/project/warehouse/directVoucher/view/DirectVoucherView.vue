@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useDirectVoucherStore } from "../directVoucherStore";
 import type { IDirectVoucherItem } from "../IDirectVoucher";
 import { t } from "@/utilities/I18nPlugin";
@@ -22,7 +22,7 @@ const { directVoucher, directVoucherEmployees } = storeToRefs(
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));

@@ -42,6 +42,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       measuringUnit: "",
     },
     description: "",
+    ItemDescription: "",
     count: 0,
     price: 0,
     value: 0,
@@ -100,7 +101,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       .then((response) => {
         if (response.status == 200) {
           inputVoucherItemsVSelect.value = response.data.data;
-          
+          //console.log(response.data.data)
         }
       })
       .catch((errors) => {
@@ -113,6 +114,8 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       .then((response) => {
         if (response.status == 200) {
           inputVoucherItemsVSelect.value = response.data.data;
+          //console.log(response.data.data)
+
         }
       })
       .catch((errors) => {

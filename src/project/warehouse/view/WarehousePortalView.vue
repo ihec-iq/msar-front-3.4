@@ -4,10 +4,10 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import { WarehouseLinks } from "./WarehouseLinks";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type CardPortalComponent from "@/components/CardPortalComponent.vue";
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 //#region Pagination
 //#endregion

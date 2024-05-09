@@ -135,6 +135,7 @@ export default {
     IdCard: "Employee IdCard",
     Position: "Position",
     Section: "Section",
+    Center: "Center",
     IsPerson: "Type Account",
     isMoveSection: "Move to Section",
     MoveSection: "Section Moved"

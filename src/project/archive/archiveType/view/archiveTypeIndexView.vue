@@ -4,13 +4,13 @@ import { useRouter } from "vue-router";
 import { useArchiveTypeStore } from "../archiveTypeStore";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import ArchiveTypeCard from "./archiveTypeCardComponent.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { storeToRefs } from "pinia";
 import IPage from "@/components/ihec/IPage.vue";
 
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
 const archiveTypeStore = useArchiveTypeStore();
 const { archiveTypes } = storeToRefs(useArchiveTypeStore());

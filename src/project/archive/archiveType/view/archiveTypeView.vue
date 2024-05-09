@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { useArchiveTypeStore } from "../archiveTypeStore";
@@ -26,7 +26,7 @@ const rules: Array<IFieldValidation> = [
 
 const archiveTypeStore = useArchiveTypeStore();
 const { archiveType } = useArchiveTypeStore();
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));

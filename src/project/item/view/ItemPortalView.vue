@@ -2,9 +2,9 @@
 import { onMounted } from "vue";
 import { t } from "@/utilities/I18nPlugin";
 import { ItemLinks } from "../ItemLinks";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 import CardPortalComponent from "@/components/CardPortalComponent.vue";
 //#region Pagination
 //#endregion

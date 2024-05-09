@@ -5,7 +5,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { Links } from "./FixedMenu";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 
 import { t } from "@/utilities/I18nPlugin";
 // import { useUserStore } from "@/stores/accounting/accounts/user";
@@ -52,7 +52,7 @@ const activeNames = ref(["1"]);
 // } )
 
 //#region nav menu
-const { permissions } = storeToRefs(usePermissionStore());
+const { permissions } = storeToRefs(usePermissionsStore());
 const filteredLinks = computed(() =>
   Links.filter((link) => {
     // Check if any of the link's permissions are included in userPermissions

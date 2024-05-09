@@ -19,6 +19,7 @@ export interface IEmployee {
   telegramId?: string;
   Position: IEmployeePosition;
   Type: IEmployeeType;
+  Center: IEmployeeCenter;
   initVacation: number;
   takeVacation: number;
   initVacationSick: number;
@@ -78,6 +79,11 @@ export interface IEmployeeFilter {
 export interface IEmployeeType {
   id: number; 
   name: string; 
+}
+export interface IEmployeeCenter {
+  id: number; 
+  name: string; 
+  code: string; 
 }
 export interface IEmployeePosition {
   id: number; 

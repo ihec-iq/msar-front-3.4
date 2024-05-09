@@ -3,7 +3,7 @@ import { reactive, ref, onMounted } from "vue";
 import { useRoleStore } from "../roleStore";
 import Swal from "sweetalert2";
 import type IRole from "../IRole.js";
-import { usePermissionsStore } from "../permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import type IPermission from "../IPermission";
 import { useRoute, useRouter } from "vue-router";
 import { useRtlStore } from "@/stores/i18n/rtlPi";

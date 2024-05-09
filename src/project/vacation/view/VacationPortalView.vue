@@ -3,9 +3,9 @@ import { onMounted } from "vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
 import { VacationLinks } from "./VacationLinks";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 //#region Pagination
 //#endregion

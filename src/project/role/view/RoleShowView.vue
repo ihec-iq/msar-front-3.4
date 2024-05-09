@@ -4,7 +4,7 @@ import { useRoleStore } from "../roleStore";
 import Swal from "sweetalert2";
 import type IRole from "../IRole.js";
 import { useRouter } from "vue-router";
-import { usePermissionsStore } from "../permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import PageTitle from "@/components/general/namePage.vue";
 import { t } from "@/utilities/I18nPlugin";
  

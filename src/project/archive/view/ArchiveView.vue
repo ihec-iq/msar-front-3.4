@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useArchiveStore } from "../archiveStore";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import FilePreview from "./FilePreview.vue";
 import DragDrop from "./DragDrop.vue";
 import { useDragDropStore } from "../dragDrop";
@@ -51,7 +51,7 @@ const { archiveTypes } = storeToRefs(useArchiveTypeStore());
 const { filesDataInput } = storeToRefs(useDragDropStore());
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("");
 const route = useRoute();
 const id = ref(Number(route.params.id));

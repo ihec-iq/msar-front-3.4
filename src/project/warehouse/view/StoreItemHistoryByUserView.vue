@@ -9,8 +9,8 @@ import type { IStoreItemHistory, IStoreItemFilter } from "../IStore";
 import { useStoringStore } from "../storingStore";
 import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 const outputVoucherStore = useOutputVoucherStore();
 const { outputVoucherEmployees } = storeToRefs(useOutputVoucherStore());

@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useItemStore } from "../itemStore";
 import { useItemCategoryStore } from "../itemCategoryStore";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 const emit = defineEmits(["setItem"]);
@@ -12,7 +12,7 @@ const emit = defineEmits(["setItem"]);
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const itemStore = useItemStore();
 const { item } = storeToRefs(useItemStore());
 const itemCategoryStore = useItemCategoryStore();
@@ -58,6 +58,7 @@ const reset = () => {
 const el = ref<HTMLInputElement>();
 onMounted(async () => {
   //console.log(can("show items1"));
+  reset()
   checkPermissionAccessArray([EnumPermission.ShowItems]);
   await itemCategoryStore.getFast();
   item.value.id = 0;

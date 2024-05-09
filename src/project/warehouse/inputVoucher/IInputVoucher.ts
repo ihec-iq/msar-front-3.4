@@ -22,6 +22,7 @@ export interface IInputVoucherItem {
   inputVoucherId?: number;
   Item: IItem;
   description: string;
+  ItemDescription?: string;
   count: number;
   price: number;
   value: number;
