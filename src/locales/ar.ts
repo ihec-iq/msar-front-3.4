@@ -100,6 +100,12 @@ export default {
   AvailableInStock: "المتوفر",
   RecordDaily: "عدد الايام",
   RecordSick: "عدد الايام",
+  Vacation: {
+    Record: "عدد",
+    DayFrom: "من تاريخ",
+    DayTo: "الى تاريخ",
+    Date: "تاريخ",
+  },
   VacationDaily: "اجازة اعتيادية",
   VacationDailyAdd: "اضافة اجازة اعتيادية",
   VacationDailyUpdate: "تعديل اجازة اعتيادية",
@@ -140,7 +146,8 @@ export default {
     Center: "المركز",
     IsPerson: "نوع الحساب",
     isMoveSection : "منسب الى شعبة",
-    MoveSection: "شعبة التنسيب"
+    MoveSection: "شعبة التنسيب",
+    VacationReport : "تقرير اجازات"
   },
   UserIndex: "بيانات المستخدمين",
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { t } from "@/utilities/I18nPlugin";
-import { UserLinks } from "../UserLinks";
+import { SettingLinks } from "../SettingLinks";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type CardPortalComponent from "@/components/CardPortalComponent.vue";
@@ -16,7 +16,7 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('UserIndex')">
     <IPageContent>
-      <CardPortalComponent :links="UserLinks"></CardPortalComponent>
+      <CardPortalComponent :links="SettingLinks"></CardPortalComponent>
     </IPageContent>
   </IPage>
 </template>

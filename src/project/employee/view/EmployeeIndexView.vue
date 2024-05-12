@@ -26,6 +26,7 @@ import IButton from "@/components/ihec/IButton.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
+import IPage from "@/components/ihec/IPage.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -69,6 +70,8 @@ const searchFilter = ref<IEmployeeFilter>({
   limit: 10,
 });
 const getFilterData = async (page = 1) => {
+  localStorage.setItem("indexEmployee", page.toString());
+
   isLoading.value = true;
   searchFilter.value.name = fastSearch.value;
   await get_filter(searchFilter.value, page)
@@ -100,12 +103,18 @@ const history = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await useSectionStore().get_sections();
 
-  await getFilterData(1);
+  let index = 1;
+
+  if (localStorage.getItem("indexEmployee") != undefined)
+    index = Number(localStorage.getItem("indexEmployee"));
+  await getFilterData(index);
+  isLoading.value = false;
 });
 
 const headers = ref<Array<ITableHeader>>([
@@ -117,7 +126,7 @@ const headers = ref<Array<ITableHeader>>([
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('EmployeeIndex')">
+  <IPage :HeaderTitle="t('EmployeeIndex')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -164,7 +173,7 @@ const headers = ref<Array<ITableHeader>>([
               </li>
               <li>
                 <EditButton
-                  title="'Employee.HistoryReport'"
+                  title="Employee.HistoryReport"
                   @click="history(row.id)"
                 />
               </li>
@@ -210,4 +219,3 @@ const headers = ref<Array<ITableHeader>>([
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

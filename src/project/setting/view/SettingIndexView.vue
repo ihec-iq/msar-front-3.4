@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useRoleStore } from "../roleStore";
-import type IRole from "../IRole";
 import Swal from "sweetalert2";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import SimpleLoading from "@/components/general/loading.vue";
@@ -12,6 +10,8 @@ import DeleteButton from "@/components/dropDown/DeleteButton.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import { t } from "@/utilities/I18nPlugin";
+import { useRoleStore } from "@/project/role/roleStore";
+import type IRole from "@/project/role/IRole";
 
 const router = useRouter();
 const roleData = ref<Array<IRole>>([]);
@@ -191,4 +191,3 @@ onMounted(async () => {
   }
 }
 </style>
-@/utilities/I18nPlugin

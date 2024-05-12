@@ -10,19 +10,22 @@ import { storeToRefs } from "pinia";
 import { t } from "@/utilities/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
-const rtlStore = useRtlStore();
+import IPage from "@/components/ihec/IPage.vue";
+import type IPermission from "../IPermission";
+import ICol from "@/components/ihec/ICol.vue";
+import IRow from "@/components/ihec/IRow.vue";
 const isLoading = ref(false);
 const permissionsStore = usePermissionsStore();
 const { permissions, permissionsBase } = storeToRefs(usePermissionsStore());
 const namePage = ref("Add Role");
 const router = useRouter();
 
-const checkedPermission = ref<Array<string>>([]);
+const checkedPermission = ref<IPermission[]>([]);
 const CheckAll = ref(false);
 const toggleCheck = () => {
   if (CheckAll.value) {
     checkedPermission.value = [];
-    permissionsStore.permissions.forEach((element: string) => {
+    permissionsStore.permissions.forEach((element: IPermission) => {
       checkedPermission.value.push(element);
     });
     //console.log(checkedPermission.value);
@@ -32,8 +35,8 @@ const toggleCheck = () => {
 };
 //#endregion
 const fastSearch = ref("");
-const filterByIDName = (item: string) => {
-  if (item.includes(fastSearch.value)) {
+const filterByIDName = (item: IPermission) => {
+  if (item.name.includes(fastSearch.value)) {
     return true;
   }
   return false;
@@ -41,7 +44,6 @@ const filterByIDName = (item: string) => {
 const makeFastSearch = () => {
   if (fastSearch.value == "") {
     permissions.value = permissionsBase.value;
-    console.log(permissionsBase.value);
   } else {
     permissions.value = permissionsStore.permissionsBase.filter(filterByIDName);
   }
@@ -116,6 +118,35 @@ const update = () => {
       });
     });
 };
+const showData = async () => {
+  isLoading.value = true;
+  await roleStore
+    .show(role.id)
+    .then((response) => {
+      if (response.status == 200) {
+        role.id = response.data.data.id;
+        role.name = response.data.data.name;
+        role.permissions = response.data.data.permissions;
+        //checkedPermission.value = response.data.data.permissions;
+        //console.log(response.data.data.permissions)
+        response.data.data.permissions.forEach((element: IPermission) => {
+          checkedPermission.value.push(element);
+        });
+      }
+    })
+    .catch((errors) => {
+      console.log(errors);
+      Swal.fire({
+        icon: "warning",
+        title: "Your Role file not exist !!!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        router.go(-1);
+      });
+    });
+  isLoading.value = false;
+};
 const route = useRoute();
 const id = Number(route.params.id);
 onMounted(async () => {
@@ -126,22 +157,10 @@ onMounted(async () => {
   } else {
     role.id = id;
     namePage.value = "Update Role";
-    roleStore.show(role.id).then((response) => {
-      if (response.status == 200) {
-        role.id = response.data.data.id;
-        role.name = response.data.data.name;
-        role.permissions = response.data.data.permissions;
-        //checkedPermission.value = response.data.data.permissions;
-        response.data.data.permissions.forEach((element: any) => {
-          checkedPermission.value.push(element.name);
-        });
-      }
-    });
+    await showData();
   }
   isLoading.value = false;
 });
-import IPage from "@/components/ihec/IPage.vue";
-
 </script>
 
 <template>
@@ -157,7 +176,6 @@ import IPage from "@/components/ihec/IPage.vue";
         </ICol>
       </IRow>
       <IRow>
-        <span class="text-start mb-4">{{ t("Permissions") }}</span>
         <ICol>
           <IInput
             v-model="fastSearch"
@@ -183,7 +201,7 @@ import IPage from "@/components/ihec/IPage.vue";
           <div
             class="flex mb-4 bg-[#35587087] p-2 mr-2 rounded-md text-gray-200"
             v-for="permission in permissionsStore.permissions"
-            :key="permission"
+            :key="permission.name"
           >
             <input
               type="checkbox"
@@ -192,7 +210,7 @@ import IPage from "@/components/ihec/IPage.vue";
               class="checkbox checkbox-md checkbox-success"
             />
             <label class="text-gray-200 ml-1 mr-4 capitalize">
-              {{ permission }}
+              {{ permission.name }}
             </label>
             <div class="relative flex flex-col items-center group">
               <svg

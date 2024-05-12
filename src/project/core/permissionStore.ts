@@ -2,10 +2,11 @@ import { onMounted, ref } from "vue";
 import { defineStore } from "pinia";
 import router from "@/router";
 import Api from "@/api/apiConfig";
+import type IPermission from "../role/IPermission";
 
 export const usePermissionsStore = defineStore("PermissionStore", () => {
-  const permissions = ref<string[]>([]);
-  const permissionsBase = ref<Array<string>>([]);
+  const permissions = ref<IPermission[]>([]);
+  const permissionsBase = ref<IPermission[]>([]);
   const UserPermissions = ref<Array<string>>([]);
   async function get() {
     if (permissions.value.length < 1) {
@@ -20,18 +21,18 @@ export const usePermissionsStore = defineStore("PermissionStore", () => {
 
   //const doubleCount = computed(() => count.value * 2);
   const can = (name: string) => {
-    if (permissions.value?.length == 0) return 0;
-    if (permissions.value?.includes(name)) return 1;
+    if (UserPermissions.value?.length == 0) return 0;
+    if (UserPermissions.value?.includes(name)) return 1;
     return 0;
   };
   const checkPermissionAccess = (name: string) => {
-    if (permissions.value?.length == 0) router.push("/unauthorized");
-    if (permissions.value?.includes(name)) return 1;
+    if (UserPermissions.value?.length == 0) router.push("/unauthorized");
+    if (UserPermissions.value?.includes(name)) return 1;
     router.push("/unauthorized");
   };
   const checkPermissionAccessArray = (names: string[]) => {
-    if (permissions.value?.length == 0) router.push("/unauthorized");
-    if (hasCommonItems(names, permissions.value)) return true;
+    if (UserPermissions.value?.length == 0) router.push("/unauthorized");
+    if (hasCommonItems(names, UserPermissions.value)) return true;
     router.push("/unauthorized");
   };
   function hasCommonItems(subArray: string[], array: string[]): boolean {
@@ -40,8 +41,8 @@ export const usePermissionsStore = defineStore("PermissionStore", () => {
     );
   }
   const canRedirect = (name: string) => {
-    if (permissions.value?.length == 0) router.push("/unauthorized");
-    if (permissions.value?.includes(name)) return 1;
+    if (UserPermissions.value?.length == 0) router.push("/unauthorized");
+    if (UserPermissions.value?.includes(name)) return 1;
     router.push("/unauthorized");
   };
   const setPermissions = (_permission: string[]) => {

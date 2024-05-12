@@ -25,6 +25,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
+import IPage from "@/components/ihec/IPage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -58,7 +59,6 @@ const searchFilter = ref<IVacationFilter>({
 });
 const getFilterData = async (page = 1) => {
   localStorage.setItem("indexVacationReport", page.toString());
-
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
@@ -66,6 +66,8 @@ const getFilterData = async (page = 1) => {
   searchFilter.value.employeeName = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
+      if (response.data.data == undefined || response.data.data == null)
+        window.location.reload();
       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
@@ -134,6 +136,7 @@ const ToNumberShow = (val: any) => {
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
+  { caption: t("Details"), value: "actions" },
   { caption: "الرصيد المستحق", value: "deservedRecord" },
   { caption: "مجموع المستنفذ", value: "totalTaken" },
   { caption: "الرصيد المتبقي", value: "remaining" },
@@ -143,7 +146,6 @@ const headers = ref<Array<ITableHeader>>([
   { caption: "رصيد المرضية", value: "deservedSickRecord" },
   { caption: "مستنفذ المرضية", value: "takenSick" },
   { caption: "متبقي المرضية", value: "remainingSick" },
-  { caption: t("Details"), value: "actions" },
 ]);
 const headersExcel = {
   الاسم: "name",

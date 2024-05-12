@@ -14,7 +14,7 @@ export default [
   },
   {
     path: "/setting/role/add",
-    name: "permissionAdd",
+    name: "roleAdd",
     component: () => import("./view/RoleView.vue"),
     meta: {
       middleware: [authMiddleware],
@@ -28,20 +28,5 @@ export default [
       middleware: [authMiddleware],
     },
   },
-  {
-    path: "/setting/role/permission",
-    name: "permissions",
-    component: permission,
-    meta: {
-      middleware: [authMiddleware],
-    },
-  },
-  {
-    path: "/setting/role/:id/update",
-    name: "roleUpdate",
-    component: roleUpdate,
-    meta: {
-      middleware: [authMiddleware],
-    },
-  },
+
 ];

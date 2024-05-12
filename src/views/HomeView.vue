@@ -5,13 +5,13 @@ import { usePermissionsStore } from "@/project/core/permissionStore";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 //#region nav menu
-const { permissions } = storeToRefs(usePermissionsStore());
+const { UserPermissions } = storeToRefs(usePermissionsStore());
 const filteredLinks = computed(() =>
   Links.filter((link) => {
     // Check if any of the link's permissions are included in userPermissions
-    if (permissions.value == undefined) return;
+    if (UserPermissions.value == undefined) return;
     return link.permissions.some((permission) =>
-      permissions.value.includes(permission)
+      UserPermissions.value.includes(permission)
     );
   })
 ); 

@@ -94,6 +94,12 @@ export default {
   RecordSick: "Days",
 
   VacationIndex: "Vacations System",
+  Vacation: {
+    Record: "Record",
+    DayFrom: "From Date",
+    DayTo: "To Date",
+    Date: "Date",
+  },
   VacationDaily: "Daily Vacation",
   VacationDailyAdd: "Add Daily Vacation",
   VacationDailyUpdate: "Update Daily Vacation",
@@ -138,7 +144,8 @@ export default {
     Center: "Center",
     IsPerson: "Type Account",
     isMoveSection: "Move to Section",
-    MoveSection: "Section Moved"
+    MoveSection: "Section Moved",
+    VacationReport: "Vacation Report"
   },
 
   UserIndex: "User System",

@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from "vue";
-import { useRoleStore } from "../roleStore";
-import Swal from "sweetalert2";
-import type IRole from "../IRole.js";
-import { usePermissionsStore } from "@/project/core/permissionStore";
-import type IPermission from "../IPermission";
-import { useRoute, useRouter } from "vue-router";
+ import Swal from "sweetalert2";
+ import { usePermissionsStore } from "@/project/core/permissionStore";
+ import { useRoute, useRouter } from "vue-router";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { t } from "@/utilities/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
+import type IPermission from "@/project/role/IPermission";
 const rtlStore = useRtlStore();
-const { isClose } = storeToRefs(rtlStore);
-
+ 
 const permissionsStore = usePermissionsStore();
 const namePage = ref("Add Role");
 const router = useRouter();

@@ -52,20 +52,20 @@ const activeNames = ref(["1"]);
 // } )
 
 //#region nav menu
-const { permissions } = storeToRefs(usePermissionsStore());
+const { UserPermissions } = storeToRefs(usePermissionsStore());
 const filteredLinks = computed(() =>
   Links.filter((link) => {
     // Check if any of the link's permissions are included in userPermissions
-    if (permissions.value == undefined) return;
+    if (UserPermissions.value == undefined) return;
     return link.permissions.some(
       (permission) =>
-        permissions.value.includes(permission) || permission == "public"
+        UserPermissions.value.includes(permission) || permission == "public"
     );
   })
 );
 const checkPermission = (per: string) => {
-  return permissions.value.some(
-    (permission) => permissions.value.includes(per) || permission == "public"
+  return UserPermissions.value.some(
+    (permission) => UserPermissions.value.includes(per) || permission == "public"
   );
 };
 // watch(nav, newSearchQuery => {
