@@ -78,7 +78,6 @@ const searchFilter = ref<IArchiveFilter>({
   issueDateFrom : new Date().toISOString().split("T")[0],
   issueDateTo : new Date().toISOString().split("T")[0],
   hasDate : false
-
 });
 const scrollPageTo = (navEl: string) => {
   let element = document.getElementById(navEl);

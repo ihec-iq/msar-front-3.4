@@ -32,7 +32,7 @@ const props = defineProps({
   },
 });
 const colClass = computed(() => {
-  let classStyle ="grid "
+  let classStyle = "grid ";
   if (props.col != null) classStyle += ` grid-cols-${props.col}`;
   if (props.colXl != null) classStyle += ` xl:grid-cols-${props.colXl}`;
   if (props.colLg != null) classStyle += ` lg:grid-cols-${props.colLg}`;
@@ -45,13 +45,12 @@ const debugClass = computed(() => {
   if (props.debug) return `border border-1 border-red-500`;
   return "";
 });
-
 </script>
 <template>
   <div
     name="Row#"
     :class="[colClass, debugClass]"
-    class="lg:justify-around xs:items-center mt-4 w-full ltr:pl-1 rtl:pr-1"
+    class="lg:justify-around xs:items-center mt-4 w-full px-1"
   >
     <div v-if="debug">{{ colClass }}</div>
     <slot></slot>

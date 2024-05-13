@@ -1,5 +1,5 @@
 export default {
-  Logout : "تسجيل الخروج",
+  Logout: "تسجيل الخروج",
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
   Warehouse: { Index: "نظام المخازن" },
   RetrievalVoucher: {
@@ -9,6 +9,7 @@ export default {
     Number: "رقم مستند",
     Employee: "الموظف",
   },
+  noData: "لا توجد بيانات",
   ID: "المعرف",
   Profile: "الملف الشخصي",
   Archive: "الارشيف",
@@ -56,7 +57,7 @@ export default {
     Unit: "الوحدة",
     Category: "صنف المادة",
     Sum: "المواد",
-    Description : "الوصف"
+    Description: "الوصف"
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -64,24 +65,24 @@ export default {
   ItemUpdate: "تحديث المادة",
   InputVoucher: {
     Index: "ادخال مخزني",
-    Add : "",
-    Update : "",
+    Add: "",
+    Update: "",
     Date: "تاريخ الادخال",
     DateReceive: "تاريخ الاستلام",
     DateBill: "تاريخ الطلبية",
-    NumberBill: "رقم الطلبية" ,
-    State:"من قبل",
+    NumberBill: "رقم الطلبية",
+    State: "من قبل",
     Number: "الرقم"
   },
   DirectVoucher: {
     Index: "الصرف المباشر",
-    Add : "",
-    Update : "",
+    Add: "",
+    Update: "",
     Date: "تاريخ الادخال",
     DateReceive: "تاريخ الاستلام",
     DateBill: "تاريخ الطلبية",
-    NumberBill: "رقم الطلبية" ,
-    State:"من قبل",
+    NumberBill: "رقم الطلبية",
+    State: "من قبل",
     Number: "الرقم"
   },
   InputVoucherAdd: "اضافة الادخال مخزني",
@@ -106,10 +107,18 @@ export default {
     DayTo: "الى تاريخ",
     Date: "تاريخ",
   },
-  VacationDaily: "اجازة اعتيادية",
-  VacationDailyAdd: "اضافة اجازة اعتيادية",
-  VacationDailyUpdate: "تعديل اجازة اعتيادية",
-  VacationTime: "اجازة زمنية",
+  VacationDaily: {
+    Title: "اجازة اعتيادية",
+    Add: "اضافة اجازة اعتيادية",
+    Update: "تعديل اجازة اعتيادية"
+  },
+  VacationTime: {
+    Title: "اجازة زمنية",
+    Record: "عدد",
+    TimeFrom: "من وقت",
+    TimeTo: "الى وقت",
+    Date: "تاريخ",
+  },
   VacationTimeRecord: "مدة الاجازة",
   VacationTimeAdd: "اضافة اجازة زمنية",
   VacationTimeUpdate: "تعديل اجازة زمنية",
@@ -145,9 +154,9 @@ export default {
     Type: "المكان",
     Center: "المركز",
     IsPerson: "نوع الحساب",
-    isMoveSection : "منسب الى شعبة",
+    isMoveSection: "منسب الى شعبة",
     MoveSection: "شعبة التنسيب",
-    VacationReport : "تقرير اجازات"
+    VacationReport: "تقرير اجازات"
   },
   UserIndex: "بيانات المستخدمين",
 

@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import type { IconLink } from "./fixed/FixedMenu";
 import { t } from "@/utilities/I18nPlugin";
+import { Icon } from "@iconify/vue";
 const props = defineProps({
   links: {
     type: Array<Object>,
@@ -40,6 +41,7 @@ const LinksBase = computed(() => {
                 class="dark:text-navIconColorHoverDark dark:hover:text-navIconColoDark hover:text-navIconColoDark text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover"
               >
                 <span v-html="Link.iconX" class="dark:text-content"></span>
+                <Icon v-if="Link?.mdi" :icon="Link?.mdi" class="dark:text-content size-16" ></Icon>
               </div>
 
               <h2 class="dark:text-gray-800 mt-4 text-xl font-medium sm:text-2xl ">

@@ -10,6 +10,7 @@ export interface IconLink {
   permissions: Array<string>;
   isActive: boolean;
   children?: Array<IconLink>;
+  mdi?: string
 }
 
 export const Links: Array<IconLink> = [

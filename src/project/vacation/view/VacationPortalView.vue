@@ -5,6 +5,7 @@ const { t } = useI18n();
 import { VacationLinks } from "./VacationLinks";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import CardPortalComponent from "@/components/CardPortalComponent.vue";
 const { checkPermissionAccessArray } = usePermissionsStore();
 
 //#region Pagination

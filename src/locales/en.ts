@@ -31,6 +31,8 @@ export default {
     State: "State",
     Number: "Number"
   },
+  noData: "No Data !!!",
+
   ID: "ID",
   Profile: "Profile",
   Archive: "Archive",
@@ -100,10 +102,18 @@ export default {
     DayTo: "To Date",
     Date: "Date",
   },
-  VacationDaily: "Daily Vacation",
-  VacationDailyAdd: "Add Daily Vacation",
-  VacationDailyUpdate: "Update Daily Vacation",
-  VacationTime: " Time Vacation",
+  VacationDaily: {
+    Title: "Daily Vacation",
+    Add: "Add Daily Vacation",
+    Update: "Update Daily Vacation"
+  },
+  VacationTime: {
+    Title: "Time Vacation",
+    Record: "Record",
+    TimeFrom: "From Time",
+    TimeTo: "To Time",
+    Date: "Date",
+  },
   VacationTimeRecord: "Time Record",
   VacationTimeAdd: "Add Time Vacation",
   VacationTimeUpdate: "Update Time Vacation",
