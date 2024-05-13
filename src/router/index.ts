@@ -1,29 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
-import notification from "@/views/NotificationView.vue";
-
 //#region Middleware
 import authMiddleware from "./middleware/authMiddleware";
 //#endregion
-
 //#region RouteArray
-import archiveRoute from "./archives/archiveRoute";
-import itemRoute from "./item/itemRoute";
-import inputVoucherRoute from "./warehouse/inputVoucherRoute";
-import outputVoucherRoute from "./warehouse/outputVoucherRoute";
-import corruptedVoucherRoute from "./warehouse/corruptedVoucherRoute";
-import directVoucherRoute from "./warehouse/directVoucherRoute";
-import itemCategoryRoute from "./item/itemCategoryRoute";
-import vacationRoute from "./vacation/vacationRoute";
-import userRoute from "./user/userRoute";
-import roleRoute from "./role/roleRoute";
-import warehouseRoute from "./warehouse/warehouseRoute";
-import employeeRoute from "./user/employeeRoute";
+import archiveRoute from "@/project/archive/archiveRoute";
+import itemRoute from "@/project/item/itemRoute";
+import itemCategoryRoute from "@/project/item/itemCategoryRoute";
+import vacationRoute from "@/project/vacation/vacationRoute";
+import userRoute from "@/project/user/userRoute";
+import roleRoute from "@/project/role/roleRoute";
+import warehouseRoute from "@/project/warehouse/warehouseRoute";
+import employeeRoute from "@/project/employee/employeeRoute";
 //#endregion
-
 import DefaultLayout from "@/views/layouts/MainView.vue";
 const router = createRouter({
   history: createWebHistory(
-    process.env.NODE_ENV === "production" ? "/10/" : "/"
+    process.env.NODE_ENV === "production" ? "/10/" : "/",
   ), //import.meta.env.BASE_URL
   linkExactActiveClass: "linkExactActiveClass",
   routes: [
@@ -34,6 +26,16 @@ const router = createRouter({
           name: "login",
           path: "",
           component: () => import("@/views/auth/LoginView.vue"),
+        },
+      ],
+    },
+    {
+      path: "/",
+      children: [
+        {
+          name: "start",
+          path: "/",
+          component: () => import("@/views/AboutView.vue"),
         },
       ],
     },
@@ -50,10 +52,6 @@ const router = createRouter({
         ...archiveRoute,
         ...itemRoute,
         ...itemCategoryRoute,
-        ...inputVoucherRoute,
-        ...outputVoucherRoute,
-        ...corruptedVoucherRoute,
-        ...directVoucherRoute,
         ...vacationRoute,
         ...userRoute,
         ...roleRoute,
@@ -81,22 +79,9 @@ const router = createRouter({
           component: () => import("@/views/ConnectionSettingView.vue"),
         },
         {
-          path: "/",
-          name: "start",
-          component: () => import("@/views/AboutView.vue"),
-        },
-        {
           path: "/unauthorized",
           name: "Unauthorized",
           component: () => import("@/views/UnauthorizedView.vue"),
-          meta: {
-            middleware: [authMiddleware],
-          },
-        },
-        {
-          path: "/notification",
-          name: "notification",
-          component: notification,
           meta: {
             middleware: [authMiddleware],
           },
@@ -125,4 +110,7 @@ router.beforeResolve(async (to, from, next) => {
   next();
   return;
 });
+router.onError(err => {
+  console.log('<!-- router error: ' + err.message + ' -->')
+})
 export default router;

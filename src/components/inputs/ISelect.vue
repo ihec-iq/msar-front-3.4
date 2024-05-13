@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { defineModel, defineProps } from "vue";
+import { onMounted, ref } from "vue";
 
 const modelValue = defineModel<any>();
 const emits = defineEmits<{
   //(e: "change", id: number): void;
   (e: "onChange"): void;
 }>();
-defineProps({
+const props = defineProps({
   name: {
     type: String,
     required: true,
@@ -23,24 +23,40 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  IsDisabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 const Change = () => {
   emits("onChange");
 };
 // import { useI18n } from "@/stores/i18n/useI18n";
 // const { t } = useI18n();
+
+const inputClasses = ref("_input");
+
+const checkRequired = () => {
+  if (!props.IsRequire) return;
+
+  if (modelValue.value) {
+    inputClasses.value = "_input";
+  } else {
+    inputClasses.value = "_input border border-red-500";
+  }
+};
 </script>
-<template>
-  <div class="mb-2 mx-1">
+<template>  
+  <div class="mb-2 mx-1" :class="{ disabled: IsDisabled }">
     <label class="_inputLabel" :for="name">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
-    <select
-      class="_input"
+    <select 
+      :class="inputClasses"
       :name="name"
-      :id="name"
       v-model="modelValue"
       @change="Change"
+      @focusout="checkRequired"
     >
       <option
         v-for="(option, index) in options"
@@ -52,3 +68,9 @@ const Change = () => {
     </select>
   </div>
 </template>
+<style scoped>
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
+</style>

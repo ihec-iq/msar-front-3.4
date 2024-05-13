@@ -45,7 +45,7 @@ if (props.icon != "") {
 </script>
 
 <template>
-  <button @click="onClick()" type="button" :class="buttonClass">
+  <button @click="onClick()" type="button" :class="buttonClass" class="focus:border-2">
     <svg
       v-if="props.icon != ''"
       class="fill-current w-4 h-4 mx-2"

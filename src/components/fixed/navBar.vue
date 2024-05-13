@@ -5,9 +5,9 @@ import { useAuthStore } from "@/stores/authStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { Links } from "./FixedMenu";
-import { usePermissionStore } from "@/stores/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 // import { useUserStore } from "@/stores/accounting/accounts/user";
 // import type IUser from "@/types/accounting/accounts/IUser";
 // const { get } = useUserStore();
@@ -52,17 +52,22 @@ const activeNames = ref(["1"]);
 // } )
 
 //#region nav menu
-const { permissions } = storeToRefs(usePermissionStore());
+const { UserPermissions } = storeToRefs(usePermissionsStore());
 const filteredLinks = computed(() =>
   Links.filter((link) => {
     // Check if any of the link's permissions are included in userPermissions
-    if (permissions.value == undefined) return;
+    if (UserPermissions.value == undefined) return;
     return link.permissions.some(
       (permission) =>
-        permissions.value.includes(permission) || permission == "public"
+        UserPermissions.value.includes(permission) || permission == "public"
     );
   })
 );
+const checkPermission = (per: string) => {
+  return UserPermissions.value.some(
+    (permission) => UserPermissions.value.includes(per) || permission == "public"
+  );
+};
 // watch(nav, newSearchQuery => {
 //   if(nav.value != "undefined" || nav.value != undefined ){
 //     tab.value=nav.value?.toString()
@@ -85,17 +90,19 @@ const setting = () => {
 onMounted(() => {
   userData.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
 });
+
+const { user } = storeToRefs(useAuthStore());
 </script>
 <template>
   <div
-    class="flex fixed h-full z-[999] bg-white dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
+    class="flex fixed h-full z-[999] bg-sideNav dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
     :class="[isClose ? 'lg:w-20 xs:w-[68px]' : 'lg:w-64  ']"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <div class="LeftNav z-50 bg-white dark:bg-darkNav flex flex-col h-full">
+    <div class="LeftNav z-50 bg-sideNav dark:bg-darkNav flex flex-col h-full">
       <div
-        class="bg-white dark:bg-darkNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
+        class="dark:bg-darkNav bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
       >
         <!-- little circule -->
         <div
@@ -142,23 +149,26 @@ onMounted(() => {
           :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
         >
           <div class="flex items-center">
+            <!-- ! the image in the assets is not rounded -->
+            <!-- *Old source: @/assets/logo-512x512.png -->
             <img
               @click="isClose = !isClose"
-              src="@/assets/logo-512x512.png"
-              alt=""
-              class="w-12 h-12 rounded-full border-2 align-middle"
+              src="@/assets/ihec-logo.jpg"
+              alt="Profile Picture"
+              class="w-14 h-14 rounded-full align-middle"
             />
             <div
               class="text-lg mt-1 ml-1 duration-700 w-28 dark:text-textLight text-text"
               :class="{ hidden: isClose, block: !isClose }"
             >
-              IHEC
+              {{ user?.Employee?.name }}
             </div>
           </div>
-          <hr
+          <!-- !Bug: the line displayed over the photo (current: IHEC logo) -->
+          <!-- <hr
             class="absolute top-14 left-5 duration-500"
             :class="{ 'lg:w-52 xs:w-40': !isClose, 'w-[40px] ': isClose }"
-          />
+          /> -->
         </div>
         <!-- main list -->
         <nav class="flex flex-col">
@@ -173,30 +183,30 @@ onMounted(() => {
                 :to="{ name: Link.routerName }"
                 @click.prevent="tab = Link.tab"
                 @mouseover="tab = Link.tab"
-                class=""
-              >
+               >
                 <button
-                  class="hover:text-[#444] btn-outline hover:rounded-2xl p-3 rounded-full bg-gray border-solid border-[#aaa] border-2 m-1 dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark duration-500"
+                  class="bg-[#FEFEFE] shadow-md  text-[#23A559] hover:text-[#FEFEFE] hover:bg-[#23A559]
+                   duration-500 fadeOut 2s ease-in-out btn-outline hover:rounded-2xl p-4
+                    rounded-full   border-none
+                      border-2 m-1  "
                   :title="Link.title"
                   v-html="Link.icon"
                 ></button
               ></router-link>
-              <!-- childrens -->
+              <!-- children -->
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
-                  class="p-2 text-base whitespace-pre-wrap cursor-pointer duration-500"
+                  class="p-2 text-gray-800 dark:text-gray-200 whitespace-pre-wrap cursor-pointer duration-500"
                 >
-                  <div
-                    v-for="child in Link.children"
-                    :key="child.routerName"
-                    :class="{ 'flex ': !isClose, hidden: isClose }"
-                    class="rounded-md border-2 my-2 hover:bg-gray-200"
-                  >
+                  <div v-for="(child, index) in Link.children" :key="index">
                     <router-link
                       :to="{ name: child.routerName }"
-                      v-if="tab == Link.tab"
-                      class="cursor-pointer rounded-md p-2"
+                      v-if="
+                        tab == Link.tab && checkPermission(child.permissions[0])
+                      "
+                      class="cursor-pointer rounded-md p-2 border-2 my-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
+                      :class="{ 'flex ': !isClose, hidden: isClose }"
                     >
                       {{ child.title }}
                     </router-link>
@@ -209,7 +219,7 @@ onMounted(() => {
         <!-- setting -->
         <div class="">
           <!-- #region setting icon -->
-          <button
+          <!-- <button
             @click="settingPop = !settingPop"
             class="dark:text-textGray border-none dark:hover:text-navIconColorHoverDark bg-transparent p-4 inline-flex justify-center rounded-md hover:bg-transparent text-iconLight hover:text-iconHoverLight smooth-hover"
             :class="{
@@ -229,7 +239,7 @@ onMounted(() => {
                 clip-rule="evenodd"
               />
             </svg>
-          </button>
+          </button> -->
           <!-- #endregion -->
         </div>
       </div>
@@ -429,7 +439,8 @@ li:hover > button svg {
   display: flex;
   position: relative;
   background-color: #6b7280;
-  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15),
+  box-shadow:
+    0 0 1px 0 rgba(24, 94, 224, 0.15),
     0 6px 12px 0 rgba(24, 94, 224, 0.15);
   padding: 0.75rem;
   border-radius: 20px;
@@ -501,4 +512,4 @@ input[id="radio-3"]:checked ~ .glider {
   }
 } */
 </style>
-@/stores/permissionStore
+@/project/user/permissionStore @/utilities/I18nPlugin

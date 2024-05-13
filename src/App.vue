@@ -3,13 +3,13 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/authStore";
-//import { usePermissionStore } from "@/stores/permissionStore";
+//import { usePermissionsStore } from "@/project/core/permissionStore";
 import Api from "./api/apiConfig";
 import { useConfigStore } from "@/stores/configStore";
 const { ConnectionString } = storeToRefs(useConfigStore());
 
 // const { getUser } = useAuthStore();
-// const { setPermissions } = usePermissionStore();
+// const { setPermissions } = usePermissionsStore();
 // const { CheckAuth } = useAuthStore();
 
 const rtlStore = useRtlStore();
@@ -57,14 +57,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <RouterView class="font-Tajawal"></RouterView>
+  <RouterView class="font-Tajawal image-bg"></RouterView>
 </template>
 <style scoped>
 .dark .image-bg {
   background-image: none;
 }
 .image-bg {
-  background-image: url("./assets/image/beams-home@95.jpg");
+  background-image: url("@/assets/image/beams-home@95.jpg");
 }
 </style>
-@/stores/configStore

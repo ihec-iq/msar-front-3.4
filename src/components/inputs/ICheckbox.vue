@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineModel, defineProps } from "vue";
-
 const modelValue = defineModel<boolean>();
 
 defineProps({

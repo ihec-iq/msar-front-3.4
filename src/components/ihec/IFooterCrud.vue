@@ -1,8 +1,7 @@
 <script setup lang="ts">
-
 import { useRouter } from "vue-router";
 const router = useRouter();
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 import IButton from "./IButton.vue";
 import IButton2 from "./IButton2.vue";
 
@@ -53,10 +52,9 @@ const goBack = () => {
 };
 </script>
 <template>
-  <div
-    class="max-w-screen-xl flex flex-wrap flex-row-reverse justify-between p-4"
-  >
-    <div class="flex gap-3">
+  <div class="flex flex-wrap flex-row-reverse justify-between p-4">
+    <div class="flex gap-3 ">
+      <slot name="Pre"></slot>
       <IButton
         v-if="props.isAdd && props.showAdd"
         :text="t(titleAdd)"
@@ -74,6 +72,8 @@ const goBack = () => {
         :text="t(titleDelete)"
         :onClick="props.onDelete"
       />
+      <slot name="Post"></slot>
+
     </div>
     <IButton2
       color="red"
@@ -85,3 +85,4 @@ const goBack = () => {
     />
   </div>
 </template>
+@/utilities/I18nPlugin

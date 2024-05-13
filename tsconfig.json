@@ -12,6 +12,8 @@
     }
   ],
   "compilerOptions": {
+    "strict": true,
+    "target": "es6",
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -20,5 +22,12 @@
     },
     "noImplicitAny": false,
     "allowJs": true,
+    "module": "es2022",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true
   },
+  "include": [
+    "src/**/*",
+    "package.json" // <---
+  ]
 }

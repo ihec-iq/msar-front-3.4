@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { i18nRepository } from "@/stores/i18n/I18nRepository";
-const st = i18nRepository.getState();
-const t = (text: string) => {
-  return st.langTextRepo[st.info.lang][text] || text;
-};
+import { t } from "@/utilities/I18nPlugin";
+const props = defineProps({
+  title: { type: String, default: "Show" },
+});
 </script>
 <template>
   <button
     class="flex justify-between dropdown-item text-sm py-2 px-4 font-normal w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700"
     href="#"
   >
-    <div class="mr-4 text-lg">{{ t("show") }}</div>
+    <div class="mr-4 text-lg">{{ t(title) }}</div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

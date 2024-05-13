@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import envConfig from "@/api/envConfig";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permissionStore";
-import { t } from "@/utils/I18nPlugin";
+import { usePermissionsStore } from "@/project/core/permissionStore";
+import { t } from "@/utilities/I18nPlugin";
 const rtlStore = useRtlStore();
 import { useConfigStore } from "@/stores/configStore";
-
+import { ref, getCurrentInstance, onMounted } from "vue";
 const { ConnectionString, Organization } = storeToRefs(useConfigStore());
 const { is } = storeToRefs(rtlStore);
 
@@ -19,7 +18,8 @@ const { is } = storeToRefs(rtlStore);
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const app = getCurrentInstance();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref(t("ConfigServer"));
 const route = useRoute();
 const Loading = ref(false);
@@ -35,7 +35,6 @@ const store = async () => {
     .store(String(ConnectionString.value), String(Organization.value))
     .then(() => {
       Swal.fire({
-        position: "top-end",
         icon: "success",
         title: "Your configuration has been updated",
         showConfirmButton: false,
@@ -95,7 +94,8 @@ onMounted(async () => {
     <div
       :class="{
         'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom': !is,
+        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
+          !is,
       }"
       class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
     >
@@ -207,4 +207,4 @@ button {
   text-align: right !important;
 }
 </style>
-@/stores/configStore@/stores/permissionStore
+@/project/user/permissionStore@/utilities/I18nPlugin
