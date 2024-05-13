@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useItemStore } from "../itemStore";
 import { useItemCategoryStore } from "../itemCategoryStore";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 const emit = defineEmits(["setItem"]);
@@ -12,9 +12,7 @@ const emit = defineEmits(["setItem"]);
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
-const namePage = ref(t("ItemAdd"));
-
+const { checkPermissionAccessArray } = usePermissionsStore();
 const itemStore = useItemStore();
 const { item } = storeToRefs(useItemStore());
 const itemCategoryStore = useItemCategoryStore();
@@ -60,6 +58,7 @@ const reset = () => {
 const el = ref<HTMLInputElement>();
 onMounted(async () => {
   //console.log(can("show items1"));
+  reset()
   checkPermissionAccessArray([EnumPermission.ShowItems]);
   await itemCategoryStore.getFast();
   item.value.id = 0;
@@ -79,9 +78,10 @@ onMounted(async () => {
           </div>
           <input
             ref="el"
+            id="NameItemEnterNew"
             v-model="item.name"
             type="text"
-            class="w-full outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />
         </div>
         <div class="w-11/12 mr-2">
@@ -93,7 +93,7 @@ onMounted(async () => {
 
           <select
             v-model="item.Category.id"
-            class="w-full outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           >
             <option
               v-for="category in categories"
@@ -113,7 +113,7 @@ onMounted(async () => {
           <input
             v-model="item.code"
             type="text"
-            class="w-full outline-none h-10 px-3 border-2 border-gray-500 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 border-2 border-gray-500 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />
         </div>
         <div class="w-11/12 mx-2">
@@ -125,7 +125,7 @@ onMounted(async () => {
           <input
             v-model="item.measuringUnit"
             type="text"
-            class="w-full outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />
         </div>
       </div>
@@ -138,7 +138,7 @@ onMounted(async () => {
         <input
           v-model="item.description"
           type="text"
-          class="w-full outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />
       </div>
       <!-- bottom tool bar -->
@@ -150,7 +150,7 @@ onMounted(async () => {
             <button
               v-if="item.id == 0"
               @click="store()"
-              class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-30 sm:w-30 md:w-30 rounded-lg text-white"
+              class="bg-create focus:outline-none focus:ring-0 focus:border-gray-900 hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-30 sm:w-30 md:w-30 rounded-lg text-white"
             >
               {{ t("Create") }}
             </button>

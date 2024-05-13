@@ -5,8 +5,8 @@ import { useVacationDailyStore } from "../vacationDailyStore";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 import type { IVacationDaily, IVacationDailyFilter } from "../IVacationDaily";
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -71,9 +71,10 @@ const searchFilter = ref<IVacationDailyFilter>({
   employeeName: "",
 });
 const getFilterData = async (page: number = 1) => {
-  isLoading.value = true;
-  searchFilter.value.employeeName = fastSearch.value.toString();
+  localStorage.setItem("indexVacationDaily", page.toString());
 
+  isLoading.value = true;
+  searchFilter.value.employeeName = fastSearch.value;
   await useVacationDailyStore()
     .get_filter(searchFilter.value, page)
     .then((response) => {
@@ -102,10 +103,15 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+  let index = 1;
+
+  if (localStorage.getItem("indexVacationDaily") != undefined)
+    index = Number(localStorage.getItem("indexVacationDaily"));
+
   // must to wait fastSearch to get init value from localStorage.getItem
   await fastSearch.value;
-  await getFilterData(1);
- });
+  await getFilterData(index);
+});
 </script>
 <template>
   <IPage :HeaderTitle="t('VacationDaily')" :is-loading="isLoading">

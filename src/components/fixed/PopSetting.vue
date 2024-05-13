@@ -7,7 +7,7 @@ import { t, setLocale, Languages } from "@/utilities/I18nPlugin";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
-let isDark = useDark(); 
+let isDark = useDark();
 const toggleDark = useToggle(isDark);
 const changeDark = () => {
   isDark.value = !isDark.value;
@@ -19,8 +19,9 @@ const change = () => {
 };
 
 import { useAuthStore } from "@/stores/authStore";
+import IButton2 from "../ihec/IButton2.vue";
 const AuthStore = useAuthStore();
-const { isAuthenticated } = storeToRefs(AuthStore);
+const { isAuthenticated } = storeToRefs(useAuthStore());
 const logout = () => {
   AuthStore.logout();
 };
@@ -94,14 +95,9 @@ const colorMode = useColorMode({
           </div>
           <div class="switch4">
             <label class="switch">
-              <input
-                type="checkbox"
-                @input="changeDark()"
-                v-model="isDark"
-              />
+              <input type="checkbox" @input="changeDark()" v-model="isDark" />
               <span class="slider"></span>
             </label>
-            
           </div>
         </div>
         <div class="flex items-center justify-around mx-6 w-full">
@@ -149,6 +145,23 @@ const colorMode = useColorMode({
             </div>
           </div>
         </div>
+        <div
+          class="flex items-center justify-around mx-6 w-full mt-5"
+          v-if="isAuthenticated"
+        >
+          <div class="text-text dark:text-textLight font-bold text-lg">
+            {{ t("Logout") }}
+          </div>
+          <div class="flex items-center">
+            <IButton2
+              type="outlined"
+              pre-icon="logout"
+              color="red"
+              :on-click="logout"
+              width="32"
+            />
+          </div>
+        </div>
         <!-- <div class="mt-10 flex item-center justify-between mx-6">
           <div class="text-text dark:text-textLight font-bold text-lg">
             {{ t("Change Color") }}
@@ -190,21 +203,6 @@ const colorMode = useColorMode({
             </div>
           </div>
         </div> -->
-      </div>
-      <div class="flex w-full mt-2" v-if="isAuthenticated">
-        <div class="flex items-center justify-around mx-6 w-full">
-          <div class="text-text dark:text-textLight font-bold text-lg">
-            {{ t("Logout") }}
-          </div>
-        </div>
-        <div class="w-full">
-          <IButton2
-            type="default"
-            text="Logout"
-            pre-icon="logout"
-            :on-click="logout"
-          ></IButton2>
-        </div>
       </div>
       <div class="flex absolute bottom-14 w-full">
         <div

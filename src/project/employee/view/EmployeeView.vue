@@ -5,7 +5,7 @@ import { useEmployeeStore } from "../employeeStore";
 import { useSectionStore } from "@/project/section/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 
 import { t } from "@/utilities/I18nPlugin";
 import type { IUser } from "@/project/user/IUser";
@@ -13,20 +13,23 @@ import { useUserStore } from "@/project/user/userStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import ISelect from "@/components/inputs/ISelect.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import IVSelect from "@/components/inputs/IVSelect.vue";
 
 //region"Drag and Drop"
 
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("EmployeeAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isPerson = ref(false);
+const isMoveSection = ref(false);
 
 const employeeStore = useEmployeeStore();
-const { employee, employees_types, employees_positions } =
+const { employee, employees_types, employees_positions, employees_centers } =
   storeToRefs(useEmployeeStore());
 const sectionStore = useSectionStore();
 const { sections } = storeToRefs(useSectionStore());
@@ -45,12 +48,16 @@ const store = () => {
   errors.value = null;
   const formData = new FormData();
   employee.value.isPerson = isPerson.value ? 1 : 0;
+  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
   formData.append("id", employee.value.id.toString());
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
+  formData.append("isMoveSection", employee.value.isMoveSection.toString());
+  formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
   formData.append("positionId", employee.value.Position.id.toString());
   formData.append("typeId", employee.value.Type.id.toString());
+  formData.append("centerId", employee.value.Center.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
   formData.append("telegramId", String(employee.value.telegramId));
@@ -94,15 +101,20 @@ function update() {
   errors.value = null;
   const formData = new FormData();
   employee.value.isPerson = isPerson.value ? 1 : 0;
+  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
+
   formData.append("name", employee.value.name.toString());
   formData.append("isPerson", employee.value.isPerson.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
+  formData.append("isMoveSection", employee.value.isMoveSection.toString());
+  formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
   formData.append("positionId", employee.value.Position.id.toString());
   formData.append("typeId", employee.value.Type.id.toString());
+  formData.append("centerId", employee.value.Center.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
   formData.append("telegramId", String(employee.value.telegramId));
-  formData.append("idCard", employee.value.idCard.toString());
+  formData.append("idCard", String(employee.value.idCard));
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
   formData.append(
@@ -179,13 +191,16 @@ const showData = async () => {
         employee.value.idCard = response.data.data.idCard;
         employee.value.number = response.data.data.number;
         employee.value.telegramId = response.data.data.telegramId;
-        employee.value.Section.id = response.data.data.Section.id;
-        employee.value.Section.name = response.data.data.Section.name;
+        employee.value.Section = response.data.data.Section;
+        employee.value.MoveSection = response.data.data.MoveSection;
         employee.value.User = response.data.data.User;
         employee.value.Type = response.data.data.Type;
+        employee.value.Center = response.data.data.Center;
         employee.value.Position = response.data.data.Position;
         employee.value.isPerson = response.data.data.isPerson;
         isPerson.value = response.data.data.isPerson == 0 ? false : true;
+        isMoveSection.value =
+          response.data.data.isMoveSection == 0 ? false : true;
       }
     })
     .catch((errors) => {
@@ -207,6 +222,13 @@ const back = () => {
     name: "employeeIndex",
   });
 };
+const ShowUser = () => {
+  let userId = employee.value.User?.id;
+  router.push({
+    name: "userUpdate",
+    params: { id: userId },
+  });
+};
 const isLoading = ref(false);
 onMounted(async () => {
   isLoading.value = true;
@@ -215,6 +237,7 @@ onMounted(async () => {
   await sectionStore.get_sections();
   await employeeStore.get_employee_types();
   await employeeStore.get_employee_positions();
+  await employeeStore.get_employee_centers();
   await useUserStore()
     .get_lite()
     .then((response) => {
@@ -238,83 +261,97 @@ onMounted(async () => {
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
     </template>
     <IPageContent>
       <IRow>
-        <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="1" span-md="1" span-sm="1">
-              <IInput
-                :label="t('Name')"
-                name="Name"
-                v-model="employee.name"
-                type="text"
-            /></ICol>
-            <ICol span="1" span-md="1" span-sm="1">
-              <IInput
-                :label="t('Employee.Number')"
-                name="Employee.Number"
-                v-model="employee.number"
-                type="text"
-            /></ICol>
-            <ICol span="1" span-md="1" span-sm="1">
-              <IInput
-                :label="t('Employee.Telegram')"
-                name="EmployeeTelegram"
-                v-model="employee.telegramId"
-                type="text"
-            /></ICol>
-            <ICol span="1" span-md="1" span-sm="1">
-              <IInput
-                :label="t('Employee.IdCard')"
-                name="EmployeeIdCard"
-                v-model="employee.idCard"
-                type="text"
-            /></ICol>
-            <ICol span="1" span-md="1" span-sm="1">
-              <ISelect
-                :label="t('Section')"
-                v-model="employee.Section.id"
-                name="archiveTypeId"
-                :options="sections"
-                :IsRequire="true"
-            /></ICol>
-            <ICol span="1" span-md="1" span-sm="1">
-              <ISelect
-                :label="t('EmployeePosition')"
-                v-model="employee.Position.id"
-                name="PostionId"
-                :options="employees_positions"
-                :IsRequire="true"
-            /></ICol>
-            <ICol span="1" span-md="1" span-sm="1">
-              <ISelect
-                :label="t('Employee.Type')"
-                v-model="employee.Type.id"
-                name="TypeId"
-                :options="employees_types"
-                :IsRequire="true"
-            /></ICol>
-            <ICol span="1" span-md="1" span-sm="1">
-              <IVSelect
-                :label="t('User')"
-                v-model="employee.User"
-                name="archiveTypeId"
-                :options="SelectedUsers"
-                :IsRequire="true"
-              />
-            </ICol>
-            <ICol span="1" span-md="1" span-sm="1">
-              <ICheckbox v-model="isPerson" :checked="isPerson">
-                {{ t("Employee.IsPerson") }} :
-                {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
-              >
-            </ICol>
-            <!-- <ICol span="1" span-md="2" span-sm="4">
+        <IRow col-lg="4" col-md="2" col-sm="1">
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput
+              :label="t('Name')"
+              name="Name"
+              v-model="employee.name"
+              type="text"
+          /></ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput
+              :label="t('Employee.Number')"
+              name="Employee.Number"
+              v-model="employee.number"
+              type="text"
+          /></ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput
+              :label="t('Employee.Telegram')"
+              name="EmployeeTelegram"
+              v-model="employee.telegramId"
+              type="text"
+          /></ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput
+              :label="t('Employee.IdCard')"
+              name="EmployeeIdCard"
+              v-model="employee.idCard"
+              type="text"
+          /></ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <ISelect
+              :label="t('Employee.Section')"
+              v-model="employee.Section.id"
+              name="archiveTypeId"
+              :options="sections"
+              :IsRequire="true"
+          /></ICol>
+
+          <ICol span="1" span-md="1" span-sm="1">
+            <ISelect
+              :label="t('Employee.Position')"
+              v-model="employee.Position.id"
+              name="PostionId"
+              :options="employees_positions"
+              :IsRequire="true"
+          /></ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <ISelect
+              :label="t('Employee.Type')"
+              v-model="employee.Type.id"
+              name="TypeId"
+              :options="employees_types"
+              :IsRequire="true"
+          /></ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <ISelect
+              :label="t('Employee.Center')"
+              v-model="employee.Center.id"
+              name="CecnterId"
+              :options="employees_centers"
+              :IsRequire="true"
+          /></ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <ICheckbox v-model="isPerson" :checked="isPerson">
+              {{ t("Employee.IsPerson") }} :
+              {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
+            >
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <ICheckbox v-model="isMoveSection" :checked="isMoveSection">
+              {{ t("Employee.isMoveSection") }} :
+              {{ isMoveSection ? " نعم " : " كلا  " }}</ICheckbox
+            >
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <ISelect
+              :label="t('Employee.MoveSection')"
+              v-model="employee.MoveSection.id"
+              name="MoveSectionId"
+              :options="sections"
+              :IsRequire="true"
+              :IsDisabled="!isMoveSection"
+          /></ICol>
+          <!-- <ICol span="1" span-md="2" span-sm="4">
               <div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
               >
@@ -335,8 +372,26 @@ onMounted(async () => {
                 </template>
               </vSelect>
             </ICol> -->
-          </IRow>
-        </IForm>
+        </IRow>
+        <IRow col-lg="3" col-md="2" col-sm="1">
+          <ICol span="1" span-md="1" span-sm="1">
+            <IVSelect
+              :label="t('User')"
+              v-model="employee.User"
+              name="archiveTypeId"
+              :options="SelectedUsers"
+              :IsRequire="true"
+            />
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IButton2
+              class="mt-3"
+              v-if="employee.User?.id"
+              :on-click="ShowUser"
+              :text="t('Open')"
+            />
+          </ICol>
+        </IRow>
       </IRow>
     </IPageContent>
 
@@ -348,5 +403,5 @@ onMounted(async () => {
         :onDelete="Delete"
       />
     </template>
-  </IPage>  
-</template> 
+  </IPage>
+</template>

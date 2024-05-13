@@ -10,10 +10,11 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import type IRole from "@/project/role/IRole";
 import type { IUser } from "../IUser";
 
-import { usePermissionStore } from "../permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 import { useRoleStore } from "@/project/role/roleStore";
+import IPage from "@/components/ihec/IPage.vue";
 const roleStore = useRoleStore();
 
 //#endregion
@@ -123,81 +124,83 @@ const showData = async () => {
 };
 
 onMounted(async () => {
+  isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowUsers]);
 
   if (Number.isNaN(id)) {
     namePage.value = "Add User Card";
     user.value.id = 0;
+    //reset()
   } else {
     namePage.value = "Update User Card";
     user.value.id = id;
     showData();
   }
   await roleStore.getRole();
+  isLoading.value = false;
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)">
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <IPageContent>
       <IRow>
-        <IForm>
-          <IRow col="2" col-lg="2" col-md="1" col-sm="1">
-            <ICol>
-              <IInput
-                :label="t('Name')"
-                v-model="user.name"
-                name="title"
-                type="text"
-                :IsRequire="true"
-            /></ICol>
-            <ICol>
-              <IInput
-                :label="t('User Name(for login)')"
-                v-model="user.user_name"
-                name="title"
-                type="text"
-                :IsRequire="true"
-            /></ICol>
-            <ICol>
-              <IInput
-                :label="t('Email')"
-                v-model="user.email"
-                name="title"
-                type="text"
-                :IsRequire="true"
-            /></ICol>
-            <ICol>
-              <IInput
-                :label="t('Password')"
-                v-model="user.password"
-                name="title"
-                type="password"
-                :IsRequire="true"
-            /></ICol>
-            <ICol>
-              <IInput
-                :label="t('Rewrite Password')"
-                v-model="user.password_confirmation"
-                name="title"
-                type="password"
-                :IsRequire="true"
-            /></ICol>
-            <ICol>
-              <div
-                class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"
-              >
-                {{ t("Role") }}
-              </div>
-              <vSelect
-                multiple
-                class="w-full h-10 rounded-sm text-text dark:text-textLight bg-selectLight dark:bg-select"
-                v-model="user.roles"
-                label="name"
-                :options="roleStore.roles"
-                :reduce="(role: IRole) => role.id"
-              ></vSelect>
-              <!-- add role page -->
-              <!-- <div
+        <IRow col="2" col-lg="2" col-md="1" col-sm="1">
+          <ICol>
+            <IInput
+              :label="t('Name')"
+              v-model="user.name"
+              name="title"
+              type="text"
+              :IsRequire="true"
+          /></ICol>
+          <ICol>
+            <IInput
+              :label="t('User Name(for login)')"
+              v-model="user.user_name"
+              name="title"
+              type="text"
+              :IsRequire="true"
+          /></ICol>
+          <ICol>
+            <IInput
+              :label="t('Email')"
+              v-model="user.email"
+              name="title"
+              type="text"
+              :IsRequire="true"
+          /></ICol>
+          <ICol>
+            <IInput
+              :label="t('Password')"
+              v-model="user.password"
+              name="title"
+              type="password"
+              :IsRequire="true"
+          /></ICol>
+          <ICol>
+            <IInput
+              :label="t('Rewrite Password')"
+              v-model="user.password_confirmation"
+              name="title"
+              type="password"
+              :IsRequire="true"
+          /></ICol>
+          <ICol>
+            <div
+              class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"
+            >
+              {{ t("Role") }}
+            </div>
+            <vSelect
+              multiple
+              class="w-full h-10 rounded-sm text-text dark:text-textLight bg-selectLight dark:bg-select"
+              v-model="user.roles"
+              label="name"
+              :options="roleStore.roles"
+              :reduce="(role: IRole) => role.id"
+            ></vSelect>
+            <!-- add role page -->
+            <!-- <div
                   :class="{
                     'ltr:right-1/2 rtl:left-1/2': !isClose,
                     'ltr:right-[58%] rtl:left-[58%]': isClose,
@@ -224,41 +227,40 @@ onMounted(async () => {
                     </svg>
                   </button>
                 </div> -->
-            </ICol>
-            <ICol>
-              <div class="moon p-3">
-                <div class="row3 flex justify-around">
-                  <div class="toggles flex w-1/5 mt-10">
-                    <div class="flex ltr:mr-3 rtl:ml-3">
-                      <input
-                        type="checkbox"
-                        v-model="check_any_device"
-                        class="toggle toggle-info"
-                      />
-                      <div
-                        class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
-                      >
-                        {{ t("Any Device") }}
-                      </div>
+          </ICol>
+          <ICol>
+            <div class="moon p-3">
+              <div class="row3 flex justify-around">
+                <div class="toggles flex w-1/5 mt-10">
+                  <div class="flex ltr:mr-3 rtl:ml-3">
+                    <input
+                      type="checkbox"
+                      v-model="check_any_device"
+                      class="toggle toggle-info"
+                    />
+                    <div
+                      class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
+                    >
+                      {{ t("Any Device") }}
                     </div>
-                    <div class="flex justify-center">
-                      <input
-                        type="checkbox"
-                        v-model="check_active"
-                        class="toggle toggle-info"
-                      />
-                      <div
-                        class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
-                      >
-                        {{ t("Active") }}
-                      </div>
+                  </div>
+                  <div class="flex justify-center">
+                    <input
+                      type="checkbox"
+                      v-model="check_active"
+                      class="toggle toggle-info"
+                    />
+                    <div
+                      class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
+                    >
+                      {{ t("Active") }}
                     </div>
                   </div>
                 </div>
-              </div></ICol
-            >
-          </IRow>
-        </IForm>
+              </div>
+            </div>
+          </ICol>
+        </IRow>
       </IRow>
     </IPageContent>
     <template #Footer>

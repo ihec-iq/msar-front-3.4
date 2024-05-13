@@ -1,13 +1,12 @@
-<template>
-  <div :class="{ loader: true, fadeout: !isLoading }">Loading ...</div>
-</template>
-
 <script lang="ts">
 export default {
   name: "LoadingScreen",
   props: ["isLoading"],
 };
 </script>
+<template>
+  <div :class="{ loader: true, fadeout: !isLoading }">Loading ...</div>
+</template>
 
 <style>
 .loader {

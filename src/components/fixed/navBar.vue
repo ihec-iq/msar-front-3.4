@@ -5,7 +5,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { Links } from "./FixedMenu";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 
 import { t } from "@/utilities/I18nPlugin";
 // import { useUserStore } from "@/stores/accounting/accounts/user";
@@ -52,17 +52,22 @@ const activeNames = ref(["1"]);
 // } )
 
 //#region nav menu
-const { permissions } = storeToRefs(usePermissionStore());
+const { UserPermissions } = storeToRefs(usePermissionsStore());
 const filteredLinks = computed(() =>
   Links.filter((link) => {
     // Check if any of the link's permissions are included in userPermissions
-    if (permissions.value == undefined) return;
+    if (UserPermissions.value == undefined) return;
     return link.permissions.some(
       (permission) =>
-        permissions.value.includes(permission) || permission == "public"
+        UserPermissions.value.includes(permission) || permission == "public"
     );
   })
 );
+const checkPermission = (per: string) => {
+  return UserPermissions.value.some(
+    (permission) => UserPermissions.value.includes(per) || permission == "public"
+  );
+};
 // watch(nav, newSearchQuery => {
 //   if(nav.value != "undefined" || nav.value != undefined ){
 //     tab.value=nav.value?.toString()
@@ -178,10 +183,12 @@ const { user } = storeToRefs(useAuthStore());
                 :to="{ name: Link.routerName }"
                 @click.prevent="tab = Link.tab"
                 @mouseover="tab = Link.tab"
-                class=""
-              >
+               >
                 <button
-                  class="hover:text-[#444] bg-[#FFFFFF] btn-outline hover:rounded-2xl p-3 rounded-full bg-gray border-solid border-[#aaa] border-2 m-1 dark:text-navIconColoDark dark:hover:text-navIconColorHoverDark duration-500"
+                  class="bg-[#FEFEFE] shadow-md  text-[#23A559] hover:text-[#FEFEFE] hover:bg-[#23A559]
+                   duration-500 fadeOut 2s ease-in-out btn-outline hover:rounded-2xl p-4
+                    rounded-full   border-none
+                      border-2 m-1  "
                   :title="Link.title"
                   v-html="Link.icon"
                 ></button
@@ -192,16 +199,14 @@ const { user } = storeToRefs(useAuthStore());
                   v-if="Link.children?.length ?? 0 > 0"
                   class="p-2 text-gray-800 dark:text-gray-200 whitespace-pre-wrap cursor-pointer duration-500"
                 >
-                  <div
-                    v-for="child in Link.children"
-                    :key="child.routerName"
-                    :class="{ 'flex ': !isClose, hidden: isClose }"
-                    class="rounded-md border-2 my-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
-                  >
+                  <div v-for="(child, index) in Link.children" :key="index">
                     <router-link
                       :to="{ name: child.routerName }"
-                      v-if="tab == Link.tab"
-                      class="cursor-pointer rounded-md  p-2"
+                      v-if="
+                        tab == Link.tab && checkPermission(child.permissions[0])
+                      "
+                      class="cursor-pointer rounded-md p-2 border-2 my-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
+                      :class="{ 'flex ': !isClose, hidden: isClose }"
                     >
                       {{ child.title }}
                     </router-link>
@@ -507,5 +512,4 @@ input[id="radio-3"]:checked ~ .glider {
   }
 } */
 </style>
-@/project/user/permissionStore
-@/utilities/I18nPlugin
+@/project/user/permissionStore @/utilities/I18nPlugin

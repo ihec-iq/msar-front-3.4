@@ -9,6 +9,7 @@ export interface IArchive {
   isIn: number;
   isInWord?: string;
   archiveTypeId: number;
+  archiveTypeName: string;
   archiveType?: IArchiveType;
 }
 export interface IArchiveType {

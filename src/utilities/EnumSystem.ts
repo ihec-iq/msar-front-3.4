@@ -65,6 +65,7 @@ enum EnumPermission {
   EditEmployee = "edit employee",
   DeleteEmployee = "delete employee",
   ShowEmployees = "show employees",
+  Setting = "setting",
 }
 enum EnumDirection {
   RTL = "rtl",

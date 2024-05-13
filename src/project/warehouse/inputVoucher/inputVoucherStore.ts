@@ -1,5 +1,5 @@
 import { reactive, ref } from "vue";
-import { defineStore } from "pinia";
+import { defineStore, type StoreOnActionListener } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
 import type {
@@ -21,6 +21,10 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     Items: [],
     signaturePerson: "",
     requestedBy: "",
+    Stock: { name: "", id: 0 },
+    numberBill: "",
+    dateBill: new Date().toISOString().split("T")[0],
+    dateReceive: new Date().toISOString().split("T")[0],
   });
   const inputVouchers = ref<IInputVoucher[]>([]);
   const inputVoucherItem = ref<IInputVoucherItem>({
@@ -37,11 +41,8 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       },
       measuringUnit: "",
     },
-    Stock: {
-      id: 0,
-      name: "",
-    },
-    serialNumber: "",
+    description: "",
+    ItemDescription: "",
     count: 0,
     price: 0,
     value: 0,
@@ -94,12 +95,13 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         console.log("in get input Voucher Items : " + errors);
       });
   }
-  async function getAvailableItemsVSelect() {
+  async function getAvailableItemsVSelect(storeId : string = "0") {
     inputVoucherItemsVSelect.value = [];
-    return await Api.get(`${pathBase}/inputVoucherItem/getAvailableItemsVSelect`)
+    return await Api.get(`${pathBase}/inputVoucherItem/getAvailableItemsVSelect/${storeId}`)
       .then((response) => {
         if (response.status == 200) {
           inputVoucherItemsVSelect.value = response.data.data;
+          //console.log(response.data.data)
         }
       })
       .catch((errors) => {
@@ -112,6 +114,8 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       .then((response) => {
         if (response.status == 200) {
           inputVoucherItemsVSelect.value = response.data.data;
+          //console.log(response.data.data)
+
         }
       })
       .catch((errors) => {
@@ -162,12 +166,16 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVoucher.value = {
       id: 0,
       number: "",
+      numberBill: "",
       date: new Date().toISOString().split("T")[0],
+      dateBill: new Date().toISOString().split("T")[0],
+      dateReceive: new Date().toISOString().split("T")[0],
       notes: "",
       State: { name: "", id: 1 },
       Items: [],
       signaturePerson: "",
       requestedBy: "",
+      Stock: { name: "", id: 0 },
     };
   }
   return {
@@ -187,7 +195,8 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     getState,
     getItems,
     getEmployees,
-    getAvailableItemsVSelect, getAllItemsVSelect,
+    getAvailableItemsVSelect,
+    getAllItemsVSelect,
     show,
     store,
     update,

@@ -43,6 +43,46 @@ export function useValidation() {
 
     return validator;
   }
+  function isObject(options: { key: string, message: string } = {
+    key: "",
+    message: t("ValidationErrors.isObject")
+  }
+  ): IValidator {
+    if (options.message == "") options.message = t("ValidationErrors.isObject")
+    const validator: IValidator = {
+      name: 'isObject',
+      message: options.message,
+      regexp: undefined,
+      check: (field1: any) => {
+        if (options.key == "") {
+          return (typeof field1 === "object" && field1 !== null && field1 !== undefined) ? true : false
+        } else {
+          if (typeof field1 === "object" && field1 !== null && field1.hasOwnProperty(options.key) && options.key != "") {
+            if (Number(field1[options.key]) > 0) return true;
+          }
+          return false;
+        }
+      }
+    };
+
+    return validator;
+  }
+  function isArray(options: { message: string } = {
+    message: t("ValidationErrors.isArray")
+  }
+  ): IValidator {
+    if (options.message == "") options.message = t("ValidationErrors.isArray")
+    const validator: IValidator = {
+      name: 'isArray',
+      message: options.message,
+      regexp: undefined,
+      check: (field1: any) => {
+        return (typeof field1 === "object" && field1 !== null && field1 !== undefined && field1.length > 0) ? true : false
+      }
+    };
+
+    return validator;
+  }
   function email(options: { message: string } = { message: t("ValidationErrors.FieldMustBeEmail") }) {
     const validator: IValidator = {
       name: 'email',
@@ -148,9 +188,8 @@ export function useValidation() {
 
     let objectKeys = Object.keys(object);
 
-    if (objectKeys.length == 0) return result;
+    if (objectKeys.length == 0 || validators.length == 0) return result;
 
-    if (validators.length == 0) return result;
 
     try {
       let success = true;
@@ -176,13 +215,19 @@ export function useValidation() {
           } else {
             if (rule.name == 'sameAs') {
               let field2 = object[String(rule.field2)]
-              if (rule.check(keyValue, field2) == false) {
+              if (!rule.check(keyValue, field2)) {
+                success = false;
+                let errorMessage = `${rule.message}`;
+                error.messages.push(errorMessage);
+              }
+            } else if (rule.name == 'isObject') {
+              if (!rule.check(keyValue)) {
                 success = false;
                 let errorMessage = `${rule.message}`;
                 error.messages.push(errorMessage);
               }
             } else {
-              if (rule.check(keyValue, keyValue) == false) {
+              if (!rule.check(keyValue)) {
                 success = false;
                 let errorMessage = `${rule.message}`;
                 error.messages.push(errorMessage);
@@ -213,6 +258,8 @@ export function useValidation() {
     float,
     min,
     max,
-    sameAs
+    sameAs,
+    isObject,
+    isArray
   };
 }

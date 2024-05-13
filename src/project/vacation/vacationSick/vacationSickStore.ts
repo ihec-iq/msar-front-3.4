@@ -17,6 +17,11 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         id: 0,
         name: "",
         Section: { id: 0, name: "" },
+        MoveSection: {
+          id: 0,
+          name: ""
+        },
+        isMoveSection: 0,
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -37,15 +42,18 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         }
       },
       record: 0,
-      newRecord: 0,
-      oldRecord: 0,
       id: 0,
-      sumDaily: 0,
-      sumTime: 0,
-      sumSick: 0,
-      oldRecordSick: 0,
-      newRecordSick: 0,
       recordSick: 0,
+      deservedRecord: 0,
+      totalTaken: 0,
+      remaining: 0,
+      currentYearVacations: 0,
+      currentYearTimeVacations: 0,
+      currentYearDailyVacations: 0,
+      deservedSickRecord: 0,
+      takenSick: 0,
+      remainingSick: 0,
+      currentYearSickVacations: 0
     },
     record: 1,
     Reason: {
@@ -66,6 +74,11 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         id: 0,
         name: "",
         Section: { id: 0, name: "" },
+        MoveSection: {
+          id: 0,
+          name: ""
+        },
+        isMoveSection: 0,
         isPerson: 1,
         dateWork: "",
         number: "",
@@ -86,15 +99,18 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         }
       },
       record: 0,
-      newRecord: 0,
-      oldRecord: 0,
       id: 0,
-      sumDaily: 0,
-      sumTime: 0,
-      sumSick: 0,
-      oldRecordSick: 0,
-      newRecordSick: 0,
       recordSick: 0,
+      deservedRecord: 0,
+      totalTaken: 0,
+      remaining: 0,
+      currentYearVacations: 0,
+      currentYearTimeVacations: 0,
+      currentYearDailyVacations: 0,
+      deservedSickRecord: 0,
+      takenSick: 0,
+      remainingSick: 0,
+      currentYearSickVacations: 0
     };
   }
   const pathBase = "/vacationSys";

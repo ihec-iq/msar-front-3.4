@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 
 import type { IVacation } from "../../IVacation";
 import type { IVacationSick } from "../IVacationSick";
@@ -13,7 +13,7 @@ import { useVacationStore } from "../../vacationStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
-import { CNumber } from "@/utilities/tools";
+import { CNumber, makeFormDataFromObject } from "@/utilities/tools";
 import {
   useValidation,
   type IValidationResult,
@@ -21,7 +21,7 @@ import {
 } from "@/utilities/Validation";
 import { WarningToast } from "@/utilities/Toast";
 
-const { validate, min, required, foreignKey, max, number } = useValidation();
+const { validate, min, required, isObject, max, number } = useValidation();
 
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
@@ -43,8 +43,8 @@ const rules: Array<IFieldValidation> = [
   },
   {
     field: "Vacation",
-    caption: t("Vacation"),
-    rules: [required()],
+    caption: t("OutputVoucherEmployeeRequest"),
+    rules: [isObject({ key: "id", message: "" })],
   },
 ];
 
@@ -53,7 +53,7 @@ const rules: Array<IFieldValidation> = [
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray, can } = usePermissionsStore();
 const namePage = ref("VacationSick");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -81,11 +81,8 @@ const store = () => {
   }
 
   errors.value = null;
-  const formData = new FormData();
-  formData.append("dayFrom", vacationSick.value.dayFrom);
-  formData.append("dayTo", vacationSick.value.dayTo);
-  formData.append("record", vacationSick.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
+  const formData = makeFormDataFromObject(vacationSick.value);
+
   objectStore
     .store(formData)
     .then((response) => {
@@ -118,11 +115,11 @@ function update() {
     return;
   }
   errors.value = null;
-  const formData = new FormData();
-  formData.append("dayFrom", vacationSick.value.dayFrom);
-  formData.append("dayTo", vacationSick.value.dayTo);
-  formData.append("record", vacationSick.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
+  // formData.append("dayFrom", vacationSick.value.dayFrom);
+  // formData.append("dayTo", vacationSick.value.dayTo);
+  // formData.append("record", vacationSick.value.record.toString());
+  // formData.append("Vacation", JSON.stringify(vacationSick.value.Vacation));
+  const formData = makeFormDataFromObject(vacationSick.value);
 
   objectStore
     .update(vacationSick.value.id, formData)
@@ -254,7 +251,7 @@ const ChangeDateRecord = () => {
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
@@ -319,8 +316,10 @@ const ChangeDateRecord = () => {
         :onCreate="store"
         :onUpdate="update"
         :onDelete="Delete"
+        :showAdd="can(EnumPermission.AddVacationSick) == 1"
+        :showUpdate="can(EnumPermission.EditVacationSick) == 1"
+        :showDelete="can(EnumPermission.DeleteVacationSick) == 1"
       />
     </template>
   </IPage>
 </template>
-@/project/user/permissionStore@/utilities/EnumSystem@/utilities/I18nPlugin@/utilities/tools

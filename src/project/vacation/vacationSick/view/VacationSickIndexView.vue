@@ -5,8 +5,8 @@ import { useVacationSickStore } from "../vacationSickStore";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 import type { IVacationSick, IVacationSickFilter } from "../IVacationSick";
 const { t } = useI18n();
 const isLoading = ref(false);
@@ -72,6 +72,8 @@ const CNumber = (val: any = 0): number => {
 };
 
 const getFilterData = async (page: number = 1) => {
+    localStorage.setItem("indexVacationSick", page.toString());
+
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
 
@@ -97,9 +99,14 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsSick]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+let index = 1;
+
+  if (localStorage.getItem("indexVacationSick") != undefined)
+    index = Number(localStorage.getItem("indexVacationSick"));
+
   // must to wait fastSearch to get init value from localStorage.getItem
   await fastSearch.value;
-  await getFilterData(1);
+  await getFilterData(index);
 });
 </script>
 <template>

@@ -3,8 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useStockStore } from "../../stockStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import { useItemStore } from "@/project/item/itemStore";
@@ -26,12 +25,46 @@ import IPage from "@/components/ihec/IPage.vue";
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
 const { item } = storeToRefs(useItemStore());
-//region"Drag and Drop"
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+import { WarningToast } from "@/utilities/Toast";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { makeFormDataFromObject } from "@/utilities/tools";
 
+const { validate, isArray, required, isObject } = useValidation();
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
+const rules: Array<IFieldValidation> = [
+  {
+    field: "number",
+    caption: t("InputVoucherNumber"),
+    rules: [required()],
+  },
+  // {
+  //   field: "Employee",
+  //   caption: t("OutputVoucherEmployeeRequest"),
+  //   rules: [isObject({ key: "id", message: "" })],
+  // },
+  {
+    field: "Stock",
+    caption: t("Stock"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "Items",
+    caption: t("Item.Sum"),
+    rules: [isArray()],
+  },
+];
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("InputVoucherAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -54,8 +87,7 @@ const VoucherItemTemp = ref<IInputVoucherItem>({
     Category: { id: 0, name: "" },
     measuringUnit: "",
   },
-  Stock: { name: "", id: 0 },
-  serialNumber: "",
+  description: "",
   count: 1,
   price: 1,
   value: 1,
@@ -79,8 +111,7 @@ const resetVoucherItemTemp = () => {
       Category: { id: 1, name: "" },
       measuringUnit: "",
     },
-    Stock: { id: 1, name: "" },
-    serialNumber: "",
+    description: "",
     count: 1,
     price: 1,
     value: 1,
@@ -155,20 +186,17 @@ const reset = () => {
   inputVoucherStore.resetData();
 };
 const store = () => {
+  // validationResult.value = validate(inputVoucher.value, rules);
+
+  // if (!validationResult.value.success) {
+  //   WarningToast(t("ValidationFails"));
+  //   return;
+  // }
   errors.value = null;
-  const formData = new FormData();
-  formData.append("number", inputVoucher.value.number);
-  formData.append("notes", inputVoucher.value.notes);
-  formData.append("date", inputVoucher.value.date);
-  formData.append("items", JSON.stringify(inputVoucher.value.Items));
-  formData.append("State", JSON.stringify(inputVoucher.value.State));
-  formData.append("requestedBy", inputVoucher.value.requestedBy);
-  formData.append(
-    "signaturePerson",
-    String(inputVoucher.value.signaturePerson)
-  );
+  const sendData = makeFormDataFromObject(inputVoucher.value);
+
   inputVoucherStore
-    .store(formData)
+    .store(sendData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -192,20 +220,29 @@ const store = () => {
     });
 };
 function update() {
+  validationResult.value = validate(inputVoucher.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
-  const formData = new FormData();
-  formData.append("number", inputVoucher.value.number);
-  formData.append("notes", inputVoucher.value.notes);
-  formData.append("date", inputVoucher.value.date);
-  formData.append("items", JSON.stringify(inputVoucher.value.Items));
-  formData.append("State", JSON.stringify(inputVoucher.value.State));
-  formData.append("requestedBy", inputVoucher.value.requestedBy);
-  formData.append(
-    "signaturePerson",
-    String(inputVoucher.value.signaturePerson)
-  );
+  const sendData = makeFormDataFromObject(inputVoucher.value);
+  //#region Old Schema
+  // const formData = new FormData();
+  // formData.append("number", inputVoucher.value.number);
+  // formData.append("notes", inputVoucher.value.notes);
+  // formData.append("date", inputVoucher.value.date);
+  // formData.append("items", JSON.stringify(inputVoucher.value.Items));
+  // formData.append("State", JSON.stringify(inputVoucher.value.State));
+  // formData.append("requestedBy", inputVoucher.value.requestedBy);
+  // formData.append(
+  //   "signaturePerson",
+  //   String(inputVoucher.value.signaturePerson)
+  // );
+  //#endregion
   inputVoucherStore
-    .update(inputVoucher.value.id, formData)
+    .update(inputVoucher.value.id, sendData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -273,6 +310,7 @@ const showData = async (id: number) => {
         inputVoucher.value.requestedBy = response.data.data.requestedBy;
         inputVoucher.value.signaturePerson = response.data.data.signaturePerson;
         inputVoucher.value.State = response.data.data.State;
+        inputVoucher.value.Stock = response.data.data.Stock;
       }
     })
     .catch((errors) => {
@@ -317,7 +355,13 @@ const handleEnter = (event: KeyboardEvent) => {
   if (matchingOption === undefined && enteredValue.length > 0) {
     let btn = document.getElementById("my_modal_7");
     item.value.name = enteredValue;
+    item.value.code = "";
+    item.value.description = "";
+    item.value.measuringUnit = "";
     btn?.click();
+    let NameItemEnterNew = document.getElementById("NameItemEnterNew");
+    NameItemEnterNew?.focus();
+    //xxx
   }
 };
 function clearSelected(event: { target: { value: string } }) {
@@ -334,8 +378,7 @@ function clearSelected(event: { target: { value: string } }) {
         Category: { id: 0, name: "" },
         measuringUnit: "",
       },
-      Stock: { name: "", id: 0 },
-      serialNumber: "",
+      description: "",
       count: 0,
       price: 0,
       value: 0,
@@ -344,16 +387,18 @@ function clearSelected(event: { target: { value: string } }) {
   }
 }
 const setItemFromChild = (_item: IItem) => {
+  _item.code = "";
+  _item.description = "";
+  _item.measuringUnit = "";
   VoucherItemTemp.value.Item = _item;
 };
 const headers = ref<Array<ITableHeader>>([
   { caption: t("ID"), value: "id" },
-  { caption: t("Item"), value: "Item" },
-  { caption: t("SerialNumber"), value: "serialNumber" },
+  { caption: t("Item.Name"), value: "Item" },
+  { caption: t("Item.Description"), value: "description" },
   { caption: t("Count"), value: "count" },
   { caption: t("Price"), value: "price" },
   { caption: t("Total"), value: "Total" },
-  { caption: t("Stock"), value: "Stock" },
   { caption: t("Notes"), value: "notes" },
   { caption: t("Details"), value: "Actions" },
 ]);
@@ -366,7 +411,7 @@ const headers = ref<Array<ITableHeader>>([
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
@@ -377,8 +422,8 @@ const headers = ref<Array<ITableHeader>>([
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
-                :label="t('InputVoucherNumber')"
-                name="InputVoucherNumber"
+                :label="t('InputVoucher.Number')"
+                name="InputVoucher.Number"
                 v-model="inputVoucher.number"
                 type="text"
               />
@@ -386,14 +431,54 @@ const headers = ref<Array<ITableHeader>>([
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('Date')"
-                name="InputVoucherNumer"
+                name="InputVoucher.Date"
                 v-model="inputVoucher.date"
                 type="date"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucher.DateReceive')"
+                name="InputVoucher.DateReceive"
+                v-model="inputVoucher.dateReceive"
+                type="date"
+              />
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucher.DateBill')"
+                name="InputVoucherNumer"
+                v-model="inputVoucher.dateBill"
+                type="date"
+              />
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
+              <IInput
+                :label="t('InputVoucher.NumberBill')"
+                name="InputVoucher.NumberBill"
+                v-model="inputVoucher.numberBill"
+                type="text"
+              />
+            </ICol>
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+              <div class="mb-2">
+                <label class="_inputLabel">
+                  <span class="text-red-600">*</span> {{ t("Stock") }}
+                </label>
+                <select v-model="inputVoucher.Stock" class="_input">
+                  <option
+                    v-for="stock in stocks"
+                    :key="stock.id"
+                    :value="stock"
+                  >
+                    {{ stock.name }}
+                  </option>
+                </select>
+              </div>
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1">
               <ISelect
-                :label="t('Section')"
+                :label="t('InputVoucher.State')"
                 v-model="inputVoucher.State.id"
                 name="inputVoucherStateId"
                 :options="inputVoucherStates"
@@ -444,9 +529,6 @@ const headers = ref<Array<ITableHeader>>([
                 <template v-slot:Item="{ row }">
                   {{ row.Item.name }}
                 </template>
-                <template v-slot:Stock="{ row }">
-                  {{ row.Stock.name }}
-                </template>
                 <template v-slot:Total="{ row }">
                   {{ row.count * row.price }}
                 </template>
@@ -468,6 +550,9 @@ const headers = ref<Array<ITableHeader>>([
                 </template>
               </ITable>
             </ICol>
+          </IRow>
+          <IRow>
+            <ICol><IErrorMessages :validationResult="validationResult" /></ICol>
           </IRow>
         </IForm>
       </IContainer>
@@ -505,8 +590,7 @@ const headers = ref<Array<ITableHeader>>([
                     Category: { id: 0, name: '' },
                     measuringUnit: '',
                   },
-                  Stock: { name: '', id: 0 },
-                  serialNumber: '',
+                  describtion: '',
                   count: 0,
                   price: 0,
                   value: 0,
@@ -609,21 +693,9 @@ const headers = ref<Array<ITableHeader>>([
         <!-- for insert item proparties -->
         <IRow col-lg="4" :col="4" col-xl="4" col-md="2" col-sm="1" col-xs="1">
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <div class="mb-2">
-              <label class="_inputLabel">
-                <span class="text-red-600">*</span> {{ t("Stock") }}
-              </label>
-              <select v-model="VoucherItemTemp.Stock" class="_input">
-                <option v-for="stock in stocks" :key="stock.id" :value="stock">
-                  {{ stock.name }}
-                </option>
-              </select>
-            </div>
-          </ICol>
-          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
-              :label="t('SerialNumber')"
-              v-model="VoucherItemTemp.serialNumber"
+              :label="t('Item.Description')"
+              v-model="VoucherItemTemp.description"
             />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
@@ -651,7 +723,7 @@ const headers = ref<Array<ITableHeader>>([
               v-model="VoucherItemTemp.value"
             />
           </ICol>
-          <ICol :span="3" span-lg="3" span-xl="1" span-md="1">
+          <ICol :span="4" span-lg="4" span-xl="1" span-md="1">
             <IInput
               :label="t('Notes')"
               type="text"

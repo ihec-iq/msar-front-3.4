@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 
 import type { IVacation, IVacationReason } from "../../IVacation";
 import { useVacationTimeStore } from "../vacationTimeStore";
@@ -19,8 +19,10 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 import { WarningToast } from "@/utilities/Toast";
+import { makeFormDataFromObject } from "@/utilities/tools";
 
-const { validate, min, required, foreignKey, max, number } = useValidation();
+const { validate, min, required, isObject, foreignKey, max, number } =
+  useValidation();
 
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
@@ -47,13 +49,13 @@ const rules: Array<IFieldValidation> = [
   },
   {
     field: "Vacation",
-    caption: t("Vacation"),
-    rules: [required()],
+    caption: t("OutputVoucherEmployeeRequest"),
+    rules: [isObject({ key: "id", message: "" })],
   },
   {
     field: "Reason",
-    caption: t("Reason"),
-    rules: [required()],
+    caption: t("VacationReason"),
+    rules: [isObject({ key: "id", message: "" })],
   },
 ];
 
@@ -62,7 +64,7 @@ const rules: Array<IFieldValidation> = [
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray,can } = usePermissionsStore();
 const namePage = ref("VacationTime");
 const isLoading = ref(false);
 
@@ -93,7 +95,7 @@ const reset = () => {
   objectStore.resetData();
 };
 const store = () => {
-  validationResult.value = validate(vacationTime.value, rules);
+   validationResult.value = validate(vacationTime.value, rules);
 
   if (!validationResult.value.success) {
     WarningToast(t("ValidationFails"));
@@ -101,14 +103,7 @@ const store = () => {
   }
 
   errors.value = null;
-  const formData = new FormData();
-  formData.append("date", vacationTime.value.date);
-  formData.append("timeFrom", vacationTime.value.timeFrom);
-  formData.append("timeTo", vacationTime.value.timeTo);
-  formData.append("record", vacationTime.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
-  formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
-
+  const formData = makeFormDataFromObject(vacationTime.value);
   objectStore
     .store(formData)
     .then((response) => {
@@ -134,20 +129,24 @@ const store = () => {
     });
 };
 function update() {
+    validationResult.value = validate(vacationTime.value, rules);
+
   if (!validationResult.value.success) {
     WarningToast(t("ValidationFails"));
     return;
   }
 
   errors.value = null;
-  const formData = new FormData();
-  formData.append("date", vacationTime.value.date);
-  formData.append("timeFrom", vacationTime.value.timeFrom);
-  formData.append("timeTo", vacationTime.value.timeTo);
-  formData.append("record", vacationTime.value.record.toString());
-  formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
-  formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
-
+  //#region data schema
+  // const formData = new FormData();
+  // formData.append("date", vacationTime.value.date);
+  // formData.append("timeFrom", vacationTime.value.timeFrom);
+  // formData.append("timeTo", vacationTime.value.timeTo);
+  // formData.append("record", vacationTime.value.record.toString());
+  // formData.append("Vacation", JSON.stringify(vacationTime.value.Vacation));
+  // formData.append("Reason", JSON.stringify(vacationTime.value.Reason));
+  //#endregion
+  const formData = makeFormDataFromObject(vacationTime.value);
   objectStore
     .update(vacationTime.value.id, formData)
     .then((response) => {
@@ -270,6 +269,7 @@ onMounted(async () => {
 //     vacationTime.value.timeFrom;
 //   vacationTime.value.timeTo = addHours(vacationTime.value.record, timeFrom);
 // };
+
 const ChangeDateRecord = () => {
   const DateTimeFrom =
     new Date(vacationTime.value.date).toISOString().split("T")[0] +
@@ -285,7 +285,7 @@ const ChangeDateRecord = () => {
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
@@ -384,8 +384,10 @@ const ChangeDateRecord = () => {
         :onCreate="store"
         :onUpdate="update"
         :onDelete="Delete"
+                :showAdd="can(EnumPermission.AddVacationTime) == 1"
+        :showUpdate="can(EnumPermission.EditVacationTime) == 1"
+        :showDelete="can(EnumPermission.DeleteVacationTime) == 1"
       />
     </template>
   </IPage>
-</template>
-@/project/user/permissionStore@/utilities/EnumSystem@/utilities/I18nPlugin
+</template> 

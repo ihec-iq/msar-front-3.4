@@ -3,7 +3,7 @@
 import SimpleLoading from "@/components/general/loading.vue";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import { useUserStore } from "../userStore";
-import { usePermissionStore } from "../permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import type { IUser, IUserFilter } from "../IUser";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
@@ -13,7 +13,7 @@ import { t } from "@/utilities/I18nPlugin";
 
 //#region Vars
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
 const data = ref<Array<IUser>>([]);
 const dataPage = ref();
@@ -124,6 +124,7 @@ import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { Icon } from "@iconify/vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
+import IPage from "@/components/ihec/IPage.vue";
 const app = getCurrentInstance();
 const trns = app?.appContext.config.globalProperties.$trns;
 </script>

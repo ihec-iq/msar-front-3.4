@@ -4,9 +4,10 @@ import { storeToRefs } from "pinia";
 import { onMounted, defineEmits, ref, type PropType } from "vue";
 import { Icon } from "@iconify/vue";
 import CardArchiveTypeIndex from "./CardArchiveTypeIndex.vue";
+import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
 
-const { archiveTypes } = storeToRefs(useArchiveStore());
-const ischecked = ref(false);
+const archiveTypeStore = useArchiveTypeStore();
+const { archiveTypes } = storeToRefs(useArchiveTypeStore());const ischecked = ref(false);
 const emits = defineEmits<{
   getFilterData: [number, number]; // Define the event structure with three parameters
 }>();
@@ -22,7 +23,7 @@ const onClick = (index: number) => {
   ischecked.value = false;
 };
 onMounted(async () => {
-  await useArchiveStore().getArchiveTypes();
+  await archiveTypeStore.getBySectionUser();
 });
 </script>
 <template>

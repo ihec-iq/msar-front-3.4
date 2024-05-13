@@ -10,6 +10,8 @@ export interface IEmployee {
   id: number;
   name: string;
   Section: ISection;
+  MoveSection: ISection;
+  isMoveSection : number;
   isPerson: number;
   dateWork: string;
   number: string;
@@ -17,6 +19,7 @@ export interface IEmployee {
   telegramId?: string;
   Position: IEmployeePosition;
   Type: IEmployeeType;
+  Center: IEmployeeCenter;
   initVacation: number;
   takeVacation: number;
   initVacationSick: number;
@@ -62,7 +65,7 @@ export interface IEmployeeHistory {
     date: string;
     Item: IItem;
     Stock: IStock;
-    serialNumber: string;
+    description: string;
   };
 }
 export interface IEmployeeFilter {
@@ -76,6 +79,11 @@ export interface IEmployeeFilter {
 export interface IEmployeeType {
   id: number; 
   name: string; 
+}
+export interface IEmployeeCenter {
+  id: number; 
+  name: string; 
+  code: string; 
 }
 export interface IEmployeePosition {
   id: number; 

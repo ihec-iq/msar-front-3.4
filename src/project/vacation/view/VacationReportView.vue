@@ -6,9 +6,9 @@ import { useI18n } from "@/stores/i18n/useI18n";
 import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "../vacationStore";
 import type { IVacationFilter, IVacation } from "../IVacation";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { isNumber } from "@/utilities/tools";
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 import JsonExcel from "vue-json-excel3";
 
 const { t } = useI18n();
@@ -25,6 +25,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
+import IPage from "@/components/ihec/IPage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -57,6 +58,7 @@ const searchFilter = ref<IVacationFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
+  localStorage.setItem("indexVacationReport", page.toString());
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
@@ -64,6 +66,8 @@ const getFilterData = async (page = 1) => {
   searchFilter.value.employeeName = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
+      if (response.data.data == undefined || response.data.data == null)
+        window.location.reload();
       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
@@ -108,7 +112,14 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.VacationReport]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  await getFilterData(1);
+  let index = 1;
+
+  if (localStorage.getItem("indexVacationReport") != undefined)
+    index = Number(localStorage.getItem("indexVacationReport"));
+
+  // must to wait fastSearch to get init value from localStorage.getItem
+  await fastSearch.value;
+  await getFilterData(index);
   if (inputRefSearch.value) {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
@@ -125,6 +136,7 @@ const ToNumberShow = (val: any) => {
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
+  { caption: t("Details"), value: "actions" },
   { caption: "الرصيد المستحق", value: "deservedRecord" },
   { caption: "مجموع المستنفذ", value: "totalTaken" },
   { caption: "الرصيد المتبقي", value: "remaining" },
@@ -134,7 +146,6 @@ const headers = ref<Array<ITableHeader>>([
   { caption: "رصيد المرضية", value: "deservedSickRecord" },
   { caption: "مستنفذ المرضية", value: "takenSick" },
   { caption: "متبقي المرضية", value: "remainingSick" },
-  { caption: t("Details"), value: "actions" },
 ]);
 const headersExcel = {
   الاسم: "name",
@@ -180,8 +191,8 @@ const headersExcel = {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow
-        ><div class="flex flex-col">
+      <IRow>
+        <div class="flex flex-col">
           <div class="inline-block min-w-full">
             <!-- card -->
             <div class="rounded-xl" v-if="isLoading == false">
@@ -211,7 +222,7 @@ const headersExcel = {
                       <span> {{ ToNumberShow(row.currentYearVacations) }}</span>
                     </template>
                     <template v-slot:currentYearTimeVacations="{ row }">
-                      <span> {{ row.currentYearTimeVacations }}</span>
+                      <span> {{ row.currentYearTimeVacations }} Hours</span>
                     </template>
                     <template v-slot:currentYearDailyVacations="{ row }">
                       <span>
@@ -235,20 +246,37 @@ const headersExcel = {
                       </IDropdown>
                     </template>
                   </ITable>
-                  <TailwindPagination
-                    class="flex justify-center mt-10"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="10"
-                  />
                 </div>
               </div>
             </div>
-            <SimpleLoading v-if="isLoading"></SimpleLoading>
+
             <!-- end card -->
           </div>
-        </div></IRow
-      >
+        </div>
+      </IRow>
+      <IRow v-if="data.length > 0">
+        <div class="w-full flex flex-row">
+          <div class="basis-4/5">
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
+          </div>
+          <div class="basis-1/5" v-if="data.length >= limits[0].id">
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </div>
+        </div>
+        <SimpleLoading v-if="isLoading">.</SimpleLoading>
+      </IRow>
     </IPageContent>
   </IPage>
   <div class="flex">

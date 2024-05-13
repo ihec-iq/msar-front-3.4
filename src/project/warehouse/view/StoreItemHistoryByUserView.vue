@@ -9,8 +9,8 @@ import type { IStoreItemHistory, IStoreItemFilter } from "../IStore";
 import { useStoringStore } from "../storingStore";
 import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 const outputVoucherStore = useOutputVoucherStore();
 const { outputVoucherEmployees } = storeToRefs(useOutputVoucherStore());
@@ -40,7 +40,7 @@ const fastSearch = ref("");
 const filterByIDName = (item: IStoreItemHistory) => {
   if (
     item.itemName.includes(fastSearch.value) ||
-    item.serialNumber.includes(fastSearch.value)
+    item.description.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -57,7 +57,7 @@ const makeFastSearch = () => {
 const searchFilter = ref<IStoreItemFilter>({
   itemId: "0",
   limit: 10,
-  serialNumber: "",
+  description: "",
   summation: true,
   isEmployee: false,
   employeeId: 0,
@@ -67,7 +67,7 @@ const getFilterData = async (page = 1) => {
   data.value = [];
   dataBase.value = [];
   isLoading.value = true;
-  searchFilter.value.serialNumber = fastSearch.value;
+  searchFilter.value.description = fastSearch.value;
   searchFilter.value.itemId = route.params.id.toString();
   await get_item(searchFilter.value, page)
     .then((response) => {
@@ -223,7 +223,7 @@ onMounted(async () => {
                             {{ t("Item") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
-                            {{ t("SerialNumber") }}
+                            {{ t("Description") }}
                           </th>
                           <th scope="col" class="text-sm font-medium px-6 py-4">
                             {{ t("BillType") }}
@@ -249,7 +249,7 @@ onMounted(async () => {
                           class="border-b border-black h-14 text-gray-100"
                         >
                           <th>{{ row.itemName }}</th>
-                          <th>{{ row.serialNumber }}</th>
+                          <th>{{ row.description }}</th>
                           <th>{{ row.billType }}</th>
                           <th>
                             <span

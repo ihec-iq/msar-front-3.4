@@ -3,13 +3,13 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { useAuthStore } from "@/stores/authStore";
-//import { usePermissionStore } from "@/project/user/permissionStore";
+//import { usePermissionsStore } from "@/project/core/permissionStore";
 import Api from "./api/apiConfig";
 import { useConfigStore } from "@/stores/configStore";
 const { ConnectionString } = storeToRefs(useConfigStore());
 
 // const { getUser } = useAuthStore();
-// const { setPermissions } = usePermissionStore();
+// const { setPermissions } = usePermissionsStore();
 // const { CheckAuth } = useAuthStore();
 
 const rtlStore = useRtlStore();

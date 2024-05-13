@@ -6,8 +6,8 @@ import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import type { IInputVoucher, IInputVoucherFilter } from "../IInputVoucher";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 const isLoading = ref(false);
 const data = ref<Array<IInputVoucher>>([]);
@@ -96,7 +96,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('InputVoucher')">
+  <IPage :HeaderTitle="t('InputVoucher.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -158,4 +158,3 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-@/project/user/permissionStore@/views/Warehouse/InputVoucher/IInputVoucher@/views/Warehouse/InputVoucher/inputVoucherStore@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

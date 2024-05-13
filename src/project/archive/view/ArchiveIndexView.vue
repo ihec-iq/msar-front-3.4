@@ -2,7 +2,7 @@
 import SimpleLoading from "@/components/general/loading.vue";
 import { useArchiveStore } from "../archiveStore";
 import { t } from "@/utilities/I18nPlugin";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import type { IArchive, IArchiveFilter } from "../IArchive";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { onMounted, ref, watch } from "vue";
@@ -19,7 +19,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import CardsArchiveTypeIndex from "./CardsArchiveTypeIndex.vue";
 import EmailCardArchiveIndex from "./EmailCardArchiveIndex.vue";
 
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
 const data = ref<Array<IArchive>>([]);
 const dataPage = ref();

@@ -1,3 +1,5 @@
+import type { IItem } from "@/project/item/IItem";
+
 export interface IDirectVoucher {
   id: number;
   number: string;
@@ -10,16 +12,15 @@ export interface IDirectVoucher {
 }
 export interface IDirectVoucherItem {
   id?: number;
-  outputVoucherId?: number;
-  item?: string;
-  Employee: IDirectVoucherEmployee;
-  serialNumber: string;
+  directVoucherId?: number;
+  Item?: IItem;
+  description: string;
   count: number;
-  countWord?: string;
   price: number;
   value: number;
   notes: string;
 }
+
 export interface IDirectVoucherEmployee {
   id: number;
   name: string;

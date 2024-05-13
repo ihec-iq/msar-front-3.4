@@ -1,4 +1,5 @@
 export default {
+  Logout: "Logout",
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
   Warehouse: { Index: "Warehouse System" },
   RetrievalVoucher: {
@@ -7,6 +8,28 @@ export default {
     Update: "Update Retrieval",
     Number: "Number",
     Employee: "Employee",
+  },
+  InputVoucher: {
+    Index: "Input Voucher",
+    Add: "",
+    Update: "",
+    Date: "Date",
+    DateReceive: "Receive Date",
+    DateBill: "Bill Date",
+    NumberBill: "Number Bill",
+    State: "State",
+    Number: "Number"
+  },
+  DirectVoucher: {
+    Index: "Direct Voucher",
+    Add: "",
+    Update: "",
+    Date: "Date",
+    DateReceive: "Receive Date",
+    DateBill: "Bill Date",
+    NumberBill: "Number Bill",
+    State: "State",
+    Number: "Number"
   },
   ID: "ID",
   Profile: "Profile",
@@ -41,12 +64,18 @@ export default {
   Code: "Code",
   Category: "Category",
   Item: {
-    Name: "Name", Index: "Item", Add: "Add Item", Out: 'Item Out', In: 'Item In', Code: "Item Code", Unit: "Unit Item", Category: "Category Item"
+    Name: "Name",
+    Index: "Item",
+    Add: "Add Item",
+    Out: 'Item Out',
+    In: 'Item In',
+    Code: "Item Code",
+    Unit: "Unit Item",
+    Category: "Category Item",
+    Sum: "Items",
+    Description: "Description"
   },
   Items: "Items",
-  InputVoucher: "Input Voucher",
-  InputVoucherAdd: "Add Input Voucher",
-  InputVoucherUpdate: "Edit Input Voucher",
   ItemAdd: "Add Item",
   InputVoucherNumber: "Number",
   InputVoucherEmployeeRequest: "Employee Request",
@@ -60,12 +89,17 @@ export default {
   OutputVoucherEmployeeAlter: "Employee Alter",
 
   NumberVoucher: "Number Voucher",
-  DirectVoucher: "Direct Voucher",
   AvailableInStock: "Available",
   RecordDaily: "Days",
   RecordSick: "Days",
 
   VacationIndex: "Vacations System",
+  Vacation: {
+    Record: "Record",
+    DayFrom: "From Date",
+    DayTo: "To Date",
+    Date: "Date",
+  },
   VacationDaily: "Daily Vacation",
   VacationDailyAdd: "Add Daily Vacation",
   VacationDailyUpdate: "Update Daily Vacation",
@@ -99,7 +133,20 @@ export default {
   EmployeeIsPerson: "Type Info",
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
-  Employee: { Title: "Employee", HistoryReport: "History Report", Telegram: "TelegramId ", Number: "Employee Number", IdCard: "Employee IdCard", Position: "Position", Type: "Type" },
+  Employee: {
+    Title: "Employee",
+    HistoryReport: "History Report",
+    Telegram: "TelegramId ",
+    Number: "Employee Number",
+    IdCard: "Employee IdCard",
+    Position: "Position",
+    Section: "Section",
+    Center: "Center",
+    IsPerson: "Type Account",
+    isMoveSection: "Move to Section",
+    MoveSection: "Section Moved",
+    VacationReport: "Vacation Report"
+  },
 
   UserIndex: "User System",
 
@@ -216,6 +263,8 @@ export default {
     FiledLengthIsTooShort: "Filed Length Is Too Short",
     FiledLengthIsTooLong: "Filed Length Is Too Long",
     FieldNotSame: "Filed Matching with ",
+    isObject: "Filed not Selected !!!",
+    isArray: "Must to have at least one item",
   },
   ToastMessages: {
     Success: "Complete Successfully",

@@ -4,7 +4,6 @@ import { useRouter } from "vue-router";
 import { useRoleStore } from "../roleStore";
 import type IRole from "../IRole";
 import Swal from "sweetalert2";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import SimpleLoading from "@/components/general/loading.vue";
 
 import EditButton from "@/components/dropDown/EditButton.vue";
@@ -19,19 +18,10 @@ const isLoadingData = ref(false);
 const { _delete } = useRoleStore();
 const permissions = () => {
   router.push({
-    name: "permissions",
+    name: "roleAdd",
   });
 };
-const back = () => {
-  router.push({
-    name: "setting",
-  });
-};
-// const showRole = () => {
-//   router.push({
-//     name: "showRole",
-//   });
-// };
+
 const update = (idRole: number) => {
   router.push({
     name: "roleUpdate",

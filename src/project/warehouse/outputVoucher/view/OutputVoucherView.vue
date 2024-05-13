@@ -3,8 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useStockStore } from "../../stockStore";
 import { useOutputVoucherStore } from "./../outputVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
@@ -18,13 +17,44 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 import type { IEmployee } from "@/project/employee/IEmployee";
 import IBasis from "@/components/ihec/IBasis.vue";
 import IFlex from "@/components/ihec/IFlex.vue";
+import { makeFormDataFromObject } from "@/utilities/tools";
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
-//region"Drag and Drop"
 
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+import { WarningToast } from "@/utilities/Toast";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import IPage from "@/components/ihec/IPage.vue";
+
+const { validate, isArray, required, isObject } = useValidation();
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
+const rules: Array<IFieldValidation> = [
+  {
+    field: "number",
+    caption: t("OutputVoucherNumber"),
+    rules: [required()],
+  },
+  {
+    field: "Employee",
+    caption: t("OutputVoucherEmployeeRequest"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "Items",
+    caption: t("Item.Sum"),
+    rules: [isArray()],
+  },
+];
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("OutputVoucher");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -37,7 +67,7 @@ const { outputVoucher, outputVoucherEmployees } = storeToRefs(
 const showPop = ref(false);
 const IsAdd = ref(false);
 
-const VoucherItem = ref<IOutputVoucherItem>({
+const OutputVoucherItem = ref<IOutputVoucherItem>({
   id: 0,
   Item: {
     id: 1,
@@ -50,11 +80,7 @@ const VoucherItem = ref<IOutputVoucherItem>({
     },
     measuringUnit: "",
   },
-  Stock: {
-    id: 1,
-    name: "",
-  },
-  serialNumber: "",
+  description: "",
   count: 1,
   price: 1,
   value: 1,
@@ -72,11 +98,7 @@ const VoucherItem = ref<IOutputVoucherItem>({
       },
       measuringUnit: "",
     },
-    Stock: {
-      id: 0,
-      name: "",
-    },
-    serialNumber: "",
+    description: "",
     count: 1,
     price: 1,
     value: 1,
@@ -90,7 +112,7 @@ const AddPopup = () => {
 const resetVoucherItem = () => {
   IsAdd.value = true;
   indexSelectedVoucherItem.value = 0;
-  VoucherItem.value = {
+  OutputVoucherItem.value = {
     id: 0,
     Item: {
       id: 1,
@@ -103,11 +125,7 @@ const resetVoucherItem = () => {
       },
       measuringUnit: "",
     },
-    Stock: {
-      id: 1,
-      name: "",
-    },
-    serialNumber: "",
+    description: "",
     count: 1,
     price: 1,
     value: 1,
@@ -126,11 +144,7 @@ const resetVoucherItem = () => {
         },
         measuringUnit: "",
       },
-      Stock: {
-        id: 0,
-        name: "",
-      },
-      serialNumber: "",
+      description: "",
       count: 1,
       price: 1,
       value: 1,
@@ -166,46 +180,48 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   showPop.value = true;
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
-  VoucherItem.value = itemX;
-  VoucherItem.value.inputVoucherItemId = Number(itemX.InputVoucherItem.id);
+  OutputVoucherItem.value = itemX;
+  OutputVoucherItem.value.inputVoucherItemId = Number(
+    itemX.InputVoucherItem.id
+  );
 };
 const AddItem = () => {
-  VoucherItem.value.Item = VoucherItem.value.InputVoucherItem?.Item;
-  VoucherItem.value.Stock = VoucherItem.value.InputVoucherItem?.Stock || {
-    id: 1,
-    name: "",
-  };
-  VoucherItem.value.serialNumber = String(
-    VoucherItem.value.InputVoucherItem?.serialNumber
+  OutputVoucherItem.value.Item = OutputVoucherItem.value.InputVoucherItem?.Item;
+  OutputVoucherItem.value.description = String(
+    OutputVoucherItem.value.InputVoucherItem?.description
   );
-  VoucherItem.value.price = Number(VoucherItem.value.InputVoucherItem?.price);
+  OutputVoucherItem.value.price = Number(
+    OutputVoucherItem.value.InputVoucherItem?.price
+  );
   ChangeValueTotal();
-  VoucherItem.value.inputVoucherItemId = Number(
-    VoucherItem.value.InputVoucherItem.id
+  OutputVoucherItem.value.inputVoucherItemId = Number(
+    OutputVoucherItem.value.InputVoucherItem.id
   );
-  outputVoucherStore.addItem(VoucherItem.value);
+  outputVoucherStore.addItem(OutputVoucherItem.value);
 
   resetVoucherItem();
   showPop.value = false;
 };
 const ChangeValueTotal = () => {
-  VoucherItem.value.value =
-    VoucherItem.value.count * Number(VoucherItem.value.InputVoucherItem?.price);
+  OutputVoucherItem.value.value =
+    OutputVoucherItem.value.count *
+    Number(OutputVoucherItem.value.InputVoucherItem?.price);
 };
 
 // for change the value of total in form item
 watch(
-  () => VoucherItem.value.InputVoucherItem.price,
+  () => OutputVoucherItem.value.InputVoucherItem.price,
   (newX) => {
     ChangeValueTotal();
   }
 );
 const indexSelectedVoucherItem = ref(0);
 const EditItem = () => {
-  VoucherItem.value.value = VoucherItem.value.count * VoucherItem.value.price;
+  OutputVoucherItem.value.value =
+    OutputVoucherItem.value.count * OutputVoucherItem.value.price;
   outputVoucherStore.editItem(
     indexSelectedVoucherItem.value,
-    VoucherItem.value
+    OutputVoucherItem.value
   );
   resetVoucherItem();
   showPop.value = false;
@@ -220,18 +236,17 @@ const errors = ref<string | null>();
 const reset = () => {
   outputVoucherStore.resetData();
 };
-const getFormData = (object: any) =>
-  Object.keys(object).reduce((formData, key) => {
-    let value = object[key];
-    if (typeof value === "object" && value !== null)
-      value = JSON.stringify(value);
-    formData.append(key, value);
-    return formData;
-  }, new FormData());
 
 const store = () => {
+  validationResult.value = validate(outputVoucher.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+
   errors.value = null;
-  const sendData = getFormData(outputVoucher.value);
+  const sendData = makeFormDataFromObject(outputVoucher.value);
   sendData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -261,8 +276,14 @@ const store = () => {
     });
 };
 function update() {
+  validationResult.value = validate(outputVoucher.value, rules);
+
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
-  const sendData = getFormData(outputVoucher.value);
+  const sendData = makeFormDataFromObject(outputVoucher.value);
   sendData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -335,6 +356,7 @@ const showData = async (id: number) => {
         outputVoucher.value.notes = response.data.data.notes;
         outputVoucher.value.Items = response.data.data.Items;
         outputVoucher.value.Employee = response.data.data.Employee;
+        outputVoucher.value.Stock = response.data.data.Stock;
         outputVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
       }
@@ -353,8 +375,11 @@ const showData = async (id: number) => {
   Loading.value = false;
 };
 //#endregion
+const { stocks } = storeToRefs(useStockStore());
 
 onMounted(async () => {
+  Loading.value = true;
+
   checkPermissionAccessArray([EnumPermission.ShowOutputVouchers]);
   await outputVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -368,28 +393,37 @@ onMounted(async () => {
   }
   await useStockStore().get_stocks();
   await useInputVoucherStore().getAvailableItemsVSelect();
+  Loading.value = false;
 });
+const ChangeStock = async () => {
+  Loading.value = true;
 
+  await useInputVoucherStore()
+    .getAvailableItemsVSelect(outputVoucher.value.Stock.id.toString())
+    .then(() => {
+      //console.log("Get Store ");
+    });
+  Loading.value = false;
+};
 const headers = ref<Array<ITableHeader>>([
   { caption: t("ID"), value: "id" },
-  { caption: t("Item"), value: "Item" },
-  { caption: t("SerialNumber"), value: "serialNumber" },
+  { caption: t("Item.Index"), value: "Item" },
+  { caption: t("Item.Description"), value: "Description" },
   { caption: t("Count"), value: "count" },
   { caption: t("Price"), value: "price" },
   { caption: t("Total"), value: "Total" },
-  { caption: t("Stock"), value: "Stock" },
   { caption: t("Notes"), value: "notes" },
   { caption: t("Actions"), value: "Actions" },
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)">
+  <IPage :HeaderTitle="t(namePage)" :isLoading="Loading">
     <template #HeaderButtons>
       <IButton2
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
@@ -444,8 +478,28 @@ const headers = ref<Array<ITableHeader>>([
               />
             </ICol>
           </IRow>
-          <IRow>
-            <ICol>
+          <IRow col-lg="4" col-md="2" col-sm="1">
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+              <div class="mb-2">
+                <label class="_inputLabel">
+                  <span class="text-red-600">*</span> {{ t("Stock") }}
+                </label>
+                <select
+                  v-model="outputVoucher.Stock"
+                  class="_input"
+                  @change="ChangeStock()"
+                >
+                  <option
+                    v-for="stock in stocks"
+                    :key="stock.id"
+                    :value="stock"
+                  >
+                    {{ stock.name }}
+                  </option>
+                </select>
+              </div>
+            </ICol>
+            <ICol span="3">
               <IInput
                 :label="t('Notes')"
                 name="InputVoucherNumer"
@@ -454,7 +508,7 @@ const headers = ref<Array<ITableHeader>>([
               />
             </ICol>
           </IRow>
-          <IRow>
+          <IRow >
             <ICol>
               <van-button
                 class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
@@ -471,8 +525,8 @@ const headers = ref<Array<ITableHeader>>([
                 <template v-slot:Item="{ row }">
                   {{ row.InputVoucherItem.Item.name }}
                 </template>
-                <template v-slot:Stock="{ row }">
-                  {{ row.InputVoucherItem.Stock.name }}
+                <template v-slot:Description="{ row }">
+                  {{ row.InputVoucherItem.description }}
                 </template>
                 <template v-slot:Total="{ row }">
                   {{ row.count * row.price }}
@@ -496,6 +550,9 @@ const headers = ref<Array<ITableHeader>>([
               </ITable>
             </ICol>
           </IRow>
+          <IRow>
+            <ICol><IErrorMessages :validationResult="validationResult" /></ICol>
+          </IRow>
         </IForm>
       </IContainer>
     </IPageContent>
@@ -517,13 +574,13 @@ const headers = ref<Array<ITableHeader>>([
             </div>
             <vSelect
               class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 dark:text-gray-200 mb-10"
-              v-model="VoucherItem.InputVoucherItem"
+              v-model="OutputVoucherItem.InputVoucherItem"
               :options="inputVoucherItemsVSelect"
               :reduce="(_item: IInputVoucherItem) => _item"
               :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
             >
-              <template #option="{ Item, outValue, inValue, notes }">
-                <div class="rtl:text-right border-2 p-2 rounded-md">
+              <template #option="{ Item, outValue, inValue, notes,description }">
+                <div class="rtl:text-right border-2 p-2 rounded-md bg-gray-800 dark:bg-gray-100">
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
                   >
@@ -542,11 +599,12 @@ const headers = ref<Array<ITableHeader>>([
                       {{ Item.Category.name.toString() }}
                     </div>
                     <div
-                      v-if="Item.serialNumber"
+                      v-if="description"
                       class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
                     >
-                      {{ t("SerialNumber") }}:
-                      {{ Item.serialNumber.toString() }}
+                      {{ t("Item.Description") }}:
+                      {{ description.toString() }}
+                     
                     </div>
                     <div
                       class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
@@ -558,17 +616,17 @@ const headers = ref<Array<ITableHeader>>([
                       {{ notes }}
                     </cite>
                   </cite>
-                  <br />
+                  <!-- <br />
                   <cite>
                     {{ Item.description }}
-                  </cite>
+                  </cite> -->
                 </div>
               </template>
             </vSelect>
           </IBasis>
           <IBasis
             base="3/4"
-            v-if="VoucherItem.InputVoucherItem == null"
+            v-if="OutputVoucherItem.InputVoucherItem == null"
             class="border-2 border-dotted border-gray-600"
             ><div class="w-full text-center align-middle border-gray-600">
               <div
@@ -580,23 +638,27 @@ const headers = ref<Array<ITableHeader>>([
           </IBasis>
           <IBasis
             base="3/4"
-            v-else-if="VoucherItem.InputVoucherItem.Item?.Category.name != ''"
+            v-else-if="
+              OutputVoucherItem.InputVoucherItem.Item?.Category.name != ''
+            "
           >
             <IFlex>
               <IBasis base="1/4">
                 <ILabel :title="t('Code')">
-                  {{ VoucherItem.InputVoucherItem.Item?.code }}</ILabel
+                  {{ OutputVoucherItem.InputVoucherItem.Item?.code }}</ILabel
                 >
               </IBasis>
               <IBasis base="1/4">
                 <ILabel :title="t('Category')">
-                  {{ VoucherItem.InputVoucherItem.Item?.Category.name }}</ILabel
+                  {{
+                    OutputVoucherItem.InputVoucherItem.Item?.Category.name
+                  }}</ILabel
                 >
               </IBasis>
               <IBasis base="1/2"
                 ><ILabel :title="t('Description')">
-                  {{ VoucherItem.InputVoucherItem.Item?.description
-                  }} - {{ VoucherItem.InputVoucherItem.notes }}</ILabel
+                  {{ OutputVoucherItem.InputVoucherItem.Item?.description }} -
+                  {{ OutputVoucherItem.InputVoucherItem.notes }}</ILabel
                 >
               </IBasis>
             </IFlex>
@@ -622,30 +684,22 @@ const headers = ref<Array<ITableHeader>>([
           col-md="2"
           col-sm="1"
           col-xs="1"
-          v-if="VoucherItem.InputVoucherItem != null"
+          v-if="OutputVoucherItem.InputVoucherItem != null"
         >
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('Stock')"
-              v-model="VoucherItem.InputVoucherItem.Stock.name"
-              :disabled="true"
-            />
-          </ICol>
-          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('SerialNumber')"
-              v-model="VoucherItem.InputVoucherItem.serialNumber"
-            />
+            <ILabel :title="t('Item.Description')">
+              {{ OutputVoucherItem.InputVoucherItem.description }}</ILabel
+            >
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
               :label="t('Count')"
               :on-input="ChangeValueTotal"
               type="number"
-              v-model="VoucherItem.count"
+              v-model="OutputVoucherItem.count"
               :max="
-                Number(VoucherItem.InputVoucherItem.inValue) -
-                Number(VoucherItem.InputVoucherItem.outValue)
+                Number(OutputVoucherItem.InputVoucherItem.inValue) -
+                Number(OutputVoucherItem.InputVoucherItem.outValue)
               "
               :min="1"
             />
@@ -655,21 +709,21 @@ const headers = ref<Array<ITableHeader>>([
               :label="t('Price')"
               :on-input="ChangeValueTotal"
               type="number"
-              v-model="VoucherItem.InputVoucherItem.price"
+              v-model="OutputVoucherItem.InputVoucherItem.price"
             />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
               :label="t('Total')"
               type="number"
-              v-model="VoucherItem.value"
+              v-model="OutputVoucherItem.value"
             />
           </ICol>
           <ICol :span="3" :span-lg="3" :span-md="2" :span-xl="1">
             <IInput
               :label="t('Note')"
               type="text"
-              v-model="VoucherItem.notes"
+              v-model="OutputVoucherItem.notes"
             />
           </ICol>
         </IRow>

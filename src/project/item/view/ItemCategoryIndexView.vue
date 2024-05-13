@@ -6,8 +6,8 @@ import type { IItemCategory, IItemCategoryFilter } from "../IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 const isLoading = ref(false);
 const data = ref<Array<IItemCategory>>([]);
@@ -19,6 +19,7 @@ import CardItemCategoryIndex from "./CardItemCategoryIndex.vue";
 
 import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import IPage from "@/components/ihec/IPage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -86,15 +87,18 @@ const update = (id: number) => {
 //#region Pagination
 //#endregion
 onMounted(async () => {
+  isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+console.log("in index catitem");
 
   await getFilterData(1);
+  isLoading.value = false;
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('ItemCategory')">
+  <IPage :HeaderTitle="t('Item.Category')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>

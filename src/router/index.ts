@@ -110,4 +110,7 @@ router.beforeResolve(async (to, from, next) => {
   next();
   return;
 });
+router.onError(err => {
+  console.log('<!-- router error: ' + err.message + ' -->')
+})
 export default router;

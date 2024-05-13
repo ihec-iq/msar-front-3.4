@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import loading from "../general/loading.vue";
+import IButton2 from "./IButton2.vue";
 
 defineProps({
   HeaderTitle: {
@@ -15,6 +16,11 @@ defineProps({
     default: false,
   },
 });
+
+const reloadPage = () => {
+  console.log("loading");
+  window.location.reload();
+};
 </script>
 
 <template>
@@ -34,24 +40,33 @@ defineProps({
 
         <div class="flex flex-row">
           <div
-           v-if="isLoading"
+            v-if="isLoading"
             class="h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
             role="status"
           >
-            <span  
+            <span
               class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
               >Loading...</span
             >
           </div>
-          <slot v-if="isLoading==false" name="HeaderButtons"></slot>
+          <span v-if="isLoading == false" class="flex flex-row">
+            <IButtonIcon
+              color="green"
+              width="15"
+              type="outlined"
+              icon="autorenew"
+              :onClick="reloadPage"
+            />
+            <slot name="HeaderButtons"></slot>
+          </span>
         </div>
       </div>
     </nav>
 
-    <div  class="bg-slate-50 dark:bg-slate-800">
+    <div class="bg-slate-50 dark:bg-slate-800">
       <slot></slot>
     </div>
-    <div  v-if="isLoading==false" class="bg-slate-100 dark:bg-slate-800">
+    <div v-if="isLoading == false" class="bg-slate-100 dark:bg-slate-800">
       <slot name="Footer"></slot>
     </div>
   </div>

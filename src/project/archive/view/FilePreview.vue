@@ -89,7 +89,7 @@ const openFile = (path: string) => {
     class="file-preview w-200px bg-black-200/10 ma-2 pa-6 preview-card cursor-pointer"
     style="display: block"
   >
-    <button @click="removeFile(document.id)" class="close-icon">&times;</button>
+    <button @click="removeFile(document.id)" type="button" class="close-icon">&times;</button>
     <img
       @click="openFile(document.path)"
       class="object-cover lg:h-36 lg:w-36 md:w-20 md:h-20 xs:w-12 xs:h-12 m-2 ml-auto mr-auto"

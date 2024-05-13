@@ -10,8 +10,8 @@ import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputV
 import { useRetrievalVoucherStore } from "@/project/warehouse/retrievalVoucher/retrievalVoucherStore";
 import { storeToRefs } from "pinia";
 import WindowsDesign from "@/components/general/WindowsDesign.vue";
-import { usePermissionStore } from "@/project/user/permissionStore";
-const { checkPermissionAccessArray } = usePermissionStore();
+import { usePermissionsStore } from "@/project/core/permissionStore";
+const { checkPermissionAccessArray } = usePermissionsStore();
 
 const outputVoucherStore = useOutputVoucherStore();
 const retrievalVoucherStore = useRetrievalVoucherStore();
@@ -34,7 +34,7 @@ const RetrievalVoucher = ref<{
   date: string;
   signaturePerson: string;
   requestEmployeeId: string;
-  items?: Array<IEmployeeHistory>;
+  Items?: Array<IEmployeeHistory>;
 }>({
   number: "",
   date: new Date().toISOString().split("T")[0],
@@ -60,7 +60,7 @@ const fastSearch = ref("");
 const filterByIDName = (item: IEmployeeHistory) => {
   if (
     item.Voucher.Item.name.includes(fastSearch.value) ||
-    item.Voucher.serialNumber.includes(fastSearch.value)
+    item.Voucher.description.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -91,7 +91,7 @@ const getFilterData = async (page = 1) => {
   await useEmployeeStore()
     .getItemHistory(searchFilter.value, page)
     .then((response) => {
-      if (response.status == 200) {
+      if (response.status == 200) {console.log(response.data.data,searchFilter.value)
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
         dataBase.value = dataPage.value.data;
@@ -123,7 +123,7 @@ const deleteItem = (index: number) => {
 //#region Pagination
 const createRetrievalVoucher = () => {
   //router.push({ name: "retrievalVoucherAdd" });
-  RetrievalVoucher.value.items = SelectedOutItemRetrieval.value;
+  RetrievalVoucher.value.Items = SelectedOutItemRetrieval.value;
   console.log(RetrievalVoucher.value);
 
   retrievalVoucherStore
@@ -234,7 +234,7 @@ const headers = ref<Array<ITableHeader>>([
                     class="border-b border-black h-14 text-gray-100"
                   >
                     <th>{{ row.Voucher.Item.name }}</th>
-                    <th>{{ row.Voucher.serialNumber }}</th>
+                    <th>{{ row.Voucher.description }}</th>
                     <th>
                       <input
                         class="w-[50px] p-2"
@@ -437,7 +437,7 @@ const headers = ref<Array<ITableHeader>>([
                             </th>
                             <th>{{ row.Voucher.Item.name }}</th>
                             <th>{{ row.Voucher.date }}</th>
-                            <th>{{ row.Voucher.serialNumber }}</th>
+                            <th>{{ row.Voucher.description }}</th>
                             <th>{{ row.type }}</th>
                             <th>
                               <span
@@ -452,7 +452,7 @@ const headers = ref<Array<ITableHeader>>([
                               >
                             </th>
                             <th>{{ row.price.toLocaleString() }}</th>
-                            <th>{{ row.Voucher.Stock.name }}</th>
+                            <th>{{ row.Voucher?.Stock?.name }}</th>
                             <th>
                               <van-button
                                 class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"

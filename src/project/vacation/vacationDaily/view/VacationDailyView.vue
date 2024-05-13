@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useVacationDailyStore } from "../vacationDailyStore";
 import { useVacationStore } from "../../vacationStore";
 import type { IEmployee } from "@/project/employee/IEmployee";
@@ -11,6 +11,8 @@ import { useEmployeeStore } from "@/project/employee/employeeStore";
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import { usePaperizer } from "paperizer";
 const { paperize } = usePaperizer("printMe");
+import printJS from "print-js";
+
 import {
   useValidation,
   type IValidationResult,
@@ -57,7 +59,7 @@ const rules: Array<IFieldValidation> = [
 
 import type { IVacation, IVacationReason } from "../../IVacation";
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray, can } = usePermissionsStore();
 const namePage = ref("VacationDaily");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -106,7 +108,7 @@ const store = (withPrint: boolean = false) => {
           timer: 1500,
         });
         console.log(response.data);
-        if (withPrint) print();
+        if (withPrint) printWindow();
         router.go(-1);
       }
     })
@@ -234,7 +236,25 @@ const back = () => {
     name: "vacationDailyIndex",
   });
 };
-const print1 = () => {
+const printDirect222 = () => {
+  printJS("printMe1", "html");
+  return;
+};
+import printDirect from "@thiagoelg/node-printer";
+
+const printWindow2 = () => {
+  const options = {
+    media: "A4",
+    n: 1,
+  };
+  const prtHtml = document.getElementById("printMe")?.innerHTML;
+
+  // printDirect.printDirect(prtHtml, options);
+};
+const printWindow = () => {
+  // Pass the element id here
+  //paperize();
+
   const prtHtml = document.getElementById("printMe")?.innerHTML;
   // Get all stylesheets HTML
   let stylesHtml = "";
@@ -254,11 +274,31 @@ const print1 = () => {
 <html>
   <head>
     ${stylesHtml}
+    <style>
+         body {
+         -webkit-print-color-adjust: exact; /*Chrome,Safari,Edge*/
+         color-adjust: exact;              /* firefox*/
+         }
+    </style>
   </head>
-  <body>
+  <body style="background-color: white">
     ${prtHtml}
   </body>
 </html>`);
+  var options = {
+    silent: false,
+    printBackground: true,
+    color: false,
+    margin: {
+      marginType: "printableArea",
+    },
+    landscape: false,
+    pagesPerSheet: 1,
+    collate: false,
+    copies: 1,
+    header: "Header of the Page",
+    footer: "Footer of the Page",
+  };
   setTimeout(function () {
     // wait until all resources loaded
     WinPrint?.document.close(); // necessary for IE >= 10
@@ -266,11 +306,6 @@ const print1 = () => {
     WinPrint?.print(); // change window to winPrint
     WinPrint?.close(); // change window to winPrint
   }, 250);
-};
-const print = () => {
-  // Pass the element id here
-  //paperize();
-  print1();
 };
 
 const ChangeDate = () => {
@@ -297,16 +332,16 @@ const ChangeDateRecord = () => {
 const SelectedEmployees = ref<Array<IEmployee>>([]);
 
 const SelectEmployeeSection = () => {
+  isLoading.value = true;
   if (
     vacationDaily.value.Vacation?.id == undefined ||
     vacationDaily.value.Vacation?.id == 0
   ) {
     SelectedEmployees.value = employees.value;
   } else {
-    isLoading.value = true;
     SelectedEmployees.value = employees.value.filter(filterEmployeesBySection);
-    isLoading.value = false;
   }
+  isLoading.value = false;
 };
 const filterEmployeesBySection = (_employee: IEmployee) => {
   if (
@@ -318,13 +353,22 @@ const filterEmployeesBySection = (_employee: IEmployee) => {
     return true;
   }
   if (
-    _employee.Section.id
-      .toString()
-      .includes(vacationDaily.value.Vacation.Employee?.Section.id.toString()) &&
+    vacationDaily.value.Vacation.Employee.isMoveSection == 1 &&
+    vacationDaily.value.Vacation?.Employee.MoveSection.id != 1 &&
+    _employee.Section.id ==
+      vacationDaily.value.Vacation?.Employee.MoveSection.id &&
     _employee.id != vacationDaily.value.Vacation.Employee?.id
   ) {
     return true;
-  } else return false;
+  } else {
+    if (
+      _employee.Section.id ==
+        vacationDaily.value.Vacation?.Employee.Section.id &&
+      _employee.id != vacationDaily.value.Vacation.Employee?.id
+    ) {
+      return true;
+    }
+  }
 };
 watch(
   () => vacationDaily.value.Vacation?.Employee.id,
@@ -334,7 +378,6 @@ watch(
 );
 //#endregion
 function getImageUrl(name: string, ext: string) {
-  console.log(new URL(`@/assets/${name}.${ext}`, import.meta.url).href);
   return new URL(`@/assets/${name}.${ext}`, import.meta.url).href;
 }
 import { useAuthStore } from "@/stores/authStore";
@@ -345,8 +388,18 @@ import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import { t } from "@/utilities/I18nPlugin";
 
+import printer from "@thiagoelg/node-printer";
+import util from "util";
+
 onMounted(async () => {
   //console.log(can("show items1"));
+  isLoading.value = true;
+
+  // console.log(
+  //   "installed printers:\n" +
+  //     util.inspect(printer.getPrinters(), { colors: true, depth: 10 })
+  // );
+
   checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "VacationDailyAdd";
@@ -358,21 +411,27 @@ onMounted(async () => {
   }
   await useVacationStore().get_vacations();
   await useVacationReasonStore().get();
-  await useEmployeeStore().get_employees();
-  SelectedEmployees.value = employees.value;
+  await useEmployeeStore()
+    .get_employees()
+    .then(() => {
+      SelectEmployeeSection();
+    });
+  isLoading.value = false;
 });
 const reset = () => {
   useVacationDailyStore().resetData();
 };
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
+  {{ vacationDaily.Vacation?.Employee.MoveSection }} -
+  {{ vacationDaily.Vacation?.Employee.isMoveSection }}
+  <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading" id="printMe1">
     <template #HeaderButtons>
       <IButton2
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
@@ -439,7 +498,11 @@ const reset = () => {
               >
                 <template #option="{ Employee }">
                   <div>
-                    <span>{{ Employee.name }}</span>
+                    <span>{{ Employee.name }}</span
+                    ><br />
+                    <span class="text-xs align-super text-gray-400">
+                      ({{ Employee.Section.name }})</span
+                    >
                   </div>
                 </template>
               </vSelect>
@@ -458,9 +521,13 @@ const reset = () => {
                 label="name"
                 :getOptionLabel="(employee: IEmployee) => employee.name"
               >
-                <template #option="{ name }">
+                <template #option="{ name, Section }">
                   <div>
                     <span>{{ name }}</span>
+                    <br />
+                    <span class="text-xs align-super text-gray-400">
+                      ({{ Section.name }})</span
+                    >
                   </div>
                 </template>
               </vSelect>
@@ -497,6 +564,9 @@ const reset = () => {
         :onCreate="store"
         :onUpdate="update"
         :onDelete="Delete"
+        :showAdd="can(EnumPermission.AddVacationDaily) == 1"
+        :showUpdate="can(EnumPermission.EditVacationDaily) == 1"
+        :showDelete="can(EnumPermission.DeleteVacationDaily) == 1"
       >
         <template #Pre>
           <IButton2
@@ -504,7 +574,7 @@ const reset = () => {
             :text="t('Print')"
             pre-icon="printer"
             type="outlined"
-            :onClick="print"
+            :onClick="printWindow"
           />
           <IButton2
             v-if="vacationDaily.id == 0"
@@ -513,17 +583,25 @@ const reset = () => {
             pre-icon="printer-pos-plus"
             :onClick="storeWithPrint"
           />
+          <IButton2
+            v-if="vacationDaily.id == 0"
+            text="Test"
+            type="outlined"
+            pre-icon="printer-pos-plus"
+            :onClick="printWindow"
+          />
         </template>
       </IFooterCrud>
     </template>
   </IPage>
 
   <div
-    class="hidden print:w-[900px] w-[900px] tablePrint m-2"
+    class="hidden print:w-[900px] w-[900px] tablePrint m-2 print:bg-white bg-white"
     id="printMe"
+    style="background-color: white !important"
     print:rtl
   >
-    <div id="Header" class="w-[900px] print:w-[900px]">
+    <div id="Header" class="w-[900px] print:w-[900px] print:bg-white bg-white">
       <br />
       <br />
       <br />
@@ -538,9 +616,9 @@ const reset = () => {
         alt=""
       />
     </div>
-    <div id="body">
+    <div id="body" class="print:bg-white bg-white">
       <table
-        class="w-[900px] float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+        class="w-[900px] print:bg-white bg-white float-right print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
         style="
           width: 890px !important ;
           margin: 3px !important ;
@@ -584,10 +662,12 @@ const reset = () => {
       </table>
     </div>
 
-    <div class="divFooter1 z-0 w-[900px] print:w-[900px]">
+    <div
+      class="divFooter1 z-0 w-[900px] print:w-[900px] print:bg-white bg-white"
+    >
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
       <table
-        class="float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
+        class="print:bg-white bg-white float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
         style="
           width: 890px !important ;
           margin: 3px !important ;

@@ -13,6 +13,8 @@ export interface IRetrievalVoucher {
   signaturePerson: string;
   Employee: IRetrievalVoucherEmployee;
   itemsCount?: number;
+  Stock: IStock;
+
 }
 export interface IRetrievalVoucherItem {
   id?: number;
@@ -24,8 +26,7 @@ export interface IRetrievalVoucherItem {
   Type: IRetrievalVoucherItemType;
   TypeId: number;
   employeeRequestId: number;
-  Stock: IStock;
-  serialNumber: string;
+  description: string;
   count: number;
   price: number;
   value: number;

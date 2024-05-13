@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { t } from '@/utilities/I18nPlugin';
-
- 
+import { t } from "@/utilities/I18nPlugin";
+const props = defineProps({
+  title: { type: String, default: "Show" },
+});
 </script>
 <template>
   <button
     class="flex justify-between dropdown-item text-sm py-2 px-4 font-normal w-full whitespace-nowrap bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:text-white focus:bg-gray-700"
     href="#"
   >
-    <div class="mr-4 text-lg">{{ t("Show") }}</div>
+    <div class="mr-4 text-lg">{{ t(title) }}</div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -30,4 +31,3 @@ import { t } from '@/utilities/I18nPlugin';
     </svg>
   </button>
 </template>
-@/utilities/I18nPlugin

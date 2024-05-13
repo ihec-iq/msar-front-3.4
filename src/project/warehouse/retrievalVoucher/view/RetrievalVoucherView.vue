@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { usePermissionStore } from "@/project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useStockStore } from "../../stockStore";
 import { useRetrievalVoucherStore } from "./../retrievalVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
@@ -23,7 +23,7 @@ const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("RetrievalVoucher.Index");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -41,11 +41,7 @@ const IsAdd = ref(false);
 
 const VoucherItem = ref<IRetrievalVoucherItem>({
   id: 0,
-  Stock: {
-    id: 1,
-    name: "",
-  },
-  serialNumber: "",
+  description: "",
   count: 1,
   price: 1,
   value: 1,
@@ -64,11 +60,7 @@ const VoucherItem = ref<IRetrievalVoucherItem>({
       },
       measuringUnit: "",
     },
-    Stock: {
-      id: 0,
-      name: "",
-    },
-    serialNumber: "",
+    description: "",
     count: 1,
     price: 1,
     value: 1,
@@ -90,11 +82,7 @@ const resetVoucherItem = () => {
   indexSelectedVoucherItem.value = 0;
   VoucherItem.value = {
     id: 0,
-    Stock: {
-      id: 1,
-      name: "",
-    },
-    serialNumber: "",
+    description: "",
     count: 1,
     price: 1,
     value: 1,
@@ -120,11 +108,7 @@ const resetVoucherItem = () => {
         },
         measuringUnit: "",
       },
-      Stock: {
-        id: 0,
-        name: "",
-      },
-      serialNumber: "",
+      description: "",
       count: 1,
       price: 1,
       value: 1,
@@ -166,12 +150,12 @@ const updatePopup = (index: number, itemX: IRetrievalVoucherItem) => {
 };
 
 const AddItem = () => {
-  VoucherItem.value.Stock = VoucherItem.value.InputVoucherItem?.Stock || {
-    id: 1,
-    name: "",
-  };
-  VoucherItem.value.serialNumber = String(
-    VoucherItem.value.InputVoucherItem?.serialNumber
+  // VoucherItem.value.Stock = VoucherItem.value.InputVoucherItem?.Stock || {
+  //   id: 1,
+  //   name: "",
+  // };
+  VoucherItem.value.description = String(
+    VoucherItem.value.InputVoucherItem?.description
   );
   VoucherItem.value.price = Number(VoucherItem.value.InputVoucherItem?.price);
   ChangeValueTotal();
@@ -393,7 +377,7 @@ const headers = ref<Array<ITableHeader>>([
         color="green"
         width="28"
         type="outlined"
-        pre-icon="autorenew"
+        pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
       />
@@ -634,15 +618,8 @@ const headers = ref<Array<ITableHeader>>([
         >
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
-              :label="t('Stock')"
-              v-model="VoucherItem.InputVoucherItem.Stock.name"
-              :disabled="true"
-            />
-          </ICol>
-          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('SerialNumber')"
-              v-model="VoucherItem.InputVoucherItem.serialNumber"
+              :label="t('Description')"
+              v-model="VoucherItem.InputVoucherItem.description"
             />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">

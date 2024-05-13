@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import { usePermissionStore } from "../project/user/permissionStore";
+import { usePermissionsStore } from "@/project/core/permissionStore";
 import type { IUser } from "@/project/user/IUser";;
 import { useRouter } from "vue-router";
 export const useAuthStore = defineStore("useAuthStore", () => {
@@ -10,7 +10,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const token = ref<string | any>("");
   const user = ref<IUser>();
   const router = useRouter();
-  const { setPermissions } = usePermissionStore();
+  const { setPermissions } = usePermissionsStore();
   const login = async (payload: { email: string; password: string }) => {
     return await new Promise((resolve, reject) => {
       Api.post("/login", payload)
@@ -44,8 +44,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     localStorage.setItem("isAuthenticated", "1");
     localStorage.setItem("token", _token);
     Api.defaults.headers.common["Authorization"] = `Bearer ${_token}`;
+    isAuthenticated.value = true
   };
-  //const PermissionStore = usePermissionStore();
+  //const PermissionStore = usePermissionsStore();
   const setUser = (_user: IUser) => {
     user.value = _user;
     localStorage.setItem("user", JSON.stringify(_user));

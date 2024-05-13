@@ -9,9 +9,9 @@ export default [
   ...retrievalVoucherRoute,
   ...directVoucherRoute,
   {
-    path: "/warehouseIndex",
-    name: "warehouseIndex",
-    component: () => import("./view/WarehouseIndexView.vue"),
+    path: "/warehousePortal",
+    name: "warehousePortal",
+    component: () => import("./view/WarehousePortalView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
