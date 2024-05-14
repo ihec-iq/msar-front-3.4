@@ -84,7 +84,8 @@ const getFilterData = async (page: number = 1) => {
   searchFilter.value.employeeName = fastSearch.value;
   searchFilter.value.limit = 1990;
   await getDataDaily(searchFilter.value);
-  //await getDataTime(searchFilter.value);
+  await getDataTime(searchFilter.value);
+  await getDataSick(searchFilter.value);
 };
 const getDataTime = async (searchFilter: IVacationFilter, page: number = 1) => {
   isLoadingTime.value = true;
@@ -94,7 +95,6 @@ const getDataTime = async (searchFilter: IVacationFilter, page: number = 1) => {
       if (response.status == 200) {
         dataPageVacationTime.value = response.data.data;
         dataVacationTime.value = response.data.data.data;
-        console.log(dataPageVacationTime.value);
       }
     })
     .catch((error) => {
@@ -106,20 +106,34 @@ const getDataDaily = async (
   searchFilter: IVacationFilter,
   page: number = 1
 ) => {
-  isLoadingTime.value = true;
+  isLoadingDaily.value = true;
   await useVacationDailyStore()
     .get_filter(searchFilter, page)
     .then((response) => {
       if (response.status == 200) {
         dataPageVacationDaily.value = response.data.data;
         dataVacationDaily.value = response.data.data.data;
-        console.log(dataPageVacationDaily.value);
+       }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoadingDaily.value = false;
+};
+const getDataSick = async (searchFilter: IVacationFilter, page: number = 1) => {
+  isLoadingSick.value = true;
+  await useVacationSickStore()
+    .get_filter(searchFilter, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataPageVacationSick.value = response.data.data;
+        dataVacationSick.value = response.data.data.data;
       }
     })
     .catch((error) => {
       console.log(error);
     });
-  isLoadingTime.value = false;
+  isLoadingSick.value = false;
 };
 //#endregion
 
@@ -165,7 +179,6 @@ const headersDaily = ref<Array<ITableHeader>>([
   { caption: t("Vacation.Record"), value: "record" },
   { caption: t("Vacation.DayFrom"), value: "dayFrom" },
   { caption: t("Vacation.DayTo"), value: "dayTo" },
-  { caption: t("Vacation.Date"), value: "date" },
   { caption: t("Details"), value: "actions" },
 ]);
 const headersSick = ref<Array<ITableHeader>>([
@@ -173,7 +186,6 @@ const headersSick = ref<Array<ITableHeader>>([
   { caption: t("Vacation.Record"), value: "record" },
   { caption: t("Vacation.DayFrom"), value: "dayFrom" },
   { caption: t("Vacation.DayTo"), value: "dayTo" },
-  { caption: t("Vacation.Date"), value: "date" },
   { caption: t("Details"), value: "actions" },
 ]);
 </script>

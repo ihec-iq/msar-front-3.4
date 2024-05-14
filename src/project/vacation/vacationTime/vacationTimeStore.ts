@@ -40,6 +40,11 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
         Type: {
           id: 0,
           name: ""
+        },
+        Center: {
+          id: 0,
+          name: "",
+          code: ""
         }
       },
       record: 0,
@@ -108,6 +113,11 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
         Type: {
           id: 0,
           name: ""
+        },
+        Center: {
+          id: 0,
+          name: "",
+          code: ""
         }
       },
       record: 0,

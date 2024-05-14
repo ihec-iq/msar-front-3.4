@@ -39,6 +39,11 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         Type: {
           id: 0,
           name: ""
+        },
+        Center: {
+          id: 0,
+          name: "",
+          code: ""
         }
       },
       record: 0,
@@ -96,6 +101,11 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         Type: {
           id: 0,
           name: ""
+        },
+        Center: {
+          id: 0,
+          name: "",
+          code: ""
         }
       },
       record: 0,
