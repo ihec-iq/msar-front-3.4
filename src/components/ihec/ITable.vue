@@ -27,9 +27,9 @@ defineProps({
     <IRowHeader v-if="title" :title="title" />
     <div
       v-motion
-      :initial="{ opacity: 0, y: -15 }"
+      :initial="{ opacity: 1, y: -15 }"
       :enter="{ opacity: 1, y: 0 }"
-      :variants="{ custom: { scale: 2 } }"
+      :variants="{ custom: { scale: 5 } }"
       :delay="200"
       v-if="items.length > 0"
       class="overflow-auto"
