@@ -423,8 +423,6 @@ const reset = () => {
 };
 </script>
 <template>
-  {{ vacationDaily.Vacation?.Employee.MoveSection }} -
-  {{ vacationDaily.Vacation?.Employee.isMoveSection }}
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading" id="printMe1">
     <template #HeaderButtons>
       <IButton2
