@@ -152,6 +152,7 @@ export default {
     Position: "Position",
     Section: "Section",
     Center: "Center",
+    DateWork: "Work Date",
     IsPerson: "Type Account",
     isMoveSection: "Move to Section",
     MoveSection: "Section Moved",

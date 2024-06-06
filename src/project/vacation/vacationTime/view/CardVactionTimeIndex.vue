@@ -15,7 +15,7 @@ const props = defineProps({
   },
 });
 const MakeTime = (time: string) => {
-   return truncateString(time, 5);
+  return truncateString(time, 5);
 };
 </script>
 <template>
@@ -54,6 +54,9 @@ const MakeTime = (time: string) => {
           class="text-text dark:text-textGray ml-2 mr-2"
           v-html="MakeTime(item.timeTo)"
         ></div>
+      </div>
+      <div class="text-[12px] text-text dark:text-textGray float-right">
+        createdAt : {{ item.createdAt }}
       </div>
     </div>
   </div>

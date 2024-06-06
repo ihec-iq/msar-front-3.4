@@ -402,12 +402,12 @@ onMounted(async () => {
 
   checkPermissionAccessArray([EnumPermission.ShowVacationsDaily]);
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "VacationDailyAdd";
+    namePage.value = "VacationDaily.Add";
     vacationDaily.value.id = 0;
   } else {
     await showData();
     vacationDaily.value.id = id.value;
-    namePage.value = "VacationDailyUpdate";
+    namePage.value = "VacationDaily.Update";
   }
   await useVacationStore().get_vacations();
   await useVacationReasonStore().get();

@@ -7,6 +7,7 @@ export interface IVacationSick {
   record: number;
   Vacation: IVacation;
   Reason: IVacationReason;
+  createdAt?: string
 }
 
 export interface IVacationSickFilter {

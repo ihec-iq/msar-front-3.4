@@ -153,6 +153,7 @@ export default {
     Section: "الشعبة",
     Type: "المكان",
     Center: "المركز",
+    DateWork : "تاريخ المباشرة",
     IsPerson: "نوع الحساب",
     isMoveSection: "منسب الى شعبة",
     MoveSection: "شعبة التنسيب",

@@ -61,6 +61,7 @@ const store = () => {
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
   formData.append("telegramId", String(employee.value.telegramId));
+  formData.append("dateWork", String(employee.value.dateWork));
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
@@ -114,6 +115,7 @@ function update() {
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
   formData.append("telegramId", String(employee.value.telegramId));
+  formData.append("dateWork", String(employee.value.dateWork));
   formData.append("idCard", String(employee.value.idCard));
   formData.append("initVacation", employee.value.initVacation.toString());
   formData.append("takeVacation", employee.value.takeVacation.toString());
@@ -191,6 +193,7 @@ const showData = async () => {
         employee.value.idCard = response.data.data.idCard;
         employee.value.number = response.data.data.number;
         employee.value.telegramId = response.data.data.telegramId;
+        employee.value.dateWork = response.data.data.dateWork;
         employee.value.Section = response.data.data.Section;
         employee.value.MoveSection = response.data.data.MoveSection;
         employee.value.User = response.data.data.User;
@@ -298,6 +301,13 @@ onMounted(async () => {
               type="text"
           /></ICol>
           <ICol span="1" span-md="1" span-sm="1">
+            <IInput
+              :label="t('Employee.DateWork')"
+              name="EmployeeDateWork"
+              v-model="employee.dateWork"
+              type="date"
+          /></ICol>
+          <ICol span="1" span-md="1" span-sm="1">
             <ISelect
               :label="t('Employee.Section')"
               v-model="employee.Section.id"
@@ -385,6 +395,7 @@ onMounted(async () => {
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
             <IButton2
+              type="outlined"
               class="mt-3"
               v-if="employee.User?.id"
               :on-click="ShowUser"

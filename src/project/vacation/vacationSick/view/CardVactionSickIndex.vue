@@ -41,6 +41,9 @@ const props = defineProps({
           v-html="item.dayTo"
         ></div>
       </div>
+      <div class="text-[12px] text-text dark:text-textGray float-right">
+        createdAt : {{ item.createdAt }}
+      </div>
     </div>
 
     <IDropdown>
