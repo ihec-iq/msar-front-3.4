@@ -256,6 +256,12 @@ onMounted(async () => {
   }
   isLoading.value = false;
 });
+const active = ref(0);
+
+const fileObj = ref<{
+  fileName: string;
+  fileType: string;
+}>();
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
@@ -271,97 +277,101 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <IRow>
-        <IRow col-lg="4" col-md="2" col-sm="1">
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput
-              :label="t('Name')"
-              name="Name"
-              v-model="employee.name"
-              type="text"
-          /></ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput
-              :label="t('Employee.Number')"
-              name="Employee.Number"
-              v-model="employee.number"
-              type="text"
-          /></ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput
-              :label="t('Employee.Telegram')"
-              name="EmployeeTelegram"
-              v-model="employee.telegramId"
-              type="text"
-          /></ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput
-              :label="t('Employee.IdCard')"
-              name="EmployeeIdCard"
-              v-model="employee.idCard"
-              type="text"
-          /></ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput
-              :label="t('Employee.DateWork')"
-              name="EmployeeDateWork"
-              v-model="employee.dateWork"
-              type="date"
-          /></ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <ISelect
-              :label="t('Employee.Section')"
-              v-model="employee.Section.id"
-              name="archiveTypeId"
-              :options="sections"
-              :IsRequire="true"
-          /></ICol>
+        <van-tabs v-model:active="active">
+          <van-tab title="معلومات الموظف">
+            <IRow col-lg="4" col-md="2" col-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput
+                  :label="t('Name')"
+                  name="Name"
+                  v-model="employee.name"
+                  type="text"
+              /></ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput
+                  :label="t('Employee.Number')"
+                  name="Employee.Number"
+                  v-model="employee.number"
+                  type="text"
+              /></ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput
+                  :label="t('Employee.Telegram')"
+                  name="EmployeeTelegram"
+                  v-model="employee.telegramId"
+                  type="text"
+              /></ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput
+                  :label="t('Employee.IdCard')"
+                  name="EmployeeIdCard"
+                  v-model="employee.idCard"
+                  type="text"
+              /></ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput
+                  :label="t('Employee.DateWork')"
+                  name="EmployeeDateWork"
+                  v-model="employee.dateWork"
+                  type="date"
+              /></ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <ISelect
+                  :label="t('Employee.Section')"
+                  v-model="employee.Section.id"
+                  name="archiveTypeId"
+                  :options="sections"
+                  :IsRequire="true"
+              /></ICol>
 
-          <ICol span="1" span-md="1" span-sm="1">
-            <ISelect
-              :label="t('Employee.Position')"
-              v-model="employee.Position.id"
-              name="PostionId"
-              :options="employees_positions"
-              :IsRequire="true"
-          /></ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <ISelect
-              :label="t('Employee.Type')"
-              v-model="employee.Type.id"
-              name="TypeId"
-              :options="employees_types"
-              :IsRequire="true"
-          /></ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <ISelect
-              :label="t('Employee.Center')"
-              v-model="employee.Center.id"
-              name="CecnterId"
-              :options="employees_centers"
-              :IsRequire="true"
-          /></ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <ICheckbox v-model="isPerson" :checked="isPerson">
-              {{ t("Employee.IsPerson") }} :
-              {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
-            >
-          </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <ICheckbox v-model="isMoveSection" :checked="isMoveSection">
-              {{ t("Employee.isMoveSection") }} :
-              {{ isMoveSection ? " نعم " : " كلا  " }}</ICheckbox
-            >
-          </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <ISelect
-              :label="t('Employee.MoveSection')"
-              v-model="employee.MoveSection.id"
-              name="MoveSectionId"
-              :options="sections"
-              :IsRequire="true"
-              :IsDisabled="!isMoveSection"
-          /></ICol>
-          <!-- <ICol span="1" span-md="2" span-sm="4">
+              <ICol span="1" span-md="1" span-sm="1">
+                <ISelect
+                  :label="t('Employee.Position')"
+                  v-model="employee.Position.id"
+                  name="PostionId"
+                  :options="employees_positions"
+                  :IsRequire="true"
+              /></ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <ISelect
+                  :label="t('Employee.Type')"
+                  v-model="employee.Type.id"
+                  name="TypeId"
+                  :options="employees_types"
+                  :IsRequire="true"
+              /></ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <ISelect
+                  :label="t('Employee.Center')"
+                  v-model="employee.Center.id"
+                  name="CecnterId"
+                  :options="employees_centers"
+                  :IsRequire="true"
+              /></ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <ICheckbox v-model="isPerson" :checked="isPerson">
+                  {{ t("Employee.IsPerson") }} :
+                  {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
+                >
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <ICheckbox v-model="isMoveSection" :checked="isMoveSection">
+                  {{ t("Employee.isMoveSection") }} :
+                  {{ isMoveSection ? " نعم " : " كلا  " }}</ICheckbox
+                >
+              </ICol>
+
+              <ICol span="1" span-md="1" span-sm="1" v-if="isMoveSection">
+                <ISelect
+                  :label="t('Employee.MoveSection')"
+                  v-model="employee.MoveSection.id"
+                  name="MoveSectionId"
+                  :options="sections"
+                  :IsRequire="true"
+              /></ICol>
+              <!-- :IsDisabled="!isMoveSection" -->
+
+              <!-- <ICol span="1" span-md="2" span-sm="4">
               <div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
               >
@@ -382,27 +392,40 @@ onMounted(async () => {
                 </template>
               </vSelect>
             </ICol> -->
-        </IRow>
-        <IRow col-lg="3" col-md="2" col-sm="1">
-          <ICol span="1" span-md="1" span-sm="1">
-            <IVSelect
-              :label="t('User')"
-              v-model="employee.User"
-              name="archiveTypeId"
-              :options="SelectedUsers"
-              :IsRequire="true"
-            />
-          </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IButton2
-              type="outlined"
-              class="mt-3"
-              v-if="employee.User?.id"
-              :on-click="ShowUser"
-              :text="t('Open')"
-            />
-          </ICol>
-        </IRow>
+            </IRow>
+            <IRow col-lg="3" col-md="2" col-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">
+                <IVSelect
+                  :label="t('User')"
+                  v-model="employee.User"
+                  name="archiveTypeId"
+                  :options="SelectedUsers"
+                  :IsRequire="true"
+                />
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IButton2
+                  type="outlined"
+                  class="mt-3"
+                  v-if="employee.User?.id"
+                  :on-click="ShowUser"
+                  :text="t('Open')"
+                />
+              </ICol>
+            </IRow>
+          </van-tab>
+          <van-tab title="الملفات">
+            <IRow col-lg="4" col-md="2" col-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput
+                  :label="t('FileName')"
+                  name="FileName"
+                  v-model="employee.name"
+                  type="text"
+              /></ICol>
+            </IRow>
+          </van-tab>
+        </van-tabs>
       </IRow>
     </IPageContent>
 

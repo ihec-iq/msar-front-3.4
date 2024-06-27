@@ -80,6 +80,8 @@ declare module 'vue' {
     ValidateInput: typeof import('./src/components/general/ValidateInput.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanPopup: typeof import('vant/es')['Popup']
+    VanTab: typeof import('vant/es')['Tab']
+    VanTabs: typeof import('vant/es')['Tabs']
     WangEditor: typeof import('./src/components/WangEditor.vue')['default']
     WindowsDesign: typeof import('./src/components/general/WindowsDesign.vue')['default']
     WindowsDesign2: typeof import('./src/components/general/WindowsDesign2.vue')['default']
