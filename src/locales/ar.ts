@@ -143,6 +143,11 @@ export default {
   EmployeeIsPerson: "نوع البيانات",
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
+  HrDocyment: {
+    Index: "ملفات الاضابير",
+    Title: "عنوان الملف",
+    Type: "نوع الملف",
+  },
   Employee: {
     Title: "الموظف",
     HistoryReport: "كشف ذمة",
@@ -153,7 +158,7 @@ export default {
     Section: "الشعبة",
     Type: "المكان",
     Center: "المركز",
-    DateWork : "تاريخ المباشرة",
+    DateWork: "تاريخ المباشرة",
     IsPerson: "نوع الحساب",
     isMoveSection: "منسب الى شعبة",
     MoveSection: "شعبة التنسيب",

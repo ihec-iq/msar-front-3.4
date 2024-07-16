@@ -65,7 +65,8 @@ const filteredLinks = computed(() =>
 );
 const checkPermission = (per: string) => {
   return UserPermissions.value.some(
-    (permission) => UserPermissions.value.includes(per) || permission == "public"
+    (permission) =>
+      UserPermissions.value.includes(per) || permission == "public"
   );
 };
 // watch(nav, newSearchQuery => {
@@ -183,12 +184,9 @@ const { user } = storeToRefs(useAuthStore());
                 :to="{ name: Link.routerName }"
                 @click.prevent="tab = Link.tab"
                 @mouseover="tab = Link.tab"
-               >
+              >
                 <button
-                  class="bg-[#FEFEFE] shadow-md  text-[#23A559] hover:text-[#FEFEFE] hover:bg-[#23A559]
-                   duration-500 fadeOut 2s ease-in-out btn-outline hover:rounded-2xl p-4
-                    rounded-full   border-none
-                      border-2 m-1  "
+                  class="bg-[#FEFEFE] shadow-md text-[#23A559] hover:text-[#FEFEFE] hover:bg-[#23A559] duration-500 fadeOut 2s ease-in-out btn-outline hover:rounded-2xl p-4 rounded-full border-none border-2 m-1"
                   :title="Link.title"
                   v-html="Link.icon"
                 ></button
@@ -197,7 +195,7 @@ const { user } = storeToRefs(useAuthStore());
               <div>
                 <div
                   v-if="Link.children?.length ?? 0 > 0"
-                  class="p-2 text-gray-800 dark:text-gray-200 whitespace-pre-wrap cursor-pointer duration-500"
+                  class="p-2 text-gray-800 dark:text-gray-200 whitespace-pre-wrap cursor-pointer"
                 >
                   <div v-for="(child, index) in Link.children" :key="index">
                     <router-link
@@ -205,7 +203,7 @@ const { user } = storeToRefs(useAuthStore());
                       v-if="
                         tab == Link.tab && checkPermission(child.permissions[0])
                       "
-                      class="cursor-pointer rounded-md p-2 border-2 my-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
+                      class="cursor-pointer duration-800 fadeOut 2s ease-in-out rounded-md p-2 border-2 my-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
                       :class="{ 'flex ': !isClose, hidden: isClose }"
                     >
                       {{ child.title }}
