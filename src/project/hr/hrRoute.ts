@@ -2,7 +2,7 @@ import authMiddleware from "@/router/middleware/authMiddleware";
 
 export default [
   {
-    path: "/hr/:search?",
+    path: "/hr/index",
     name: "hrDocumentIndex",
     component: () => import("@/project/hr/view/HrDocumentIndexView.vue"),
     meta: {
@@ -10,7 +10,7 @@ export default [
     },
   },
   {
-    path: "/hrPortal",
+    path: "/hr/portal",
     name: "hrPortal",
     component: () => import("@/project/hr/view/HrPortalView.vue"),
     meta: {
@@ -18,7 +18,7 @@ export default [
     },
   },
   {
-    path: "/hrDocument",
+    path: "/hr/document",
     name: "hrDocumentAdd",
     component: () => import("@/project/hr/view/HrDocumentView.vue"),
     meta: {
@@ -26,7 +26,7 @@ export default [
     },
   },
   {
-    path: "/hrDocument/:id",
+    path: "/hr/document/:id",
     name: "hrDocumentUpdate",
     component: () => import("@/project/hr/view/HrDocumentView.vue"),
     meta: {

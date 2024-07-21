@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useEmployeeStore } from "../employeeStore";
+import { useHrDomcumnetStore } from "../hrDocumentStore";
 import { useSectionStore } from "@/project/section/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
@@ -28,9 +28,8 @@ const id = ref(Number(route.params.id));
 const isPerson = ref(false);
 const isMoveSection = ref(false);
 
-const employeeStore = useEmployeeStore();
-const { employee, employees_types, employees_positions, employees_centers } =
-  storeToRefs(useEmployeeStore());
+const hrDomcumnetStore = useHrDomcumnetStore();
+const { hrDocument, hrDocumentTypes } = storeToRefs(useHrDomcumnetStore());
 const sectionStore = useSectionStore();
 const { sections } = storeToRefs(useSectionStore());
 
@@ -42,39 +41,20 @@ const SelectedUsers = ref<Array<IUser>>([]);
 //#endregion
 //#region CURD
 const reset = () => {
-  employeeStore.resetData();
+  hrDomcumnetStore.resetData();
 };
+const filesDataInput = ref<File>();
+
 const store = () => {
   errors.value = null;
   const formData = new FormData();
-  employee.value.isPerson = isPerson.value ? 1 : 0;
-  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
-  formData.append("id", employee.value.id.toString());
-  formData.append("name", employee.value.name.toString());
-  formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("isMoveSection", employee.value.isMoveSection.toString());
-  formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
-  formData.append("sectionId", employee.value.Section.id.toString());
-  formData.append("positionId", employee.value.Position.id.toString());
-  formData.append("typeId", employee.value.Type.id.toString());
-  formData.append("centerId", employee.value.Center.id.toString());
-  formData.append("UserId", String(employee.value.User?.id));
-  formData.append("number", String(employee.value.number));
-  formData.append("telegramId", String(employee.value.telegramId));
-  formData.append("dateWork", String(employee.value.dateWork));
-  formData.append("idCard", employee.value.idCard.toString());
-  formData.append("initVacation", employee.value.initVacation.toString());
-  formData.append("takeVacation", employee.value.takeVacation.toString());
-  formData.append(
-    "initVacationSick",
-    employee.value.initVacationSick.toString()
-  );
-  formData.append(
-    "takeVacationSick",
-    employee.value.takeVacationSick.toString()
-  );
+  formData.append("addDays", String(hrDocument.value.addDays));
+  formData.append("title", hrDocument.value.title.toString());
+  formData.append("issueDate", hrDocument.value.issueDate.toString());
+  formData.append("addDays", hrDocument.value.addDays.toString());
+  formData.append("files", filesDataInput.value);
 
-  employeeStore
+  hrDomcumnetStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -89,7 +69,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = employeeStore.getError(error);
+      errors.value = hrDomcumnetStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -127,7 +107,7 @@ function update() {
     "takeVacationSick",
     employee.value.takeVacationSick.toString()
   );
-  employeeStore
+  hrDomcumnetStore
     .update(employee.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
@@ -142,7 +122,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = employeeStore.getError(error);
+      errors.value = hrDomcumnetStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -171,7 +151,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await employeeStore._delete(employee.value.id).then(() => {
+        await hrDomcumnetStore._delete(employee.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -184,7 +164,7 @@ const Delete = async () => {
 };
 const showData = async () => {
   Loading.value = true;
-  await employeeStore
+  await hrDomcumnetStore
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
@@ -238,9 +218,9 @@ onMounted(async () => {
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   await sectionStore.get_sections();
-  await employeeStore.get_employee_types();
-  await employeeStore.get_employee_positions();
-  await employeeStore.get_employee_centers();
+  await hrDomcumnetStore.get_employee_types();
+  await hrDomcumnetStore.get_employee_positions();
+  await hrDomcumnetStore.get_employee_centers();
   await useUserStore()
     .get_lite()
     .then((response) => {

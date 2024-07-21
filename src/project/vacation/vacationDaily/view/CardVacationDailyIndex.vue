@@ -21,7 +21,7 @@ const props = defineProps({
     <div class="w-3/4 overflow-hidden">
       <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
         <div class="text-2xl text-text dark:text-textLight mb-2">
-          {{ item.Vacation.Employee.name }}
+          <span class="text-lg">{{ item.id }})</span> {{ item.Vacation.Employee.name }}
         </div>
       </div>
       <div class="flex justify-betweens">

@@ -54,7 +54,7 @@ export const useHrDomcumnetStore = defineStore("HrDomcumnetStore", () => {
   const hrDocuments = ref<Array<IHrDocument>>([]);
   const hrDocumentTypes = ref<Array<IHrHocumentType>>([]);
   const pathBase = "";
-  const pathUrl = `${pathBase}/hrDocument`;
+  const pathUrl = `${pathBase}/hr_document`;
   async function get() {
     return await Api.get(`${pathUrl}`);
   }

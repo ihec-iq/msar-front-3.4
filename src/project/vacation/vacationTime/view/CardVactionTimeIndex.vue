@@ -25,7 +25,7 @@ const MakeTime = (time: string) => {
     <div class="w-4/4 overflow-hidden">
       <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right flex w-full">
         <div class="text-2xl text-text dark:text-textLight mb-2">
-          {{ item.Vacation.Employee.name }}
+          <span class="text-lg">{{ item.id }})</span>{{ item.Vacation.Employee.name }}
         </div>
         <IDropdown>
           <li>

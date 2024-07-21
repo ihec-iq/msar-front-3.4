@@ -4,7 +4,7 @@ import type { IEmployee } from "../employee/IEmployee";
 export interface IHrDocument {
   id: number;
   title: string;
-  dateIssue: string;
+  issueDate: string;
   Employee: IEmployee;
   Type: IHrHocumentType;
   addDays?: number;

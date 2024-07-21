@@ -41,7 +41,7 @@ watch(
 const addItem = () => {
   useHrDomcumnetStore().resetData();
   router.push({
-    name: "hrDcoumentAdd",
+    name: "hrDocumentAdd",
   });
 };
 
@@ -102,10 +102,10 @@ const history = (id: number) => {
 //#endregion
 onMounted(async () => {
   isLoading.value = true;
-  checkPermissionAccessArray([EnumPermission.ShowEmployees]);
+  //checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  await useSectionStore().get_sections();
+  //await useSectionStore().get_sections();
 
   let index = 1;
 

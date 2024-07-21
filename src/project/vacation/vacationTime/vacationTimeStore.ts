@@ -81,7 +81,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
     return dateTimeTo;
   };
   function resetData() {
-    vacationTime.timeFrom = addHours();
+    vacationTime.timeFrom = addHours(0);
     vacationTime.record = 0.5;
     vacationTime.timeTo = addHours(vacationTime.record);
     vacationTime.id = 0;
