@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useHrDomcumnetStore } from "../hrDocumentStore";
+import { useHrDocumentStore } from "../hrDocumentStore";
 import { useSectionStore } from "@/project/section/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
-
+import type { IEmployeeLite } from "@/project/employee/IEmployee";
+import type { IHrDocumentType  } from '../IHrDocument'
 import { t } from "@/utilities/I18nPlugin";
-import type { IUser } from "@/project/user/IUser";
-import { useUserStore } from "@/project/user/userStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import ISelect from "@/components/inputs/ISelect.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
-import IVSelect from "@/components/inputs/IVSelect.vue";
 
 //region"Drag and Drop"
 
@@ -22,39 +20,44 @@ import IVSelect from "@/components/inputs/IVSelect.vue";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref("EmployeeAdd");
+const namePage = ref("HrDocumentAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
-const isPerson = ref(false);
-const isMoveSection = ref(false);
 
-const hrDomcumnetStore = useHrDomcumnetStore();
-const { hrDocument, hrDocumentTypes } = storeToRefs(useHrDomcumnetStore());
+const HrDocumentStore = useHrDocumentStore();
+const { hrDocument, hrDocumentTypes, employees } = storeToRefs(
+  useHrDocumentStore()
+);
 const sectionStore = useSectionStore();
-const { sections } = storeToRefs(useSectionStore());
 
 const Loading = ref(false);
 
 const router = useRouter();
 const errors = ref<string | null>();
-const SelectedUsers = ref<Array<IUser>>([]);
 //#endregion
 //#region CURD
 const reset = () => {
-  hrDomcumnetStore.resetData();
+  HrDocumentStore.resetData();
 };
 const filesDataInput = ref<File>();
 
+function onFileChanged($event: Event) {
+  const target = $event.target as HTMLInputElement;
+  if (target && target.files) {
+    filesDataInput.value = target.files[0];
+  }
+}
 const store = () => {
   errors.value = null;
   const formData = new FormData();
   formData.append("addDays", String(hrDocument.value.addDays));
   formData.append("title", hrDocument.value.title.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
-  formData.append("addDays", hrDocument.value.addDays.toString());
-  formData.append("files", filesDataInput.value);
+  formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
+  formData.append("employeeId", hrDocument.value.Employee.id.toString());
+  if (filesDataInput.value) formData.append("file", filesDataInput.value);
 
-  hrDomcumnetStore
+  HrDocumentStore
     .store(formData)
     .then((response) => {
       if (response.status === 200) {
@@ -69,7 +72,7 @@ const store = () => {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = hrDomcumnetStore.getError(error);
+      errors.value = HrDocumentStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -81,39 +84,20 @@ const store = () => {
 function update() {
   errors.value = null;
   const formData = new FormData();
-  employee.value.isPerson = isPerson.value ? 1 : 0;
-  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
+  formData.append("addDays", String(hrDocument.value.addDays));
+  formData.append("title", hrDocument.value.title.toString());
+  formData.append("issueDate", hrDocument.value.issueDate.toString());
+  formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
+  formData.append("employeeId", hrDocument.value.Employee.id.toString());
+  if (filesDataInput.value) formData.append("file", filesDataInput.value);
 
-  formData.append("name", employee.value.name.toString());
-  formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("sectionId", employee.value.Section.id.toString());
-  formData.append("isMoveSection", employee.value.isMoveSection.toString());
-  formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
-  formData.append("positionId", employee.value.Position.id.toString());
-  formData.append("typeId", employee.value.Type.id.toString());
-  formData.append("centerId", employee.value.Center.id.toString());
-  formData.append("UserId", String(employee.value.User?.id));
-  formData.append("number", String(employee.value.number));
-  formData.append("telegramId", String(employee.value.telegramId));
-  formData.append("dateWork", String(employee.value.dateWork));
-  formData.append("idCard", String(employee.value.idCard));
-  formData.append("initVacation", employee.value.initVacation.toString());
-  formData.append("takeVacation", employee.value.takeVacation.toString());
-  formData.append(
-    "initVacationSick",
-    employee.value.initVacationSick.toString()
-  );
-  formData.append(
-    "takeVacationSick",
-    employee.value.takeVacationSick.toString()
-  );
-  hrDomcumnetStore
-    .update(employee.value.id, formData)
+  HrDocumentStore
+    .update(hrDocument.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
-          title: "Your employee has been updated",
+          title: "Your data has been updated",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -122,7 +106,7 @@ function update() {
     })
     .catch((error) => {
       //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = hrDomcumnetStore.getError(error);
+      errors.value = HrDocumentStore.getError(error);
       Swal.fire({
         icon: "error",
         title: "updating data fails!!!",
@@ -151,7 +135,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await hrDomcumnetStore._delete(employee.value.id).then(() => {
+        await HrDocumentStore._delete(hrDocument.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -164,26 +148,16 @@ const Delete = async () => {
 };
 const showData = async () => {
   Loading.value = true;
-  await hrDomcumnetStore
+  await HrDocumentStore
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        employee.value.id = response.data.data.id;
-        employee.value.name = response.data.data.name;
-        employee.value.idCard = response.data.data.idCard;
-        employee.value.number = response.data.data.number;
-        employee.value.telegramId = response.data.data.telegramId;
-        employee.value.dateWork = response.data.data.dateWork;
-        employee.value.Section = response.data.data.Section;
-        employee.value.MoveSection = response.data.data.MoveSection;
-        employee.value.User = response.data.data.User;
-        employee.value.Type = response.data.data.Type;
-        employee.value.Center = response.data.data.Center;
-        employee.value.Position = response.data.data.Position;
-        employee.value.isPerson = response.data.data.isPerson;
-        isPerson.value = response.data.data.isPerson == 0 ? false : true;
-        isMoveSection.value =
-          response.data.data.isMoveSection == 0 ? false : true;
+        hrDocument.value.id = response.data.data.id;
+        hrDocument.value.addDays = response.data.data.addDays;
+        hrDocument.value.title = response.data.data.title;
+        hrDocument.value.issueDate = response.data.data.issueDate;
+        hrDocument.value.Type = response.data.data.Type;
+        hrDocument.value.Employee = response.data.data.Employee;
       }
     })
     .catch((errors) => {
@@ -206,7 +180,7 @@ const back = () => {
   });
 };
 const ShowUser = () => {
-  let userId = employee.value.User?.id;
+  let userId = hrDocument.value.id;
   router.push({
     name: "userUpdate",
     params: { id: userId },
@@ -217,31 +191,20 @@ onMounted(async () => {
   isLoading.value = true;
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
-  await sectionStore.get_sections();
-  await hrDomcumnetStore.get_employee_types();
-  await hrDomcumnetStore.get_employee_positions();
-  await hrDomcumnetStore.get_employee_centers();
-  await useUserStore()
-    .get_lite()
-    .then((response) => {
-      SelectedUsers.value = response.data.data;
-    });
+  //await sectionStore.get_sections();
+  await HrDocumentStore.get_employees();
+  await HrDocumentStore.get_hrDocumentTypes();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "EmployeeAdd";
-    employee.value.id = 0;
+    namePage.value = "HrDocumentAdd";
+    hrDocument.value.id = 0;
   } else {
     await showData();
-    employee.value.id = id.value;
-    namePage.value = "EmployeeUpdate";
+    hrDocument.value.id = id.value;
+    namePage.value = "HrDocumentUpdate";
   }
   isLoading.value = false;
 });
 const active = ref(0);
-
-const fileObj = ref<{
-  fileName: string;
-  fileType: string;
-}>();
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
@@ -264,144 +227,74 @@ const fileObj = ref<{
                 <IInput
                   :label="t('Name')"
                   name="Name"
-                  v-model="employee.name"
+                  v-model="hrDocument.title"
                   type="text"
               /></ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.Number')"
-                  name="Employee.Number"
-                  v-model="employee.number"
-                  type="text"
-              /></ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.Telegram')"
-                  name="EmployeeTelegram"
-                  v-model="employee.telegramId"
-                  type="text"
-              /></ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.IdCard')"
-                  name="EmployeeIdCard"
-                  v-model="employee.idCard"
-                  type="text"
-              /></ICol>
+                <input
+                  type="file"
+                  @change="onFileChanged($event)"
+                  accept="image/*"
+                  capture
+                />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput
                   :label="t('Employee.DateWork')"
                   name="EmployeeDateWork"
-                  v-model="employee.dateWork"
+                  v-model="hrDocument.issueDate"
                   type="date"
               /></ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Section')"
-                  v-model="employee.Section.id"
-                  name="archiveTypeId"
-                  :options="sections"
-                  :IsRequire="true"
-              /></ICol>
 
-              <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Position')"
-                  v-model="employee.Position.id"
-                  name="PostionId"
-                  :options="employees_positions"
-                  :IsRequire="true"
-              /></ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Type')"
-                  v-model="employee.Type.id"
-                  name="TypeId"
-                  :options="employees_types"
-                  :IsRequire="true"
-              /></ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Center')"
-                  v-model="employee.Center.id"
-                  name="CecnterId"
-                  :options="employees_centers"
-                  :IsRequire="true"
-              /></ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ICheckbox v-model="isPerson" :checked="isPerson">
-                  {{ t("Employee.IsPerson") }} :
-                  {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
+               
+              <ICol span="1" span-md="2" span-sm="4">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ICheckbox v-model="isMoveSection" :checked="isMoveSection">
-                  {{ t("Employee.isMoveSection") }} :
-                  {{ isMoveSection ? " نعم " : " كلا  " }}</ICheckbox
+                  {{ t(".Title") }}
+                </div>
+                <vSelect
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="hrDocument.Type"
+                  :options="hrDocumentTypes"
+                  :reduce="(hrDocumentType: IHrDocumentType) => hrDocumentType"
+                  label="name"
+                  :getOptionLabel="(hrDocumentType: IHrDocumentType) => hrDocumentType.name"
                 >
+                  <template #option="{ name,addDays }">
+                    <div class="dir:rtl text-right p-1 border-2 border-solid border-red-500">
+                      <span>{{ name }}</span> <br/><span v-if="addDays>0" class="text-gray-100">يظاف عدد ايام  {{ addDays }}</span>
+                    </div>
+                  </template>
+                </vSelect>
               </ICol>
-
-              <ICol span="1" span-md="1" span-sm="1" v-if="isMoveSection">
-                <ISelect
-                  :label="t('Employee.MoveSection')"
-                  v-model="employee.MoveSection.id"
-                  name="MoveSectionId"
-                  :options="sections"
-                  :IsRequire="true"
-              /></ICol>
-              <!-- :IsDisabled="!isMoveSection" -->
-
-              <!-- <ICol span="1" span-md="2" span-sm="4">
-              <div
-                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              >
-                {{ t("OutputVoucherEmployeeRequest") }}
-              </div>
-              <vSelect
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="vacationSick.Vacation"
-                :options="vacations"
-                :reduce="(vacation: IVacation) => vacation"
-                label="name"
-                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
-              >
-                <template #option="{ Employee }">
-                  <div>
-                    <span>{{ Employee.name }}</span>
-                  </div>
-                </template>
-              </vSelect>
-            </ICol> -->
-            </IRow>
-            <IRow col-lg="3" col-md="2" col-sm="1">
-              <ICol span="1" span-md="1" span-sm="1">
-                <IVSelect
-                  :label="t('User')"
-                  v-model="employee.User"
-                  name="archiveTypeId"
-                  :options="SelectedUsers"
-                  :IsRequire="true"
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IButton2
-                  type="outlined"
-                  class="mt-3"
-                  v-if="employee.User?.id"
-                  :on-click="ShowUser"
-                  :text="t('Open')"
-                />
+              <ICol span="1" span-md="2" span-sm="4">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
+                  {{ t("Employee.Title") }}
+                </div>
+                <vSelect
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="hrDocument.Employee"
+                  :options="employees"
+                  :reduce="(employee: IEmployeeLite) => employee"
+                  label="name"
+                  :getOptionLabel="(employee: IEmployeeLite) => employee.name"
+                >
+                  <template #option="{ name }">
+                    <div>
+                      <span>{{ name }}</span>
+                    </div>
+                  </template>
+                </vSelect>
               </ICol>
             </IRow>
           </van-tab>
           <van-tab title="الملفات">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('FileName')"
-                  name="FileName"
-                  v-model="employee.name"
-                  type="text"
+                <ILabel title="Test"
               /></ICol>
             </IRow>
           </van-tab>
@@ -411,7 +304,7 @@ const fileObj = ref<{
 
     <template #Footer>
       <IFooterCrud
-        :isAdd="employee.id == 0"
+        :isAdd="hrDocument.id == 0"
         :onCreate="store"
         :onUpdate="update"
         :onDelete="Delete"
@@ -419,4 +312,3 @@ const fileObj = ref<{
     </template>
   </IPage>
 </template>
-../hrDocumentStore

@@ -29,6 +29,10 @@ export interface IEmployee {
   vacationSick?: Array<IVacationSick>;
   vacationTime?: Array<IVacationTime>;
 }
+export interface IEmployeeLite {
+  id: number;
+  name: string;
+}
 const xx = {
   voucherItemHistoriable: {
     id: 4,

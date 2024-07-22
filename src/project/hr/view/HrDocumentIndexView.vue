@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useHrDomcumnetStore } from "../hrDocumentStore";
+import { useHrDocumentStore } from "../hrDocumentStore";
 import { useSectionStore } from "@/project/section/sectionStore";
 
 import { storeToRefs } from "pinia";
@@ -13,14 +13,14 @@ import type { IHrDocument, IHrDocumentFilter } from "../IHrDocument";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
-const { hrDocument } = storeToRefs(useHrDomcumnetStore());
-const { hrDocuments } = storeToRefs(useHrDomcumnetStore());
-const { hrDocumentTypes } = storeToRefs(useHrDomcumnetStore());
+const { hrDocument } = storeToRefs(useHrDocumentStore());
+const { hrDocuments } = storeToRefs(useHrDocumentStore());
+const { hrDocumentTypes } = storeToRefs(useHrDocumentStore());
 
 const data = ref<Array<IHrDocument>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IHrDocument>>([]);
-const { get_filter } = useHrDomcumnetStore();
+const { get_filter } = useHrDocumentStore();
 
 import { limits } from "@/utilities/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
@@ -39,7 +39,7 @@ watch(
   }
 );
 const addItem = () => {
-  useHrDomcumnetStore().resetData();
+  useHrDocumentStore().resetData();
   router.push({
     name: "hrDocumentAdd",
   });

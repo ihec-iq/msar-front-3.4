@@ -169,7 +169,7 @@ const Delete = () => {
 
 const showData = async () => {
   isLoading.value = true;
-  archive.value.files = [];
+  archive.value.Files = [];
   await archiveStore
     .show(id.value)
     .then((response) => {
@@ -182,7 +182,7 @@ const showData = async () => {
         archive.value.way = response.data.data.way;
         archive.value.archiveTypeId = response.data.data.archiveTypeId;
         archive.value.isIn = response.data.data.isIn;
-        archive.value.files = response.data.data.files;
+        archive.value.Files = response.data.data.Files;
         isIn.value = response.data.data.isIn == 0 ? false : true;
         archive.value.isInWord = response.data.data.isInWord;
       }
@@ -316,7 +316,7 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
               span-md="2"
               span-sm="1"
               class=""
-              v-for="document in archive.files"
+              v-for="document in archive.Files"
               :key="document.name"
             >
               <FilePreview :file="document" @updateList="updateList">

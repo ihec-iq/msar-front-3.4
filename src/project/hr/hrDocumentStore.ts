@@ -2,49 +2,18 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IHrDocument, IHrDocumentFilter, IHrHocumentType } from "./IHrDocument";
+import type { IHrDocument, IHrDocumentFilter, IHrDocumentType } from "./IHrDocument";
+import type { IEmployeeLite } from "../employee/IEmployee";
 
-export const useHrDomcumnetStore = defineStore("HrDomcumnetStore", () => {
+export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
   const hrDocument = ref<IHrDocument>({
     id: 0,
     title: "",
     addDays: 0,
-    dateIssue: new Date().toLocaleDateString(),
+    issueDate: new Date().toLocaleDateString(),
     Employee: {
       id: 0,
-      name: "",
-      Section: {
-        id: 0,
-        name: ""
-      },
-      MoveSection: {
-        id: 0,
-        name: ""
-      },
-      isMoveSection: 0,
-      isPerson: 0,
-      dateWork: "",
-      number: "",
-      idCard: "",
-      Position: {
-        id: 0,
-        name: "",
-        level: "",
-        code: ""
-      },
-      Type: {
-        id: 0,
-        name: ""
-      },
-      Center: {
-        id: 0,
-        name: "",
-        code: ""
-      },
-      initVacation: 0,
-      takeVacation: 0,
-      initVacationSick: 0,
-      takeVacationSick: 0
+      name: ""
     },
     Type: {
       id: 0,
@@ -52,7 +21,8 @@ export const useHrDomcumnetStore = defineStore("HrDomcumnetStore", () => {
     }
   });
   const hrDocuments = ref<Array<IHrDocument>>([]);
-  const hrDocumentTypes = ref<Array<IHrHocumentType>>([]);
+  const hrDocumentTypes = ref<Array<IHrDocumentType>>([]);
+  const employees = ref<Array<IEmployeeLite>>([]);
   const pathBase = "";
   const pathUrl = `${pathBase}/hr_document`;
   async function get() {
@@ -74,42 +44,10 @@ export const useHrDomcumnetStore = defineStore("HrDomcumnetStore", () => {
       id: 0,
       title: "",
       addDays: 0,
-      dateIssue: new Date().toLocaleDateString(),
+      issueDate: new Date().toLocaleDateString(),
       Employee: {
         id: 0,
         name: "",
-        Section: {
-          id: 0,
-          name: ""
-        },
-        MoveSection: {
-          id: 0,
-          name: ""
-        },
-        isMoveSection: 0,
-        isPerson: 0,
-        dateWork: "",
-        number: "",
-        idCard: "",
-        Position: {
-          id: 0,
-          name: "",
-          level: "",
-          code: ""
-        },
-        Type: {
-          id: 0,
-          name: ""
-        },
-        Center: {
-          id: 0,
-          name: "",
-          code: ""
-        },
-        initVacation: 0,
-        takeVacation: 0,
-        initVacationSick: 0,
-        takeVacationSick: 0
       },
       Type: {
         id: 0,
@@ -122,9 +60,19 @@ export const useHrDomcumnetStore = defineStore("HrDomcumnetStore", () => {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function get_hrDocumentTypes() {
-    return await Api.get(`hrDocumentType`).then((response: any) => {
+    return await Api.get(`/hr_document_type`).then((response: any) => {
       if (response.status == 200) {
         hrDocumentTypes.value = response.data.data;
+      }
+    })
+      .catch((errors: any) => {
+        console.log("in get get hrDocumentTypes : " + errors);
+      });
+  }
+  async function get_employees() {
+    return await Api.get(`/employee/lite`).then((response: any) => {
+      if (response.status == 200) {
+        employees.value = response.data.data;
       }
     })
       .catch((errors: any) => {
@@ -148,10 +96,12 @@ export const useHrDomcumnetStore = defineStore("HrDomcumnetStore", () => {
     resetData,
     hrDocumentTypes,
     hrDocuments,
+    employees,
     get,
     get_filter,
     get_hrDocuments,
     get_hrDocumentTypes,
+    get_employees,
     show,
     store,
     update,
