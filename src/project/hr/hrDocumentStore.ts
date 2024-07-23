@@ -10,7 +10,7 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
     id: 0,
     title: "",
     addDays: 0,
-    issueDate: new Date().toLocaleDateString(),
+    issueDate: new Date().toISOString().split("T")[0],
     Employee: {
       id: 0,
       name: ""
@@ -44,7 +44,7 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
       id: 0,
       title: "",
       addDays: 0,
-      issueDate: new Date().toLocaleDateString(),
+      issueDate: new Date().toISOString().split("T")[0],
       Employee: {
         id: 0,
         name: "",
@@ -82,8 +82,8 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);
   }
-  async function update(item_id: number, params: object) {
-    return await Api.post(`${pathUrl}/update/${item_id}`, params);
+  async function update(id: number, params: object) {
+    return await Api.post(`${pathUrl}/update/${id}`, params);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);

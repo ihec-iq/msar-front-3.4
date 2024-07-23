@@ -8,7 +8,7 @@ export interface IHrDocument {
   issueDate: string;
   Employee: IEmployeeLite;
   Type: IHrDocumentType;
-  Document:IDocument;
+  Files?: Array<IDocument>;
   addDays?: number;
   UserCreate?: IUser;
   UserUpdate?: IUser;

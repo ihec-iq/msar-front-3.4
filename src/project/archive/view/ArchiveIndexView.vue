@@ -51,7 +51,7 @@ const addArchive = () => {
   archive.id = 0;
   archive.title = "";
   archive.issueDate = new Date().toISOString().split("T")[0];
-  archive.files = [];
+  archive.Files = [];
   archive.number = "";
   archive.description = "";
   archive.isIn = 1;

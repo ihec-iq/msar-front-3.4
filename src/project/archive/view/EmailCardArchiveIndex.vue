@@ -15,7 +15,7 @@ const props = defineProps<{
     description: string;
     issueDate: string;
     archiveTypeName: string;
-    files: { title: string; path: string; extension: string }[];
+    Files: { title: string; path: string; extension: string }[];
   };
 }>();
 

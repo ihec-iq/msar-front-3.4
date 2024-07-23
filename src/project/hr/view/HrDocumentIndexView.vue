@@ -13,7 +13,6 @@ import type { IHrDocument, IHrDocumentFilter } from "../IHrDocument";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
-const { hrDocument } = storeToRefs(useHrDocumentStore());
 const { hrDocuments } = storeToRefs(useHrDocumentStore());
 const { hrDocumentTypes } = storeToRefs(useHrDocumentStore());
 
@@ -65,7 +64,7 @@ const makeFastSearch = () => {
 const searchFilter = ref<IHrDocumentFilter>({
   title: "",
   limit: 10,
-  employeeName: ""
+  employeeName: "",
 });
 const getFilterData = async (page = 1) => {
   localStorage.setItem("indexHrDocument", page.toString());
@@ -118,12 +117,12 @@ onMounted(async () => {
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Title"), value: "title" },
   { caption: t("Details"), value: "actions" },
-  { caption: t("Employee.Name"), value: "EmployeeName" },
-  { caption: t("HrDocyment.Type"), value: "HrDocymenType" },
+  { caption: t("Employee.Title"), value: "EmployeeName" },
+  { caption: t("HrDocument.Type"), value: "HrDocumentype" },
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('HrDocyment.Index')" :is-loading="isLoading">
+  <IPage :HeaderTitle="t('HrDocument.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -153,24 +152,17 @@ const headers = ref<Array<ITableHeader>>([
         </ISearchBar>
       </IRow>
       <IRow>
-        
         <ITable :items="data" :headers="headers">
           <template v-slot:EmployeeName="{ row }">
             <span>{{ row.Employee.name }}</span>
           </template>
-          <template v-slot:HrDocymenType="{ row }">
-            <span>{{ row.HrDocymenType.name }}</span>
+          <template v-slot:HrDocumentype="{ row }">
+            <span>{{ row.Type.name }}</span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
                 <EditButton @click="update(row.id)" />
-              </li>
-              <li>
-                <EditButton
-                  title="Employee.HistoryReport"
-                  @click="history(row.id)"
-                />
               </li>
             </IDropdown>
           </template>

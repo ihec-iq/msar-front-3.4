@@ -16,7 +16,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     takeVacation: 0,
     initVacationSick: 0,
     takeVacationSick: 0,
-    dateWork: new Date().toLocaleDateString(),
+    dateWork: new Date().toISOString().split("T")[0],
     Position: {
       id: 0,
       name: "",
@@ -73,7 +73,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       takeVacation: 0,
       initVacationSick: 0,
       takeVacationSick: 0,
-      dateWork: new Date().toLocaleDateString(),
+      dateWork: new Date().toISOString().split("T")[0],
       Position: {
         id: 0,
         name: "",

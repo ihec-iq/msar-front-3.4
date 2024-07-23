@@ -143,6 +143,13 @@ export default {
   EmployeeIsPerson: "Type Info",
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
+  HrDocument: {
+    Index: "Employee Document",
+    Title: "Title Document",
+    Type: "Type Document",
+    Add: "Add Document",
+    Update: "Update Document",
+  },
   Employee: {
     Title: "Employee",
     HistoryReport: "History Report",

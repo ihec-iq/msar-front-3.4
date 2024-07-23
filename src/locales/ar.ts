@@ -143,10 +143,12 @@ export default {
   EmployeeIsPerson: "نوع البيانات",
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
-  HrDocyment: {
+  HrDocument: {
     Index: "ملفات الاضابير",
     Title: "عنوان الملف",
     Type: "نوع الملف",
+    Add:"اضافة ملف الى الاضبارة",
+    Update:"تعديل ملف الى الاضبارة",
   },
   Employee: {
     Title: "الموظف",

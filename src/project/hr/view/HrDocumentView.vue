@@ -7,12 +7,18 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import type { IEmployeeLite } from "@/project/employee/IEmployee";
-import type { IHrDocumentType  } from '../IHrDocument'
+import type { IHrDocumentType } from "../IHrDocument";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import ISelect from "@/components/inputs/ISelect.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
+import FilePreview from "@/project/archive/view/FilePreview.vue";
+import DragDrop from "@/project/archive/view/DragDrop.vue";
+import { useDragDropStore } from "@/project/archive/dragDrop";
+
+const { filesDataInput } = storeToRefs(useDragDropStore());
+import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast";
 
 //region"Drag and Drop"
 
@@ -20,15 +26,13 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref("HrDocumentAdd");
+const namePage = ref("HrDocument.Add");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
 const HrDocumentStore = useHrDocumentStore();
-const { hrDocument, hrDocumentTypes, employees } = storeToRefs(
-  useHrDocumentStore()
-);
-const sectionStore = useSectionStore();
+const { hrDocument, hrDocumentTypes, employees } =
+  storeToRefs(useHrDocumentStore());
 
 const Loading = ref(false);
 
@@ -39,14 +43,7 @@ const errors = ref<string | null>();
 const reset = () => {
   HrDocumentStore.resetData();
 };
-const filesDataInput = ref<File>();
 
-function onFileChanged($event: Event) {
-  const target = $event.target as HTMLInputElement;
-  if (target && target.files) {
-    filesDataInput.value = target.files[0];
-  }
-}
 const store = () => {
   errors.value = null;
   const formData = new FormData();
@@ -55,18 +52,15 @@ const store = () => {
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
-  if (filesDataInput.value) formData.append("file", filesDataInput.value);
-
-  HrDocumentStore
-    .store(formData)
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    formData.append("files[]", files[i]);
+  }
+  HrDocumentStore.store(formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your employee has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        SuccessToast();
+        filesDataInput.value = [];
         router.go(-1);
       }
     })
@@ -89,18 +83,15 @@ function update() {
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
-  if (filesDataInput.value) formData.append("file", filesDataInput.value);
-
-  HrDocumentStore
-    .update(hrDocument.value.id, formData)
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    formData.append("files[]", files[i]);
+  }
+  HrDocumentStore.update(hrDocument.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your data has been updated",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        SuccessToast();
+        //filesDataInput.value = [];
         showData();
       }
     })
@@ -148,8 +139,7 @@ const Delete = async () => {
 };
 const showData = async () => {
   Loading.value = true;
-  await HrDocumentStore
-    .show(id.value)
+  await HrDocumentStore.show(id.value)
     .then((response) => {
       if (response.status == 200) {
         hrDocument.value.id = response.data.data.id;
@@ -158,6 +148,7 @@ const showData = async () => {
         hrDocument.value.issueDate = response.data.data.issueDate;
         hrDocument.value.Type = response.data.data.Type;
         hrDocument.value.Employee = response.data.data.Employee;
+        hrDocument.value.Files = response.data.data.Files;
       }
     })
     .catch((errors) => {
@@ -174,37 +165,37 @@ const showData = async () => {
   Loading.value = false;
 };
 //#endregion
-const back = () => {
-  router.push({
-    name: "employeeIndex",
-  });
-};
-const ShowUser = () => {
-  let userId = hrDocument.value.id;
-  router.push({
-    name: "userUpdate",
-    params: { id: userId },
-  });
-};
+
 const isLoading = ref(false);
+
+//#region Multi Files && Sections
+const sectionStore = useSectionStore();
+const { sections } = storeToRefs(useSectionStore());
+const SelectedSectionId = ref(0);
+const ChosePushBy = ref(0);
+
+//#endregion
+
+const ActiveTab = ref(0);
+const updateList = () => showData();
+
 onMounted(async () => {
   isLoading.value = true;
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
-  //await sectionStore.get_sections();
+  await sectionStore.get_sections();
   await HrDocumentStore.get_employees();
   await HrDocumentStore.get_hrDocumentTypes();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "HrDocumentAdd";
+    namePage.value = "HrDocument.Add";
     hrDocument.value.id = 0;
   } else {
     await showData();
     hrDocument.value.id = id.value;
-    namePage.value = "HrDocumentUpdate";
+    namePage.value = "HrDocument.Update";
   }
   isLoading.value = false;
 });
-const active = ref(0);
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
@@ -220,8 +211,8 @@ const active = ref(0);
     </template>
     <IPageContent>
       <IRow>
-        <van-tabs v-model:active="active">
-          <van-tab title="معلومات الموظف">
+        <van-tabs v-model:active="ActiveTab">
+          <van-tab title="معلومات الكتاب">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput
@@ -231,14 +222,6 @@ const active = ref(0);
                   type="text"
               /></ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <input
-                  type="file"
-                  @change="onFileChanged($event)"
-                  accept="image/*"
-                  capture
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
                 <IInput
                   :label="t('Employee.DateWork')"
                   name="EmployeeDateWork"
@@ -246,12 +229,11 @@ const active = ref(0);
                   type="date"
               /></ICol>
 
-               
               <ICol span="1" span-md="2" span-sm="4">
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
-                  {{ t(".Title") }}
+                  {{ t("Title") }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -259,11 +241,19 @@ const active = ref(0);
                   :options="hrDocumentTypes"
                   :reduce="(hrDocumentType: IHrDocumentType) => hrDocumentType"
                   label="name"
-                  :getOptionLabel="(hrDocumentType: IHrDocumentType) => hrDocumentType.name"
+                  :getOptionLabel="
+                    (hrDocumentType: IHrDocumentType) => hrDocumentType.name
+                  "
                 >
-                  <template #option="{ name,addDays }">
-                    <div class="dir:rtl text-right p-1 border-2 border-solid border-red-500">
-                      <span>{{ name }}</span> <br/><span v-if="addDays>0" class="text-gray-100">يظاف عدد ايام  {{ addDays }}</span>
+                  <template #option="{ name, addDays }">
+                    <div
+                      class="dir:rtl text-right p-1 border-2 border-solid border-red-500"
+                    >
+                      <span>{{ name }}</span> <br /><span
+                        v-if="addDays > 0"
+                        class="text-gray-100"
+                        >يظاف عدد ايام {{ addDays }}</span
+                      >
                     </div>
                   </template>
                 </vSelect>
@@ -290,12 +280,81 @@ const active = ref(0);
                 </vSelect>
               </ICol>
             </IRow>
+            <!-- file -->
+            <IRow col-lg="4" col-md="2" col-sm="1">
+              <ICol
+                span="1"
+                span-md="2"
+                span-sm="1"
+                class=""
+                v-for="document in hrDocument.Files"
+                :key="document.name"
+              >
+                <FilePreview :file="document" @updateList="updateList">
+                </FilePreview>
+              </ICol>
+            </IRow>
+            <DragDrop></DragDrop>
+            <div class="px-6">
+              <div id="showFiles" class="p-0 flex flex-col w-full list-none">
+                <div class="w-64 content-center" v-if="isLoading">
+                  <div
+                    class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"
+                  >
+                    <span
+                      class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                      >Loading...</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div id="DropZone"></div>
+            </div>
           </van-tab>
-          <van-tab title="الملفات">
+          <van-tab title="توزيع متعدد">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <ILabel title="Test"
-              /></ICol>
+                <IRadio
+                  label="توزيع مفرد  "
+                  name="ChosePushBy"
+                  v-model="ChosePushBy"
+                  value="0"
+                  checked="true"
+                />
+              </ICol>
+            </IRow>
+            <IRow col-lg="4" col-md="2" col-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">
+                <IRadio
+                  label="توزيع حسب القسم"
+                  name="ChosePushBy"
+                  v-model="ChosePushBy"
+                  value="1"
+                />
+              </ICol>
+
+              <ICol span="1" span-md="1" span-sm="1">
+                <ISelect
+                  :label="t('Employee.Section')"
+                  v-model="SelectedSectionId"
+                  name="archiveTypeId"
+                  :options="sections"
+                  :IsRequire="true"
+                  :-is-disabled="ChosePushBy != 1"
+                />
+              </ICol>
+            </IRow>
+
+            <IRow col-lg="4" col-md="2" col-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">
+                <IRadio
+                  label="توزيع لجميع الموظفين"
+                  name="ChosePushBy"
+                  v-model="ChosePushBy"
+                  value="2"
+                />
+              </ICol>
             </IRow>
           </van-tab>
         </van-tabs>
