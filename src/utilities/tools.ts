@@ -47,6 +47,18 @@ export const CNumber = (val: any = 0): number => {
   if (!isNumber(val)) return 0;
   return Number(val);
 };
+export function round(num: number, fractionDigits: number = 3): number {
+  return Number(num.toFixed(fractionDigits));
+}
+export const ToNumber = (val: any, numericFormat: boolean = true) => {
+  if (isNaN(val) || isNumber(val) == false) {
+    return 0;
+  } else return round(val, 2);
+};
+export const ToNumberShow = (val: any) => {
+  if (isNaN(val) || isNumber(val) == false || val == 0) return;
+  else return round(val, 2);
+};
 export const dateWithoutTime = function (date: string) {
   return date ? date.split("T")[0] : ""
 }

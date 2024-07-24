@@ -10,12 +10,14 @@ import type { IEmployeeLite } from "@/project/employee/IEmployee";
 import type { IHrDocumentType } from "../IHrDocument";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import ISelect from "@/components/inputs/ISelect.vue";
+import ISelectObject from "@/components/inputs/ISelectObject.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import FilePreview from "@/project/archive/view/FilePreview.vue";
 import DragDrop from "@/project/archive/view/DragDrop.vue";
 import { useDragDropStore } from "@/project/archive/dragDrop";
+import { Icon } from "@iconify/vue";
+import { ToNumber } from "@/utilities/tools";
 
 const { filesDataInput } = storeToRefs(useDragDropStore());
 import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast";
@@ -44,14 +46,37 @@ const reset = () => {
   HrDocumentStore.resetData();
 };
 
-const store = () => {
+//#region Multi Files && Sections
+const sectionStore = useSectionStore();
+const { sections } = storeToRefs(useSectionStore());
+import type { ISection } from "@/project/section/ISection";
+import type { ITableHeader } from "@/types/core/components/ITable";
+const SelectedSection = ref<ISection>({ id: 0, name: "" });
+const ChosePushBy = ref(0);
+enum EnumTypeChoseShareDocument {
+  none = 0,
+  toSection = 1,
+  toAllEmployees = 2,
+  toCustom = 3,
+}
+//#endregion
+
+const store = async () => {
   errors.value = null;
+  if ((await conforimShareDocumnet()) == false) return;
+
+  console.log("ok");
+
   const formData = new FormData();
   formData.append("addDays", String(hrDocument.value.addDays));
   formData.append("title", hrDocument.value.title.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
+
+  formData.append("chosePushBy", ChosePushBy.value.toString());
+  formData.append("selectedSectionId", SelectedSection.value.id.toString());
+
   const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
@@ -75,14 +100,18 @@ const store = () => {
       });
     });
 };
-function update() {
+const update = async () => {
   errors.value = null;
+  if ((await conforimShareDocumnet()) == false) return;
+
   const formData = new FormData();
   formData.append("addDays", String(hrDocument.value.addDays));
   formData.append("title", hrDocument.value.title.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
+  formData.append("chosePushBy", ChosePushBy.value.toString());
+  formData.append("selectedSectionId", SelectedSection.value.id.toString());
   const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
@@ -91,7 +120,7 @@ function update() {
     .then((response) => {
       if (response.status === 200) {
         SuccessToast();
-        //filesDataInput.value = [];
+        filesDataInput.value = [];
         showData();
       }
     })
@@ -105,7 +134,52 @@ function update() {
         footer: "",
       });
     });
-}
+};
+const conforimShareDocumnet = async () => {
+  if (ChosePushBy.value == EnumTypeChoseShareDocument.none) return true;
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn m-2 bg-red-700",
+      cancelButton: "btn bg-grey-400",
+    },
+    buttonsStyling: false,
+  });
+  // defualt check is 2 = select all employees
+  let msg = "اضافة الكتاب الى جميع الموظفين";
+  if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection) {
+    if (SelectedSection.value.id < 1) {
+      swalWithBootstrapButtons.fire(
+        t("تنبيه !"),
+        t("يجب ان تقوم بأختيار قسم محدد"),
+        "warning"
+      );
+      return false;
+    }
+    msg = "اضاف الكتاب الى قسم " + SelectedSection.value.name;
+  } else if (ChosePushBy.value == EnumTypeChoseShareDocument.toCustom) {
+  }
+  swalWithBootstrapButtons
+    .fire({
+      title: "تأكيد من نشر الكتاب",
+      text: "هل انت متأكد من " + msg,
+      icon: "warning",
+      showCancelButton: true,
+      showCloseButton: true,
+      confirmButtonText: t("Yes, do it"),
+      cancelButtonText: t("No, cancel!"),
+      reverseButtons: true,
+      customClass: {
+        confirmButton: "btn btn-primary m-2",
+        cancelButton: "btn btn-danger",
+      },
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        return true;
+      }
+    });
+  return false;
+};
 const Delete = async () => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -116,11 +190,11 @@ const Delete = async () => {
   });
   swalWithBootstrapButtons
     .fire({
-      title: t("Are You Sure?"),
-      text: t("You Won't Be Able To Revert This!"),
+      title: t("تأكيد عملية الحذف"),
+      text: t("ConfirmDelete"),
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: t("Yes, delete it!"),
+      confirmButtonText: t("Are You Sure?"),
       cancelButtonText: t("No, cancel!"),
       reverseButtons: true,
     })
@@ -166,23 +240,32 @@ const showData = async () => {
 };
 //#endregion
 
+//#region Custom Employee select
+const SelectedEmployee = ref<IEmployeeLite>({
+  id: 0,
+  name: "",
+});
+const SelectedEmployeesHeaders = ref<Array<ITableHeader>>([
+  { caption: t("id"), value: "id" },
+  { caption: t("Details"), value: "delete" },
+  { caption: t("Employee.Title"), value: "name" },
+]);
+const SelectedEmployeesData = ref<Array<IEmployeeLite>>([]);
+const deleteSelectedEmployee = (index: number) => {
+SelectedEmployeesData.value.slice(index,1)
+ك};
+//#endregion
 const isLoading = ref(false);
 
-//#region Multi Files && Sections
-const sectionStore = useSectionStore();
-const { sections } = storeToRefs(useSectionStore());
-const SelectedSectionId = ref(0);
-const ChosePushBy = ref(0);
-
-//#endregion
-
 const ActiveTab = ref(0);
-const updateList = () => showData();
+const openSectionDocument = ref(0);
 
 onMounted(async () => {
   isLoading.value = true;
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
+  filesDataInput.value = [];
+
   await sectionStore.get_sections();
   await HrDocumentStore.get_employees();
   await HrDocumentStore.get_hrDocumentTypes();
@@ -227,8 +310,8 @@ onMounted(async () => {
                   name="EmployeeDateWork"
                   v-model="hrDocument.issueDate"
                   type="date"
-              /></ICol>
-
+                />
+              </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -281,18 +364,34 @@ onMounted(async () => {
               </ICol>
             </IRow>
             <!-- file -->
-            <IRow col-lg="4" col-md="2" col-sm="1">
-              <ICol
-                span="1"
-                span-md="2"
-                span-sm="1"
-                class=""
-                v-for="document in hrDocument.Files"
-                :key="document.name"
+            <IRow col-lg="1" col-md="1" col-sm="1">
+              <div
+                class="collapse align-middle w-full"
+                v-if="ToNumber(hrDocument.Files?.length) > 0"
               >
-                <FilePreview :file="document" @updateList="updateList">
-                </FilePreview>
-              </ICol>
+                <input type="checkbox" class="" v-model="openSectionDocument" />
+                <div
+                  class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
+                >
+                  <span class="mx-2 px-2">
+                    لديك ملفات مرفقة , اضغط للعرض الملفات
+                  </span>
+                  <Icon icon="mingcute:attachment-fill" />
+                </div>
+                <div class="collapse-content grid grid-cols-4">
+                  <div class="mt-5"></div>
+                  <ICol
+                    span="1"
+                    span-md="2"
+                    span-sm="1"
+                    class=""
+                    v-for="document in hrDocument.Files"
+                    :key="document.name"
+                  >
+                    <FilePreview :file="document" @updateList="showData" />
+                  </ICol>
+                </div>
+              </div>
             </IRow>
             <DragDrop></DragDrop>
             <div class="px-6">
@@ -335,17 +434,16 @@ onMounted(async () => {
               </ICol>
 
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
+                <ISelectObject
                   :label="t('Employee.Section')"
-                  v-model="SelectedSectionId"
-                  name="archiveTypeId"
+                  v-model="SelectedSection"
+                  name="selectedSection"
                   :options="sections"
                   :IsRequire="true"
                   :-is-disabled="ChosePushBy != 1"
                 />
               </ICol>
             </IRow>
-
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IRadio
@@ -354,6 +452,52 @@ onMounted(async () => {
                   v-model="ChosePushBy"
                   value="2"
                 />
+              </ICol>
+            </IRow>
+            <IRow col-lg="4" col-md="2" col-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">
+                <IRadio
+                  label="توزيع محدد"
+                  name="ChosePushBy"
+                  v-model="ChosePushBy"
+                  value="3"
+                />
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
+                  {{ t("Employee.Title") }} قم بأختيار
+                </div>
+                <vSelect
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="SelectedEmployee"
+                  :options="employees"
+                  :reduce="(employee: IEmployeeLite) => employee"
+                  label="name"
+                  :getOptionLabel="(employee: IEmployeeLite) => employee.name"
+                >
+                  <template #option="{ name }">
+                    <div>
+                      <span>{{ name }}</span>
+                    </div>
+                  </template>
+                </vSelect>
+
+                <ITable
+                  :items="SelectedEmployeesData"
+                  :headers="SelectedEmployeesHeaders"
+                >
+                  <template v-slot:name="{ row }">
+                    <span>{{ row.name }}</span>
+                  </template>
+                  <template v-slot:id="{ row }">
+                    <span>{{ row.id }}</span>
+                  </template>
+                  <template v-slot:delete="{ row }">
+                    <EditButton @click="deleteSelectedEmployee(row.id)" />
+                  </template>
+                </ITable>
               </ICol>
             </IRow>
           </van-tab>

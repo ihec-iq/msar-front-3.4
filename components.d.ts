@@ -53,6 +53,7 @@ declare module 'vue' {
     ISearchBar: typeof import('./src/components/ihec/ISearchBar.vue')['default']
     ISection: typeof import('./src/components/ihec/ISection.vue')['default']
     ISelect: typeof import('./src/components/inputs/ISelect.vue')['default']
+    ISelectObject: typeof import('./src/components/inputs/ISelectObject.vue')['default']
     ITable: typeof import('./src/components/ihec/ITable.vue')['default']
     IVSelect: typeof import('./src/components/inputs/IVSelect.vue')['default']
     Loading: typeof import('./src/components/general/loading.vue')['default']
