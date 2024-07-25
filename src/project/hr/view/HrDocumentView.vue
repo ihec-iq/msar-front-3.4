@@ -63,9 +63,10 @@ enum EnumTypeChoseShareDocument {
 
 const store = async () => {
   errors.value = null;
-  if ((await conforimShareDocumnet()) == false) return;
 
-  console.log("ok");
+  const result = ref(false);
+  result.value = Boolean(conforimShareDocumnet);
+  console.log(result.value);
 
   const formData = new FormData();
   formData.append("addDays", String(hrDocument.value.addDays));
@@ -75,7 +76,13 @@ const store = async () => {
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
 
   formData.append("chosePushBy", ChosePushBy.value.toString());
-  formData.append("selectedSectionId", SelectedSection.value.id.toString());
+  if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
+    formData.append("selectedSectionId", SelectedSection.value.id.toString());
+  if (ChosePushBy.value == EnumTypeChoseShareDocument.toCustom)
+    formData.append(
+      "SelectedEmployeesData",
+      JSON.stringify(SelectedEmployeesData.value)
+    );
 
   const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
@@ -102,7 +109,15 @@ const store = async () => {
 };
 const update = async () => {
   errors.value = null;
-  if ((await conforimShareDocumnet()) == false) return;
+  const result = ref();
+  await conforimShareDocumnet().then((response) => {
+    console.log(response);
+
+    result.value = response;
+  });
+
+  console.log("from Update :", result.value);
+  if (result.value == false) return;
 
   const formData = new FormData();
   formData.append("addDays", String(hrDocument.value.addDays));
@@ -111,7 +126,13 @@ const update = async () => {
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
   formData.append("chosePushBy", ChosePushBy.value.toString());
-  formData.append("selectedSectionId", SelectedSection.value.id.toString());
+  if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
+    formData.append("selectedSectionId", SelectedSection.value.id.toString());
+  if (ChosePushBy.value == EnumTypeChoseShareDocument.toCustom)
+    formData.append(
+      "SelectedEmployeesData",
+      JSON.stringify(SelectedEmployeesData.value)
+    );
   const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
     formData.append("files[]", files[i]);
@@ -153,18 +174,27 @@ const conforimShareDocumnet = async () => {
         t("يجب ان تقوم بأختيار قسم محدد"),
         "warning"
       );
-      return false;
+      return Promise.resolve(false);
     }
     msg = "اضاف الكتاب الى قسم " + SelectedSection.value.name;
   } else if (ChosePushBy.value == EnumTypeChoseShareDocument.toCustom) {
+    if (SelectedEmployeesData.value.length < 1) {
+      swalWithBootstrapButtons.fire(
+        t("تنبيه !"),
+        t("يجب ان تقوم بأختيار موظفين"),
+        "warning"
+      );
+      return Promise.resolve(false);
+    }
+    msg = "اضاف الكتاب الى مجموعة الموظفين " + SelectedSection.value.name;
   }
-  swalWithBootstrapButtons
+
+  await swalWithBootstrapButtons
     .fire({
       title: "تأكيد من نشر الكتاب",
       text: "هل انت متأكد من " + msg,
       icon: "warning",
       showCancelButton: true,
-      showCloseButton: true,
       confirmButtonText: t("Yes, do it"),
       cancelButtonText: t("No, cancel!"),
       reverseButtons: true,
@@ -174,11 +204,15 @@ const conforimShareDocumnet = async () => {
       },
     })
     .then(async (result) => {
-      if (result.isConfirmed) {
-        return true;
-      }
+      console.log("result from dailog is ", result.isConfirmed);
+      return Promise.resolve(result.isConfirmed);
+    })
+    .catch((error) => {
+      console.log("error from dailog is ", error);
+
+      return Promise.resolve(false);
     });
-  return false;
+  //return Promise.resolve(false);
 };
 const Delete = async () => {
   const swalWithBootstrapButtons = Swal.mixin({
@@ -247,18 +281,47 @@ const SelectedEmployee = ref<IEmployeeLite>({
 });
 const SelectedEmployeesHeaders = ref<Array<ITableHeader>>([
   { caption: t("id"), value: "id" },
-  { caption: t("Details"), value: "delete" },
+  { caption: t("Delete"), value: "delete" },
   { caption: t("Employee.Title"), value: "name" },
 ]);
 const SelectedEmployeesData = ref<Array<IEmployeeLite>>([]);
-const deleteSelectedEmployee = (index: number) => {
-SelectedEmployeesData.value.slice(index,1)
-ك};
+const deleteSelectedEmployee = (emplyeeName: string): undefined => {
+  if (SelectedEmployeesData.value.length == 1) {
+    SelectedEmployeesData.value = [];
+    return;
+  }
+  SelectedEmployeesData.value = SelectedEmployeesData.value.filter(
+    (item) => item.name !== emplyeeName
+  );
+};
+const addSelectedEmployee = () => {
+  const newEmployee = <IEmployeeLite>{
+    id: SelectedEmployee.value.id,
+    name: SelectedEmployee.value.name,
+  };
+  if (newEmployee.name == "") return;
+  const exists = SelectedEmployeesData.value.find(
+    (emp) => emp.name === newEmployee.name
+  );
+  if (!exists) {
+    SelectedEmployeesData.value.push(newEmployee);
+    SelectedEmployeesData.value = [...SelectedEmployeesData.value];
+    SelectedEmployee.value = { id: 0, name: "" };
+  }
+  let HtmlSelectedEmployee = document.getElementById("SelectedEmployee");
+  HtmlSelectedEmployee?.focus();
+};
+
 //#endregion
+import vSelect from "vue-select";
+
 const isLoading = ref(false);
 
-const ActiveTab = ref(0);
+const ActiveTab = ref(1);
 const openSectionDocument = ref(0);
+function onChange(event: any) {
+  addSelectedEmployee();
+}
 
 onMounted(async () => {
   isLoading.value = true;
@@ -419,7 +482,6 @@ onMounted(async () => {
                   name="ChosePushBy"
                   v-model="ChosePushBy"
                   value="0"
-                  checked="true"
                 />
               </ICol>
             </IRow>
@@ -440,7 +502,9 @@ onMounted(async () => {
                   name="selectedSection"
                   :options="sections"
                   :IsRequire="true"
-                  :-is-disabled="ChosePushBy != 1"
+                  :-is-disabled="
+                    ChosePushBy != EnumTypeChoseShareDocument.toSection
+                  "
                 />
               </ICol>
             </IRow>
@@ -463,26 +527,46 @@ onMounted(async () => {
                   value="3"
                 />
               </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
+              <ICol
+                span="1"
+                span-md="1"
+                span-sm="1"
+                :disabled="ChosePushBy != EnumTypeChoseShareDocument.toCustom"
+              >
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
                   {{ t("Employee.Title") }} قم بأختيار
                 </div>
-                <vSelect
-                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="SelectedEmployee"
-                  :options="employees"
-                  :reduce="(employee: IEmployeeLite) => employee"
-                  label="name"
-                  :getOptionLabel="(employee: IEmployeeLite) => employee.name"
-                >
-                  <template #option="{ name }">
-                    <div>
-                      <span>{{ name }}</span>
-                    </div>
-                  </template>
-                </vSelect>
+                <div class="flex pb-2">
+                  <div class="flex w-full">
+                    <vSelect
+                      id="SelectedEmployee"
+                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                      v-model="SelectedEmployee"
+                      :options="employees"
+                      :reduce="(employee: IEmployeeLite) => employee"
+                      label="name"
+                      @change="onChange($event)"
+                      :getOptionLabel="
+                        (employee: IEmployeeLite) => employee.name
+                      "
+                    >
+                      <template #option="{ name }">
+                        <div>
+                          <span>{{ name }}</span>
+                        </div>
+                      </template>
+                    </vSelect>
+                  </div>
+                  <div class="flex w-1/4">
+                    <IButton2
+                      @click="addSelectedEmployee"
+                      id="SelectedEmployeeButton"
+                      :text="t('Add')"
+                    />
+                  </div>
+                </div>
 
                 <ITable
                   :items="SelectedEmployeesData"
@@ -495,7 +579,10 @@ onMounted(async () => {
                     <span>{{ row.id }}</span>
                   </template>
                   <template v-slot:delete="{ row }">
-                    <EditButton @click="deleteSelectedEmployee(row.id)" />
+                    <IButton2
+                      @click="deleteSelectedEmployee(row.name)"
+                      :text="t('Delete')"
+                    />
                   </template>
                 </ITable>
               </ICol>
@@ -515,3 +602,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
+<style></style>

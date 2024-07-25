@@ -30,7 +30,7 @@ const props = defineProps({
   },
   onClick: {
     type: Function,
-    default: () => {},
+    default: (): void => {},
   },
   width: {
     type: String,
@@ -103,7 +103,12 @@ const buttonClass = computed(() => {
 </script>
 
 <template>
-  <button @click="onClick()" :class="buttonClass" class="flex flex-row mx-2" style="align-items:center">
+  <button
+    @click="onClick()"
+    :class="buttonClass"
+    class="flex flex-row mx-2"
+    style="align-items: center"
+  >
     <Icon
       v-if="props.preIcon != ''"
       :icon="PreIcon"
