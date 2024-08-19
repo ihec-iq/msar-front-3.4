@@ -58,6 +58,7 @@ enum EnumTypeChoseShareDocument {
   toSection = 1,
   toAllEmployees = 2,
   toCustom = 3,
+  toEmployee = 4,
 }
 //#endregion
 
@@ -204,6 +205,7 @@ const conforimShareDocumnet = async () => {
       },
     })
     .then(async (result) => {
+      // here code
       console.log("result from dailog is ", result.isConfirmed);
       return Promise.resolve(result.isConfirmed);
     })
@@ -250,6 +252,7 @@ const showData = async () => {
   await HrDocumentStore.show(id.value)
     .then((response) => {
       if (response.status == 200) {
+        console.log(response.data.data)
         hrDocument.value.id = response.data.data.id;
         hrDocument.value.addDays = response.data.data.addDays;
         hrDocument.value.title = response.data.data.title;
@@ -257,6 +260,7 @@ const showData = async () => {
         hrDocument.value.Type = response.data.data.Type;
         hrDocument.value.Employee = response.data.data.Employee;
         hrDocument.value.Files = response.data.data.Files;
+        ChosePushBy.value = EnumTypeChoseShareDocument.toEmployee;
       }
     })
     .catch((errors) => {
@@ -317,8 +321,8 @@ import vSelect from "vue-select";
 
 const isLoading = ref(false);
 
-const ActiveTab = ref(1);
-const openSectionDocument = ref(0);
+const ActiveTab = ref(0);
+const openSectionDocument = ref(true);
 function onChange(event: any) {
   addSelectedEmployee();
 }
@@ -432,12 +436,12 @@ onMounted(async () => {
                 class="collapse align-middle w-full"
                 v-if="ToNumber(hrDocument.Files?.length) > 0"
               >
-                <input type="checkbox" class="" v-model="openSectionDocument" />
+                <input type="checkbox" class="" v-model="openSectionDocument" checked/>
                 <div
                   class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
                 >
                   <span class="mx-2 px-2">
-                    لديك ملفات مرفقة , اضغط للعرض الملفات
+                    لديك {{ hrDocument.Files?.length }} ملفات مرفقة , اضغط للعرض الملفات
                   </span>
                   <Icon icon="mingcute:attachment-fill" />
                 </div>
@@ -474,14 +478,14 @@ onMounted(async () => {
               <div id="DropZone"></div>
             </div>
           </van-tab>
-          <van-tab title="توزيع متعدد">
+          <van-tab title="توزيع متعدد" v-if="hrDocument.id == 0">
             <IRow col-lg="4" col-md="2" col-sm="1">
-              <ICol span="1" span-md="1" span-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">{{ ChosePushBy }}
                 <IRadio
                   label="توزيع مفرد  "
                   name="ChosePushBy"
                   v-model="ChosePushBy"
-                  value="0"
+                  value="4"
                 />
               </ICol>
             </IRow>
