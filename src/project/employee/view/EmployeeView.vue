@@ -272,8 +272,6 @@ const searchFilter = ref<IHrDocumentFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexHrDocument", page.toString());
-
   isLoading.value = true;
   searchFilter.value.employeeId = employee.value.id;
   //searchFilter.value.title = fastSearch.value.toString();
@@ -294,6 +292,12 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "EmployeeName" },
   { caption: t("HrDocument.Type"), value: "HrDocumentype" },
 ]);
+const openFile = (id: number) => {
+  router.push({
+    name: "hrDocumentUpdate",
+    params: { id: id },
+  });
+};
 //#endregion
 const active = ref(0);
 
@@ -453,7 +457,7 @@ const fileObj = ref<{
               </ICol>
             </IRow>
           </van-tab>
-          <van-tab title="ملفات الضبارة">
+          <van-tab title="ملفات الضبارة" onclick="getFilterData">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseFiles" :headers="headers">
