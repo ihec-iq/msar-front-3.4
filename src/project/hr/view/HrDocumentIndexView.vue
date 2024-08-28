@@ -70,7 +70,8 @@ const getFilterData = async (page = 1) => {
   localStorage.setItem("indexHrDocument", page.toString());
 
   isLoading.value = true;
-  searchFilter.value.title = fastSearch.value;
+  searchFilter.value.employeeName = fastSearch.value.toString();
+  //searchFilter.value.title = fastSearch.value.toString();
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {

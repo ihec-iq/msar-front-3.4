@@ -65,7 +65,7 @@ const formatArchiveDate = (value: string) => {
       >
     </div>
 
-    <div v-if="item.files.length != 0" class="flex px-6 pb-2">
+    <div v-if="item.Files.length != 0" class="flex px-6 pb-2">
       <!-- empty div -->
       <div class="flex basis-96"></div>
       <span
@@ -74,8 +74,8 @@ const formatArchiveDate = (value: string) => {
         >
       <!-- chip -->
       <div
-        v-if="item.files.length < 3"
-        v-for="(file, index) in item.files"
+        v-if="item.Files.length < 3"
+        v-for="(file, index) in item.Files"
         :key="index"
         @click="openFile(file.path)"
         class="rtl:ml-3 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer hover:bg-gray-50 hover:text-gray-600 relative grid select-none items-center whitespace-nowrap rounded-lg border border-gray-900 py-1.5 px-3 font-sans text-xs font-bold uppercase text-gray-700"
@@ -93,24 +93,24 @@ const formatArchiveDate = (value: string) => {
       <div v-else class="flex">
         <div
           v-for="i in 2"
-          @click="openFile(item.files[i].path)"
+          @click="openFile(item.Files[i].path)"
           class="rtl:ml-3 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer hover:bg-gray-50 hover:text-gray-600 relative grid select-none items-center whitespace-nowrap rounded-lg border border-gray-900 py-1.5 px-3 font-sans text-xs font-bold uppercase text-gray-700"
         >
           <div class="absolute top-2/4 right-1.5 h-5 w-5 -translate-y-2/4">
             <img
               width="16"
               height="16"
-              :src="generateIcon(item.files[i].extension)"
+              :src="generateIcon(item.Files[i].extension)"
               alt="file"
             />
           </div>
-          <span class="mr-[18px]">{{ item.files[i].title }}</span>
+          <span class="mr-[18px]">{{ item.Files[i].title }}</span>
         </div>
         <div
-          v-if="item.files.length > 2"
+          v-if="item.Files.length > 2"
           class="rtl:ml-3 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 hover:bg-gray-50 hover:text-gray-600 relative grid select-none items-center whitespace-nowrap rounded-lg border border-gray-900 py-1.5 px-3 font-sans text-xs font-bold uppercase text-gray-700"
         >
-          <span>+{{ item.files.length - 2 }}</span>
+          <span>+{{ item.Files.length - 2 }}</span>
         </div>
       </div>
     </div>

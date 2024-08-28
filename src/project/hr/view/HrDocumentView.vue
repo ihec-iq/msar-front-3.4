@@ -66,8 +66,11 @@ const store = async () => {
   errors.value = null;
 
   const result = ref(false);
-  result.value = Boolean(conforimShareDocumnet);
-  console.log(result.value);
+  await conforimShareDocumnet().then((response) => {
+    result.value = response;
+  });
+
+  if (result.value === false || result.value === undefined) return;
 
   const formData = new FormData();
   formData.append("addDays", String(hrDocument.value.addDays));
@@ -110,15 +113,12 @@ const store = async () => {
 };
 const update = async () => {
   errors.value = null;
-  const result = ref();
+  const result = ref(false);
   await conforimShareDocumnet().then((response) => {
-    console.log(response);
-
     result.value = response;
   });
 
-  console.log("from Update :", result.value);
-  if (result.value == false) return;
+  if (result.value === false || result.value === undefined) return;
 
   const formData = new FormData();
   formData.append("addDays", String(hrDocument.value.addDays));
@@ -167,7 +167,7 @@ const conforimShareDocumnet = async () => {
     buttonsStyling: false,
   });
   // defualt check is 2 = select all employees
-  let msg = "اضافة الكتاب الى جميع الموظفين";
+  let msg = "";
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection) {
     if (SelectedSection.value.id < 1) {
       swalWithBootstrapButtons.fire(
@@ -175,7 +175,7 @@ const conforimShareDocumnet = async () => {
         t("يجب ان تقوم بأختيار قسم محدد"),
         "warning"
       );
-      return Promise.resolve(false);
+      return false;
     }
     msg = "اضاف الكتاب الى قسم " + SelectedSection.value.name;
   } else if (ChosePushBy.value == EnumTypeChoseShareDocument.toCustom) {
@@ -185,14 +185,20 @@ const conforimShareDocumnet = async () => {
         t("يجب ان تقوم بأختيار موظفين"),
         "warning"
       );
-      return Promise.resolve(false);
+      return false;
     }
     msg = "اضاف الكتاب الى مجموعة الموظفين " + SelectedSection.value.name;
+  } else if (ChosePushBy.value == EnumTypeChoseShareDocument.toAllEmployees) {
+    msg = "اضافة الكتاب الى جميع الموظفين";
+  } else {
+    // that mean it for one employee
+    return true ;
   }
-
+   
+  let re = false;
   await swalWithBootstrapButtons
     .fire({
-      title: "تأكيد من نشر الكتاب",
+      title: "تأكيد من توزيع الكتاب",
       text: "هل انت متأكد من " + msg,
       icon: "warning",
       showCancelButton: true,
@@ -205,15 +211,13 @@ const conforimShareDocumnet = async () => {
       },
     })
     .then(async (result) => {
-      // here code
-      console.log("result from dailog is ", result.isConfirmed);
-      return Promise.resolve(result.isConfirmed);
+      re = result.isConfirmed;
     })
     .catch((error) => {
       console.log("error from dailog is ", error);
-
-      return Promise.resolve(false);
     });
+  return re;
+
   //return Promise.resolve(false);
 };
 const Delete = async () => {
@@ -226,8 +230,8 @@ const Delete = async () => {
   });
   swalWithBootstrapButtons
     .fire({
-      title: t("تأكيد عملية الحذف"),
-      text: t("ConfirmDelete"),
+      title: t("تأكيد عملية التعديل"),
+      text: t("Confirm"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: t("Are You Sure?"),
@@ -238,8 +242,8 @@ const Delete = async () => {
       if (result.isConfirmed) {
         await HrDocumentStore._delete(hrDocument.value.id).then(() => {
           swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
+            t("Update!"),
+            t("Update successfully ."),
             "success"
           );
           router.go(-1);
@@ -252,7 +256,6 @@ const showData = async () => {
   await HrDocumentStore.show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        console.log(response.data.data)
         hrDocument.value.id = response.data.data.id;
         hrDocument.value.addDays = response.data.data.addDays;
         hrDocument.value.title = response.data.data.title;
@@ -261,6 +264,7 @@ const showData = async () => {
         hrDocument.value.Employee = response.data.data.Employee;
         hrDocument.value.Files = response.data.data.Files;
         ChosePushBy.value = EnumTypeChoseShareDocument.toEmployee;
+        console.log(ChosePushBy.value);
       }
     })
     .catch((errors) => {
@@ -436,12 +440,18 @@ onMounted(async () => {
                 class="collapse align-middle w-full"
                 v-if="ToNumber(hrDocument.Files?.length) > 0"
               >
-                <input type="checkbox" class="" v-model="openSectionDocument" checked/>
+                <input
+                  type="checkbox"
+                  class=""
+                  v-model="openSectionDocument"
+                  checked
+                />
                 <div
                   class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
                 >
                   <span class="mx-2 px-2">
-                    لديك {{ hrDocument.Files?.length }} ملفات مرفقة , اضغط للعرض الملفات
+                    لديك {{ hrDocument.Files?.length }} ملفات مرفقة , اضغط للعرض
+                    الملفات
                   </span>
                   <Icon icon="mingcute:attachment-fill" />
                 </div>
@@ -480,7 +490,8 @@ onMounted(async () => {
           </van-tab>
           <van-tab title="توزيع متعدد" v-if="hrDocument.id == 0">
             <IRow col-lg="4" col-md="2" col-sm="1">
-              <ICol span="1" span-md="1" span-sm="1">{{ ChosePushBy }}
+              <ICol span="1" span-md="1" span-sm="1"
+                >{{ ChosePushBy }}
                 <IRadio
                   label="توزيع مفرد  "
                   name="ChosePushBy"
