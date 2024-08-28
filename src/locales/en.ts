@@ -153,6 +153,7 @@ export default {
   Employee: {
     Title: "Employee",
     HistoryReport: "History Report",
+    Info : "Employee Info",
     Telegram: "TelegramId ",
     Number: "Employee Number",
     IdCard: "Employee IdCard",

@@ -13,8 +13,8 @@ import type { IHrDocument, IHrDocumentFilter } from "../IHrDocument";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
-const { hrDocuments } = storeToRefs(useHrDocumentStore());
-const { hrDocumentTypes } = storeToRefs(useHrDocumentStore());
+// const { hrDocuments } = storeToRefs(useHrDocumentStore());
+// const { hrDocumentTypes } = storeToRefs(useHrDocumentStore());
 
 const data = ref<Array<IHrDocument>>([]);
 const dataPage = ref();
@@ -102,7 +102,7 @@ const history = (id: number) => {
 //#endregion
 onMounted(async () => {
   isLoading.value = true;
-  //checkPermissionAccessArray([EnumPermission.ShowEmployees]);
+  checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   //await useSectionStore().get_sections();

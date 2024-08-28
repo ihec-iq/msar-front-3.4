@@ -23,7 +23,15 @@ const { filesDataInput } = storeToRefs(useDragDropStore());
 import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast";
 
 //region"Drag and Drop"
+import vSelect from "vue-select";
 
+const isLoading = ref(false);
+
+const ActiveTab = ref(0);
+const openSectionDocument = ref(true);
+function onChange(event: any) {
+  addSelectedEmployee();
+}
 //#endregion
 
 //#region Vars
@@ -46,6 +54,45 @@ const reset = () => {
   HrDocumentStore.resetData();
 };
 
+//#region Custom Employee select
+const SelectedEmployee = ref<IEmployeeLite>({
+  id: 0,
+  name: "",
+});
+const SelectedEmployeesHeaders = ref<Array<ITableHeader>>([
+  { caption: t("id"), value: "id" },
+  { caption: t("Delete"), value: "delete" },
+  { caption: t("Employee.Title"), value: "name" },
+]);
+const SelectedEmployeesData = ref<Array<IEmployeeLite>>([]);
+const deleteSelectedEmployee = (emplyeeName: string): undefined => {
+  if (SelectedEmployeesData.value.length == 1) {
+    SelectedEmployeesData.value = [];
+    return;
+  }
+  SelectedEmployeesData.value = SelectedEmployeesData.value.filter(
+    (item) => item.name !== emplyeeName
+  );
+};
+const addSelectedEmployee = () => {
+  const newEmployee = <IEmployeeLite>{
+    id: SelectedEmployee.value.id,
+    name: SelectedEmployee.value.name,
+  };
+  if (newEmployee.name == "") return;
+  const exists = SelectedEmployeesData.value.find(
+    (emp) => emp.name === newEmployee.name
+  );
+  if (!exists) {
+    SelectedEmployeesData.value.push(newEmployee);
+    SelectedEmployeesData.value = [...SelectedEmployeesData.value];
+    SelectedEmployee.value = { id: 0, name: "" };
+  }
+  let HtmlSelectedEmployee = document.getElementById("SelectedEmployee");
+  HtmlSelectedEmployee?.focus();
+};
+
+//#endregion
 //#region Multi Files && Sections
 const sectionStore = useSectionStore();
 const { sections } = storeToRefs(useSectionStore());
@@ -61,13 +108,13 @@ enum EnumTypeChoseShareDocument {
   toEmployee = 4,
 }
 //#endregion
+const result = ref(false);
 
 const store = async () => {
   errors.value = null;
-
-  const result = ref(false);
+ 
   await conforimShareDocumnet().then((response) => {
-    result.value = response;
+    result.value = Boolean(response);
   });
 
   if (result.value === false || result.value === undefined) return;
@@ -113,9 +160,8 @@ const store = async () => {
 };
 const update = async () => {
   errors.value = null;
-  const result = ref(false);
   await conforimShareDocumnet().then((response) => {
-    result.value = response;
+    result.value = Boolean(response);
   });
 
   if (result.value === false || result.value === undefined) return;
@@ -158,8 +204,7 @@ const update = async () => {
     });
 };
 const conforimShareDocumnet = async () => {
-  if (ChosePushBy.value == EnumTypeChoseShareDocument.none) return true;
-  const swalWithBootstrapButtons = Swal.mixin({
+   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn m-2 bg-red-700",
       cancelButton: "btn bg-grey-400",
@@ -167,7 +212,7 @@ const conforimShareDocumnet = async () => {
     buttonsStyling: false,
   });
   // defualt check is 2 = select all employees
-  let msg = "";
+  let msg = "";  
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection) {
     if (SelectedSection.value.id < 1) {
       swalWithBootstrapButtons.fire(
@@ -192,9 +237,18 @@ const conforimShareDocumnet = async () => {
     msg = "اضافة الكتاب الى جميع الموظفين";
   } else {
     // that mean it for one employee
-    return true ;
+    if (Number(hrDocument.value.Employee.id) < 1) {
+      swalWithBootstrapButtons.fire(
+        t("تنبيه !"),
+        t("يجب ان تقوم بأختيار الموظف"),
+        "warning"
+      );
+      ActiveTab.value = 0;
+      return false;
+    }
+    return true;
   }
-   
+
   let re = false;
   await swalWithBootstrapButtons
     .fire({
@@ -230,7 +284,7 @@ const Delete = async () => {
   });
   swalWithBootstrapButtons
     .fire({
-      title: t("تأكيد عملية التعديل"),
+      title: t("تأكيد عملية الحذف"),
       text: t("Confirm"),
       icon: "warning",
       showCancelButton: true,
@@ -242,8 +296,8 @@ const Delete = async () => {
       if (result.isConfirmed) {
         await HrDocumentStore._delete(hrDocument.value.id).then(() => {
           swalWithBootstrapButtons.fire(
-            t("Update!"),
-            t("Update successfully ."),
+            t("Delete!"),
+            t("Deleted Successfully ."),
             "success"
           );
           router.go(-1);
@@ -282,55 +336,6 @@ const showData = async () => {
 };
 //#endregion
 
-//#region Custom Employee select
-const SelectedEmployee = ref<IEmployeeLite>({
-  id: 0,
-  name: "",
-});
-const SelectedEmployeesHeaders = ref<Array<ITableHeader>>([
-  { caption: t("id"), value: "id" },
-  { caption: t("Delete"), value: "delete" },
-  { caption: t("Employee.Title"), value: "name" },
-]);
-const SelectedEmployeesData = ref<Array<IEmployeeLite>>([]);
-const deleteSelectedEmployee = (emplyeeName: string): undefined => {
-  if (SelectedEmployeesData.value.length == 1) {
-    SelectedEmployeesData.value = [];
-    return;
-  }
-  SelectedEmployeesData.value = SelectedEmployeesData.value.filter(
-    (item) => item.name !== emplyeeName
-  );
-};
-const addSelectedEmployee = () => {
-  const newEmployee = <IEmployeeLite>{
-    id: SelectedEmployee.value.id,
-    name: SelectedEmployee.value.name,
-  };
-  if (newEmployee.name == "") return;
-  const exists = SelectedEmployeesData.value.find(
-    (emp) => emp.name === newEmployee.name
-  );
-  if (!exists) {
-    SelectedEmployeesData.value.push(newEmployee);
-    SelectedEmployeesData.value = [...SelectedEmployeesData.value];
-    SelectedEmployee.value = { id: 0, name: "" };
-  }
-  let HtmlSelectedEmployee = document.getElementById("SelectedEmployee");
-  HtmlSelectedEmployee?.focus();
-};
-
-//#endregion
-import vSelect from "vue-select";
-
-const isLoading = ref(false);
-
-const ActiveTab = ref(0);
-const openSectionDocument = ref(true);
-function onChange(event: any) {
-  addSelectedEmployee();
-}
-
 onMounted(async () => {
   isLoading.value = true;
   //console.log(can("show employees1"));
@@ -347,6 +352,7 @@ onMounted(async () => {
     await showData();
     hrDocument.value.id = id.value;
     namePage.value = "HrDocument.Update";
+    ChosePushBy.value = 0;
   }
   isLoading.value = false;
 });
@@ -370,14 +376,14 @@ onMounted(async () => {
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput
-                  :label="t('Name')"
+                  :label="t('Title')"
                   name="Name"
                   v-model="hrDocument.title"
                   type="text"
               /></ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput
-                  :label="t('Employee.DateWork')"
+                  :label="t('Date')"
                   name="EmployeeDateWork"
                   v-model="hrDocument.issueDate"
                   type="date"
@@ -387,7 +393,7 @@ onMounted(async () => {
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
-                  {{ t("Title") }}
+                  {{ t("TypeBook") }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -401,11 +407,11 @@ onMounted(async () => {
                 >
                   <template #option="{ name, addDays }">
                     <div
-                      class="dir:rtl text-right p-1 border-2 border-solid border-red-500"
+                      class="dir:rtl text-right p-1 border-2 border-solid border-red-700"
                     >
                       <span>{{ name }}</span> <br /><span
                         v-if="addDays > 0"
-                        class="text-gray-100"
+                        class="dark:text-gray-100 text-gray-600"
                         >يظاف عدد ايام {{ addDays }}</span
                       >
                     </div>
@@ -490,13 +496,12 @@ onMounted(async () => {
           </van-tab>
           <van-tab title="توزيع متعدد" v-if="hrDocument.id == 0">
             <IRow col-lg="4" col-md="2" col-sm="1">
-              <ICol span="1" span-md="1" span-sm="1"
-                >{{ ChosePushBy }}
+              <ICol span="1" span-md="1" span-sm="1">
                 <IRadio
                   label="توزيع مفرد  "
                   name="ChosePushBy"
                   v-model="ChosePushBy"
-                  value="4"
+                  value="0"
                 />
               </ICol>
             </IRow>

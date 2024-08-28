@@ -153,6 +153,7 @@ export default {
   Employee: {
     Title: "الموظف",
     HistoryReport: "كشف ذمة",
+    Info: "معلومات الموظف",
     Telegram: "معرف التلكرام",
     Number: "الرقم الوظيفي",
     IdCard: "رقم الهوية",

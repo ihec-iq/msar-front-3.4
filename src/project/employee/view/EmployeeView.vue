@@ -256,6 +256,45 @@ onMounted(async () => {
   }
   isLoading.value = false;
 });
+
+//#region
+import { useHrDocumentStore } from "@/project/hr/hrDocumentStore";
+import type { IHrDocument, IHrDocumentFilter } from "@/project/hr/IHrDocument";
+import type { ITableHeader } from "@/types/core/components/ITable";
+
+const { get_filter } = useHrDocumentStore();
+
+const dataBaseFiles = ref<Array<IHrDocument>>([]);
+
+const searchFilter = ref<IHrDocumentFilter>({
+  title: "",
+  limit: 10,
+  employeeName: "",
+});
+const getFilterData = async (page = 1) => {
+  localStorage.setItem("indexHrDocument", page.toString());
+
+  isLoading.value = true;
+  searchFilter.value.employeeId = employee.value.id;
+  //searchFilter.value.title = fastSearch.value.toString();
+  await get_filter(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataBaseFiles.value = response.data.data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoading.value = false;
+};
+const headers = ref<Array<ITableHeader>>([
+  { caption: t("Title"), value: "title" },
+  { caption: t("Details"), value: "actions" },
+  { caption: t("Employee.Title"), value: "EmployeeName" },
+  { caption: t("HrDocument.Type"), value: "HrDocumentype" },
+]);
+//#endregion
 const active = ref(0);
 
 const fileObj = ref<{
@@ -414,15 +453,25 @@ const fileObj = ref<{
               </ICol>
             </IRow>
           </van-tab>
-          <van-tab title="الملفات">
+          <van-tab title="ملفات الضبارة">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('FileName')"
-                  name="FileName"
-                  v-model="employee.name"
-                  type="text"
-              /></ICol>
+                <ITable :items="dataBaseFiles" :headers="headers">
+                  <template v-slot:EmployeeName="{ row }">
+                    <span>{{ row.Employee.name }}</span>
+                  </template>
+                  <template v-slot:HrDocumentype="{ row }">
+                    <span>{{ row.Type.name }}</span>
+                  </template>
+                  <template v-slot:actions="{ row }">
+                    <IDropdown>
+                      <li>
+                        <EditButton @click="openFile(row.id)" />
+                      </li>
+                    </IDropdown>
+                  </template>
+                </ITable>
+              </ICol>
             </IRow>
           </van-tab>
         </van-tabs>

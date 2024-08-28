@@ -9,7 +9,7 @@ import CardPortalComponent from "@/components/CardPortalComponent.vue";
 //#region Pagination
 //#endregion
 onMounted(async () => {
-  checkPermissionAccessArray([EnumPermission.ShowUsers]);
+  checkPermissionAccessArray([EnumPermission.ShowEmployees]);
 });
 </script>
 <template>
