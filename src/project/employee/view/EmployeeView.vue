@@ -272,24 +272,29 @@ const searchFilter = ref<IHrDocumentFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  isLoading.value = true;
-  searchFilter.value.employeeId = employee.value.id;
-  //searchFilter.value.title = fastSearch.value.toString();
-  await get_filter(searchFilter.value, page)
-    .then((response) => {
-      if (response.status == 200) {
-        dataBaseFiles.value = response.data.data.data;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  isLoading.value = false;
+  if (active.value == 1) {
+    searchFilter.value.employeeId = employee.value.id;
+    if (Number(searchFilter.value.employeeId) < 1) return;
+    isLoading.value = true;
+
+    //searchFilter.value.title = fastSearch.value.toString();
+    await get_filter(searchFilter.value, page)
+      .then((response) => {
+        if (response.status == 200) {
+          dataBaseFiles.value = response.data.data.data;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    isLoading.value = false;
+  }
 };
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Title"), value: "title" },
   { caption: t("Details"), value: "actions" },
   { caption: t("Employee.Title"), value: "EmployeeName" },
+  { caption: t("Date"), value: "issueDate" },
   { caption: t("HrDocument.Type"), value: "HrDocumentype" },
 ]);
 const openFile = (id: number) => {
@@ -300,11 +305,6 @@ const openFile = (id: number) => {
 };
 //#endregion
 const active = ref(0);
-
-const fileObj = ref<{
-  fileName: string;
-  fileType: string;
-}>();
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
@@ -320,7 +320,7 @@ const fileObj = ref<{
     </template>
     <IPageContent>
       <IRow>
-        <van-tabs v-model:active="active">
+        <van-tabs v-model:active="active" @click-tab="getFilterData">
           <van-tab title="معلومات الموظف">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
@@ -457,25 +457,23 @@ const fileObj = ref<{
               </ICol>
             </IRow>
           </van-tab>
-          <van-tab title="ملفات الضبارة" onclick="getFilterData">
-            <IRow col-lg="4" col-md="2" col-sm="1">
-              <ICol span="1" span-md="1" span-sm="1">
-                <ITable :items="dataBaseFiles" :headers="headers">
-                  <template v-slot:EmployeeName="{ row }">
-                    <span>{{ row.Employee.name }}</span>
-                  </template>
-                  <template v-slot:HrDocumentype="{ row }">
-                    <span>{{ row.Type.name }}</span>
-                  </template>
-                  <template v-slot:actions="{ row }">
-                    <IDropdown>
-                      <li>
-                        <EditButton @click="openFile(row.id)" />
-                      </li>
-                    </IDropdown>
-                  </template>
-                </ITable>
-              </ICol>
+          <van-tab title="ملفات الضبارة">
+            <IRow col-lg="1" col-md="1" col-sm="1">
+              <ITable :items="dataBaseFiles" :headers="headers">
+                <template v-slot:EmployeeName="{ row }">
+                  <span>{{ row.Employee.name }}</span>
+                </template>
+                <template v-slot:HrDocumentype="{ row }">
+                  <span>{{ row.Type.name }}</span>
+                </template>
+                <template v-slot:actions="{ row }">
+                  <EditButton
+                    title="Open"
+                    @click="openFile(row.id)"
+                    class="m-1"
+                  />
+                </template>
+              </ITable>
             </IRow>
           </van-tab>
         </van-tabs>

@@ -318,7 +318,6 @@ const showData = async () => {
         hrDocument.value.Employee = response.data.data.Employee;
         hrDocument.value.Files = response.data.data.Files;
         ChosePushBy.value = EnumTypeChoseShareDocument.toEmployee;
-        console.log(ChosePushBy.value);
       }
     })
     .catch((errors) => {

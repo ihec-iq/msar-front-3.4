@@ -119,6 +119,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Title"), value: "title" },
   { caption: t("Details"), value: "actions" },
   { caption: t("Employee.Title"), value: "EmployeeName" },
+  { caption: t("Date"), value: "issueDate" },
   { caption: t("HrDocument.Type"), value: "HrDocumentype" },
 ]);
 </script>
