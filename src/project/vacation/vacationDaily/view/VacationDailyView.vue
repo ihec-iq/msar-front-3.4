@@ -9,10 +9,7 @@ import { useVacationStore } from "../../vacationStore";
 import type { IEmployee } from "@/project/employee/IEmployee";
 import { useEmployeeStore } from "@/project/employee/employeeStore";
 import { useVacationReasonStore } from "../../vacationReasonStore";
-import { usePaperizer } from "paperizer";
-const { paperize } = usePaperizer("printMe");
-import printJS from "print-js";
-
+   
 import {
   useValidation,
   type IValidationResult,
@@ -236,12 +233,7 @@ const back = () => {
     name: "vacationDailyIndex",
   });
 };
-const printDirect222 = () => {
-  printJS("printMe1", "html");
-  return;
-};
-import printDirect from "@thiagoelg/node-printer";
-
+ 
 const printWindow2 = () => {
   const options = {
     media: "A4",
@@ -387,9 +379,7 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import { t } from "@/utilities/I18nPlugin";
-
-import printer from "@thiagoelg/node-printer";
-import util from "util";
+ 
 
 onMounted(async () => {
   //console.log(can("show items1"));
