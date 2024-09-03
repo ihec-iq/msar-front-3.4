@@ -24,3 +24,22 @@ export const getError = (error: {
 
   return errorMessage;
 };
+
+export async function generateKey() {
+  const key = await window.crypto.subtle.generateKey(
+    {
+      name: "AES-GCM",
+      length: 256,
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  const exportedKey = await window.crypto.subtle.exportKey("raw", key);
+  const keyString = Array.from(new Uint8Array(exportedKey))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+  return keyString;
+}
+
+
+
