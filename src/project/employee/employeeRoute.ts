@@ -10,6 +10,14 @@ export default [
     },
   },
   {
+    path: "/employeePortal",
+    name: "employeePortal",
+    component: () => import("./view/EmployeePortalView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
     path: "/employee",
     name: "employeeAdd",
     component: () => import("./view/EmployeeView.vue"),

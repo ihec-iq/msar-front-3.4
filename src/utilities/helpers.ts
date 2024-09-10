@@ -7,7 +7,7 @@ export const getError = (error: {
   };
   config: { url: any };
 }) => {
-  const errorMessage = t("Server is down, please try again.");
+   const errorMessage = t("Server is down, please try again.");
 
   if (!error.response) {
     console.error(`API ${error.config.url} not found`);

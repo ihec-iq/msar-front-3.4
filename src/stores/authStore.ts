@@ -90,9 +90,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     if (user.value) setPermissions(user.value.permissions);
   };
 
-
-   
-
   return {
     isAuthenticated,
     token,

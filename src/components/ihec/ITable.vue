@@ -36,7 +36,7 @@ defineProps({
     >
       <table class="w-full pb-5">
         <caption></caption>
-        <thead class="dark:bg-tableHead bg-[#7192AD] text-[#fff] shadow">
+        <thead class="dark:bg-tableHead bg-[#23A559] text-[#fff] shadow">
           <tr>
             <th
               class="text-lg font-medium text-gray-50 dark:text-white py-2"

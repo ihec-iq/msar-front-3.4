@@ -193,7 +193,7 @@ const { user } = storeToRefs(useAuthStore());
               ></router-link>
               <!-- children -->
               <div>
-                <div
+                <!-- <div
                   v-if="Link.children?.length ?? 0 > 0"
                   class="p-2 text-gray-800 dark:text-gray-200 whitespace-pre-wrap cursor-pointer"
                 >
@@ -209,6 +209,13 @@ const { user } = storeToRefs(useAuthStore());
                       {{ child.title }}
                     </router-link>
                   </div>
+                </div> -->
+                <div
+                  v-if="tab == Link.tab && checkPermission(Link.permissions[0])"
+                  class="cursor-pointer duration-800  -2 fadeOut 2s ease-in-out rounded-md    m-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-400"
+                  :class="{ 'flex ': !isClose, hidden: isClose }"
+                >
+                  {{ Link.description }}
                 </div>
               </div>
             </li>

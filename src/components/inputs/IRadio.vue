@@ -33,12 +33,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="mb-2 flex h-full">
-    <label class="_inputLabel mx-2">
-      <span v-if="IsRequire" class="text-red-600">*</span
-      ><span v-if="label != ''"></span> {{ label }}
-      <slot class="_inputLabel"></slot>
-    </label>
+  <div class="mb-2 flex h-full ">
     <input
       :disabled="disabled"
       type="radio"
@@ -48,5 +43,11 @@ defineProps({
       :value="value"
       :checked="checked"
     />
+    <label class="_inputLabel mx-2">
+      <span v-if="IsRequire" class="text-red-600">*</span
+      ><span v-if="label != ''"></span> {{ label }}
+      <slot class="_inputLabel"></slot>
+    </label>
+    
   </div>
 </template>

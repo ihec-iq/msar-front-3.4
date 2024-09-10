@@ -87,6 +87,7 @@ const Login = async () => {
       });
     })
     .catch((error) => {
+      isLoading.value = false;
       errs.value = getError(error.response);
     });
   isLoading.value = false;
@@ -107,7 +108,9 @@ onMounted(async () => {
         swalWithBootstrapButtons
           .fire({
             title: t("Are You Sure?"),
-            text: t("Your Server is down ,You want to open Connection Setting ?"),
+            text: t(
+              "Your Server is down ,You want to open Connection Setting ?"
+            ),
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: t("Yes, open it!"),
@@ -130,7 +133,9 @@ onMounted(async () => {
   <div
     class="relative z-30 overflow-y-hidden sm:flex sm:flex-row justify-evenly bg-transparent rounded-3xl"
   >
-    <div class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md">
+    <div
+      class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md"
+    >
       <div class="self-start hidden lg:flex flex-col text-gray-300">
         <!-- <p class="pr-3 text-sm opacity-75">
           Lorem ipsum is placeholder text commonly used in the graphic, print,
@@ -166,7 +171,7 @@ onMounted(async () => {
                 type="email"
                 :label="t('E-mail')"
                 :placeholder="t('Your Email Address')"
-                success-message="Got it, we won't spam you!"
+                success-message="ادخل الاميل او اسم الحساب"
               />
               <TextInput
                 v-model="loginForm.password"
@@ -174,7 +179,7 @@ onMounted(async () => {
                 type="password"
                 :label="t('Password')"
                 :placeholder="t('Your password')"
-                success-message="Nice and secure!"
+                success-message="ادخل رمز الحساب"
               />
             </div>
             <div class="flex items-center justify-between">
@@ -288,25 +293,31 @@ onMounted(async () => {
     <div class="waveWrapperInner bgTop">
       <div
         class="wave waveTop"
-        style="background-image: url('http://front-end-noobs.com/jecko/img/wave-top.png')"
+        style="
+          background-image: url(&quot;http://front-end-noobs.com/jecko/img/wave-top.png&quot;);
+        "
       ></div>
     </div>
     <div class="waveWrapperInner bgMiddle">
       <div
         class="wave waveMiddle"
-        style="background-image: url('http://front-end-noobs.com/jecko/img/wave-mid.png')"
+        style="
+          background-image: url(&quot;http://front-end-noobs.com/jecko/img/wave-mid.png&quot;);
+        "
       ></div>
     </div>
     <div class="waveWrapperInner bgBottom">
       <div
         class="wave waveBottom"
-        style="background-image: url('http://front-end-noobs.com/jecko/img/wave-bot.png')"
+        style="
+          background-image: url(&quot;http://front-end-noobs.com/jecko/img/wave-bot.png&quot;);
+        "
       ></div>
     </div>
   </div>
   <div class="fixed top-4 right-5 z-40">
     <PopSetting></PopSetting>
-  </div> 
+  </div>
 </template>
 
 <style>
@@ -318,7 +329,6 @@ onMounted(async () => {
   --success-bg-color: #e0eee4;
 }
 
- 
 .submit-btn {
   background: var(--primary-color);
   outline: none;
