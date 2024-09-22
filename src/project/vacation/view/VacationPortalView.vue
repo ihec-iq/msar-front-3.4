@@ -2,7 +2,7 @@
 import { onMounted } from "vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-import { VacationLinks } from "./VacationLinks";
+import { VacationLinks } from "../VacationLinks";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardPortalComponent from "@/components/CardPortalComponent.vue";
@@ -17,7 +17,7 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('VacationIndex')">
     <IPageContent>
-      <CardPortalComponent :links="VacationLinks"></CardPortalComponent>
+      <CardPortalComponent :links="VacationLinks[0].children"></CardPortalComponent>
     </IPageContent>
   </IPage>
 </template>

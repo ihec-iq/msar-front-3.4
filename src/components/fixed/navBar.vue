@@ -97,7 +97,7 @@ const { user } = storeToRefs(useAuthStore());
 <template>
   <div
     class="flex fixed h-full z-[999] bg-sideNav dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
-    :class="[isClose ? 'lg:w-20 xs:w-[68px]' : 'lg:w-64  ']"
+    :class="[isClose ? 'lg:w-20 sm:w-20 xs:w-[68px]' : 'lg:w-64 sm:w-64  ']"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
@@ -113,7 +113,7 @@ const { user } = storeToRefs(useAuthStore());
           :variants="{ custom: { scale: 2 } }"
           :delay="300"
           v-if="!isClose"
-          class="lg:fixed ltr:left-[225px] rtl:right-[225px] top-4 text-white lg:block xs:hidden"
+          class="lg:fixed sm:fixed ltr:left-[225px] rtl:right-[225px] top-4 text-white lg:block xs:hidden"
         >
           <button @click="changeStackSideBar()" v-if="isCloseStick">
             <svg
@@ -146,7 +146,7 @@ const { user } = storeToRefs(useAuthStore());
         </div>
         <!-- logo and co Name  -->
         <div
-          class="font-bold items-center flex flex-col text-black mt-5"
+          class="font-bold items-start flex flex-col text-black mt-5"
           :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
         >
           <div class="flex items-center">
@@ -156,10 +156,10 @@ const { user } = storeToRefs(useAuthStore());
               @click="isClose = !isClose"
               src="@/assets/ihec-logo.jpg"
               alt="Profile Picture"
-              class="w-14 h-14 rounded-full align-middle"
+              class="w-14 h-14  rounded-full align-middle"
             />
             <div
-              class="text-lg mt-1 ml-1 duration-700 w-28 dark:text-textLight text-text"
+              class="text-lg mt-1 ml-1 duration-700 w-20 dark:text-textLight text-text"
               :class="{ hidden: isClose, block: !isClose }"
             >
               {{ user?.Employee?.name }}

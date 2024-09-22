@@ -15,6 +15,7 @@ import hrRoute from '@/project/hr/hrRoute';
 
 //#endregion
 import DefaultLayout from "@/views/layouts/MainView.vue";
+import bonusesRoute from "@/project/bonuses/bonusesRoute";
 const router = createRouter({
   history: createWebHistory(
     process.env.NODE_ENV === "production" ? "/10/" : "/",
@@ -60,6 +61,7 @@ const router = createRouter({
         ...warehouseRoute,
         ...employeeRoute,
         ...hrRoute,
+        ...bonusesRoute,
         {
           path: "/dashboard",
           name: "Dashboard",

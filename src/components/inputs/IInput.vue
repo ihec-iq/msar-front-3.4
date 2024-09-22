@@ -87,7 +87,6 @@ onMounted(async () => {
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
     <input
-      id="Control1"
       @change="keydown"
       @focusout="checkRequired"
       :disabled="disabled"
