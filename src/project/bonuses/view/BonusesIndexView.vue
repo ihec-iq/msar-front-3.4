@@ -1,25 +1,24 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useHrDocumentStore } from "../bonusesDocumentStore";
-import { useSectionStore } from "@/project/section/sectionStore";
-
+import { useBonusesStore } from "../bonusesStore";
+ 
 import { storeToRefs } from "pinia";
 
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IHrDocument, IHrDocumentFilter } from "../IBonuses";
+import type { IBonuses, IBonusesFilter } from "../IBonuses";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
 // const { hrDocuments } = storeToRefs(useHrDocumentStore());
 // const { hrDocumentTypes } = storeToRefs(useHrDocumentStore());
 
-const data = ref<Array<IHrDocument>>([]);
+const data = ref<Array<IBonuses>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IHrDocument>>([]);
-const { get_filter } = useHrDocumentStore();
+const dataBase = ref<Array<IBonuses>>([]);
+const { get_filter } = useBonusesStore();
 
 import { limits } from "@/utilities/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
@@ -38,16 +37,16 @@ watch(
   }
 );
 const addItem = () => {
-  useHrDocumentStore().resetData();
+  useBonusesStore().resetData();
   router.push({
-    name: "hrDocumentAdd",
+    name: "bonusesAdd",   
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (hrDocument: IHrDocument) => {
-  if (hrDocument.title.includes(fastSearch.value)) {
+const filterByIDName = (bonuses: IBonuses) => {
+  if (bonuses.title.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -61,13 +60,13 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IHrDocumentFilter>({
+const searchFilter = ref<IBonusesFilter>({
   title: "",
   limit: 10,
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexHrDocument", page.toString());
+  localStorage.setItem("indexBonuses", page.toString());
 
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value.toString();
@@ -88,16 +87,11 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "hrDocumentUpdate",
+    name: "bonusesUpdate",
     params: { id: id },
   });
 };
-const history = (id: number) => {
-  router.push({
-    name: "hrDocumentHistory",
-    params: { id: id },
-  });
-};
+ 
 //#region Pagination
 //#endregion
 onMounted(async () => {
@@ -109,8 +103,8 @@ onMounted(async () => {
 
   let index = 1;
 
-  if (localStorage.getItem("indexHrDocument") != undefined)
-    index = Number(localStorage.getItem("indexHrDocument"));
+  if (localStorage.getItem("indexBonuses") != undefined)
+    index = Number(localStorage.getItem("indexBonuses"));
   await getFilterData(index);
   isLoading.value = false;
 });
@@ -120,13 +114,15 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Details"), value: "actions" },
   { caption: t("Employee.Title"), value: "EmployeeName" },
   { caption: t("Date"), value: "issueDate" },
-  { caption: t("HrDocument.Type"), value: "HrDocumentype" },
+  { caption: t("Bonus.DegreeStage"), value: "BonusDegreeStage" },
+  { caption: t("Bonus.JobTitle"), value: "BonusJobTitle" },
+  { caption: t("Bonus.Study"), value: "BonusStudy" },
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('HrDocument.Index')" :is-loading="isLoading">
+  <IPage :HeaderTitle="t('Bonus.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton width="28" :onClick="addItem" :text="t('Add')" />
+      <IButton width="28" :onClick="addItem" :text="t('Bonus.Add')" />
     </template>
     <IPageContent>
       <IRow :col="3" :col-md="2" :col-lg="3">
@@ -158,8 +154,14 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:EmployeeName="{ row }">
             <span>{{ row.Employee.name }}</span>
           </template>
-          <template v-slot:HrDocumentype="{ row }">
-            <span>{{ row.Type.name }}</span>
+          <template v-slot:BonusJobTitle="{ row }">
+            <span>{{ row.BonusJobTitle.name }}</span>
+          </template>
+          <template v-slot:BonusStudy="{ row }">
+            <span>{{ row.BonusStudy.name }}</span>
+          </template>
+          <template v-slot:BonusDigreeStage="{ row }">
+            <span>{{ row.BonusDigreeStage.name }}</span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>

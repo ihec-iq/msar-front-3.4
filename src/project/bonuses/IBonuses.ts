@@ -1,5 +1,5 @@
 import type { IUser } from "../user/IUser";
-import type { IEmployee, IEmployeeLite } from "../employee/IEmployee";
+import type { IEmployeeLite } from "../employee/IEmployee";
 import type { IDocument } from "../archive/IArchive";
 
 export interface IBonuses {
@@ -7,17 +7,30 @@ export interface IBonuses {
   title: string;
   issueDate: string;
   Employee: IEmployeeLite;
-  Type: IBonusesType;
+  BonusJobTitle: IBonusesBonusJobTitle;
+  BonusStudy: IBonusesBonusStudy;
+  BonusDigreeStage: IBonusesDigreeStage;
   Files?: Array<IDocument>;
-  addDays?: number;
+  numberLastBounues: number;
+  dateLastBounues: string;
+  dateLastWorth: string;
+  dateNextWorth: string;
   UserCreate?: IUser;
   UserUpdate?: IUser;
+  notes: string;
 }
 
-export interface IBonusesType {
+export interface IBonusesBonusJobTitle {
   id: number;
   name: string;
-  addDays?: number;
+}
+export interface IBonusesBonusStudy {
+  id: number;
+  name: string;
+}
+export interface IBonusesDigreeStage {
+  id: number;
+  name: string;
 }
 export interface IBonusesFilter {
   title: string;

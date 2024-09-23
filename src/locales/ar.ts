@@ -167,6 +167,19 @@ export default {
     MoveSection: "شعبة التنسيب",
     VacationReport: "تقرير اجازات"
   },
+  Bonus: {
+    Index: "العلاوات",
+    Add: "اضافة علاوة",
+    Update: "تعديل علاوة",
+    dateLastWorth: "تاريخ اخر استحقاق",
+    dateNextWorth: "تاريخ الاستحقاق القادم",
+    JobTitle: "المنصب",
+    Study: "الدراسة",
+    DegreeStage: "المرحلة الدراسية",
+    Employee: "الموظف",
+    issueDate: "تاريخ الاصدار",
+    dateLastBounues: "تاريخ الاخراج",
+  },
   UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",

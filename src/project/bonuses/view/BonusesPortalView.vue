@@ -6,8 +6,7 @@ import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionsStore();
 import CardPortalComponent from "@/components/CardPortalComponent.vue";
-//#region Pagination
-//#endregion
+
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
 });

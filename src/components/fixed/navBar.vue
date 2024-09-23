@@ -89,7 +89,7 @@ const setting = () => {
   });
 };
 onMounted(() => {
-  userData.value = JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+  userData.value = JSON.parse(localStorage.getItem("user") || "{}");
 });
 
 const { user } = storeToRefs(useAuthStore());

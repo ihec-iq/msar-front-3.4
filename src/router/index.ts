@@ -59,9 +59,9 @@ const router = createRouter({
         ...userRoute,
         ...roleRoute,
         ...warehouseRoute,
+        ...bonusesRoute,
         ...employeeRoute,
         ...hrRoute,
-        ...bonusesRoute,
         {
           path: "/dashboard",
           name: "Dashboard",

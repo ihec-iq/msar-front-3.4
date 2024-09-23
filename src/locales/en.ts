@@ -166,7 +166,19 @@ export default {
     MoveSection: "Section Moved",
     VacationReport: "Vacation Report"
   },
-
+  Bonus: {
+    Index: "Bonuses",
+    Add: "Add Bonuses",
+    Update: "Update Bonuses",
+    dateLastWorth: "Date Last Worth",
+    dateNextWorth: "Date Next Worth",
+    JobTitle: "Job Title",
+    Study: "Study",
+    DegreeStage: "Degree Stage",
+    Employee: "Employee",
+    issueDate: "Issue Date",
+    dateLastBounues: "Date Last Bounues",
+  },
   UserIndex: "User System",
 
   Help: "Help",
