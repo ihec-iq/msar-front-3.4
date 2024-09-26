@@ -2,14 +2,14 @@ import type { IUser } from "../user/IUser";
 import type { IEmployeeLite } from "../employee/IEmployee";
 import type { IDocument } from "../archive/IArchive";
 
-export interface IBonuses {
+export interface IBonus {
   id: number;
   title: string;
   issueDate: string;
   Employee: IEmployeeLite;
-  BonusJobTitle: IBonusesBonusJobTitle;
-  BonusStudy: IBonusesBonusStudy;
-  BonusDigreeStage: IBonusesDigreeStage;
+  BonusJobTitle: IBonusJobTitle;
+  BonusStudy: IBonusStudy;
+  BonusDegreeStage: IBonusDegreeStage;
   Files?: Array<IDocument>;
   numberLastBounues: number;
   dateLastBounues: string;
@@ -20,22 +20,37 @@ export interface IBonuses {
   notes: string;
 }
 
-export interface IBonusesBonusJobTitle {
+export interface IBonusJobTitle {
+  id: number;
+  name: string;
+  description: string;
+}
+export interface IBonusStudy {
   id: number;
   name: string;
 }
-export interface IBonusesBonusStudy {
+export interface IBonusDegree {
   id: number;
   name: string;
 }
-export interface IBonusesDigreeStage {
+export interface IBonusStage {
   id: number;
   name: string;
 }
-export interface IBonusesFilter {
+export interface IBonusDegreeStage {
+  id: number;
+  title: string;
+  Degree: IBonusDegree;
+  Stage: IBonusStage;
+  salery: number;
+  yearlyBounues: number;
+  yearlyService: number;
+}
+export interface IBonusFilter {
   title: string;
   limit: number;
   checked?: boolean;
   employeeId?: number;
   employeeName?: string;
+  name?: string;
 }

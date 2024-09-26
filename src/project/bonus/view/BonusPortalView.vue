@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { t } from "@/utilities/I18nPlugin";
-import { BonusesLinks } from "../BonusesLinks";
+import { BonusLinks } from "../BonusLinks";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 const { checkPermissionAccessArray } = usePermissionsStore();
@@ -12,9 +12,9 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('UserIndex')">
+  <IPage :HeaderTitle="t('Bonus.Portal')">
     <IPageContent>
-      <CardPortalComponent :links="BonusesLinks"></CardPortalComponent>
+      <CardPortalComponent :links="BonusLinks"></CardPortalComponent>
     </IPageContent>
   </IPage>
 </template>

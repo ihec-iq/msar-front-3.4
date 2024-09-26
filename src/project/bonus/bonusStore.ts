@@ -1,0 +1,238 @@
+import { ref, computed } from "vue";
+import { defineStore } from "pinia";
+import Api from "@/api/apiConfig";
+import { getError } from "@/utilities/helpers";
+import type { IBonusFilter, IBonusJobTitle, IBonusStudy, IBonus, IBonusDegreeStage } from "./IBonus";
+import type { IEmployeeLite } from "../employee/IEmployee";
+
+export const useBonusStore = defineStore("BonusStore", () => {
+  const Bonus = ref<IBonus>({
+    id: 0,
+    title: "",
+    issueDate: new Date().toISOString().split("T")[0],
+    dateLastBounues: new Date().toISOString().split("T")[0],
+    dateLastWorth: new Date().toISOString().split("T")[0],
+    dateNextWorth: new Date().toISOString().split("T")[0],
+    numberLastBounues: 0,
+    Employee: { id: 0, name: "" },
+    BonusJobTitle: { id: 0, name: "", description: "" },
+    BonusStudy: { id: 0, name: "" },
+    BonusDegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBounues: 0, yearlyService: 0 },
+    notes: ""
+  });
+  const BonusJobTitle = ref<IBonusJobTitle>({ id: 0, name: "", description: "" });
+  const BonusStudy = ref<IBonusStudy>({ id: 0, name: "" });
+  const BonusDegreeStage = ref<IBonusDegreeStage>({ id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBounues: 0, yearlyService: 0 });
+
+  const Bonuses = ref<Array<IBonus>>([]);
+  const BonusJobTitles = ref<Array<IBonusJobTitle>>([]);
+  const BonusStudies = ref<Array<IBonusStudy>>([]);
+  const BonusDegreeStages = ref<Array<IBonusDegreeStage>>([]);
+  const Employees = ref<Array<IEmployeeLite>>([]);
+
+  const pathBase = "";
+  const pathUrl = `${pathBase}/bonus`;
+
+  const isLoading = ref(false);
+  const error = ref<string | null>(null);
+
+  const sortedBonuses = computed(() => {
+    return [...Bonuses.value].sort((a, b) => a.title.localeCompare(b.title));
+  });
+ 
+  async function get() {
+    return await  Api.get(`${pathUrl}`) ;
+  }
+
+  async function get_Bonuses() {
+      await   Api.get(`${pathUrl}`).then((response) => {
+        if (response.status == 200) {
+          Bonuses.value = response.data .data;
+        }
+      });
+     
+  }
+
+  const resetDataBonus=() => {
+    Bonus.value = {
+      id: 0,
+      title: "",
+      issueDate: new Date().toISOString().split("T")[0],
+      numberLastBounues: 0,
+      dateLastBounues: new Date().toISOString().split("T")[0],
+      dateLastWorth: new Date().toISOString().split("T")[0],
+      dateNextWorth: new Date().toISOString().split("T")[0],
+      Employee: { id: 0, name: "" },
+      BonusJobTitle: { id: 0, name: "", description: "" },
+      BonusStudy: { id: 0, name: "" },
+      BonusDegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBounues: 0, yearlyService: 0 },
+      notes: ""
+    };
+  }
+  const resetDataBonusJobTitle=() => {
+    BonusJobTitle.value = {
+      id: 0,
+      name: "",
+      description: ""
+    };
+  } 
+  const resetDataBonusStudy=() => {
+    BonusStudy.value = {
+      id: 0,
+      name: ""
+    };
+  } 
+  const resetDataBonusDegreeStage=() => {
+    BonusDegreeStage.value = {
+      id: 0,
+      title: "",  
+      Degree: { id: 0, name: "" },
+      Stage: { id: 0, name: "" },
+      salery: 0,
+      yearlyBounues: 0,
+      yearlyService: 0
+    };
+  } 
+
+
+  async function get_filter(params: IBonusFilter, page: number) {
+    return await  Api.get(`${pathUrl}/filter?page=${page}`, { params }) ;
+  }
+
+  //#region BonusJobTitle
+  async function get_BonusJobTitle() {
+   return await  Api.get(`bonus_job_title`).then((response) => {
+    if (response.status == 200) {
+      BonusJobTitles.value = response.data.data;
+    }
+  });
+  }
+  async function getFilter_BonusJobTitle(params: IBonusFilter, page: number) {
+    return await  Api.get(`bonus_job_title/filter?page=${page}`, { params });
+  }
+  async function store_BonusJobTitle(params: object) {
+    return await  Api.post(`bonus_job_title/store`, params) ;
+  }
+  async function update_BonusJobTitle(id: number, params: object) {
+    return await  Api.post(`bonus_job_title/update/${id}`, params);
+  }
+  async function delete_BonusJobTitle(id: number) {
+    return await  Api.delete(`bonus_job_title/delete/${id}`);
+  }
+  async function show_BonusJobTitle(id: number) {
+    return await  Api.get(`bonus_job_title/${id}`);
+  }
+  //#endregion
+
+  //#region BonusStudy
+  async function get_BonusStudy() {
+     return await  Api.get(`bonus_study`).then((response) => {
+      if (response.status == 200) {
+        BonusStudies.value = response.data.data;
+      }
+    });
+  }
+  async function store_BonusStudy(params: object) {
+    return await  Api.post(`bonus_study/store`, params);
+  }
+  async function update_BonusStudy(id: number, params: object) {
+    return await  Api.post(`bonus_study/update/${id}`, params);
+  }
+  async function delete_BonusStudy(id: number) {
+    return await  Api.delete(`bonus_study/delete/${id}`);
+  }
+  async function show_BonusStudy(id: number) {
+    return await  Api.get(`bonus_study/${id}`);
+  }
+  //#endregion
+
+  //#region BonusDegreeStage  
+  async function get_BonusDegreeStage() {
+    return await  Api.get(`bonus_degree_stage`).then((response) => {
+      if (response.status == 200) {
+        BonusDegreeStages.value = response.data.data;
+      }
+    });
+  }
+  async function store_BonusDegreeStage(params: object) {
+    return await  Api.post(`bonus_degree_stage/store`, params);
+  }
+  async function update_BonusDegreeStage(id: number, params: object) {
+    return await  Api.post(`bonus_degree_stage/update/${id}`, params);
+  }
+  async function delete_BonusDegreeStage(id: number) {
+    return await  Api.delete(`bonus_degree_stage/delete/${id}`);
+  }
+  async function show_BonusDegreeStage(id: number) {
+    return await  Api.get(`bonus_degree_stage/${id}`);
+  }
+  //#endregion
+
+  async function get_Employees() {
+    return await  Api.get(`/employee/lite`).then((response) => {
+      if (response.status == 200) {
+        Employees.value = response.data.data;
+      }
+    });
+  }
+
+  async function store(params: object) {
+      return await  Api.post(`${pathUrl}/store`, params);
+  }
+
+  async function update(id: number, params: object) {
+    return await  Api.post(`${pathUrl}/update/${id}`, params);
+  }
+
+  async function show(id: number) {
+    return await  Api.get(`${pathUrl}/${id}`);
+  }
+
+  async function _delete(id: number) {
+    return await Api.delete(`${pathUrl}/delete/${id}`);
+  }
+
+  return {
+    Bonus,
+    resetDataBonus,
+    resetDataBonusJobTitle,
+    resetDataBonusStudy,
+    resetDataBonusDegreeStage,
+    BonusJobTitle,
+    BonusStudy,
+    BonusDegreeStage,
+    Bonuses,
+    BonusJobTitles,
+    BonusStudies,
+    BonusDegreeStages,
+    sortedBonuses,
+    Employees,
+    isLoading,
+    error,
+    get,
+    get_filter,
+    get_Bonuses,
+    get_BonusJobTitle,
+    getFilter_BonusJobTitle,
+    get_BonusStudy,
+    get_BonusDegreeStage,
+    get_Employees,
+    show,
+    show_BonusJobTitle,
+    show_BonusStudy,
+    show_BonusDegreeStage,
+    delete_BonusJobTitle,
+    delete_BonusStudy,
+    delete_BonusDegreeStage,
+    store,
+    store_BonusJobTitle,
+    store_BonusStudy,
+    store_BonusDegreeStage,
+    update,
+    update_BonusJobTitle,
+    update_BonusStudy,
+    update_BonusDegreeStage,
+    getError,
+    _delete,
+  };
+});

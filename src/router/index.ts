@@ -15,7 +15,7 @@ import hrRoute from '@/project/hr/hrRoute';
 
 //#endregion
 import DefaultLayout from "@/views/layouts/MainView.vue";
-import bonusesRoute from "@/project/bonuses/bonusesRoute";
+import bonusRoute from "@/project/bonus/bonusRoute";
 const router = createRouter({
   history: createWebHistory(
     process.env.NODE_ENV === "production" ? "/10/" : "/",
@@ -59,7 +59,7 @@ const router = createRouter({
         ...userRoute,
         ...roleRoute,
         ...warehouseRoute,
-        ...bonusesRoute,
+        ...bonusRoute,
         ...employeeRoute,
         ...hrRoute,
         {
@@ -112,7 +112,7 @@ router.beforeResolve(async (to, from, next) => {
       await middleware(to, from, next);
     }
   }
-  next();
+  //next();
   return;
 });
 router.onError(err => {

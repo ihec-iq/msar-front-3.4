@@ -7,39 +7,40 @@ import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import vSelect from "vue-select";
-import { useBonusesStore } from "@/project/bonuses/bonusesStore";
+import { useBonusStore } from "@/project/bonus/bonusStore";
 import { SuccessToast } from "@/utilities/Toast";
 import { IEmployeeLite } from "@/project/employee/IEmployee";
+import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
+import { ConvertToMoneyFormat } from "@/utilities/tools";
 
 const route = useRoute();
 const router = useRouter();
 const id = ref(Number(route.params.id));
 const { checkPermissionAccessArray } = usePermissionsStore();
-const BonusesStore = useBonusesStore();
-const { Bonuses } = storeToRefs(BonusesStore);
+const BonusStore = useBonusStore();
+const { Bonus } = storeToRefs(BonusStore);
 
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
-const namePage = ref("Bonuses.Add");
+const namePage = ref("Bonus.Add");
 
 const store = async () => {
   errors.value = null;
   const formData = new FormData();
-  Object.entries(Bonuses.value).forEach(([key, value]) => {
+  Object.entries(Bonus.value).forEach(([key, value]) => {
     if (value !== null && value !== undefined) {
       formData.append(key, String(value));
     }
   });
-
   try {
-    const response = await BonusesStore.store(formData);
+    const response = await BonusStore.store(formData);
     if (response.status === 200) {
       SuccessToast();
       router.go(-1);
     }
   } catch (error) {
     if (error instanceof Error) {
-      errors.value = BonusesStore.getError(error as any);
+      errors.value = BonusStore.getError(error as any);
       Swal.fire({
         icon: "error",
         title: "Create new data failed!",
@@ -59,24 +60,24 @@ const store = async () => {
 const update = async () => {
   errors.value = null;
   const formData = new FormData();
-  Object.entries(Bonuses.value).forEach(([key, value]) => {
+  Object.entries(Bonus.value).forEach(([key, value]) => {
     if (value !== null && value !== undefined) {
       formData.append(key, String(value));
     }
   });
 
   try {
-    const response = await BonusesStore.update(Bonuses.value.id, formData);
+    const response = await BonusStore.update(Bonus.value.id, formData);
     if (response.status === 200) {
       SuccessToast();
       router.go(-1);
     }
   } catch (error) {
-    errors.value = BonusesStore.error;
+    errors.value = BonusStore.error;
     Swal.fire({
       icon: "error",
       title: "Updating data failed!",
-      text: BonusesStore.error?.toString(),
+      text: BonusStore.error?.toString(),
     });
   }
 };
@@ -94,7 +95,7 @@ const Delete = async () => {
 
   if (result.isConfirmed) {
     try {
-      await BonusesStore._delete(Bonuses.value.id);
+      await BonusStore._delete(Bonus.value.id);
       Swal.fire(t("Deleted!"), t("Deleted Successfully."), "success");
       router.go(-1);
     } catch (error) {
@@ -104,9 +105,9 @@ const Delete = async () => {
 };
 
 const showData = async () => {
-  await BonusesStore.show(id.value).then((response) => {
+  await BonusStore.show(id.value).then((response) => {
     if (response.status === 200) {
-      Object.assign(Bonuses.value, response.data.data);
+      Object.assign(Bonus.value, response.data.data);
     }
   }).catch((error) => {
     console.error(error);
@@ -118,28 +119,28 @@ const showData = async () => {
     }).then(() => {
       router.go(-1);
     });
-  }); 
+  });
 };
 const reset = () => {
-  BonusesStore.resetData();
+  BonusStore.resetDataBonus();
 };
 onMounted(async () => {
   isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
 
   await Promise.all([
-    BonusesStore.get_BonusJobTitle(),
-    BonusesStore.get_BonusStudy(),
-    BonusesStore.get_BonusDigreeStage(),
-    BonusesStore.get_Employees()
+    BonusStore.get_BonusJobTitle(),
+    BonusStore.get_BonusStudy(),
+    BonusStore.get_BonusDegreeStage(),
+    BonusStore.get_Employees()
   ]);
 
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "Bonuses.Add";
-    Bonuses.value.id = 0;
+    namePage.value = "Bonus.Add";
+    Bonus.value.id = 0;
   } else {
-    Bonuses.value.id = id.value;
-    namePage.value = "Bonuses.Update";
+    Bonus.value.id = id.value;
+    namePage.value = "Bonus.Update";
     await showData();
   }
   isLoading.value = false;
@@ -156,22 +157,24 @@ onMounted(async () => {
       <IRow>
         <IRow col-lg="4" col-md="2" col-sm="1">
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Title')" name="Name" v-model="Bonuses.title" type="text" />
+            <IInput :label="t('Title')" name="Name" v-model="Bonus.title" type="text" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Date')" name="issueDate" v-model="Bonuses.issueDate" type="date" />
+            <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" type="date" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateLastBounues')" name="dateLastBounues" v-model="Bonuses.dateLastBounues"
+            <IInput :label="t('Bonus.numberLastBounues')" name="numberLastBounues" v-model="Bonus.numberLastBounues"
+              type="text" />
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Bonus.dateLastBounues')" name="dateLastBounues" v-model="Bonus.dateLastBounues"
               type="date" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateLastWorth')" name="dateLastWorth" v-model="Bonuses.dateLastWorth"
-              type="date" />
+            <IInput :label="t('Bonus.dateLastWorth')" name="dateLastWorth" v-model="Bonus.dateLastWorth" type="date" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateNextWorth')" name="dateNextWorth" v-model="Bonuses.dateNextWorth"
-              type="date" />
+            <IInput :label="t('Bonus.dateNextWorth')" name="dateNextWorth" v-model="Bonus.dateNextWorth" type="date" />
           </ICol>
           <ICol span="1" span-md="2" span-sm="4">
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
@@ -179,9 +182,9 @@ onMounted(async () => {
             </div>
             <vSelect
               class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonuses.BonusDigreeStage" :options="BonusesStore.BonusDigreeStage"
-              :reduce="(BonusDigreeStage) => BonusDigreeStage" label="name"
-              :getOptionLabel="(BonusDigreeStage) => BonusDigreeStage.name">
+              v-model="Bonus.BonusJobTitle" :options="BonusStore.BonusJobTitles"
+              :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
+              :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
               <template #option="{ name }">
                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                   <span>{{ name }}</span>
@@ -195,7 +198,7 @@ onMounted(async () => {
             </div>
             <vSelect
               class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonuses.BonusStudy" :options="BonusesStore.BonusStudy" :reduce="(BonusStudy) => BonusStudy"
+              v-model="Bonus.BonusStudy" :options="BonusStore.BonusStudies" :reduce="(BonusStudy) => BonusStudy"
               label="name" :getOptionLabel="(BonusStudy) => BonusStudy.name">
               <template #option="{ name }">
                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
@@ -206,16 +209,19 @@ onMounted(async () => {
           </ICol>
           <ICol span="1" span-md="2" span-sm="4">
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-              {{ t("Bonus.DigreeStage") }}
+              {{ t("Bonus.DegreeStage") }}
             </div>
             <vSelect
               class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonuses.BonusDigreeStage" :options="BonusesStore.BonusDigreeStage"
-              :reduce="(BonusDigreeStage) => BonusDigreeStage" label="name"
-              :getOptionLabel="(BonusDigreeStage) => BonusDigreeStage.name">
-              <template #option="{ name }">
+              v-model="Bonus.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
+              :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
+              :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
+              <template #option="{ title, salery, yearlyBounues, yearlyService }">
                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
-                  <span>{{ name }}</span>
+                  <span>{{ title }} </span><br>
+                  <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
+                  <span>{{ t('Bonus.yearlyBounues') + ' :' + ConvertToMoneyFormat(yearlyBounues) }} </span><br>
+                  <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
                 </div>
               </template>
             </vSelect>
@@ -226,9 +232,8 @@ onMounted(async () => {
             </div>
             <vSelect
               class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonuses.Employee" :options="BonusesStore.Employees"
-              :reduce="(employee: IEmployeeLite) => employee" label="name"
-              :getOptionLabel="(employee: IEmployeeLite) => employee.name">
+              v-model="Bonus.Employee" :options="BonusStore.Employees" :reduce="(employee: IEmployeeLite) => employee"
+              label="name" :getOptionLabel="(employee: IEmployeeLite) => employee.name">
               <template #option="{ name }">
                 <div>
                   <span>{{ name }}</span>
@@ -241,7 +246,7 @@ onMounted(async () => {
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud :isAdd="Bonuses.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+      <IFooterCrud :isAdd="Bonus.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
     </template>
   </IPage>
 </template>

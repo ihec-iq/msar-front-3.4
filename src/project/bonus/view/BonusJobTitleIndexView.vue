@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useBonusesStore } from "../bonusesStore";
+import { useBonusStore } from "../bonusStore";
  
 import { storeToRefs } from "pinia";
 
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IBonuses, IBonusesFilter } from "../IBonuses";
+import type { IBonusJobTitle, IBonusFilter } from "../IBonus";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
 // const { hrDocuments } = storeToRefs(useHrDocumentStore());
 // const { hrDocumentTypes } = storeToRefs(useHrDocumentStore());
 
-const data = ref<Array<IBonuses>>([]);
+const data = ref<Array<IBonusJobTitle>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IBonuses>>([]);
-const { get_filter } = useBonusesStore();
+const dataBase = ref<Array<IBonusJobTitle>>([]);
+const { getFilter_BonusJobTitle, BonusJobTitles } = useBonusStore();
 
 import { limits } from "@/utilities/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
@@ -37,16 +37,16 @@ watch(
   }
 );
 const addItem = () => {
-  useBonusesStore().resetData();
+  useBonusStore().resetDataBonusJobTitle();
   router.push({
-    name: "bonusesAdd",   
+    name: "bonusJobTitleAdd",   
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (bonuses: IBonuses) => {
-  if (bonuses.title.includes(fastSearch.value)) {
+const filterByIDName = (bonusJobTitles: IBonusJobTitle) => {
+  if (bonusJobTitles.name.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -60,20 +60,19 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IBonusesFilter>({
+const searchFilter = ref<IBonusFilter>({
   title: "",
   limit: 10,
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexBonuses", page.toString());
+  localStorage.setItem("indexBonusJobTitles", page.toString());
 
   isLoading.value = true;
-  searchFilter.value.employeeName = fastSearch.value.toString();
-  //searchFilter.value.title = fastSearch.value.toString();
-  await get_filter(searchFilter.value, page)
+  searchFilter.value.name = fastSearch.value.toString();
+  await getFilter_BonusJobTitle(searchFilter.value, page)
     .then((response) => {
-      if (response.status == 200) {
+       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
@@ -87,7 +86,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "bonusesUpdate",
+    name: "bonusJobTitleUpdate",
     params: { id: id },
   });
 };
@@ -103,26 +102,22 @@ onMounted(async () => {
 
   let index = 1;
 
-  if (localStorage.getItem("indexBonuses") != undefined)
-    index = Number(localStorage.getItem("indexBonuses"));
+  if (localStorage.getItem("indexBonusJobTitle") != undefined)
+    index = Number(localStorage.getItem("indexBonusJobTitle"));
   await getFilterData(index);
   isLoading.value = false;
 });
 
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Title"), value: "title" },
+  { caption: t("Name"), value: "name" },
   { caption: t("Details"), value: "actions" },
-  { caption: t("Employee.Title"), value: "EmployeeName" },
-  { caption: t("Date"), value: "issueDate" },
-  { caption: t("Bonus.DegreeStage"), value: "BonusDegreeStage" },
-  { caption: t("Bonus.JobTitle"), value: "BonusJobTitle" },
-  { caption: t("Bonus.Study"), value: "BonusStudy" },
+  { caption: t("Description"), value: "description" }, 
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('Bonus.Index')" :is-loading="isLoading">
+  <IPage :HeaderTitle="t('Bonus.JobTitle')" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton width="28" :onClick="addItem" :text="t('Bonus.Add')" />
+      <IButton width="28" :onClick="addItem" :text="t('Bonus.JobTitleAdd')" />
     </template>
     <IPageContent>
       <IRow :col="3" :col-md="2" :col-lg="3">
@@ -136,33 +131,17 @@ const headers = ref<Array<ITableHeader>>([
               :OnKeyEnter="getFilterData"
             />
           </ICol>
-          <!-- date -->
-          <!-- <ICol :span-lg="1" :span-md="2" :span="1">
-            <ISelect
-              :label="t('EmployeeSection')"
-              v-model="searchFilter.sectionId"
-              name="archiveTypeId"
-              :options="sections"
-              :IsRequire="true"
-              @onChange="getFilterData()"
-            />
-          </ICol> -->
         </ISearchBar>
       </IRow>
       <IRow>
         <ITable :items="data" :headers="headers">
-          <template v-slot:EmployeeName="{ row }">
-            <span>{{ row.Employee.name }}</span>
+          <template v-slot:name="{ row }">
+            <span>{{ row.name }}</span>
           </template>
-          <template v-slot:BonusJobTitle="{ row }">
-            <span>{{ row.BonusJobTitle.name }}</span>
+          <template v-slot:description="{ row }">
+            <span>{{ row.description }}</span>
           </template>
-          <template v-slot:BonusStudy="{ row }">
-            <span>{{ row.BonusStudy.name }}</span>
-          </template>
-          <template v-slot:BonusDigreeStage="{ row }">
-            <span>{{ row.BonusDigreeStage.name }}</span>
-          </template>
+
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
