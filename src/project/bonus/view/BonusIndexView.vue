@@ -37,7 +37,7 @@ watch(
   }
 );
 const addItem = () => {
-  useBonusStore().resetData();
+  useBonusStore().resetDataBonus();
   router.push({
     name: "bonusAdd",   
   });
@@ -128,13 +128,8 @@ const headers = ref<Array<ITableHeader>>([
       <IRow :col="3" :col-md="2" :col-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
-            <IInput
-              :label="t('SearchForUser')"
-              :placeholder="t('SearchForUser')"
-              v-model="fastSearch"
-              type="text"
-              :OnKeyEnter="getFilterData"
-            />
+            <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch" type="text"
+              :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
@@ -160,8 +155,8 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:BonusStudy="{ row }">
             <span>{{ row.BonusStudy.name }}</span>
           </template>
-          <template v-slot:BonusDigreeStage="{ row }">
-            <span>{{ row.BonusDigreeStage.name }}</span>
+          <template v-slot:BonusDegreeStage="{ row }">
+            <span>{{ row.BonusDegreeStage.title }}</span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
@@ -181,27 +176,16 @@ const headers = ref<Array<ITableHeader>>([
           ></IPagination> -->
           <div class="w-full flex flex-row">
             <div class="basis-4/5 overflow-auto">
-              <TailwindPagination
-                class="flex justify-center mt-6"
-                :data="dataPage"
-                @pagination-change-page="getFilterData"
-                :limit="searchFilter.limit"
-              />
+              <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+                @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
             </div>
             <div class="basis-1/5" v-if="data.length >= limits[0].id">
-              <ISelect
-                name="limit"
-                :label="t('Limit')"
-                v-model="searchFilter.limit"
-                :options="limits"
-                :IsRequire="true"
-                @onChange="getFilterData()"
-              />
+              <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
+                @onChange="getFilterData()" />
             </div>
           </div>
           <SimpleLoading v-if="isLoading">.</SimpleLoading>
         </IRow>
-        <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
       <IRow>
         <div id="PageDataEnd"></div>

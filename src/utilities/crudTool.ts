@@ -37,3 +37,14 @@ export const crud_delete = async ({ store, id }: DeleteParams) => {
     console.error("Error during deletion:", error);
   }
 };
+
+export const prepareFormData = (data : object) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    const formattedKey = key.replace(/ /g, "_").replace(/([A-Z])/g, "_$1").replace(/^_/, "").toLowerCase();
+    if (value !== null && value !== undefined) {
+      formData.append(formattedKey + (typeof value === 'object' ? "_id" : ""), value['id'] || String(value));
+    }
+  });
+  return formData;
+}

@@ -12,6 +12,7 @@ import { SuccessToast } from "@/utilities/Toast";
 import { IEmployeeLite } from "@/project/employee/IEmployee";
 import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
+import { prepareFormData } from "@/utilities/crudTool";
 
 const route = useRoute();
 const router = useRouter();
@@ -26,12 +27,7 @@ const namePage = ref("Bonus.Add");
 
 const store = async () => {
   errors.value = null;
-  const formData = new FormData();
-  Object.entries(Bonus.value).forEach(([key, value]) => {
-    if (value !== null && value !== undefined) {
-      formData.append(key, String(value));
-    }
-  });
+  const formData = prepareFormData(Bonus.value);
   try {
     const response = await BonusStore.store(formData);
     if (response.status === 200) {
@@ -46,6 +42,7 @@ const store = async () => {
         title: "Create new data failed!",
         text: error.message,
       });
+      console.log(errors.value)
     } else {
       console.error("An unknown error occurred:", error);
       Swal.fire({
@@ -56,16 +53,10 @@ const store = async () => {
     }
   }
 }
-
+ 
 const update = async () => {
   errors.value = null;
-  const formData = new FormData();
-  Object.entries(Bonus.value).forEach(([key, value]) => {
-    if (value !== null && value !== undefined) {
-      formData.append(key, String(value));
-    }
-  });
-
+  const formData = prepareFormData(Bonus.value);
   try {
     const response = await BonusStore.update(Bonus.value.id, formData);
     if (response.status === 200) {

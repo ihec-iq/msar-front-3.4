@@ -112,7 +112,7 @@ router.beforeResolve(async (to, from, next) => {
       await middleware(to, from, next);
     }
   }
-  //next();
+  next();
   return;
 });
 router.onError(err => {
