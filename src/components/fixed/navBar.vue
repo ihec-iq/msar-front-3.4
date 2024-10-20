@@ -97,71 +97,37 @@ const { user } = storeToRefs(useAuthStore());
 <template>
   <div
     class="flex fixed h-full z-[999] bg-sideNav dark:bg-darkNav nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
-    :class="[isClose ? 'lg:w-20 sm:w-20 xs:w-[68px]' : 'lg:w-64 sm:w-64  ']"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-  >
+    :class="[isClose ? 'lg:w-20 sm:w-20 xs:w-[68px]' : 'lg:w-64 sm:w-64  ']" @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave">
     <div class="LeftNav z-50 bg-sideNav dark:bg-darkNav flex flex-col h-full">
-      <div
-        class="dark:bg-darkNav bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col justify-between ltr:pl-2 rtl:pr-2"
-      >
+      <div class="dark:bg-darkNav bg-sideNav h-full md:min-h-screen md:h-screen flex flex-col  ltr:pl-2 rtl:pr-2">
         <!-- little circule -->
-        <div
-          v-motion
-          :initial="{ opacity: 0, x: -85 }"
-          :enter="{ opacity: 1, x: 0 }"
-          :variants="{ custom: { scale: 2 } }"
-          :delay="300"
-          v-if="!isClose"
-          class="lg:fixed sm:fixed ltr:left-[225px] rtl:right-[225px] top-4 text-white lg:block xs:hidden"
-        >
+        <div v-motion :initial="{ opacity: 0, x: -85 }" :enter="{ opacity: 1, x: 0 }"
+          :variants="{ custom: { scale: 2 } }" :delay="300" v-if="!isClose"
+          class="lg:fixed sm:fixed ltr:left-[225px] rtl:right-[225px] top-4 text-white lg:block xs:hidden">
           <button @click="changeStackSideBar()" v-if="isCloseStick">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              class="text-black"
-            >
-              <path
-                fill="currentColor"
-                d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 2a8 8 0 0 1 8 8a8 8 0 0 1-8 8a8 8 0 0 1-8-8a8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6a6 6 0 0 0 6 6a6 6 0 0 0 6-6a6 6 0 0 0-6-6m0 2a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4Z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="text-black">
+              <path fill="currentColor"
+                d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 2a8 8 0 0 1 8 8a8 8 0 0 1-8 8a8 8 0 0 1-8-8a8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6a6 6 0 0 0 6 6a6 6 0 0 0 6-6a6 6 0 0 0-6-6m0 2a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4Z" />
             </svg>
           </button>
           <button @click="changeStackSideBar()" v-if="!isCloseStick">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              class="text-textLight"
-            >
-              <path
-                fill="currentColor"
-                d="M12 20a8 8 0 0 1-8-8a8 8 0 0 1 8-8a8 8 0 0 1 8 8a8 8 0 0 1-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2Z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="text-textLight">
+              <path fill="currentColor"
+                d="M12 20a8 8 0 0 1-8-8a8 8 0 0 1 8-8a8 8 0 0 1 8 8a8 8 0 0 1-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2Z" />
             </svg>
           </button>
         </div>
         <!-- logo and co Name  -->
-        <div
-          class="font-bold items-start flex flex-col text-black mt-5"
-          :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }"
-        >
+        <div class="font-bold items-start flex flex-col text-black mt-5"
+          :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }">
           <div class="flex items-center">
             <!-- ! the image in the assets is not rounded -->
             <!-- *Old source: @/assets/logo-512x512.png -->
-            <img
-              @click="isClose = !isClose"
-              src="@/assets/ihec-logo.jpg"
-              alt="Profile Picture"
-              class="w-14 h-14  rounded-full align-middle"
-            />
-            <div
-              class="text-lg mt-1 ml-1 duration-700 w-20 dark:text-textLight text-text"
-              :class="{ hidden: isClose, block: !isClose }"
-            >
+            <img @click="isClose = !isClose" src="@/assets/ihec-logo.jpg" alt="Profile Picture"
+              class="w-14 h-14  rounded-full align-middle" />
+            <div class="text-lg mt-1 ml-1 duration-700 w-20 dark:text-textLight text-text"
+              :class="{ hidden: isClose, block: !isClose }">
               {{ user?.Employee?.name }}
             </div>
           </div>
@@ -172,25 +138,14 @@ const { user } = storeToRefs(useAuthStore());
           /> -->
         </div>
         <!-- main list -->
-        <nav class="flex flex-col">
+        <nav class="flex pt-3 flex-col">
           <!-- main route -->
           <ul class="relative overflow-hidden">
-            <li
-              v-for="Link in filteredLinks"
-              :key="Link.routerName"
-              class="overflow-hidden flex items-center"
-            >
-              <router-link
-                :to="{ name: Link.routerName }"
-                @click.prevent="tab = Link.tab"
-                @mouseover="tab = Link.tab"
-              >
+            <li v-for="Link in filteredLinks" :key="Link.routerName" class="overflow-hidden flex items-center">
+              <router-link :to="{ name: Link.routerName }" @click.prevent="tab = Link.tab" @mouseover="tab = Link.tab">
                 <button
                   class="bg-[#FEFEFE] shadow-md text-[#23A559] hover:text-[#FEFEFE] hover:bg-[#23A559] duration-500 fadeOut 2s ease-in-out btn-outline hover:rounded-2xl p-4 rounded-full border-none border-2 m-1"
-                  :title="Link.title"
-                  v-html="Link.icon"
-                ></button
-              ></router-link>
+                  :title="Link.title" v-html="Link.icon"></button></router-link>
               <!-- children -->
               <div>
                 <!-- <div
@@ -210,11 +165,9 @@ const { user } = storeToRefs(useAuthStore());
                     </router-link>
                   </div>
                 </div> -->
-                <div
-                  v-if="tab == Link.tab && checkPermission(Link.permissions[0])"
-                  class="cursor-pointer duration-800  -2 fadeOut 2s ease-in-out rounded-md    m-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-400"
-                  :class="{ 'flex ': !isClose, hidden: isClose }"
-                >
+                <div v-if="tab == Link.tab && checkPermission(Link.permissions[0])"
+                  class="cursor-pointer duration-800  -2 fadeOut 2s ease-in-out rounded-md m-2 border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-400"
+                  :class="{ 'flex ': !isClose, hidden: isClose }">
                   {{ Link.description }}
                 </div>
               </div>
@@ -261,19 +214,13 @@ const { user } = storeToRefs(useAuthStore());
   <!--! #region user info -->
   <van-popup
     class="bg-customer ltr:left-[9.5rem] rtl:-right-[8.5rem] h-screen z-[999999] lg:w-[15%] xs:w-[78%] dark:bg-content flex"
-    v-model:show="showPop"
-    round
-    ><div class="dark:text-textLight w-full">
+    v-model:show="showPop" round>
+    <div class="dark:text-textLight w-full">
       <div class="text-2xl text-center p-2 font-bold mt-6">
         {{ t("User Info") }}
       </div>
-      <div
-        v-motion
-        :initial="{ opacity: 0, y: -15 }"
-        :enter="{ opacity: 1, y: 0 }"
-        :variants="{ custom: { scale: 2 } }"
-        :delay="200"
-      >
+      <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }" :variants="{ custom: { scale: 2 } }"
+        :delay="200">
         <div class="flex justify-between mx-8 mt-5">
           <div class="flex items-center">
             <div class="text-xl font-bold">{{ t("Name") }}:</div>
@@ -290,10 +237,7 @@ const { user } = storeToRefs(useAuthStore());
           <div class="ltr:ml-1 text-lg rtl:mr-1">{{ userData.email }}</div>
         </div>
       </div>
-      <div
-        @click="closePopup()"
-        class="bg-back w-64 mx-4 p-2 text-xl rounded-lg absolute bottom-2 cursor-pointer"
-      >
+      <div @click="closePopup()" class="bg-back w-64 mx-4 p-2 text-xl rounded-lg absolute bottom-2 cursor-pointer">
         {{ t("Close") }}
       </div>
     </div>
@@ -301,43 +245,25 @@ const { user } = storeToRefs(useAuthStore());
   <!--? #endregion -->
 
   <!--! #region setting pop -->
-  <div
-    v-if="settingPop == true"
-    class="bg-settingLight dark:bg-setting fixed rtl:right-14 ltr:left-14 bottom-10 h-[350px] w-[300px] rounded-xl z-[9999999] flex overflow-hidden"
-  >
+  <div v-if="settingPop == true"
+    class="bg-settingLight dark:bg-setting fixed rtl:right-14 ltr:left-14 bottom-10 h-[350px] w-[300px] rounded-xl z-[9999999] flex overflow-hidden">
     <!-- main setting -->
     <div
-      class="relative flex flex-col justify-between border-r border-gray-900 w-[160px] gap-6 bg-settingLight dark:bg-setting z-50 pl-2 pr-1 py-6"
-    >
+      class="relative flex flex-col justify-between border-r border-gray-900 w-[160px] gap-6 bg-settingLight dark:bg-setting z-50 pl-2 pr-1 py-6">
       <!-- main up setting -->
       <div>
-        <div
-          @click.prevent="settingMenu = 'MainSetting'"
+        <div @click.prevent="settingMenu = 'MainSetting'"
           class="-mr-3 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
           :class="{
             ' text-white  border-l-2 border-blue-500 ':
               settingMenu === 'MainSetting',
-          }"
-        >
+          }">
           <!-- Heroicon name: outline/shield-check -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6 text-[#0099ff]"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-6 h-6 text-[#0099ff]">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
 
           <div class="ml-4">
@@ -349,21 +275,13 @@ const { user } = storeToRefs(useAuthStore());
       </div>
       <!-- log out -->
       <div>
-        <div
-          @click="logout()"
-          class="p-2 cursor-pointer font-bold text-delete hover:text-text dark:hover:text-textLight flex rounded-lg duration-300 hover:bg-deleteHover mb-2"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 sm:h-6 sm:w-6 mr-2"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
+        <div @click="logout()"
+          class="p-2 cursor-pointer font-bold text-delete hover:text-text dark:hover:text-textLight flex rounded-lg duration-300 hover:bg-deleteHover mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 mr-2" viewBox="0 0 20 20"
+            fill="currentColor">
+            <path fill-rule="evenodd"
               d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
-              clip-rule="evenodd"
-            />
+              clip-rule="evenodd" />
           </svg>
           {{ t("Log Out") }}
         </div>
@@ -371,10 +289,8 @@ const { user } = storeToRefs(useAuthStore());
     </div>
     <!-- side setting -->
     <div class="h-full w-[130px] p-2" v-if="settingMenu === 'MainSetting'">
-      <div
-        @click="setting()"
-        class="-mr-3 mt-4 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150"
-      >
+      <div @click="setting()"
+        class="-mr-3 mt-4 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150">
         <div class="ml-4">
           <p class="text-base font-medium text-text dark:text-textLight">
             {{ t("setting") }}
@@ -390,38 +306,48 @@ const { user } = storeToRefs(useAuthStore());
 .transOff {
   transform: translateX(-400px);
 }
+
 .transOn {
   transform: translateX(1);
 }
+
 .spinn {
   animation: spin 2s linear infinite;
 }
+
 @keyframes spinn {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 .form-control:focus {
   box-shadow: none;
 }
+
 /* since nested groupes are not supported we have to use 
      regular css for the nested dropdowns 
   */
-li > ul {
+li>ul {
   transform: translatex(100%) scale(0);
 }
-li:hover > ul {
+
+li:hover>ul {
   transform: translatex(101%) scale(1);
 }
-li > button svg {
+
+li>button svg {
   transform: rotate(-90deg);
 }
-li:hover > button svg {
+
+li:hover>button svg {
   transform: rotate(-270deg);
 }
+
 /* Below styles fake what can be achieved with the tailwind config
      you need to add the group-hover variant to scale and define your custom
      min width style.
@@ -431,15 +357,19 @@ li:hover > button svg {
 .group:hover .group-hover\:scale-100 {
   transform: scale(1);
 }
+
 .group:hover .group-hover\:-rotate-180 {
   transform: rotate(180deg);
 }
+
 .scale-0 {
   transform: scale(0);
 }
+
 .min-w-32 {
   min-width: 8rem;
 }
+
 .tabs {
   display: flex;
   position: relative;
@@ -450,12 +380,15 @@ li:hover > button svg {
   padding: 0.75rem;
   border-radius: 20px;
 }
+
 .tabs * {
   z-index: 2;
 }
+
 input[type="radio"] {
   display: none;
 }
+
 .tab {
   display: flex;
   align-items: center;
@@ -469,6 +402,7 @@ input[type="radio"] {
   transition: color 0.15s ease-in;
   color: #fff;
 }
+
 .notification {
   display: flex;
   align-items: center;
@@ -480,22 +414,28 @@ input[type="radio"] {
   background-color: var(--secondary-color);
   transition: 0.15s ease-in;
 }
-input[type="radio"]:checked + label {
+
+input[type="radio"]:checked+label {
   color: var(--primary-color);
 }
-input[type="radio"]:checked + label > .notification {
+
+input[type="radio"]:checked+label>.notification {
   background-color: var(--primary-color);
   color: #fff;
 }
-input[id="radio-1"]:checked ~ .glider {
+
+input[id="radio-1"]:checked~.glider {
   transform: translateX(0);
 }
-input[id="radio-2"]:checked ~ .glider {
+
+input[id="radio-2"]:checked~.glider {
   transform: translateX(100%);
 }
-input[id="radio-3"]:checked ~ .glider {
+
+input[id="radio-3"]:checked~.glider {
   transform: translateX(200%);
 }
+
 .glider {
   position: absolute;
   display: flex;
@@ -506,15 +446,16 @@ input[id="radio-3"]:checked ~ .glider {
   border-radius: 99px;
   transition: 0.25s ease-out;
 }
+
 @media (max-width: 700px) {
   .tabs {
     transform: scale(0.6);
   }
 }
+
 /* @media (min-width: 390px) {
   .user-info {
     width: 70% !important;
   }
 } */
 </style>
-@/project/user/permissionStore @/utilities/I18nPlugin

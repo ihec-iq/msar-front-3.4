@@ -69,6 +69,7 @@ const update = async () => {
       icon: "error",
       title: "Updating data failed!",
       text: BonusStore.error?.toString(),
+      
     });
   }
 };
@@ -118,7 +119,7 @@ const reset = () => {
 onMounted(async () => {
   isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
-
+ 
   await Promise.all([
     BonusStore.get_BonusJobTitle(),
     BonusStore.get_BonusStudy(),

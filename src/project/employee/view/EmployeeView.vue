@@ -2,6 +2,8 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useEmployeeStore } from "../employeeStore";
+import { useBonusStore } from "@/project/bonus/bonusStore";
+
 import { useSectionStore } from "@/project/section/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
@@ -29,6 +31,8 @@ const isPerson = ref(false);
 const isMoveSection = ref(false);
 
 const employeeStore = useEmployeeStore();
+const BonusStore = useBonusStore();
+
 const { employee, employees_types, employees_positions, employees_centers } =
   storeToRefs(useEmployeeStore());
 const sectionStore = useSectionStore();
@@ -44,7 +48,35 @@ const SelectedUsers = ref<Array<IUser>>([]);
 const reset = () => {
   employeeStore.resetData();
 };
-const store = () => {
+const store = async () => {
+  errors.value = null;
+  const formData = prepareFormData(employee.value);
+  try {
+    const response = await employeeStore.store(formData);
+    if (response.status === 200) {
+      SuccessToast();
+      router.go(-1);
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      errors.value = employeeStore.getError(error as any);
+      Swal.fire({
+        icon: "error",
+        title: "Create new data failed!",
+        text: error.message,
+      });
+      console.log(errors.value)
+    } else {
+      console.error("An unknown error occurred:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Create new data failed!",
+        text: "An unknown error occurred.",
+      });
+    }
+  }
+}
+const storeOld = () => {
   errors.value = null;
   const formData = new FormData();
   employee.value.isPerson = isPerson.value ? 1 : 0;
@@ -55,12 +87,12 @@ const store = () => {
   formData.append("isMoveSection", employee.value.isMoveSection.toString());
   formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
-  formData.append("positionId", employee.value.Position.id.toString());
-  formData.append("typeId", employee.value.Type.id.toString());
-  formData.append("centerId", employee.value.Center.id.toString());
+  formData.append("positionId", employee.value. EmployeePosition.id.toString());
+  formData.append("typeId", employee.value.EmployeeType.id.toString());
+  formData.append("centerId", employee.value.EmployeeCenter.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
-  formData.append("telegramId", String(employee.value.telegramId));
+  formData.append("telegram", String(employee.value.telegram));
   formData.append("dateWork", String(employee.value.dateWork));
   formData.append("idCard", employee.value.idCard.toString());
   formData.append("initVacation", employee.value.initVacation.toString());
@@ -98,7 +130,28 @@ const store = () => {
       });
     });
 };
-function update() {
+const update = async () => {
+  errors.value = null;
+  employee.value.isPerson = isPerson.value ? 1 : 0;
+  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
+  const formData = prepareFormData(employee.value);
+  try {
+    const response = await employeeStore.update(employee.value.id, formData);
+    if (response.status === 200) {
+      SuccessToast();
+      router.go(-1);
+    }
+  } catch (error) {
+    errors.value = employeeStore.error;
+    Swal.fire({
+      icon: "error",
+      title: "Updating data failed!",
+      text: BonusStore.error?.toString(),
+
+    });
+  }
+};
+function updateOld() {
   errors.value = null;
   const formData = new FormData();
   employee.value.isPerson = isPerson.value ? 1 : 0;
@@ -109,12 +162,12 @@ function update() {
   formData.append("sectionId", employee.value.Section.id.toString());
   formData.append("isMoveSection", employee.value.isMoveSection.toString());
   formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
-  formData.append("positionId", employee.value.Position.id.toString());
-  formData.append("typeId", employee.value.Type.id.toString());
-  formData.append("centerId", employee.value.Center.id.toString());
+  formData.append("positionId", employee.value.EmployeePosition.id.toString());
+  formData.append("typeId", employee.value.EmployeeType.id.toString());
+  formData.append("centerId", employee.value.EmployeeCenter.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
   formData.append("number", String(employee.value.number));
-  formData.append("telegramId", String(employee.value.telegramId));
+  formData.append("telegram", String(employee.value.telegram));
   formData.append("dateWork", String(employee.value.dateWork));
   formData.append("idCard", String(employee.value.idCard));
   formData.append("initVacation", employee.value.initVacation.toString());
@@ -161,7 +214,7 @@ const Delete = async () => {
   });
   swalWithBootstrapButtons
     .fire({
-      title: t("Are You Sure?"),
+      title: t('Are You Sure?'),
       text: t("You Won't Be Able To Revert This!"),
       icon: "warning",
       showCancelButton: true,
@@ -192,14 +245,14 @@ const showData = async () => {
         employee.value.name = response.data.data.name;
         employee.value.idCard = response.data.data.idCard;
         employee.value.number = response.data.data.number;
-        employee.value.telegramId = response.data.data.telegramId;
+        employee.value.telegram = response.data.data.telegram;
         employee.value.dateWork = response.data.data.dateWork;
         employee.value.Section = response.data.data.Section;
         employee.value.MoveSection = response.data.data.MoveSection;
         employee.value.User = response.data.data.User;
-        employee.value.Type = response.data.data.Type;
-        employee.value.Center = response.data.data.Center;
-        employee.value.Position = response.data.data.Position;
+        employee.value.EmployeeType = response.data.data.Type;
+        employee.value.EmployeeCenter = response.data.data.Center;
+        employee.value.EmployeePosition = response.data.data.Position;
         employee.value.isPerson = response.data.data.isPerson;
         isPerson.value = response.data.data.isPerson == 0 ? false : true;
         isMoveSection.value =
@@ -237,10 +290,19 @@ onMounted(async () => {
   isLoading.value = true;
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
-  await sectionStore.get_sections();
-  await employeeStore.get_employee_types();
-  await employeeStore.get_employee_positions();
-  await employeeStore.get_employee_centers();
+
+
+  await Promise.all([
+    sectionStore.get_sections(),
+    employeeStore.get_employee_types(),
+    employeeStore.get_employee_positions(),
+    employeeStore.get_employee_centers(),
+    BonusStore.get_BonusJobTitle(),
+    BonusStore.get_BonusStudy(),
+    BonusStore.get_BonusDegreeStage(),
+    BonusStore.get_Employees()
+  ]);
+
   await useUserStore()
     .get_lite()
     .then((response) => {
@@ -261,6 +323,10 @@ onMounted(async () => {
 import { useHrDocumentStore } from "@/project/hr/hrDocumentStore";
 import type { IHrDocument, IHrDocumentFilter } from "@/project/hr/IHrDocument";
 import type { ITableHeader } from "@/types/core/components/ITable";
+import { ConvertToMoneyFormat } from "@/utilities/tools";
+import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
+import { prepareFormData } from "@/utilities/crudTool";
+import { SuccessToast } from "@/utilities/Toast";
 
 const { get_filter } = useHrDocumentStore();
 
@@ -291,11 +357,11 @@ const getFilterData = async (page = 1) => {
   }
 };
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Title"), value: "title" },
-  { caption: t("Details"), value: "actions" },
-  { caption: t("Employee.Title"), value: "EmployeeName" },
-  { caption: t("Date"), value: "issueDate" },
-  { caption: t("HrDocument.Type"), value: "HrDocumentype" },
+  { caption: t('Title'), value: "title" },
+  { caption: t('Details'), value: "actions" },
+  { caption: t('Employee.Title'), value: "EmployeeName" },
+  { caption: t('Date'), value: "issueDate" },
+  { caption: t('HrDocument.Type'), value: "HrDocumentype" },
 ]);
 const openFile = (id: number) => {
   router.push({
@@ -309,14 +375,7 @@ const active = ref(0);
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton2
-        color="green"
-        width="28"
-        type="outlined"
-        pre-icon="view-grid-plus"
-        :onClick="reset"
-        :text="t('New')"
-      />
+      <IButton2 color="green" width="28" type="outlined" pre-icon="view-grid-plus" :onClick="reset" :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>
@@ -324,101 +383,61 @@ const active = ref(0);
           <van-tab title="معلومات الموظف">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Name')"
-                  name="Name"
-                  v-model="employee.name"
-                  type="text"
-              /></ICol>
+                <IInput :label="t('Name')" name="Name" v-model="employee.name" type="text" />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.Number')"
-                  name="Employee.Number"
-                  v-model="employee.number"
-                  type="text"
-              /></ICol>
+                <IInput :label="t('Employee.Number')" name="Employee.Number" v-model="employee.number" type="text" />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.Telegram')"
-                  name="EmployeeTelegram"
-                  v-model="employee.telegramId"
-                  type="text"
-              /></ICol>
+                <IInput :label="t('Employee.Telegram')" name="EmployeeTelegram" v-model="employee.telegram"
+                  type="text" />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.IdCard')"
-                  name="EmployeeIdCard"
-                  v-model="employee.idCard"
-                  type="text"
-              /></ICol>
+                <IInput :label="t('Employee.IdCard')" name="EmployeeIdCard" v-model="employee.idCard" type="text" />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.DateWork')"
-                  name="EmployeeDateWork"
-                  v-model="employee.dateWork"
-                  type="date"
-              /></ICol>
+                <IInput :label="t('Employee.DateWork')" name="EmployeeDateWork" v-model="employee.dateWork"
+                  type="date" />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Section')"
-                  v-model="employee.Section.id"
-                  name="archiveTypeId"
-                  :options="sections"
-                  :IsRequire="true"
-              /></ICol>
+                <ISelect :label="t('Employee.Section')" v-model="employee.Section.id" name="archiveTypeId"
+                  :options="sections" :IsRequire="true" />
+              </ICol>
 
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Position')"
-                  v-model="employee.Position.id"
-                  name="PostionId"
-                  :options="employees_positions"
-                  :IsRequire="true"
-              /></ICol>
+                <ISelect :label="t('Employee.Position')" v-model="employee.EmployeePosition.id" name="PostionId"
+                  :options="employees_positions" :IsRequire="true" />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Type')"
-                  v-model="employee.Type.id"
-                  name="TypeId"
-                  :options="employees_types"
-                  :IsRequire="true"
-              /></ICol>
+                <ISelect :label="t('Employee.Type')" v-model="employee.EmployeeType.id" name="TypeId" :options="employees_types"
+                  :IsRequire="true" />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Center')"
-                  v-model="employee.Center.id"
-                  name="CecnterId"
-                  :options="employees_centers"
-                  :IsRequire="true"
-              /></ICol>
+                <ISelect :label="t('Employee.Center')" v-model="employee.EmployeeCenter.id" name="CecnterId"
+                  :options="employees_centers" :IsRequire="true" />
+              </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <ICheckbox v-model="isPerson" :checked="isPerson">
-                  {{ t("Employee.IsPerson") }} :
-                  {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
-                >
+                  {{ t('Employee.IsPerson') }} :
+                  {{ isPerson ? " شخص " : " قسم " }}</ICheckbox>
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <ICheckbox v-model="isMoveSection" :checked="isMoveSection">
-                  {{ t("Employee.isMoveSection") }} :
-                  {{ isMoveSection ? " نعم " : " كلا  " }}</ICheckbox
-                >
+                  {{ t('Employee.isMoveSection') }} :
+                  {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox>
               </ICol>
 
               <ICol span="1" span-md="1" span-sm="1" v-if="isMoveSection">
-                <ISelect
-                  :label="t('Employee.MoveSection')"
-                  v-model="employee.MoveSection.id"
-                  name="MoveSectionId"
-                  :options="sections"
-                  :IsRequire="true"
-              /></ICol>
+                <ISelect :label="t('Employee.MoveSection')" v-model="employee.MoveSection.id" name="MoveSectionId"
+                  :options="sections" :IsRequire="true" />
+              </ICol>
               <!-- :IsDisabled="!isMoveSection" -->
 
               <!-- <ICol span="1" span-md="2" span-sm="4">
               <div
                 class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
               >
-                {{ t("OutputVoucherEmployeeRequest") }}
+                {{ t('OutputVoucherEmployeeRequest') }}
               </div>
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -435,25 +454,81 @@ const active = ref(0);
                 </template>
               </vSelect>
             </ICol> -->
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput :label="t('Employee.numberLastBounues')" name="numberLastBounues" v-model="employee.numberLastBounues"
+                  type="text" />
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput :label="t('Employee.dateLastBounues')" name="dateLastBounues" v-model="employee.dateLastBounues"
+                  type="date" />
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput :label="t('Employee.dateLastWorth')" name="dateLastWorth" v-model="employee.dateLastWorth"
+                  type="date" />
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput :label="t('Employee.dateNextWorth')" name="dateNextWorth" v-model="employee.dateNextWorth"
+                  type="date" />
+              </ICol>
+              <ICol span="1" span-md="2" span-sm="4">
+                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                  {{ t('Employee.JobTitle') }}
+                </div>
+                <vSelect
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="employee.BonusJobTitle" :options="BonusStore.BonusJobTitles"
+                  :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
+                  :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
+                  <template #option="{ name }">
+                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                      <span>{{ name }}</span>
+                    </div>
+                  </template>
+                </vSelect>
+              </ICol>
+              <ICol span="1" span-md="2" span-sm="4">
+                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                  {{ t('Employee.Study') }}
+                </div>
+                <vSelect
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="employee.BonusStudy" :options="BonusStore.BonusStudies" :reduce="(BonusStudy) => BonusStudy"
+                  label="name" :getOptionLabel="(BonusStudy) => BonusStudy.name">
+                  <template #option="{ name }">
+                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                      <span>{{ name }}</span>
+                    </div>
+                  </template>
+                </vSelect>
+              </ICol>
+              <ICol span="1" span-md="2" span-sm="4">
+                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                  {{ t('Employee.DegreeStage') }}
+                </div>
+                <vSelect
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="employee.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
+                  :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
+                  :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
+                  <template #option="{ title, salery, yearlyBounues, yearlyService }">
+                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                      <span>{{ title }} </span><br>
+                      <span>{{ t('Employee.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
+                      <span>{{ t('Employee.yearlyBounues') + ' :' + ConvertToMoneyFormat(yearlyBounues) }} </span><br>
+                      <span>{{ t('Employee.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
+                    </div>
+                  </template>
+                </vSelect>
+              </ICol> 
             </IRow>
             <IRow col-lg="3" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IVSelect
-                  :label="t('User')"
-                  v-model="employee.User"
-                  name="archiveTypeId"
-                  :options="SelectedUsers"
-                  :IsRequire="true"
-                />
+                <IVSelect :label="t('User')" v-model="employee.User" name="archiveTypeId" :options="SelectedUsers"
+                  :IsRequire="true" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IButton2
-                  type="outlined"
-                  class="mt-3"
-                  v-if="employee.User?.id"
-                  :on-click="ShowUser"
-                  :text="t('Open')"
-                />
+                <IButton2 type="outlined" class="mt-3" v-if="employee.User?.id" :on-click="ShowUser"
+                  :text="t('Open')" />
               </ICol>
             </IRow>
           </van-tab>
@@ -467,11 +542,7 @@ const active = ref(0);
                   <span>{{ row.Type.name }}</span>
                 </template>
                 <template v-slot:actions="{ row }">
-                  <EditButton
-                    title="Open"
-                    @click="openFile(row.id)"
-                    class="m-1"
-                  />
+                  <EditButton title="Open" @click="openFile(row.id)" class="m-1" />
                 </template>
               </ITable>
             </IRow>
@@ -481,12 +552,7 @@ const active = ref(0);
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud
-        :isAdd="employee.id == 0"
-        :onCreate="store"
-        :onUpdate="update"
-        :onDelete="Delete"
-      />
+      <IFooterCrud :isAdd="employee.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
     </template>
   </IPage>
 </template>

@@ -161,7 +161,7 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
-                <EditButton @click="update(row.id)" />
+                <OpenButton @click="update(row.id)" />
               </li>
             </IDropdown>
           </template>

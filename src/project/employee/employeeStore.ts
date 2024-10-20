@@ -17,13 +17,13 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     initVacationSick: 0,
     takeVacationSick: 0,
     dateWork: new Date().toISOString().split("T")[0],
-    Position: {
+    EmployeePosition: {
       id: 0,
       name: "",
       level: "",
       code: "",
     },
-    Type: {
+    EmployeeType: {
       id: 0,
       name: "",
     },
@@ -32,12 +32,42 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       name: ""
     },
     isMoveSection: 0,
-    Center: {
+    EmployeeCenter: {
       id: 0,
       name: "",
       code: ""
-    }
+    },
+    BonusJobTitle: {
+      id: 0,
+      name: "",
+      description: ""
+    },
+    BonusStudy: {
+      id: 0,
+      name: ""
+    },
+    BonusDegreeStage: {
+      id: 0,
+      title: "",
+      Degree: {
+        id: 0,
+        name: ""
+      },
+      Stage: {
+        id: 0,
+        name: ""
+      },
+      salery: 0,
+      yearlyBounues: 0,
+      yearlyService: 0
+    },
+    numberLastBounues: 0,
+    dateLastBounues: "",
+    dateLastWorth: "",
+    dateNextWorth: ""
   });
+  const error = ref<string | null>(null);
+
   const employees = ref<Array<IEmployee>>([]);
   const employees_positions = ref<Array<IEmployeePosition>>([]);
   const employees_types = ref<Array<IEmployeeType>>([]);
@@ -74,21 +104,49 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       initVacationSick: 0,
       takeVacationSick: 0,
       dateWork: new Date().toISOString().split("T")[0],
-      Position: {
+      EmployeePosition: {
         id: 0,
         name: "",
         level: "",
         code: "",
       },
-      Center: {
-        id: 0,
-        name: "",
-        code: "",
-      },
-      Type: {
+      EmployeeType: {
         id: 0,
         name: "",
       },
+      EmployeeCenter: {
+        id: 0,
+        name: "",
+        code: ""
+      },
+      BonusJobTitle: {
+        id: 0,
+        name: "",
+        description: ""
+      },
+      BonusStudy: {
+        id: 0,
+        name: ""
+      },
+      BonusDegreeStage: {
+        id: 0,
+        title: "",
+        Degree: {
+          id: 0,
+          name: ""
+        },
+        Stage: {
+          id: 0,
+          name: ""
+        },
+        salery: 0,
+        yearlyBounues: 0,
+        yearlyService: 0
+      },
+      numberLastBounues: 0,
+      dateLastBounues: "",
+      dateLastWorth: "",
+      dateNextWorth: ""
 
     };
   }
@@ -160,6 +218,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     store,
     update,
     getError,
+    error,
     _delete,
   };
 });
