@@ -28,6 +28,7 @@ const namePage = ref("EmployeeAdd");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isPerson = ref(false);
+const showUserPanel = ref(false);
 const isMoveSection = ref(false);
 
 const employeeStore = useEmployeeStore();
@@ -47,6 +48,7 @@ const SelectedUsers = ref<Array<IUser>>([]);
 //#region CURD
 const reset = () => {
   employeeStore.resetData();
+  isPerson.value = true;
 };
 const store = async () => {
   errors.value = null;
@@ -87,7 +89,7 @@ const storeOld = () => {
   formData.append("isMoveSection", employee.value.isMoveSection.toString());
   formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
   formData.append("sectionId", employee.value.Section.id.toString());
-  formData.append("positionId", employee.value. EmployeePosition.id.toString());
+  formData.append("positionId", employee.value.EmployeePosition.id.toString());
   formData.append("typeId", employee.value.EmployeeType.id.toString());
   formData.append("centerId", employee.value.EmployeeCenter.id.toString());
   formData.append("UserId", String(employee.value.User?.id));
@@ -137,17 +139,18 @@ const update = async () => {
   const formData = prepareFormData(employee.value);
   try {
     const response = await employeeStore.update(employee.value.id, formData);
+    console.log(response)
     if (response.status === 200) {
       SuccessToast();
-      router.go(-1);
+      //router.go(-1);
     }
   } catch (error) {
     errors.value = employeeStore.error;
+    console.log(error)
     Swal.fire({
       icon: "error",
       title: "Updating data failed!",
-      text: BonusStore.error?.toString(),
-
+      text: employeeStore.error?.toString(),
     });
   }
 };
@@ -229,8 +232,9 @@ const Delete = async () => {
             t("Deleted!"),
             t("Deleted successfully ."),
             "success"
-          );
-          router.go(-1);
+          ).then(() => {
+            router.back();
+          });
         });
       }
     });
@@ -241,19 +245,20 @@ const showData = async () => {
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        employee.value.id = response.data.data.id;
-        employee.value.name = response.data.data.name;
-        employee.value.idCard = response.data.data.idCard;
-        employee.value.number = response.data.data.number;
-        employee.value.telegram = response.data.data.telegram;
-        employee.value.dateWork = response.data.data.dateWork;
-        employee.value.Section = response.data.data.Section;
-        employee.value.MoveSection = response.data.data.MoveSection;
-        employee.value.User = response.data.data.User;
-        employee.value.EmployeeType = response.data.data.Type;
-        employee.value.EmployeeCenter = response.data.data.Center;
-        employee.value.EmployeePosition = response.data.data.Position;
-        employee.value.isPerson = response.data.data.isPerson;
+        // employee.value.id = response.data.data.id;
+        // employee.value.name = response.data.data.name;
+        // employee.value.idCard = response.data.data.idCard;
+        // employee.value.number = response.data.data.number;
+        // employee.value.telegram = response.data.data.telegram;
+        // employee.value.dateWork = response.data.data.dateWork;
+        // employee.value.Section = response.data.data.Section;
+        // employee.value.MoveSection = response.data.data.MoveSection;
+        // employee.value.User = response.data.data.User;
+        // employee.value.EmployeeType = response.data.data.EmployeeType;
+        // employee.value.EmployeeCenter = response.data.data.EmployeeCenter;
+        // employee.value.EmployeePosition = response.data.data.EmployeePosition;
+        // employee.value.isPerson = response.data.data.isPerson;
+        Object.assign(employee.value, response.data.data);
         isPerson.value = response.data.data.isPerson == 0 ? false : true;
         isMoveSection.value =
           response.data.data.isMoveSection == 0 ? false : true;
@@ -327,6 +332,7 @@ import { ConvertToMoneyFormat } from "@/utilities/tools";
 import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
 import { prepareFormData } from "@/utilities/crudTool";
 import { SuccessToast } from "@/utilities/Toast";
+import EditButton from "@/components/dropDown/EditButton.vue";
 
 const { get_filter } = useHrDocumentStore();
 
@@ -369,6 +375,12 @@ const openFile = (id: number) => {
     params: { id: id },
   });
 };
+const addHrDocument = (id: number) => {
+  router.push({
+    name: "hrDocumentAddByEmployee",
+    params: { employeeId: id },
+  });
+};
 //#endregion
 const active = ref(0);
 </script>
@@ -401,7 +413,7 @@ const active = ref(0);
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <ISelect :label="t('Employee.Section')" v-model="employee.Section.id" name="archiveTypeId"
-                  :options="sections" :IsRequire="true" />
+                  :options="sections" :IsRequire="true" class="focus:border-gray-200 focus:border-red-200" />
               </ICol>
 
               <ICol span="1" span-md="1" span-sm="1">
@@ -409,8 +421,8 @@ const active = ref(0);
                   :options="employees_positions" :IsRequire="true" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect :label="t('Employee.Type')" v-model="employee.EmployeeType.id" name="TypeId" :options="employees_types"
-                  :IsRequire="true" />
+                <ISelect :label="t('Employee.Type')" v-model="employee.EmployeeType.id" name="TypeId"
+                  :options="employees_types" :IsRequire="true" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <ISelect :label="t('Employee.Center')" v-model="employee.EmployeeCenter.id" name="CecnterId"
@@ -421,8 +433,8 @@ const active = ref(0);
                   {{ t('Employee.IsPerson') }} :
                   {{ isPerson ? " شخص " : " قسم " }}</ICheckbox>
               </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ICheckbox v-model="isMoveSection" :checked="isMoveSection">
+              <ICol span="1" span-md="1" span-sm="1" class="mt-5">
+                <ICheckbox v-model="isMoveSection" :checked="isMoveSection" class="">
                   {{ t('Employee.isMoveSection') }} :
                   {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox>
               </ICol>
@@ -454,25 +466,27 @@ const active = ref(0);
                 </template>
               </vSelect>
             </ICol> -->
+            </IRow>
+            <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.numberLastBounues')" name="numberLastBounues" v-model="employee.numberLastBounues"
+                <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="employee.numberLastBonus"
                   type="text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.dateLastBounues')" name="dateLastBounues" v-model="employee.dateLastBounues"
+                <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="employee.dateLastBonus"
                   type="date" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.dateLastWorth')" name="dateLastWorth" v-model="employee.dateLastWorth"
+                <IInput :label="t('Bonus.dateLastWorth')" name="dateLastWorth" v-model="employee.dateLastWorth"
                   type="date" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.dateNextWorth')" name="dateNextWorth" v-model="employee.dateNextWorth"
+                <IInput :label="t('Bonus.dateNextWorth')" name="dateNextWorth" disabled v-model="employee.dateNextWorth"
                   type="date" />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t('Employee.JobTitle') }}
+                  {{ t('Bonus.JobTitle') }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -488,7 +502,7 @@ const active = ref(0);
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t('Employee.Study') }}
+                  {{ t('Bonus.Study') }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -503,25 +517,29 @@ const active = ref(0);
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t('Employee.DegreeStage') }}
+                  {{ t('Bonus.DegreeStage') }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                   v-model="employee.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
                   :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
                   :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
-                  <template #option="{ title, salery, yearlyBounues, yearlyService }">
+                  <template #option="{ title, salery, yearlyBonus, yearlyService }">
                     <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                       <span>{{ title }} </span><br>
                       <span>{{ t('Employee.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
-                      <span>{{ t('Employee.yearlyBounues') + ' :' + ConvertToMoneyFormat(yearlyBounues) }} </span><br>
+                      <span>{{ t('Employee.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span><br>
                       <span>{{ t('Employee.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
                     </div>
                   </template>
                 </vSelect>
-              </ICol> 
+              </ICol>
             </IRow>
-            <IRow col-lg="3" col-md="2" col-sm="1">
+            <div class="mt-2">
+              <label for="showUserPanel">اظهار معلومات المستخدم</label>
+              <input class="right-0" type="checkbox" id="showUserPanel" v-model="showUserPanel">
+            </div>
+            <IRow col-lg="3" col-md="2" col-sm="1" class="bg-[#C2D7FB]" v-if="showUserPanel">
               <ICol span="1" span-md="1" span-sm="1">
                 <IVSelect :label="t('User')" v-model="employee.User" name="archiveTypeId" :options="SelectedUsers"
                   :IsRequire="true" />
@@ -533,18 +551,25 @@ const active = ref(0);
             </IRow>
           </van-tab>
           <van-tab title="ملفات الضبارة">
+            <ICol span="1" span-md="1" span-sm="1">
+              <EditButton class="mt-3  border-gray border-2" v-if="employee.id != 0" @click="addHrDocument(employee.id)"
+                title="HrDocument.Add" icon="mdi-plus-box" />
+            </ICol>
             <IRow col-lg="1" col-md="1" col-sm="1">
-              <ITable :items="dataBaseFiles" :headers="headers">
-                <template v-slot:EmployeeName="{ row }">
-                  <span>{{ row.Employee.name }}</span>
-                </template>
-                <template v-slot:HrDocumentype="{ row }">
-                  <span>{{ row.Type.name }}</span>
-                </template>
-                <template v-slot:actions="{ row }">
-                  <EditButton title="Open" @click="openFile(row.id)" class="m-1" />
-                </template>
-              </ITable>
+              <ICol span="1" span-md="1" span-sm="1">
+                <ITable :items="dataBaseFiles" :headers="headers">
+                  <template v-slot:EmployeeName="{ row }">
+                    <span>{{ row.Employee.name }}</span>
+                  </template>
+                  <template v-slot:HrDocumentype="{ row }">
+                    <span>{{ row.Type.name }}</span>
+                  </template>
+                  <template v-slot:actions="{ row }">
+                    <EditButton title="Open" @click="openFile(row.id)" class="m-1" />
+                  </template>
+                </ITable>
+              </ICol>
+
             </IRow>
           </van-tab>
         </van-tabs>

@@ -58,11 +58,11 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
         name: ""
       },
       salery: 0,
-      yearlyBounues: 0,
+      yearlyBonus: 0,
       yearlyService: 0
     },
-    numberLastBounues: 0,
-    dateLastBounues: "",
+    numberLastBonus: 0,
+    dateLastBonus: "",
     dateLastWorth: "",
     dateNextWorth: ""
   });
@@ -140,11 +140,11 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
           name: ""
         },
         salery: 0,
-        yearlyBounues: 0,
+        yearlyBonus: 0,
         yearlyService: 0
       },
-      numberLastBounues: 0,
-      dateLastBounues: "",
+      numberLastBonus: 0,
+      dateLastBonus: "",
       dateLastWorth: "",
       dateNextWorth: ""
 
@@ -189,10 +189,10 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     });
   }
   async function store(prams: object) {
-    return await Api.post(`${pathUrl}/store`, prams);
+    return await Api.post(`${pathUrl}/store/`, prams);
   }
-  async function update(item_id: number, params: object) {
-    return await Api.post(`${pathUrl}/update/${item_id}`, params);
+  async function update(id: number, params: object) {
+    return await Api.post(`${pathUrl}/update/${id}`, params);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);

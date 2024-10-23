@@ -11,8 +11,8 @@ export interface IBonus {
   BonusStudy: IBonusStudy;
   BonusDegreeStage: IBonusDegreeStage;
   Files?: Array<IDocument>;
-  numberLastBounues: number;
-  dateLastBounues: string;
+  numberLastBonus: number;
+  dateLastBonus: string;
   dateLastWorth: string;
   dateNextWorth: string;
   UserCreate?: IUser;
@@ -43,7 +43,7 @@ export interface IBonusDegreeStage {
   Degree: IBonusDegree;
   Stage: IBonusStage;
   salery: number;
-  yearlyBounues: number;
+  yearlyBonus: number;
   yearlyService: number;
 }
 export interface IBonusFilter {

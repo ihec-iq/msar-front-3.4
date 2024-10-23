@@ -155,11 +155,11 @@ onMounted(async () => {
             <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" type="date" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.numberLastBounues')" name="numberLastBounues" v-model="Bonus.numberLastBounues"
+            <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="Bonus.numberLastBonus"
               type="text" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateLastBounues')" name="dateLastBounues" v-model="Bonus.dateLastBounues"
+            <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="Bonus.dateLastBonus"
               type="date" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
@@ -208,11 +208,11 @@ onMounted(async () => {
               v-model="Bonus.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
               :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
               :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
-              <template #option="{ title, salery, yearlyBounues, yearlyService }">
+              <template #option="{ title, salery, yearlyBonus, yearlyService }">
                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                   <span>{{ title }} </span><br>
                   <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
-                  <span>{{ t('Bonus.yearlyBounues') + ' :' + ConvertToMoneyFormat(yearlyBounues) }} </span><br>
+                  <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span><br>
                   <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
                 </div>
               </template>

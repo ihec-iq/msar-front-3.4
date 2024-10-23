@@ -85,4 +85,3 @@ const goBack = () => {
     />
   </div>
 </template>
-@/utilities/I18nPlugin

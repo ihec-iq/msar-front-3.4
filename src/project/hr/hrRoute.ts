@@ -33,5 +33,13 @@ export default [
       middleware: [authMiddleware],
     },
   },
+  {
+    path: "/hr/document/employee/:employeeId",
+    name: "hrDocumentAddByEmployee",
+    component: () => import("@/project/hr/view/HrDocumentView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
    
 ];

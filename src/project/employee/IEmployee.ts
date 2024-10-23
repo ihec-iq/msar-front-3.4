@@ -35,8 +35,8 @@ export interface IEmployee {
   BonusStudy: IBonusStudy;
   BonusDegreeStage: IBonusDegreeStage;
   Files?: Array<IDocument>;
-  numberLastBounues: number;
-  dateLastBounues: string;
+  numberLastBonus: number;
+  dateLastBonus: string;
   dateLastWorth: string;
   dateNextWorth: string;
 
