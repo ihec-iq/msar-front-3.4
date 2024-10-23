@@ -137,6 +137,7 @@ export default {
   ConfigServer: "اعدادات الاتصال بالسيرفر",
   ConnectionString: "عنوان السيرفر",
   Organization: "المؤوسسة",
+  IsActive : "تفعيل",
   Day: "يوم",
   EmployeeAdd: "اضافة بيانات موظف",
   EmployeeUpdate: "تعديل بيانات موظف",

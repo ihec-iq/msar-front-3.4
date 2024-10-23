@@ -365,6 +365,7 @@ const getFilterData = async (page = 1) => {
 const headers = ref<Array<ITableHeader>>([
   { caption: t('Title'), value: "title" },
   { caption: t('Details'), value: "actions" },
+  { caption: t('IsActive'), value: "isActive" },
   { caption: t('Employee.Title'), value: "EmployeeName" },
   { caption: t('Date'), value: "issueDate" },
   { caption: t('HrDocument.Type'), value: "HrDocumentype" },
@@ -560,6 +561,12 @@ const active = ref(0);
                 <ITable :items="dataBaseFiles" :headers="headers">
                   <template v-slot:EmployeeName="{ row }">
                     <span>{{ row.Employee.name }}</span>
+                  </template>
+                  <template v-slot:isActive="{ row }">
+                    <span v-if="row.isActive">
+                      <Icon icon="mdi-pencil-box-outline" /> مفعل
+                    </span>
+                    <span v-else> غير مفعل </span>
                   </template>
                   <template v-slot:HrDocumentype="{ row }">
                     <span>{{ row.Type.name }}</span>

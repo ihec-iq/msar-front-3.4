@@ -54,7 +54,7 @@ const errors = ref<string | null>();
 const reset = () => {
   const tempEmp = hrDocument.value.Employee;
   HrDocumentStore.resetData();
-  hrDocument.value.Employee=tempEmp;
+  hrDocument.value.Employee = tempEmp;
 };
 
 //#region Custom Employee select
@@ -102,6 +102,7 @@ const { sections } = storeToRefs(useSectionStore());
 import type { ISection } from "@/project/section/ISection";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import { useEmployeeStore } from "@/project/employee/employeeStore";
+import ICheckbox from "@/components/inputs/ICheckbox.vue";
 const SelectedSection = ref<ISection>({ id: 0, name: "" });
 const ChosePushBy = ref(0);
 enum EnumTypeChoseShareDocument {
@@ -124,11 +125,12 @@ const store = async () => {
   if (result.value === false || result.value === undefined) return;
 
   const formData = new FormData();
-  formData.append("addDays", String(hrDocument.value.addDays));
+  formData.append("addDays", hrDocument.value.addDays.toString());
   formData.append("title", hrDocument.value.title.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
+  formData.append("isActive", hrDocument.value.isActive == true ? "1" : "0");
 
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
@@ -171,11 +173,12 @@ const update = async () => {
   if (result.value === false || result.value === undefined) return;
 
   const formData = new FormData();
-  formData.append("addDays", String(hrDocument.value.addDays));
+  formData.append("addDays", hrDocument.value.addDays.toString());
   formData.append("title", hrDocument.value.title.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
+  formData.append("isActive", hrDocument.value.isActive == true ? "1" : "0");
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
     formData.append("selectedSectionId", SelectedSection.value.id.toString());
@@ -321,6 +324,7 @@ const showData = async () => {
         hrDocument.value.Type = response.data.data.Type;
         hrDocument.value.Employee = response.data.data.Employee;
         hrDocument.value.Files = response.data.data.Files;
+        hrDocument.value.isActive = response.data.data.isActive == 1 ? true : false;
         ChosePushBy.value = EnumTypeChoseShareDocument.toEmployee;
       }
     })
@@ -345,10 +349,14 @@ onMounted(async () => {
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   filesDataInput.value = [];
+  await Promise.all(
+    [
+      sectionStore.get_sections(),
+      HrDocumentStore.get_employees(),
+      HrDocumentStore.get_hrDocumentTypes(),
+    ]
+  )
 
-  await sectionStore.get_sections();
-  await HrDocumentStore.get_employees();
-  await HrDocumentStore.get_hrDocumentTypes();
   //check if selected emplioyee or not
   if (Number.isNaN(employeeId.value) || employeeId.value === undefined) {
     // that mean it normal document and not select any employee
@@ -375,7 +383,7 @@ onMounted(async () => {
   isLoading.value = false;
 });
 const changeSelectedType = () => {
-  hrDocument.value.addDays = hrDocument.value.Type.addDays;
+  hrDocument.value.addDays = Number(hrDocument.value.Type.addDays);
 }
 </script>
 <template>
@@ -398,7 +406,7 @@ const changeSelectedType = () => {
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                   {{ t("TypeBook") }}
                 </div>
-                <vSelect 
+                <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                   v-model="hrDocument.Type" :options="hrDocumentTypes"
                   :reduce="(hrDocumentType: IHrDocumentType) => hrDocumentType" label="name" :getOptionLabel="(hrDocumentType: IHrDocumentType) => hrDocumentType.name
@@ -418,8 +426,7 @@ const changeSelectedType = () => {
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                   {{ t("Employee.Title") }}
                 </div>
-                <vSelect
-                :disabled="disabledChangeEmployee"
+                <vSelect :disabled="disabledChangeEmployee"
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                   v-model="hrDocument.Employee" :options="employees" :reduce="(employee: IEmployeeLite) => employee"
                   label="name" :getOptionLabel="(employee: IEmployeeLite) => employee.name">
@@ -429,6 +436,9 @@ const changeSelectedType = () => {
                     </div>
                   </template>
                 </vSelect>
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <ICheckbox :label="t('IsActive')" v-model="hrDocument.isActive" name="isActive" :IsRequire="true" />
               </ICol>
             </IRow>
             <!-- file -->
@@ -467,7 +477,7 @@ const changeSelectedType = () => {
               <div id="DropZone"></div>
             </div>
           </van-tab>
-          <van-tab title="توزيع متعدد" v-if="hrDocument.id == 0 && disabledChangeEmployee==false">
+          <van-tab title="توزيع متعدد" v-if="hrDocument.id == 0 && disabledChangeEmployee == false">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IRadio label="توزيع مفرد  " name="ChosePushBy" v-model="ChosePushBy" value="0" />

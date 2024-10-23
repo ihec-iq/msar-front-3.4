@@ -9,9 +9,10 @@ export interface IHrDocument {
   Employee: IEmployeeLite;
   Type: IHrDocumentType;
   Files?: Array<IDocument>;
-  addDays?: number;
+  addDays: number;
   UserCreate?: IUser;
   UserUpdate?: IUser;
+  isActive:boolean
 }
 
 export interface IHrDocumentType {

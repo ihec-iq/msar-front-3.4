@@ -18,7 +18,8 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
     Type: {
       id: 0,
       name: ""
-    }
+    },
+    isActive: true
   });
   const hrDocuments = ref<Array<IHrDocument>>([]);
   const hrDocumentTypes = ref<Array<IHrDocumentType>>([]);
@@ -53,7 +54,7 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
         id: 0,
         name: ""
       },
-
+      isActive: true
     };
   }
   async function get_filter(params: IHrDocumentFilter, page: number) {
