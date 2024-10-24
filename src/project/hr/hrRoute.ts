@@ -2,13 +2,13 @@ import authMiddleware from "@/router/middleware/authMiddleware";
 
 export default [
   {
-    path: "/hr/index",
+    path: "/hr/index/:employeeId",
     name: "hrDocumentIndex",
     component: () => import("@/project/hr/view/HrDocumentIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
-  },
+  }, 
   {
     path: "/hr/portal",
     name: "hrPortal",

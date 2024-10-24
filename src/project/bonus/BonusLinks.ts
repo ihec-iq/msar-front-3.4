@@ -1,7 +1,7 @@
 import type { IconLink } from "@/components/fixed/FixedMenu";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
- 
+
 
 export const BonusLinks: Array<IconLink> = [
   {
@@ -14,7 +14,7 @@ export const BonusLinks: Array<IconLink> = [
     description: "اضافة العلاوات للموظفين",
     permissions: [EnumPermission.ShowArchives],
     isActive: true,
-  }, 
+  },
   {
     routerName: "bonusJobTitleIndex",
     title: t('Bonus.JobTitle'),
@@ -25,6 +25,15 @@ export const BonusLinks: Array<IconLink> = [
     description: "اضافة العلاوات للموظفين",
     permissions: [EnumPermission.ShowArchives],
     isActive: true,
-  }, 
+  },
+  {
+    routerName: "bonusSettingView",
+    title: t('Setting'),
+    mdi: "mdi-cog",
+    tab: "Company",
+    description: "اعدادات العلاوات",
+    permissions: [EnumPermission.ShowArchives],
+    isActive: true,
+  },
 
 ];

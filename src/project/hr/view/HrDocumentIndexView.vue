@@ -27,6 +27,7 @@ import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
+import { useEmployeeStore } from "@/project/employee/employeeStore";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -105,6 +106,13 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
+  if (route.params.employeeId != undefined){
+    await useEmployeeStore().show(Number(route.params.employeeId)).then((response)=>{
+      fastSearch.value = response.data.data.name;
+    }) 
+  }
+    
+ 
   //await useSectionStore().get_sections();
 
   let index = 1;

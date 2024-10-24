@@ -60,5 +60,13 @@ export default [
       middleware: [authMiddleware],
     },
   },
+  {
+    path: "/bonusSetting",
+    name: "bonusSettingView",
+    component: () => import("@/project/bonus/view/BonusSettingView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
   //#endregion
 ];

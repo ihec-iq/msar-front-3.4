@@ -151,7 +151,8 @@ export default {
     Type: "Type Document",
     Add: "Add Document",
     Update: "Update Document",
-    AddDayes: "Add Dayes Bonus"
+    AddDayes: "Add Dayes Bonus",
+    Open: "Open Documents" 
   },
   Employee: {
     Title: "Employee",

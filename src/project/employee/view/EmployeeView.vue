@@ -45,12 +45,74 @@ const router = useRouter();
 const errors = ref<string | null>();
 const SelectedUsers = ref<Array<IUser>>([]);
 //#endregion
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+import { WarningToast } from "@/utilities/Toast";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { makeFormDataFromObject } from "@/utilities/tools";
+
+const { validate, isArray, required, isObject } = useValidation();
+
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+
+const rules: Array<IFieldValidation> = [
+  {
+    field: "Section",
+    caption: t("InputVoucherNumber"),
+    rules: [required()],
+  },
+  // {
+  //   field: "Employee",
+  //   caption: t("OutputVoucherEmployeeRequest"),
+  //   rules: [isObject({ key: "id", message: "" })],
+  // },
+  {
+    field: "Section",
+    caption: t("Section"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "BonusDegreeStage",
+    caption: t("Bonus.DegreeStage"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "BonusStudy",
+    caption: t("Bonus.Study"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "BonusJobTitle",
+    caption: t("Bonus.JobTitle"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+];
+//#endregion
 //#region CURD
 const reset = () => {
   employeeStore.resetData();
   isPerson.value = true;
 };
 const store = async () => {
+  errors.value = null;
+  validationResult.value = validate(employee.value, rules);
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    const someElement = ref() // assigned to some element in the template
+    const element = someElement.value
+    const elementPosition = element.getBoundingClientRect().top
+    const offsetPosition = elementPosition + window.pageYOffset - 60 // 60px offset from top
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    })
+    return;
+  }
   errors.value = null;
   const formData = prepareFormData(employee.value);
   try {
@@ -133,6 +195,12 @@ const storeOld = () => {
     });
 };
 const update = async () => {
+  errors.value = null;
+  validationResult.value = validate(employee.value, rules);
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
   employee.value.isPerson = isPerson.value ? 1 : 0;
   employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
@@ -382,6 +450,12 @@ const addHrDocument = (id: number) => {
     params: { employeeId: id },
   });
 };
+const openHrDocument = (id: number) => {
+  router.push({
+    name: "hrDocumentIndex",
+    params: { employeeId: id },
+  });
+};
 //#endregion
 const active = ref(0);
 </script>
@@ -551,11 +625,18 @@ const active = ref(0);
               </ICol>
             </IRow>
           </van-tab>
-          <van-tab title="ملفات الضبارة">
-            <ICol span="1" span-md="1" span-sm="1">
-              <EditButton class="mt-3  border-gray border-2" v-if="employee.id != 0" @click="addHrDocument(employee.id)"
-                title="HrDocument.Add" icon="mdi-plus-box" />
-            </ICol>
+          <van-tab title="ملفات الضبارة" v-if="employee.id > 0">
+            <IRow col-lg="2" col-md="2" col-sm="2">
+              <ICol span="2" span-md="2" span-sm="2">
+                <EditButton class="mt-3  border-gray border-2" v-if="employee.id != 0"
+                  @click="addHrDocument(employee.id)" title="HrDocument.Add" icon="mdi-plus-box" />
+              </ICol>
+              <ICol span="2" span-md="2" span-sm="2">
+                <EditButton class="mt-3  border-gray border-2" v-if="employee.id != 0"
+                  @click="openHrDocument(employee.id)" title="HrDocument.Open" icon="mdi-open-in-new" />
+              </ICol>
+            </IRow>
+
             <IRow col-lg="1" col-md="1" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseFiles" :headers="headers">
@@ -584,6 +665,7 @@ const active = ref(0);
     </IPageContent>
 
     <template #Footer>
+      <IErrorMessages :validationResult="validationResult" ref="someRefName" />
       <IFooterCrud :isAdd="employee.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
     </template>
   </IPage>

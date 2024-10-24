@@ -9,8 +9,8 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 export interface IconLink {
   routerName: string;
   title: string;
-  icon: string;
-  iconX: string;
+  icon?: string;
+  iconX?: string;
   tab: string;
   description: string;
   permissions: Array<string>;
