@@ -141,7 +141,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <IPage :headerTitle="t(namePage)" :isLoading="isLoading">
+  <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
     <template #headerButtons>
       <IButton2 color="green" width="28" type="outlined" preIcon="view-grid-plus" :onClick="reset" :text="t('New')" />
     </template>

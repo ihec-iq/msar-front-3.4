@@ -28,7 +28,7 @@ export const BonusLinks: Array<IconLink> = [
   },
   {
     routerName: "bonusSettingView",
-    title: t('Setting'),
+    title: t('Setting.Name'),
     mdi: "mdi-cog",
     tab: "Company",
     description: "اعدادات العلاوات",

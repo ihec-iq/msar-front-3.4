@@ -145,6 +145,12 @@ export default {
   EmployeeIsPerson: "نوع البيانات",
   EmployeeSection: "شعبة الموظف",
   EmployeeStore: "المخزنية",
+  Setting :{
+    Name : "الاعدادات",
+    Add: "اضافة اعدادات",
+    Update : "تعديل الاعدادات",
+    SettingNumberDayesAlertBonus : "عدد الايام الداخلة في التنبيهات"
+  },
   HrDocument: {
     Index: "ملفات الاضابير",
     Title: "عنوان الملف",
@@ -299,8 +305,7 @@ export default {
   "Type Room": "نوع الغرفة",
   Finish: "أنهاء",
   Room: "الغرفة",
-  Support: "الدعم",
-  Setting: "الاعدادات",
+  Support: "الدعم", 
   "Log Out": "تسجيل خروج",
   "Last LogIn": " اخر تسجيل دخول",
   Role: "كروب الصلاحيات",

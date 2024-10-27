@@ -145,6 +145,12 @@ export default {
   EmployeeIsPerson: "Type Info",
   EmployeeSection: "Section Employee",
   EmployeeStore: "Employee Store",
+  Setting: {
+    Name: "Setting",
+    Add: "Add Setting",
+    Update: "Update Setting",
+    SettingNumberDayesAlertBonus: "Number Dayes Show Alert Bonus"
+  },
   HrDocument: {
     Index: "Employee Document",
     Title: "Title Document",
@@ -275,7 +281,6 @@ export default {
   "Date Out": "Date Out",
   "Search For Permission": "Search For Permission",
   Permissions: "Permissions",
-  Setting: "Setting",
   "Are You Sure?": "Are You Sure?",
   "You Won't Be Able To Revert This!": "You Won't Be Able To Revert This!",
   "ConfirmDelete": "Delete Operation , Are You Sure?",

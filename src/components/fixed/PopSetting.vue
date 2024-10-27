@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
-import { t, setLocale, Languages } from "@/utilities/I18nPlugin";
+import { t, setLocale, Languages, currentLocale } from "@/utilities/I18nPlugin";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
@@ -20,6 +20,7 @@ const change = () => {
 
 import { useAuthStore } from "@/stores/authStore";
 import IButton2 from "../ihec/IButton2.vue";
+import { Icon } from "@iconify/vue";
 const AuthStore = useAuthStore();
 const { isAuthenticated } = storeToRefs(useAuthStore());
 const logout = () => {
@@ -46,52 +47,22 @@ const colorMode = useColorMode({
 <template>
   <div class="flex items-center">
     <!-- Old Settings -->
-    <button
-      is-link
-      @click="showPopup"
-      class="dark:text-textGray z-50 mx-2 dark:hover:text-iconHover dark:bg-sideNavSetting bg-transparent hover:bg-transparent text-iconLight hover:text-iconHoverLight inline-flex justify-center rounded-md smooth-hover"
-    >
-      <svg
-        class="w-7 h-7"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-        />
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-        />
-      </svg>
+    <button is-link @click="showPopup"
+      class="dark:text-textGray z-50 mx-2 dark:hover:text-iconHover dark:bg-sideNavSetting bg-transparent hover:bg-transparent text-iconLight hover:text-iconHoverLight inline-flex justify-center rounded-md smooth-hover">
+      <Icon icon="mdi-cog-outline" class="text-[25px]"></Icon>
     </button>
   </div>
-  <van-popup
-    class="bg-customer h-screen z-[999999] lg:w-[30%] md:w-full xs:w-full dark:bg-content flex overflow-hidden"
-    v-model:show="showPop"
-    round
-    ><div class="dark:text-textLight w-full">
-      <div class="text-2xl text-center p-2 font-bold mt-6">
-        {{ t("Setting") }}
+  <van-popup class="bg-customer h-screen z-[999999] lg:w-[30%] md:w-full xs:w-full dark:bg-content flex overflow-hidden"
+    v-model:show="showPop" round>
+    <div class="dark:text-textLight w-full">
+      <div class="text-2xl text-center text-text dark:text-textLight p-2 font-bold mt-6">
+        {{ t("Setting.Name") }}
       </div>
-      <div
-        v-motion
-        :initial="{ opacity: 0, y: -15 }"
-        :enter="{ opacity: 1, y: 0 }"
-        :variants="{ custom: { scale: 2 } }"
-        :delay="200"
-      >
+      <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }" :variants="{ custom: { scale: 2 } }"
+        :delay="200">
         <div class="flex items-center justify-around mx-6 w-full">
-          <div class="text-text dark:text-textLight font-bold text-lg">
-            {{ t("Change Theme") }} {{ isDark }}
+          <div class="text-text dark:text-textLight  font-bold text-lg">
+            {{ t("Change Theme") }} {{ isDark ? "مظلم" : "فاتح" }}
           </div>
           <div class="switch4">
             <label class="switch">
@@ -105,17 +76,10 @@ const colorMode = useColorMode({
             {{ t("Change Direction") }}
           </div>
           <div class="flex items-center">
-            <div
-              class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3"
-            >
+            <div class="dark:text-white mb-6 text-black mt-6 ml-3 rtl:ml-3 ltr:mr-3">
               {{ isRtl ? "RTL" : "LTR" }}
             </div>
-            <input
-              type="checkbox"
-              @click="change()"
-              v-model="isRtl"
-              class="toggle toggle-info"
-            />
+            <input type="checkbox" @click="change()" v-model="isRtl" class="toggle toggle-info" />
           </div>
         </div>
         <div class="flex items-center justify-around mx-6 w-full">
@@ -123,20 +87,16 @@ const colorMode = useColorMode({
             {{ t("Change Language") }}
           </div>
           <div class="flex items-center">
-            <div
-              class="dropdown dropdown-bottom ltr:ml-5 rtl:mr-3 border-2 rounded border-[#3ABFF8] p-2"
-            >
+            <div class="dropdown dropdown-bottom ltr:ml-5 rtl:mr-3 border-2 rounded border-[#3ABFF8] p-2">
               <button href="#" class="items-center flex" tabindex="0">
-                Languages
-                <ul
-                  tabindex="0"
-                  class="dropdown-content ltr:right-0 rtl:left-0 menu p-2 shadow bg-settingLight dark:bg-setting text-text dark:text-textLight rounded-box mt-5"
-                >
+                <span class="text-text dark:text-textLight flex items-center">
+                  <Icon icon="mdi-web"></Icon>{{ currentLocale.name }}
+                </span>
+
+                <ul tabindex="0"
+                  class="dropdown-content ltr:right-0 rtl:left-0 menu p-2 shadow bg-settingLight dark:bg-setting text-text dark:text-textLight rounded-box mt-5">
                   <li v-for="language in Languages" :key="language.code">
-                    <button
-                      @click="setLocale(language)"
-                      class="flex justify-between"
-                    >
+                    <button @click="setLocale(language)" class="flex justify-between">
                       {{ language.name }}
                     </button>
                   </li>
@@ -145,21 +105,12 @@ const colorMode = useColorMode({
             </div>
           </div>
         </div>
-        <div
-          class="flex items-center justify-around mx-6 w-full mt-5"
-          v-if="isAuthenticated"
-        >
+        <div class="flex items-center justify-around mx-6 w-full mt-5" v-if="isAuthenticated">
           <div class="text-text dark:text-textLight font-bold text-lg">
             {{ t("Logout") }}
           </div>
           <div class="flex items-center">
-            <IButton2
-              type="outlined"
-              pre-icon="logout"
-              color="red"
-              :on-click="logout"
-              width="32"
-            />
+            <IButton2 type="outlined" pre-icon="logout" color="red" :text="t('Logout')" :on-click="logout" width="32" />
           </div>
         </div>
         <!-- <div class="mt-10 flex item-center justify-between mx-6">
@@ -205,17 +156,14 @@ const colorMode = useColorMode({
         </div> -->
       </div>
       <div class="flex absolute bottom-14 w-full">
-        <div
-          @click="
-            $router.push('/config');
-            closePopup();
-          "
-          class="flex-auto sm:w-[95%] md:w-2/4 bg-amber-900 text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer"
-        >
-          {{ t("Setting") }}
+        <div @click="
+          $router.push('/config');
+        closePopup();
+        "
+          class="flex-auto sm:w-[95%] md:w-2/4 bg-amber-900 text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer">
+          {{ t("Setting.Name") }}
         </div>
-        <div
-          @click="closePopup()"
+        <div @click="closePopup()"
           class="flex-auto sm:w-[95%] md:w-2/4 bg-back text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer"
           :class="{
             'bg-red-500': colorMode == 'red',
@@ -223,8 +171,7 @@ const colorMode = useColorMode({
             'bg-blue-500': colorMode == 'blue',
             'bg-yellow-500': colorMode == 'yellow',
             'bg-amber-900': colorMode == 'amber',
-          }"
-        >
+          }">
           {{ t("Close") }}
         </div>
       </div>
@@ -236,15 +183,19 @@ const colorMode = useColorMode({
   background: rgb(239 68 68);
   color: green;
 }
+
 .green {
   background: rgb(34 197 94);
 }
+
 .yellow {
   background: rgb(234 179 8);
 }
+
 .blue {
   background: rgb(59 130 246);
 }
+
 .amber {
   background: #78350f;
 }
@@ -252,6 +203,7 @@ const colorMode = useColorMode({
 .rtl {
   direction: rtl;
 }
+
 .checkbox {
   opacity: 0;
   position: absolute;
@@ -269,6 +221,7 @@ const colorMode = useColorMode({
   position: relative;
   transform: scale(1.5);
 }
+
 .label {
   width: 40px;
   height: 16px;
@@ -292,6 +245,7 @@ const colorMode = useColorMode({
   border-radius: 50%;
   transition: transform 0.2s linear;
 }
+
 .ball {
   width: 13px;
   height: 13px;
@@ -304,7 +258,7 @@ const colorMode = useColorMode({
 }
 
 /*  target the elemenent after the label*/
-.checkbox:checked + .label .ball {
+.checkbox:checked+.label .ball {
   transform: translateX(24px);
 }
 
@@ -323,9 +277,11 @@ const colorMode = useColorMode({
   left: 0px;
   right: 0px;
 }
+
 .switch input {
   display: none;
 }
+
 .slider {
   width: 55px;
   height: 30px;
@@ -339,6 +295,7 @@ const colorMode = useColorMode({
   right: 0px;
   cursor: pointer;
 }
+
 .slider::before {
   content: "";
   width: 20px;
@@ -352,27 +309,33 @@ const colorMode = useColorMode({
     transform 0.8s,
     background-color 1s;
 }
-input:checked + .slider {
+
+input:checked+.slider {
   background-color: black;
 }
-input:checked + .slider::before {
+
+input:checked+.slider::before {
   transform: translateX(calc(60px - 24px - 8px));
 }
-.switch3 input:checked + .slider::before {
+
+.switch3 input:checked+.slider::before {
   transform: translateX(calc(70px - 24px));
 }
+
 .switch4 .slider::before {
   content: "☼";
   color: rgb(255, 221, 0);
   background: black;
 }
-.switch4 input:checked + .slider::before {
+
+.switch4 input:checked+.slider::before {
   content: "☾";
   color: pink;
   font: 900;
   text-align: center;
   background: white;
 }
+
 .fa-moon {
   color: pink;
 }

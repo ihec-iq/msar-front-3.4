@@ -6,14 +6,16 @@ import type { ISetting } from "./ISetting"; // Import the updated ISetting inter
 export const useSettingStore = defineStore("SettingStore", () => {
   const Settings = ref<Array<ISetting>>([]);
   const Setting = ref<ISetting>({
-    Id: 0,
-    Key: "",
-    Value1: "",
-    Value2: "",
-    Value3: "",
-    Value4: "",
-    Description: "",
-    IsActive: false
+    id: 0,
+    key: "",
+    valStr: "",
+    valStr2: "",
+    valBool: false,
+    valDate: "",
+    valInt:0,
+    valDbl:0,
+    description: "",
+    isActive: false
   });
 
   const isLoading = ref(false);
@@ -21,20 +23,9 @@ export const useSettingStore = defineStore("SettingStore", () => {
   const pathBase = "";
   const pathUrl = `${pathBase}/setting`;
   const sortedSettings = computed(() => {
-    return [...Settings.value].sort((a, b) => a.Key.localeCompare(b.Key));
+    return [...Settings.value].sort((a, b) => a.key.localeCompare(b.key));
   });
-  const reset = () => {
-    Setting.value = {
-      Id: 0,
-      Key: "",
-      Description: "",
-      Value1: "",
-      Value2: "",
-      Value3: "",
-      Value4: "",
-      IsActive: false
-    };
-  }
+
   async function getSettings() {
     isLoading.value = true;
     try {
@@ -65,27 +56,58 @@ export const useSettingStore = defineStore("SettingStore", () => {
 
   async function update(id: string, updatedSetting: any) {
     isLoading.value = true;
+    let response;
     try {
-      const response = await Api.post(`${pathUrl}/update/${id}`, updatedSetting);
+      response = await Api.post(`${pathUrl}/update/${id}`, updatedSetting);
       if (response.status === 200) {
-        const index = Settings.value.findIndex(setting => setting.Id === updatedSetting.Id);
+        const index = Settings.value.findIndex(setting => setting.id === updatedSetting.Id);
         if (index !== -1) {
           Settings.value[index] = response.data.data;
         }
       }
-      return response
     } catch (err: any) {
       error.value = err.message;
     } finally {
       isLoading.value = false;
+      return response;
     }
-    return Promise<null>
+  }
+  async function updateByKey(setting : any , id : string) {
+    isLoading.value = true;
+    let response;
+    try {
+      response = await Api.post(`${pathUrl}/update/`+id,  setting  );
+      if (response.status === 200) {
+        const index = Settings.value.findIndex(seting => seting.key === setting.key);
+        if (index !== -1) {
+          Settings.value[index] = response.data.data;
+        }
+      }
+    } catch (err: any) {
+      error.value = err.message;
+    } finally {
+      isLoading.value = false;
+      return response;
+    }
   }
 
   async function show(id: string) {
     isLoading.value = true;
     try {
       const response = await Api.get(`${pathUrl}/${id}`);
+      if (response.status === 200) {
+        return response.data.data;
+      }
+    } catch (err: any) {
+      error.value = err.message;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+  async function showByKey(key: string) {
+    isLoading.value = true;
+    try {
+      const response = await Api.get(`${pathUrl}/show/key`, { params: { key: key } });
       if (response.status === 200) {
         return response.data.data;
       }
@@ -105,6 +127,8 @@ export const useSettingStore = defineStore("SettingStore", () => {
     getSettings,
     store,
     update,
+    updateByKey,
     show,
+    showByKey
   };
 });

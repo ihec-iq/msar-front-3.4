@@ -282,7 +282,7 @@ const { user } = storeToRefs(useAuthStore());
             <path fill-rule="evenodd"
               d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z"
               clip-rule="evenodd" />
-          </svg>
+          </svg>s
           {{ t("Log Out") }}
         </div>
       </div>
@@ -293,7 +293,7 @@ const { user } = storeToRefs(useAuthStore());
         class="-mr-3 mt-4 p-3 mb-9 h-14 w-full cursor-pointer z-[10000] flex items-start rounded-lg dark:hover:bg-sideNavHover hover:bg-sideNavLightHover transition ease-in-out duration-150">
         <div class="ml-4">
           <p class="text-base font-medium text-text dark:text-textLight">
-            {{ t("setting") }}
+            {{ t("Setting.Name") }}
           </p>
         </div>
       </div>
