@@ -32,6 +32,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
 
   const pathBase = "";
   const pathUrl = `${pathBase}/bonus`;
+  const pathEmployeeUrl = `${pathBase}/employee`;
 
   const isLoading = ref(false);
   const error = ref<string | null>(null);
@@ -40,18 +41,6 @@ export const useBonusStore = defineStore("BonusStore", () => {
     return [...Bonuses.value].sort((a, b) => a.title.localeCompare(b.title));
   });
  
-  async function get() {
-    return await  Api.get(`${pathUrl}`) ;
-  }
-
-  async function get_Bonuses() {
-      await   Api.get(`${pathUrl}`).then((response) => {
-        if (response.status == 200) {
-          Bonuses.value = response.data .data;
-        }
-      });
-     
-  }
 
   const resetDataBonus=() => {
     Bonus.value = {
@@ -69,37 +58,34 @@ export const useBonusStore = defineStore("BonusStore", () => {
       notes: ""
     };
   }
-  const resetDataBonusJobTitle=() => {
+  async function get() {
+    return await Api.get(`${pathUrl}`);
+  }
+  async function get_Bonuses() {
+    await Api.get(`${pathUrl}`).then((response) => {
+      if (response.status == 200) {
+        Bonuses.value = response.data.data;
+      }
+    }); 
+  }
+  async function get_filter(params: IBonusFilter, page: number) {
+    return await  Api.get(`${pathUrl}/filter?page=${page}`, { params }) ;
+  }
+  async function get_checkBonus(params: IBonusFilter, page: number) {
+    return await  Api.get(`${pathEmployeeUrl}/bonus/check?page=${page}`, { params }) ;
+  }
+  async function calculateBonus(params: IBonusFilter) {
+    return await  Api.get(`${pathEmployeeUrl}/bonus/calculate`, { params }) ;
+  }
+
+  //#region BonusJobTitle
+  const resetDataBonusJobTitle = () => {
     BonusJobTitle.value = {
       id: 0,
       name: "",
       description: ""
     };
   } 
-  const resetDataBonusStudy=() => {
-    BonusStudy.value = {
-      id: 0,
-      name: ""
-    };
-  } 
-  const resetDataBonusDegreeStage=() => {
-    BonusDegreeStage.value = {
-      id: 0,
-      title: "",  
-      Degree: { id: 0, name: "" },
-      Stage: { id: 0, name: "" },
-      salery: 0,
-      yearlyBonus: 0,
-      yearlyService: 0
-    };
-  } 
-
-
-  async function get_filter(params: IBonusFilter, page: number) {
-    return await  Api.get(`${pathUrl}/filter?page=${page}`, { params }) ;
-  }
-
-  //#region BonusJobTitle
   async function get_BonusJobTitle() {
    return await  Api.get(`bonus_job_title`).then((response) => {
     if (response.status == 200) {
@@ -125,6 +111,12 @@ export const useBonusStore = defineStore("BonusStore", () => {
   //#endregion
 
   //#region BonusStudy
+  const resetDataBonusStudy = () => {
+    BonusStudy.value = {
+      id: 0,
+      name: ""
+    };
+  } 
   async function get_BonusStudy() {
      return await  Api.get(`bonus_study`).then((response) => {
       if (response.status == 200) {
@@ -147,6 +139,17 @@ export const useBonusStore = defineStore("BonusStore", () => {
   //#endregion
 
   //#region BonusDegreeStage  
+  const resetDataBonusDegreeStage = () => {
+    BonusDegreeStage.value = {
+      id: 0,
+      title: "",
+      Degree: { id: 0, name: "" },
+      Stage: { id: 0, name: "" },
+      salery: 0,
+      yearlyBonus: 0,
+      yearlyService: 0
+    };
+  } 
   async function get_BonusDegreeStage() {
     return await  Api.get(`bonus_degree_stage`).then((response) => {
       if (response.status == 200) {
@@ -211,6 +214,8 @@ export const useBonusStore = defineStore("BonusStore", () => {
     error,
     get,
     get_filter,
+    get_checkBonus,
+    calculateBonus,
     get_Bonuses,
     get_BonusJobTitle,
     getFilter_BonusJobTitle,

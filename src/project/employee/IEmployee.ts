@@ -41,6 +41,20 @@ export interface IEmployee {
   dateNextWorth: string;
 
 }
+export interface IEmployeeBonus {
+  id: number;
+  name: string;
+  employeePosition: string;
+  employeeType: string;
+  employeeCenter: string;
+  bonusJobTitle: string;
+  bonusStudy: string;
+  bonusDegreeStage: string;
+  numberLastBonus: number;
+  dateLastBonus: string;
+  difNextDate:string;
+  dateNextWorth: string;
+}
 export interface IEmployeeLite {
   id: number;
   name: string;

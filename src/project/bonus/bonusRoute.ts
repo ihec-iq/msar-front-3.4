@@ -68,5 +68,13 @@ export default [
       middleware: [authMiddleware],
     },
   },
+  {
+    path: "/bonusChecker",
+    name: "bonusCheckerView",
+    component: () => import("@/project/bonus/view/BonusCheckerView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
   //#endregion
 ];

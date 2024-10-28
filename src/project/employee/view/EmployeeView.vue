@@ -326,7 +326,7 @@ const showData = async () => {
         // employee.value.EmployeeCenter = response.data.data.EmployeeCenter;
         // employee.value.EmployeePosition = response.data.data.EmployeePosition;
         // employee.value.isPerson = response.data.data.isPerson;
-        Object.assign(employee.value, response.data.data);
+        Object.assign(employee.value, response.data.data); console.log(response.data.data)
         isPerson.value = response.data.data.isPerson == 0 ? false : true;
         isMoveSection.value =
           response.data.data.isMoveSection == 0 ? false : true;

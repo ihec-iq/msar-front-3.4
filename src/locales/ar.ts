@@ -184,6 +184,7 @@ export default {
     Portal: "بوابة العلاوات",
     dateLastWorth: "تاريخ اخر استحقاق",
     dateNextWorth: "تاريخ الاستحقاق القادم",
+    difNextDate: "ايام الاستحقاق",
     numberLastBonus: "رقم اخر علاوة",
     JobTitle: "العنوان الوظيفي",
     JobTitleAdd: "اضافة عنوان وظيفي",
@@ -196,7 +197,11 @@ export default {
     salery: "الراتب",
     yearlyBonus: "العلاوة السنوية",
     yearlyService: "الخدمة السنوية",
+    Alert : "تنبيهات العلاوات",
+    Refresh: "تحديث النتائج", 
+    ReCalculate: "اعادة حساب العلاوات"
   },
+  Refresh :"تحديث",
   UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",

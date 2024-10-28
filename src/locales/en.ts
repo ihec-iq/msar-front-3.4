@@ -182,6 +182,7 @@ export default {
     Update: "Update Bonuses",
     Portal: "Bonus Portal",
     dateLastWorth: "Date Last Worth",
+    difNextDate: "Days worth",
     dateNextWorth: "Date Next Worth",
     numberLastBonus: "Number Last Bonus",
     JobTitle: "Job Title",
@@ -195,7 +196,11 @@ export default {
     salery: "Salery",
     yearlyBonus: "Yearly Bonus",
     yearlyService: "Yearly Service",
+    Alert: "Alert Bonuses",
+    Refresh: "Refresh Data",
+    ReCalculate: "Recalculate Data"
   },
+  Refresh: "Refresh",
   UserIndex: "User System",
 
   Help: "Help",
