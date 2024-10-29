@@ -367,7 +367,7 @@ onMounted(async () => {
     useEmployeeStore().show(employeeId.value).then((response) => {
       hrDocument.value.Employee.id = response.data.data.id
       hrDocument.value.Employee.name = response.data.data.name
-
+      reset()
     })
   }
 

@@ -24,10 +24,14 @@ const { get_checkBonus, calculateBonus } = useBonusStore();
 import { limits } from "@/utilities/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
-import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumPermission, EnumSetting } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import { IEmployee } from "@/project/employee/IEmployee";
+import ICheckbox from "@/components/inputs/ICheckbox.vue";
+import { useSettingStore } from "@/project/core/settingStore";
+import { ISetting } from "@/project/core/ISetting";
+import ITable from "@/components/ihec/ITable.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -57,14 +61,19 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
+const SettingStore = useSettingStore();
+const SettingNumberDayesAlertBonus = ref<ISetting>({
+  id: 0,
+  key: EnumSetting.SettingNumberDayesAlertBonus,
+});
 const searchFilter = ref<IBonusFilter>({
   name: "",
   limit: 10,
-  title: ""
+  title: "",
+  isBound: true
 });
 const getFilterData = async (page = 1) => {
   localStorage.setItem("checkBonus", page.toString());
-
   isLoading.value = true;
   searchFilter.value.name = fastSearch.value;
   await get_checkBonus(searchFilter.value, page)
@@ -88,12 +97,10 @@ const update = (id: number) => {
   });
 };
 const recheck = async () => {
-  
-  isLoading.value = true; 
+  isLoading.value = true;
   await calculateBonus(searchFilter.value);
   await getFilterData(1);
   isLoading.value = false;
-
 };
 //#region Pagination
 //#endregion
@@ -102,7 +109,9 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-
+  await SettingStore.showByKey(SettingNumberDayesAlertBonus.value.key).then((response) => {
+    Object.assign(SettingNumberDayesAlertBonus.value, response);
+  })
   let index = 1;
 
   if (localStorage.getItem("checkBonus") != undefined)
@@ -111,20 +120,11 @@ onMounted(async () => {
   isLoading.value = false;
 });
 
-
-// 'name'
-// 'dateLastBonus'
-// 'dateLastWorth'
-// 'dateNextWorth'
-// 'numberLastBonus'
-// 'bonusJobTitle'
-// 'bonusStudy'
-// 'bonusDegreeStage'
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
   { caption: t("Details"), value: "actions" },
   { caption: t("Bonus.dateLastBonus"), value: "dateLastBonus" },
-  { caption: t("Bonus.difNextDate"), value: "difNextDate" },
+  { caption: t("Bonus.difNextDate"), value: "difNextDateShow" },
   { caption: t("Bonus.dateNextWorth"), value: "dateNextWorth" },
   { caption: t("Bonus.Study"), value: "bonusStudy" },
   { caption: t("Bonus.DegreeStage"), value: "bonusDegreeStage" },
@@ -144,16 +144,20 @@ const headers = ref<Array<ITableHeader>>([
           </ICol>
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
-            <ISelect :label="t('BonusSection')" v-model="searchFilter.sectionId" name="archiveTypeId"
+            <ISelect :label="t('BonusSection')" v-model="searchFilter.sectionId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol> -->
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <ICheckbox :label="t('Bonus.IsBoundFilter') + ' ' + SettingNumberDayesAlertBonus.valInt + ' ' + t('Day')"
+              v-model="searchFilter.isBound" :IsRequire="true" @onChange="getFilterData()" />
+          </ICol>
         </ISearchBar>
       </IRow>
       <IRow>
         <ITable :items="data" :headers="headers">
-          <!-- <template v-slot:type="{ row }">
-            <span>{{ row.BonusType.name }}</span>
-          </template> -->
+          <template v-slot:difNextDateShow="{ row }">
+            <span>{{ row.difNextDate + " " + t('Day') }} </span>
+          </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>

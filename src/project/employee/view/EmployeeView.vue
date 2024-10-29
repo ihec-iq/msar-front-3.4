@@ -401,6 +401,7 @@ import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
 import { prepareFormData } from "@/utilities/crudTool";
 import { SuccessToast } from "@/utilities/Toast";
 import EditButton from "@/components/dropDown/EditButton.vue";
+import { Icon } from "@iconify/vue";
 
 const { get_filter } = useHrDocumentStore();
 
@@ -437,6 +438,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t('Employee.Title'), value: "EmployeeName" },
   { caption: t('Date'), value: "issueDate" },
   { caption: t('HrDocument.Type'), value: "HrDocumentype" },
+  { caption: t('HrDocument.AddDayes'), value: "addDays" },
 ]);
 const openFile = (id: number) => {
   router.push({
@@ -644,10 +646,15 @@ const active = ref(0);
                     <span>{{ row.Employee.name }}</span>
                   </template>
                   <template v-slot:isActive="{ row }">
-                    <span v-if="row.isActive">
-                      <Icon icon="mdi-pencil-box-outline" /> مفعل
+                    <span v-if="row.isActive"
+                      class="flex justify-center items-center border-2 border-green-400 rounded-md bg-green-100 p-0">
+                      <Icon icon="mdi-check-circle" class="text-green-600"></Icon> مفعل
                     </span>
-                    <span v-else> غير مفعل </span>
+                    <span v-else
+                      class="flex justify-center items-center border-2 border-red-400 rounded-md bg-red-100 p-0">
+                      <Icon icon="mdi-pause-octagon" class="text-red-600"></Icon>
+                      <span>غير مفعل</span>
+                    </span>
                   </template>
                   <template v-slot:HrDocumentype="{ row }">
                     <span>{{ row.Type.name }}</span>

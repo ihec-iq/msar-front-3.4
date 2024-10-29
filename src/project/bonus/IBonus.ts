@@ -53,4 +53,7 @@ export interface IBonusFilter {
   employeeId?: number;
   employeeName?: string;
   name?: string;
+  isBound?:boolean;
+  bound?: number;
+
 }

@@ -184,7 +184,7 @@ export default {
     Portal: "بوابة العلاوات",
     dateLastWorth: "تاريخ اخر استحقاق",
     dateNextWorth: "تاريخ الاستحقاق القادم",
-    difNextDate: "ايام الاستحقاق",
+    difNextDate: "المتبقي للاستحقاق القادم",
     numberLastBonus: "رقم اخر علاوة",
     JobTitle: "العنوان الوظيفي",
     JobTitleAdd: "اضافة عنوان وظيفي",
@@ -199,7 +199,8 @@ export default {
     yearlyService: "الخدمة السنوية",
     Alert : "تنبيهات العلاوات",
     Refresh: "تحديث النتائج", 
-    ReCalculate: "اعادة حساب العلاوات"
+    ReCalculate: "اعادة حساب العلاوات",
+    IsBoundFilter: "عرض الاستحقاق فقط خلال الفترة"
   },
   Refresh :"تحديث",
   UserIndex: "بيانات المستخدمين",

@@ -198,7 +198,8 @@ export default {
     yearlyService: "Yearly Service",
     Alert: "Alert Bonuses",
     Refresh: "Refresh Data",
-    ReCalculate: "Recalculate Data"
+    ReCalculate: "Recalculate Data",
+    IsBoundFilter: "Filter Rusult on "
   },
   Refresh: "Refresh",
   UserIndex: "User System",

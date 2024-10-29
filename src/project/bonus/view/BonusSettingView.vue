@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
-import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumPermission, EnumSetting } from "@/utilities/EnumSystem";
 import { ErrorToast, SuccessToast } from "@/utilities/Toast";
 import { prepareFormData } from "@/utilities/crudTool";
 import { useSettingStore } from "@/project/core/settingStore";
@@ -20,8 +20,9 @@ const { checkPermissionAccessArray } = usePermissionsStore();
 const SettingStore = useSettingStore();
 const SettingNumberDayesAlertBonus = ref<ISetting>({
   id: 0,
-  key: "SettingNumberDayesAlertBonus",
+  key: EnumSetting.SettingNumberDayesAlertBonus,
 });
+
 
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
