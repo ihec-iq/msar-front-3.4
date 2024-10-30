@@ -182,7 +182,7 @@ export default {
     Add: "اضافة علاوة",
     Update: "تعديل علاوة",
     Portal: "بوابة العلاوات",
-    dateLastWorth: "تاريخ اخر استحقاق",
+    dateWorth: "تاريخ اخر استحقاق",
     dateNextWorth: "تاريخ الاستحقاق القادم",
     difNextDate: "المتبقي للاستحقاق القادم",
     numberLastBonus: "رقم اخر علاوة",
@@ -201,6 +201,13 @@ export default {
     Refresh: "تحديث النتائج", 
     ReCalculate: "اعادة حساب العلاوات",
     IsBoundFilter: "عرض الاستحقاق فقط خلال الفترة"
+  },
+  Promotion: {
+    dateLastPromotion: "تاريخ اخر ترقية",
+    difNextDate: "المتبقي للترقية القادمة",
+    dateNextWorth: "تاريخ الترقية القادمة",
+    Study: "التحصيل الدراسي",
+    DegreeStage: "الدرجة الوظيفية",
   },
   Refresh :"تحديث",
   UserIndex: "بيانات المستخدمين",

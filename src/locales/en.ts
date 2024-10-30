@@ -181,7 +181,7 @@ export default {
     Add: "Add Bonuses",
     Update: "Update Bonuses",
     Portal: "Bonus Portal",
-    dateLastWorth: "Date Last Worth",
+    dateWorth: "Date Last Worth",
     difNextDate: "Days worth",
     dateNextWorth: "Date Next Worth",
     numberLastBonus: "Number Last Bonus",

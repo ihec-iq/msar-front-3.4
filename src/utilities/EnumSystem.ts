@@ -73,6 +73,7 @@ enum EnumDirection {
   Auto = "inherit",
 }
 export enum EnumSetting{
-  SettingNumberDayesAlertBonus = "SettingNumberDayesAlertBonus"
+  SettingNumberDayesAlertBonus = "SettingNumberDayesAlertBonus",
+  SettingPromotionAlertData = "SettingPromotionAlertData",
 }
 export { EnumPermission, EnumDirection };

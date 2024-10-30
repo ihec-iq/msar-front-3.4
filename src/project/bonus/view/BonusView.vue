@@ -147,27 +147,17 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <IRow>
-        <IRow col-lg="4" col-md="2" col-sm="1">
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Title')" name="Name" v-model="Bonus.title" type="text" />
-          </ICol>
+        <IRow col-lg="4" col-md="2" col-sm="1"> 
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" type="date" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="Bonus.numberLastBonus"
+            <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="Bonus.numberBonus"
               type="text" />
-          </ICol>
+          </ICol> 
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="Bonus.dateLastBonus"
-              type="date" />
-          </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateLastWorth')" name="dateLastWorth" v-model="Bonus.dateLastWorth" type="date" />
-          </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateNextWorth')" name="dateNextWorth" v-model="Bonus.dateNextWorth" type="date" />
-          </ICol>
+            <IInput :label="t('Bonus.dateWorth')" name="dateLastWorth" v-model="Bonus.dateWorth" type="date" />
+          </ICol> 
           <ICol span="1" span-md="2" span-sm="4">
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
               {{ t("Bonus.JobTitle") }}

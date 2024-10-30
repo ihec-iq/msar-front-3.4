@@ -4,17 +4,14 @@ import type { IDocument } from "../archive/IArchive";
 
 export interface IBonus {
   id: number;
-  title: string;
   issueDate: string;
   Employee: IEmployeeLite;
   BonusJobTitle: IBonusJobTitle;
   BonusStudy: IBonusStudy;
   BonusDegreeStage: IBonusDegreeStage;
   Files?: Array<IDocument>;
-  numberLastBonus: number;
-  dateLastBonus: string;
-  dateLastWorth: string;
-  dateNextWorth: string;
+  numberBonus: string;
+  dateWorth: string;
   UserCreate?: IUser;
   UserUpdate?: IUser;
   notes: string;
