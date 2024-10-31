@@ -66,6 +66,15 @@ enum EnumPermission {
   DeleteEmployee = "delete employee",
   ShowEmployees = "show employees",
   Setting = "setting",
+  ShowPromotions = "show promotions",
+  AddPromotion = "add promotion",
+  EditPromotion = "edit promotion",
+  DeletePromotion = "delete promotion",
+  ShowBonuses = "show bonuses",
+  AddBonus = "add bonus",
+  EditBonus = "edit bonus",
+  DeleteBonus = "delete bonus",
+  HasSectionOnly = "has section only",
 }
 enum EnumDirection {
   RTL = "rtl",

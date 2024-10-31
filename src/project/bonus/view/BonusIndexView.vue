@@ -36,7 +36,7 @@ watch(
     await getFilterData(1);
   }
 );
-const addItem = () => {
+const add = () => {
   useBonusStore().resetDataBonus();
   router.push({
     name: "bonusAdd",   
@@ -46,7 +46,7 @@ const addItem = () => {
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (bonuses: IBonus) => {
-  if (bonuses.title.includes(fastSearch.value)) {
+  if (bonuses.Employee.name.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
@@ -122,7 +122,7 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t('Bonus.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton width="28" :onClick="addItem" :text="t('Bonus.Add')" />
+      <IButton width="28" :onClick="add" :text="t('Bonus.Add')" />
     </template>
     <IPageContent>
       <IRow :col="3" :col-md="2" :col-lg="3">

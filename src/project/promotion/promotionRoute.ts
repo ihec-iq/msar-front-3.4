@@ -10,9 +10,9 @@ export default [
         },
     },
     {
-        path: "/bonus/index",
+        path: "/promotion/index",
         name: "promotionIndex",
-        component: () => import("./PromotionIndexView.vue"),
+        component: () => import("./view/PromotionIndexView.vue"),
         meta: {
             middleware: [authMiddleware],
         },

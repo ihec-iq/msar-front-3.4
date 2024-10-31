@@ -16,6 +16,7 @@ import hrRoute from '@/project/hr/hrRoute';
 //#endregion
 import DefaultLayout from "@/views/layouts/MainView.vue";
 import bonusRoute from "@/project/bonus/bonusRoute";
+import promotionRoute from "@/project/promotion/promotionRoute";
 const router = createRouter({
   history: createWebHistory(
     process.env.NODE_ENV === "production" ? "/10/" : "/",
@@ -60,6 +61,7 @@ const router = createRouter({
         ...roleRoute,
         ...warehouseRoute,
         ...bonusRoute,
+        ...promotionRoute,
         ...employeeRoute,
         ...hrRoute,
         {

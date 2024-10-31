@@ -13,6 +13,7 @@ import { IEmployeeLite } from "@/project/employee/IEmployee";
 import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus"; // Updated interfaces
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import { prepareFormData } from "@/utilities/crudTool";
+import { useBonusStore } from "@/project/bonus/bonusStore";
 
 const route = useRoute();
 const router = useRouter();
@@ -78,9 +79,9 @@ onMounted(async () => {
     checkPermissionAccessArray([EnumPermission.ShowEmployees]);
 
     await Promise.all([
-        PromotionStore.get_BonusJobTitle(), // Updated store method
-        PromotionStore.get_BonusDegreeStage(), // Updated store method
-        PromotionStore.get_Employees()
+        useBonusStore() .get_BonusJobTitle(), // Updated store method
+        useBonusStore().get_BonusDegreeStage(), // Updated store method
+        useBonusStore().get_Employees()
     ]);
 
     if (Number.isNaN(id.value) || id.value === undefined) {
@@ -111,21 +112,15 @@ onMounted(async () => {
                     <ICol span="1" span-md="1" span-sm="1">
                         <IInput :label="t('Promotion.numberLastPromotion')" name="numberLastPromotion"
                             v-model="promotion.numberPromotion" type="text" /> <!-- Updated reference -->
-                    </ICol>
-                    <ICol span="1" span-md="1" span-sm="1">
-                        <IInput :label="t('Promotion.dateWorth')" name="dateLastWorth" v-model="Promotion.dateWorth"
-                            type="date" /> <!-- Updated reference -->
-                    </ICol>
+                    </ICol> 
                     <ICol span="1" span-md="2" span-sm="4">
                         <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                             {{ t("Promotion.JobTitle") }} <!-- Updated label -->
                         </div>
                         <vSelect
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                            v-model="promotion.BonusJobTitle" :options="PromotionStore.BonusJobTitles" <!--
-                            Updated reference -->
-                            :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
-                            <!-- Updated reference -->
+                            v-model="promotion.BonusJobTitle" :options="useBonusStore().BonusJobTitles"  
+                            :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle" 
                             :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
                             <template #option="{ name }">
                                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
@@ -140,9 +135,8 @@ onMounted(async () => {
                         </div>
                         <vSelect
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                            v-model="promotion.BonusDegreeStage" :options="PromotionStore.BonusDegreeStages"
-                            <!-- Updated reference -->
-                            :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage"
+                            v-model="promotion.BonusDegreeStage" :options="useBonusStore().BonusDegreeStages"
+                             :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage"
                             label="title"
                             :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) =>
                             BonusDegreeStage.title">
@@ -159,7 +153,7 @@ onMounted(async () => {
                         </div>
                         <vSelect
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                            v-model="promotion.Employee" :options="PromotionStore.Employees"
+                            v-model="promotion.Employee" :options="useBonusStore().Employees"
                             :reduce="(employee: IEmployeeLite) => employee" label="name"
                             :getOptionLabel="(employee: IEmployeeLite) => employee.name">
                             <template #option="{ name }">

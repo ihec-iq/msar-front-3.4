@@ -17,6 +17,9 @@ import { prepareFormData } from "@/utilities/crudTool";
 const route = useRoute();
 const router = useRouter();
 const id = ref(Number(route.params.id));
+const employeeId = ref(Number(route.params.employeeId));
+const disabledChangeEmployee = ref(false);
+
 const { checkPermissionAccessArray } = usePermissionsStore();
 const BonusStore = useBonusStore();
 const { Bonus } = storeToRefs(BonusStore);
@@ -126,7 +129,19 @@ onMounted(async () => {
     BonusStore.get_BonusDegreeStage(),
     BonusStore.get_Employees()
   ]);
-
+  //check if selected emplioyee or not
+  if (Number.isNaN(employeeId.value) || employeeId.value === undefined) {
+    // that mean it normal document and not select any employee
+    disabledChangeEmployee.value = false
+  } else {
+    // it selected employee
+    disabledChangeEmployee.value = true
+    useEmployeeStore().show(employeeId.value).then((response) => {
+      reset()
+      hrDocument.value.Employee.id = response.data.data.id
+      hrDocument.value.Employee.name = response.data.data.name
+    })
+  }
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "Bonus.Add";
     Bonus.value.id = 0;
@@ -147,17 +162,17 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <IRow>
-        <IRow col-lg="4" col-md="2" col-sm="1"> 
+        <IRow col-lg="4" col-md="2" col-sm="1">
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" type="date" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="Bonus.numberBonus"
               type="text" />
-          </ICol> 
+          </ICol>
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Bonus.dateWorth')" name="dateLastWorth" v-model="Bonus.dateWorth" type="date" />
-          </ICol> 
+          </ICol>
           <ICol span="1" span-md="2" span-sm="4">
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
               {{ t("Bonus.JobTitle") }}
@@ -212,7 +227,7 @@ onMounted(async () => {
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
               {{ t("Employee.Title") }}
             </div>
-            <vSelect
+            <vSelect :disabled="disabledChangeEmployee"
               class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
               v-model="Bonus.Employee" :options="BonusStore.Employees" :reduce="(employee: IEmployeeLite) => employee"
               label="name" :getOptionLabel="(employee: IEmployeeLite) => employee.name">

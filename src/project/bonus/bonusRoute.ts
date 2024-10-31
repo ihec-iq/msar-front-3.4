@@ -34,6 +34,14 @@ export default [
       middleware: [authMiddleware],
     },
   },
+  {
+    path: "/bonus/employee/:employeeId",
+    name: "bonusAddByEmployee",
+    component: () => import("@/project/bonus/view/BonusView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
    //#region Bonus Job Title
   {
     path: "/bonusJobTitle/index",
