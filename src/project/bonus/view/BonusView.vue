@@ -13,6 +13,7 @@ import { IEmployeeLite } from "@/project/employee/IEmployee";
 import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import { prepareFormData } from "@/utilities/crudTool";
+import { useEmployeeStore } from "@/project/employee/employeeStore";
 
 const route = useRoute();
 const router = useRouter();
@@ -136,10 +137,10 @@ onMounted(async () => {
   } else {
     // it selected employee
     disabledChangeEmployee.value = true
-    useEmployeeStore().show(employeeId.value).then((response) => {
+    useEmployeeStore().showLite(employeeId.value).then((response) => {
       reset()
-      hrDocument.value.Employee.id = response.data.data.id
-      hrDocument.value.Employee.name = response.data.data.name
+      Bonus.value.Employee.id = response.data.data.id
+      Bonus.value.Employee.name = response.data.data.name
     })
   }
   if (Number.isNaN(id.value) || id.value === undefined) {

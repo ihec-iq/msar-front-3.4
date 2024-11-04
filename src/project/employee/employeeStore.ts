@@ -197,6 +197,9 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
   }
+  async function showLite(id: number) {
+    return await Api.get(`${pathUrl}/show/lite/${id}`);
+  }
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
@@ -215,6 +218,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     get_employee_types,
     get_employee_centers,
     show,
+    showLite,
     store,
     update,
     getError,

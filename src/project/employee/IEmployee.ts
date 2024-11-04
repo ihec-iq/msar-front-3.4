@@ -39,7 +39,7 @@ export interface IEmployee {
   dateLastBonus: string;
   dateLastWorth: string;
   dateNextWorth: string;
-
+  isChecked?: boolean;
 }
 export interface IEmployeeBonus {
   id: number;

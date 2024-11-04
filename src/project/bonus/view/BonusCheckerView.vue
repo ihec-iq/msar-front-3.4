@@ -32,6 +32,7 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import { useSettingStore } from "@/project/core/settingStore";
 import { ISetting } from "@/project/core/ISetting";
 import ITable from "@/components/ihec/ITable.vue";
+import IDropdown from "@/components/ihec/IDropdown.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -96,6 +97,12 @@ const update = (id: number) => {
     params: { id: id },
   });
 };
+const addBound = (employeeId: number) => {
+  router.push({
+    name: "bonusAddByEmployee",
+    params: { employeeId: employeeId },
+  });
+};
 const recheck = async () => {
   isLoading.value = true;
   await calculateBonus(searchFilter.value);
@@ -111,13 +118,18 @@ onMounted(async () => {
     fastSearch.value = route.params.search.toString() || "";
   await SettingStore.showByKey(SettingNumberDayesAlertBonus.value.key).then((response) => {
     Object.assign(SettingNumberDayesAlertBonus.value, response);
+    if (SettingNumberDayesAlertBonus.value.valInt == 0) {
+      SettingNumberDayesAlertBonus.value.valInt = 30;
+    } else if (SettingNumberDayesAlertBonus.value.valInt === undefined) {
+      location.reload();
+    }
   })
   let index = 1;
 
   if (localStorage.getItem("checkBonus") != undefined)
     index = Number(localStorage.getItem("checkBonus"));
   await getFilterData(index);
-  isLoading.value = false;
+  //isLoading.value = false;
 });
 
 const headers = ref<Array<ITableHeader>>([
@@ -128,6 +140,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Bonus.dateNextWorth"), value: "dateNextWorth" },
   { caption: t("Bonus.Study"), value: "bonusStudy" },
   { caption: t("Bonus.DegreeStage"), value: "bonusDegreeStage" },
+  { caption: t("Bonus.Add"), value: "btnAddBound" },
 ]);
 </script>
 <template>
@@ -161,9 +174,12 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
-                <EditButton title="Employee.Info" @click="update(row.id)" />
+                <EditButton title="Employee.Info" class="p-0 m-0" @click="update(row.id)" />
               </li>
             </IDropdown>
+          </template>
+          <template v-slot:btnAddBound="{ row }">
+            <IButton @click="addBound(row.id)" icon="mdi-bookmark-plus" type="outlined" :text="t('Bonus.Add')" />
           </template>
         </ITable>
         <IRow v-if="data.length > 0">
