@@ -80,10 +80,10 @@ export const useBonusStore = defineStore("BonusStore", () => {
       description: ""
     };
   }
-  async function get_BonusJobTitle() {
-    return await Api.get(`bonus_job_title`).then((response) => {
+  async function get_BonusJobTitle(params: object = {}) {
+    return await Api.get(`bonus_job_title`, { params }).then((response) => {
       if (response.status == 200) {
-        BonusJobTitles.value = response.data.data;
+        BonusJobTitles.value = response.data.data; console.log(BonusJobTitles.value)
       }
     });
   }
@@ -165,8 +165,15 @@ export const useBonusStore = defineStore("BonusStore", () => {
   }
   //#endregion
 
-  async function get_Employees() {
+  async function get_EmployeesLite() {
     return await Api.get(`/employee/lite`).then((response) => {
+      if (response.status == 200) {
+        Employees.value = response.data.data;
+      }
+    });
+  }
+  async function get_Employees() {
+    return await Api.get(`/employee`).then((response) => {
       if (response.status == 200) {
         Employees.value = response.data.data;
       }
@@ -216,6 +223,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
     get_BonusStudy,
     get_BonusDegreeStage,
     get_Employees,
+    get_EmployeesLite,
     show,
     show_BonusJobTitle,
     show_BonusStudy,

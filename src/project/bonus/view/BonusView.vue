@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
@@ -24,6 +24,15 @@ const disabledChangeEmployee = ref(false);
 const { checkPermissionAccessArray } = usePermissionsStore();
 const BonusStore = useBonusStore();
 const { Bonus } = storeToRefs(BonusStore);
+
+
+const ChangeBonusDegreeStage = async () => {
+  if (Bonus.value.BonusDegreeStage.Degree) {
+    await BonusStore.get_BonusJobTitle({ bonusDegreeId: Bonus.value.BonusDegreeStage.Degree.id }).then((response) => {
+    })
+  }
+}
+
 
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
@@ -57,7 +66,7 @@ const store = async () => {
     }
   }
 }
- 
+
 const update = async () => {
   errors.value = null;
   const formData = prepareFormData(Bonus.value);
@@ -73,7 +82,7 @@ const update = async () => {
       icon: "error",
       title: "Updating data failed!",
       text: BonusStore.error?.toString(),
-      
+
     });
   }
 };
@@ -123,9 +132,8 @@ const reset = () => {
 onMounted(async () => {
   isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
- 
+
   await Promise.all([
-    BonusStore.get_BonusJobTitle(),
     BonusStore.get_BonusStudy(),
     BonusStore.get_BonusDegreeStage(),
     BonusStore.get_Employees()
@@ -176,22 +184,6 @@ onMounted(async () => {
           </ICol>
           <ICol span="1" span-md="2" span-sm="4">
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-              {{ t("Bonus.JobTitle") }}
-            </div>
-            <vSelect
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonus.BonusJobTitle" :options="BonusStore.BonusJobTitles"
-              :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
-              :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
-              <template #option="{ name }">
-                <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
-                  <span>{{ name }}</span>
-                </div>
-              </template>
-            </vSelect>
-          </ICol>
-          <ICol span="1" span-md="2" span-sm="4">
-            <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
               {{ t("Bonus.Study") }}
             </div>
             <vSelect
@@ -205,6 +197,8 @@ onMounted(async () => {
               </template>
             </vSelect>
           </ICol>
+
+
           <ICol span="1" span-md="2" span-sm="4">
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
               {{ t("Bonus.DegreeStage") }}
@@ -212,6 +206,7 @@ onMounted(async () => {
             <vSelect
               class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
               v-model="Bonus.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
+              @update:model-value="ChangeBonusDegreeStage"
               :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
               :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
               <template #option="{ title, salery, yearlyBonus, yearlyService }">
@@ -220,6 +215,22 @@ onMounted(async () => {
                   <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
                   <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span><br>
                   <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
+                </div>
+              </template>
+            </vSelect>
+          </ICol>
+          <ICol span="1" span-md="2" span-sm="4">
+            <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              {{ t("Bonus.JobTitle") }}
+            </div>
+            <vSelect
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              v-model="Bonus.BonusJobTitle" :options="BonusStore.BonusJobTitles"
+              :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
+              :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
+              <template #option="{ name }">
+                <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                  <span>{{ name }}</span>
                 </div>
               </template>
             </vSelect>

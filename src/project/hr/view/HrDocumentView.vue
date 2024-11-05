@@ -366,8 +366,9 @@ onMounted(async () => {
     disabledChangeEmployee.value = true
     useEmployeeStore().show(employeeId.value).then((response) => {
       reset()
-      hrDocument.value.Employee.id = response.data.data.id
-      hrDocument.value.Employee.name = response.data.data.name
+      console.log(response.data.data);
+      hrDocument.value.Employee.id = response.data.data.id;
+      hrDocument.value.Employee.name = response.data.data.name;
     })
   }
 

@@ -373,7 +373,7 @@ onMounted(async () => {
     BonusStore.get_BonusJobTitle(),
     BonusStore.get_BonusStudy(),
     BonusStore.get_BonusDegreeStage(),
-    BonusStore.get_Employees()
+    BonusStore.get_EmployeesLite()
   ]);
 
   await useUserStore()
