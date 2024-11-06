@@ -1,21 +1,19 @@
 import type { IUser } from "../user/IUser";
-import type { IEmployeeLite } from "../employee/IEmployee";
+import type {  IEmployeeLiteBonus } from "../employee/IEmployee";
 import type { IDocument } from "../archive/IArchive";
 
 export interface IBonus {
   id: number;
   issueDate: string;
-  Employee: IEmployeeLite;
-  BonusJobTitle: IBonusJobTitle;
-  BonusStudy: IBonusStudy;
+  number: string;
+  Employee: IEmployeeLiteBonus; 
   BonusDegreeStage: IBonusDegreeStage;
   Files?: Array<IDocument>;
-  numberBonus: string;
-  dateWorth: string;
   UserCreate?: IUser;
   UserUpdate?: IUser;
   notes: string;
 }
+
 
 export interface IBonusJobTitle {
   id: number;

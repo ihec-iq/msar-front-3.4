@@ -61,10 +61,9 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       yearlyBonus: 0,
       yearlyService: 0
     },
-    numberLastBonus: 0,
-    dateLastBonus: "",
-    dateLastWorth: "",
-    dateNextWorth: ""
+    numberLastBonus: "",
+    dateLastBonus: "", 
+    dateNextBonus: ""
   });
   const error = ref<string | null>(null);
 
@@ -143,11 +142,9 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
         yearlyBonus: 0,
         yearlyService: 0
       },
-      numberLastBonus: 0,
+      numberLastBonus: "",
       dateLastBonus: "",
-      dateLastWorth: "",
-      dateNextWorth: ""
-
+      dateNextBonus: "" 
     };
   }
   async function get_filter(params: IEmployeeFilter, page: number) {
@@ -197,8 +194,8 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
   }
-  async function showLite(id: number) {
-    return await Api.get(`${pathUrl}/show/lite/${id}`);
+  async function showBonusLite(id: number) {
+    return await Api.get(`${pathUrl}/show/bonus/lite/${id}`);
   }
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
@@ -218,7 +215,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     get_employee_types,
     get_employee_centers,
     show,
-    showLite,
+    showBonusLite,
     store,
     update,
     getError,

@@ -119,7 +119,7 @@ const headers = ref<Array<ITableHeader>>([
     { caption: t("Details"), value: "actions" },
     { caption: t("Promotion.dateLastPromotion"), value: "dateLastPromotion" }, // Updated for promotion
     { caption: t("Promotion.difNextDate"), value: "difNextDateShow" }, // Updated for promotion
-    { caption: t("Promotion.dateNextWorth"), value: "dateNextWorth" }, // Updated for promotion
+    { caption: t("Promotion.dateNextBonus"), value: "dateNextBonus" }, // Updated for promotion
     { caption: t("Promotion.Study"), value: "promotionStudy" }, // Updated for promotion
     { caption: t("Promotion.DegreeStage"), value: "promotionDegreeStage" }, // Updated for promotion
 ]);

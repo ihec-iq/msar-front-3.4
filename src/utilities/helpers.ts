@@ -6,21 +6,26 @@ export const getError = (error: {
     headers: any;
   };
   config: { url: any };
-}) => {
-   const errorMessage = t("Server is down, please try again.");
-
-  if (!error.response) {
-    console.error(`API ${error.config.url} not found`);
-    return errorMessage;
+} | string) => {
+  const errorMessage = t("Server is down, please try again.");
+  if (typeof error === 'object') {
+    if (!error.response) {
+      console.error(`API ${error.config.url} not found`);
+      return errorMessage;
+    }
+    if (process.env.NODE_ENV === "development") {
+      console.error(error.response.data);
+      console.error(error.response.status);
+      console.error(error.response.headers);
+    }
+    if (error.response.data && error.response.data.errors) {
+      return Object.values(error.response.data.errors).flat().join();
+    }
+  } else {
+    window.location.reload();
+    return error; 
   }
-  if (process.env.NODE_ENV === "development") {
-    console.error(error.response.data);
-    console.error(error.response.status);
-    console.error(error.response.headers);
-  }
-  if (error.response.data && error.response.data.errors) {
-    return Object.values(error.response.data.errors).flat().join();
-  }
+  
 
   return errorMessage;
 };

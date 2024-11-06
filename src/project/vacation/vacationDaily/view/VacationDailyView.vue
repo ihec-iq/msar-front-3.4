@@ -115,7 +115,7 @@ const store = (withPrint: boolean = false) => {
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
-        text: error.response.data.message,
+        text: errors.value,
         footer: "",
       });
     });
@@ -337,9 +337,9 @@ const SelectEmployeeSection = () => {
 };
 const filterEmployeesBySection = (_employee: IEmployee) => {
   if (
-    (vacationDaily.value.Vacation.Employee?.Position.level === "1" ||
-      vacationDaily.value.Vacation.Employee?.Position.level === "0") &&
-    (_employee.Position.level === "0" || _employee.Position.level === "1") &&
+    (vacationDaily.value.Vacation.Employee?.EmployeePosition.level === "1" ||
+      vacationDaily.value.Vacation.Employee?.EmployeePosition.level === "0") &&
+    (_employee.EmployeePosition.level === "0" || _employee.EmployeePosition.level === "1") &&
     _employee.id != vacationDaily.value.Vacation.Employee?.id
   ) {
     return true;

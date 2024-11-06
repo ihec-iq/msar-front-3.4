@@ -47,7 +47,9 @@ if (props.icon != "") {
 </script>
 
 <template>
-  <button @click="onClick()" type="button" :class="buttonClass" class="focus:border-2 flex items-center justify-center">
+  <button @click="onClick()" type="button" :class="buttonClass" class="flex items-center justify-center 
+    focus:bg-black focus:bg-opacity-80 focus:text-white  
+    hover:bg-black hover:bg-opacity-80 hover:text-white ">
     <Icon v-if="props.icon != ''" :icon="props.icon" />
     <span>{{ props.text }}</span>
     <slot></slot>

@@ -33,6 +33,8 @@ import { useSettingStore } from "@/project/core/settingStore";
 import { ISetting } from "@/project/core/ISetting";
 import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
+import { getError } from "@/utilities/helpers";
+import Swal from "sweetalert2";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -68,15 +70,16 @@ const SettingNumberDayesAlertBonus = ref<ISetting>({
   key: EnumSetting.SettingNumberDayesAlertBonus,
 });
 const searchFilter = ref<IBonusFilter>({
-  name: "",
+  employeeName: "",
   limit: 10,
   title: "",
-  isBound: true
+  isBound: true,
+  bound: 0
 });
 const getFilterData = async (page = 1) => {
   localStorage.setItem("checkBonus", page.toString());
   isLoading.value = true;
-  searchFilter.value.name = fastSearch.value;
+  searchFilter.value.employeeName = fastSearch.value;
   await get_checkBonus(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -86,6 +89,13 @@ const getFilterData = async (page = 1) => {
       }
     })
     .catch((error) => {
+      let errors = getError(error);
+      Swal.fire({
+        icon: "error",
+        title: "create new data fails!!!",
+        text: errors,
+        footer: "",
+      });
       console.log(error);
     });
   isLoading.value = false;
@@ -123,6 +133,7 @@ onMounted(async () => {
     } else if (SettingNumberDayesAlertBonus.value.valInt === undefined) {
       location.reload();
     }
+    searchFilter.value.bound = SettingNumberDayesAlertBonus.value.valInt;
   })
   let index = 1;
 
@@ -137,7 +148,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Details"), value: "actions" },
   { caption: t("Bonus.dateLastBonus"), value: "dateLastBonus" },
   { caption: t("Bonus.difNextDate"), value: "difNextDateShow" },
-  { caption: t("Bonus.dateNextWorth"), value: "dateNextWorth" },
+  { caption: t("Bonus.dateNextBonus"), value: "dateNextBonus" },
   { caption: t("Bonus.Study"), value: "bonusStudy" },
   { caption: t("Bonus.DegreeStage"), value: "bonusDegreeStage" },
   { caption: t("Bonus.Add"), value: "btnAddBound" },
@@ -161,8 +172,9 @@ const headers = ref<Array<ITableHeader>>([
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol> -->
           <ICol :span-lg="1" :span-md="2" :span="1">
-            <ICheckbox :label="t('Bonus.IsBoundFilter') + ' ' + SettingNumberDayesAlertBonus.valInt + ' ' + t('Day')"
-              v-model="searchFilter.isBound" :IsRequire="true" @onChange="getFilterData()" />
+            <ICheckbox :label="t('Bonus.IsBoundFilter') + ' ' + t('Days')" v-model="searchFilter.isBound"
+              :IsRequire="true" @onChange="getFilterData()" />
+            <IInput v-model="searchFilter.bound" type="number" :OnKeyEnter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>

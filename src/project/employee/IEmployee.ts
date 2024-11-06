@@ -31,14 +31,13 @@ export interface IEmployee {
   vacationSick?: Array<IVacationSick>;
   vacationTime?: Array<IVacationTime>;
   issueDate?:string;
-  BonusJobTitle: IBonusJobTitle;
-  BonusStudy: IBonusStudy;
-  BonusDegreeStage: IBonusDegreeStage;
+  BonusJobTitle?: IBonusJobTitle;
+  BonusStudy?: IBonusStudy;
+  BonusDegreeStage?: IBonusDegreeStage;
   Files?: Array<IDocument>;
-  numberLastBonus: number;
-  dateLastBonus: string;
-  dateLastWorth: string;
-  dateNextWorth: string;
+  numberLastBonus?: string;
+  dateLastBonus?: string;
+  dateNextBonus?: string;
   isChecked?: boolean;
 }
 export interface IEmployeeBonus {
@@ -50,14 +49,24 @@ export interface IEmployeeBonus {
   bonusJobTitle: string;
   bonusStudy: string;
   bonusDegreeStage: string;
-  numberLastBonus: number;
+  numberLastBonus: string;
   dateLastBonus: string;
   difNextDate:string;
-  dateNextWorth: string;
+  dateNextBonus: string;
 }
 export interface IEmployeeLite {
   id: number;
   name: string;
+}
+export interface IEmployeeLiteBonus {
+  id: number;
+  name: string;
+  dateLastBonus: string;
+  dateNextBonus: string;
+  numberLastBonus: string;
+  BonusDegreeStage: IBonusDegreeStage;
+  BonusJobTitle: IBonusJobTitle;
+  BonusStudy: IBonusStudy;
 }
 
 export interface IEmployeeHistory {

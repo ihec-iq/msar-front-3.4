@@ -384,7 +384,7 @@ onMounted(async () => {
   isLoading.value = false;
 });
 const changeSelectedType = () => {
-  hrDocument.value.addDays = Number(hrDocument.value.Type.addDays);
+  hrDocument.value.addDays = hrDocument.value.Type.addDays? Number(hrDocument.value.Type.addDays) : 0;
 }
 </script>
 <template>

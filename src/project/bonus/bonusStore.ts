@@ -9,12 +9,34 @@ export const useBonusStore = defineStore("BonusStore", () => {
   const Bonus = ref<IBonus>({
     id: 0,
     issueDate: new Date().toISOString().split("T")[0],
-    dateWorth: new Date().toISOString().split("T")[0],
-    numberBonus: "",
-    Employee: { id: 0, name: "" },
-    BonusJobTitle: { id: 0, name: "", description: "" },
-    BonusStudy: { id: 0, name: "" },
-    BonusDegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBonus: 0, yearlyService: 0 },
+    number: "",
+    Employee: {
+      id: 0,
+      name: "",
+      dateLastBonus: "",
+      dateNextBonus: "",
+      numberLastBonus: "",
+      BonusDegreeStage: {
+        id: 0,
+        title: "",
+        Degree: { id: 0, name: "" },
+        Stage: { id: 0, name: "" },
+        salery: 0,
+        yearlyBonus: 0,
+        yearlyService: 0
+      },
+      BonusJobTitle: { id: 0, name: "", description: "" },
+      BonusStudy: { id: 0, name: "" }
+    },
+    BonusDegreeStage: {
+      id: 0,
+      title: "",
+      Degree: { id: 0, name: "" },
+      Stage: { id: 0, name: "" },
+      salery: 0,
+      yearlyBonus: 0,
+      yearlyService: 0
+    },
     notes: ""
   });
   const BonusJobTitle = ref<IBonusJobTitle>({ id: 0, name: "", description: "" });
@@ -35,20 +57,41 @@ export const useBonusStore = defineStore("BonusStore", () => {
   const error = ref<string | null>(null);
 
   const sortedBonuses = computed(() => {
-    return [...Bonuses.value].sort((a, b) => a.numberBonus.localeCompare(b.numberBonus));
+    return [...Bonuses.value].sort((a, b) => a.number.localeCompare(b.number));
   });
-
 
   const resetDataBonus = () => {
     Bonus.value = {
       id: 0,
       issueDate: new Date().toISOString().split("T")[0],
-      dateWorth: new Date().toISOString().split("T")[0],
-      numberBonus: "",
-      Employee: { id: 0, name: "" },
-      BonusJobTitle: { id: 0, name: "", description: "" },
-      BonusStudy: { id: 0, name: "" },
-      BonusDegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBonus: 0, yearlyService: 0 },
+      number: "",
+      Employee: {
+        id: 0,
+        name: "",
+        dateLastBonus: "",
+        dateNextBonus: "",
+        numberLastBonus: "",
+        BonusDegreeStage: { // Added this property
+          id: 0,
+          title: "",
+          Degree: { id: 0, name: "" },
+          Stage: { id: 0, name: "" },
+          salery: 0,
+          yearlyBonus: 0,
+          yearlyService: 0
+        },
+        BonusJobTitle: { id: 0, name: "", description: "" },
+        BonusStudy: { id: 0, name: "" }
+      },
+      BonusDegreeStage: {
+        id: 0,
+        title: "",
+        Degree: { id: 0, name: "" },
+        Stage: { id: 0, name: "" },
+        salery: 0,
+        yearlyBonus: 0,
+        yearlyService: 0
+      },
       notes: ""
     };
   }
@@ -83,7 +126,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
   async function get_BonusJobTitle(params: object = {}) {
     return await Api.get(`bonus_job_title`, { params }).then((response) => {
       if (response.status == 200) {
-        BonusJobTitles.value = response.data.data; console.log(BonusJobTitles.value)
+        BonusJobTitles.value = response.data.data;
       }
     });
   }

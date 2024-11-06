@@ -24,16 +24,6 @@ const disabledChangeEmployee = ref(false);
 const { checkPermissionAccessArray } = usePermissionsStore();
 const BonusStore = useBonusStore();
 const { Bonus } = storeToRefs(BonusStore);
-
-
-const ChangeBonusDegreeStage = async () => {
-  if (Bonus.value.BonusDegreeStage.Degree) {
-    await BonusStore.get_BonusJobTitle({ bonusDegreeId: Bonus.value.BonusDegreeStage.Degree.id }).then((response) => {
-    })
-  }
-}
-
-
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
 const namePage = ref("Bonus.Add");
@@ -145,10 +135,10 @@ onMounted(async () => {
   } else {
     // it selected employee
     disabledChangeEmployee.value = true
-    useEmployeeStore().showLite(employeeId.value).then((response) => {
+    useEmployeeStore().showBonusLite(employeeId.value).then((response) => {
       reset()
-      Bonus.value.Employee.id = response.data.data.id
-      Bonus.value.Employee.name = response.data.data.name
+      console.log(response.data.data)
+      Object.assign(Bonus.value.Employee, response.data.data)
     })
   }
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -170,71 +160,27 @@ onMounted(async () => {
       <IButton2 color="green" width="28" type="outlined" preIcon="view-grid-plus" :onClick="reset" :text="t('New')" />
     </template>
     <IPageContent>
+      <!-- for old data of employee -->
       <IRow>
-        <IRow col-lg="4" col-md="2" col-sm="1">
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" type="date" />
+        {{ Bonus.Employee }}
+        <IRow col-lg="4" col-md="2" col-sm="1" v-if="Bonus.Employee"
+          class="rounded-sm border-2 border-solid border-red-700">
+          <ICol span="1" span-md="2" span-sm="4">
+            <IInput :label="t('Bonus.JobTitle')" name="JobTitle" v-if="Bonus.Employee.BonusJobTitle" disabled
+              v-model="Bonus.Employee.BonusJobTitle.name" type="text" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="Bonus.numberBonus"
+            <IInput :label="t('Bonus.dateNextBonus')" name="dateLastBonus" disabled v-model="Bonus.Employee.dateLastBonus"
+              type="date" />
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" disabled v-model="Bonus.Employee.numberLastBonus"
               type="text" />
           </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateWorth')" name="dateLastWorth" v-model="Bonus.dateWorth" type="date" />
-          </ICol>
-          <ICol span="1" span-md="2" span-sm="4">
-            <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-              {{ t("Bonus.Study") }}
-            </div>
-            <vSelect
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonus.BonusStudy" :options="BonusStore.BonusStudies" :reduce="(BonusStudy) => BonusStudy"
-              label="name" :getOptionLabel="(BonusStudy) => BonusStudy.name">
-              <template #option="{ name }">
-                <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
-                  <span>{{ name }}</span>
-                </div>
-              </template>
-            </vSelect>
-          </ICol>
+        </IRow>
 
-
-          <ICol span="1" span-md="2" span-sm="4">
-            <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-              {{ t("Bonus.DegreeStage") }}
-            </div>
-            <vSelect
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonus.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
-              @update:model-value="ChangeBonusDegreeStage"
-              :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
-              :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
-              <template #option="{ title, salery, yearlyBonus, yearlyService }">
-                <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
-                  <span>{{ title }} </span><br>
-                  <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
-                  <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span><br>
-                  <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
-                </div>
-              </template>
-            </vSelect>
-          </ICol>
-          <ICol span="1" span-md="2" span-sm="4">
-            <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-              {{ t("Bonus.JobTitle") }}
-            </div>
-            <vSelect
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonus.BonusJobTitle" :options="BonusStore.BonusJobTitles"
-              :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
-              :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
-              <template #option="{ name }">
-                <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
-                  <span>{{ name }}</span>
-                </div>
-              </template>
-            </vSelect>
-          </ICol>
+        <!-- for new Bonus of employee -->
+        <IRow col-lg="4" col-md="2" col-sm="1">
           <ICol span="1" span-md="2" span-sm="4">
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
               {{ t("Employee.Title") }}
@@ -250,6 +196,34 @@ onMounted(async () => {
               </template>
             </vSelect>
           </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" type="date" />
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Bonus.number')" name="number" v-model="Bonus.number" type="text" />
+          </ICol>
+
+          <ICol span="1" span-md="2" span-sm="4">
+            <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              {{ t("Bonus.DegreeStage") }}
+            </div>
+            <vSelect
+              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              v-model="Bonus.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
+              :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
+              :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
+              <template #option="{ title, salery, yearlyBonus, yearlyService }">
+                <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                  <span>{{ title }} </span><br>
+                  <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
+                  <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span><br>
+                  <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
+                </div>
+              </template>
+            </vSelect>
+          </ICol>
+
+
         </IRow>
       </IRow>
     </IPageContent>

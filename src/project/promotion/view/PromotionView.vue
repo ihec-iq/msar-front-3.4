@@ -25,7 +25,12 @@ const { promotion } = storeToRefs(PromotionStore); // Updated reference
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
 const namePage = ref("Promotion.Add"); // Updated page name
-
+const ChangeBonusDegreeStage = async () => {
+    if (promotion.value.BonusDegreeStage.Degree) {
+        await useBonusStore().get_BonusJobTitle({ bonusDegreeId: promotion.value.BonusDegreeStage.Degree.id }).then((response) => {
+        })
+    }
+}
 const store = async () => {
     errors.value = null;
     const formData = prepareFormData(promotion.value); // Updated reference
@@ -79,7 +84,7 @@ onMounted(async () => {
     checkPermissionAccessArray([EnumPermission.ShowEmployees]);
 
     await Promise.all([
-        useBonusStore() .get_BonusJobTitle(), // Updated store method
+        useBonusStore().get_BonusJobTitle(), // Updated store method
         useBonusStore().get_BonusDegreeStage(), // Updated store method
         useBonusStore().get_Employees()
     ]);
@@ -112,15 +117,15 @@ onMounted(async () => {
                     <ICol span="1" span-md="1" span-sm="1">
                         <IInput :label="t('Promotion.numberLastPromotion')" name="numberLastPromotion"
                             v-model="promotion.numberPromotion" type="text" /> <!-- Updated reference -->
-                    </ICol> 
+                    </ICol>
                     <ICol span="1" span-md="2" span-sm="4">
                         <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                             {{ t("Promotion.JobTitle") }} <!-- Updated label -->
                         </div>
                         <vSelect
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                            v-model="promotion.BonusJobTitle" :options="useBonusStore().BonusJobTitles"  
-                            :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle" 
+                            v-model="promotion.BonusJobTitle" :options="useBonusStore().BonusJobTitles"
+                            :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
                             :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
                             <template #option="{ name }">
                                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
@@ -136,9 +141,9 @@ onMounted(async () => {
                         <vSelect
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                             v-model="promotion.BonusDegreeStage" :options="useBonusStore().BonusDegreeStages"
-                             :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage"
-                            label="title"
-                            :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) =>
+                            :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage"
+                            @update:model-value="ChangeBonusDegreeStage"
+                             label="title" :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) =>
                             BonusDegreeStage.title">
                             <template #option="{ title }">
                                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">

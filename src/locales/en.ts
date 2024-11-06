@@ -183,7 +183,7 @@ export default {
     Portal: "Bonus Portal",
     dateWorth: "Date Last Worth",
     difNextDate: "Days worth",
-    dateNextWorth: "Date Next Worth",
+    dateNextBonus: "Date Next Worth",
     numberLastBonus: "Number Last Bonus",
     JobTitle: "Job Title",
     JobTitleAdd: "Add Job Title",
@@ -199,7 +199,8 @@ export default {
     Alert: "Alert Bonuses",
     Refresh: "Refresh Data",
     ReCalculate: "Recalculate Data",
-    IsBoundFilter: "Filter Rusult on "
+    IsBoundFilter: "Filter Rusult on ",
+    number: "Number Bonus"
   },
   Refresh: "Refresh",
   UserIndex: "User System",

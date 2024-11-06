@@ -140,60 +140,6 @@ const store = async () => {
     }
   }
 }
-const storeOld = () => {
-  errors.value = null;
-  const formData = new FormData();
-  employee.value.isPerson = isPerson.value ? 1 : 0;
-  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
-  formData.append("id", employee.value.id.toString());
-  formData.append("name", employee.value.name.toString());
-  formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("isMoveSection", employee.value.isMoveSection.toString());
-  formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
-  formData.append("sectionId", employee.value.Section.id.toString());
-  formData.append("positionId", employee.value.EmployeePosition.id.toString());
-  formData.append("typeId", employee.value.EmployeeType.id.toString());
-  formData.append("centerId", employee.value.EmployeeCenter.id.toString());
-  formData.append("UserId", String(employee.value.User?.id));
-  formData.append("number", String(employee.value.number));
-  formData.append("telegram", String(employee.value.telegram));
-  formData.append("dateWork", String(employee.value.dateWork));
-  formData.append("idCard", employee.value.idCard.toString());
-  formData.append("initVacation", employee.value.initVacation.toString());
-  formData.append("takeVacation", employee.value.takeVacation.toString());
-  formData.append(
-    "initVacationSick",
-    employee.value.initVacationSick.toString()
-  );
-  formData.append(
-    "takeVacationSick",
-    employee.value.takeVacationSick.toString()
-  );
-
-  employeeStore
-    .store(formData)
-    .then((response) => {
-      if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your employee has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        router.go(-1);
-      }
-    })
-    .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = employeeStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "create new data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
-    });
-};
 const update = async () => {
   errors.value = null;
   validationResult.value = validate(employee.value, rules);
@@ -222,59 +168,7 @@ const update = async () => {
     });
   }
 };
-function updateOld() {
-  errors.value = null;
-  const formData = new FormData();
-  employee.value.isPerson = isPerson.value ? 1 : 0;
-  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
 
-  formData.append("name", employee.value.name.toString());
-  formData.append("isPerson", employee.value.isPerson.toString());
-  formData.append("sectionId", employee.value.Section.id.toString());
-  formData.append("isMoveSection", employee.value.isMoveSection.toString());
-  formData.append("MoveSectionId", employee.value.MoveSection.id.toString());
-  formData.append("positionId", employee.value.EmployeePosition.id.toString());
-  formData.append("typeId", employee.value.EmployeeType.id.toString());
-  formData.append("centerId", employee.value.EmployeeCenter.id.toString());
-  formData.append("UserId", String(employee.value.User?.id));
-  formData.append("number", String(employee.value.number));
-  formData.append("telegram", String(employee.value.telegram));
-  formData.append("dateWork", String(employee.value.dateWork));
-  formData.append("idCard", String(employee.value.idCard));
-  formData.append("initVacation", employee.value.initVacation.toString());
-  formData.append("takeVacation", employee.value.takeVacation.toString());
-  formData.append(
-    "initVacationSick",
-    employee.value.initVacationSick.toString()
-  );
-  formData.append(
-    "takeVacationSick",
-    employee.value.takeVacationSick.toString()
-  );
-  employeeStore
-    .update(employee.value.id, formData)
-    .then((response) => {
-      if (response.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Your employee has been updated",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        showData();
-      }
-    })
-    .catch((error) => {
-      //errors.value = Object.values(error.response.data.errors).flat().join();
-      errors.value = employeeStore.getError(error);
-      Swal.fire({
-        icon: "error",
-        title: "updating data fails!!!",
-        text: error.response.data.message,
-        footer: "",
-      });
-    });
-}
 const Delete = async () => {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -326,7 +220,7 @@ const showData = async () => {
         // employee.value.EmployeeCenter = response.data.data.EmployeeCenter;
         // employee.value.EmployeePosition = response.data.data.EmployeePosition;
         // employee.value.isPerson = response.data.data.isPerson;
-        Object.assign(employee.value, response.data.data); console.log(response.data.data)
+        Object.assign(employee.value, response.data.data); console.log(response.data)
         isPerson.value = response.data.data.isPerson == 0 ? false : true;
         isMoveSection.value =
           response.data.data.isMoveSection == 0 ? false : true;
@@ -334,6 +228,8 @@ const showData = async () => {
     })
     .catch((errors) => {
       console.log(errors);
+      let error = getError(errors);
+      console.log(error);
       Swal.fire({
         icon: "warning",
         title: "Your employee file not exist !!!",
@@ -402,6 +298,7 @@ import { prepareFormData } from "@/utilities/crudTool";
 import { SuccessToast } from "@/utilities/Toast";
 import EditButton from "@/components/dropDown/EditButton.vue";
 import { Icon } from "@iconify/vue";
+import { getError } from "@/utilities/helpers";
 
 const { get_filter } = useHrDocumentStore();
 
@@ -554,11 +451,7 @@ const active = ref(0);
                   type="date" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.dateLastWorth')" name="dateLastWorth" v-model="employee.dateLastWorth"
-                  type="date" />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.dateNextWorth')" name="dateNextWorth" disabled v-model="employee.dateNextWorth"
+                <IInput :label="t('Bonus.dateNextBonus')" name="dateNextBonus" disabled v-model="employee.dateNextBonus"
                   type="date" />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
