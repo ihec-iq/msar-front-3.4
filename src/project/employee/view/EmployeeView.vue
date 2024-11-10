@@ -13,6 +13,7 @@ import { t } from "@/utilities/I18nPlugin";
 import type { IUser } from "@/project/user/IUser";
 import { useUserStore } from "@/project/user/userStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
@@ -361,7 +362,8 @@ const active = ref(0);
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" type="outlined" pre-icon="view-grid-plus" :onClick="reset" :text="t('New')" />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>
@@ -515,7 +517,7 @@ const active = ref(0);
                   :IsRequire="true" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IButton2 type="outlined" class="mt-3" v-if="employee.User?.id" :on-click="ShowUser"
+                <IButton2 :type="EnumButtonType.Outlined" class="mt-3" v-if="employee.User?.id" :on-click="ShowUser"
                   :text="t('Open')" />
               </ICol>
             </IRow>

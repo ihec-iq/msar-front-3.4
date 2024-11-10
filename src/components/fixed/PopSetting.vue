@@ -21,6 +21,7 @@ const change = () => {
 import { useAuthStore } from "@/stores/authStore";
 import IButton2 from "../ihec/IButton2.vue";
 import { Icon } from "@iconify/vue";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 const AuthStore = useAuthStore();
 const { isAuthenticated } = storeToRefs(useAuthStore());
 const logout = () => {
@@ -110,7 +111,8 @@ const colorMode = useColorMode({
             {{ t("Logout") }}
           </div>
           <div class="flex items-center">
-            <IButton2 type="outlined" pre-icon="logout" color="red" :text="t('Logout')" :on-click="logout" width="32" />
+            <IButton2 :type="EnumButtonType.Outlined" pre-icon="logout" color="red" :text="t('Logout')" :on-click="logout"
+              width="32" />
           </div>
         </div>
         <!-- <div class="mt-10 flex item-center justify-between mx-6">

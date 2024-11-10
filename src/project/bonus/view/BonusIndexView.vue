@@ -2,7 +2,7 @@
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useBonusStore } from "../bonusStore";
- 
+
 import { storeToRefs } from "pinia";
 
 import { TailwindPagination } from "laravel-vue-pagination";
@@ -39,7 +39,7 @@ watch(
 const add = () => {
   useBonusStore().resetDataBonus();
   router.push({
-    name: "bonusAdd",   
+    name: "bonusAdd",
   });
 };
 
@@ -73,6 +73,8 @@ const getFilterData = async (page = 1) => {
   //searchFilter.value.title = fastSearch.value.toString();
   await get_filter(searchFilter.value, page)
     .then((response) => {
+      console.log(response.data.data);
+
       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
@@ -91,7 +93,7 @@ const update = (id: number) => {
     params: { id: id },
   });
 };
- 
+
 //#region Pagination
 //#endregion
 onMounted(async () => {
@@ -110,13 +112,11 @@ onMounted(async () => {
 });
 
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Title"), value: "title" },
+  { caption: t("Bonus.number"), value: "number" },
   { caption: t("Details"), value: "actions" },
   { caption: t("Employee.Title"), value: "EmployeeName" },
   { caption: t("Date"), value: "issueDate" },
   { caption: t("Bonus.DegreeStage"), value: "BonusDegreeStage" },
-  { caption: t("Bonus.JobTitle"), value: "BonusJobTitle" },
-  { caption: t("Bonus.Study"), value: "BonusStudy" },
 ]);
 </script>
 <template>
@@ -148,12 +148,6 @@ const headers = ref<Array<ITableHeader>>([
         <ITable :items="data" :headers="headers">
           <template v-slot:EmployeeName="{ row }">
             <span>{{ row.Employee.name }}</span>
-          </template>
-          <template v-slot:BonusJobTitle="{ row }">
-            <span>{{ row.BonusJobTitle.name }}</span>
-          </template>
-          <template v-slot:BonusStudy="{ row }">
-            <span>{{ row.BonusStudy.name }}</span>
           </template>
           <template v-slot:BonusDegreeStage="{ row }">
             <span>{{ row.BonusDegreeStage.title }}</span>

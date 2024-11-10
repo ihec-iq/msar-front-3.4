@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import { useArchiveTypeStore } from "../archiveTypeStore";
 import {
   useValidation,
@@ -173,7 +174,7 @@ const reset = () => {
       <IButton2
         color="green"
         width="28"
-        type="outlined"
+        :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"

@@ -20,6 +20,7 @@ import CardItemCategoryIndex from "./CardItemCategoryIndex.vue";
 import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import IPage from "@/components/ihec/IPage.vue";
+import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -110,7 +111,7 @@ console.log("in index catitem");
               :label="t('Search')"
               :placeholder="t('Search')"
               v-model="fastSearch"
-              type="text"
+              :type="EnumInputType.Text"
               :OnKeyEnter="getFilterData"
             />
           </ICol>

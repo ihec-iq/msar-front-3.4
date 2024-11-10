@@ -8,6 +8,7 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 
@@ -167,39 +168,20 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2
-        color="green"
-        width="28"
-        type="outlined"
-        pre-icon="view-grid-plus"
-        :onClick="reset"
-        :text="t('New')"
-      />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>
         <IRow col-lg="2" col="2" col-md="2">
           <ICol>
-            <IInput
-              :label="t('Name')"
-              name="name"
-              v-model="category.name"
-              type="text"
-          /></ICol>
+            <IInput :label="t('Name')" name="name" v-model="category.name" type="text" />
+          </ICol>
           <ICol>
-            <IInput
-              :label="t('Description')"
-              name="description"
-              v-model="category.description"
-              type="text"
-          /></ICol>
+            <IInput :label="t('Description')" name="description" v-model="category.description" type="text" />
+          </ICol>
         </IRow>
-        <IFooterCrud
-          :isAdd="category.id == 0"
-          :onCreate="store"
-          :onUpdate="update"
-          :onDelete="Delete"
-        />
+        <IFooterCrud :isAdd="category.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
       </IRow>
     </IPageContent>
   </IPage>

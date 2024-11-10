@@ -2,6 +2,10 @@
 import { computed } from "vue";
 
 const props = defineProps({
+  title: {
+    type: [String],
+    default: "",
+  },
   col: {
     type: [Number, String],
     default: 1,
@@ -47,12 +51,14 @@ const debugClass = computed(() => {
 });
 </script>
 <template>
-  <div
-    name="Row#"
-    :class="[colClass, debugClass]"
-    class="lg:justify-around xs:items-center mt-4 w-full px-1"
-  >
-    <div v-if="debug">{{ colClass }}</div>
-    <slot></slot>
+  <div class="w-full">
+    <div v-if="title"
+      class="hover:text-gray-300 dark:hover:text-gray-700 duration-300 text-lg font-bold header-title text-blue-700 dark:text-blue-300 py-2 w-full basis-full px-2 bg-gray-200 dark:bg-gray-800">
+      {{ title }}</div>
+    <div name="Row#" :class="[colClass, debugClass]" class="lg:justify-around xs:items-center mt-4 w-full px-1">
+      <div v-if="debug">{{ colClass }}</div>
+      <slot></slot>
+    </div>
   </div>
+
 </template>

@@ -139,6 +139,8 @@ export default {
   Organization: "Organization",
   IsActive: "Active",
   Day: "Day",
+  Days: "Days",
+  ShowNotes: "Show Notes",
   EmployeeAdd: "Add new employee",
   EmployeeUpdate: "update employee",
   EmployeeIndex: "Employees",
@@ -185,6 +187,7 @@ export default {
     difNextDate: "Days worth",
     dateNextBonus: "Date Next Worth",
     numberLastBonus: "Number Last Bonus",
+    oldEmployeeData: "Old Employee Data",
     JobTitle: "Job Title",
     JobTitleAdd: "Add Job Title",
     JobTitleUpdate: "Update Job Title",
@@ -200,7 +203,8 @@ export default {
     Refresh: "Refresh Data",
     ReCalculate: "Recalculate Data",
     IsBoundFilter: "Filter Rusult on ",
-    number: "Number Bonus"
+    number: "Number Bonus",
+    notes: "Notes"
   },
   Refresh: "Refresh",
   UserIndex: "User System",

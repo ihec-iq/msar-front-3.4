@@ -10,6 +10,7 @@ import type { IEmployeeLite } from "@/project/employee/IEmployee";
 import type { IHrDocumentType } from "../IHrDocument";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import ISelectObject from "@/components/inputs/ISelectObject.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
@@ -390,7 +391,8 @@ const changeSelectedType = () => {
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" type="outlined" pre-icon="view-grid-plus" :onClick="reset" :text="t('New')" />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>

@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 import { t } from "@/utilities/I18nPlugin";
 import IButton from "./IButton.vue";
-import IButton2 from "./IButton2.vue";
+import IButton2, { EnumButtonType } from "./IButton2.vue";
 
 const props = defineProps({
   onCreate: {
@@ -79,7 +79,7 @@ const goBack = () => {
       color="red"
       :onClick="goBack"
       pre-icon="arrow-left-top"
-      type="text"
+      :type="EnumButtonType.Text"
       :text="t('Back')"
       class="text-lg"
     />

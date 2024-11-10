@@ -6,6 +6,7 @@ import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import vSelect from "vue-select";
 import { useBonusStore } from "@/project/bonus/bonusStore";
 import { SuccessToast } from "@/utilities/Toast";
@@ -14,6 +15,9 @@ import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import { prepareFormData } from "@/utilities/crudTool";
 import { useEmployeeStore } from "@/project/employee/employeeStore";
+import IRow from "@/components/ihec/IRow.vue";
+import IRichtext from "@/components/ihec/IRichtext.vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -139,6 +143,7 @@ onMounted(async () => {
       reset()
       console.log(response.data.data)
       Object.assign(Bonus.value.Employee, response.data.data)
+      Bonus.value.BonusDegreeStage = response.data.data.BonusDegreeStage
     })
   }
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -157,36 +162,44 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
     <template #headerButtons>
-      <IButton2 color="green" width="28" type="outlined" preIcon="view-grid-plus" :onClick="reset" :text="t('New')" />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" preIcon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <!-- for old data of employee -->
+
+
       <IRow>
-        {{ Bonus.Employee }}
-        <IRow col-lg="4" col-md="2" col-sm="1" v-if="Bonus.Employee"
-          class="rounded-sm border-2 border-solid border-red-700">
+        <IRow v-if="isLoading">
+          <div class="skeleton h-32 w-full"></div>
+        </IRow>
+        <IRow v-else :title="t('Bonus.oldEmployeeData')" col-lg="4" col-md="2" col-sm="1"
+          class="rounded-sm border-2 border-solid border-red-400">
           <ICol span="1" span-md="2" span-sm="4">
-            <IInput :label="t('Bonus.JobTitle')" name="JobTitle" v-if="Bonus.Employee.BonusJobTitle" disabled
-              v-model="Bonus.Employee.BonusJobTitle.name" type="text" />
-          </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.dateNextBonus')" name="dateLastBonus" disabled v-model="Bonus.Employee.dateLastBonus"
-              type="date" />
-          </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" disabled v-model="Bonus.Employee.numberLastBonus"
+            <IInput :label="t('Bonus.JobTitle')" name="JobTitle" disabled v-model="Bonus.Employee.BonusJobTitle.name"
               type="text" />
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Bonus.dateWorth')" name="dateWorth" disabled v-model="Bonus.Employee.dateNextBonus" />
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" disabled
+              v-model="Bonus.Employee.numberLastBonus" type="text" />
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Bonus.DegreeStage')" name="degreeStage" disabled
+              v-model="Bonus.Employee.BonusDegreeStage.title" />
           </ICol>
         </IRow>
 
         <!-- for new Bonus of employee -->
         <IRow col-lg="4" col-md="2" col-sm="1">
           <ICol span="1" span-md="2" span-sm="4">
-            <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+            <div class=" md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
               {{ t("Employee.Title") }}
             </div>
             <vSelect :disabled="disabledChangeEmployee"
-              class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              class="w-full outline-none h-10 px-2 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
               v-model="Bonus.Employee" :options="BonusStore.Employees" :reduce="(employee: IEmployeeLite) => employee"
               label="name" :getOptionLabel="(employee: IEmployeeLite) => employee.name">
               <template #option="{ name }">
@@ -221,9 +234,14 @@ onMounted(async () => {
                 </div>
               </template>
             </vSelect>
+          </ICol> 
+        </IRow>
+        <IRow>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IButton2 :type="EnumButtonType.Outlined" :onClick="() => Bonus.notes = 'اكتب ملاحظاتك'" :text="t('ShowNotes')"
+              v-if="Bonus.notes.length == 0" />
+            <IRichtext :label="t('Bonus.notes')" v-if="Bonus.notes.length > 0" name="notes" v-model="Bonus.notes" />
           </ICol>
-
-
         </IRow>
       </IRow>
     </IPageContent>

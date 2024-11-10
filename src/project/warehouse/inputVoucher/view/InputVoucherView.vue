@@ -16,8 +16,8 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 import ICol from "@/components/ihec/ICol.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ILabel from "@/components/ihec/ILabel.vue";
-import IInput from "@/components/inputs/IInput.vue";
-import IButton from "@/components/ihec/IButton2.vue";
+import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import IButton, { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import IContainer from "@/components/ihec/IContainer.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
@@ -410,7 +410,7 @@ const headers = ref<Array<ITableHeader>>([
       <IButton2
         color="green"
         width="28"
-        type="outlined"
+        :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -425,7 +425,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('InputVoucher.Number')"
                 name="InputVoucher.Number"
                 v-model="inputVoucher.number"
-                type="text"
+                :type="EnumInputType.Text"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -433,7 +433,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('Date')"
                 name="InputVoucher.Date"
                 v-model="inputVoucher.date"
-                type="date"
+                :type="EnumInputType.Date"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -441,7 +441,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('InputVoucher.DateReceive')"
                 name="InputVoucher.DateReceive"
                 v-model="inputVoucher.dateReceive"
-                type="date"
+                :type="EnumInputType.Date"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -449,7 +449,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('InputVoucher.DateBill')"
                 name="InputVoucherNumer"
                 v-model="inputVoucher.dateBill"
-                type="date"
+                :type="EnumInputType.Date"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -457,7 +457,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('InputVoucher.NumberBill')"
                 name="InputVoucher.NumberBill"
                 v-model="inputVoucher.numberBill"
-                type="text"
+                :type="EnumInputType.Text"
               />
             </ICol>
             <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
@@ -490,7 +490,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('InputVoucherEmployeeRequest')"
                 name="InputVoucherNumer"
                 v-model="inputVoucher.requestedBy"
-                type="text"
+                :type="EnumInputType.Text"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -498,7 +498,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('InputVoucherSignaturePerson')"
                 name="InputVoucherNumer"
                 v-model="inputVoucher.signaturePerson"
-                type="text"
+                :type="EnumInputType.Text"
               />
             </ICol>
           </IRow>
@@ -508,7 +508,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('Notes')"
                 name="InputVoucherNumer"
                 v-model="inputVoucher.notes"
-                type="text"
+                :type="EnumInputType.Text"
               />
             </ICol>
           </IRow>
@@ -702,7 +702,7 @@ const headers = ref<Array<ITableHeader>>([
             <IInput
               :label="t('Count')"
               :on-input="ChangeValueTotal"
-              type="number"
+              :type="EnumInputType.Number"
               v-model="VoucherItemTemp.count"
               :min="1"
             />
@@ -711,7 +711,7 @@ const headers = ref<Array<ITableHeader>>([
             <IInput
               :label="t('Price')"
               :on-input="ChangeValueTotal"
-              type="number"
+              :type="EnumInputType.Number"
               v-model="VoucherItemTemp.price"
               :min="1"
             />
@@ -719,14 +719,14 @@ const headers = ref<Array<ITableHeader>>([
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
               :label="t('Total')"
-              type="number"
+              :type="EnumInputType.Number"
               v-model="VoucherItemTemp.value"
             />
           </ICol>
           <ICol :span="4" span-lg="4" span-xl="1" span-md="1">
             <IInput
               :label="t('Notes')"
-              type="text"
+              :type="EnumInputType.Text"
               v-model="VoucherItemTemp.notes"
             />
           </ICol>
@@ -736,14 +736,14 @@ const headers = ref<Array<ITableHeader>>([
           <IButton
             :text="t('Add')"
             color="blue"
-            type="default"
+            :type="EnumButtonType.Default"
             :on-click="AddItem"
             v-if="IsAdd"
           />
           <IButton
             :text="t('Update')"
             color="blue"
-            type="default"
+            :type="EnumButtonType.Default"
             :on-click="EditItem"
             v-else
           />
@@ -752,7 +752,7 @@ const headers = ref<Array<ITableHeader>>([
             pre-icon="close-box"
             :text="t('Close')"
             color="blue"
-            type="text"
+            :type="EnumButtonType.Text"
             :on-click="() => (showPop = false)"
           />
         </IContainer>

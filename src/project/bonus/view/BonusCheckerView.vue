@@ -80,6 +80,7 @@ const getFilterData = async (page = 1) => {
   localStorage.setItem("checkBonus", page.toString());
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
+  searchFilter.value.bound = searchFilter.value.bound == 0 ? 0 : searchFilter.value.bound;
   await get_checkBonus(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -171,10 +172,10 @@ const headers = ref<Array<ITableHeader>>([
             <ISelect :label="t('BonusSection')" v-model="searchFilter.sectionId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol> -->
-          <ICol :span-lg="1" :span-md="2" :span="1">
+          <ICol :span-lg="1" :span-md="2" :span="1" class="flex items-center">
             <ICheckbox :label="t('Bonus.IsBoundFilter') + ' ' + t('Days')" v-model="searchFilter.isBound"
               :IsRequire="true" @onChange="getFilterData()" />
-            <IInput v-model="searchFilter.bound" type="number" :OnKeyEnter="getFilterData" />
+            <IInput v-model="searchFilter.bound"  type="number" class="w-[100px]" @keyup.enter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>

@@ -11,6 +11,8 @@ import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import type { IItem } from "../IItem";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
+import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
 
 //region"Drag and Drop"
 
@@ -183,7 +185,7 @@ const reset = () => {
       <IButton2
         color="green"
         width="28"
-        type="outlined"
+        :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -198,14 +200,14 @@ const reset = () => {
                 :label="t('Item.Name')"
                 name="name"
                 v-model="item.name"
-                type="text"
+                :type="EnumInputType.Text"
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('Item.Code')"
                 name="code"
                 v-model="item.code"
-                type="text"
+                :type="EnumInputType.Text"
             /></ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <ISelect
@@ -221,7 +223,7 @@ const reset = () => {
                 :label="t('Item.Unit')"
                 name="Item.Unit"
                 v-model="item.measuringUnit"
-                type="text"
+                :type="EnumInputType.Text"
             /></ICol>
           </IRow>
           <IRow>
@@ -230,7 +232,7 @@ const reset = () => {
                 :label="t('Description')"
                 name="name"
                 v-model="item.description"
-                type="text"
+                :type="EnumInputType.Text"
             /></ICol>
           </IRow>
         </IForm>

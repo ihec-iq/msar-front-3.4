@@ -3,11 +3,26 @@ import { EnumDirection } from "@/utilities/EnumSystem";
 import { ref, onMounted } from "vue";
 const modelValue = defineModel<any>();
 import { t } from "@/utilities/I18nPlugin";
-
+export enum EnumInputType {
+  Text = "text",
+  Number = "number",
+  Password = "password",
+  Email = "email",
+  Date = "date",
+  Time = "time",
+  DateTime = "datetime",
+  Tel = "tel",
+  Url = "url",
+  Search = "search",
+  Range = "range",
+  Color = "color",
+  File = "file",
+  Hidden = "hidden",
+}
 const props = defineProps({
   type: {
-    type: String,
-    default: "text",
+    type: String as () => EnumInputType,
+    default: EnumInputType.Text,
   },
   label: {
     type: String,

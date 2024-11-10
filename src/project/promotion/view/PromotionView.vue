@@ -14,6 +14,8 @@ import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus"; // U
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import { prepareFormData } from "@/utilities/crudTool";
 import { useBonusStore } from "@/project/bonus/bonusStore";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
+import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -104,19 +106,20 @@ onMounted(async () => {
 <template>
     <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
         <template #headerButtons>
-            <IButton2 color="green" width="28" type="outlined" preIcon="view-grid-plus" :onClick="reset"
+            <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" preIcon="view-grid-plus" :onClick="reset"
                 :text="t('New')" />
         </template>
         <IPageContent>
             <IRow>
                 <IRow col-lg="4" col-md="2" col-sm="1">
                     <ICol span="1" span-md="1" span-sm="1">
-                        <IInput :label="t('Date')" name="issueDate" v-model="promotion.issueDate" type="date" />
+                        <IInput :label="t('Date')" name="issueDate" v-model="promotion.issueDate"
+                            :type="EnumInputType.Date" />
                         <!-- Updated reference -->
                     </ICol>
                     <ICol span="1" span-md="1" span-sm="1">
                         <IInput :label="t('Promotion.numberLastPromotion')" name="numberLastPromotion"
-                            v-model="promotion.numberPromotion" type="text" /> <!-- Updated reference -->
+                            v-model="promotion.numberPromotion" :type="EnumInputType.Text" /> <!-- Updated reference -->
                     </ICol>
                     <ICol span="1" span-md="2" span-sm="4">
                         <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
@@ -142,9 +145,8 @@ onMounted(async () => {
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                             v-model="promotion.BonusDegreeStage" :options="useBonusStore().BonusDegreeStages"
                             :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage"
-                            @update:model-value="ChangeBonusDegreeStage"
-                             label="title" :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) =>
-                            BonusDegreeStage.title">
+                            @update:model-value="ChangeBonusDegreeStage" label="title" :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) =>
+                                BonusDegreeStage.title">
                             <template #option="{ title }">
                                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                                     <span>{{ title }} </span>

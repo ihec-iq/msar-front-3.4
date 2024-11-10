@@ -139,6 +139,8 @@ export default {
   Organization: "المؤوسسة",
   IsActive : "تفعيل",
   Day: "يوم",
+  Days: "ايام",
+  ShowNotes: "عرض الملاحظات",
   EmployeeAdd: "اضافة بيانات موظف",
   EmployeeUpdate: "تعديل بيانات موظف",
   EmployeeIndex: "بيانات الموظفين",
@@ -186,6 +188,7 @@ export default {
     dateNextBonus: "تاريخ الاستحقاق القادم",
     difNextDate: "المتبقي للاستحقاق القادم",
     numberLastBonus: "رقم اخر علاوة",
+    oldEmployeeData: "بيانات الموظف القديمة",
     JobTitle: "العنوان الوظيفي",
     JobTitleAdd: "اضافة عنوان وظيفي",
     JobTitleUpdate: "تعديل عنوان وظيفي",
@@ -201,7 +204,8 @@ export default {
     Refresh: "تحديث النتائج", 
     ReCalculate: "اعادة حساب العلاوات",
     IsBoundFilter: "عرض الاستحقاق فقط خلال الفترة",
-    number: "رقم العلاوة"
+    number: "رقم العلاوة",
+    notes: "ملاحظات"
   },
   Promotion: {
     dateLastPromotion: "تاريخ اخر ترقية",

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { t } from "@/utilities/I18nPlugin";
-import IButton2 from "./IButton2.vue";
+import IButton2, { EnumButtonType } from "./IButton2.vue";
+
 const props = defineProps({
   getDataButton: {
     type: Function,
@@ -14,7 +15,7 @@ const props = defineProps({
   <div class="rtl:ml-2 ltr:mr-2 lg:mt-0 xs:mt-2">
     <IButton2
       color="green"
-      type="outlined"
+      :type="EnumButtonType.Outlined"
       :text="t('Search')"
       preIcon="magnify"
       :onClick="props.getDataButton"

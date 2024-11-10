@@ -6,6 +6,7 @@ import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import { useBonusStore } from "@/project/bonus/bonusStore";
 import { SuccessToast } from "@/utilities/Toast";
 import {   IBonusJobTitle } from "@/project/bonus/IBonus";
@@ -142,7 +143,8 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
     <template #headerButtons>
-      <IButton2 color="green" width="28" type="outlined" preIcon="view-grid-plus" :onClick="reset" :text="t('New')" />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" preIcon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>
@@ -150,7 +152,7 @@ onMounted(async () => {
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Name')" name="Name" v-model="BonusJobTitle.name" type="text" />
           </ICol>
-           <ICol span="1" span-md="1" span-sm="1">
+          <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Description')" name="Description" v-model="BonusJobTitle.description" type="text" />
           </ICol>
         </IRow>

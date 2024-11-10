@@ -12,7 +12,7 @@ import { useVacationStore } from "../../vacationStore";
 
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
-import IInput from "@/components/inputs/IInput.vue";
+import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
 import { CNumber, makeFormDataFromObject } from "@/utilities/tools";
 import {
   useValidation,
@@ -20,6 +20,7 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 import { WarningToast } from "@/utilities/Toast";
+import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 
 const { validate, min, required, isObject, max, number } = useValidation();
 
@@ -250,7 +251,7 @@ const ChangeDateRecord = () => {
       <IButton2
         color="green"
         width="28"
-        type="outlined"
+        :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -265,7 +266,7 @@ const ChangeDateRecord = () => {
                 :label="t('DateFrom')"
                 name="dayFrom"
                 v-model="vacationSick.dayFrom"
-                type="date"
+                :type="EnumInputType.Date"
                 @change="ChangeDate()"
               />
             </ICol>
@@ -274,7 +275,7 @@ const ChangeDateRecord = () => {
                 :label="t('DateTo')"
                 v-model="vacationSick.dayTo"
                 name="issueDate"
-                type="date"
+                :type="EnumInputType.Date"
                 @change="ChangeDate()"
                 :IsRequire="true"
               />
@@ -283,7 +284,7 @@ const ChangeDateRecord = () => {
               <IInput
                 :label="t('RecordSick')"
                 v-model="vacationSick.record"
-                type="number"
+                :type="EnumInputType.Number"
                 @input="ChangeDateRecord()"
                 :min="1"
                 :IsRequire="true"
