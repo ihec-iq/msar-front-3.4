@@ -8,10 +8,11 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
-
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 //region"Drag and Drop"
 
 //#endregion
@@ -175,10 +176,11 @@ const reset = () => {
       <IRow>
         <IRow col-lg="2" col="2" col-md="2">
           <ICol>
-            <IInput :label="t('Name')" name="name" v-model="category.name" type="text" />
+            <IInput :label="t('Name')" name="name" v-model="category.name" :type="EnumInputType.Text" />
           </ICol>
           <ICol>
-            <IInput :label="t('Description')" name="description" v-model="category.description" type="text" />
+            <IInput :label="t('Description')" name="description" v-model="category.description"
+              :type="EnumInputType.Text" />
           </ICol>
         </IRow>
         <IFooterCrud :isAdd="category.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />

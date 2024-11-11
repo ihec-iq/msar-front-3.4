@@ -19,7 +19,8 @@ const { resetData, get_filter } = useOutputVoucherStore();
 import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardOutputVoucherIndex from "./CardOutputVoucherIndex.vue";
-import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 
 const route = useRoute();
 const router = useRouter();

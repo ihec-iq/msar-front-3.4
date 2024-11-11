@@ -1,4 +1,4 @@
-enum EnumPermission {
+export enum EnumPermission {
   Administrator = "Administrator",
   Dashboard = "dashboard",
   AddUser = "add user",
@@ -76,13 +76,14 @@ enum EnumPermission {
   DeleteBonus = "delete bonus",
   HasSectionOnly = "has section only",
 }
-enum EnumDirection {
+export enum EnumDirection {
   RTL = "rtl",
   LTR = "ltr",
   Auto = "inherit",
 }
-export enum EnumSetting{
+export enum EnumSetting {
   SettingNumberDayesAlertBonus = "SettingNumberDayesAlertBonus",
   SettingPromotionAlertData = "SettingPromotionAlertData",
 }
-export { EnumPermission, EnumDirection };
+
+

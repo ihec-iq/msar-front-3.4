@@ -11,7 +11,8 @@ import { t } from "@/utilities/I18nPlugin";
 import IPage from "@/components/ihec/IPage.vue";
 import { crud_delete } from "@/utilities/crudTool";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
-import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import ISelect from "@/components/inputs/ISelect.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
@@ -229,8 +230,10 @@ const chackArchiveTypeLoad = async () => {
   )
   await useArchiveTypeStore().getBySectionUser();
 };
-import IButton2, { EnumButtonType } from "@/components/ihec/IButton2.vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
 </script>

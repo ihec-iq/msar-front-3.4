@@ -12,7 +12,8 @@ import { useVacationStore } from "../../vacationStore";
 
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
-import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType, EnumButtonType } from "@/utilities/EnumSystem";
 import { CNumber, makeFormDataFromObject } from "@/utilities/tools";
 import {
   useValidation,
@@ -20,8 +21,7 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 import { WarningToast } from "@/utilities/Toast";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
-
+ 
 const { validate, min, required, isObject, max, number } = useValidation();
 
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });

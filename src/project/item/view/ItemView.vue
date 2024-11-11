@@ -11,8 +11,11 @@ import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import type { IItem } from "../IItem";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
-import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import IInput from "@/components/inputs/IInput.vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+
 
 //region"Drag and Drop"
 

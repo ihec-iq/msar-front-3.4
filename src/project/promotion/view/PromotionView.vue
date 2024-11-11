@@ -14,8 +14,9 @@ import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus"; // U
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import { prepareFormData } from "@/utilities/crudTool";
 import { useBonusStore } from "@/project/bonus/bonusStore";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
-import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
 const route = useRoute();
 const router = useRouter();

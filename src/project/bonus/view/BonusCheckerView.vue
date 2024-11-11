@@ -35,6 +35,8 @@ import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import { getError } from "@/utilities/helpers";
 import Swal from "sweetalert2";
+import IInput from "@/components/inputs/IInput.vue"; 
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -164,8 +166,8 @@ const headers = ref<Array<ITableHeader>>([
       <IRow :col="3" :col-md="2" :col-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
-            <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch" type="text"
-              :OnKeyEnter="getFilterData" />
+            <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch"
+              :type="EnumInputType.Text" :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
@@ -175,7 +177,7 @@ const headers = ref<Array<ITableHeader>>([
           <ICol :span-lg="1" :span-md="2" :span="1" class="flex items-center">
             <ICheckbox :label="t('Bonus.IsBoundFilter') + ' ' + t('Days')" v-model="searchFilter.isBound"
               :IsRequire="true" @onChange="getFilterData()" />
-            <IInput v-model="searchFilter.bound"  type="number" class="w-[100px]" @keyup.enter="getFilterData" />
+            <IInput v-model="searchFilter.bound" :type="EnumInputType.Number" class="w-[100px]" @keyup.enter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>

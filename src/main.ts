@@ -11,8 +11,11 @@ import { MotionPlugin } from "@vueuse/motion";
 import { Icon } from "@iconify/vue";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import globalComponents from './globalComponents'; // Import the global components
+import { EnumInputType } from "./components/inputs/IInput.vue";
+
 const app = createApp(App);
-app.component("vSelect", VueSelect);
+app.component("vSelect", VueSelect as any);
 app.component("MdiIcon", Icon);
 app.use(createPinia());
 app.use(MotionPlugin);
@@ -20,6 +23,7 @@ app.use(router);
 app.use(Toast, {
   transition: "Vue-Toastification__fade",
 });
+// app.use(globalComponents); // Use the global components
 
 app.directive("focus", {
   // When the bound element is mounted into the DOM...

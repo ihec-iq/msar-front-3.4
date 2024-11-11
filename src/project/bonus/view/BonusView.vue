@@ -6,7 +6,6 @@ import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import vSelect from "vue-select";
 import { useBonusStore } from "@/project/bonus/bonusStore";
 import { SuccessToast } from "@/utilities/Toast";
@@ -18,6 +17,9 @@ import { useEmployeeStore } from "@/project/employee/employeeStore";
 import IRow from "@/components/ihec/IRow.vue";
 import IRichtext from "@/components/ihec/IRichtext.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
 const route = useRoute();
 const router = useRouter();
@@ -177,14 +179,14 @@ onMounted(async () => {
           class="rounded-sm border-2 border-solid border-red-400">
           <ICol span="1" span-md="2" span-sm="4">
             <IInput :label="t('Bonus.JobTitle')" name="JobTitle" disabled v-model="Bonus.Employee.BonusJobTitle.name"
-              type="text" />
+              :type="EnumInputType.Text" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Bonus.dateWorth')" name="dateWorth" disabled v-model="Bonus.Employee.dateNextBonus" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" disabled
-              v-model="Bonus.Employee.numberLastBonus" type="text" />
+              v-model="Bonus.Employee.numberLastBonus" :type="EnumInputType.Text" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Bonus.DegreeStage')" name="degreeStage" disabled
@@ -210,10 +212,10 @@ onMounted(async () => {
             </vSelect>
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" type="date" />
+            <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" :type="EnumInputType.Date" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.number')" name="number" v-model="Bonus.number" type="text" />
+            <IInput :label="t('Bonus.number')" name="number" v-model="Bonus.number" :type="EnumInputType.Text" />
           </ICol>
 
           <ICol span="1" span-md="2" span-sm="4">
@@ -234,12 +236,12 @@ onMounted(async () => {
                 </div>
               </template>
             </vSelect>
-          </ICol> 
+          </ICol>
         </IRow>
         <IRow>
           <ICol span="1" span-md="1" span-sm="1">
-            <IButton2 :type="EnumButtonType.Outlined" :onClick="() => Bonus.notes = 'اكتب ملاحظاتك'" :text="t('ShowNotes')"
-              v-if="Bonus.notes.length == 0" />
+            <IButton2 :type="EnumButtonType.Outlined" :onClick="() => Bonus.notes = 'اكتب ملاحظاتك'"
+              :text="t('ShowNotes')" v-if="Bonus.notes.length == 0" />
             <IRichtext :label="t('Bonus.notes')" v-if="Bonus.notes.length > 0" name="notes" v-model="Bonus.notes" />
           </ICol>
         </IRow>

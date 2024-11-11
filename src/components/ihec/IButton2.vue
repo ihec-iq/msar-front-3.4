@@ -1,13 +1,8 @@
 <script setup lang="ts">
 
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import { Icon } from "@iconify/vue";
 import { computed, type PropType } from "vue";
-export enum EnumButtonType {
-  Default = "default",
-  Outlined = "outlined",
-  Text = "text",
-  Primary = "primary",
-}
 const props = defineProps({
   text: {
     type: String,
@@ -106,8 +101,7 @@ const buttonClass = computed(() => {
     );
   }
 });
-</script>
-
+</script> 
 <template>
   <button
     @click="onClick()"

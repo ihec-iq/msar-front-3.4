@@ -19,7 +19,8 @@ import { limits } from "@/utilities/defaultParams";
 import CardInputVoucherIndex from "./CardInputVoucherIndex.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue" ;
 import { EnumPermission } from "@/utilities/EnumSystem";
-import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 
 const route = useRoute();
 const router = useRouter();

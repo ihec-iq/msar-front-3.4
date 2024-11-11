@@ -20,7 +20,8 @@ import CardItemCategoryIndex from "./CardItemCategoryIndex.vue";
 import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import IPage from "@/components/ihec/IPage.vue";
-import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 
 const route = useRoute();
 const router = useRouter();

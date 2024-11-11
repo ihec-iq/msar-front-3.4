@@ -3,7 +3,8 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 import { t } from "@/utilities/I18nPlugin";
 import IButton from "./IButton.vue";
-import IButton2, { EnumButtonType } from "./IButton2.vue";
+import IButton2 from "./IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
 const props = defineProps({
   onCreate: {

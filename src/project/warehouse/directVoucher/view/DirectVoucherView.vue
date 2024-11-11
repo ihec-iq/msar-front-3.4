@@ -331,7 +331,8 @@ const reset = () => {
   directVoucherStore.resetData();
 };
 import { useItemStore } from "@/project/item/itemStore";
-import IButton2, { EnumButtonType } from "@/components/ihec/IButton2.vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
 const { items } = storeToRefs(useItemStore());
 const { item } = storeToRefs(useItemStore());

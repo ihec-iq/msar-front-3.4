@@ -32,6 +32,7 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import { useSettingStore } from "@/project/core/settingStore";
 import { ISetting } from "@/project/core/ISetting";
 import ITable from "@/components/ihec/ITable.vue";
+import { EnumInputType } from "@/components/inputs/IInput.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -134,7 +135,7 @@ const headers = ref<Array<ITableHeader>>([
                 <ISearchBar :getDataButton="getFilterData">
                     <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
                         <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch"
-                            type="text" :OnKeyEnter="getFilterData" />
+                            :type="EnumInputType.Text" :OnKeyEnter="getFilterData" />
                     </ICol>
                     <ICol :span-lg="1" :span-md="2" :span="1">
                         <ICheckbox

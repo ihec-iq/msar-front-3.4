@@ -24,7 +24,8 @@ import IPage from "@/components/ihec/IPage.vue";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
-import IInput, { EnumInputType } from "@/components/inputs/IInput.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 const route = useRoute();
 const router = useRouter();
 watch(

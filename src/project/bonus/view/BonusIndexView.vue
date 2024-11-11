@@ -26,6 +26,9 @@ import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -128,8 +131,8 @@ const headers = ref<Array<ITableHeader>>([
       <IRow :col="3" :col-md="2" :col-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
-            <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch" type="text"
-              :OnKeyEnter="getFilterData" />
+            <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch"
+              :type="EnumInputType.Text" :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">

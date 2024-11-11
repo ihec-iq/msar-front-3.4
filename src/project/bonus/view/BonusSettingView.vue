@@ -13,6 +13,7 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import { ISetting } from "@/project/core/ISetting";
 import IPage from "@/components/ihec/IPage.vue";
 import { showSuccessToast } from "vant";
+import { EnumInputType } from "@/components/inputs/IInput.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -67,7 +68,7 @@ onMounted(async () => {
         <IRow col-lg="4" col-md="2" col-sm="1">
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Setting.SettingNumberDayesAlertBonus')" v-model="SettingNumberDayesAlertBonus.valInt"
-              type="number" />
+              :type="EnumInputType.Number" />
           </ICol>
         </IRow>
       </IRow>

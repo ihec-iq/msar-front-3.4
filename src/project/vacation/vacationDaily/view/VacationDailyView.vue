@@ -374,7 +374,8 @@ function getImageUrl(name: string, ext: string) {
 }
 import { useAuthStore } from "@/stores/authStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import IButton2, { EnumButtonType } from "@/components/ihec/IButton2.vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";

@@ -8,17 +8,27 @@ import { useSectionStore } from "@/project/section/sectionStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
-
 import { t } from "@/utilities/I18nPlugin";
 import type { IUser } from "@/project/user/IUser";
 import { useUserStore } from "@/project/user/userStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import IVSelect from "@/components/inputs/IVSelect.vue";
-
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import { useHrDocumentStore } from "@/project/hr/hrDocumentStore";
+import type { IHrDocument, IHrDocumentFilter } from "@/project/hr/IHrDocument";
+import type { ITableHeader } from "@/types/core/components/ITable";
+import { ConvertToMoneyFormat } from "@/utilities/tools";
+import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
+import { prepareFormData } from "@/utilities/crudTool";
+import { SuccessToast } from "@/utilities/Toast";
+import EditButton from "@/components/dropDown/EditButton.vue";
+import { Icon } from "@iconify/vue";
+import { getError } from "@/utilities/helpers";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 //region"Drag and Drop"
 
 //#endregion
@@ -290,16 +300,6 @@ onMounted(async () => {
 });
 
 //#region
-import { useHrDocumentStore } from "@/project/hr/hrDocumentStore";
-import type { IHrDocument, IHrDocumentFilter } from "@/project/hr/IHrDocument";
-import type { ITableHeader } from "@/types/core/components/ITable";
-import { ConvertToMoneyFormat } from "@/utilities/tools";
-import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
-import { prepareFormData } from "@/utilities/crudTool";
-import { SuccessToast } from "@/utilities/Toast";
-import EditButton from "@/components/dropDown/EditButton.vue";
-import { Icon } from "@iconify/vue";
-import { getError } from "@/utilities/helpers";
 
 const { get_filter } = useHrDocumentStore();
 
@@ -371,21 +371,23 @@ const active = ref(0);
           <van-tab title="معلومات الموظف">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Name')" name="Name" v-model="employee.name" type="text" />
+                <IInput :label="t('Name')" name="Name" v-model="employee.name" :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.Number')" name="Employee.Number" v-model="employee.number" type="text" />
+                <IInput :label="t('Employee.Number')" name="Employee.Number" v-model="employee.number"
+                  :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Employee.Telegram')" name="EmployeeTelegram" v-model="employee.telegram"
-                  type="text" />
+                  :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.IdCard')" name="EmployeeIdCard" v-model="employee.idCard" type="text" />
+                <IInput :label="t('Employee.IdCard')" name="EmployeeIdCard" v-model="employee.idCard"
+                  :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Employee.DateWork')" name="EmployeeDateWork" v-model="employee.dateWork"
-                  type="date" />
+                  :type="EnumInputType.Date" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <ISelect :label="t('Employee.Section')" v-model="employee.Section.id" name="archiveTypeId"
@@ -446,15 +448,15 @@ const active = ref(0);
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="employee.numberLastBonus"
-                  type="text" />
+                  :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="employee.dateLastBonus"
-                  type="date" />
+                  :type="EnumInputType.Date" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Bonus.dateNextBonus')" name="dateNextBonus" disabled v-model="employee.dateNextBonus"
-                  type="date" />
+                  :type="EnumInputType.Date" />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">

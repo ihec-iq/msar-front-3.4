@@ -10,7 +10,6 @@ import type { IEmployeeLite } from "@/project/employee/IEmployee";
 import type { IHrDocumentType } from "../IHrDocument";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import ISelectObject from "@/components/inputs/ISelectObject.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
@@ -104,6 +103,10 @@ import type { ISection } from "@/project/section/ISection";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import { useEmployeeStore } from "@/project/employee/employeeStore";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+
 const SelectedSection = ref<ISection>({ id: 0, name: "" });
 const ChosePushBy = ref(0);
 enum EnumTypeChoseShareDocument {
@@ -385,7 +388,7 @@ onMounted(async () => {
   isLoading.value = false;
 });
 const changeSelectedType = () => {
-  hrDocument.value.addDays = hrDocument.value.Type.addDays? Number(hrDocument.value.Type.addDays) : 0;
+  hrDocument.value.addDays = hrDocument.value.Type.addDays ? Number(hrDocument.value.Type.addDays) : 0;
 }
 </script>
 <template>
@@ -400,10 +403,11 @@ const changeSelectedType = () => {
           <van-tab title="معلومات الكتاب">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Title')" name="Name" v-model="hrDocument.title" type="text" />
+                <IInput :label="t('Title')" name="Name" v-model="hrDocument.title" :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Date')" name="EmployeeDateWork" v-model="hrDocument.issueDate" type="date" />
+                <IInput :label="t('Date')" name="EmployeeDateWork" v-model="hrDocument.issueDate"
+                  :type="EnumInputType.Date" />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
@@ -423,7 +427,8 @@ const changeSelectedType = () => {
                 </vSelect>
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
-                <IInput :label="t('HrDocument.AddDayes')" name="AddDayes" v-model="hrDocument.addDays" type="number" />
+                <IInput :label="t('HrDocument.AddDayes')" name="AddDayes" v-model="hrDocument.addDays"
+                  :type="EnumInputType.Number" />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">

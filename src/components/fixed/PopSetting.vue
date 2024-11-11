@@ -21,7 +21,7 @@ const change = () => {
 import { useAuthStore } from "@/stores/authStore";
 import IButton2 from "../ihec/IButton2.vue";
 import { Icon } from "@iconify/vue";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 const AuthStore = useAuthStore();
 const { isAuthenticated } = storeToRefs(useAuthStore());
 const logout = () => {

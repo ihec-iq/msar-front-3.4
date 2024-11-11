@@ -6,12 +6,13 @@ import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
 import { useBonusStore } from "@/project/bonus/bonusStore";
 import { SuccessToast } from "@/utilities/Toast";
 import {   IBonusJobTitle } from "@/project/bonus/IBonus";
 import BonusJobTitleIndexView from "./BonusJobTitleIndexView.vue";
-
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 const route = useRoute();
 const router = useRouter();
 const id = ref(Number(route.params.id));
@@ -150,10 +151,11 @@ onMounted(async () => {
       <IRow>
         <IRow col-lg="4" col-md="2" col-sm="1">
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Name')" name="Name" v-model="BonusJobTitle.name" type="text" />
+            <IInput :label="t('Name')" name="Name" v-model="BonusJobTitle.name" :type="EnumInputType.Text" />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Description')" name="Description" v-model="BonusJobTitle.description" type="text" />
+            <IInput :label="t('Description')" name="Description" v-model="BonusJobTitle.description"
+              :type="EnumInputType.Text" />
           </ICol>
         </IRow>
       </IRow>
