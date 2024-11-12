@@ -13,8 +13,8 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import { ISetting } from "@/project/core/ISetting";
 import IPage from "@/components/ihec/IPage.vue";
 import { showSuccessToast } from "vant";
-import { EnumInputType } from "@/components/inputs/IInput.vue";
-
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+ 
 const route = useRoute();
 const router = useRouter();
 const { checkPermissionAccessArray } = usePermissionsStore();

@@ -188,7 +188,7 @@ export default {
     dateNextBonus: "تاريخ الاستحقاق القادم",
     difNextDate: "المتبقي للاستحقاق القادم",
     numberLastBonus: "رقم اخر علاوة",
-    oldEmployeeData: "بيانات الموظف القديمة",
+    currentEmployeeData: "بيانات الموظف الحالية",
     JobTitle: "العنوان الوظيفي",
     JobTitleAdd: "اضافة عنوان وظيفي",
     JobTitleUpdate: "تعديل عنوان وظيفي",

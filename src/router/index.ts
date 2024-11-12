@@ -39,7 +39,7 @@ const router = createRouter({
         {
           name: "start",
           path: "/",
-          component: () => import("@/views/AboutView.vue"),
+          component: () => import("@/views/WelcomeView.vue"),
         },
       ],
     },

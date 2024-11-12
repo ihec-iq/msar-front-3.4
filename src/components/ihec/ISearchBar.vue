@@ -11,18 +11,12 @@ const props = defineProps({
 });
 </script>
 <template>
-  <slot></slot>
-  <!-- search button -->
-  <div class="rtl:ml-2 ltr:mr-2 lg:mt-0 xs:mt-2">
-    <IButton2
-      color="green"
-      :type="EnumButtonType.Outlined"
-      :text="t('Search')"
-      preIcon="magnify"
-      :onClick="props.getDataButton"
-      class="mt-3"
-      width="25"
-    />
+  <div class="flex flex-row items-center justify-center">
+    <slot></slot>
+    <!-- search button -->
+    <div class="rtl:ml-2 ltr:mr-2 lg:mt-0 xs:mt-2">
+      <IButton2 color="green" :type="EnumButtonType.Outlined" :text="t('Search')" preIcon="magnify"
+        :onClick="props.getDataButton" class="mt-0" width="25" />
+    </div>
   </div>
 </template>
-@/utilities/I18nPlugin

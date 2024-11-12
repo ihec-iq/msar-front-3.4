@@ -187,7 +187,7 @@ export default {
     difNextDate: "Days worth",
     dateNextBonus: "Date Next Worth",
     numberLastBonus: "Number Last Bonus",
-    oldEmployeeData: "Old Employee Data",
+    currentEmployeeData: "Current Employee Data",
     JobTitle: "Job Title",
     JobTitleAdd: "Add Job Title",
     JobTitleUpdate: "Update Job Title",

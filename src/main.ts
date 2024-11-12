@@ -3,6 +3,8 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import "./assets/main.css";
+import "./assets/index.css";
+import "./assets/tailwind.css";
 import "./assets/vue-select.css";
 import "./assets/print.css";
 import { t } from "./utilities/I18nPlugin";
@@ -11,8 +13,6 @@ import { MotionPlugin } from "@vueuse/motion";
 import { Icon } from "@iconify/vue";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
-import globalComponents from './globalComponents'; // Import the global components
-import { EnumInputType } from "./components/inputs/IInput.vue";
 
 const app = createApp(App);
 app.component("vSelect", VueSelect as any);

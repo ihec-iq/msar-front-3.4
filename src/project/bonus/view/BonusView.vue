@@ -20,6 +20,7 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import Button from "@/components/ui/button/Button.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -33,6 +34,7 @@ const { Bonus } = storeToRefs(BonusStore);
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
 const namePage = ref("Bonus.Add");
+
 
 const store = async () => {
   errors.value = null;
@@ -169,13 +171,11 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- for old data of employee -->
-
-
       <IRow>
         <IRow v-if="isLoading">
           <div class="skeleton h-32 w-full"></div>
         </IRow>
-        <IRow v-else :title="t('Bonus.oldEmployeeData')" col-lg="4" col-md="2" col-sm="1"
+        <IRow v-else :title="t('Bonus.currentEmployeeData')" col-lg="4" col-md="2" col-sm="1"
           class="rounded-sm border-2 border-solid border-red-400">
           <ICol span="1" span-md="2" span-sm="4">
             <IInput :label="t('Bonus.JobTitle')" name="JobTitle" disabled v-model="Bonus.Employee.BonusJobTitle.name"
@@ -206,18 +206,11 @@ onMounted(async () => {
               label="name" :getOptionLabel="(employee: IEmployeeLite) => employee.name">
               <template #option="{ name }">
                 <div>
-                  <span>{{ name }}</span>
+                  <span class="text-right dark:text-textLight dark:bg-input">{{ name }}</span>
                 </div>
               </template>
             </vSelect>
           </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" :type="EnumInputType.Date" />
-          </ICol>
-          <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Bonus.number')" name="number" v-model="Bonus.number" :type="EnumInputType.Text" />
-          </ICol>
-
           <ICol span="1" span-md="2" span-sm="4">
             <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
               {{ t("Bonus.DegreeStage") }}
@@ -230,19 +223,27 @@ onMounted(async () => {
               <template #option="{ title, salery, yearlyBonus, yearlyService }">
                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                   <span>{{ title }} </span><br>
-                  <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
-                  <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span><br>
-                  <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
+                  <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span> -
+                  <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span>
+                  <!-- <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span> -->
                 </div>
               </template>
             </vSelect>
           </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Date')" name="issueDate" v-model="Bonus.issueDate" :type="EnumInputType.Date" />
+          </ICol>
+          <ICol span="1" span-md="1" span-sm="1">
+            <IInput :label="t('Bonus.number')" name="number" v-model="Bonus.number" :type="EnumInputType.Text" />
+          </ICol>
+
+
         </IRow>
         <IRow>
           <ICol span="1" span-md="1" span-sm="1">
-            <IButton2 :type="EnumButtonType.Outlined" :onClick="() => Bonus.notes = 'اكتب ملاحظاتك'"
-              :text="t('ShowNotes')" v-if="Bonus.notes.length == 0" />
-            <IRichtext :label="t('Bonus.notes')" v-if="Bonus.notes.length > 0" name="notes" v-model="Bonus.notes" />
+            <IButton2 :type="EnumButtonType.Outlined" :onClick="() => { Bonus.notes = ' ' }" :text="t('ShowNotes')"
+              v-if="!Bonus.notes" />
+            <IRichtext :label="t('Bonus.notes')" v-else name="notes" v-model="Bonus.notes" />
           </ICol>
         </IRow>
       </IRow>

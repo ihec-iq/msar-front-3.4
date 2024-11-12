@@ -110,7 +110,8 @@ onMounted(async () => {
     </div>
     <div class="bg-gray-100 dark:bg-gray-900 ">
         <div class="h-20"></div>
-        <div class="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 mb-10">
+        <div
+            class="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg border border-gray-800 shadow-lg p-6 mb-10">
             <div class="text-center">
                 <img class="h-8 w-auto mx-auto" src="@/assets/logo-512x512.png" alt="Apple">
                 <h2 class="mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">لوحة الدخول

@@ -21,9 +21,9 @@ import { useHrDocumentStore } from "@/project/hr/hrDocumentStore";
 import type { IHrDocument, IHrDocumentFilter } from "@/project/hr/IHrDocument";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
-import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
+import { IBonus, IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
 import { prepareFormData } from "@/utilities/crudTool";
-import { SuccessToast } from "@/utilities/Toast";
+import { ErrorToast, SuccessToast } from "@/utilities/Toast";
 import EditButton from "@/components/dropDown/EditButton.vue";
 import { Icon } from "@iconify/vue";
 import { getError } from "@/utilities/helpers";
@@ -113,15 +113,6 @@ const store = async () => {
   validationResult.value = validate(employee.value, rules);
   if (!validationResult.value.success) {
     WarningToast(t("ValidationFails"));
-    const someElement = ref() // assigned to some element in the template
-    const element = someElement.value
-    const elementPosition = element.getBoundingClientRect().top
-    const offsetPosition = elementPosition + window.pageYOffset - 60 // 60px offset from top
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    })
     return;
   }
   errors.value = null;
@@ -135,19 +126,11 @@ const store = async () => {
   } catch (error) {
     if (error instanceof Error) {
       errors.value = employeeStore.getError(error as any);
-      Swal.fire({
-        icon: "error",
-        title: "Create new data failed!",
-        text: error.message,
-      });
+      WarningToast('Create new data failed!');
       console.log(errors.value)
     } else {
       console.error("An unknown error occurred:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Create new data failed!",
-        text: "An unknown error occurred.",
-      });
+      ErrorToast('Create new data failed!')
     }
   }
 }
@@ -171,12 +154,8 @@ const update = async () => {
     }
   } catch (error) {
     errors.value = employeeStore.error;
-    console.log(error)
-    Swal.fire({
-      icon: "error",
-      title: "Updating data failed!",
-      text: employeeStore.error?.toString(),
-    });
+    console.error("An unknown error occurred:", error);
+    ErrorToast('Update data failed!')
   }
 };
 
@@ -231,7 +210,7 @@ const showData = async () => {
         // employee.value.EmployeeCenter = response.data.data.EmployeeCenter;
         // employee.value.EmployeePosition = response.data.data.EmployeePosition;
         // employee.value.isPerson = response.data.data.isPerson;
-        Object.assign(employee.value, response.data.data); console.log(response.data)
+        Object.assign(employee.value, response.data.data);
         isPerson.value = response.data.data.isPerson == 0 ? false : true;
         isMoveSection.value =
           response.data.data.isMoveSection == 0 ? false : true;
@@ -301,35 +280,50 @@ onMounted(async () => {
 
 //#region
 
-const { get_filter } = useHrDocumentStore();
-
 const dataBaseFiles = ref<Array<IHrDocument>>([]);
-
+const dataBaseBonus = ref<Array<IBonus>>([]);
 const searchFilter = ref<IHrDocumentFilter>({
   title: "",
   limit: 10,
   employeeName: "",
 });
-const getFilterData = async (page = 1) => {
-  if (active.value == 1) {
-    searchFilter.value.employeeId = employee.value.id;
-    if (Number(searchFilter.value.employeeId) < 1) return;
-    isLoading.value = true;
+const getFiles = async (page = 1) => {
+  searchFilter.value.employeeId = employee.value.id;
+  if (Number(searchFilter.value.employeeId) < 1) return;
+  isLoading.value = true;
+  //searchFilter.value.title = fastSearch.value.toString();
+  await useHrDocumentStore().get_filter(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataBaseFiles.value = response.data.data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoading.value = false;
 
-    //searchFilter.value.title = fastSearch.value.toString();
-    await get_filter(searchFilter.value, page)
-      .then((response) => {
-        if (response.status == 200) {
-          dataBaseFiles.value = response.data.data.data;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    isLoading.value = false;
-  }
 };
-const headers = ref<Array<ITableHeader>>([
+const getBonus = async (page = 1) => {
+
+  searchFilter.value.employeeId = employee.value.id;
+  if (Number(searchFilter.value.employeeId) < 1) return;
+  isLoading.value = true;
+
+  //searchFilter.value.title = fastSearch.value.toString();
+  await useBonusStore().get_filter(searchFilter.value, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataBaseBonus.value = response.data.data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoading.value = false;
+
+};
+const headerFiles = ref<Array<ITableHeader>>([
   { caption: t('Title'), value: "title" },
   { caption: t('Details'), value: "actions" },
   { caption: t('IsActive'), value: "isActive" },
@@ -338,7 +332,13 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t('HrDocument.Type'), value: "HrDocumentype" },
   { caption: t('HrDocument.AddDayes'), value: "addDays" },
 ]);
-const openFile = (id: number) => {
+const headerBonus = ref<Array<ITableHeader>>([
+  { caption: t('Bonus.Number'), value: "number" },
+  { caption: t('Details'), value: "actions" },
+  { caption: t('Employee.Title'), value: "EmployeeName" },
+  { caption: t('Date'), value: "issueDate" }
+]);
+const openFileHrDocument = (id: number) => {
   router.push({
     name: "hrDocumentUpdate",
     params: { id: id },
@@ -356,6 +356,28 @@ const openHrDocument = (id: number) => {
     params: { employeeId: id },
   });
 };
+const openFileBonus = (id: number) => {
+  router.push({
+    name: "bonusUpdate",
+    params: { id: id },
+  });
+};
+const addBonus = (id: number) => {
+  router.push({
+    name: "bonusAddByEmployee",
+    params: { employeeId: id },
+  });
+};
+const openBonus = (id: number) => {
+  router.push({
+    name: "bonusIndex",
+    params: { employeeId: id },
+  });
+};
+const loadData = (tab: any) => {
+  if (tab.name == "files") getFiles();
+  if (tab.name == "bonus") getBonus();
+}
 //#endregion
 const active = ref(0);
 </script>
@@ -367,8 +389,8 @@ const active = ref(0);
     </template>
     <IPageContent>
       <IRow>
-        <van-tabs v-model:active="active" @click-tab="getFilterData">
-          <van-tab title="معلومات الموظف">
+        <van-tabs v-model:active="active" @click-tab="loadData" sticky>
+          <van-tab title="معلومات الموظف" name="employee">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Name')" name="Name" v-model="employee.name" :type="EnumInputType.Text" />
@@ -524,7 +546,7 @@ const active = ref(0);
               </ICol>
             </IRow>
           </van-tab>
-          <van-tab title="ملفات الضبارة" v-if="employee.id > 0">
+          <van-tab title="ملفات الضبارة" v-if="employee.id > 0" name="files">
             <IRow col-lg="2" col-md="2" col-sm="2">
               <ICol span="2" span-md="2" span-sm="2">
                 <EditButton class="mt-3  border-gray border-2" v-if="employee.id != 0"
@@ -538,17 +560,17 @@ const active = ref(0);
 
             <IRow col-lg="1" col-md="1" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <ITable :items="dataBaseFiles" :headers="headers">
+                <ITable :items="dataBaseFiles" :headers="headerFiles">
                   <template v-slot:EmployeeName="{ row }">
                     <span>{{ row.Employee.name }}</span>
                   </template>
                   <template v-slot:isActive="{ row }">
                     <span v-if="row.isActive"
-                      class="flex justify-center items-center border-2 border-green-400 rounded-md bg-green-100 p-0">
+                      class="flex justify-center items-center border-2  rounded-md dark:text-textLight text-text  border-green-400  bg-green-100 dark:bg-green-950 p-0">
                       <Icon icon="mdi-check-circle" class="text-green-600"></Icon> مفعل
                     </span>
                     <span v-else
-                      class="flex justify-center items-center border-2 border-red-400 rounded-md bg-red-100 p-0">
+                      class="flex justify-center items-center border-2 dark:text-textLight text-text border-red-400 rounded-md bg-red-100 dark:bg-red-950 p-0">
                       <Icon icon="mdi-pause-octagon" class="text-red-600"></Icon>
                       <span>غير مفعل</span>
                     </span>
@@ -557,7 +579,33 @@ const active = ref(0);
                     <span>{{ row.Type.name }}</span>
                   </template>
                   <template v-slot:actions="{ row }">
-                    <EditButton title="Open" @click="openFile(row.id)" class="m-1" />
+                    <EditButton title="Open" @click="openFileHrDocument(row.id)" class="m-1" />
+                  </template>
+                </ITable>
+              </ICol>
+
+            </IRow>
+          </van-tab>
+          <van-tab title="العلاوات والترفيعات" v-if="employee.id > 0" name="bonus">
+            <IRow col-lg="2" col-md="2" col-sm="2">
+              <ICol span="2" span-md="2" span-sm="2">
+                <EditButton class="mt-3  border-gray border-2" v-if="employee.id != 0" @click="addBonus(employee.id)"
+                  title="Bonus.Add" icon="mdi-plus-box" />
+              </ICol>
+              <ICol span="2" span-md="2" span-sm="2">
+                <EditButton class="mt-3  border-gray border-2" v-if="employee.id != 0" @click="openBonus(employee.id)"
+                  title="Bonus.Open" icon="mdi-open-in-new" />
+              </ICol>
+            </IRow>
+
+            <IRow col-lg="1" col-md="1" col-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">
+                <ITable :items="dataBaseBonus" :headers="headerBonus">
+                  <template v-slot:EmployeeName="{ row }">
+                    <span>{{ row.Employee.name }}</span>
+                  </template>
+                  <template v-slot:actions="{ row }">
+                    <EditButton title="Open" @click="openFileBonus(row.id)" class="m-1" />
                   </template>
                 </ITable>
               </ICol>

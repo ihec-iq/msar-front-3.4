@@ -37,6 +37,7 @@ import { getError } from "@/utilities/helpers";
 import Swal from "sweetalert2";
 import IInput from "@/components/inputs/IInput.vue"; 
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import ISearchBar from "@/components/ihec/ISearchBar.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -163,10 +164,10 @@ const headers = ref<Array<ITableHeader>>([
       <IButton width="28" :onClick="recheck" :text="t('Bonus.ReCalculate')" />
     </template>
     <IPageContent>
-      <IRow :col="3" :col-md="2" :col-lg="3">
+      <IRow :col="1" :col-md="1" :col-lg="1" class="scroll-auto">
         <ISearchBar :getDataButton="getFilterData">
-          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
-            <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch"
+          <ICol :span-lg="3" :span-md="3" :span="2" :span-sm="4">
+            <IInput   :placeholder="t('SearchForUser')" v-model="fastSearch"
               :type="EnumInputType.Text" :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
@@ -174,10 +175,10 @@ const headers = ref<Array<ITableHeader>>([
             <ISelect :label="t('BonusSection')" v-model="searchFilter.sectionId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol> -->
-          <ICol :span-lg="1" :span-md="2" :span="1" class="flex items-center">
+          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center">
             <ICheckbox :label="t('Bonus.IsBoundFilter') + ' ' + t('Days')" v-model="searchFilter.isBound"
-              :IsRequire="true" @onChange="getFilterData()" />
-            <IInput v-model="searchFilter.bound" :type="EnumInputType.Number" class="w-[100px]" @keyup.enter="getFilterData" />
+              :IsRequire="true" @onChange="getFilterData()" class="flex items-center justify-center" />
+            <IInput v-model="searchFilter.bound" :disabled="!searchFilter.isBound" :type="EnumInputType.Number" class="w-[100px]" @keyup.enter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>
