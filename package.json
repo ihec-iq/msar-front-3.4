@@ -1,7 +1,7 @@
 {
-  "name": "IHEC",
-  "version": "0.0.0",
-  "main": "main.js",
+  "name": "ihec-iraq",
+  "version": "24.11.13.0",
+  "main": "main.ts",
   "scripts": {
     "build": "run-p type-check build-only",
     "test:unit": "vitest --environment jsdom",

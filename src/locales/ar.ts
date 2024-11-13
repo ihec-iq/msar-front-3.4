@@ -41,8 +41,8 @@ export default {
   DropFiles: "افلت الملفات هنا !!!",
   ReleaseFiles:
     "قم بسحب البيانات الى هنا  <u> او قم بالنقر هنا </u> لتحميل البيانات.",
-  "Your password": "Your password",
-  "Your Email Address": "Your Email Address",
+  "Your password": "رمز الحساب",
+  "Your Email Address": "الاميل او اسم الحساب",
   "See whats going on": "اطلع على المستجدات",
   UserSearch: "ابحث عن اسم المستخدم او الاميل",
   Code: "الرمز",

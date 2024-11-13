@@ -28,6 +28,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import { useEmployeeStore } from "@/project/employee/employeeStore";
+import { isNumber } from "@/utilities/tools";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -106,7 +107,8 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  if (route.params.employeeId != undefined){
+  if (isNumber(route.params.employeeId as string)){
+    console.log(route.params.employeeId);
     await useEmployeeStore().show(Number(route.params.employeeId)).then((response)=>{
       fastSearch.value = response.data.data.name;
     }) 

@@ -8,7 +8,7 @@ export default [
     meta: {
       middleware: [authMiddleware],
     },
-  }, 
+  },  
   {
     path: "/hr/portal",
     name: "hrPortal",

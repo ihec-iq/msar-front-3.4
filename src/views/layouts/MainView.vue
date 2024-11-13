@@ -14,7 +14,7 @@ const { isClose } = storeToRefs(rtlStore);
       :class="{
         'lg:ltr:ml-[80px] lg:rtl:mr-[80px] xs:ltr:ml-[65px] xs:rtl:mr-[65px]':
           isClose,
-        'lg:rtl:mr-[256px] lg:ltr:ml-[256px] opacity-100': !isClose,
+        'lg:rtl:mr-[256px] lg:ltr:ml-[256px] opacity-30': !isClose,
       }"
       class="flex-1 bg-white overflow-hidden dark:bg-[#25293c] flex flex-col min-h-screen h-full print:ltr:ml-0 print:rtl:mr-0 duration-500"
     >

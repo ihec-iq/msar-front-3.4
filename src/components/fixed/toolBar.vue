@@ -59,54 +59,33 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div
-    class="print:hidden flex text-white bg-[#F2F3F5] dark:bg-darkNav h-14 max-w-full bg-navLight box-border mx-0"
-  >
-    <div
-      class="flex-1 flex items-center justify-between dark:border-b dark:border-gray-900 sm:px-1 xs:w-full"
-    >
-      <div class="flex items-center">
-        <div class="text-gray-500 text-2xl rtl:mr-2 ltr:ml-2"><!-- # --></div>
-        <div class="text-sm text-text dark:text-textLight">
-          {{ Organization }}
-        </div>
+  <div class="print:hidden flex text-gray-800 
+        dark:bg-[#26293B]  max-h-14
+    bg-navLight box-border mx-0 flex-1   items-center
+    justify-between dark:border-b dark:border-gray-800 shadow-md sm:px-1 xs:w-full">
+
+    <div class="flex items-center">
+      <div class="text-gray-500 text-2xl rtl:mr-2 ltr:ml-2"><!-- # --></div>
+      <div class="text-sm text-text dark:text-textLight">
+        {{ Organization }}
       </div>
-      <div
-        class="relative w-56 duration-500 ease-in-out"
-        :class="{ 'lg:w-[700px] xs:w-56': searchInput }"
-      >
-        <input
-          type="text"
-          id="inputValue"
-          v-model="valSearch"
-          ref="inputRefSearch"
-          :placeholder="t('Search')"
-          @focus="searchInput = true"
-          @blur="searchInput = false"
-          class="rounded w-full text-gray-800 border-[1px] dark:border-[#505051] dark:hover:border-[#686869] dark:bg-[#3C3C3D] dark:hover:bg-[#424243] bg-LightTableHead px-2 py-1 duration-300"
-          :class="{
-            'lg:py-2 xs:py-1 placeholder:text-sm text-lg': searchInput,
-          }"
-        />
-        <span
-          class="absolute ltr:right-0 rtl:left-0 mx-2 top-1.5"
-          :class="{ 'top-[14px]': searchInput }"
-        >
-          <svg
-            class="w-4 h-4 text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:text-iconHover"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-          >
-            <path
-              class="heroicon-ui"
-              d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
-            ></path>
-          </svg>
-        </span>
-      </div>
-      <PopSetting></PopSetting>
     </div>
+    <div class="relative w-56 duration-500 ease-in-out" :class="{ 'lg:w-[700px] xs:w-56': searchInput }">
+      <input type="text" id="inputValue" v-model="valSearch" ref="inputRefSearch" :placeholder="t('Search')"
+        @focus="searchInput = true" @blur="searchInput = false"
+        class="rounded w-full text-gray-800 border-[1px] dark:border-[#505051] dark:hover:border-[#686869] dark:bg-[#3C3C3D] dark:hover:bg-[#424243] bg-LightTableHead px-2 py-1 duration-300"
+        :class="{
+          'lg:py-2 xs:py-1 placeholder:text-sm text-lg': searchInput,
+        }" />
+      <span class="absolute ltr:right-0 rtl:left-0 mx-2 top-1.5" :class="{ 'top-[14px]': searchInput }">
+        <svg class="w-4 h-4 text-iconLight hover:text-iconHoverLight dark:text-icon dark:hover:text-iconHover"
+          fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
+          <path class="heroicon-ui"
+            d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z">
+          </path>
+        </svg>
+      </span>
+    </div>
+    <PopSetting></PopSetting>
   </div>
 </template>

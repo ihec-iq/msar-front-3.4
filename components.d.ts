@@ -20,6 +20,8 @@ declare module 'vue' {
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DuplicateButton: typeof import('./src/components/dropDown/DuplicateButton.vue')['default']
     EditButton: typeof import('./src/components/dropDown/EditButton.vue')['default']
+    GlardCard: typeof import('./src/components/ui/GlardCard.vue')['default']
+    GlowBorder: typeof import('./src/components/ui/GlowBorder.vue')['default']
     I2BtnSearch: typeof import('./src/components/v2/I2BtnSearch.vue')['default']
     IBadge: typeof import('./src/components/inputs/IBadge.vue')['default']
     IBasis: typeof import('./src/components/ihec/IBasis.vue')['default']
