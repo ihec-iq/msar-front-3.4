@@ -10,6 +10,7 @@ export interface IHrDocument {
   Type: IHrDocumentType;
   Files?: Array<IDocument>;
   addDays: number;
+  addMonths: number;
   UserCreate?: IUser;
   UserUpdate?: IUser;
   isActive:boolean
@@ -19,6 +20,7 @@ export interface IHrDocumentType {
   id: number;
   name: string;
   addDays?: number;
+  addMonths?: number;
 }
 export interface IHrDocumentFilter {
   title: string;

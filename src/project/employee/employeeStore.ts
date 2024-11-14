@@ -46,7 +46,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       id: 0,
       name: ""
     },
-    BonusDegreeStage: {
+    DegreeStage: {
       id: 0,
       title: "",
       Degree: {
@@ -127,7 +127,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
         id: 0,
         name: ""
       },
-      BonusDegreeStage: {
+      DegreeStage: {
         id: 0,
         title: "",
         Degree: {
@@ -196,7 +196,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   }
   async function showBonusLite(id: number) {
     return await Api.get(`${pathUrl}/show/bonus/lite/${id}`);
-  }
+  } 
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }

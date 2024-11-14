@@ -74,6 +74,10 @@ export enum EnumPermission {
   AddBonus = "add bonus",
   EditBonus = "edit bonus",
   DeleteBonus = "delete bonus",
+  ShowPromotionSetting = "show promotion setting",
+  AddPromotionSetting = "add promotion setting",
+  EditPromotionSetting = "edit promotion setting",
+  DeletePromotionSetting = "delete promotion setting",
   HasSectionOnly = "has section only",
 }
 export enum EnumDirection {
@@ -81,9 +85,9 @@ export enum EnumDirection {
   LTR = "ltr",
   Auto = "inherit",
 }
-export enum EnumSetting {
+export enum   EnumSetting {
   SettingNumberDayesAlertBonus = "SettingNumberDayesAlertBonus",
-  SettingPromotionAlertData = "SettingPromotionAlertData",
+  SettingNumberDayesAlertPromotion = "SettingNumberDayesAlertPromotion",
 }
 
 

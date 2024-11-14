@@ -9,16 +9,16 @@ import { storeToRefs } from "pinia";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IBonus, IBonusFilter } from "../IBonus";
+import type { IBonus, IBonusEmployeeChecker, IBonusFilter } from "../IBonus";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
 const { Bonus } = storeToRefs(useBonusStore());
 const { sections } = storeToRefs(useSectionStore());
 
-const data = ref<Array<IEmployee>>([]);
+const data = ref<Array<IBonusEmployeeChecker>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IEmployee>>([]);
+const dataBase = ref<Array<IBonusEmployeeChecker>>([]);
 const { get_checkBonus, calculateBonus } = useBonusStore();
 
 import { limits } from "@/utilities/defaultParams";
@@ -90,6 +90,7 @@ const getFilterData = async (page = 1) => {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
+        console.log(response.data.data.data);
       }
     })
     .catch((error) => {
@@ -151,10 +152,10 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
   { caption: t("Details"), value: "actions" },
   { caption: t("Bonus.dateLastBonus"), value: "dateLastBonus" },
-  { caption: t("Bonus.difNextDate"), value: "difNextDateShow" },
+  { caption: t("Bonus.difNextBonusDate"), value: "difNextBonusDate" },
   { caption: t("Bonus.dateNextBonus"), value: "dateNextBonus" },
   { caption: t("Bonus.Study"), value: "bonusStudy" },
-  { caption: t("Bonus.DegreeStage"), value: "bonusDegreeStage" },
+  { caption: t("Bonus.DegreeStage"), value: "degreeStage" },
   { caption: t("Bonus.Add"), value: "btnAddBound" },
 ]);
 </script>
@@ -184,8 +185,8 @@ const headers = ref<Array<ITableHeader>>([
       </IRow>
       <IRow>
         <ITable :items="data" :headers="headers">
-          <template v-slot:difNextDateShow="{ row }">
-            <span>{{ row.difNextDate + " " + t('Day') }} </span>
+          <template v-slot:difNextBonusDate="{ row }">
+            <span>{{ row.difNextBonusDate + " " + t('Day') }} </span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>

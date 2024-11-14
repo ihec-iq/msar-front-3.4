@@ -10,6 +10,7 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
     id: 0,
     title: "",
     addDays: 0,
+    addMonths: 0,
     issueDate: new Date().toISOString().split("T")[0],
     Employee: {
       id: 0,
@@ -45,6 +46,7 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
       id: 0,
       title: "",
       addDays: 0,
+      addMonths: 0,
       issueDate: new Date().toISOString().split("T")[0],
       Employee: {
         id: 0,

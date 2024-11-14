@@ -2,18 +2,36 @@ import type { IUser } from "../user/IUser";
 import type {  IEmployeeLiteBonus } from "../employee/IEmployee";
 import type { IDocument } from "../archive/IArchive";
 
+
 export interface IBonus {
   id: number;
   issueDate: string;
   number: string;
   Employee: IEmployeeLiteBonus; 
-  BonusDegreeStage: IBonusDegreeStage;
+  DegreeStage: IDegreeStage;
   Files?: Array<IDocument>;
   UserCreate?: IUser;
   UserUpdate?: IUser;
   notes: string;
 }
-
+export interface IBonusEmployeeChecker {
+  id: number;
+  name: string;
+  numberLastBonus: string;
+  dateLastBonus: string;
+  dateNextBonus: string;
+  difNextBonusDate: number;
+  numberLastPromotion: string;
+  dateLastPromotion: string;
+  dateNextPromotion: string;
+  difNextPromotionDate: number;
+  employeePosition: string;
+  employeeCenter: string;
+  employeeType: string;
+  bonusJobTitle: string;
+  bonusStudy: string;
+  degreeStage: string;
+}
 
 export interface IBonusJobTitle {
   id: number;
@@ -32,7 +50,7 @@ export interface IBonusStage {
   id: number;
   name: string;
 }
-export interface IBonusDegreeStage {
+export interface IDegreeStage {
   id: number;
   title: string;
   Degree: IBonusDegree;

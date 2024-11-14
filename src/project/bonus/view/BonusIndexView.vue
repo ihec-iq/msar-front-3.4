@@ -119,7 +119,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Details"), value: "actions" },
   { caption: t("Employee.Title"), value: "EmployeeName" },
   { caption: t("Date"), value: "issueDate" },
-  { caption: t("Bonus.DegreeStage"), value: "BonusDegreeStage" },
+  { caption: t("Bonus.DegreeStage"), value: "DegreeStage" },
 ]);
 </script>
 <template>
@@ -152,8 +152,8 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:EmployeeName="{ row }">
             <span>{{ row.Employee.name }}</span>
           </template>
-          <template v-slot:BonusDegreeStage="{ row }">
-            <span>{{ row.BonusDegreeStage.title }}</span>
+          <template v-slot:DegreeStage="{ row }">
+            <span>{{ row.DegreeStage.title }}</span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>

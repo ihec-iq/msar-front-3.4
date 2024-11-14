@@ -13,46 +13,43 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import { ISetting } from "@/project/core/ISetting";
 import IPage from "@/components/ihec/IPage.vue";
 import { showSuccessToast } from "vant";
+import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
- 
+
 const route = useRoute();
 const router = useRouter();
 const { checkPermissionAccessArray } = usePermissionsStore();
 const SettingStore = useSettingStore();
-const SettingNumberDayesAlertPromotion = ref<ISetting>({
+const SettingPromotionData = ref<ISetting>({
   id: 0,
-  key: EnumSetting.SettingNumberDayesAlertPromotion,
+  key: EnumSetting.SettingPromotionAlertData,
 });
-
 
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
-const namePage = ref("Setting.Name");
-
-
+const namePage = ref("Setting.PromotionName");
 
 const update = async () => {
   errors.value = null;
-  try { 
-      await SettingStore.updateByKey(prepareFormData(SettingNumberDayesAlertPromotion.value),SettingNumberDayesAlertPromotion.value.id.toString())
-      SuccessToast();
+  try {
+    await SettingStore.updateByKey(prepareFormData(SettingPromotionData.value), SettingPromotionData.value.id.toString());
+    SuccessToast();
   } catch (e: any) {
-    ErrorToast(e.toString())
+    ErrorToast(e.toString());
   }
-}
-
-
+};
 
 const showData = async (key: string) => {
-  return SettingStore.showByKey(key)
+  return SettingStore.showByKey(key);
 };
+
 onMounted(async () => {
   isLoading.value = true;
-  checkPermissionAccessArray([EnumPermission.ShowEmployees]);
+  checkPermissionAccessArray([EnumPermission.Setting]);
 
-  await showData(SettingNumberDayesAlertPromotion.value.key).then((response) => {
-    Object.assign(SettingNumberDayesAlertPromotion.value, response);
-  })
+  await showData(SettingPromotionData.value.key).then((response) => {
+    Object.assign(SettingPromotionData.value, response);
+  });
 
   isLoading.value = false;
 });
@@ -67,7 +64,7 @@ onMounted(async () => {
       <IRow>
         <IRow col-lg="4" col-md="2" col-sm="1">
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Setting.SettingNumberDayesAlertPromotion')" v-model="SettingNumberDayesAlertPromotion.valInt"
+            <IInput :label="t('Setting.SettingPromotionData')" v-model="SettingPromotionData.valInt"
               :type="EnumInputType.Number" />
           </ICol>
         </IRow>
@@ -79,4 +76,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
-<style></style>
+<style></style> 

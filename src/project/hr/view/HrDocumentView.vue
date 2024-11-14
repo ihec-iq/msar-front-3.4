@@ -130,6 +130,7 @@ const store = async () => {
 
   const formData = new FormData();
   formData.append("addDays", hrDocument.value.addDays.toString());
+  formData.append("addMonths", hrDocument.value.addMonths.toString());
   formData.append("title", hrDocument.value.title.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
@@ -178,6 +179,7 @@ const update = async () => {
 
   const formData = new FormData();
   formData.append("addDays", hrDocument.value.addDays.toString());
+  formData.append("addMonths", hrDocument.value.addMonths.toString());
   formData.append("title", hrDocument.value.title.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
@@ -323,6 +325,7 @@ const showData = async () => {
       if (response.status == 200) {
         hrDocument.value.id = response.data.data.id;
         hrDocument.value.addDays = response.data.data.addDays;
+        hrDocument.value.addMonths = response.data.data.addMonths;
         hrDocument.value.title = response.data.data.title;
         hrDocument.value.issueDate = response.data.data.issueDate;
         hrDocument.value.Type = response.data.data.Type;
@@ -389,6 +392,7 @@ onMounted(async () => {
 });
 const changeSelectedType = () => {
   hrDocument.value.addDays = hrDocument.value.Type.addDays ? Number(hrDocument.value.Type.addDays) : 0;
+  hrDocument.value.addMonths = hrDocument.value.Type.addMonths ? Number(hrDocument.value.Type.addMonths) : 0;
 }
 </script>
 <template>
@@ -418,16 +422,22 @@ const changeSelectedType = () => {
                   v-model="hrDocument.Type" :options="hrDocumentTypes"
                   :reduce="(hrDocumentType: IHrDocumentType) => hrDocumentType" label="name" :getOptionLabel="(hrDocumentType: IHrDocumentType) => hrDocumentType.name
                     " @update:modelValue="changeSelectedType">
-                  <template #option="{ name, addDays }">
+                  <template #option="{ name, addDays, addMonths }">
                     <div class="dir:rtl text-right p-1 border-2 border-solid border-red-700">
                       <span>{{ name }}</span> <br /><span v-if="addDays > 0" class="dark:text-gray-100 text-gray-600">{{
                         t('HrDocument.AddDayes') }} {{ addDays }} {{ t('Day') }}</span>
+                      <span v-if="addMonths > 0" class="dark:text-gray-100 text-gray-600">{{
+                        t('HrDocument.AddMonths') }} {{ addMonths }} {{ t('Month') }}</span>
                     </div>
                   </template>
                 </vSelect>
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <IInput :label="t('HrDocument.AddDayes')" name="AddDayes" v-model="hrDocument.addDays"
+                  :type="EnumInputType.Number" />
+              </ICol>
+              <ICol span="1" span-md="2" span-sm="4">
+                <IInput :label="t('HrDocument.AddMonths')" name="AddMonths" v-model="hrDocument.addMonths"
                   :type="EnumInputType.Number" />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">

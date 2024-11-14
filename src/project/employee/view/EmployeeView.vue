@@ -21,7 +21,7 @@ import { useHrDocumentStore } from "@/project/hr/hrDocumentStore";
 import type { IHrDocument, IHrDocumentFilter } from "@/project/hr/IHrDocument";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
-import { IBonus, IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
+import { IBonus, IDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
 import { prepareFormData } from "@/utilities/crudTool";
 import { ErrorToast, SuccessToast } from "@/utilities/Toast";
 import EditButton from "@/components/dropDown/EditButton.vue";
@@ -87,7 +87,7 @@ const rules: Array<IFieldValidation> = [
     rules: [isObject({ key: "id", message: "" })],
   },
   {
-    field: "BonusDegreeStage",
+    field: "DegreeStage",
     caption: t("Bonus.DegreeStage"),
     rules: [isObject({ key: "id", message: "" })],
   },
@@ -258,7 +258,7 @@ onMounted(async () => {
     employeeStore.get_employee_centers(),
     BonusStore.get_BonusJobTitle(),
     BonusStore.get_BonusStudy(),
-    BonusStore.get_BonusDegreeStage(),
+    BonusStore.get_DegreeStage(),
     BonusStore.get_EmployeesLite()
   ]);
 
@@ -517,9 +517,9 @@ const active = ref(0);
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="employee.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
-                  :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
-                  :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
+                  v-model="employee.DegreeStage" :options="BonusStore.DegreeStages"
+                  :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title"
+                  :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title">
                   <template #option="{ title, salery, yearlyBonus, yearlyService }">
                     <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                       <span>{{ title }} </span><br>

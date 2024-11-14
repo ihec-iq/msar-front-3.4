@@ -1,19 +1,29 @@
-import type { IBonusDegreeStage, IBonusJobTitle } from "../bonus/IBonus";
-import type { IEmployeeLite } from "../employee/IEmployee";
+import type { IUser } from "../user/IUser";
+import type {  IEmployeeLitePromotion } from "../employee/IEmployee";
+import type { IDocument } from "../archive/IArchive";
+import type { IDegreeStage } from "../bonus/IBonus";
 
 export interface IPromotion {
-  id: number;                     // Unique identifier for the promotion
-  Employee: IEmployeeLite;               // Employee associated with the promotion
-  numberPromotion: string;        // Unique number for the promotion
-  issueDate: string;                // Date when the promotion was issued
-  note: string;                   // Additional notes regarding the promotion
-  BonusDegreeStage: IBonusDegreeStage;       // Degree stage related to the bonus
-  BonusJobTitle: IBonusJobTitle;          // Job title associated with the bonus
-}   
+  id: number;
+  issueDate: string;
+  number: string;
+  Employee: IEmployeeLitePromotion; 
+  DegreeStage: IDegreeStage;
+  Files?: Array<IDocument>;
+  UserCreate?: IUser;
+  UserUpdate?: IUser;
+  notes: string;
+}
 
+ 
 export interface IPromotionFilter {
   title: string;
   limit: number;
-  employeeName: string;
-  isBound: boolean;
+  checked?: boolean;
+  employeeId?: number;
+  employeeName?: string;
+  name?: string;
+  isBound?:boolean;
+  bound?: number;
+
 }

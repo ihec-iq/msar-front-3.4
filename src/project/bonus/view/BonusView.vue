@@ -10,7 +10,7 @@ import vSelect from "vue-select";
 import { useBonusStore } from "@/project/bonus/bonusStore";
 import { SuccessToast } from "@/utilities/Toast";
 import { IEmployeeLite } from "@/project/employee/IEmployee";
-import { IBonusDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
+import { IDegreeStage, IBonusJobTitle } from "@/project/bonus/IBonus";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import { prepareFormData } from "@/utilities/crudTool";
 import { useEmployeeStore } from "@/project/employee/employeeStore";
@@ -133,7 +133,7 @@ onMounted(async () => {
 
   await Promise.all([
     BonusStore.get_BonusStudy(),
-    BonusStore.get_BonusDegreeStage(),
+    BonusStore.get_DegreeStage(),
     BonusStore.get_Employees()
   ]);
   //check if selected emplioyee or not
@@ -147,7 +147,7 @@ onMounted(async () => {
       reset()
       console.log(response.data.data)
       Object.assign(Bonus.value.Employee, response.data.data)
-      Bonus.value.BonusDegreeStage = response.data.data.BonusDegreeStage
+      Bonus.value.DegreeStage = response.data.data.DegreeStage
     })
   }
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -190,7 +190,7 @@ onMounted(async () => {
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
             <IInput :label="t('Bonus.DegreeStage')" name="degreeStage" disabled
-              v-model="Bonus.Employee.BonusDegreeStage.title" />
+              v-model="Bonus.Employee.DegreeStage.title" />
           </ICol>
         </IRow>
 
@@ -217,9 +217,9 @@ onMounted(async () => {
             </div>
             <vSelect
               class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-              v-model="Bonus.BonusDegreeStage" :options="BonusStore.BonusDegreeStages"
-              :reduce="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage" label="title"
-              :getOptionLabel="(BonusDegreeStage: IBonusDegreeStage) => BonusDegreeStage.title">
+              v-model="Bonus.DegreeStage" :options="BonusStore.DegreeStages"
+              :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title"
+              :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title">
               <template #option="{ title, salery, yearlyBonus, yearlyService }">
                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                   <span>{{ title }} </span><br>
