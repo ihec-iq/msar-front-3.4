@@ -413,7 +413,7 @@ const active = ref(0);
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <ISelect :label="t('Employee.Section')" v-model="employee.Section.id" name="archiveTypeId"
-                  :options="sections" :IsRequire="true" class="focus:border-gray-200 focus:border-red-200" />
+                  :options="sections" :IsRequire="true" class="focus:border-red-200" />
               </ICol>
 
               <ICol span="1" span-md="1" span-sm="1">

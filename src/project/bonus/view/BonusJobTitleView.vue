@@ -166,4 +166,3 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
-<style></style>

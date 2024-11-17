@@ -432,25 +432,23 @@ const changeSelectedType = () => {
                   </template>
                 </vSelect>
               </ICol>
-              <ICol span="1" span-md="2" span-sm="4">
-                <IInput :label="t('HrDocument.AddDayes')" name="AddDayes" v-model="hrDocument.addDays"
+              <ICol span="1" span-md="2" span-sm="4" class="flex flex-row">
+                <IInput :label="t('HrDocument.AddDayes')" name="AddDayes" v-model="hrDocument.addDays" class="w-40 mx-2"
                   :type="EnumInputType.Number" />
-              </ICol>
-              <ICol span="1" span-md="2" span-sm="4">
                 <IInput :label="t('HrDocument.AddMonths')" name="AddMonths" v-model="hrDocument.addMonths"
-                  :type="EnumInputType.Number" />
+                  class="w-40 mx-2" :type="EnumInputType.Number" />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                   {{ t("Employee.Title") }}
                 </div>
                 <vSelect :disabled="disabledChangeEmployee"
-                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight "
                   v-model="hrDocument.Employee" :options="employees" :reduce="(employee: IEmployeeLite) => employee"
                   label="name" :getOptionLabel="(employee: IEmployeeLite) => employee.name">
                   <template #option="{ name }">
                     <div>
-                      <span>{{ name }}</span>
+                      <span>{{ name }} </span>
                     </div>
                   </template>
                 </vSelect>
