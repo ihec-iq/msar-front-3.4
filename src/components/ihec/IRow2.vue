@@ -21,16 +21,15 @@ const rowClass = computed(() => {
 });
 
 const debugClass = computed(() => {
-    if (props.debug) return `border border-1 border-blue-500`;
+    if (props.debug) return `border border-2 border-blue-500 bg-blue-500`;
     return "";
 });
 </script>
 
 <template>
-
     <div :class="[rowClass, debugClass]">
         <div v-if="title"
-            class="hover:text-gray-300 dark:hover:text-gray-700 duration-300 text-lg font-bold header-title text-blue-700 dark:text-blue-300 py-2 w-full basis-full px-2 bg-gray-200 dark:bg-gray-800">
+            class="hover:text-gray-300 w-full dark:hover:text-gray-700 duration-300 text-lg font-bold header-title text-blue-700 dark:text-blue-300 py-2 w-full basis-full px-2 bg-gray-200 dark:bg-gray-800">
             {{ title }}
         </div>
         <slot></slot>

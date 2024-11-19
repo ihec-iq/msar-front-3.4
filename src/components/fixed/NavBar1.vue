@@ -94,10 +94,10 @@ onMounted(() => {
 
 const { user } = storeToRefs(useAuthStore());
 </script>
-<template>
+<template> 
   <div
     class="LeftNav flex-col  ltr:pl-2 rtl:pr-2 flex fixed h-full z-[999] bg-sideNav dark:bg-[#25293c] nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
-    :class="[isClose ? 'lg:w-20 sm:w-20 xs:w-[68px]' : 'lg:w-64 sm:w-64  ']" @mouseenter="handleMouseEnter"
+    :class="[isClose ? 'lg:w-20 sm:w-20 xs:w-[68px]' : 'lg:w-120 md:w-120 sm:w-64  ']" @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave">
     <!-- little circule -->
     <div v-motion :initial="{ opacity: 0, x: -85 }" :enter="{ opacity: 1, x: 0 }" :variants="{ custom: { scale: 2 } }"
@@ -123,7 +123,7 @@ const { user } = storeToRefs(useAuthStore());
         <!-- ! the image in the assets is not rounded -->
         <!-- *Old source: @/assets/logo-512x512.png -->
         <img @click="isClose = !isClose" src="@/assets/ihec-logo.jpg" alt="Profile Picture"
-          class="w-14 h-14  rounded-full align-middle" />
+          class="w-14 h-14 cursor-pointer rounded-full align-middle" />
         <div class="text-lg mt-1 ml-1 duration-700 w-20 dark:text-textLight text-text"
           :class="{ hidden: isClose, block: !isClose }">
           <span class="mx-2">{{ user?.Employee?.name }}</span>

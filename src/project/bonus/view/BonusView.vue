@@ -26,6 +26,7 @@ import IFlex from "@/components/ihec/IFlex.vue";
 import ICol from "@/components/ihec/ICol.vue";
 import IRow2 from "@/components/ihec/IRow2.vue";
 import ICol2 from "@/components/ihec/ICol2.vue";
+import ILabel from "@/components/ihec/ILabel.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -181,22 +182,27 @@ onMounted(async () => {
         <IRow v-if="isLoading">
           <div class="skeleton h-32 w-full"></div>
         </IRow>
-        <IRow2 v-else :title="t('Bonus.currentEmployeeData')" :gap="4"
+        <IRow2 v-else :title="t('Bonus.currentEmployeeData')" :gap="0" :debug="true"
           class="rounded-sm border-2 border-solid border-red-400">
-          <ICol2 :cols="12" :md="3" :lg="3">
-            <IInput :label="t('Bonus.JobTitle')" name="JobTitle" disabled v-model="Bonus.Employee.BonusJobTitle.name"
-              :type="EnumInputType.Text" />
+          <ICol2 :md="6" :lg="6" :debug="true">
+            <ILabel :title="t('Bonus.JobTitle')" >
+              {{ Bonus.Employee.BonusJobTitle.name }}
+            </ILabel>
           </ICol2>
-          <ICol2 :cols="12" :md="3" :lg="3">
-            <IInput :label="t('Bonus.dateWorth')" name="dateWorth" disabled v-model="Bonus.Employee.dateNextBonus" />
+          <ICol2 :md="6" :lg="6" :debug="true">
+            <ILabel :title="t('Bonus.dateWorth')" >
+              {{ Bonus.Employee.dateNextBonus }}
+            </ILabel>
           </ICol2>
-          <ICol2 :cols="12" :md="3" :lg="3">
-            <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" disabled
-              v-model="Bonus.Employee.numberLastBonus" :type="EnumInputType.Text" />
+          <ICol2 :md="6" :lg="6" :debug="true">
+            <ILabel :title="t('Bonus.numberLastBonus')" >
+              {{ Bonus.Employee.numberLastBonus }}
+            </ILabel>
           </ICol2>
-          <ICol2 :cols="12" :md="3" :lg="3">
-            <IInput :label="t('Bonus.DegreeStage')" name="degreeStage" disabled
-              v-model="Bonus.Employee.DegreeStage.title" />
+          <ICol2 :md="6" :lg="6" :debug="true">
+            <ILabel :title="t('Bonus.DegreeStage')" >
+              {{ Bonus.Employee.DegreeStage.title }}
+            </ILabel>
           </ICol2>
         </IRow2>
 

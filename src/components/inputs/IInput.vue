@@ -82,8 +82,8 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="mb-2">
-    <label class="_inputLabel" for="Control1" v-if="label">
+  <div class="mb-2 px-1">
+    <label class="_inputLabel w-full" for="Control1" v-if="label">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
     <input
