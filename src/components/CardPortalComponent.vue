@@ -3,6 +3,8 @@ import { computed } from "vue";
 import type { IconLink } from "./fixed/FixedMenu";
 import { t } from "@/utilities/I18nPlugin";
 import { Icon } from "@iconify/vue";
+import ICol2 from "./ihec/ICol2.vue";
+import IRow2 from "./ihec/IRow2.vue";
 const props = defineProps({
   links: {
     type: Array<Object>,
@@ -16,13 +18,13 @@ const LinksBase = computed(() => {
 </script>
 
 <template> 
-  <IRow col="4" md="2">
-    <ICol
-      span="1"
-      spanMd="1"
-      spanSm="1"
+  <IRow2 :gap="2" >
+    <ICol2 
+      :cols="12"
+      :debug="true"
       v-for="Link in LinksBase"
       :key="Link.routerName"
+      
     >
       <router-link :to="{ name: Link.routerName }">
         <span href="" class="group relative block h-64 sm:h-50 lg:h-60">
@@ -67,6 +69,6 @@ const LinksBase = computed(() => {
           </div>
         </span>
       </router-link>
-    </ICol>
-  </IRow>
+    </ICol2>
+  </IRow2>
 </template>

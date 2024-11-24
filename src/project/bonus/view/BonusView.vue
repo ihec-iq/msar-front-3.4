@@ -182,24 +182,24 @@ onMounted(async () => {
         <IRow v-if="isLoading">
           <div class="skeleton h-32 w-full"></div>
         </IRow>
-        <IRow2 v-else :title="t('Bonus.currentEmployeeData')" :gap="0" :debug="true"
+        <IRow2 v-else-if="Bonus.Employee.BonusJobTitle.id != 0 && isLoading" :title="t('Bonus.currentEmployeeData')" :gap="2" 
           class="rounded-sm border-2 border-solid border-red-400">
-          <ICol2 :md="6" :lg="6" :debug="true">
+          <ICol2 :md="6" :lg="6" >
             <ILabel :title="t('Bonus.JobTitle')" >
               {{ Bonus.Employee.BonusJobTitle.name }}
             </ILabel>
           </ICol2>
-          <ICol2 :md="6" :lg="6" :debug="true">
+          <ICol2 :md="6" :lg="6"  >
             <ILabel :title="t('Bonus.dateWorth')" >
               {{ Bonus.Employee.dateNextBonus }}
             </ILabel>
           </ICol2>
-          <ICol2 :md="6" :lg="6" :debug="true">
+          <ICol2 :md="6" :lg="6" >
             <ILabel :title="t('Bonus.numberLastBonus')" >
               {{ Bonus.Employee.numberLastBonus }}
             </ILabel>
           </ICol2>
-          <ICol2 :md="6" :lg="6" :debug="true">
+          <ICol2 :md="6" :lg="6" >
             <ILabel :title="t('Bonus.DegreeStage')" >
               {{ Bonus.Employee.DegreeStage.title }}
             </ILabel>
@@ -213,11 +213,11 @@ onMounted(async () => {
               {{ t("Employee.Title") }}
             </div>
             <vSelect :disabled="disabledChangeEmployee"
-              class="w-full outline-none h-10 p-1 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-500 dark:disabled:text-gray-400"
+              class="w-full outline-none h-10 p-1 rounded-md  bg-lightInput dark:bg-input text-text dark:text-textLight disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-500 dark:disabled:text-gray-400"
               v-model="Bonus.Employee" :options="BonusStore.Employees" :reduce="(employee: IEmployeeLite) => employee"
               label="name" :getOptionLabel="(employee: IEmployeeLite) => employee.name">
               <template #option="{ name }">
-                <div class="text-right">
+                <div class="text-right border-2 p-2 border-solid border-red-400">
                   <span>{{ name }}</span>
                 </div>
               </template>

@@ -90,7 +90,6 @@ const getFilterData = async (page = 1) => {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
-        console.log(response.data.data.data);
       }
     })
     .catch((error) => {

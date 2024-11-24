@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref, computed, h } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
@@ -123,12 +123,14 @@ export const useBonusStore = defineStore("BonusStore", () => {
       description: ""
     };
   }
-  async function get_BonusJobTitle(params: object = {}) {
-    return await Api.get(`bonus_job_title`, { params }).then((response) => {
-      if (response.status == 200) {
+  async function get_BonusJobTitle(params: object = {}, hardRefresh: boolean = false) {
+    if (hardRefresh == false || BonusJobTitles.value.length == 0) {
+      return await Api.get(`bonus_job_title`, { params }).then((response) => {
+        if (response.status == 200) {
         BonusJobTitles.value = response.data.data;
-      }
-    });
+        }
+      });
+    }
   }
   async function getFilter_BonusJobTitle(params: IBonusFilter, page: number) {
     return await Api.get(`bonus_job_title/filter?page=${page}`, { params });
@@ -154,12 +156,14 @@ export const useBonusStore = defineStore("BonusStore", () => {
       name: ""
     };
   }
-  async function get_BonusStudy() {
-    return await Api.get(`bonus_study`).then((response) => {
-      if (response.status == 200) {
-        BonusStudies.value = response.data.data;
-      }
-    });
+  async function get_BonusStudy(hardRefresh: boolean = false) {
+    if (hardRefresh == false || BonusJobTitles.value.length == 0) {
+      return await Api.get(`bonus_study`).then((response) => {
+        if (response.status == 200) {
+          BonusStudies.value = response.data.data;
+        }
+      });
+    }
   }
   async function store_BonusStudy(params: object) {
     return await Api.post(`bonus_study/store`, params);
@@ -187,12 +191,14 @@ export const useBonusStore = defineStore("BonusStore", () => {
       yearlyService: 0
     };
   }
-  async function get_DegreeStage() {
-    return await Api.get(`bonus_degree_stage`).then((response) => {
-      if (response.status == 200) {
-        DegreeStages.value = response.data.data;
-      }
-    });
+  async function get_DegreeStage(hardRefresh: boolean = false) {
+    if (hardRefresh == false || BonusJobTitles.value.length == 0) {
+      return await Api.get(`bonus_degree_stage`).then((response) => {
+        if (response.status == 200) {
+          DegreeStages.value = response.data.data;
+        }
+      });
+    }
   }
   async function store_DegreeStage(params: object) {
     return await Api.post(`bonus_degree_stage/store`, params);
@@ -208,19 +214,23 @@ export const useBonusStore = defineStore("BonusStore", () => {
   }
   //#endregion
 
-  async function get_EmployeesLite() {
-    return await Api.get(`/employee/lite`).then((response) => {
-      if (response.status == 200) {
-        Employees.value = response.data.data;
-      }
-    });
+  async function get_EmployeesLite(hardRefresh: boolean = false) {
+    if (hardRefresh == false || Employees.value.length == 0) {
+      return await Api.get(`/employee/lite`).then((response) => {
+        if (response.status == 200) {
+          Employees.value = response.data.data;
+        }
+      });
+    }
   }
-  async function get_Employees() {
-    return await Api.get(`/employee`).then((response) => {
-      if (response.status == 200) {
-        Employees.value = response.data.data;
-      }
-    });
+  async function get_Employees(hardRefresh: boolean = false) {
+    if (hardRefresh == false || Employees.value.length == 0) {
+      return await Api.get(`/employee`).then((response) => {
+        if (response.status == 200) {
+          Employees.value = response.data.data;
+        }
+      });
+    }
   }
 
   async function store(params: object) {

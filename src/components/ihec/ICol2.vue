@@ -62,8 +62,8 @@ const debugClass = computed(() => {
 </script>
 
 <template>
-    <div :class="[colClass, debugClass]">
-        <div v-if="debug" class="text-xs">{{ colClass }}</div>
+    <div :class="[colClass, debugClass]" class="sm:w-[45%] md:w-[33%] lg:w-[20%] xl:w-[15%] content-center align-middle">
+        <div v-if="debug" class="text-xs bg-red-40">{{ colClass }}</div>
         <slot></slot>
     </div>
 </template>

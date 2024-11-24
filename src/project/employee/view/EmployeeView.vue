@@ -482,6 +482,25 @@ const active = ref(0);
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                  {{ t('Bonus.DegreeStage') }}
+                </div>
+                <vSelect
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="employee.DegreeStage" :options="BonusStore.DegreeStages"
+                  :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title"
+                  :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title">
+                  <template #option="{ title, salery, yearlyBonus, yearlyService }">
+                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                      <span>{{ title }} </span><br>
+                      <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span> -
+                      <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span>
+                      <!-- <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span> -->
+                    </div>
+                  </template>
+                </vSelect>
+              </ICol>
+              <ICol span="1" span-md="2" span-sm="4">
+                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                   {{ t('Bonus.JobTitle') }}
                 </div>
                 <vSelect
@@ -511,25 +530,7 @@ const active = ref(0);
                   </template>
                 </vSelect>
               </ICol>
-              <ICol span="1" span-md="2" span-sm="4">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t('Bonus.DegreeStage') }}
-                </div>
-                <vSelect
-                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="employee.DegreeStage" :options="BonusStore.DegreeStages"
-                  :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title"
-                  :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title">
-                  <template #option="{ title, salery, yearlyBonus, yearlyService }">
-                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
-                      <span>{{ title }} </span><br>
-                      <span>{{ t('Employee.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span><br>
-                      <span>{{ t('Employee.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span><br>
-                      <span>{{ t('Employee.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span>
-                    </div>
-                  </template>
-                </vSelect>
-              </ICol>
+
             </IRow>
             <div class="mt-2">
               <label for="showUserPanel">اظهار معلومات المستخدم</label>
