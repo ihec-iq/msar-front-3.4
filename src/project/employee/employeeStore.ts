@@ -150,35 +150,41 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
   async function get_filter(params: IEmployeeFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
-  async function get_employee_positions() {
-    return await Api.get(`employee_position`).then((response: any) => {
-      if (response.status == 200) {
+  async function get_employee_positions(hardRefresh: boolean = false) {
+    if (hardRefresh == false || employees_positions.value.length == 0) {
+      return await Api.get(`employee_position`).then((response: any) => {
+        if (response.status == 200) {
         employees_positions.value = response.data.data;
       }
     })
       .catch((errors: any) => {
         console.log("in get employees_positions : " + errors);
       });
+    }
   }
-  async function get_employee_types() {
-    return await Api.get(`employee_type`).then((response: any) => {
-      if (response.status == 200) {
-        employees_types.value = response.data.data;
-      }
-    })
+  async function get_employee_types(hardRefresh: boolean = false) {
+    if (hardRefresh == false || employees_types.value.length == 0) {
+      return await Api.get(`employee_type`).then((response: any) => {
+        if (response.status == 200) {
+          employees_types.value = response.data.data;
+        }
+      })
       .catch((errors: any) => {
         console.log("in get employee_type : " + errors);
-      });;
+        });;
+    }
   }
-  async function get_employee_centers() {
-    return await Api.get(`employee_center`).then((response: any) => {
-      if (response.status == 200) {
-        employees_centers.value = response.data.data;
-      }
-    })
+  async function get_employee_centers(hardRefresh: boolean = false) {
+    if (hardRefresh == false || employees_centers.value.length == 0) {
+      return await Api.get(`employee_center`).then((response: any) => {
+        if (response.status == 200) {
+          employees_centers.value = response.data.data;
+        }
+      })
       .catch((errors: any) => {
         console.log("in get employee_center : " + errors);
-      });;
+        });;
+    }
   }
   async function getItemHistory(params: IEmployeeFilter, page: number) {
     return await Api.get(`stockSys/voucherItemHistory/filter?page=${page}`, {

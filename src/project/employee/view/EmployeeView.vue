@@ -294,7 +294,7 @@ const getFiles = async (page = 1) => {
   //searchFilter.value.title = fastSearch.value.toString();
   await useHrDocumentStore().get_filter(searchFilter.value, page)
     .then((response) => {
-      if (response.status == 200) {
+      if (response.status == 200 && response.data.data) {
         dataBaseFiles.value = response.data.data.data;
       }
     })
@@ -330,6 +330,7 @@ const headerFiles = ref<Array<ITableHeader>>([
   { caption: t('Employee.Title'), value: "EmployeeName" },
   { caption: t('Date'), value: "issueDate" },
   { caption: t('HrDocument.Type'), value: "HrDocumentype" },
+  { caption: t('HrDocument.AddMonths'), value: "addMonths" },
   { caption: t('HrDocument.AddDayes'), value: "addDays" },
 ]);
 const headerBonus = ref<Array<ITableHeader>>([

@@ -177,12 +177,11 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- for old data of employee -->
-      <IRow>
-
+      <IRow> 
         <IRow v-if="isLoading">
           <div class="skeleton h-32 w-full"></div>
         </IRow>
-        <IRow2 v-else-if="Bonus.Employee.BonusJobTitle.id != 0 && isLoading" :title="t('Bonus.currentEmployeeData')" :gap="2" 
+        <IRow2 v-else-if="Bonus.Employee.BonusJobTitle.id != 0" :title="t('Bonus.currentEmployeeData')" :gap="2" 
           class="rounded-sm border-2 border-solid border-red-400">
           <ICol2 :md="6" :lg="6" >
             <ILabel :title="t('Bonus.JobTitle')" >
