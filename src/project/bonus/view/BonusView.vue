@@ -86,7 +86,6 @@ const update = async () => {
       icon: "error",
       title: "Updating data failed!",
       text: BonusStore.error?.toString(),
-
     });
   }
 };
@@ -231,10 +230,10 @@ onMounted(async () => {
               v-model="Bonus.DegreeStage" :options="BonusStore.DegreeStages"
               :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title"
               :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title">
-              <template #option="{ title, salery, yearlyBonus, yearlyService }">
+              <template #option="{ title, salary, yearlyBonus, yearlyService }">
                 <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                   <span>{{ title }} </span><br>
-                  <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span> -
+                  <span>{{ t('Bonus.salary') + ' :' + ConvertToMoneyFormat(salary) }} </span> -
                   <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span>
                   <!-- <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span> -->
                 </div>

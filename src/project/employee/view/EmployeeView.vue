@@ -65,6 +65,7 @@ import {
 import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
+import OpenButton from "@/components/dropDown/OpenButton.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -327,7 +328,6 @@ const headerFiles = ref<Array<ITableHeader>>([
   { caption: t('Title'), value: "title" },
   { caption: t('Details'), value: "actions" },
   { caption: t('IsActive'), value: "isActive" },
-  { caption: t('Employee.Title'), value: "EmployeeName" },
   { caption: t('Date'), value: "issueDate" },
   { caption: t('HrDocument.Type'), value: "HrDocumentype" },
   { caption: t('HrDocument.AddMonths'), value: "addMonths" },
@@ -336,7 +336,6 @@ const headerFiles = ref<Array<ITableHeader>>([
 const headerBonus = ref<Array<ITableHeader>>([
   { caption: t('Bonus.Number'), value: "number" },
   { caption: t('Details'), value: "actions" },
-  { caption: t('Employee.Title'), value: "EmployeeName" },
   { caption: t('Date'), value: "issueDate" }
 ]);
 const openFileHrDocument = (id: number) => {
@@ -490,10 +489,10 @@ const active = ref(0);
                   v-model="employee.DegreeStage" :options="BonusStore.DegreeStages"
                   :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title"
                   :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title">
-                  <template #option="{ title, salery, yearlyBonus, yearlyService }">
+                  <template #option="{ title, salary, yearlyBonus, yearlyService }">
                     <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                       <span>{{ title }} </span><br>
-                      <span>{{ t('Bonus.salery') + ' :' + ConvertToMoneyFormat(salery) }} </span> -
+                      <span>{{ t('Bonus.salary') + ' :' + ConvertToMoneyFormat(salary) }} </span> -
                       <span>{{ t('Bonus.yearlyBonus') + ' :' + ConvertToMoneyFormat(yearlyBonus) }} </span>
                       <!-- <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span> -->
                     </div>
@@ -563,16 +562,13 @@ const active = ref(0);
             <IRow col-lg="1" col-md="1" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseFiles" :headers="headerFiles">
-                  <template v-slot:EmployeeName="{ row }">
-                    <span>{{ row.Employee.name }}</span>
-                  </template>
                   <template v-slot:isActive="{ row }">
                     <span v-if="row.isActive"
-                      class="flex justify-center items-center border-2  rounded-md dark:text-textLight text-text  border-green-400  bg-green-100 dark:bg-green-950 p-0">
+                      class="flex justify-center w-full items-center border-2  rounded-md dark:text-textLight text-text  border-green-400  bg-green-100 dark:bg-green-950 p-0">
                       <Icon icon="mdi-check-circle" class="text-green-600"></Icon> مفعل
                     </span>
                     <span v-else
-                      class="flex justify-center items-center border-2 dark:text-textLight text-text border-red-400 rounded-md bg-red-100 dark:bg-red-950 p-0">
+                      class="flex justify-center w-full items-center border-2 dark:text-textLight text-text border-red-400 rounded-md bg-red-100 dark:bg-red-950 p-0">
                       <Icon icon="mdi-pause-octagon" class="text-red-600"></Icon>
                       <span>غير مفعل</span>
                     </span>
@@ -581,7 +577,7 @@ const active = ref(0);
                     <span>{{ row.Type.name }}</span>
                   </template>
                   <template v-slot:actions="{ row }">
-                    <EditButton title="Open" @click="openFileHrDocument(row.id)" class="m-1" />
+                    <OpenButton title="Open" @click="openFileHrDocument(row.id)" class="m-1" />
                   </template>
                 </ITable>
               </ICol>
@@ -603,11 +599,8 @@ const active = ref(0);
             <IRow col-lg="1" col-md="1" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseBonus" :headers="headerBonus">
-                  <template v-slot:EmployeeName="{ row }">
-                    <span>{{ row.Employee.name }}</span>
-                  </template>
                   <template v-slot:actions="{ row }">
-                    <EditButton title="Open" @click="openFileBonus(row.id)" class="m-1" />
+                    <OpenButton title="Open" @click="openFileBonus(row.id)" class="m-1" />
                   </template>
                 </ITable>
               </ICol>

@@ -57,7 +57,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
         id: 0,
         name: ""
       },
-      salery: 0,
+      salary: 0,
       yearlyBonus: 0,
       yearlyService: 0
     },
@@ -138,7 +138,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
           id: 0,
           name: ""
         },
-        salery: 0,
+        salary: 0,
         yearlyBonus: 0,
         yearlyService: 0
       },

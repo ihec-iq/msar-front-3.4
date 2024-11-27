@@ -21,7 +21,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
         title: "",
         Degree: { id: 0, name: "" },
         Stage: { id: 0, name: "" },
-        salery: 0,
+        salary: 0,
         yearlyBonus: 0,
         yearlyService: 0
       },
@@ -33,7 +33,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
       title: "",
       Degree: { id: 0, name: "" },
       Stage: { id: 0, name: "" },
-      salery: 0,
+      salary: 0,
       yearlyBonus: 0,
       yearlyService: 0
     },
@@ -41,7 +41,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
   });
   const BonusJobTitle = ref<IBonusJobTitle>({ id: 0, name: "", description: "" });
   const BonusStudy = ref<IBonusStudy>({ id: 0, name: "" });
-  const DegreeStage = ref<IDegreeStage>({ id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBonus: 0, yearlyService: 0 });
+  const DegreeStage = ref<IDegreeStage>({ id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 });
 
   const Bonuses = ref<Array<IBonus>>([]);
   const BonusJobTitles = ref<Array<IBonusJobTitle>>([]);
@@ -76,7 +76,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
           title: "",
           Degree: { id: 0, name: "" },
           Stage: { id: 0, name: "" },
-          salery: 0,
+          salary: 0,
           yearlyBonus: 0,
           yearlyService: 0
         },
@@ -88,7 +88,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
         title: "",
         Degree: { id: 0, name: "" },
         Stage: { id: 0, name: "" },
-        salery: 0,
+        salary: 0,
         yearlyBonus: 0,
         yearlyService: 0
       },
@@ -186,7 +186,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
       title: "",
       Degree: { id: 0, name: "" },
       Stage: { id: 0, name: "" },
-      salery: 0,
+      salary: 0,
       yearlyBonus: 0,
       yearlyService: 0
     };

@@ -22,7 +22,7 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
         title: "",
         Degree: { id: 0, name: "" },
         Stage: { id: 0, name: "" },
-        salery: 0,
+        salary: 0,
         yearlyBonus: 0,
         yearlyService: 0
       },
@@ -33,13 +33,13 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
       title: "",
       Degree: { id: 0, name: "" },
       Stage: { id: 0, name: "" },
-      salery: 0,
+      salary: 0,
       yearlyBonus: 0,
       yearlyService: 0
     },
     notes: ""
   });
-  const DegreeStage = ref<IDegreeStage>({ id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBonus: 0, yearlyService: 0 });
+  const DegreeStage = ref<IDegreeStage>({ id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 });
 
   const Promotiones = ref<Array<IPromotion>>([]);
   const DegreeStages = ref<Array<IDegreeStage>>([]);
@@ -72,7 +72,7 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
           title: "",
           Degree: { id: 0, name: "" },
           Stage: { id: 0, name: "" },
-          salery: 0,
+          salary: 0,
           yearlyBonus: 0,
           yearlyService: 0
         },
@@ -83,7 +83,7 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
         title: "",
         Degree: { id: 0, name: "" },
         Stage: { id: 0, name: "" },
-        salery: 0,
+        salary: 0,
         yearlyBonus: 0,
         yearlyService: 0
       },

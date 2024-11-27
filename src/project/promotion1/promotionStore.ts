@@ -11,7 +11,7 @@ export const usePromotionStore = defineStore('promotion', () => {
     numberPromotion: "",
     issueDate: new Date().toISOString().split("T")[0],
     note: "",
-    DegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBonus: 0, yearlyService: 0 },
+    DegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 },
     BonusJobTitle: { id: 0, name: "", description: "" },
   });
   const isLoading = ref(false);
@@ -37,7 +37,7 @@ export const usePromotionStore = defineStore('promotion', () => {
             numberPromotion: "",
             Employee: { id: 0, name: "" },
             BonusJobTitle: { id: 0, name: "", description: "" },
-            DegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salery: 0, yearlyBonus: 0, yearlyService: 0 },
+            DegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 },
             note: ""
         };
     }
