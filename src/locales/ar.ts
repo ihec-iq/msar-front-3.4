@@ -142,6 +142,7 @@ export default {
   Days: "ايام",
   Month: "شهر",
   Months: "اشهر",
+  Number: "الرقم",
   ShowNotes: "عرض الملاحظات",
   EmployeeAdd: "اضافة بيانات موظف",
   EmployeeUpdate: "تعديل بيانات موظف",

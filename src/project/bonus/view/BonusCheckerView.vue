@@ -280,12 +280,12 @@ const headers = ref<Array<ITableHeader>>([
                               <tr class="border-t-2 border-black">
                                 <th class="borderx-2 border-black border-l-2 border-solid w-[70px]">تاريخ الاستحقاق</th>
                                 <th
-                                  class="borderx-2 border-black border-x-2 border-solid  [writing-mode:vertical-lr] rotate-180">
+                                  class="borderx-2 border-black border-x-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
                                   الدرجة</th>
                                 <th
-                                  class="borderx-2 border-black border-x-2 border-solid  [writing-mode:vertical-lr] rotate-180">
+                                  class="borderx-2 border-black border-x-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
                                   المرحلة</th>
-                                <th class="borderx-2 border-black border-x-2 border-solid w-[43px]">مقدار الراتب</th>
+                                <th class="borderx-2 border-black border-x-2 border-solid w-[44px]">مقدار الراتب</th>
                                 <th class="borderx-2 border-black border-r-2 border-solid">كتب الشكر والتقدير والعقوبات
                                   والغيابات والاجازات</th>
                               </tr>
@@ -311,13 +311,14 @@ const headers = ref<Array<ITableHeader>>([
                               <tr class="border-t-2 border-black">
                                 <th class="borderx-2 border-black border-l-2 border-solid w-[70px]">تاريخ الاستحقاق</th>
                                 <th
-                                  class="borderx-2 border-black border-x-2 border-solid  [writing-mode:vertical-lr] rotate-180">
+                                  class="borderx-2 border-black border-x-2 border-solid w-[24px]  [writing-mode:vertical-lr] rotate-180">
                                   الدرجة</th>
                                 <th
-                                  class="borderx-2 border-black border-x-2 border-solid  [writing-mode:vertical-lr] rotate-180">
+                                  class="borderx-2 border-black border-x-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
                                   المرحلة</th>
-                                <th class="borderx-2 border-black border-x-2 border-solid w-[43px]">مقدار الراتب</th>
-                                <th class="borderx-2 border-black border-r-2 border-solid">كتب الشكر والتقدير والعقوبات
+                                <th class="borderx-2 border-black border-x-2 border-solid w-[44px]">مقدار الراتب</th>
+                                <th class="borderx-2 border-black border-r-2 border-solid ">كتب الشكر والتقدير
+                                  والعقوبات
                                   والغيابات والاجازات</th>
                               </tr>
                             </thead>
@@ -330,37 +331,50 @@ const headers = ref<Array<ITableHeader>>([
               </tr>
             </thead>
             <tbody>
-              <tr v-for="row in data" :key="row.id" class="border-2 border-black dir-rtl">
+              <tr v-for="row in data" :key="row.id" class="border-2 border-black dir-rtl  h-full">
                 <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.id }}</td>
-                <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.name }}</td>
+                <td class="border-2 border-black border-x-2 border-solid text-sm p-1">{{ row.name }}</td>
                 <td class="border-2 border-black border-x-2 border-solid text-sm">مكتب انتخابات كربلاء</td>
                 <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.employeeDepartment }}</td>
                 <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.bonusStudy }}</td>
                 <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.degreeStage }}</td>
                 <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.bonusJobTitle }}</td>
-                <td class="border-2 border-black border-x-2 border-solid text-sm">
-                  <table>
+                <td class="border-2 border-black border-solid text-sm h-full  p-0 align-fill relative">
+                  <table class="absolute top-0 left-0 w-full h-full">
                     <thead>
                       <tr>
-                        <th class="borderx-2 border-black border-l-2 border-solid w-[70px]">{{ row.dateLastBonus }}</th>
-                        <th class="borderx-2 border-black border-x-2 border-solid w-[23px]">{{ row.degree }}</th>
-                        <th class="borderx-2 border-black border-x-2 border-solid w-[25px]">{{ row.stage }}</th>
-                        <th class="borderx-2 border-black border-x-2 border-solid text-[12px]">{{ row.salary }}</th>
-                        <th class="borderx-2 border-black border-r-2 border-solid text-[12px]">{{ row.lastBonus.notes }}
+                        <th class="borderx-2 border-black border-l-2 border-solid w-[71px]">{{
+                          row.dateLastBonus
+                          }}</th>
+                        <th class="borderx-2 border-black border-x-2 border-solid w-[24px]">{{ row.degree }}
+                        </th>
+                        <th class="borderx-2 border-black border-x-2 border-solid w-[24px]">{{ row.stage }}
+                        </th>
+                        <th class="borderx-2 border-black border-x-2 border-solid w-[44px] text-[12px]">{{
+                          row.salary }}
+                        </th>
+                        <th class="borderx-2 border-black border-r-2 border-solid text-[12px]">{{
+                          row.lastBonus.notes }}
                         </th>
                       </tr>
                     </thead>
                   </table>
                 </td>
-                <td class="border-2 border-black border-r-2 border-solid text-sm">
-                  <table>
+                <td class="border-2 border-black border-solid text-sm  p-0 align-fill relative">
+                  <table class="absolute top-0 left-0 h-full">
                     <thead>
                       <tr>
-                        <th class="borderx-2 border-black border-l-2 border-solid w-[70px]">{{ row.dateNextBonus }}</th>
-                        <th class="borderx-2 border-black border-x-2 border-solid w-[23px]">{{ row.degreeNext }}</th>
-                        <th class="borderx-2 border-black border-x-2 border-solid w-[25px]">{{ row.stageNext }}</th>
-                        <th class="borderx-2 border-black border-x-2 border-solid text-[12px]">{{ row.salaryNext }}</th>
-                        <th class="borderx-2 border-black border-r-2 border-solid text-[12px]">{{ row.notesNext }}
+                        <th class=" border-black border-l-2 border-solid !w-[71px]">{{ row.dateNextBonus
+                          }}</th>
+                        <th class=" border-black border-x-2 border-solid w-[24px]">{{ row.degreeNext }}
+                        </th>
+                        <th class=" border-black border-x-2 border-solid w-[24px]">{{ row.stageNext }}
+                        </th>
+                        <th class=" border-black border-x-2 border-solid w-[44px] text-[12px]">{{
+                          row.salaryNext
+                          }}</th>
+                        <th class=" border-black border-r-2 border-solid text-[12px]">{{ row.notesNext
+                          }}
                         </th>
                       </tr>
                     </thead>

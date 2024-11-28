@@ -132,6 +132,7 @@ const store = async () => {
   formData.append("addDays", hrDocument.value.addDays.toString());
   formData.append("addMonths", hrDocument.value.addMonths.toString());
   formData.append("title", hrDocument.value.title.toString());
+  formData.append("number", hrDocument.value.number.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
@@ -180,6 +181,7 @@ const update = async () => {
   const formData = new FormData();
   formData.append("addDays", hrDocument.value.addDays.toString());
   formData.append("addMonths", hrDocument.value.addMonths.toString());
+  formData.append("number", hrDocument.value.number.toString());
   formData.append("title", hrDocument.value.title.toString());
   formData.append("issueDate", hrDocument.value.issueDate.toString());
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
@@ -327,6 +329,7 @@ const showData = async () => {
         hrDocument.value.addDays = response.data.data.addDays;
         hrDocument.value.addMonths = response.data.data.addMonths;
         hrDocument.value.title = response.data.data.title;
+        hrDocument.value.number = response.data.data.number;
         hrDocument.value.issueDate = response.data.data.issueDate;
         hrDocument.value.Type = response.data.data.Type;
         hrDocument.value.Employee = response.data.data.Employee;
@@ -373,7 +376,6 @@ onMounted(async () => {
     disabledChangeEmployee.value = true
     useEmployeeStore().show(employeeId.value).then((response) => {
       reset()
-      console.log(response.data.data);
       hrDocument.value.Employee.id = response.data.data.id;
       hrDocument.value.Employee.name = response.data.data.name;
     })
@@ -408,6 +410,9 @@ const changeSelectedType = () => {
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Title')" name="Name" v-model="hrDocument.title" :type="EnumInputType.Text" />
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput :label="t('Number')" name="Number" v-model="hrDocument.number" :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Date')" name="EmployeeDateWork" v-model="hrDocument.issueDate"

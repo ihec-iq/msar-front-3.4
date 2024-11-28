@@ -334,7 +334,7 @@ const headerFiles = ref<Array<ITableHeader>>([
   { caption: t('HrDocument.AddDayes'), value: "addDays" },
 ]);
 const headerBonus = ref<Array<ITableHeader>>([
-  { caption: t('Bonus.Number'), value: "number" },
+  { caption: t('Bonus.number'), value: "number" },
   { caption: t('Details'), value: "actions" },
   { caption: t('Date'), value: "issueDate" }
 ]);
@@ -581,7 +581,6 @@ const active = ref(0);
                   </template>
                 </ITable>
               </ICol>
-
             </IRow>
           </van-tab>
           <van-tab title="العلاوات والترفيعات" v-if="employee.id > 0" name="bonus">

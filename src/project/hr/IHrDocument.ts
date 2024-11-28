@@ -4,6 +4,7 @@ import type { IDocument } from "../archive/IArchive";
 
 export interface IHrDocument {
   id: number;
+  number: string;
   title: string;
   issueDate: string;
   Employee: IEmployeeLite;

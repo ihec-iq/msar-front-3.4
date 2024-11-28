@@ -142,6 +142,7 @@ export default {
   Days: "Days",
   Month: "Month",
   Months: "Months",
+  Number: "Number",
   ShowNotes: "Show Notes",
   EmployeeAdd: "Add new employee",
   EmployeeUpdate: "update employee",
