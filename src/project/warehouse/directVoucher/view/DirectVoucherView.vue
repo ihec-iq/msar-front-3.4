@@ -331,6 +331,8 @@ const reset = () => {
   directVoucherStore.resetData();
 };
 import { useItemStore } from "@/project/item/itemStore";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
 const { items } = storeToRefs(useItemStore());
 const { item } = storeToRefs(useItemStore());
@@ -373,7 +375,7 @@ onMounted(async () => {
       <IButton2
         color="green"
         width="28"
-        type="outlined"
+        :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"

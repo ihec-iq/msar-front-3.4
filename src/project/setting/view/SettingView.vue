@@ -8,6 +8,8 @@ import { storeToRefs } from "pinia";
 import { t } from "@/utilities/I18nPlugin";
 import IInput from "@/components/inputs/IInput.vue";
 import type IPermission from "@/project/role/IPermission";
+import type IRole from "@/project/role/IRole";
+import { useRoleStore } from "@/project/role/roleStore";
 const rtlStore = useRtlStore();
  
 const permissionsStore = usePermissionsStore();
@@ -16,13 +18,13 @@ const router = useRouter();
 const back = () => {
   router.go(-1);
 };
-const checkedPermission = ref<Array<string>>([]);
+const checkedPermission = ref<Array<IPermission>>([]);
 const CheckAll = ref(false);
 const toggleCheck = () => {
   if (CheckAll.value) {
     checkedPermission.value = [];
     permissionsStore.permissions.forEach((element: IPermission) => {
-      checkedPermission.value.push(element.name);
+      checkedPermission.value.push(element);
     });
     //console.log(checkedPermission.value);
   } else {

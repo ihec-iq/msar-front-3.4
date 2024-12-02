@@ -24,6 +24,8 @@ import IPage from "@/components/ihec/IPage.vue";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import ITable from "@/components/ihec/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -133,7 +135,7 @@ const headers = ref<Array<ITableHeader>>([
               :label="t('Title')"
               :placeholder="t('Search')"
               v-model="fastSearch"
-              type="text"
+              :type="EnumInputType.Text"
               :OnKeyEnter="getFilterData"
             />
           </ICol>

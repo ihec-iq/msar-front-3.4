@@ -1,7 +1,8 @@
 <script setup lang="ts">
+
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import { Icon } from "@iconify/vue";
 import { computed, type PropType } from "vue";
-
 const props = defineProps({
   text: {
     type: String,
@@ -13,8 +14,8 @@ const props = defineProps({
     default: "Btn",
   },
   type: {
-    type: String as PropType<"default" | "outlined" | "text">,
-    default: "default",
+    type: String as PropType<EnumButtonType>,
+    default: EnumButtonType.Default,
   },
   color: {
     type: String as PropType<"blue" | "green" | "amber" | "white" | "red">,
@@ -30,7 +31,7 @@ const props = defineProps({
   },
   onClick: {
     type: Function,
-    default: () => {},
+    default: (): void => {},
   },
   width: {
     type: String,
@@ -45,9 +46,9 @@ const PostIcon = computed(() => {
 });
 const classIcon = computed(() => {
   let _classIcon = "";
-  if (props.type === "default") {
+  if (props.type === EnumButtonType.Default) {
     _classIcon = "w-5 h-5 text-" + props.color + "-500 mx-1 basis-1/3 p-0";
-  } else if (props.type === "outlined") {
+  } else if (props.type === EnumButtonType.Outlined) {
     _classIcon = "w-5 h-5 text-" + props.color + "-500 mx-1 basis-1/3 p-0";
   } else {
     _classIcon = "w-5 h-5 text-" + props.color + "-500 mx-1 basis-1/3 p-0";
@@ -58,7 +59,7 @@ const BColor = computed(() => {
   return props.color;
 });
 const buttonClass = computed(() => {
-  if (props.type == "default") {
+  if (props.type == EnumButtonType.Default) {
     return (
       "bg-" +
       props.color +
@@ -68,7 +69,7 @@ const buttonClass = computed(() => {
       props.width +
       " py-2 px-4 rounded"
     );
-  } else if (props.type == "outlined") {
+  } else if (props.type == EnumButtonType.Outlined) {
     return (
       "ring-1 ring-" +
       props.color +
@@ -82,7 +83,7 @@ const buttonClass = computed(() => {
       props.width +
       " py-2 px-4 rounded"
     );
-  } else if (props.type == "text") {
+  } else if (props.type == EnumButtonType.Text) {
     return (
       " dark:hover:text-white-200 hover:text-white-800 duration-300 font-bold py-2 px-4 text-" +
       BColor.value +
@@ -100,10 +101,14 @@ const buttonClass = computed(() => {
     );
   }
 });
-</script>
-
+</script> 
 <template>
-  <button @click="onClick()" :class="buttonClass" class="flex flex-row mx-2" style="align-items:center">
+  <button
+    @click="onClick()"
+    :class="buttonClass"
+    class="flex flex-row mx-2"
+    style="align-items: center"
+  >
     <Icon
       v-if="props.preIcon != ''"
       :icon="PreIcon"

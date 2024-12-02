@@ -5,6 +5,8 @@ import { getError } from "@/utilities/helpers";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import type { IUser } from "@/project/user/IUser";;
 import { useRouter } from "vue-router";
+import CryptoJS from 'crypto-js';
+
 export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);
   const token = ref<string | any>("");
@@ -29,19 +31,19 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     await Api.get(`/profile`)
       .then((response) => {
         if (response.status == 200) {
-          console.log(response.data.data);
           setUser(response.data.data);
           return user;
         }
       })
       .catch((errors) => {
-        console.log("in get employee : " + errors);
+        console.log("in get User : " + errors);
       });
   }
   const setToken = (_token: string) => {
     if (!_token || _token == "") return logout();
     token.value = _token;
     localStorage.setItem("isAuthenticated", "1");
+
     localStorage.setItem("token", _token);
     Api.defaults.headers.common["Authorization"] = `Bearer ${_token}`;
     isAuthenticated.value = true
@@ -87,6 +89,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     );
     if (user.value) setPermissions(user.value.permissions);
   };
+
   return {
     isAuthenticated,
     token,

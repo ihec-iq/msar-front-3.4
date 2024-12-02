@@ -5,6 +5,8 @@ import type { IUser } from "../user/IUser";
 import type { IVacationDaily } from "../vacation/vacationDaily/IVacationDaily";
 import type { IVacationSick } from "../vacation/vacationSick/IVacationSick";
 import type { IVacationTime } from "../vacation/vacationTime/IVacationTime";
+import type { IDegreeStage, IBonusJobTitle, IBonusStudy } from "../bonus/IBonus";
+import type { IDocument } from "../archive/IArchive";
 
 export interface IEmployee {
   id: number;
@@ -16,10 +18,10 @@ export interface IEmployee {
   dateWork: string;
   number: string;
   idCard: string;
-  telegramId?: string;
-  Position: IEmployeePosition;
-  Type: IEmployeeType;
-  Center: IEmployeeCenter;
+  telegram?: string;
+  EmployeePosition: IEmployeePosition;
+  EmployeeType: IEmployeeType;
+  EmployeeCenter: IEmployeeCenter;
   initVacation: number;
   takeVacation: number;
   initVacationSick: number;
@@ -28,27 +30,53 @@ export interface IEmployee {
   vacationDaily?: Array<IVacationDaily>;
   vacationSick?: Array<IVacationSick>;
   vacationTime?: Array<IVacationTime>;
+  issueDate?:string;
+  BonusJobTitle?: IBonusJobTitle;
+  BonusStudy?: IBonusStudy;
+  DegreeStage?: IDegreeStage;
+  Files?: Array<IDocument>;
+  numberLastBonus?: string;
+  dateLastBonus?: string;
+  dateNextBonus?: string;
+  isChecked?: boolean;
 }
-const xx = {
-  voucherItemHistoriable: {
-    id: 4,
-    inputVoucherId: 2,
-    itemId: 1,
-    item: {
-      id: 1,
-      name: "ميز خشب",
-      code: "A2152AA0001",
-      description: "loren loren",
-      itemCategory: {
-        id: 1,
-        name: "اجهزة كهربائية",
-        description: "تختص بالاجهزة الكهربائية والالكترونية",
-      },
-      itemCategoryId: 1,
-      measuringUnit: "Item",
-    },
-  },
-};
+export interface IEmployeeBonus {
+  id: number;
+  name: string;
+  employeePosition: string;
+  employeeType: string;
+  employeeCenter: string;
+  bonusJobTitle: string;
+  bonusStudy: string;
+  DegreeStage: string;
+  numberLastBonus: string;
+  dateLastBonus: string;
+  difNextBonusDate:string;
+  dateNextBonus: string;
+}
+export interface IEmployeeLite {
+  id: number;
+  name: string;
+}
+export interface IEmployeeLiteBonus {
+  id: number;
+  name: string;
+  dateLastBonus: string;
+  dateNextBonus: string;
+  numberLastBonus: string;
+  DegreeStage: IDegreeStage;
+  BonusJobTitle: IBonusJobTitle;
+  BonusStudy: IBonusStudy;
+}
+export interface IEmployeeLitePromotion {
+  id: number;
+  name: string;
+  dateLastPromotion: string;
+  dateNextPromotion: string;
+  numberLastPromotion: string;
+  DegreeStage: IDegreeStage;
+  BonusJobTitle: IBonusJobTitle;
+}
 
 export interface IEmployeeHistory {
   id: number;

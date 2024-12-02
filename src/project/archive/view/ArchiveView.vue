@@ -12,6 +12,7 @@ import IPage from "@/components/ihec/IPage.vue";
 import { crud_delete } from "@/utilities/crudTool";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import ISelect from "@/components/inputs/ISelect.vue";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
@@ -169,7 +170,7 @@ const Delete = () => {
 
 const showData = async () => {
   isLoading.value = true;
-  archive.value.files = [];
+  archive.value.Files = [];
   await archiveStore
     .show(id.value)
     .then((response) => {
@@ -182,7 +183,7 @@ const showData = async () => {
         archive.value.way = response.data.data.way;
         archive.value.archiveTypeId = response.data.data.archiveTypeId;
         archive.value.isIn = response.data.data.isIn;
-        archive.value.files = response.data.data.files;
+        archive.value.Files = response.data.data.Files;
         isIn.value = response.data.data.isIn == 0 ? false : true;
         archive.value.isInWord = response.data.data.isInWord;
       }
@@ -231,6 +232,8 @@ const chackArchiveTypeLoad = async () => {
 };
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
 </script>
@@ -240,7 +243,7 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
       <IButton2
         color="green"
         width="28"
-        type="outlined"
+        :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -255,7 +258,7 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
                 :label="t('Title')"
                 v-model="archive.title"
                 name="title"
-                type="text"
+                :type="EnumInputType.Text"
                 :IsRequire="true"
             /></ICol>
           </IRow>
@@ -265,14 +268,14 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
                 :label="t('NumberBook')"
                 v-model="archive.number"
                 name="number"
-                type="text"
+                :type="EnumInputType.Text"
             /></ICol>
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('Date')"
                 v-model="archive.issueDate"
                 name="issueDate"
-                type="date"
+                :type="EnumInputType.Date"
                 :IsRequire="true"
             /></ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -289,14 +292,14 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
                 :label="t('way')"
                 v-model="archive.way"
                 name="way"
-                type="text"
+                :type="EnumInputType.Text"
             /></ICol>
             <ICol span="4" span-md="4" span-sm="4">
               <IInput
                 :label="t('Description')"
                 v-model="archive.description"
                 name="description"
-                type="text"
+                :type="EnumInputType.Text"
                 class="w-full"
             /></ICol>
           </IRow>
@@ -316,7 +319,7 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
               span-md="2"
               span-sm="1"
               class=""
-              v-for="document in archive.files"
+              v-for="document in archive.Files"
               :key="document.name"
             >
               <FilePreview :file="document" @updateList="updateList">

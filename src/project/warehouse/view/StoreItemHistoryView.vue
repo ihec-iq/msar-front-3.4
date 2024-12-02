@@ -28,6 +28,8 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import EditButton from "@/components/dropDown/EditButton.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 
 const route = useRoute();
 const router = useRouter();
@@ -143,7 +145,7 @@ const headers = ref<Array<ITableHeader>>([
               :label="t('Title')"
               :placeholder="t('Search')"
               v-model="fastSearch"
-              type="text"
+              :type="EnumInputType.Text"
               :OnKeyEnter="getFilterData"
             />
           </ICol>

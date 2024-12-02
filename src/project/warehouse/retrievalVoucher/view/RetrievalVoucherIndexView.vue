@@ -21,6 +21,8 @@ import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardRetrievalVoucherIndex from "./CardRetrievalVoucherIndex.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 
 const route = useRoute();
 const router = useRouter();
@@ -114,7 +116,7 @@ onMounted(async () => {
               :label="t('Search')"
               :placeholder="t('Search')"
               v-model="fastSearch"
-              type="text"
+              :type="EnumInputType.Text"
               :OnKeyEnter="getFilterData"
             />
           </ICol>

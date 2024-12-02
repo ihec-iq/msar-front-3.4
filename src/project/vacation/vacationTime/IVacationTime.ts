@@ -8,6 +8,7 @@ export interface IVacationTime {
   record: number;
   Vacation: IVacation;
   Reason: IVacationReason;
+  createdAt?: string
 }
 
 export interface IVacationTimeFilter {
