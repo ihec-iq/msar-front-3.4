@@ -16,7 +16,7 @@ const isLoading = ref(false);
 const { Bonus } = storeToRefs(useBonusStore());
 const { sections } = storeToRefs(useSectionStore());
 
-const IdPage = "BonusChecker"
+const IdPage = "BonusChecker";
 const data = ref<Array<IBonusEmployeeChecker>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IBonusEmployeeChecker>>([]);
@@ -50,7 +50,6 @@ watch(
   }
 );
 
-
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (Bonus: IBonus) => {
@@ -78,12 +77,12 @@ const searchFilter = ref<IBonusFilter>({
   limit: 10,
   title: "",
   isBound: true,
-  bound: 0
+  bound: 0,
 });
 const printAll = () => {
   printWindow();
   return;
-}
+};
 const printWindow = () => {
   // Pass the element id here
   //paperize();
@@ -144,7 +143,8 @@ const getFilterData = async (page = 1) => {
   localStorage.setItem("index" + IdPage, page.toString());
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
-  searchFilter.value.bound = searchFilter.value.bound == 0 ? 0 : searchFilter.value.bound;
+  searchFilter.value.bound =
+    searchFilter.value.bound == 0 ? 0 : searchFilter.value.bound;
   await get_checkBonus(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -191,17 +191,20 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  await SettingStore.showByKey(SettingNumberDayesAlertBonus.value.key).then((response) => {
-    Object.assign(SettingNumberDayesAlertBonus.value, response);
-    if (SettingNumberDayesAlertBonus.value.valInt == 0) {
-      SettingNumberDayesAlertBonus.value.valInt = 30;
-    } else if (SettingNumberDayesAlertBonus.value.valInt === undefined) {
-      location.reload();
+  await SettingStore.showByKey(SettingNumberDayesAlertBonus.value.key).then(
+    (response) => {
+      Object.assign(SettingNumberDayesAlertBonus.value, response);
+      if (SettingNumberDayesAlertBonus.value.valInt == 0) {
+        SettingNumberDayesAlertBonus.value.valInt = 30;
+      } else if (SettingNumberDayesAlertBonus.value.valInt === undefined) {
+        location.reload();
+      }
+      searchFilter.value.bound = SettingNumberDayesAlertBonus.value.valInt;
     }
-    searchFilter.value.bound = SettingNumberDayesAlertBonus.value.valInt;
-  })
-  let check = await localStorage.getItem("check" + IdPage)
-  if (check != undefined) searchFilter.value.isBound = (check == "1" ? true : false)
+  );
+  let check = await localStorage.getItem("check" + IdPage);
+  if (check != undefined)
+    searchFilter.value.isBound = check == "1" ? true : false;
 
   let index = 1;
 
@@ -211,8 +214,11 @@ onMounted(async () => {
   //isLoading.value = false;
 });
 const changeCheck = () => {
-  localStorage.setItem("check" + IdPage, searchFilter.value.isBound ? "1" : "0")
-}
+  localStorage.setItem(
+    "check" + IdPage,
+    searchFilter.value.isBound ? "1" : "0"
+  );
+};
 const headers = ref<Array<ITableHeader>>([
   { caption: t("#"), value: "checkId" },
   { caption: t("Employee.Title"), value: "name" },
@@ -244,7 +250,10 @@ const headers = ref<Array<ITableHeader>>([
           </ICol> -->
           <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center">
             <ICheckbox :label="t('Bonus.IsBoundFilter') + ' ' + t('Days')" v-model="searchFilter.isBound"
-              :IsRequire="true" @Change="getFilterData(); changeCheck()" class="flex items-center justify-center" />
+              :IsRequire="true" @Change="
+                getFilterData();
+              changeCheck();
+              " class="flex items-center justify-center" />
             <IInput v-model="searchFilter.bound" :disabled="!searchFilter.isBound" :type="EnumInputType.Number"
               class="w-[100px]" @keyup.enter="getFilterData" />
           </ICol>
@@ -254,135 +263,155 @@ const headers = ref<Array<ITableHeader>>([
         </ICol>
       </IRow>
       <IRow id="PrintArea">
-        <div id="printMe" class="[print-color-adjust:exact]">
-          <table class="w-full border-2 border-black dir-rtl" dir="rtl">
-            <thead>
-              <tr class="border-2 border-black border-x border-solid bg-gray-300">
-                <th class="border-2 border-black border-x-2 border-solid">ت</th>
-                <th class="border-2 border-black border-x-2 border-solid">الاسم</th>
-                <th class="border-2 border-black border-x-2 border-solid">المكتب</th>
-                <th class="border-2 border-black border-x-2 border-solid">القسم</th>
-                <th class="border-2 border-black border-x-2 border-solid">التحصيل الدراسي</th>
-                <th class="border-2 border-black border-x-2 border-solid">الشهادة الدراسية</th>
-                <th class="border-2 border-black border-x-2 border-solid">العنوان الوظيفي</th>
-                <th class="border-2 border-black border-x-2 border-solid text-sm">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>الاستحقاق السابق</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="p-0 m-0">
-                          <table>
-                            <thead>
-                              <tr class="border-t-2 border-black">
-                                <th class="borderx-2 border-black border-l-2 border-solid w-[70px]">تاريخ الاستحقاق</th>
-                                <th
-                                  class="borderx-2 border-black border-x-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
-                                  الدرجة</th>
-                                <th
-                                  class="borderx-2 border-black border-x-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
-                                  المرحلة</th>
-                                <th class="borderx-2 border-black border-x-2 border-solid w-[44px]">مقدار الراتب</th>
-                                <th class="borderx-2 border-black border-r-2 border-solid">كتب الشكر والتقدير والعقوبات
-                                  والغيابات والاجازات</th>
-                              </tr>
-                            </thead>
-                          </table>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </th>
-                <th class="border-2 border-black border-x-2 border-solid text-sm">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>الاستحقاق الجديد</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="p-0 m-0">
-                          <table>
-                            <thead>
-                              <tr class="border-t-2 border-black">
-                                <th class="borderx-2 border-black border-l-2 border-solid w-[70px]">تاريخ الاستحقاق</th>
-                                <th
-                                  class="borderx-2 border-black border-x-2 border-solid w-[24px]  [writing-mode:vertical-lr] rotate-180">
-                                  الدرجة</th>
-                                <th
-                                  class="borderx-2 border-black border-x-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
-                                  المرحلة</th>
-                                <th class="borderx-2 border-black border-x-2 border-solid w-[44px]">مقدار الراتب</th>
-                                <th class="borderx-2 border-black border-r-2 border-solid ">كتب الشكر والتقدير
-                                  والعقوبات
-                                  والغيابات والاجازات</th>
-                              </tr>
-                            </thead>
-                          </table>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="row in data" :key="row.id" class="border-2 border-black dir-rtl  h-full">
-                <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.id }}</td>
-                <td class="border-2 border-black border-x-2 border-solid text-sm p-1">{{ row.name }}</td>
-                <td class="border-2 border-black border-x-2 border-solid text-sm">مكتب انتخابات كربلاء</td>
-                <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.employeeDepartment }}</td>
-                <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.bonusStudy }}</td>
-                <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.degreeStage }}</td>
-                <td class="border-2 border-black border-x-2 border-solid text-sm">{{ row.bonusJobTitle }}</td>
-                <td class="border-2 border-black border-solid text-sm h-full  p-0 align-fill relative">
-                  <table class="absolute top-0 left-0 w-full h-full">
-                    <thead>
-                      <tr>
-                        <th class="borderx-2 border-black border-l-2 border-solid w-[71px]">{{
-                          row.dateLastBonus
-                          }}</th>
-                        <th class="borderx-2 border-black border-x-2 border-solid w-[24px]">{{ row.degree }}
-                        </th>
-                        <th class="borderx-2 border-black border-x-2 border-solid w-[24px]">{{ row.stage }}
-                        </th>
-                        <th class="borderx-2 border-black border-x-2 border-solid w-[44px] text-[12px]">{{
-                          row.salary }}
-                        </th>
-                        <th class="borderx-2 border-black border-r-2 border-solid text-[12px]">{{
-                          row.lastBonus.notes }}
-                        </th>
-                      </tr>
-                    </thead>
-                  </table>
-                </td>
-                <td class="border-2 border-black border-solid text-sm  p-0 align-fill relative">
-                  <table class="absolute top-0 left-0 h-full">
-                    <thead>
-                      <tr>
-                        <th class=" border-black border-l-2 border-solid !w-[71px]">{{ row.dateNextBonus
-                          }}</th>
-                        <th class=" border-black border-x-2 border-solid w-[24px]">{{ row.degreeNext }}
-                        </th>
-                        <th class=" border-black border-x-2 border-solid w-[24px]">{{ row.stageNext }}
-                        </th>
-                        <th class=" border-black border-x-2 border-solid w-[44px] text-[12px]">{{
-                          row.salaryNext
-                          }}</th>
-                        <th class=" border-black border-r-2 border-solid text-[12px]">{{ row.notesNext
-                          }}
-                        </th>
-                      </tr>
-                    </thead>
-                  </table>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div id="printMe" class="[print-color-adjust:exact] p-1">
+          <div class="overflow-auto">
+<div class="flex items-center content-center justify-center text-md font-bold w-[1040px] border-black border-x-2 border-t-2">              استحقاق العلاوة السنوية لموظفي كادر مكتب انتخابات كربلاء
+            </div>
+            <table class="table-fixed text-sm w-[1040px]" dir="rtl">
+              <thead>
+                <tr class="bg-gray-300">
+                  <th class="tdborderx w-[30px]">ت</th>
+                  <th class="tdborderx">الاسم</th>
+                  <th class="tdborderx">المكتب</th>
+                  <th class="tdborderx">القسم</th>
+                  <th class="tdborderx">التحصيل الدراسي</th>
+                  <th class="tdborderx">الشهادة الدراسية</th>
+                  <th class="tdborderx">العنوان الوظيفي</th>
+                  <th class="tdborderx w-[330px]">
+                    <table class="text-sm">
+                      <thead>
+                        <tr>
+                          <th>الاستحقاق السابق</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="p-0 m-0">
+                            <table>
+                              <thead>
+                                <tr class="border-t-2 border-black">
+                                  <th class="border-black border-l-2 border-solid w-[70px]">
+                                    تاريخ الاستحقاق
+                                  </th>
+                                  <th
+                                    class="border-black border-r-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
+                                    الدرجة
+                                  </th>
+                                  <th
+                                    class="border-black border-r-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
+                                    المرحلة
+                                  </th>
+                                  <th class="border-black border-r-2 border-solid w-[44px]">
+                                    مقدار الراتب
+                                  </th>
+                                  <th class="border-black border-r-2 border-solid">
+                                    كتب الشكر والتقدير والعقوبات والغيابات
+                                    والاجازات
+                                  </th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </th>
+                  <th class="tdborderx w-[330px]">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>الاستحقاق الجديد</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="p-0 m-0">
+                            <table>
+                              <thead class="text-sm">
+                                <tr class="border-t-2 border-black">
+                                  <th class="border-black border-l-2 border-solid w-[70px]">
+                                    تاريخ الاستحقاق
+                                  </th>
+                                  <th
+                                    class="border-black border-r-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
+                                    الدرجة
+                                  </th>
+                                  <th
+                                    class="border-black border-r-2 border-solid w-[24px] [writing-mode:vertical-lr] rotate-180">
+                                    المرحلة
+                                  </th>
+                                  <th class="border-black border-r-2 border-solid w-[44px]">
+                                    مقدار الراتب
+                                  </th>
+                                  <th class="border-black border-r-2 border-solid w-[164px]">
+                                    كتب الشكر والتقدير والعقوبات والغيابات
+                                    والاجازات
+                                  </th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="text-[12px]">
+                <tr v-for="row in data" :key="row.id" class="border-2 border-black text-[12px] text-center">
+                  <td class="tdborderx">{{ row.id }}</td>
+                  <td class="tdborderx">{{ row.name }}</td>
+                  <td class="tdborderx">مكتب انتخابات كربلاء</td>
+                  <td class="tdborderx">{{ row.employeeDepartment }}</td>
+                  <td class="tdborderx">{{ row.bonusStudy }}</td>
+                  <td class="tdborderx">{{ row.degreeStage }}</td>
+                  <td class="tdborderx">{{ row.bonusJobTitle }}</td>
+                  <td class="tdborderx">
+                    <!-- Reverse position using 'right' -->
+                    <div class="flex w-full m-0 p-0 text-center align-top content-normal">
+                      <span class="mx-0 px-0 border-black border-l-2 border-solid !w-[71px]">
+                        {{ row.dateLastBonus }}
+                      </span>
+                      <span class="mx-0 px-0 border-black border-l-2 border-solid !w-[24px]">
+                        {{ row.degree }}
+                      </span>
+                      <span class="mx-0  px-0 border-black border-l-2 border-solid !w-[24px]">
+                        {{ row.stage }}
+                      </span>
+                      <span class="mx-0 px-0 border-black border-l-2 border-solid !w-[44px]">
+                        {{ row.salary }}
+                      </span>
+                      <span class="flex-1 mx-0 px-0 w-[167px]">
+                        {{ row.lastBonus.notes }}
+                      </span>
+                    </div>
+                  </td>
+                  <td class="relative text-wrap">
+                    <!-- Reverse position using 'right' -->
+                    <div
+                      class="absolute top-0 right-0 border-black border-l-2 border-solid w-[73px] text-center h-full">
+                      {{ row.dateNextBonus }}
+                    </div>
+                    <div class="absolute top-0 border-black border-l-2 border-solid w-[24px] text-center h-full"
+                      style="right: 71px">
+                      {{ row.degreeNext }}
+                    </div>
+                    <div class="absolute top-0 border-black border-l-2 border-solid w-[24px] text-center h-full"
+                      style="right: 95px">
+                      {{ row.stageNext }}
+                    </div>
+                    <div
+                      class="absolute top-0 border-black border-l-2 border-solid w-[44px] text-center h-full right-[119px]">
+                      {{ row.salaryNext }}
+                    </div>
+                    <div class="absolute top-0 w-[164px] text-center text-wrap z-0 h-full right-[164px]">
+                      {{ row.notesNext }}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </IRow>
       <IRow>
@@ -391,7 +420,7 @@ const headers = ref<Array<ITableHeader>>([
             <input type="checkbox" :value="row.checked" />
           </template>
           <template v-slot:difNextBonusDate="{ row }">
-            <span>{{ row.difNextBonusDate + " " + t('Day') }} </span>
+            <span>{{ row.difNextBonusDate + " " + t("Day") }} </span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
@@ -434,3 +463,8 @@ const headers = ref<Array<ITableHeader>>([
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
+<style scoped lang="postcss">
+.tdborderx {
+  @apply border-2 border-black border-x-2 border-solid;
+}
+</style>
