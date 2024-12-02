@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
 
 
 const props = defineProps({
@@ -36,8 +38,8 @@ var buttonClass =
   props.type === "default"
     ? defaultClass
     : props.type === "outlined"
-    ? outlinedClass
-    : defaultClass;
+      ? outlinedClass
+      : defaultClass;
 
 if (props.icon != "") {
   buttonClass = iconClass;
@@ -45,15 +47,11 @@ if (props.icon != "") {
 </script>
 
 <template>
-  <button @click="onClick()" type="button" :class="buttonClass">
-    <svg
-      v-if="props.icon != ''"
-      class="fill-current w-4 h-4 mx-2"
-      :xmlns="props.icon"
-      viewBox="0 0 20 20"
-    >
-      <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-    </svg>
+  <button @click="onClick()" type="button" :class="buttonClass" class="flex items-center justify-center 
+    focus:bg-black focus:bg-opacity-80 focus:text-white  
+    hover:bg-black hover:bg-opacity-80 hover:text-white ">
+    <Icon v-if="props.icon != ''" :icon="props.icon" />
     <span>{{ props.text }}</span>
+    <slot></slot>
   </button>
 </template>

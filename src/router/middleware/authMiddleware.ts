@@ -8,16 +8,16 @@ export default async function authMiddleware(
   // Perform your authentication logic here
   const isAuthenticated =
     localStorage.getItem("token") != "" &&
-    localStorage.getItem("token") != undefined
+      localStorage.getItem("token") != undefined
       ? true
       : false; // Replace with your authentication check
   if (!isAuthenticated) {
     // If not authenticated, redirect to login
     next("/login");
     return;
-  } else {
-    // If authenticated, proceed to the next middleware
-    next();
-    return;
   }
+  // If authenticated, proceed to the next middleware
+  next();
+  return;
+
 }

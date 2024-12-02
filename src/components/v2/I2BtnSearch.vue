@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { Icon } from "@iconify/vue";
-import { t } from "@/utils/I18nPlugin";
+import { t } from "@/utilities/I18nPlugin";
 const fastSearch = defineModel();
 
 const emit = defineEmits(["getFilterData", "makeFastSearch"]);
@@ -38,3 +38,4 @@ onMounted(async () => {
     />
   </div>
 </template>
+@/utilities/I18nPlugin

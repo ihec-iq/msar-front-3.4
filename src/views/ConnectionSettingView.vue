@@ -5,8 +5,8 @@ import { storeToRefs } from "pinia";
 import envConfig from "@/api/envConfig";
 import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
-import { usePermissionStore } from "@/stores/permissionStore";
-import { t } from "@/utils/I18nPlugin";
+import { usePermissionsStore } from "@/project/core/permissionStore";
+import { t } from "@/utilities/I18nPlugin";
 const rtlStore = useRtlStore();
 import { useConfigStore } from "@/stores/configStore";
 import { ref, getCurrentInstance, onMounted } from "vue";
@@ -19,7 +19,7 @@ const { is } = storeToRefs(rtlStore);
 
 //#region Vars
 const app = getCurrentInstance();
-const { checkPermissionAccessArray } = usePermissionStore();
+const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref(t("ConfigServer"));
 const route = useRoute();
 const Loading = ref(false);
@@ -35,7 +35,6 @@ const store = async () => {
     .store(String(ConnectionString.value), String(Organization.value))
     .then(() => {
       Swal.fire({
-        position: "top-end",
         icon: "success",
         title: "Your configuration has been updated",
         showConfirmButton: false,
@@ -208,3 +207,4 @@ button {
   text-align: right !important;
 }
 </style>
+@/project/user/permissionStore@/utilities/I18nPlugin

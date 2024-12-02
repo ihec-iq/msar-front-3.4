@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const modelValue = defineModel();
-import { EnumDirection } from "@/utils/EnumSystem";
-import { t } from "@/utils/I18nPlugin";
+import { EnumDirection } from "@/utilities/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
 
 defineProps({
   type: {
@@ -36,3 +36,4 @@ defineProps({
     />
   </div>
 </template>
+@/utilities/EnumSystem@/utilities/I18nPlugin
