@@ -11,7 +11,7 @@ import { useVacationStore } from "../../vacationStore";
 
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import ISelect from "@/components/inputs/ISelect.vue";
-import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType, EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
 import {
   useValidation,
@@ -284,7 +284,7 @@ const ChangeDateRecord = () => {
       <IButton2
         color="green"
         width="28"
-        type="outlined"
+        :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"

@@ -51,7 +51,7 @@ const addArchive = () => {
   archive.id = 0;
   archive.title = "";
   archive.issueDate = new Date().toISOString().split("T")[0];
-  archive.files = [];
+  archive.Files = [];
   archive.number = "";
   archive.description = "";
   archive.isIn = 1;
@@ -78,7 +78,6 @@ const searchFilter = ref<IArchiveFilter>({
   issueDateFrom : new Date().toISOString().split("T")[0],
   issueDateTo : new Date().toISOString().split("T")[0],
   hasDate : false
-
 });
 const scrollPageTo = (navEl: string) => {
   let element = document.getElementById(navEl);

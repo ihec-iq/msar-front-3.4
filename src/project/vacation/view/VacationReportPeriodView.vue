@@ -9,7 +9,6 @@ import PageTitle from "@/components/general/namePage.vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 
-
 import type {
   IVacationTime,
   IVacationTimeFilter,
@@ -19,7 +18,6 @@ import type {
   IVacationDailyFilter,
 } from "../vacationDaily/IVacationDaily";
 import type { IVacationSick } from "../vacationSick/IVacationSick";
-
 
 //#region Stores
 import { useVacationTimeStore } from "../vacationTime/vacationTimeStore";
@@ -33,7 +31,32 @@ import { limits } from "@/utilities/defaultParams";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
+import type { ITableHeader } from "@/types/core/components/ITable";
+import IRow from "@/components/ihec/IRow.vue";
+import ICol from "@/components/ihec/ICol.vue";
+import IPage from "@/components/ihec/IPage.vue";
+import IInput from "@/components/inputs/IInput.vue";
+import ILabel from "@/components/ihec/ILabel.vue";
+import ITable from "@/components/ihec/ITable.vue";
+import type { IVacationFilter } from "../IVacation";
+//#region Vars
+const { checkPermissionAccessArray } = usePermissionsStore();
+const namePage = ref("");
+const route = useRoute();
+const id = ref(Number(route.params.id));
+const rtlStore = useRtlStore();
+const isIn = ref(false);
 
+const employeeStore = useEmployeeStore();
+const { employee } = storeToRefs(useEmployeeStore());
+const sectionStore = useSectionStore();
+const { sections } = storeToRefs(useSectionStore());
+
+const Loading = ref(false);
+
+const router = useRouter();
+const errors = ref<String | null>();
+//#endregion
 const limit = ref(10);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
 const dataVacationDaily = ref<Array<IVacationDaily>>([]);
@@ -48,23 +71,30 @@ const isLoadingSick = ref(false);
 
 //#endregion
 //#region Functions
+const fastSearch = ref("");
+
+const searchFilter = ref<IVacationFilter>({
+  employeeName: "",
+  limit: 10,
+  hasDate: true,
+  dayFrom: new Date(Date.now() - 86400000).toISOString().split("T")[0],
+  dayTo: new Date().toISOString().split("T")[0],
+});
 const getFilterData = async (page: number = 1) => {
-  await getDataDaily();
-  await getDataTime();
+  searchFilter.value.employeeName = fastSearch.value;
+  searchFilter.value.limit = 1990;
+  await getDataDaily(searchFilter.value);
+  await getDataTime(searchFilter.value);
+  await getDataSick(searchFilter.value);
 };
-const getDataTime = async (page: number = 1) => {
+const getDataTime = async (searchFilter: IVacationFilter, page: number = 1) => {
   isLoadingTime.value = true;
-  const searchFilter = ref<IVacationTimeFilter>({
-    limit: limit.value,
-    employeeId: employee.value.id,
-  });
   await useVacationTimeStore()
-    .get_filter(searchFilter.value, page)
+    .get_filter(searchFilter, page)
     .then((response) => {
       if (response.status == 200) {
         dataPageVacationTime.value = response.data.data;
         dataVacationTime.value = response.data.data.data;
-        console.log(dataPageVacationTime.value);
       }
     })
     .catch((error) => {
@@ -72,25 +102,38 @@ const getDataTime = async (page: number = 1) => {
     });
   isLoadingTime.value = false;
 };
-const getDataDaily = async (page: number = 1) => {
-  isLoadingTime.value = true;
-  const searchFilter = ref<IVacationDailyFilter>({
-    limit: limit.value,
-    employeeId: employee.value.id,
-  });
+const getDataDaily = async (
+  searchFilter: IVacationFilter,
+  page: number = 1
+) => {
+  isLoadingDaily.value = true;
   await useVacationDailyStore()
-    .get_filter(searchFilter.value, page)
+    .get_filter(searchFilter, page)
     .then((response) => {
       if (response.status == 200) {
         dataPageVacationDaily.value = response.data.data;
         dataVacationDaily.value = response.data.data.data;
-        console.log(dataPageVacationDaily.value);
+       }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  isLoadingDaily.value = false;
+};
+const getDataSick = async (searchFilter: IVacationFilter, page: number = 1) => {
+  isLoadingSick.value = true;
+  await useVacationSickStore()
+    .get_filter(searchFilter, page)
+    .then((response) => {
+      if (response.status == 200) {
+        dataPageVacationSick.value = response.data.data;
+        dataVacationSick.value = response.data.data.data;
       }
     })
     .catch((error) => {
       console.log(error);
     });
-  isLoadingTime.value = false;
+  isLoadingSick.value = false;
 };
 //#endregion
 
@@ -98,57 +141,8 @@ const getDataDaily = async (page: number = 1) => {
 
 //#endregion
 
-//#region Vars
-const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref("");
-const route = useRoute();
-const id = ref(Number(route.params.id));
-const rtlStore = useRtlStore();
-const { is } = storeToRefs(rtlStore);
-const isIn = ref(false);
-
-const employeeStore = useEmployeeStore();
-const { employee } = storeToRefs(useEmployeeStore());
-const sectionStore = useSectionStore();
-const { sections } = storeToRefs(useSectionStore());
-
-const Loading = ref(false);
-
-const router = useRouter();
-const errors = ref<String | null>();
-//#endregion
 //#region CURD
-const showData = async () => {
-  Loading.value = true;
-  await employeeStore
-    .show(id.value)
-    .then((response) => {
-      if (response.status == 200) {
-        employee.value.id = response.data.data.id;
-        employee.value.name = response.data.data.name;
-        employee.value.Section.id = response.data.data.Section.id;
-        employee.value.Section.name = response.data.data.Section.name;
-        employee.value.isPerson = response.data.data.isPerson;
-        isIn.value = response.data.data.isPerson == 0 ? false : true;
-      }
-    })
-    .catch((errors) => {
-      console.log(errors);
-      Swal.fire({
-        icon: "warning",
-        title: "Your employee file not exist !!!",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        router.go(-1);
-      });
-    });
-  Loading.value = false;
-};
-//#endregion
-const back = () => {
-  router.back();
-};
+
 const OpenVacationTime = (id: number) => {
   router.push({
     name: "vacationTimeUpdate",
@@ -161,317 +155,154 @@ const OpenVacationDaily = (id: number) => {
     params: { id: id },
   });
 };
+const OpenVacationSick = (id: number) => {
+  router.push({
+    name: "vacationSickUpdate",
+    params: { id: id },
+  });
+};
 onMounted(async () => {
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.VacationReport]);
-  await sectionStore.get_sections();
-  if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("EmployeeAdd");
-    employee.value.id = 0;
-  } else {
-    await showData();
-    await getFilterData();
-    employee.value.id = id.value;
-    namePage.value = t("EmployeeUpdate");
-  }
+  await getFilterData();
 });
+const headersTime = ref<Array<ITableHeader>>([
+  { caption: t("Employee.Title"), value: "name" },
+  { caption: t("Vacation.Record"), value: "record" },
+  { caption: t("VacationTime.TimeFrom"), value: "timeFrom" },
+  { caption: t("VacationTime.TimeTo"), value: "timeTo" },
+  { caption: t("VacationTime.Date"), value: "date" },
+  { caption: t("Details"), value: "actions" },
+]);
+const headersDaily = ref<Array<ITableHeader>>([
+  { caption: t("Employee.Title"), value: "name" },
+  { caption: t("Vacation.Record"), value: "record" },
+  { caption: t("Vacation.DayFrom"), value: "dayFrom" },
+  { caption: t("Vacation.DayTo"), value: "dayTo" },
+  { caption: t("Details"), value: "actions" },
+]);
+const headersSick = ref<Array<ITableHeader>>([
+  { caption: t("Employee.Title"), value: "name" },
+  { caption: t("Vacation.Record"), value: "record" },
+  { caption: t("Vacation.DayFrom"), value: "dayFrom" },
+  { caption: t("Vacation.DayTo"), value: "dayTo" },
+  { caption: t("Details"), value: "actions" },
+]);
 </script>
 <template>
-  <PageTitle>{{ namePage }}</PageTitle>
-  <div class="w-full">
-    <div class="w-full p-6 grid lg:grid-cols-4 xs:grid-cols-2">
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("Name") }}
-        </div>
-        <input
-          v-model="employee.name"
-          type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("EmployeeSection") }}
-        </div>
-        <input
-          v-model="employee.Section.name"
-          type="text"
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("EmployeeIsPerson") }}
-        </div>
-        <div
-          class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        >
-          {{ isIn ? "شخص" : "شعبة" }}
-        </div>
-      </div>
-    </div>
-    <!-- For Time Report -->
-    <div class="w-full">
-      <div class="flex flex-col">
-        <div class="py-4 inline-block min-w-full lg:px-8">
-          <!-- card -->
-
-          <div class="rounded-xl" v-if="isLoadingTime == false">
-            <div
-              v-motion
-              :initial="{ opacity: 0, y: -15 }"
-              :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }"
-              :delay="200"
-              v-if="dataVacationTime.length > 0"
+  <IPage
+    :HeaderTitle="t('Employee.VacationReport')"
+    :is-loading="isLoadingDaily && isLoadingTime && isLoadingSick"
+  >
+    <IPageContent>
+      <IRow :col="5" :col-md="2" :col-lg="4">
+        <ISearchBar :getDataButton="getFilterData">
+          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
+            <IInput
+              :label="t('Title')"
+              :placeholder="t('SearchForArchive')"
+              v-model="fastSearch"
+              type="text"
+            />
+          </ICol>
+          <!-- date -->
+          <ICol :span-lg="1" :span-md="2">
+            <input
+              id="default-checkbox"
+              type="checkbox"
+              v-model="searchFilter.hasDate"
+              value=""
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              for="default-checkbox"
+              class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              <div class="max-w-full relative">
-                <div
-                  class="w-full outline-none font-bold h-10 px-3 py-2 mb-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                >
-                  الاجازات الزمنية
-                </div>
-                <div
-                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
-                >
-                  <!-- card -->
-                  <div
-                    class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                    v-for="vacation in dataVacationTime"
-                    :key="vacation.id"
-                  >
-                    <div class="w-3/4 overflow-hidden">
-                      <div class="flex justify-betweens">
-                        اجازة لمدة
-                        <div
-                          class="text-text dark:text-textGray pr-2 pl-2"
-                          v-html="vacation.record"
-                        />
-                        ساعة من
-                        <div
-                          class="text-text dark:text-textGray pr-2 pl-2"
-                          v-html="vacation.timeFrom"
-                        />
-                        الى
-                        <div
-                          class="text-text dark:text-textGray pr-2 pl-2"
-                          v-html="vacation.timeTo"
-                        />
-                        بتاريخ
-                        <div
-                          class="text-text dark:text-textGray pr-2 pl-2"
-                          v-html="vacation.date"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
-                      is-link
-                      @click="OpenVacationTime(vacation.id)"
-                    >
-                      Open
-                    </button>
-                  </div>
-                  <!-- end card -->
-                </div>
-                <TailwindPagination
-                  class="flex justify-center mt-10"
-                  :data="dataPageVacationTime"
-                  @pagination-change-page="getDataTime"
-                  :limit="10"
-                />
-              </div>
-            </div>
-          </div>
-          <SimpleLoading v-if="isLoadingTime"></SimpleLoading>
-          <!-- end card -->
-        </div>
-      </div>
-    </div>
-    <!-- For Daily Report -->
-    <div class="w-full">
-      <div class="flex flex-col">
-        <div class="py-4 inline-block min-w-full lg:px-8">
-          <!-- card -->
-
-          <div class="rounded-xl" v-if="isLoadingDaily == false">
-            <div
-              v-motion
-              :initial="{ opacity: 0, y: -15 }"
-              :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }"
-              :delay="200"
-              v-if="dataVacationDaily.length > 0"
+              {{ t("SearhFilter.enableDateFilter") }}</label
             >
-              <div class="max-w-full relative">
-                <div
-                  class="w-full outline-none font-bold h-10 px-3 py-2 mb-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                >
-                  الاجازات الاعتيادية
-                </div>
-                <div
-                  class="grid lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 gap-10 lg:m-0 xs:mx-3"
-                >
-                  <!-- card -->
-                  <div
-                    class="bg-cardLight dark:bg-card flex w-full p-5 rounded-lg border border-gray-600 shadow-md shadow-gray-900 duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600"
-                    v-for="vacation in dataVacationDaily"
-                    :key="vacation.id"
-                  >
-                    <div class="w-3/4 overflow-hidden">
-                      <div class="flex justify-betweens">
-                        اجازة لمدة
-                        <div
-                          class="text-text dark:text-textGray pr-2 pl-2"
-                          v-html="vacation.record"
-                        />
-                        يوم من
-                        <div
-                          class="text-text dark:text-textGray pr-2 pl-2"
-                          v-html="vacation.dayFrom"
-                        />
-                        الى
-                        <div
-                          class="text-text dark:text-textGray pr-2 pl-2"
-                          v-html="vacation.dayTo"
-                        />
-                      </div>
-                    </div>
+          </ICol>
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <IInput
+              :label="t('DateFrom')"
+              v-model="searchFilter.dayFrom"
+              name="issueDateFrom"
+              type="date"
+              :disabled="!searchFilter.hasDate"
+            />
+          </ICol>
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <IInput
+              :label="t('DateTo')"
+              v-model="searchFilter.dayTo"
+              name="issueDateTo"
+              type="date"
+              :disabled="!searchFilter.hasDate"
+            />
+          </ICol>
+        </ISearchBar>
+      </IRow>
 
-                    <button
-                      class="duration-500 h-10 w-24 rounded-lg bg-create hover:bg-createHover text-white"
-                      is-link
-                      @click="OpenVacationDaily(vacation.id)"
-                    >
-                      Open
-                    </button>
-                  </div>
-                  <!-- end card -->
-                </div>
-                <TailwindPagination
-                  class="flex justify-center mt-10"
-                  :data="dataPageVacationDaily"
-                  @pagination-change-page="getDataDaily"
-                  :limit="10"
-                />
-              </div>
-            </div>
-          </div>
-          <SimpleLoading v-if="isLoadingDaily"></SimpleLoading>
-          <!-- end card -->
-        </div>
-      </div>
-    </div>
-    <!-- bottom tool bar -->
-    <div
-      :class="{
-        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-          !is,
-      }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-    >
-      <div class="flex ltr:ml-8 rtl:mr-8">
-        <div class="items-center mr-3"></div>
-      </div>
-    </div>
-    <div
-      :class="{
-        'ltr:left-4 rtl:right-4': is,
-        'ltr:left-28 rtl:right-28': !is,
-      }"
-      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-    >
-      <button
-        @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-      >
-        {{ t("Back") }}
-      </button>
-    </div>
-    <!-- end bottom tool -->
-  </div>
+      <IRow>
+        <ITable
+          :items="dataVacationTime"
+          :headers="headersTime"
+          :title="t('VacationTime.Title')"
+        >
+          <template v-slot:name="{ row }">
+            {{ row.Vacation.Employee.name }}
+          </template>
+          <template v-slot:actions="{ row }">
+            <IDropdown>
+              <li>
+                <EditButton title="Open" @click="OpenVacationTime(row.id)" />
+              </li>
+            </IDropdown>
+          </template>
+        </ITable>
+        <SimpleLoading v-if="isLoadingTime">.</SimpleLoading>
+      </IRow>
+      <IRow class="p-0">
+        <ITable
+          :items="dataVacationDaily"
+          :headers="headersDaily"
+          :title="t('VacationDaily.Title')"
+        >
+          <template v-slot:name="{ row }">
+            {{ row.Vacation.Employee.name }}
+          </template>
+          <template v-slot:actions="{ row }">
+            <IDropdown>
+              <li>
+                <EditButton title="Open" @click="OpenVacationDaily(row.id)" />
+              </li>
+            </IDropdown>
+          </template>
+        </ITable>
+        <SimpleLoading v-if="isLoadingDaily">.</SimpleLoading>
+      </IRow>
+      <IRow>
+        <ITable
+          :items="dataVacationSick"
+          :headers="headersSick"
+          :title="t('VacationSick.Title')"
+        >
+          <template v-slot:name="{ row }">
+            {{ row.Vacation.Employee.name }}
+          </template>
+          <template v-slot:actions="{ row }">
+            <IDropdown>
+              <li>
+                <EditButton title="Open" @click="OpenVacationSick(row.id)" />
+              </li>
+            </IDropdown>
+          </template>
+        </ITable>
+        <SimpleLoading v-if="isLoadingSick">.</SimpleLoading>
+      </IRow>
+      <IRow>
+        <div id="PageDataEnd"></div>
+      </IRow>
+    </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
+  </IPage>
 </template>
-<style scoped>
-.drop-area {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 50px;
-  background: rgba(255, 255, 255, 0.333);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: 0.2s ease;
-}
-
-.drop-area[data-active="true"] {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background: rgba(255, 255, 255, 0.8);
-}
-
-label {
-  font-size: 36px;
-  cursor: pointer;
-  display: block;
-}
-
-label span {
-  display: block;
-}
-
-label input[type="file"]:not(:focus-visible) {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-label .smaller {
-  font-size: 16px;
-}
-
-.image-list {
-  display: flex;
-  list-style: none;
-  flex-wrap: wrap;
-  padding: 0;
-  margin-bottom: 35px;
-}
-
-.preview-card {
-  display: flex;
-  border: 1px solid #a2a2a2;
-  padding: 5px;
-  margin: 5px;
-}
-
-.upload-button {
-  display: block;
-  appearance: none;
-  border: 0;
-  border-radius: 50px;
-  padding: 0.75rem 3rem;
-  margin: 1rem auto;
-  font-size: 1.25rem;
-  font-weight: bold;
-  background: #369;
-  color: #fff;
-  text-transform: uppercase;
-}
-
-button {
-  cursor: pointer;
-}
-</style>

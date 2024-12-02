@@ -16,14 +16,14 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     takeVacation: 0,
     initVacationSick: 0,
     takeVacationSick: 0,
-    dateWork: new Date().toLocaleDateString(),
-    Position: {
+    dateWork: new Date().toISOString().split("T")[0],
+    EmployeePosition: {
       id: 0,
       name: "",
       level: "",
       code: "",
     },
-    Type: {
+    EmployeeType: {
       id: 0,
       name: "",
     },
@@ -32,12 +32,41 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       name: ""
     },
     isMoveSection: 0,
-    Center: {
+    EmployeeCenter: {
       id: 0,
       name: "",
       code: ""
-    }
+    },
+    BonusJobTitle: {
+      id: 0,
+      name: "",
+      description: ""
+    },
+    BonusStudy: {
+      id: 0,
+      name: ""
+    },
+    DegreeStage: {
+      id: 0,
+      title: "",
+      Degree: {
+        id: 0,
+        name: ""
+      },
+      Stage: {
+        id: 0,
+        name: ""
+      },
+      salary: 0,
+      yearlyBonus: 0,
+      yearlyService: 0
+    },
+    numberLastBonus: "",
+    dateLastBonus: "", 
+    dateNextBonus: ""
   });
+  const error = ref<string | null>(null);
+
   const employees = ref<Array<IEmployee>>([]);
   const employees_positions = ref<Array<IEmployeePosition>>([]);
   const employees_types = ref<Array<IEmployeeType>>([]);
@@ -73,57 +102,89 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       takeVacation: 0,
       initVacationSick: 0,
       takeVacationSick: 0,
-      dateWork: new Date().toLocaleDateString(),
-      Position: {
+      dateWork: new Date().toISOString().split("T")[0],
+      EmployeePosition: {
         id: 0,
         name: "",
         level: "",
         code: "",
       },
-      Center: {
-        id: 0,
-        name: "",
-        code: "",
-      },
-      Type: {
+      EmployeeType: {
         id: 0,
         name: "",
       },
-
+      EmployeeCenter: {
+        id: 0,
+        name: "",
+        code: ""
+      },
+      BonusJobTitle: {
+        id: 0,
+        name: "",
+        description: ""
+      },
+      BonusStudy: {
+        id: 0,
+        name: ""
+      },
+      DegreeStage: {
+        id: 0,
+        title: "",
+        Degree: {
+          id: 0,
+          name: ""
+        },
+        Stage: {
+          id: 0,
+          name: ""
+        },
+        salary: 0,
+        yearlyBonus: 0,
+        yearlyService: 0
+      },
+      numberLastBonus: "",
+      dateLastBonus: "",
+      dateNextBonus: "" 
     };
   }
   async function get_filter(params: IEmployeeFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
-  async function get_employee_positions() {
-    return await Api.get(`employee_position`).then((response: any) => {
-      if (response.status == 200) {
+  async function get_employee_positions(hardRefresh: boolean = false) {
+    if (hardRefresh == false || employees_positions.value.length == 0) {
+      return await Api.get(`employee_position`).then((response: any) => {
+        if (response.status == 200) {
         employees_positions.value = response.data.data;
       }
     })
       .catch((errors: any) => {
         console.log("in get employees_positions : " + errors);
       });
+    }
   }
-  async function get_employee_types() {
-    return await Api.get(`employee_type`).then((response: any) => {
-      if (response.status == 200) {
-        employees_types.value = response.data.data;
-      }
-    })
+  async function get_employee_types(hardRefresh: boolean = false) {
+    if (hardRefresh == false || employees_types.value.length == 0) {
+      return await Api.get(`employee_type`).then((response: any) => {
+        if (response.status == 200) {
+          employees_types.value = response.data.data;
+        }
+      })
       .catch((errors: any) => {
         console.log("in get employee_type : " + errors);
-      });;
+        });;
+    }
   }
-  async function get_employee_centers() {
-    return await Api.get(`employee_center`).then((response: any) => {
-      if (response.status == 200) {
-        employees_centers.value = response.data.data;
-      }
-    })
+  async function get_employee_centers(hardRefresh: boolean = false) {
+    if (hardRefresh == false || employees_centers.value.length == 0) {
+      return await Api.get(`employee_center`).then((response: any) => {
+        if (response.status == 200) {
+          employees_centers.value = response.data.data;
+        }
+      })
       .catch((errors: any) => {
         console.log("in get employee_center : " + errors);
-      });;
+        });;
+    }
   }
   async function getItemHistory(params: IEmployeeFilter, page: number) {
     return await Api.get(`stockSys/voucherItemHistory/filter?page=${page}`, {
@@ -131,14 +192,17 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     });
   }
   async function store(prams: object) {
-    return await Api.post(`${pathUrl}/store`, prams);
+    return await Api.post(`${pathUrl}/store/`, prams);
   }
-  async function update(item_id: number, params: object) {
-    return await Api.post(`${pathUrl}/update/${item_id}`, params);
+  async function update(id: number, params: object) {
+    return await Api.post(`${pathUrl}/update/${id}`, params);
   }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
   }
+  async function showBonusLite(id: number) {
+    return await Api.get(`${pathUrl}/show/bonus/lite/${id}`);
+  } 
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
@@ -157,9 +221,11 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
     get_employee_types,
     get_employee_centers,
     show,
+    showBonusLite,
     store,
     update,
     getError,
+    error,
     _delete,
   };
 });

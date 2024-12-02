@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { EnumDirection } from "@/utilities/EnumSystem";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import { ref, onMounted } from "vue";
 const modelValue = defineModel<any>();
 import { t } from "@/utilities/I18nPlugin";
-
 const props = defineProps({
   type: {
-    type: String,
+    type: String as () => "text" | "number" | "email" | "password" | "date" | "time" | "datetime" | "color" | "file" | "hidden" | "search" | "range" | "tel" | "url" ,
     default: "text",
   },
   label: {
@@ -82,12 +82,11 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="mb-2">
-    <label class="_inputLabel" for="Control1" v-if="label">
+  <div class="mb-2 px-1">
+    <label class="_inputLabel w-full" for="Control1" v-if="label">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
     <input
-      id="Control1"
       @change="keydown"
       @focusout="checkRequired"
       :disabled="disabled"

@@ -3,7 +3,7 @@ import { onMounted } from "vue";
 import PageTitle from "@/components/general/namePage.vue";
 import { useI18n } from "@/stores/i18n/useI18n";
 const { t } = useI18n();
-import { WarehouseLinks } from "./WarehouseLinks";
+import { WarehouseLinks } from "../WarehouseLinks";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type CardPortalComponent from "@/components/CardPortalComponent.vue";
@@ -18,7 +18,7 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('Warehouse.Index')">
     <IPageContent>
-      <CardPortalComponent :links="WarehouseLinks"></CardPortalComponent>
+      <CardPortalComponent :links="WarehouseLinks[0].children"></CardPortalComponent>
     </IPageContent>
   </IPage>
 </template>

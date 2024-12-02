@@ -15,9 +15,10 @@ export const useSectionStore = defineStore("sectionStore", () => {
   async function get() {
     return await Api.get(`${pathUrl}`);
   }
-  async function get_sections() {
-    await Api.get(`${pathUrl}`)
-      .then((response) => {
+  async function get_sections(hardRefresh: boolean = false) {
+    if (hardRefresh == false || sections.value.length == 0) {
+      await Api.get(`${pathUrl}`)
+        .then((response) => {
         if (response.status == 200) {
           sections.value = response.data.data;
         }
@@ -25,6 +26,7 @@ export const useSectionStore = defineStore("sectionStore", () => {
       .catch((errors) => {
         console.log("in get section : " + errors);
       });
+    }
   }
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);

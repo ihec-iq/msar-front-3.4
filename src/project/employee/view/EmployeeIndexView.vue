@@ -161,15 +161,17 @@ const headers = ref<Array<ITableHeader>>([
             <span>{{ row.Section.name }}</span>
           </template>
           <template v-slot:position="{ row }">
-            <span>{{ row.Position.name }}</span>
+            <span>{{ row.EmployeePosition.name }}</span>
           </template>
           <template v-slot:type="{ row }">
-            <span>{{ row.Type.name }}</span>
+            <span>{{ row.EmployeeType.name }}</span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
-                <EditButton @click="update(row.id)" />
+                <EditButton
+                title="Employee.Info"
+                @click="update(row.id)" />
               </li>
               <li>
                 <EditButton

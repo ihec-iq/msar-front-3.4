@@ -10,7 +10,9 @@ import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import IPage from "@/components/ihec/IPage.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
-
+import IInput from "@/components/inputs/IInput.vue";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 //region"Drag and Drop"
 
 //#endregion
@@ -167,39 +169,21 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2
-        color="green"
-        width="28"
-        type="outlined"
-        pre-icon="view-grid-plus"
-        :onClick="reset"
-        :text="t('New')"
-      />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>
         <IRow col-lg="2" col="2" col-md="2">
           <ICol>
-            <IInput
-              :label="t('Name')"
-              name="name"
-              v-model="category.name"
-              type="text"
-          /></ICol>
+            <IInput :label="t('Name')" name="name" v-model="category.name" :type="EnumInputType.Text" />
+          </ICol>
           <ICol>
-            <IInput
-              :label="t('Description')"
-              name="description"
-              v-model="category.description"
-              type="text"
-          /></ICol>
+            <IInput :label="t('Description')" name="description" v-model="category.description"
+              :type="EnumInputType.Text" />
+          </ICol>
         </IRow>
-        <IFooterCrud
-          :isAdd="category.id == 0"
-          :onCreate="store"
-          :onUpdate="update"
-          :onDelete="Delete"
-        />
+        <IFooterCrud :isAdd="category.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
       </IRow>
     </IPageContent>
   </IPage>

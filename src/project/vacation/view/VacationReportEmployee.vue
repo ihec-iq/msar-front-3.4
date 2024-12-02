@@ -37,6 +37,7 @@ import ICol from "@/components/ihec/ICol.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ILabel from "@/components/ihec/ILabel.vue";
+import ITable from "@/components/ihec/ITable.vue";
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("");
@@ -128,7 +129,6 @@ const showData = async () => {
       if (response.status == 200) {
         if (response.data.data == undefined || response.data.data == null)
           window.location.reload();
-        console.log(response.data);
         employee.value.id = response.data.data.id;
         employee.value.name = response.data.data.name;
         employee.value.Section.id = response.data.data.Section.id;
@@ -234,7 +234,10 @@ const headersSick = ref<Array<ITableHeader>>([
         </ICol>
       </IRow>
       <IRow>
-        <ITable :items="dataVacationTime" :headers="headersTime">
+        <ITable :items="dataVacationTime" :headers="headersTime" :title="t('VacationTime.Title')">
+          <template v-slot:name="{ row }">
+            {{ row.Vacation.Employee.name }}
+          </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
@@ -245,8 +248,11 @@ const headersSick = ref<Array<ITableHeader>>([
         </ITable>
         <SimpleLoading v-if="isLoadingTime">.</SimpleLoading>
       </IRow>
-      <IRow>
-        <ITable :items="dataVacationDaily" :headers="headersDaily">
+      <IRow class="p-0">
+        <ITable :items="dataVacationDaily" :headers="headersDaily" :title="t('VacationDaily.Title')">
+          <template v-slot:name="{ row }">
+            {{ row.Vacation.Employee.name }}
+          </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
@@ -258,7 +264,10 @@ const headersSick = ref<Array<ITableHeader>>([
         <SimpleLoading v-if="isLoadingDaily">.</SimpleLoading>
       </IRow>
       <IRow>
-        <ITable :items="dataVacationSick" :headers="headersSick">
+        <ITable :items="dataVacationSick" :headers="headersSick" :title="t('VacationSick.Title')">
+          <template v-slot:name="{ row }">
+            {{ row.Vacation.Employee.name }}
+          </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>

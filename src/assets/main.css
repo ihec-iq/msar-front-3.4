@@ -1,5 +1,5 @@
 :root {
-  --primary: #111827;
+  --primary: #38cae4;
   --secondary: #35383c;
   --secondaryHover: #585c60;
 
@@ -127,7 +127,6 @@
   box-shadow: 0px 8px 10px 0px black;
 }
 
-@tailwind base;
 
 /*scroll for Chrome, Edge, and Safari */
 .dark *::-webkit-scrollbar {
@@ -170,6 +169,7 @@
   background-color: var(--secondaryHoverLight);
 }
 
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 

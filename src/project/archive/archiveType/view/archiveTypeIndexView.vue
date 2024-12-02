@@ -18,14 +18,11 @@ const { archiveTypes } = storeToRefs(useArchiveTypeStore());
 const router = useRouter();
 
 onMounted(async () => {
-     isLoading.value = true;
-
+  isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowArchiveTypes]);
   await archiveTypeStore.getBySectionUser();
   isLoading.value = false;
 });
-
- 
 
 const addObject = () => {
   archiveTypeStore.resetData();

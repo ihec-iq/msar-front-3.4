@@ -1,2 +1,2 @@
-const DefaultURL = "http://localhost/ihec-backend/public/api";
+const DefaultURL = "http://10.10.10.10/ihec-backend/public/api";
 export { DefaultURL };

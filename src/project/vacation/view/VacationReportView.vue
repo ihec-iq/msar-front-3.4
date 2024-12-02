@@ -7,7 +7,7 @@ import SimpleLoading from "@/components/general/loading.vue";
 import { useVacationStore } from "../vacationStore";
 import type { IVacationFilter, IVacation } from "../IVacation";
 import { usePermissionsStore } from "@/project/core/permissionStore";
-import { isNumber } from "@/utilities/tools";
+import { ToNumberShow } from "@/utilities/tools";
 const { checkPermissionAccessArray } = usePermissionsStore();
 import JsonExcel from "vue-json-excel3";
 
@@ -90,9 +90,7 @@ const openItem = (id: number) => {
   });
 };
 //#region Pagination
-function round(num: number, fractionDigits: number = 3): number {
-  return Number(num.toFixed(fractionDigits));
-}
+
 //#endregion
 //#region Search by Enter Key
 
@@ -124,15 +122,6 @@ onMounted(async () => {
     inputRefSearch.value.addEventListener("keydown", Search);
   }
 });
-const ToNumber = (val: any, numericFormat: boolean = true) => {
-  if (isNaN(val) || isNumber(val) == false) {
-    return 0;
-  } else return round(val, 2);
-};
-const ToNumberShow = (val: any) => {
-  if (isNaN(val) || isNumber(val) == false || val == 0) return;
-  else return round(val, 2);
-};
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },

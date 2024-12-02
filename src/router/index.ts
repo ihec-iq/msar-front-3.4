@@ -11,8 +11,12 @@ import userRoute from "@/project/user/userRoute";
 import roleRoute from "@/project/role/roleRoute";
 import warehouseRoute from "@/project/warehouse/warehouseRoute";
 import employeeRoute from "@/project/employee/employeeRoute";
+import hrRoute from '@/project/hr/hrRoute';
+
 //#endregion
 import DefaultLayout from "@/views/layouts/MainView.vue";
+import bonusRoute from "@/project/bonus/bonusRoute";
+import promotionRoute from "@/project/promotion/promotionRoute";
 const router = createRouter({
   history: createWebHistory(
     process.env.NODE_ENV === "production" ? "/10/" : "/",
@@ -25,7 +29,7 @@ const router = createRouter({
         {
           name: "login",
           path: "",
-          component: () => import("@/views/auth/LoginView.vue"),
+          component: () => import("@/views/auth/LoginView2.vue"),
         },
       ],
     },
@@ -35,7 +39,7 @@ const router = createRouter({
         {
           name: "start",
           path: "/",
-          component: () => import("@/views/AboutView.vue"),
+          component: () => import("@/views/WelcomeView.vue"),
         },
       ],
     },
@@ -56,7 +60,10 @@ const router = createRouter({
         ...userRoute,
         ...roleRoute,
         ...warehouseRoute,
+        ...bonusRoute,
+        ...promotionRoute,
         ...employeeRoute,
+        ...hrRoute,
         {
           path: "/dashboard",
           name: "Dashboard",

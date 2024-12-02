@@ -15,7 +15,7 @@ const props = defineProps({
   },
 });
 const MakeTime = (time: string) => {
-   return truncateString(time, 5);
+  return truncateString(time, 5);
 };
 </script>
 <template>
@@ -25,7 +25,7 @@ const MakeTime = (time: string) => {
     <div class="w-4/4 overflow-hidden">
       <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right flex w-full">
         <div class="text-2xl text-text dark:text-textLight mb-2">
-          {{ item.Vacation.Employee.name }}
+          <span class="text-lg">{{ item.id }})</span>{{ item.Vacation.Employee.name }}
         </div>
         <IDropdown>
           <li>
@@ -54,6 +54,9 @@ const MakeTime = (time: string) => {
           class="text-text dark:text-textGray ml-2 mr-2"
           v-html="MakeTime(item.timeTo)"
         ></div>
+      </div>
+      <div class="text-[12px] text-text dark:text-textGray float-right">
+        createdAt : {{ item.createdAt }}
       </div>
     </div>
   </div>

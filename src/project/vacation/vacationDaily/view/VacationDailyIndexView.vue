@@ -114,7 +114,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('VacationDaily')" :is-loading="isLoading">
+  <IPage :HeaderTitle="t('VacationDaily.Title')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>

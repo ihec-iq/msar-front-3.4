@@ -5,7 +5,7 @@ export interface IArchive {
   issueDate: string;
   number: string;
   description: string;
-  files: Array<IDocument>;
+  Files: Array<IDocument>;
   isIn: number;
   isInWord?: string;
   archiveTypeId: number;
@@ -26,7 +26,7 @@ export interface IDocument {
   path: string;
   extension: string;
   size: string;
-  archive_id: string;
+  linkId: string;
 }
 export interface IArchiveFilter {
   limit: number;

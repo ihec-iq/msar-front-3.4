@@ -54,4 +54,3 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-@/views/Archive/archiveStore

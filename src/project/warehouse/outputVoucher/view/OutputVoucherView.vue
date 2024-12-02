@@ -12,6 +12,8 @@ import { t } from "@/utilities/I18nPlugin";
 import type { IInputVoucherItem } from "../../inputVoucher/IInputVoucher";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import type { IEmployee } from "@/project/employee/IEmployee";
@@ -422,7 +424,7 @@ const headers = ref<Array<ITableHeader>>([
       <IButton2
         color="green"
         width="28"
-        type="outlined"
+        :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -437,7 +439,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('OutputVoucherNumber')"
                 name="Number"
                 v-model="outputVoucher.number"
-                type="text"
+                :type="EnumInputType.Text"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -445,7 +447,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('Date')"
                 name="InputVoucherNumer"
                 v-model="outputVoucher.date"
-                type="date"
+                :type="EnumInputType.Date"
               />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -474,7 +476,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('InputVoucherSignaturePerson')"
                 name="InputVoucherNumer"
                 v-model="outputVoucher.signaturePerson"
-                type="text"
+                :type="EnumInputType.Text"
               />
             </ICol>
           </IRow>
@@ -504,7 +506,7 @@ const headers = ref<Array<ITableHeader>>([
                 :label="t('Notes')"
                 name="InputVoucherNumer"
                 v-model="outputVoucher.notes"
-                type="text"
+                :type="EnumInputType.Text"
               />
             </ICol>
           </IRow>
@@ -695,7 +697,7 @@ const headers = ref<Array<ITableHeader>>([
             <IInput
               :label="t('Count')"
               :on-input="ChangeValueTotal"
-              type="number"
+              :type="EnumInputType.Number"
               v-model="OutputVoucherItem.count"
               :max="
                 Number(OutputVoucherItem.InputVoucherItem.inValue) -
@@ -708,21 +710,21 @@ const headers = ref<Array<ITableHeader>>([
             <IInput
               :label="t('Price')"
               :on-input="ChangeValueTotal"
-              type="number"
+              :type="EnumInputType.Number"
               v-model="OutputVoucherItem.InputVoucherItem.price"
             />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
               :label="t('Total')"
-              type="number"
+              :type="EnumInputType.Number"
               v-model="OutputVoucherItem.value"
             />
           </ICol>
           <ICol :span="3" :span-lg="3" :span-md="2" :span-xl="1">
             <IInput
               :label="t('Note')"
-              type="text"
+              :type="EnumInputType.Text"
               v-model="OutputVoucherItem.notes"
             />
           </ICol>
@@ -732,14 +734,14 @@ const headers = ref<Array<ITableHeader>>([
           <IButton2
             :text="t('Add')"
             color="blue"
-            type="default"
+            :type="EnumButtonType.Default"
             :on-click="AddItem"
             v-if="IsAdd"
           />
           <IButton2
             :text="t('Update')"
             color="blue"
-            type="default"
+            :type="EnumButtonType.Default"
             :on-click="EditItem"
             v-else
           />
@@ -748,7 +750,7 @@ const headers = ref<Array<ITableHeader>>([
             pre-icon="close-box"
             :text="t('Close')"
             color="blue"
-            type="text"
+            :type="EnumButtonType.Text"
             :on-click="() => (showPop = false)"
           />
         </IContainer>

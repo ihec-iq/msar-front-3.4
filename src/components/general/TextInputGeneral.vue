@@ -23,6 +23,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  errorsMessage: {
+    type: String,
+    default: "",
+  },
   placeholder: {
     type: String,
     default: "",
@@ -54,6 +58,7 @@ const {
   >
     <label :for="name">{{ label }}</label>
     <input
+      class="bg-gray-100"
       :name="name"
       :id="name"
       :type="type"
@@ -61,15 +66,24 @@ const {
       :placeholder="placeholder"
       @input="handleChange"
       @blur="handleBlur"
-    />
-
-    <p class="help-message" v-show="errorMessage || meta.valid">
-      {{ errorMessage || successMessage }}
+     />  
+    <p class="help-message" v-show="!meta.valid">
+      {{ errorsMessage || errorMessage }}
+    </p>
+    <p class="help-message" v-show="meta.valid">
+      {{ successMessage }}
     </p>
   </div>
 </template>
 
 <style scoped>
+:root {
+  --primary-color: #0071fe;
+  --error-color: #f23648;
+  --error-bg-color: #fddfe2;
+  --success-color: #21a67a;
+  --success-bg-color: #e0eee4;
+}
 .TextInput {
   position: relative;
   margin-bottom: calc(1em * 1.5);
@@ -94,7 +108,6 @@ input {
   border: 2px solid transparent;
   padding: 15px 10px;
   outline: none;
-  background-color: #f2f5f7;
   width: 100%;
   transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out,
     background-color 0.3s ease-in-out;
@@ -113,8 +126,13 @@ input:focus {
 }
 
 .TextInput.has-error input {
-  background-color: var(--error-bg-color);
-  color: var(--error-color);
+  background-color: #fddfe2;
+  color: #f23648;
+  border-color: var(--error-color);
+}
+
+.TextInput.has-error input::placeholder {
+  color: #f23648;
 }
 
 .TextInput.has-error input:focus {
@@ -126,12 +144,12 @@ input:focus {
 }
 
 .TextInput.success input {
-  background-color: var(--success-bg-color);
-  color: var(--success-color);
+  background-color: #e0eee4;
+  color: #21a67a;
 }
 
 .TextInput.success input:focus {
-  border-color: var(--success-color);
+  border-color: #21a67a;
 }
 
 .TextInput.success .help-message {

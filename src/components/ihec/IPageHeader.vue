@@ -1,6 +1,4 @@
 <script setup lang="ts">
-
-
 const props = defineProps({
   title: {
     type: String,
@@ -26,7 +24,6 @@ const props = defineProps({
           {{ props.title }}
         </div>
       </div>
-
       <div>
         <slot name="buttons"></slot>
       </div>

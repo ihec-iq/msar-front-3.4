@@ -45,7 +45,7 @@ const { filesDataInput } = storeToRefs(useDragDropStore());
               <div v-else v-html="t('ReleaseFiles')"></div>
             </label>
           </div>
-          <div class="flex flex-wrap justify-center items-center">
+          <div class="w-full flex flex-wrap justify-center items-center">
             <DragDropFilePreview
               v-for="(file, index) in filesDataInput"
               :key="index"

@@ -30,6 +30,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 const colClass = computed(() => {
   let classStyle = "";
@@ -48,8 +52,17 @@ const debugClass = computed(() => {
 </script>
 
 <template>
-  <div :class="[colClass, debugClass]" class="ltr:mr-2 rtl:ml-2">
+  <div
+    :class="[colClass, debugClass, { 'disabledDev': disabled }]"
+    class="ltr:mr-2 rtl:ml-2"
+  >
     <div v-if="debug" class="">{{ colClass }}</div>
-    <slot ></slot>
+    <slot></slot>
   </div>
 </template>
+<style>
+.disabledDev {
+  pointer-events: none;
+  opacity: 0.4;
+}
+</style>
