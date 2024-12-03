@@ -42,7 +42,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
       name: "",
       description: ""
     },
-    BonusStudy: {
+    Study: {
       id: 0,
       name: ""
     },
@@ -123,7 +123,7 @@ export const useEmployeeStore = defineStore("employeeStore", () => {
         name: "",
         description: ""
       },
-      BonusStudy: {
+      Study: {
         id: 0,
         name: ""
       },

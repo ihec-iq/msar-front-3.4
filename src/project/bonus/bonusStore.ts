@@ -2,7 +2,7 @@ import { ref, computed, h } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IBonusFilter, IBonusJobTitle, IBonusStudy, IBonus, IDegreeStage } from "./IBonus";
+import type { IBonusFilter, IBonusJobTitle, IStudy, ICertificate, IBonus, IDegreeStage } from "./IBonus";
 import type { IEmployeeLite } from "../employee/IEmployee";
 
 export const useBonusStore = defineStore("BonusStore", () => {
@@ -26,7 +26,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
         yearlyService: 0
       },
       BonusJobTitle: { id: 0, name: "", description: "" },
-      BonusStudy: { id: 0, name: "" }
+      Study: { id: 0, name: "" }
     },
     DegreeStage: {
       id: 0,
@@ -40,12 +40,15 @@ export const useBonusStore = defineStore("BonusStore", () => {
     notes: ""
   });
   const BonusJobTitle = ref<IBonusJobTitle>({ id: 0, name: "", description: "" });
-  const BonusStudy = ref<IBonusStudy>({ id: 0, name: "" });
+  const Study = ref<IStudy>({ id: 0, name: "" });
+  const Certificate = ref<ICertificate>({ id: 0, name: "" });
+
   const DegreeStage = ref<IDegreeStage>({ id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 });
 
   const Bonuses = ref<Array<IBonus>>([]);
   const BonusJobTitles = ref<Array<IBonusJobTitle>>([]);
-  const BonusStudies = ref<Array<IBonusStudy>>([]);
+  const Studies = ref<Array<IStudy>>([]);
+  const Certificates = ref<Array<ICertificate>>([]);
   const DegreeStages = ref<Array<IDegreeStage>>([]);
   const Employees = ref<Array<IEmployeeLite>>([]);
 
@@ -81,7 +84,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
           yearlyService: 0
         },
         BonusJobTitle: { id: 0, name: "", description: "" },
-        BonusStudy: { id: 0, name: "" }
+        Study: { id: 0, name: "" }
       },
       DegreeStage: {
         id: 0,
@@ -150,36 +153,64 @@ export const useBonusStore = defineStore("BonusStore", () => {
   }
   //#endregion
 
-  //#region BonusStudy
-  const resetDataBonusStudy = () => {
-    BonusStudy.value = {
+  //#region Study
+  const resetDataStudy = () => {
+    Study.value = {
       id: 0,
       name: ""
     };
   }
-  async function get_BonusStudy(hardRefresh: boolean = false) {
+  async function get_Study(hardRefresh: boolean = false) {
     if (hardRefresh == false || BonusJobTitles.value.length == 0) {
-      return await Api.get(`bonus_study`).then((response) => {
+      return await Api.get(`study`).then((response) => {
         if (response.status == 200) {
-          BonusStudies.value = response.data.data;
+          Studies.value = response.data.data;
         }
       });
     }
   }
-  async function store_BonusStudy(params: object) {
-    return await Api.post(`bonus_study/store`, params);
+  async function store_Study(params: object) {
+    return await Api.post(`study/store`, params);
   }
-  async function update_BonusStudy(id: number, params: object) {
-    return await Api.post(`bonus_study/update/${id}`, params);
+  async function update_Study(id: number, params: object) {
+    return await Api.post(`study/update/${id}`, params);
   }
-  async function delete_BonusStudy(id: number) {
-    return await Api.delete(`bonus_study/delete/${id}`);
+  async function delete_Study(id: number) {
+    return await Api.delete(`study/delete/${id}`);
   }
-  async function show_BonusStudy(id: number) {
-    return await Api.get(`bonus_study/${id}`);
+  async function show_Study(id: number) {
+    return await Api.get(`study/${id}`);
   }
   //#endregion
-
+//#region Certificate
+  const resetDataCertificate = () => {
+    Certificate.value = {
+      id: 0,
+      name: ""
+    };
+  }
+  async function get_Certificate(hardRefresh: boolean = false) {
+    if (hardRefresh == false || Certificates.value.length == 0) {
+      return await Api.get(`certificate`).then((response) => {
+        if (response.status == 200) {
+          Certificates.value = response.data.data;
+        }
+      });
+    }
+  }
+  async function store_Certificate(params: object) {
+    return await Api.post(`certificate/store`, params);
+  }
+  async function update_Certificate(id: number, params: object) {
+    return await Api.post(`certificate/update/${id}`, params);
+  }
+  async function delete_Certificate(id: number) {
+    return await Api.delete(`certificate/delete/${id}`);
+  }
+  async function show_Certificate(id: number) {
+    return await Api.get(`certificate/${id}`);
+  }
+  //#endregion
   //#region DegreeStage  
   const resetDataDegreeStage = () => {
     DegreeStage.value = {
@@ -254,14 +285,16 @@ export const useBonusStore = defineStore("BonusStore", () => {
     Bonus,
     resetDataBonus,
     resetDataBonusJobTitle,
-    resetDataBonusStudy,
+    resetDataStudy,
     resetDataDegreeStage,
     BonusJobTitle,
-    BonusStudy,
+    Study,
+    Certificate,
     DegreeStage,
     Bonuses,
     BonusJobTitles,
-    BonusStudies,
+    Studies,
+    Certificates,
     DegreeStages,
     sortedBonuses,
     Employees,
@@ -274,24 +307,27 @@ export const useBonusStore = defineStore("BonusStore", () => {
     get_Bonuses,
     get_BonusJobTitle,
     getFilter_BonusJobTitle,
-    get_BonusStudy,
+    get_Study,
+    get_Certificate,
     get_DegreeStage,
     get_Employees,
     get_EmployeesLite,
     show,
     show_BonusJobTitle,
-    show_BonusStudy,
+    show_Study,
     show_DegreeStage,
     delete_BonusJobTitle,
-    delete_BonusStudy,
+    delete_Study,
     delete_DegreeStage,
     store,
     store_BonusJobTitle,
-    store_BonusStudy,
+    store_Study,
+    store_Certificate,
     store_DegreeStage,
     update,
     update_BonusJobTitle,
-    update_BonusStudy,
+    update_Study,
+    update_Certificate,
     update_DegreeStage,
     getError,
     _delete,

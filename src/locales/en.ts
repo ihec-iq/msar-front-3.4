@@ -1,3 +1,5 @@
+import { Certificate } from "crypto";
+
 export default {
   Logout: "Logout",
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
@@ -197,6 +199,7 @@ export default {
     JobTitleAdd: "Add Job Title",
     JobTitleUpdate: "Update Job Title",
     Study: "Study",
+    Certificate: "Certificate",
     DegreeStage: "Degree Stage",
     Employee: "Employee",
     issueDate: "Issue Date",

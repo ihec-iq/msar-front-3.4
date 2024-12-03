@@ -10,7 +10,7 @@ export const getError = (error: {
   const errorMessage = t("Server is down, please try again.");
   if (typeof error === 'object') {
     if (!error.response) {
-      console.error(`API ${error.config.url} not found`);
+      console.error(`API ${error.config} not found`);
       return errorMessage;
     }
     if (process.env.NODE_ENV === "development") {

@@ -226,7 +226,8 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Bonus.dateLastBonus"), value: "dateLastBonus" },
   { caption: t("Bonus.difNextBonusDate"), value: "difNextBonusDate" },
   { caption: t("Bonus.dateNextBonus"), value: "dateNextBonus" },
-  { caption: t("Bonus.Study"), value: "bonusStudy" },
+  { caption: t("Bonus.Study"), value: "study" },
+  { caption: t("Bonus.Certificate"), value: "certificate" },
   { caption: t("Bonus.DegreeStage"), value: "degreeStage" },
   { caption: t("Bonus.Add"), value: "btnAddBound" },
 ]);
@@ -257,15 +258,18 @@ const headers = ref<Array<ITableHeader>>([
             <IInput v-model="searchFilter.bound" :disabled="!searchFilter.isBound" :type="EnumInputType.Number"
               class="w-[100px]" @keyup.enter="getFilterData" />
           </ICol>
+          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center">
+            <IButton :onClick="printAll" :text="t('Print')" />
+          </ICol>
         </ISearchBar>
-        <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center">
-          <IButton :onClick="printAll" :text="t('Print')" />
-        </ICol>
+
       </IRow>
-      <IRow id="PrintArea">
-        <div id="printMe" class="[print-color-adjust:exact] p-1">
+      <IRow id="PrintArea hidden">
+        <div id="printMe" class="[print-color-adjust:exact] p-1 hidden">
           <div class="overflow-auto">
-<div class="flex items-center content-center justify-center text-md font-bold w-[1040px] border-black border-x-2 border-t-2">              استحقاق العلاوة السنوية لموظفي كادر مكتب انتخابات كربلاء
+            <div
+              class="flex items-center content-center justify-center text-md font-bold w-[1040px] border-black border-x-2 border-t-2">
+              استحقاق العلاوة السنوية لموظفي كادر مكتب انتخابات كربلاء
             </div>
             <table class="table-fixed text-sm w-[1040px]" dir="rtl">
               <thead>
@@ -363,51 +367,83 @@ const headers = ref<Array<ITableHeader>>([
                   <td class="tdborderx">{{ row.name }}</td>
                   <td class="tdborderx">مكتب انتخابات كربلاء</td>
                   <td class="tdborderx">{{ row.employeeDepartment }}</td>
-                  <td class="tdborderx">{{ row.bonusStudy }}</td>
-                  <td class="tdborderx">{{ row.degreeStage }}</td>
+                  <td class="tdborderx">{{ row.study }}</td>
+                  <td class="tdborderx">{{ row.certificate }}</td>
                   <td class="tdborderx">{{ row.bonusJobTitle }}</td>
-                  <td class="tdborderx">
-                    <!-- Reverse position using 'right' -->
-                    <div class="flex w-full m-0 p-0 text-center align-top content-normal">
-                      <span class="mx-0 px-0 border-black border-l-2 border-solid !w-[71px]">
-                        {{ row.dateLastBonus }}
-                      </span>
-                      <span class="mx-0 px-0 border-black border-l-2 border-solid !w-[24px]">
+                  <td class="tdborderx p-0 m-0 align-top">
+                    <div class="inline-block p-0 m-0 text-center align-top h-full">
+                      <div class="inline-block p-0 m-0 text-wrap w-[69px]">
+                        <span class="flex mx-0 px-0 border-black border-l-2 border-b-2 border-solid">
+                          <span class="border-l-2 border-black !w-[30px]">{{ row.dateLastBonus?.slice(0, 4) }}</span>
+                          <span class="border-l-2 border-black !w-[20px]">{{ row.dateLastBonus?.slice(5, 7) }}</span>
+                          <span class="!w-[21px]">{{ row.dateLastBonus?.slice(8, 10) }}</span>
+                        </span>
+                      </div>
+                      <div
+                        class="inline-block p-0 m-0 text-wrap w-[24px] align-top h-full  border-l-2 border-b-2  border-black">
                         {{ row.degree }}
-                      </span>
-                      <span class="mx-0  px-0 border-black border-l-2 border-solid !w-[24px]">
+                      </div>
+                      <div
+                        class="inline-block p-0 m-0 text-wrap w-[24px] align-top h-full  border-l-2 border-b-2  border-black">
                         {{ row.stage }}
-                      </span>
-                      <span class="mx-0 px-0 border-black border-l-2 border-solid !w-[44px]">
+                      </div>
+                      <div class="inline-block p-0 m-0 text-wrap w-[44px] align-top h-full    border-b-2  border-black">
                         {{ row.salary }}
-                      </span>
-                      <span class="flex-1 mx-0 px-0 w-[167px]">
-                        {{ row.lastBonus.notes }}
-                      </span>
+                      </div>
                     </div>
+                    <div class="inline-block w-[165px] align-top h-full border-r-2  border-b-2 border-black">
+                      {{ row.lastBonus.notes }}
+                    </div>
+
+
                   </td>
-                  <td class="relative text-wrap">
-                    <!-- Reverse position using 'right' -->
-                    <div
-                      class="absolute top-0 right-0 border-black border-l-2 border-solid w-[73px] text-center h-full">
-                      {{ row.dateNextBonus }}
+                  <td class="p-0 m-0 align-top">
+                    <div class="inline-block p-0 m-0 text-center align-top h-full">
+                      <div class="inline-block p-0 m-0 text-wrap w-[69px]">
+                        <span class="flex mx-0 px-0 border-black border-l-2 border-b-2 border-solid">
+                          <span class="border-l-2 border-black !w-[30px]">{{ row.dateNextBonus?.slice(0, 4) }}</span>
+                          <span class="border-l-2 border-black !w-[20px]">{{ row.dateNextBonus?.slice(5, 7) }}</span>
+                          <span class="!w-[21px]">{{ row.dateNextBonus?.slice(8, 10) }}</span>
+                        </span>
+                      </div>
+                      <div
+                        class="inline-block p-0 m-0 text-wrap w-[24px] align-top h-full  border-l-2 border-b-2  border-black">
+                        {{ row.degreeNext }}
+                      </div>
+                      <div
+                        class="inline-block p-0 m-0 text-wrap w-[24px] align-top h-full  border-l-2 border-b-2  border-black">
+                        {{ row.stageNext }}
+                      </div>
+                      <div class="inline-block p-0 m-0 text-wrap w-[44px] align-top h-full    border-b-2  border-black">
+                        {{ row.salaryNext }}
+                      </div>
                     </div>
-                    <div class="absolute top-0 border-black border-l-2 border-solid w-[24px] text-center h-full"
-                      style="right: 71px">
-                      {{ row.degreeNext }}
-                    </div>
-                    <div class="absolute top-0 border-black border-l-2 border-solid w-[24px] text-center h-full"
-                      style="right: 95px">
-                      {{ row.stageNext }}
-                    </div>
-                    <div
-                      class="absolute top-0 border-black border-l-2 border-solid w-[44px] text-center h-full right-[119px]">
-                      {{ row.salaryNext }}
-                    </div>
-                    <div class="absolute top-0 w-[164px] text-center text-wrap z-0 h-full right-[164px]">
+                    <div class="inline-block w-[165px] align-top h-full border-r-2  border-b-2 border-black">
                       {{ row.notesNext }}
                     </div>
                   </td>
+
+
+                  <!-- <td class="relative text-wrap">                     
+                    <div class=" absolute top-0 right-0 flex mx-0 px-0 border-black border-l-2 border-solid h-full !w-[71px]">
+                        <span class="border-l-2 border-black !w-[30px]">{{ row.dateNextBonus?.slice(0,4) }}</span>
+                        <span class="border-l-2 border-black !w-[20px]">{{ row.dateNextBonus?.slice(5,7) }}</span>
+                        <span class="!w-[21px]">{{ row.dateNextBonus?.slice(8,10) }}</span>
+                      </div>
+                    <div class="absolute top-0 right-[71px] border-black border-l-2 border-solid w-[24px] text-center h-full">
+                      {{ row.degreeNext }}
+                    </div>
+                    <div class="absolute top-0 right-[95px] border-black border-l-2 border-solid w-[24px] text-center h-full">
+                      {{ row.stageNext }}
+                    </div>
+                    <div
+                      class="absolute top-0 right-[119px] border-black border-l-2 border-solid w-[44px] text-center h-full">
+                      {{ row.salaryNext }}
+                    </div>
+                    <div class="absolute top-0 right-[164px] w-[164px] text-center text-wrap z-0 h-full">
+                      {{ row.notesNext }}
+                    </div>
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -463,7 +499,7 @@ const headers = ref<Array<ITableHeader>>([
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-<style scoped lang="postcss">
+<style scoped>
 .tdborderx {
   @apply border-2 border-black border-x-2 border-solid;
 }

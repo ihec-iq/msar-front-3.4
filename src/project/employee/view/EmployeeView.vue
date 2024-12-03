@@ -66,6 +66,10 @@ import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
 import OpenButton from "@/components/dropDown/OpenButton.vue";
+import IRow from "@/components/ihec/IRow.vue";
+import IRow2 from "@/components/ihec/IRow2.vue";
+import ICol2 from "@/components/ihec/ICol2.vue";
+import ICol from "@/components/ihec/ICol.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -93,7 +97,7 @@ const rules: Array<IFieldValidation> = [
     rules: [isObject({ key: "id", message: "" })],
   },
   {
-    field: "BonusStudy",
+    field: "Study",
     caption: t("Bonus.Study"),
     rules: [isObject({ key: "id", message: "" })],
   },
@@ -212,9 +216,9 @@ const showData = async () => {
         // employee.value.EmployeePosition = response.data.data.EmployeePosition;
         // employee.value.isPerson = response.data.data.isPerson;
         Object.assign(employee.value, response.data.data);
-        isPerson.value = response.data.data.isPerson == 0 ? false : true;
+        isPerson.value = employee.value.isPerson == 0 ? false : true;
         isMoveSection.value =
-          response.data.data.isMoveSection == 0 ? false : true;
+          employee.value.isMoveSection == 0 ? false : true;
       }
     })
     .catch((errors) => {
@@ -258,7 +262,8 @@ onMounted(async () => {
     employeeStore.get_employee_positions(),
     employeeStore.get_employee_centers(),
     BonusStore.get_BonusJobTitle(),
-    BonusStore.get_BonusStudy(),
+    BonusStore.get_Study(),
+    BonusStore.get_Certificate(),
     BonusStore.get_DegreeStage(),
     BonusStore.get_EmployeesLite()
   ]);
@@ -332,10 +337,12 @@ const headerFiles = ref<Array<ITableHeader>>([
   { caption: t('HrDocument.Type'), value: "HrDocumentype" },
   { caption: t('HrDocument.AddMonths'), value: "addMonths" },
   { caption: t('HrDocument.AddDayes'), value: "addDays" },
+  { caption: t('Notes'), value: "notes" },
 ]);
 const headerBonus = ref<Array<ITableHeader>>([
   { caption: t('Bonus.number'), value: "number" },
   { caption: t('Details'), value: "actions" },
+  { caption: t('Notes'), value: "notes" },
   { caption: t('Date'), value: "issueDate" }
 ]);
 const openFileHrDocument = (id: number) => {
@@ -437,11 +444,46 @@ const active = ref(0);
                 <ICheckbox v-model="isMoveSection" :checked="isMoveSection" class="">
                   {{ t('Employee.isMoveSection') }} :
                   {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox>
+                <ISelect v-if="isMoveSection" :label="t('Employee.MoveSection')" v-model="employee.MoveSection.id"
+                  name="MoveSectionId" :options="sections" :IsRequire="true" />
               </ICol>
 
-              <ICol span="1" span-md="1" span-sm="1" v-if="isMoveSection">
-                <ISelect :label="t('Employee.MoveSection')" v-model="employee.MoveSection.id" name="MoveSectionId"
-                  :options="sections" :IsRequire="true" />
+              <ICol>
+                <div class="flex justify-between">
+                  <div class="w-[49%]">
+                    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                      {{ t('Bonus.Study') }}
+                    </div>
+                    <vSelect
+                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                      v-model="employee.Study" :options="BonusStore.Studies" :reduce="(Study) => Study" label="name"
+                      :getOptionLabel="(Study) => Study.name">
+                      <template #option="{ name }">
+                        <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                          <span>{{ name }}</span>
+                        </div>
+                      </template>
+                    </vSelect>
+                  </div>
+                  <div class="w-[49%]">
+                    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                      {{ t('Bonus.Certificate') }}
+                    </div>
+                    <vSelect
+                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                      v-model="employee.Certificate" :options="BonusStore.Certificates"
+                      :reduce="(Certificate) => Certificate" label="name"
+                      :getOptionLabel="(Certificate) => Certificate.name">
+                      <template #option="{ name }">
+                        <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                          <span>{{ name }}</span>
+                        </div>
+                      </template>
+                    </vSelect>
+                  </div>
+                </div>
+
+
               </ICol>
               <!-- :IsDisabled="!isMoveSection" -->
 
@@ -508,21 +550,6 @@ const active = ref(0);
                   v-model="employee.BonusJobTitle" :options="BonusStore.BonusJobTitles"
                   :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
                   :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
-                  <template #option="{ name }">
-                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
-                      <span>{{ name }}</span>
-                    </div>
-                  </template>
-                </vSelect>
-              </ICol>
-              <ICol span="1" span-md="2" span-sm="4">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t('Bonus.Study') }}
-                </div>
-                <vSelect
-                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="employee.BonusStudy" :options="BonusStore.BonusStudies" :reduce="(BonusStudy) => BonusStudy"
-                  label="name" :getOptionLabel="(BonusStudy) => BonusStudy.name">
                   <template #option="{ name }">
                     <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                       <span>{{ name }}</span>

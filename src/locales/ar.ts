@@ -198,6 +198,7 @@ export default {
     JobTitleAdd: "اضافة عنوان وظيفي",
     JobTitleUpdate: "تعديل عنوان وظيفي",
     Study: "التحصيل الدراسي",
+    Certificate: "الشهادة الدراسية",
     DegreeStage: "الدرجة الوظيفية",
     Employee: "الموظف",
     issueDate: "تاريخ الاصدار",
