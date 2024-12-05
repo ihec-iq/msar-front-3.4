@@ -23,20 +23,20 @@ const router = useRouter();
 const id = ref(Number(route.params.id));
 const { checkPermissionAccessArray } = usePermissionsStore();
 const PromotionStore = usePromotionStore(); // Updated store reference
-const { promotion } = storeToRefs(PromotionStore); // Updated reference
+const { Promotion } = storeToRefs(PromotionStore); // Updated reference
 
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
 const namePage = ref("Promotion.Add"); // Updated page name
 const ChangeDegreeStage = async () => {
-    if (promotion.value.DegreeStage.Degree) {
-        await useBonusStore().get_BonusJobTitle({ bonusDegreeId: promotion.value.DegreeStage.Degree.id }).then((response) => {
+    if (Promotion.value.DegreeStage.Degree) {
+        await useBonusStore().get_BonusJobTitle({ bonusDegreeId: Promotion.value.DegreeStage.Degree.id }).then((response) => {
         })
     }
 }
 const store = async () => {
     errors.value = null;
-    const formData = prepareFormData(promotion.value); // Updated reference
+    const formData = prepareFormData(Promotion.value); // Updated reference
     try {
         await PromotionStore.store(formData).then((response: any) => { // Updated store method
             if (response.status === 200) {
@@ -51,9 +51,9 @@ const store = async () => {
 
 const update = async () => {
     errors.value = null;
-    const formData = prepareFormData(promotion.value); // Updated reference
+    const formData = prepareFormData(Promotion.value); // Updated reference
     try {
-        await PromotionStore.update(promotion.value.id, formData).then((response: any) => { // Updated store method
+        await PromotionStore.update(Promotion.value.id, formData).then((response: any) => { // Updated store method
             if (response.status === 200) {
                 SuccessToast();
                 router.go(-1);
@@ -71,7 +71,7 @@ const Delete = async () => {
 const showData = async () => {
     await PromotionStore.show(id.value).then((response) => { // Updated store method
         if (response.status === 200) {
-            Object.assign(promotion.value, response.data.data); // Updated reference
+            Object.assign(Promotion.value, response.data.data); // Updated reference
         }
     }).catch((error) => {
         // ... existing error handling ...
@@ -94,9 +94,9 @@ onMounted(async () => {
 
     if (Number.isNaN(id.value) || id.value === undefined) {
         namePage.value = "Promotion.Add"; // Updated page name
-        promotion.value.id = 0; // Updated reference
+        Promotion.value.id = 0; // Updated reference
     } else {
-        promotion.value.id = id.value; // Updated reference
+        Promotion.value.id = id.value; // Updated reference
         namePage.value = "Promotion.Update"; // Updated page name
         await showData();
     }
@@ -114,13 +114,13 @@ onMounted(async () => {
             <IRow>
                 <IRow col-lg="4" col-md="2" col-sm="1">
                     <ICol span="1" span-md="1" span-sm="1">
-                        <IInput :label="t('Date')" name="issueDate" v-model="promotion.issueDate"
+                        <IInput :label="t('Date')" name="issueDate" v-model="Promotion.issueDate"
                             :type="EnumInputType.Date" />
                         <!-- Updated reference -->
                     </ICol>
                     <ICol span="1" span-md="1" span-sm="1">
                         <IInput :label="t('Promotion.numberLastPromotion')" name="numberLastPromotion"
-                            v-model="promotion.numberPromotion" :type="EnumInputType.Text" /> <!-- Updated reference -->
+                            v-model="Promotion.number" :type="EnumInputType.Text" /> <!-- Updated reference -->
                     </ICol>
                     <ICol span="1" span-md="2" span-sm="4">
                         <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
@@ -128,7 +128,7 @@ onMounted(async () => {
                         </div>
                         <vSelect
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                            v-model="promotion.BonusJobTitle" :options="useBonusStore().BonusJobTitles"
+                            v-model="Promotion.JobTitle" :options="useBonusStore().BonusJobTitles"
                             :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
                             :getOptionLabel="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name">
                             <template #option="{ name }">
@@ -144,7 +144,7 @@ onMounted(async () => {
                         </div>
                         <vSelect
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                            v-model="promotion.DegreeStage" :options="useBonusStore().DegreeStages"
+                            v-model="Promotion.DegreeStage" :options="useBonusStore().DegreeStages"
                             :reduce="(DegreeStage: IDegreeStage) => DegreeStage"
                             @update:model-value="ChangeDegreeStage" label="title" :getOptionLabel="(DegreeStage: IDegreeStage) =>
                                 DegreeStage.title">
@@ -161,7 +161,7 @@ onMounted(async () => {
                         </div>
                         <vSelect
                             class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                            v-model="promotion.Employee" :options="useBonusStore().Employees"
+                            v-model="Promotion.Employee" :options="useBonusStore().Employees"
                             :reduce="(employee: IEmployeeLite) => employee" label="name"
                             :getOptionLabel="(employee: IEmployeeLite) => employee.name">
                             <template #option="{ name }">
@@ -176,7 +176,7 @@ onMounted(async () => {
         </IPageContent>
 
         <template #Footer>
-            <IFooterCrud :isAdd="promotion.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+            <IFooterCrud :isAdd="Promotion.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
             <!-- Updated reference -->
         </template>
     </IPage>

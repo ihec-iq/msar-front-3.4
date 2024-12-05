@@ -168,7 +168,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "employeeUpdate",
+    name: "Employee.Update",
     params: { id: id },
   });
 };
@@ -453,7 +453,9 @@ const headers = ref<Array<ITableHeader>>([
       <IRow>
         <ITable :items="data" :headers="headers">
           <template v-slot:checkId="{ row }">
-            <input type="checkbox" :value="row.checked" />
+            <div class="cursor-pointer h-full w-full">
+              <input type="checkbox" v-model="row.checked" clas s="cursor-pointer" :id="'checkId' + row.id" />
+            </div>
           </template>
           <template v-slot:difNextBonusDate="{ row }">
             <span>{{ row.difNextBonusDate + " " + t("Day") }} </span>
@@ -499,7 +501,7 @@ const headers = ref<Array<ITableHeader>>([
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-<style scoped>
+<style scoped lang="">
 .tdborderx {
   @apply border-2 border-black border-x-2 border-solid;
 }

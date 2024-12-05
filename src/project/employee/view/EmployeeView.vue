@@ -35,7 +35,7 @@ import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref("EmployeeAdd");
+const namePage = ref("Employee.Add");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isPerson = ref(false);
@@ -239,7 +239,7 @@ const showData = async () => {
 //#endregion
 const back = () => {
   router.push({
-    name: "employeeIndex",
+    name: "Employee.Index",
   });
 };
 const ShowUser = () => {
@@ -274,12 +274,12 @@ onMounted(async () => {
       SelectedUsers.value = response.data.data;
     });
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "EmployeeAdd";
+    namePage.value = "Employee.Add";
     employee.value.id = 0;
   } else {
     await showData();
     employee.value.id = id.value;
-    namePage.value = "EmployeeUpdate";
+    namePage.value = "Employee.Update";
   }
   isLoading.value = false;
 });
@@ -310,6 +310,12 @@ const getFiles = async (page = 1) => {
   isLoading.value = false;
 
 };
+const ChangeDegreeStage = async () => {
+  if (employee.value.DegreeStage?.Degree) {
+    await useBonusStore().get_BonusJobTitle({ bonusDegreeId: employee.value.DegreeStage.Degree.id }).then((response) => {
+    })
+  }
+}
 const getBonus = async (page = 1) => {
 
   searchFilter.value.employeeId = employee.value.id;
@@ -441,13 +447,19 @@ const active = ref(0);
                   {{ isPerson ? " شخص " : " قسم " }}</ICheckbox>
               </ICol>
               <ICol span="1" span-md="1" span-sm="1" class="mt-5">
-                <ICheckbox v-model="isMoveSection" :checked="isMoveSection" class="">
-                  {{ t('Employee.isMoveSection') }} :
-                  {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox>
-                <ISelect v-if="isMoveSection" :label="t('Employee.MoveSection')" v-model="employee.MoveSection.id"
-                  name="MoveSectionId" :options="sections" :IsRequire="true" />
-              </ICol>
+                <div class="flex-col">
+                  <div>
+                    <ICheckbox v-model="isMoveSection" :checked="isMoveSection" class="">
+                      {{ t('Employee.isMoveSection') }} :
+                      {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox>
+                  </div>
+                  <div>
+                    <ISelect v-if="isMoveSection" :label="t('Employee.MoveSection')" v-model="employee.MoveSection.id"
+                      name="MoveSectionId" :options="sections" :IsRequire="true" />
+                  </div>
+                </div>
 
+              </ICol>
               <ICol>
                 <div class="flex justify-between">
                   <div class="w-[49%]">
@@ -482,9 +494,8 @@ const active = ref(0);
                     </vSelect>
                   </div>
                 </div>
-
-
               </ICol>
+
               <!-- :IsDisabled="!isMoveSection" -->
 
               <!-- <ICol span="1" span-md="2" span-sm="4">
@@ -510,18 +521,6 @@ const active = ref(0);
             </ICol> -->
             </IRow>
             <IRow col-lg="4" col-md="2" col-sm="1">
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="employee.numberLastBonus"
-                  :type="EnumInputType.Text" />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="employee.dateLastBonus"
-                  :type="EnumInputType.Date" />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.dateNextBonus')" name="dateNextBonus" disabled v-model="employee.dateNextBonus"
-                  :type="EnumInputType.Date" />
-              </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                   {{ t('Bonus.DegreeStage') }}
@@ -530,7 +529,8 @@ const active = ref(0);
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                   v-model="employee.DegreeStage" :options="BonusStore.DegreeStages"
                   :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title"
-                  :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title">
+                  :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title"
+                  @update:model-value="ChangeDegreeStage">
                   <template #option="{ title, salary, yearlyBonus, yearlyService }">
                     <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                       <span>{{ title }} </span><br>
@@ -557,6 +557,23 @@ const active = ref(0);
                   </template>
                 </vSelect>
               </ICol>
+              <ICol>
+                <div class="flex justify-between">
+                  <div class="w-[49%]">
+                    <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus"
+                      v-model="employee.numberLastBonus" :type="EnumInputType.Text" />
+                  </div>
+                  <div class="w-[49%]">
+                    <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="employee.dateLastBonus"
+                      :type="EnumInputType.Date" />
+                  </div>
+                </div>
+              </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput :label="t('Bonus.dateNextBonus')" name="dateNextBonus" disabled v-model="employee.dateNextBonus"
+                  :type="EnumInputType.Date" />
+              </ICol>
+              
 
             </IRow>
             <div class="mt-2">

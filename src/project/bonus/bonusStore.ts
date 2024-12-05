@@ -109,7 +109,6 @@ export const useBonusStore = defineStore("BonusStore", () => {
     });
   }
   async function get_filter(params: IBonusFilter, page: number) {
-    console.log(params)
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params });
   }
   async function get_checkBonus(params: IBonusFilter, page: number) {

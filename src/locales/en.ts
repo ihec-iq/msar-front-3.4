@@ -146,12 +146,6 @@ export default {
   Months: "Months",
   Number: "Number",
   ShowNotes: "Show Notes",
-  EmployeeAdd: "Add new employee",
-  EmployeeUpdate: "update employee",
-  EmployeeIndex: "Employees",
-  EmployeeIsPerson: "Type Info",
-  EmployeeSection: "Section Employee",
-  EmployeeStore: "Employee Store",
   Setting: {
     Name: "Setting",
     Add: "Add Setting",
@@ -182,7 +176,11 @@ export default {
     IsPerson: "Type Account",
     isMoveSection: "Move to Section",
     MoveSection: "Section Moved",
-    VacationReport: "Vacation Report"
+    VacationReport: "Vacation Report",
+    Index: "Employees",
+    Add: "Add Employee",
+    Update: "Update Employee",
+    Store: "Store",
   },
   Bonus: {
     Index: "Bonuses",

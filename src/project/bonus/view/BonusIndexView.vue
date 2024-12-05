@@ -138,7 +138,7 @@ const headers = ref<Array<ITableHeader>>([
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
             <ISelect
-              :label="t('EmployeeSection')"
+              :label="t('Employee.Section')"
               v-model="searchFilter.sectionId"
               name="archiveTypeId"
               :options="sections"

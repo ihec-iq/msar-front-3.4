@@ -4,7 +4,7 @@ import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
 import type { IEmployee, IEmployeeCenter, IEmployeeFilter, IEmployeePosition, IEmployeeType } from "@/project/employee/IEmployee";
 
-export const useEmployeeStore = defineStore("employeeStore", () => {
+export const useEmployeeStore = defineStore("useEmployeeStore", () => {
   const employee = ref<IEmployee>({
     id: 0,
     name: "",
