@@ -202,19 +202,6 @@ const showData = async () => {
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        // employee.value.id = response.data.data.id;
-        // employee.value.name = response.data.data.name;
-        // employee.value.idCard = response.data.data.idCard;
-        // employee.value.number = response.data.data.number;
-        // employee.value.telegram = response.data.data.telegram;
-        // employee.value.dateWork = response.data.data.dateWork;
-        // employee.value.Section = response.data.data.Section;
-        // employee.value.MoveSection = response.data.data.MoveSection;
-        // employee.value.User = response.data.data.User;
-        // employee.value.EmployeeType = response.data.data.EmployeeType;
-        // employee.value.EmployeeCenter = response.data.data.EmployeeCenter;
-        // employee.value.EmployeePosition = response.data.data.EmployeePosition;
-        // employee.value.isPerson = response.data.data.isPerson;
         Object.assign(employee.value, response.data.data);
         isPerson.value = employee.value.isPerson == 0 ? false : true;
         isMoveSection.value =
@@ -413,7 +400,7 @@ const active = ref(0);
                   :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.Telegram')" name="EmployeeTelegram" v-model="employee.telegram"
+                <IInput :label="t('Employee.Telegram')" name="EmployeeTelegram" v-model="employee.telegramId"
                   :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">

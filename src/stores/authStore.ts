@@ -3,9 +3,9 @@ import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
 import { usePermissionsStore } from "@/project/core/permissionStore";
-import type { IUser } from "@/project/user/IUser";;
+import type { IUser } from "@/project/user/IUser";
 import { useRouter } from "vue-router";
-import CryptoJS from 'crypto-js';
+import { useCrypto } from "@/compositions/useCrypto";
 
 export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);
@@ -13,6 +13,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const user = ref<IUser>();
   const router = useRouter();
   const { setPermissions } = usePermissionsStore();
+  const { encryptData, decryptData } = useCrypto();
+
   const login = async (payload: { email: string; password: string }) => {
     return await new Promise((resolve, reject) => {
       Api.post("/login", payload)
@@ -46,12 +48,13 @@ export const useAuthStore = defineStore("useAuthStore", () => {
 
     localStorage.setItem("token", _token);
     Api.defaults.headers.common["Authorization"] = `Bearer ${_token}`;
-    isAuthenticated.value = true
+    isAuthenticated.value = true;
   };
   //const PermissionStore = usePermissionsStore();
-  const setUser = (_user: IUser) => {
+  const setUser = async (_user: IUser) => {
     user.value = _user;
-    localStorage.setItem("user", JSON.stringify(_user));
+    //localStorage.setItem("user", JSON.stringify(_user));
+    localStorage.setItem("userEnc",String(encryptData({ userEnc: JSON.stringify(_user) })));
     //PermissionStore.permissions = _user.permissions;
     setPermissions(user.value.permissions);
   };
@@ -68,7 +71,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       });
   };
   const getUser = async () => {
-    return await JSON.parse(localStorage.getItem("user")?.toString() || "{}");
+    const userEnc = localStorage.getItem("userEnc");
+    if (!userEnc) return null;
+    const decrypted = decryptData(userEnc);
+    if (!decrypted) return null;
+    return decrypted;
   };
   const logout = async () => {
     isAuthenticated.value = false;
@@ -77,6 +84,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userEnc");
     Api.defaults.headers.common["Authorization"] = "";
     router.push("/login");
   };
