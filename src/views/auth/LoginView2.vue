@@ -71,7 +71,7 @@ const Login = async () => {
         });
     isLoading.value = false;
 };
-onMounted(async () => {console.log(authStore.isAuthenticated);
+onMounted(async () => {
     if (authStore.isAuthenticated) router.push({ name: "Dashboard" });
     await useConfigStore()
         .load()
