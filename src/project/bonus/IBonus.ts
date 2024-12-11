@@ -32,7 +32,8 @@ export interface IBonusEmployeeChecker {
   employeeDepartment: string;
   employeeType: string;
   bonusJobTitle: string;
-  bonusStudy: string;
+  study: string;
+  certificate: string;
   degreeStage: string;
   stage: string;
   degree: string;
@@ -60,7 +61,11 @@ export interface IBonusJobTitle {
   name: string;
   description: string;
 }
-export interface IBonusStudy {
+export interface IStudy {
+  id: number;
+  name: string;
+}
+export interface ICertificate {
   id: number;
   name: string;
 }

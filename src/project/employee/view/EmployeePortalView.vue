@@ -13,7 +13,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('EmployeeIndex')">
+  <IPage :HeaderTitle="t('Employee.Index')">
     <IPageContent>
       <CardPortalComponent :links="EmployeeLinks[0].children"></CardPortalComponent>
     </IPageContent>

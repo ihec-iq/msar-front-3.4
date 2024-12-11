@@ -1,3 +1,5 @@
+import { Search } from "vant";
+
 export default {
   Logout: "تسجيل الخروج",
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
@@ -143,13 +145,7 @@ export default {
   Month: "شهر",
   Months: "اشهر",
   Number: "الرقم",
-  ShowNotes: "عرض الملاحظات",
-  EmployeeAdd: "اضافة بيانات موظف",
-  EmployeeUpdate: "تعديل بيانات موظف",
-  EmployeeIndex: "بيانات الموظفين",
-  EmployeeIsPerson: "نوع البيانات",
-  EmployeeSection: "شعبة الموظف",
-  EmployeeStore: "المخزنية",
+  ShowNotes: "عرض الملاحظات", 
   Setting :{
     Name : "الاعدادات",
     Add: "اضافة اعدادات",
@@ -181,7 +177,15 @@ export default {
     IsPerson: "نوع الحساب",
     isMoveSection: "منسب الى شعبة",
     MoveSection: "شعبة التنسيب",
-    VacationReport: "تقرير اجازات"
+    VacationReport: "تقرير اجازات",
+    Index: "بيانات الموظفين",
+    Add: "اضافة موظف",
+    Update: "تعديل بيانات موظف",
+    Store: "المخزنية",
+    Search: "ابحث عن موظف",
+    All: "كل الموظفين",
+    Active: "الموظفين النشطين",
+    Inactive: "الموظفين الغير نشطين",
   },
   Bonus: {
     Index: "العلاوات",
@@ -198,6 +202,7 @@ export default {
     JobTitleAdd: "اضافة عنوان وظيفي",
     JobTitleUpdate: "تعديل عنوان وظيفي",
     Study: "التحصيل الدراسي",
+    Certificate: "الشهادة الدراسية",
     DegreeStage: "الدرجة الوظيفية",
     Employee: "الموظف",
     issueDate: "تاريخ الاصدار",

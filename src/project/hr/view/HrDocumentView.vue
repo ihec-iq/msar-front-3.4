@@ -137,6 +137,7 @@ const store = async () => {
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
   formData.append("isActive", hrDocument.value.isActive == true ? "1" : "0");
+  formData.append("notes", hrDocument.value.notes.toString());
 
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
@@ -187,6 +188,7 @@ const update = async () => {
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
   formData.append("isActive", hrDocument.value.isActive == true ? "1" : "0");
+  formData.append("notes", hrDocument.value.notes.toString());
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
     formData.append("selectedSectionId", SelectedSection.value.id.toString());
@@ -331,6 +333,7 @@ const showData = async () => {
         hrDocument.value.title = response.data.data.title;
         hrDocument.value.number = response.data.data.number;
         hrDocument.value.issueDate = response.data.data.issueDate;
+        hrDocument.value.notes = response.data.data.notes;
         hrDocument.value.Type = response.data.data.Type;
         hrDocument.value.Employee = response.data.data.Employee;
         hrDocument.value.Files = response.data.data.Files;
@@ -460,6 +463,12 @@ const changeSelectedType = () => {
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <ICheckbox :label="t('IsActive')" v-model="hrDocument.isActive" name="isActive" :IsRequire="true" />
+              </ICol>
+
+            </IRow>
+            <IRow col-lg="1" col-md="1" col-sm="1">
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput :label="t('Notes')" v-model="hrDocument.notes" name="notes" />
               </ICol>
             </IRow>
             <!-- file -->

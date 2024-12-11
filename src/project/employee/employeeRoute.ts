@@ -3,7 +3,7 @@ import authMiddleware from "@/router/middleware/authMiddleware";
 export default [
   {
     path: "/employees/:search?",
-    name: "employeeIndex",
+    name: "Employee.Index",
     component: () => import("./view/EmployeeIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
@@ -19,7 +19,7 @@ export default [
   },
   {
     path: "/employee",
-    name: "employeeAdd",
+    name: "Employee.Add",
     component: () => import("./view/EmployeeView.vue"),
     meta: {
       middleware: [authMiddleware],
@@ -27,7 +27,7 @@ export default [
   },
   {
     path: "/employee/:id",
-    name: "employeeUpdate",
+    name: "Employee.Update",
     component: () => import("./view/EmployeeView.vue"),
     meta: {
       middleware: [authMiddleware],

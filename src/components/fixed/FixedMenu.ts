@@ -12,6 +12,8 @@ export interface IconLink {
   icon?: string;
   iconX?: string;
   tab: string;
+  color?: string;
+  shake?: boolean;
   description: string;
   permissions: Array<string>;
   isActive: boolean;

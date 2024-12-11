@@ -35,7 +35,7 @@ import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref("EmployeeAdd");
+const namePage = ref("Employee.Add");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 const isPerson = ref(false);
@@ -66,6 +66,10 @@ import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
 import OpenButton from "@/components/dropDown/OpenButton.vue";
+import IRow from "@/components/ihec/IRow.vue";
+import IRow2 from "@/components/ihec/IRow2.vue";
+import ICol2 from "@/components/ihec/ICol2.vue";
+import ICol from "@/components/ihec/ICol.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -93,7 +97,7 @@ const rules: Array<IFieldValidation> = [
     rules: [isObject({ key: "id", message: "" })],
   },
   {
-    field: "BonusStudy",
+    field: "Study",
     caption: t("Bonus.Study"),
     rules: [isObject({ key: "id", message: "" })],
   },
@@ -198,23 +202,10 @@ const showData = async () => {
     .show(id.value)
     .then((response) => {
       if (response.status == 200) {
-        // employee.value.id = response.data.data.id;
-        // employee.value.name = response.data.data.name;
-        // employee.value.idCard = response.data.data.idCard;
-        // employee.value.number = response.data.data.number;
-        // employee.value.telegram = response.data.data.telegram;
-        // employee.value.dateWork = response.data.data.dateWork;
-        // employee.value.Section = response.data.data.Section;
-        // employee.value.MoveSection = response.data.data.MoveSection;
-        // employee.value.User = response.data.data.User;
-        // employee.value.EmployeeType = response.data.data.EmployeeType;
-        // employee.value.EmployeeCenter = response.data.data.EmployeeCenter;
-        // employee.value.EmployeePosition = response.data.data.EmployeePosition;
-        // employee.value.isPerson = response.data.data.isPerson;
         Object.assign(employee.value, response.data.data);
-        isPerson.value = response.data.data.isPerson == 0 ? false : true;
+        isPerson.value = employee.value.isPerson == 0 ? false : true;
         isMoveSection.value =
-          response.data.data.isMoveSection == 0 ? false : true;
+          employee.value.isMoveSection == 0 ? false : true;
       }
     })
     .catch((errors) => {
@@ -235,7 +226,7 @@ const showData = async () => {
 //#endregion
 const back = () => {
   router.push({
-    name: "employeeIndex",
+    name: "Employee.Index",
   });
 };
 const ShowUser = () => {
@@ -258,7 +249,8 @@ onMounted(async () => {
     employeeStore.get_employee_positions(),
     employeeStore.get_employee_centers(),
     BonusStore.get_BonusJobTitle(),
-    BonusStore.get_BonusStudy(),
+    BonusStore.get_Study(),
+    BonusStore.get_Certificate(),
     BonusStore.get_DegreeStage(),
     BonusStore.get_EmployeesLite()
   ]);
@@ -269,12 +261,12 @@ onMounted(async () => {
       SelectedUsers.value = response.data.data;
     });
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "EmployeeAdd";
+    namePage.value = "Employee.Add";
     employee.value.id = 0;
   } else {
     await showData();
     employee.value.id = id.value;
-    namePage.value = "EmployeeUpdate";
+    namePage.value = "Employee.Update";
   }
   isLoading.value = false;
 });
@@ -305,6 +297,12 @@ const getFiles = async (page = 1) => {
   isLoading.value = false;
 
 };
+const ChangeDegreeStage = async () => {
+  if (employee.value.DegreeStage?.Degree) {
+    await useBonusStore().get_BonusJobTitle({ bonusDegreeId: employee.value.DegreeStage.Degree.id }).then((response) => {
+    })
+  }
+}
 const getBonus = async (page = 1) => {
 
   searchFilter.value.employeeId = employee.value.id;
@@ -332,10 +330,12 @@ const headerFiles = ref<Array<ITableHeader>>([
   { caption: t('HrDocument.Type'), value: "HrDocumentype" },
   { caption: t('HrDocument.AddMonths'), value: "addMonths" },
   { caption: t('HrDocument.AddDayes'), value: "addDays" },
+  { caption: t('Notes'), value: "notes" },
 ]);
 const headerBonus = ref<Array<ITableHeader>>([
   { caption: t('Bonus.number'), value: "number" },
   { caption: t('Details'), value: "actions" },
+  { caption: t('Notes'), value: "notes" },
   { caption: t('Date'), value: "issueDate" }
 ]);
 const openFileHrDocument = (id: number) => {
@@ -400,7 +400,7 @@ const active = ref(0);
                   :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.Telegram')" name="EmployeeTelegram" v-model="employee.telegram"
+                <IInput :label="t('Employee.Telegram')" name="EmployeeTelegram" v-model="employee.telegramId"
                   :type="EnumInputType.Text" />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
@@ -434,15 +434,55 @@ const active = ref(0);
                   {{ isPerson ? " شخص " : " قسم " }}</ICheckbox>
               </ICol>
               <ICol span="1" span-md="1" span-sm="1" class="mt-5">
-                <ICheckbox v-model="isMoveSection" :checked="isMoveSection" class="">
-                  {{ t('Employee.isMoveSection') }} :
-                  {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox>
+                <div class="flex-col">
+                  <div>
+                    <ICheckbox v-model="isMoveSection" :checked="isMoveSection" class="">
+                      {{ t('Employee.isMoveSection') }} :
+                      {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox>
+                  </div>
+                  <div>
+                    <ISelect v-if="isMoveSection" :label="t('Employee.MoveSection')" v-model="employee.MoveSection.id"
+                      name="MoveSectionId" :options="sections" :IsRequire="true" />
+                  </div>
+                </div>
+
+              </ICol>
+              <ICol>
+                <div class="flex justify-between">
+                  <div class="w-[49%]">
+                    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                      {{ t('Bonus.Study') }}
+                    </div>
+                    <vSelect
+                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                      v-model="employee.Study" :options="BonusStore.Studies" :reduce="(Study) => Study" label="name"
+                      :getOptionLabel="(Study) => Study.name">
+                      <template #option="{ name }">
+                        <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                          <span>{{ name }}</span>
+                        </div>
+                      </template>
+                    </vSelect>
+                  </div>
+                  <div class="w-[49%]">
+                    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                      {{ t('Bonus.Certificate') }}
+                    </div>
+                    <vSelect
+                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                      v-model="employee.Certificate" :options="BonusStore.Certificates"
+                      :reduce="(Certificate) => Certificate" label="name"
+                      :getOptionLabel="(Certificate) => Certificate.name">
+                      <template #option="{ name }">
+                        <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                          <span>{{ name }}</span>
+                        </div>
+                      </template>
+                    </vSelect>
+                  </div>
+                </div>
               </ICol>
 
-              <ICol span="1" span-md="1" span-sm="1" v-if="isMoveSection">
-                <ISelect :label="t('Employee.MoveSection')" v-model="employee.MoveSection.id" name="MoveSectionId"
-                  :options="sections" :IsRequire="true" />
-              </ICol>
               <!-- :IsDisabled="!isMoveSection" -->
 
               <!-- <ICol span="1" span-md="2" span-sm="4">
@@ -468,18 +508,6 @@ const active = ref(0);
             </ICol> -->
             </IRow>
             <IRow col-lg="4" col-md="2" col-sm="1">
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus" v-model="employee.numberLastBonus"
-                  :type="EnumInputType.Text" />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="employee.dateLastBonus"
-                  :type="EnumInputType.Date" />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.dateNextBonus')" name="dateNextBonus" disabled v-model="employee.dateNextBonus"
-                  :type="EnumInputType.Date" />
-              </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                   {{ t('Bonus.DegreeStage') }}
@@ -488,7 +516,8 @@ const active = ref(0);
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
                   v-model="employee.DegreeStage" :options="BonusStore.DegreeStages"
                   :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title"
-                  :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title">
+                  :getOptionLabel="(DegreeStage: IDegreeStage) => DegreeStage.title"
+                  @update:model-value="ChangeDegreeStage">
                   <template #option="{ title, salary, yearlyBonus, yearlyService }">
                     <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
                       <span>{{ title }} </span><br>
@@ -515,21 +544,23 @@ const active = ref(0);
                   </template>
                 </vSelect>
               </ICol>
-              <ICol span="1" span-md="2" span-sm="4">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
-                  {{ t('Bonus.Study') }}
+              <ICol>
+                <div class="flex justify-between">
+                  <div class="w-[49%]">
+                    <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus"
+                      v-model="employee.numberLastBonus" :type="EnumInputType.Text" />
+                  </div>
+                  <div class="w-[49%]">
+                    <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="employee.dateLastBonus"
+                      :type="EnumInputType.Date" />
+                  </div>
                 </div>
-                <vSelect
-                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="employee.BonusStudy" :options="BonusStore.BonusStudies" :reduce="(BonusStudy) => BonusStudy"
-                  label="name" :getOptionLabel="(BonusStudy) => BonusStudy.name">
-                  <template #option="{ name }">
-                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
-                      <span>{{ name }}</span>
-                    </div>
-                  </template>
-                </vSelect>
               </ICol>
+              <ICol span="1" span-md="1" span-sm="1">
+                <IInput :label="t('Bonus.dateNextBonus')" name="dateNextBonus" disabled v-model="employee.dateNextBonus"
+                  :type="EnumInputType.Date" />
+              </ICol>
+              
 
             </IRow>
             <div class="mt-2">

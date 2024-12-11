@@ -30,7 +30,10 @@ const LinksBase = computed(() => {
               <div title="Feature"
                 class="dark:text-navIconColorHoverDark dark:hover:text-navIconColoDark hover:text-navIconColoDark text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover">
                 <span v-html="Link.iconX" class="dark:text-content"></span>
-                <Icon v-if="Link?.mdi" :icon="Link?.mdi" class="dark:text-content size-16"></Icon>
+                <Icon v-if="Link?.mdi" :icon="Link?.mdi" class="dark:text-content size-16" :class="{
+                  ['text-' + Link.color]: Link?.color,
+                  'animate-shake': Link?.shake
+                }"></Icon>
               </div>
 
               <h2 class="dark:text-gray-800 mt-4 text-xl font-medium sm:text-2xl ">
@@ -58,3 +61,25 @@ const LinksBase = computed(() => {
     </ICol2>
   </IRow2>
 </template>
+
+<style scoped>
+.animate-shake {
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-5deg);
+  }
+
+  75% {
+    transform: rotate(5deg);
+  }
+}
+</style>
