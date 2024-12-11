@@ -8,7 +8,7 @@ export default interface ICompany {
   phones: string;
   facebook: string;
   package: number;
-  telegram: string;
+  telegramId: string;
   last_login_at: string;
   active_at: string;
   computers: Array<IComputer>;

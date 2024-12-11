@@ -5,7 +5,7 @@ import type { IUser } from "../user/IUser";
 import type { IVacationDaily } from "../vacation/vacationDaily/IVacationDaily";
 import type { IVacationSick } from "../vacation/vacationSick/IVacationSick";
 import type { IVacationTime } from "../vacation/vacationTime/IVacationTime";
-import type { IDegreeStage, IBonusJobTitle, IBonusStudy } from "../bonus/IBonus";
+import type { IDegreeStage, IBonusJobTitle, IStudy, ICertificate } from "../bonus/IBonus";
 import type { IDocument } from "../archive/IArchive";
 
 export interface IEmployee {
@@ -18,7 +18,7 @@ export interface IEmployee {
   dateWork: string;
   number: string;
   idCard: string;
-  telegram?: string;
+  telegramId?: string;
   EmployeePosition: IEmployeePosition;
   EmployeeType: IEmployeeType;
   EmployeeCenter: IEmployeeCenter;
@@ -32,7 +32,8 @@ export interface IEmployee {
   vacationTime?: Array<IVacationTime>;
   issueDate?:string;
   BonusJobTitle?: IBonusJobTitle;
-  BonusStudy?: IBonusStudy;
+  Study?: IStudy;
+  Certificate?: ICertificate;
   DegreeStage?: IDegreeStage;
   Files?: Array<IDocument>;
   numberLastBonus?: string;
@@ -47,7 +48,7 @@ export interface IEmployeeBonus {
   employeeType: string;
   employeeCenter: string;
   bonusJobTitle: string;
-  bonusStudy: string;
+  Study: string;
   DegreeStage: string;
   numberLastBonus: string;
   dateLastBonus: string;
@@ -66,7 +67,7 @@ export interface IEmployeeLiteBonus {
   numberLastBonus: string;
   DegreeStage: IDegreeStage;
   BonusJobTitle: IBonusJobTitle;
-  BonusStudy: IBonusStudy;
+  Study: IStudy;
 }
 export interface IEmployeeLitePromotion {
   id: number;

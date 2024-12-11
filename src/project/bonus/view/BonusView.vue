@@ -137,7 +137,7 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
 
   await Promise.all([
-    BonusStore.get_BonusStudy(),
+    BonusStore.get_Study(),
     BonusStore.get_DegreeStage(),
     BonusStore.get_Employees()
   ]);

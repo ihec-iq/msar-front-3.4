@@ -27,6 +27,7 @@ import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
+import EditButton from "@/components/dropDown/EditButton.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -43,7 +44,7 @@ const addItem = () => {
   employee.value.Section = { name: "", id: 0 };
   employee.value.isPerson = 0;
   router.push({
-    name: "employeeAdd",
+    name: "Employee.Add",
   });
 };
 
@@ -77,6 +78,10 @@ const getFilterData = async (page = 1) => {
   await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
+        if (response.data.length == 0) {
+          isLoading.value = false;
+          window.location.reload();
+        }
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
@@ -90,7 +95,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "employeeUpdate",
+    name: "Employee.Update",
     params: { id: id },
   });
 };
@@ -126,36 +131,27 @@ const headers = ref<Array<ITableHeader>>([
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('EmployeeIndex')" :is-loading="isLoading">
+  <IPage :HeaderTitle="t('Employee.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
+
       <IRow :col="3" :col-md="2" :col-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
-            <IInput
-              :label="t('SearchForUser')"
-              :placeholder="t('SearchForUser')"
-              v-model="fastSearch"
-              type="text"
-              :OnKeyEnter="getFilterData"
-            />
+            <IInput :label="t('SearchForUser')" :placeholder="t('Search')" v-model="fastSearch" type="text"
+              :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
           <ICol :span-lg="1" :span-md="2" :span="1">
-            <ISelect
-              :label="t('EmployeeSection')"
-              v-model="searchFilter.sectionId"
-              name="archiveTypeId"
-              :options="sections"
-              :IsRequire="true"
-              @onChange="getFilterData()"
-            />
+            <ISelect :label="t('Employee.Section')" v-model="searchFilter.sectionId" name="archiveTypeId"
+              :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol>
         </ISearchBar>
-      </IRow>
+      </IRow> 
       <IRow>
+        <SimpleLoading v-if="isLoading"/>
         <ITable :items="data" :headers="headers">
           <template v-slot:section="{ row }">
             <span>{{ row.Section.name }}</span>
@@ -169,15 +165,11 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
-                <EditButton
-                title="Employee.Info"
-                @click="update(row.id)" />
+                <EditButton title="Employee.Info" @click="update(row.id)" />
               </li>
               <li>
-                <EditButton
-                  title="Employee.HistoryReport"
-                  @click="history(row.id)"
-                />
+                <EditButton title="Employee.HistoryReport" @click="history(row.id)" class="w-full"
+                  icon="mdi-clipboard-text-clock-outline" />
               </li>
             </IDropdown>
           </template>
@@ -192,27 +184,15 @@ const headers = ref<Array<ITableHeader>>([
           ></IPagination> -->
           <div class="w-full flex flex-row">
             <div class="basis-4/5 overflow-auto">
-              <TailwindPagination
-                class="flex justify-center mt-6"
-                :data="dataPage"
-                @pagination-change-page="getFilterData"
-                :limit="searchFilter.limit"
-              />
+              <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+                @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
             </div>
             <div class="basis-1/5" v-if="data.length >= limits[0].id">
-              <ISelect
-                name="limit"
-                :label="t('Limit')"
-                v-model="searchFilter.limit"
-                :options="limits"
-                :IsRequire="true"
-                @onChange="getFilterData()"
-              />
+              <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
+                @onChange="getFilterData()" />
             </div>
           </div>
-          <SimpleLoading v-if="isLoading">.</SimpleLoading>
         </IRow>
-        <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
       <IRow>
         <div id="PageDataEnd"></div>

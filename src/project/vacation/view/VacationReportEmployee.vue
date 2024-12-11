@@ -177,13 +177,13 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.VacationReport]);
   await sectionStore.get_sections();
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = t("EmployeeAdd");
+    namePage.value = t("Employee.Add");
     employee.value.id = 0;
   } else {
     await showData();
     await getFilterData();
     employee.value.id = id.value;
-    namePage.value = t("EmployeeUpdate");
+    namePage.value = t("Employee.Update");
   }
 });
 const headersTime = ref<Array<ITableHeader>>([

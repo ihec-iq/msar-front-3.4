@@ -119,6 +119,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Details"), value: "actions" },
   { caption: t("Employee.Title"), value: "EmployeeName" },
   { caption: t("Date"), value: "issueDate" },
+  { caption: t("Notes"), value: "notes" },
   { caption: t("Bonus.DegreeStage"), value: "DegreeStage" },
 ]);
 </script>
@@ -137,7 +138,7 @@ const headers = ref<Array<ITableHeader>>([
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
             <ISelect
-              :label="t('EmployeeSection')"
+              :label="t('Employee.Section')"
               v-model="searchFilter.sectionId"
               name="archiveTypeId"
               :options="sections"

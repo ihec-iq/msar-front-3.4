@@ -107,7 +107,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "employeeUpdate",
+    name: "Employee.Update",
     params: { id: id },
   });
 };

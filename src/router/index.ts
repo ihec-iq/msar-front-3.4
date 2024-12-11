@@ -73,6 +73,14 @@ const router = createRouter({
           },
         },
         {
+          path: "/whatsapp",
+          name: "whatsapp",
+          component: () => import("@/project/whatsapp/view/WhatsappView.vue"),
+          meta: {
+            middleware: [authMiddleware],
+          },
+        },
+        {
           path: "/test",
           name: "Test",
           component: () => import("@/views/TestView.vue"),
