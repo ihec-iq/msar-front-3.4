@@ -1,6 +1,5 @@
-import { defineStore } from "pinia";
 import { useCrypto } from "@/compositions/useCrypto";
-export const useLocalStorageStore = defineStore("useLocalStorageStore", () => {
+export function  useLocalStorage () {
   const { encryptData, decryptData } = useCrypto();
 
   function get({
@@ -32,4 +31,4 @@ export const useLocalStorageStore = defineStore("useLocalStorageStore", () => {
     get,
     set,
   };
-});
+};

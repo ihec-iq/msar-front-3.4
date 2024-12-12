@@ -501,7 +501,7 @@ const headers = ref<Array<ITableHeader>>([
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
-<style scoped lang="">
+<style scoped lang="postcss">
 .tdborderx {
   @apply border-2 border-black border-x-2 border-solid;
 }

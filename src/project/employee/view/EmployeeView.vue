@@ -254,7 +254,7 @@ onMounted(async () => {
     BonusStore.get_DegreeStage(),
     BonusStore.get_EmployeesLite()
   ]);
-
+console.log("loading dependencies")
   await useUserStore()
     .get_lite()
     .then((response) => {

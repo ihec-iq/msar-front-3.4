@@ -1,58 +1,89 @@
+// Import necessary modules and dependencies
 import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router";
-import { useAuthStore } from "@/stores/authStore";
 import envConfig from "./envConfig";
- import { useToast, POSITION } from "vue-toastification";
+import { useToast, POSITION } from "vue-toastification";
+import { useAuthStore, getSecureToken } from "@/stores/authStore";
 
+// Initialize Axios instance
 const Api = axios.create({
-  //baseURL: "http://10.9.8.7/workflow_ihec/public/api",
-  // baseURL: "http://10.10.10.10/workflow_ihec/public/api",
   baseURL: envConfig._baseURL,
 });
+
+// Set default Axios configurations
 Api.defaults.withCredentials = true;
 Api.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-Api.defaults.headers.common["Access-Control-Allow-Methods"] =
-  "DELETE, POST, GET, PUT";
+Api.defaults.headers.common["Access-Control-Allow-Methods"] = "DELETE, POST, GET, PUT";
 Api.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-Api.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
-  "token"
-)}`;
-Api.interceptors.response.use(
-  (response) => response,
-  (error) => {
 
-    error.handleGlobally = errorComposer(error);
+// Attach authorization token lazily
+// Api.interceptors.request.use((config) => {
+//   const token = getSecureToken(); // Get the token when needed
+//   if (token) {
+//     config.headers["Authorization"] = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
+// Axios response interceptor for error handling
+Api.interceptors.response.use(
+  (response) => response, // Pass through successful responses
+  (error) => {
+    error.handleGlobally = composeErrorHandler(error);
     return Promise.reject(error);
   }
 );
-// errorComposer will compose a handleGlobally function
-const errorComposer = (error: any) => {
-  const statusCode = error.response ? error.response.status : null;
-  // request not Found
-  if (statusCode === 404) {
-    console.log("The requested resource does not exist or has been deleted");
-    router.back();
-  }
-  // request unAuthorize
-  if (statusCode === 401) {
-    ErrorToast("Your session has expired. Would you like to be redirected to the login page.");
-    useAuthStore().logout();
-    router.push("/login");
-  }
-  // ERR_NETWORK == server not work
-  else if (error.code == "ERR_NETWORK") {
 
-    ErrorToast("الاتصال بالسيرفر غير متوفر , الرجاء التواصل مع الدعم الفني");
-    useAuthStore().logout();
-    router.push("/login");
-  } else if (error.code == "ERR_CONNECTION_REFUSED") {
-    useAuthStore().logout();
-    router.push("/login");
+// Compose a global error handler function
+const composeErrorHandler = (error : any) => {
+  const statusCode = error.response ? error.response.status : null;
+  const authStore = useAuthStore();
+
+  switch (statusCode) {
+    case 404:
+      console.error("The requested resource does not exist or has been deleted.");
+      router.back();
+      break;
+
+    case 401:
+      showErrorToast("Your session has expired. Redirecting to the login page.");
+      authStore.logout();
+      router.push("/login");
+      break;
+
+    default:
+      handleNetworkErrors(error);
+      break;
   }
 };
+
+// Handle specific network-related errors
+const handleNetworkErrors = (error : any) => {
+  const authStore = useAuthStore();
+
+  switch (error.code) {
+    case "ERR_NETWORK":
+      showErrorToast("Server connection is unavailable. Please contact technical support.");
+      authStore.logout();
+      router.push("/login");
+      break;
+
+    case "ERR_CONNECTION_REFUSED":
+      showErrorToast("Connection refused by the server. Redirecting to login.");
+      authStore.logout();
+      router.push("/login");
+      break;
+
+    default:
+      console.error("An unexpected error occurred:", error);
+      break;
+  }
+};
+
+// Utility function to show error toasts
 const toast = useToast();
-function ErrorToast(message: String = "") {
+const showErrorToast = (message = "") => {
   toast.error(message, {
     position: POSITION.TOP_CENTER,
     timeout: 2500,
@@ -66,6 +97,6 @@ function ErrorToast(message: String = "") {
     icon: true,
     rtl: false,
   });
-}
+};
 
 export default Api;

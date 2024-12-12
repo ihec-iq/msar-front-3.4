@@ -32,7 +32,6 @@
     "pinia": "^2.2.6",
     "radix-vue": "^1.9.9",
     "register-service-worker": "^1.7.2",
-    "selenium-webdriver": "^4.27.0",
     "sweetalert2": "^11.6.13",
     "tailwindcss-animate": "^1.0.7",
     "vant": "^4.9.8",
