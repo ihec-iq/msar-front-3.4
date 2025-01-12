@@ -20,10 +20,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);
   const token = ref<string | any>("");
   const user = ref<IUser>();
-  
+
   const { setPermissions } = usePermissionsStore();
   const login = async (payload: { email: string; password: string }) => {
-    return await new Promise((resolve, reject) => { console.log(Api.defaults.headers.common["Authorization"] );
+    return await new Promise((resolve, reject) => {
+      console.log(Api.defaults.headers.common["Authorization"]);
       Api.post("/login", payload)
         .then((response) => {
           if (response.status == 200) {
@@ -105,7 +106,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
 
   //#region Encryption
-  
 
   return {
     isAuthenticated,
@@ -149,9 +149,7 @@ export const getSecureToken = async () => {
   });
   if (!storedData) return null;
   try {
-    const { token, fingerprint, timestamp } = JSON.parse(
-      storedData.toString()
-    );
+    const { token, fingerprint, timestamp } = JSON.parse(storedData.toString());
     // Check token age (e.g., expire after 7 days)
     const MAX_TOKEN_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
     if (Date.now() - timestamp > MAX_TOKEN_AGE) {
@@ -166,6 +164,7 @@ export const getSecureToken = async () => {
       removeUnUsedLogin();
       return null;
     }
+    Api.defaults.headers.common["Authorization"] = "Bearer " + token;
     return token;
   } catch (error) {
     console.log("Decryption Error:", error);
