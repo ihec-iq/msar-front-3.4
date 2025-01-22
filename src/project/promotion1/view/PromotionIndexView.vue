@@ -16,8 +16,7 @@ import { EnumPermission } from "@/utilities/EnumSystem"; // Added permission enu
 import type { ITableHeader } from "@/types/core/components/ITable"; // Added table header type
 import IPage from "@/components/ihec/IPage.vue"; // Added page component
 import router from "@/router";
-import { EnumInputType } from "@/components/inputs/IInput.vue";
-
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
 

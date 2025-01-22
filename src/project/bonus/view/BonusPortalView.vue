@@ -19,5 +19,6 @@ onMounted(async () => {
          <CardPortalComponent :links="BonusLinks"></CardPortalComponent>
       </IRow2>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"/>
   </IPage>
 </template>

@@ -6,7 +6,7 @@ import { usePermissionsStore } from "@/project/core/permissionStore";
 import type { IUser } from "@/project/user/IUser";
 import { useRouter } from "vue-router";
 import CryptoJS from "crypto-js";
-import { useLocalStorageStore } from "@/project/core/localStorageStore";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 // Create a secret key for encryption (ideally from an environment variable)
 export enum EnumNameToken {
   tokenENCRYPT = "TENCRYPT",
@@ -20,6 +20,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const token = ref<string | any>("");
   const user = ref<IUser>();
   const router = useRouter();
+
   const { setPermissions } = usePermissionsStore();
   const login = async (payload: { email: string; password: string }) => {
     return await new Promise((resolve, reject) => {
@@ -59,7 +60,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   //const PermissionStore = usePermissionsStore();
   const setUser = (_user: IUser) => {
     user.value = _user;
-    useLocalStorageStore().set({
+    useLocalStorage().set({
       key: EnumNameToken.userENCRYPT,
       value: JSON.stringify(_user),
       withEncrypt: true,
@@ -80,7 +81,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       });
   };
   const getUser = async () => {
-    const user = await useLocalStorageStore().get({
+    const user = await useLocalStorage().get({
       key: EnumNameToken.userENCRYPT,
       withEncrypt: true,
     });
@@ -90,10 +91,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     isAuthenticated.value = false;
     token.value = "";
     user.value = undefined;
-    localStorage.removeItem(EnumNameToken.tokenENCRYPT);
-    localStorage.removeItem(EnumNameToken.userENCRYPT);
-    localStorage.removeItem(EnumNameToken.isAuthenticated);
-    Api.defaults.headers.common["Authorization"] = "";
+    removeUnUsedLogin();
     router.push("/login");
   };
   const CheckAuth = async () => {
@@ -107,67 +105,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
 
   //#region Encryption
-  const setSecureToken = (token: string) => {
-    // Add additional browser-specific identifier
-    const browserFingerprint = generateBrowserFingerprint();
-    useLocalStorageStore().set({
-      key: EnumNameToken.tokenENCRYPT,
-      value: JSON.stringify({
-        token: token,
-        fingerprint: browserFingerprint,
-        timestamp: Date.now(),
-      }),
-      withEncrypt: true,
-    });
-  };
-
-  // Retrieve and validate token
-  const getSecureToken = async () => {
-    const storedData = await useLocalStorageStore().get({
-      key: EnumNameToken.tokenENCRYPT,
-      withEncrypt: true,
-    });
-    if (!storedData) return null;
-    try {
-      const { token, fingerprint, timestamp } = JSON.parse(
-        storedData.toString()
-      );
-      // Check token age (e.g., expire after 7 days)
-      const MAX_TOKEN_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
-      if (Date.now() - timestamp > MAX_TOKEN_AGE) {
-        console.log("Token expired");
-        logout();
-        return null;
-      }
-
-      // Verify browser fingerprint
-      if (fingerprint !== generateBrowserFingerprint()) {
-        console.log("Fingerprint mismatch");
-        logout();
-        return null;
-      }
-      return token;
-    } catch (error) {
-      console.log("Decryption Error:", error);
-      logout();
-      return null;
-    }
-  };
-
-  // Generate a unique browser fingerprint
-  const generateBrowserFingerprint = () => {
-    return CryptoJS.MD5(
-      [
-        navigator.userAgent,
-        screen.width,
-        screen.height,
-        navigator.language,
-        // Add more unique browser characteristics
-        new Date().getTimezoneOffset(),
-        navigator.hardwareConcurrency,
-      ].join("|")
-    ).toString();
-  };
 
   return {
     isAuthenticated,
@@ -182,3 +119,69 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     getSecureToken,
   };
 });
+
+export const removeUnUsedLogin = () => { 
+  localStorage.removeItem(EnumNameToken.tokenENCRYPT);
+  localStorage.removeItem(EnumNameToken.userENCRYPT);
+  localStorage.removeItem(EnumNameToken.isAuthenticated); 
+};
+export const setSecureToken = (token: string) => {
+  // Add additional browser-specific identifier
+  const browserFingerprint = generateBrowserFingerprint();
+  useLocalStorage().set({
+    key: EnumNameToken.tokenENCRYPT,
+    value: JSON.stringify({
+      token: token,
+      fingerprint: browserFingerprint,
+      timestamp: Date.now(),
+    }),
+    withEncrypt: true,
+  });
+};
+
+// Retrieve and validate token
+export const getSecureToken = async () => {
+  const storedData = await useLocalStorage().get({
+    key: EnumNameToken.tokenENCRYPT,
+    withEncrypt: true,
+  });
+  if (!storedData) return null;
+  try {
+    const { token, fingerprint, timestamp } = JSON.parse(storedData.toString());
+    // Check token age (e.g., expire after 7 days)
+    const MAX_TOKEN_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+    if (Date.now() - timestamp > MAX_TOKEN_AGE) {
+      console.log("Token expired");
+      removeUnUsedLogin();
+      return null;
+    }
+
+    // Verify browser fingerprint
+    if (fingerprint !== generateBrowserFingerprint()) {
+      console.log("Fingerprint mismatch");
+      removeUnUsedLogin();
+      return null;
+    }
+    Api.defaults.headers.common["Authorization"] = "Bearer " + token;
+    return token;
+  } catch (error) {
+    console.log("Decryption Error:", error);
+    removeUnUsedLogin();
+    return null;
+  }
+};
+
+// Generate a unique browser fingerprint
+export const generateBrowserFingerprint = () => {
+  return CryptoJS.MD5(
+    [
+      navigator.userAgent,
+      screen.width,
+      screen.height,
+      navigator.language,
+      // Add more unique browser characteristics
+      new Date().getTimezoneOffset(),
+      navigator.hardwareConcurrency,
+    ].join("|")
+  ).toString();
+};

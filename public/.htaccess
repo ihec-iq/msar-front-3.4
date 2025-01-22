@@ -1,9 +1,9 @@
-RewriteBase /10/
+RewriteBase /erp-msar/
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /10/
+  RewriteBase /erp-msar/
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /10/index.html [L]
+  RewriteRule . /erp-msar/index.html [L]
 </IfModule>

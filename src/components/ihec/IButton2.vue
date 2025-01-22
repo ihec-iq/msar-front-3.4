@@ -109,6 +109,8 @@ const buttonClass = computed(() => {
     class="flex flex-row mx-2"
     style="align-items: center"
   >
+    <slot name="icon"></slot>
+
     <Icon
       v-if="props.preIcon != ''"
       :icon="PreIcon"

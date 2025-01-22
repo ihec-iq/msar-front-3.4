@@ -80,7 +80,7 @@ const getFilterData = async (page = 1) => {
       if (response.status == 200) {
         if (response.data.length == 0) {
           isLoading.value = false;
-          window.location.reload();
+          //window.location.reload();
         }
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
@@ -115,7 +115,6 @@ onMounted(async () => {
   await useSectionStore().get_sections();
 
   let index = 1;
-
   if (localStorage.getItem("indexEmployee") != undefined)
     index = Number(localStorage.getItem("indexEmployee"));
   await getFilterData(index);
@@ -137,15 +136,15 @@ const headers = ref<Array<ITableHeader>>([
     </template>
     <IPageContent>
 
-      <IRow :col="3" :col-md="2" :col-lg="3">
-        <ISearchBar :getDataButton="getFilterData">
-          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
+      <IRow>
+        <ISearchBar :getDataButton="getFilterData" class="w-full overflow-x-auto border-b-2 border-gray-200 min-w-[300px]">
+            <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4" class="min-w-[50px]" >
             <IInput :label="t('SearchForUser')" :placeholder="t('Search')" v-model="fastSearch" type="text"
               :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
-          <ICol :span-lg="1" :span-md="2" :span="1">
-            <ISelect :label="t('Employee.Section')" v-model="searchFilter.sectionId" name="archiveTypeId"
+          <ICol :span-lg="1" :span-md="2" :span="1" >
+            <ISelect :label="t('Employee.Section')"  v-model="searchFilter.sectionId" name="archiveTypeId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol>
         </ISearchBar>

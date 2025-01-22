@@ -19,7 +19,7 @@ import bonusRoute from "@/project/bonus/bonusRoute";
 import promotionRoute from "@/project/promotion/promotionRoute";
 const router = createRouter({
   history: createWebHistory(
-    process.env.NODE_ENV === "production" ? "/10/" : "/",
+    process.env.NODE_ENV === "production" ? "/erp-msar/" : "/",
   ), //import.meta.env.BASE_URL
   linkExactActiveClass: "linkExactActiveClass",
   routes: [

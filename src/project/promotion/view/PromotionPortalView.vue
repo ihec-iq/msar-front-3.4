@@ -16,5 +16,6 @@ onMounted(async () => {
     <IPageContent>
       <CardPortalComponent :links="PromotionLinks"></CardPortalComponent>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>

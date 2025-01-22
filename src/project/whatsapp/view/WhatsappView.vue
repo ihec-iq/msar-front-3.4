@@ -15,6 +15,10 @@ const isValidForm = computed(() => {
 
 // Method to send WhatsApp message
 const sendWhatsAppMessage = () => {
+  const frm = new FormData()
+  frm.append('number', phoneNumber.value)
+  frm.append('message', message.value)  
+  
   // Remove non-digit characters from phone number
   const cleanedNumber = phoneNumber.value.replace(/\D/g, '')
 
@@ -30,7 +34,7 @@ const sendWhatsAppMessage = () => {
 }
 // Method to setup message sending
 const setupMessageSender = () => {
-  const checkAndSendMessage = () => {
+  const checkAndSendMessage = () =>  {
     // Check if window is still open
     if (!whatsappWindow.value || whatsappWindow.value.closed) {
       removeMessageListener()

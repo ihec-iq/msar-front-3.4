@@ -9,6 +9,7 @@ import ArchiveTypeCard from "./archiveTypeCardComponent.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { storeToRefs } from "pinia";
 import IPage from "@/components/ihec/IPage.vue";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
@@ -50,6 +51,7 @@ const addObject = () => {
         </ICol>
       </IRow>
     </IPageContent>
+    <IFooterCrud :isAdd="false" :show-delete="false" :show-add="false" :show-update="false"> </IFooterCrud>
   </IPage>
   <SimpleLoading v-if="isLoading"></SimpleLoading>
 </template>

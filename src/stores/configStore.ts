@@ -34,6 +34,26 @@ export const useConfigStore = defineStore("ConfigStore", () => {
     }
   };
 
+  async function checkConnection(server: string) {
+    return await new Promise((resolve, reject) => {
+       Api.get(server+"/check")
+      .then((response) => {
+        if (response.status == 200) {
+          if (response.status == 200) {
+            if (response.data.state == "ERP MSAR API running...") {
+              resolve(true);
+            }
+            resolve(false);
+          }
+        }
+      })
+      .catch((errors) => {
+        console.log("in checkConnection : " + errors);
+        resolve(false);
+      });
+    });
+  }
+
   const storeOrganization = async (organization: string) => {
     if (Organization.value) {
       try {
@@ -62,6 +82,7 @@ export const useConfigStore = defineStore("ConfigStore", () => {
     ConnectionString,
     Organization,
     store,
+    checkConnection,
     storeConnection,
     storeOrganization,
     load,

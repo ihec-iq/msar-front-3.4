@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import { EnumButtonType } from "@/components/ihec/IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import { useArchiveTypeStore } from "../archiveTypeStore";
 import {
   useValidation,
@@ -212,4 +212,3 @@ const reset = () => {
     </IPageContent>
   </IPage>
 </template>
-@/utilities/Validation
