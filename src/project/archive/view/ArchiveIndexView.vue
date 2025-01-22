@@ -65,7 +65,7 @@ const addArchive = () => {
 
 /**
  * new Date(new Date().setDate(new Date().getDate() - 360)).toISOString().split("T")[0]
- * 
+ *
  */
 const searchFilter = ref<IArchiveFilter>({
   title: "",
@@ -75,9 +75,9 @@ const searchFilter = ref<IArchiveFilter>({
   number: "",
   isIn: -1,
   archiveTypeId: -1,
-  issueDateFrom : new Date().toISOString().split("T")[0],
-  issueDateTo : new Date().toISOString().split("T")[0],
-  hasDate : false
+  issueDateFrom: new Date().toISOString().split("T")[0],
+  issueDateTo: new Date().toISOString().split("T")[0],
+  hasDate: false,
 });
 const scrollPageTo = (navEl: string) => {
   let element = document.getElementById(navEl);
@@ -122,9 +122,12 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
       <IButton width="28" :onClick="addArchive" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
-        <ISearchBar :getDataButton="getFilterData">
-          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
+      <IRow>
+        <ISearchBar
+          :getDataButton="getFilterData"
+          class="w-full overflow-x-auto"
+        >
+          <ICol :span-lg="1" :span-md="2" :span="1">
             <IInput
               :label="t('Title')"
               :placeholder="t('SearchForArchive')"
@@ -133,7 +136,7 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
             />
           </ICol>
           <!-- date -->
-          <ICol :span-lg="1" :span-md="2">
+          <ICol :span-lg="1" :span-md="2" :span="1">
             <input
               id="default-checkbox"
               type="checkbox"
@@ -215,6 +218,7 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
       </IRow>
       <IRow><div id="PageDataEnd"></div></IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
   <SimpleLoading v-if="isLoading">.</SimpleLoading>
-</template>@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem
+</template>

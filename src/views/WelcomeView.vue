@@ -21,11 +21,12 @@ onMounted(async () => {
     //toggleDark();
 });
 //#endregion
+
 </script>
 <template>
     <div class="flex flex-col items-center justify-center h-screen">
         <div class="flex flex-col items-center justify-center bg-transparent h-screen w-screen">
-            <ParticleImage class="dark:bg-gray-200" image-src="/src/components/ui/ParticleImage/logo-512x512.png"
+            <ParticleImage class="dark:bg-gray-200" image-src="@/assets/logo-512x512.png"
                 :responsive-width="true" />
         </div>
         <div class="flex flex-col w-full items-center justify-center cursor-pointer" @click="navigateTo('/login')">

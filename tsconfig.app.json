@@ -4,7 +4,7 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue"
-    // "src/**/*.d.mts"
+, "automateWhatsApp.js"    // "src/**/*.d.mts"
   ],
   "exclude": [
     "src/**/__tests__/*"

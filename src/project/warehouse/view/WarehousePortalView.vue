@@ -18,8 +18,11 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('Warehouse.Index')">
     <IPageContent>
-      <CardPortalComponent :links="WarehouseLinks[0].children"></CardPortalComponent>
+      <CardPortalComponent
+        :links="WarehouseLinks[0].children"
+      ></CardPortalComponent>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>
 <style></style>

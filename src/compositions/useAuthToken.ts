@@ -5,7 +5,7 @@ import CryptoJS from 'crypto-js'
 
 export function useAuthToken() {
   // Encrypted token storage function
-  const setSecureToken = (token: string) => {
+  const setSecureToken1 = (token: string) => {
     // Encrypt the token
     console.log("token: ", token)
     console.log("secretKey: ", secretKey)
@@ -25,7 +25,7 @@ export function useAuthToken() {
   }
 
   // Retrieve and validate token
-  const getSecureToken = () => {
+  const getSecureToken1 = () => {
     const storedData = localStorage.getItem('secure_token')
     if (!storedData) return null
 
@@ -77,8 +77,8 @@ export function useAuthToken() {
   }
 
   return {
-    setSecureToken,
-    getSecureToken,
+    setSecureToken1,
+    getSecureToken1,
     removeSecureToken
   }
 }

@@ -4,7 +4,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useItemStore } from "../itemStore";
 import type { IItem, IItemFilter } from "../IItem";
 import { TailwindPagination } from "laravel-vue-pagination";
-import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
@@ -18,6 +17,7 @@ const { item, get_filter } = useItemStore();
 import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardItemIndex from "./CardItemIndex.vue";
+import { t } from "@/utilities/I18nPlugin";
 
 const route = useRoute();
 const router = useRouter();
@@ -99,7 +99,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('Item')">
+  <IPage :HeaderTitle="t('Item.Index')">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
@@ -157,6 +157,6 @@ onMounted(async () => {
         </div>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
-</template>./CardItemIndex.vue@/project/user/permissionStore
-@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem
+</template>

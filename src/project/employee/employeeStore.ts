@@ -197,6 +197,9 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
   async function update(id: number, params: object) {
     return await Api.post(`${pathUrl}/update/${id}`, params);
   }
+  async function updateBonus(id: number, params: object) {
+    return await Api.post(`${pathUrl}/update/bonus/${id}`, params);
+  }
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
   }
@@ -224,6 +227,7 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
     showBonusLite,
     store,
     update,
+    updateBonus,
     getError,
     error,
     _delete,

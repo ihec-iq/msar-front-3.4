@@ -20,7 +20,9 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
       id: 0,
       name: ""
     },
-    isActive: true
+    isActive: true,
+    number: "",
+    notes: ""
   });
   const hrDocuments = ref<Array<IHrDocument>>([]);
   const hrDocumentTypes = ref<Array<IHrDocumentType>>([]);
@@ -50,13 +52,15 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
       issueDate: new Date().toISOString().split("T")[0],
       Employee: {
         id: 0,
-        name: "",
+        name: ""
       },
       Type: {
         id: 0,
         name: ""
       },
-      isActive: true
+      isActive: true,
+      number: "",
+      notes: ""
     };
   }
   async function get_filter(params: IHrDocumentFilter, page: number) {

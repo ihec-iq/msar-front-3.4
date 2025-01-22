@@ -30,17 +30,17 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         takeVacation: 0,
         initVacationSick: 0,
         takeVacationSick: 0,
-        Position: {
+        EmployeePosition: {
           id: 0,
           name: "",
           level: "",
           code: ""
         },
-        Type: {
+        EmployeeType: {
           id: 0,
           name: ""
         },
-        Center: {
+        EmployeeCenter: {
           id: 0,
           name: "",
           code: ""
@@ -92,17 +92,17 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         takeVacation: 0,
         initVacationSick: 0,
         takeVacationSick: 0,
-        Position: {
+        EmployeePosition: {
           id: 0,
           name: "",
           level: "",
           code: ""
         },
-        Type: {
+        EmployeeType: {
           id: 0,
           name: ""
         },
-        Center: {
+        EmployeeCenter: {
           id: 0,
           name: "",
           code: ""

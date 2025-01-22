@@ -11,7 +11,9 @@ import { useVacationStore } from "../../vacationStore";
 
 import { useVacationReasonStore } from "../../vacationReasonStore";
 import ISelect from "@/components/inputs/ISelect.vue";
-import { EnumButtonType, EnumPermission } from "@/utilities/EnumSystem";
+import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+
 import { t } from "@/utilities/I18nPlugin";
 import {
   useValidation,
@@ -64,7 +66,7 @@ const rules: Array<IFieldValidation> = [
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray,can } = usePermissionsStore();
+const { checkPermissionAccessArray, can } = usePermissionsStore();
 const namePage = ref("VacationTime");
 const isLoading = ref(false);
 
@@ -95,7 +97,7 @@ const reset = () => {
   objectStore.resetData();
 };
 const store = () => {
-   validationResult.value = validate(vacationTime.value, rules);
+  validationResult.value = validate(vacationTime.value, rules);
 
   if (!validationResult.value.success) {
     WarningToast(t("ValidationFails"));
@@ -129,7 +131,7 @@ const store = () => {
     });
 };
 function update() {
-    validationResult.value = validate(vacationTime.value, rules);
+  validationResult.value = validate(vacationTime.value, rules);
 
   if (!validationResult.value.success) {
     WarningToast(t("ValidationFails"));
@@ -384,10 +386,10 @@ const ChangeDateRecord = () => {
         :onCreate="store"
         :onUpdate="update"
         :onDelete="Delete"
-                :showAdd="can(EnumPermission.AddVacationTime) == 1"
+        :showAdd="can(EnumPermission.AddVacationTime) == 1"
         :showUpdate="can(EnumPermission.EditVacationTime) == 1"
         :showDelete="can(EnumPermission.DeleteVacationTime) == 1"
       />
     </template>
   </IPage>
-</template> 
+</template>

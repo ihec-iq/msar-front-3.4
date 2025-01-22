@@ -31,7 +31,7 @@ defineProps({
         <caption></caption>
         <thead class="dark:bg-tableHead  bg-[#23A559] text-[#fff] shadow">
           <tr>
-            <th class="text-lg font-bold text-sm border-r border-gray-400 text-gray-50 dark:text-white py-2"
+            <th class="text-lg font-bold   border-r border-gray-400 text-gray-50 dark:text-white py-2"
               v-for="(header, index) in headers" :key="index">
               {{ header.caption }}
             </th>
@@ -52,7 +52,7 @@ defineProps({
       </table>
     </div>
   </div>
-  <div v-else>
+  <div v-else class="flex justify-center items-center w-full  mt-10 border border-gray-400 dark:border-gray-900">
     <span v-if="showNoData">{{ t("noData") }}</span>
   </div>
 </template>

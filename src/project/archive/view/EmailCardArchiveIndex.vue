@@ -69,7 +69,7 @@ const formatArchiveDate = (value: string) => {
       <!-- empty div -->
       <div class="flex basis-96"></div>
       <span
-          class="text-gray text-sm rounded-lg opacity-80 bg-orange-100 border-1 border border-orange-300 p-1 px-2 mx-2"
+          class="text-gray text-sm rounded-lg opacity-80 dark:bg-gray-800  bg-orange-100 border-1 border border-orange-300 p-1 px-2 mx-2"
           >{{ item.archiveTypeName }}</span
         >
       <!-- chip -->

@@ -8,13 +8,49 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 const rtlStore = useRtlStore();
+import { Icon } from "@iconify/vue";
+
 import { useConfigStore } from "@/stores/configStore";
 import { ref, getCurrentInstance, onMounted } from "vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 const { ConnectionString, Organization } = storeToRefs(useConfigStore());
 const { is } = storeToRefs(rtlStore);
 
-//region"Drag and Drop"
-
+//region""
+import { useToast, POSITION } from "vue-toastification";
+// Utility function to show error toasts
+const toast = useToast();
+const showErrorToast = (message = "") => {
+  toast.error(message, {
+    position: POSITION.TOP_CENTER,
+    timeout: 2500,
+    closeOnClick: true,
+    pauseOnFocusLoss: true,
+    pauseOnHover: true,
+    draggable: true,
+    showCloseButtonOnHover: false,
+    hideProgressBar: false,
+    closeButton: "button",
+    icon: true,
+    rtl: false,
+  });
+};
+const showSuccessToast = (message = "") => {
+  toast.success(message, {
+    position: POSITION.TOP_CENTER,
+    timeout: 2500,
+    closeOnClick: true,
+    pauseOnFocusLoss: true,
+    pauseOnHover: true,
+    draggable: true,
+    showCloseButtonOnHover: false,
+    hideProgressBar: false,
+    closeButton: "button",
+    icon: true,
+    rtl: false,
+  });
+};
 //#endregion
 
 //#region Vars
@@ -44,6 +80,25 @@ const store = async () => {
       });
     });
 };
+const loading = ref(false);
+const successConnection = ref(0);
+// state 0 inial, 1 loading , 2 success , 3 error
+const checkConnection = async () => {
+  successConnection.value = 1;
+  await useConfigStore()
+    .checkConnection(String(ConnectionString.value))
+    .then((response) => {
+      const success: Boolean = Boolean(response);
+      if (success) {
+        successConnection.value = 2;
+        showSuccessToast("Connection is successful");
+        return;
+      } else {
+        successConnection.value = 3;
+        showErrorToast("Connection failed");
+      }
+    });
+};
 //http://10.10.10.10/workflow_ihec/public/api
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -71,11 +126,42 @@ onMounted(async () => {
         >
           {{ t("ConnectionString") }}
         </div>
-        <input
-          v-model="ConnectionString"
-          type="text"
-          class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
+        <div class="flex">
+          <input
+            v-model="ConnectionString"
+            type="text"
+            class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+          />
+          <IButton2
+            :text="t('Check')"
+            @click="checkConnection"
+            :type="EnumButtonType.Outlined"
+            class="ml-2"
+            :class="{
+              'bg-create': successConnection == 2,
+              'border-red-500 border-2': successConnection == 3,
+            }"
+          >
+            <template #icon>
+              <Icon
+                v-if="successConnection == 1"
+                icon="mdi:loading"
+                class="grow-0 animate-spin"
+              >
+              </Icon>
+              <Icon
+                v-else-if="successConnection == 2"
+                icon="mdi:check-circle"
+                class="grow-0"
+              />
+              <Icon
+                v-else-if="successConnection == 3"
+                icon="fa6-solid:circle-exclamation"
+                class="grow-0 text-red-500"
+              />
+            </template>
+          </IButton2>
+        </div>
       </div>
       <div class="w-11/12 mr-2">
         <div
@@ -105,7 +191,7 @@ onMounted(async () => {
             @click="store()"
             class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
           >
-            {{ t("Store") }}
+            {{ t("Save") }}
           </button>
         </div>
       </div>

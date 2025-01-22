@@ -1,2 +1,2 @@
-const DefaultURL = "http://10.10.10.10/ihec-backend/public/api";
+const DefaultURL = "http://localhost/masr-backend-11/public/api";
 export { DefaultURL };

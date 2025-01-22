@@ -93,7 +93,7 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-console.log("in index catitem");
+  console.log("in index catitem");
 
   await getFilterData(1);
   isLoading.value = false;
@@ -163,6 +163,6 @@ console.log("in index catitem");
         </div>
       </IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false"/>
   </IPage>
 </template>
-@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

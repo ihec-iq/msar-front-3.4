@@ -34,6 +34,14 @@ export default [
     },
   },
   {
+    path: "/employee/bonus/:id",
+    name: "Employee.Update.Info.Bonus",
+    component: () => import("./view/EmployeeBonusInfoView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
     path: "/employee/:id/history",
     name: "employeeHistory",
     component: () => import("./view/EmployeeHistoryView.vue"),

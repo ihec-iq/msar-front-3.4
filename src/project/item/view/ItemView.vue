@@ -5,7 +5,6 @@ import { useItemStore } from "../itemStore";
 import { useItemCategoryStore } from "../itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 
 import { t } from "@/utilities/I18nPlugin";
@@ -15,7 +14,6 @@ import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
-
 
 //region"Drag and Drop"
 

@@ -35,6 +35,7 @@ import {
 import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -571,7 +572,7 @@ const headers = ref<Array<ITableHeader>>([
             <div
               class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
             >
-              {{ t("Item") }}
+              {{ t("Item.Add") }}
             </div>
             <vSelect
               class="capitalize rounded-md border-2 p-2 dark:text-gray-200 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
@@ -625,6 +626,7 @@ const headers = ref<Array<ITableHeader>>([
                 </div>
               </template>
             </vSelect>
+            <IButton :text="t('refresh')" color="blue" :type="EnumButtonType.Default" />
             <AddItemPopup :setItem="setItemFromChild"></AddItemPopup>
           </ICol>
           <ICol

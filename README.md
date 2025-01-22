@@ -1,6 +1,11 @@
-# Archive
+# MASR ERP ( Masr Enterprise resource planning)
 
-This template should help get you started developing with Vue 3 in Vite.
+This developing with Vue 3 in Vite.
+
+## Additional Information
+
+- must to depoly in http server with name folder "erp-msar"
+- can access to http://localhost/erp-masr
 
 ## Additional Library
 

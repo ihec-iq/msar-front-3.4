@@ -27,6 +27,7 @@ import type {
   IBonusJobTitle,
   ICertificate,
   IStudy,
+  IBonusFilter,
 } from "@/project/bonus/IBonus";
 import { prepareFormData } from "@/utilities/crudTool";
 import { ErrorToast, SuccessToast } from "@/utilities/Toast";
@@ -76,6 +77,7 @@ import IRow from "@/components/ihec/IRow.vue";
 import IRow2 from "@/components/ihec/IRow2.vue";
 import ICol2 from "@/components/ihec/ICol2.vue";
 import ICol from "@/components/ihec/ICol.vue";
+import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -115,36 +117,7 @@ const rules: Array<IFieldValidation> = [
 ];
 //#endregion
 //#region CURD
-const reset = () => {
-  employeeStore.resetData();
-  isPerson.value = true;
-};
-const store = async () => {
-  errors.value = null;
-  validationResult.value = validate(employee.value, rules);
-  if (!validationResult.value.success) {
-    WarningToast(t("ValidationFails"));
-    return;
-  }
-  errors.value = null;
-  const formData = prepareFormData(employee.value);
-  try {
-    const response = await employeeStore.store(formData);
-    if (response.status === 200) {
-      SuccessToast();
-      router.go(-1);
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      errors.value = employeeStore.getError(error as any);
-      WarningToast("Create new data failed!");
-      console.log(errors.value);
-    } else {
-      console.error("An unknown error occurred:", error);
-      ErrorToast("Create new data failed!");
-    }
-  }
-};
+
 const update = async () => {
   errors.value = null;
   validationResult.value = validate(employee.value, rules);
@@ -153,12 +126,18 @@ const update = async () => {
     return;
   }
   errors.value = null;
+  employee.value.isPerson = isPerson.value ? 1 : 0;
+  employee.value.isMoveSection = isMoveSection.value ? 1 : 0;
   const formData = prepareFormData(employee.value);
   try {
-    const response = await employeeStore.update(employee.value.id, formData);
+    const response = await employeeStore.updateBonus(
+      employee.value.id,
+      formData
+    );
     console.log(response);
     if (response.status === 200) {
       SuccessToast();
+      showData();
       //router.go(-1);
     }
   } catch (error) {
@@ -207,6 +186,7 @@ const showData = async () => {
         Object.assign(employee.value, response.data.data);
         isPerson.value = employee.value.isPerson == 0 ? false : true;
         isMoveSection.value = employee.value.isMoveSection == 0 ? false : true;
+        getFiles()
       }
     })
     .catch((errors) => {
@@ -245,20 +225,12 @@ onMounted(async () => {
 
   await Promise.all([
     sectionStore.get_sections(),
-    employeeStore.get_employee_types(),
-    employeeStore.get_employee_positions(),
-    employeeStore.get_employee_centers(),
     BonusStore.get_BonusJobTitle(),
     BonusStore.get_Study(),
     BonusStore.get_Certificate(),
     BonusStore.get_DegreeStage(),
-    BonusStore.get_EmployeesLite(),
   ]);
-  await useUserStore()
-    .get_lite()
-    .then((response) => {
-      SelectedUsers.value = response.data.data;
-    });
+
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "Employee.Add";
     employee.value.id = 0;
@@ -295,6 +267,46 @@ const getFiles = async (page = 1) => {
       console.log(error);
     });
   isLoading.value = false;
+};
+
+const recheckFilter = ref<IBonusFilter>({
+  employeeName: "",
+  employeeId: 0,
+  limit: 10,
+  title: "",
+  isBound: true,
+  bound: 0,
+});
+
+const { get_checkBonus, calculateBonus } = useBonusStore();
+const recheckBonus = async () => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn m-2 bg-green-600 dark:bg-green-900",
+      cancelButton: "btn bg-grey-400",
+    },
+    buttonsStyling: false,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      title: t("Are You Sure?"),
+      text: t("You Won't Be Able To Revert This!"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: t("Yes, do it"),
+      cancelButtonText: t("No, cancel!"),
+      reverseButtons: true,
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        isLoading.value = true;
+        recheckFilter.value.employeeId = employee.value.id;
+        SuccessToast();
+        await calculateBonus(recheckFilter.value);
+        await getFiles();
+        isLoading.value = false;
+      }
+    });
 };
 const ChangeDegreeStage = async () => {
   if (employee.value.DegreeStage?.Degree) {
@@ -376,7 +388,7 @@ const openBonus = (id: number) => {
   });
 };
 const loadData = (tab: any) => {
-  if (tab.name == "files") getFiles();
+  // if (tab.name == "files") getFiles();
   if (tab.name == "bonus") getBonus();
 };
 //#endregion
@@ -385,60 +397,35 @@ const active = ref(0);
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton2
+      <!-- <IButton2
         color="green"
         width="28"
         :type="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
-      />
+      /> -->
     </template>
     <IPageContent>
       <IRow>
         <van-tabs v-model:active="active" @click-tab="loadData" sticky>
-          <van-tab title="معلومات الموظف" name="employee">
-            <IRow col-lg="4" col-md="2" col-sm="1">
+          <van-tab title="معلومات العلاوات" name="employee">
+            <IRow
+              title="معلومات العلاوة الحالية"
+              col-lg="4"
+              col-md="2"
+              col-sm="1"
+            >
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput
                   :label="t('Name')"
                   name="Name"
                   v-model="employee.name"
                   :type="EnumInputType.Text"
+                  :disabled="true"
                 />
               </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.Number')"
-                  name="Employee.Number"
-                  v-model="employee.number"
-                  :type="EnumInputType.Text"
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.Telegram')"
-                  name="EmployeeTelegram"
-                  v-model="employee.telegramId"
-                  :type="EnumInputType.Text"
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.IdCard')"
-                  name="EmployeeIdCard"
-                  v-model="employee.idCard"
-                  :type="EnumInputType.Text"
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IInput
-                  :label="t('Employee.DateWork')"
-                  name="EmployeeDateWork"
-                  v-model="employee.dateWork"
-                  :type="EnumInputType.Date"
-                />
-              </ICol>
+
               <ICol span="1" span-md="1" span-sm="1">
                 <ISelect
                   :label="t('Employee.Section')"
@@ -449,147 +436,13 @@ const active = ref(0);
                   class="focus:border-red-200"
                 />
               </ICol>
-
-              <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Position')"
-                  v-model="employee.EmployeePosition.id"
-                  name="PostionId"
-                  :options="employees_positions"
-                  :IsRequire="true"
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Type')"
-                  v-model="employee.EmployeeType.id"
-                  name="TypeId"
-                  :options="employees_types"
-                  :IsRequire="true"
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ISelect
-                  :label="t('Employee.Center')"
-                  v-model="employee.EmployeeCenter.id"
-                  name="CecnterId"
-                  :options="employees_centers"
-                  :IsRequire="true"
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <ICheckbox v-model="isPerson" :checked="isPerson">
-                  {{ t("Employee.IsPerson") }} :
-                  {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
-                >
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1" class="mt-5">
-                <div class="flex-col">
-                  <div>
-                    <ICheckbox
-                      v-model="isMoveSection"
-                      :checked="isMoveSection"
-                      class=""
-                    >
-                      {{ t("Employee.isMoveSection") }} :
-                      {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox
-                    >
-                  </div>
-                  <div>
-                    <ISelect
-                      v-if="isMoveSection"
-                      :label="t('Employee.MoveSection')"
-                      v-model="employee.MoveSection.id"
-                      name="MoveSectionId"
-                      :options="sections"
-                      :IsRequire="true"
-                    />
-                  </div>
-                </div>
-              </ICol>
-              <ICol>
-                <div class="flex justify-between">
-                  <div class="w-[49%]">
-                    <div
-                      class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-                    >
-                      {{ t("Bonus.Study") }}
-                    </div>
-                    <vSelect
-                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                      v-model="employee.Study"
-                      :options="BonusStore.Studies"
-                      :reduce="(Study: IStudy) => Study"
-                      label="name"
-                      :getOptionLabel="(Study: IStudy) => Study.name"
-                    >
-                      <template #option="{ name }">
-                        <div
-                          class="dir-rtl text-right p-1 border-2 border-solid border-red-700"
-                        >
-                          <span>{{ name }}</span>
-                        </div>
-                      </template>
-                    </vSelect>
-                  </div>
-                  <div class="w-[49%]">
-                    <div
-                      class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-                    >
-                      {{ t("Bonus.Certificate") }}
-                    </div>
-                    <vSelect
-                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                      v-model="employee.Certificate"
-                      :options="BonusStore.Certificates"
-                      :reduce="(Certificate: ICertificate) => Certificate"
-                      label="name"
-                      :getOptionLabel="
-                        (Certificate: ICertificate) => Certificate.name
-                      "
-                    >
-                      <template #option="{ name }">
-                        <div
-                          class="dir-rtl text-right p-1 border-2 border-solid border-red-700"
-                        >
-                          <span>{{ name }}</span>
-                        </div>
-                      </template>
-                    </vSelect>
-                  </div>
-                </div>
-              </ICol>
-
-              <!-- :IsDisabled="!isMoveSection" -->
-
-              <!-- <ICol span="1" span-md="2" span-sm="4">
-              <div
-                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              >
-                {{ t('OutputVoucherEmployeeRequest') }}
-              </div>
-              <vSelect
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="vacationSick.Vacation"
-                :options="vacations"
-                :reduce="(vacation: IVacation) => vacation"
-                label="name"
-                :getOptionLabel="(vacation: IVacation) => vacation.Employee.name"
-              >
-                <template #option="{ Employee }">
-                  <div>
-                    <span>{{ Employee.name }}</span>
-                  </div>
-                </template>
-              </vSelect>
-            </ICol> -->
             </IRow>
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="2" span-sm="4">
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
-                  {{ t("Bonus.DegreeStage") }}
+                  {{ t("Bonus.DegreeStageCurrent") }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -628,12 +481,34 @@ const active = ref(0);
                     </div>
                   </template>
                 </vSelect>
+                <div
+                  class="dir-rtl text-right p-1 border-2 border-solid border-red-700"
+                >
+                  <span
+                    >{{
+                      t("Bonus.salary") +
+                      " :" +
+                      ConvertToMoneyFormat(String(employee.DegreeStage?.salary))
+                    }}
+                  </span>
+                  -
+                  <span
+                    >{{
+                      t("Bonus.yearlyBonus") +
+                      " :" +
+                      ConvertToMoneyFormat(
+                        String(employee.DegreeStage?.yearlyBonus)
+                      )
+                    }}
+                  </span>
+                  <!-- <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span> -->
+                </div>
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
-                  {{ t("Bonus.JobTitle") }}
+                  {{ t("Bonus.JobTitleCurrent") }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
@@ -657,7 +532,7 @@ const active = ref(0);
                 <div class="flex justify-between">
                   <div class="w-[49%]">
                     <IInput
-                      :label="t('Bonus.numberLastBonus')"
+                      :label="t('Bonus.numberLastBonusCurrent')"
                       name="numberLastBonus"
                       v-model="employee.numberLastBonus"
                       :type="EnumInputType.Text"
@@ -665,7 +540,7 @@ const active = ref(0);
                   </div>
                   <div class="w-[49%]">
                     <IInput
-                      :label="t('Bonus.dateLastBonus')"
+                      :label="t('Bonus.dateLastBonusCurrent')"
                       name="dateLastBonus"
                       v-model="employee.dateLastBonus"
                       :type="EnumInputType.Date"
@@ -683,69 +558,39 @@ const active = ref(0);
                 />
               </ICol>
             </IRow>
-            <div class="mt-2">
-              <label for="showUserPanel">اظهار معلومات المستخدم</label>
-              <input
-                class="right-0"
-                type="checkbox"
-                id="showUserPanel"
-                v-model="showUserPanel"
-              />
-            </div>
-            <IRow
-              col-lg="3"
-              col-md="2"
-              col-sm="1"
-              class="bg-[#C2D7FB]"
-              v-if="showUserPanel"
-            >
-              <ICol span="1" span-md="1" span-sm="1">
-                <IVSelect
-                  :label="t('User')"
-                  v-model="employee.User"
-                  name="archiveTypeId"
-                  :options="SelectedUsers"
-                  :IsRequire="true"
-                />
-              </ICol>
-              <ICol span="1" span-md="1" span-sm="1">
-                <IButton2
-                  :type="EnumButtonType.Outlined"
-                  class="mt-3"
-                  v-if="employee.User?.id"
-                  :on-click="ShowUser"
-                  :text="t('Open')"
-                />
-              </ICol>
-            </IRow>
-          </van-tab>
-            <van-tab title="ملفات الضبارة" v-if="employee.id > 0" name="files">
-            <IRow class="flex justify-between spin-out-3">
+            <IRow class="flex justify-between spin-out-1 overflow-auto">
               <div class="flex">
-              <EditButton
-                class="mt-3 border-gray border-2 ml-2"
-                v-if="employee.id != 0"
-                @click="addHrDocument(employee.id)"
-                title="HrDocument.Add"
-                icon="mdi-plus-box"
-              />
-              <EditButton
-                class="mt-3 border-gray border-2 ml-2"
-                v-if="employee.id != 0"
-                @click="getFiles"
-                :title="t('Refresh')"
-                icon="mdi-refresh"
-              />
-              <EditButton
-                class="mt-3 border-gray border-2 ml-2"
-                v-if="employee.id != 0"
-                @click="openHrDocument(employee.id)"
-                title="HrDocument.Open"
-                icon="mdi-open-in-new"
-              />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="addHrDocument(employee.id)"
+                  title="HrDocument.Add"
+                  icon="mdi-plus-box"
+                />
+
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="openHrDocument(employee.id)"
+                  title="HrDocument.Open"
+                  icon="mdi-open-in-new"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="getFiles"
+                  title="Refresh"
+                  icon="mdi-refresh"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="recheckBonus"
+                  title="Bonus.ReCalculate"
+                  icon="mdi-refresh"
+                />
               </div>
             </IRow>
-
             <IRow col-lg="1" col-md="1" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseFiles" :headers="headerFiles">
@@ -790,22 +635,23 @@ const active = ref(0);
             v-if="employee.id > 0"
             name="bonus"
           >
-          <IRow class="flex justify-between spin-out-3">
+            <IRow class="flex justify-between spin-out-3">
               <div class="flex">
-              <EditButton
+                <EditButton
                   class="mt-3 border-gray border-2 ml-2"
                   v-if="employee.id != 0"
                   @click="addBonus(employee.id)"
                   title="Bonus.Add"
-                  icon="mdi-plus-box"/>
-              <EditButton
-                class="mt-3 border-gray border-2 ml-2"
-                v-if="employee.id != 0"
-                @click="getBonus"
-                :title="t('Refresh')"
-                icon="mdi-refresh"
-              />
-               <EditButton
+                  icon="mdi-plus-box"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="getBonus"
+                  :title="t('Refresh')"
+                  icon="mdi-refresh"
+                />
+                <EditButton
                   class="mt-3 border-gray border-2"
                   v-if="employee.id != 0"
                   @click="openBonus(employee.id)"
@@ -813,7 +659,7 @@ const active = ref(0);
                   icon="mdi-open-in-new"
                 />
               </div>
-            </IRow> 
+            </IRow>
             <IRow col-lg="1" col-md="1" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseBonus" :headers="headerBonus">
@@ -834,12 +680,7 @@ const active = ref(0);
 
     <template #Footer>
       <IErrorMessages :validationResult="validationResult" ref="someRefName" />
-      <IFooterCrud
-        :isAdd="employee.id == 0"
-        :onCreate="store"
-        :onUpdate="update"
-        :onDelete="Delete"
-      />
+      <IFooterCrud :is-add="false" :onUpdate="update" :show-delete="false" />
     </template>
   </IPage>
 </template>

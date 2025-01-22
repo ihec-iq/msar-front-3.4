@@ -1,4 +1,4 @@
-GET http://localhost/ihec-backend/public/api/section HTTP/1.1
+GET http://localhost/ihec-backend-11/public/api/section HTTP/1.1
 content-type: application/json
 
 {

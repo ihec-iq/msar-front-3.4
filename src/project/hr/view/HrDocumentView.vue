@@ -131,13 +131,13 @@ const store = async () => {
   const formData = new FormData();
   formData.append("addDays", hrDocument.value.addDays.toString());
   formData.append("addMonths", hrDocument.value.addMonths.toString());
-  formData.append("title", hrDocument.value.title.toString());
-  formData.append("number", hrDocument.value.number.toString());
-  formData.append("issueDate", hrDocument.value.issueDate.toString());
+  formData.append("title", hrDocument.value.title);
+  formData.append("number", hrDocument.value.number);
+  formData.append("issueDate", hrDocument.value.issueDate);
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
   formData.append("isActive", hrDocument.value.isActive == true ? "1" : "0");
-  formData.append("notes", hrDocument.value.notes.toString());
+  formData.append("notes", hrDocument.value.notes);
 
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
@@ -182,13 +182,13 @@ const update = async () => {
   const formData = new FormData();
   formData.append("addDays", hrDocument.value.addDays.toString());
   formData.append("addMonths", hrDocument.value.addMonths.toString());
-  formData.append("number", hrDocument.value.number.toString());
-  formData.append("title", hrDocument.value.title.toString());
-  formData.append("issueDate", hrDocument.value.issueDate.toString());
+  formData.append("number", hrDocument.value.number);
+  formData.append("title", hrDocument.value.title);
+  formData.append("issueDate", hrDocument.value.issueDate);
   formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
   formData.append("employeeId", hrDocument.value.Employee.id.toString());
   formData.append("isActive", hrDocument.value.isActive == true ? "1" : "0");
-  formData.append("notes", hrDocument.value.notes.toString());
+  formData.append("notes", hrDocument.value.notes);
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
     formData.append("selectedSectionId", SelectedSection.value.id.toString());
