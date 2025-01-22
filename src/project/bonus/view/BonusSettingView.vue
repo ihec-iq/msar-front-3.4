@@ -10,7 +10,7 @@ import { ErrorToast, SuccessToast } from "@/utilities/Toast";
 import { prepareFormData } from "@/utilities/crudTool";
 import { useSettingStore } from "@/project/core/settingStore";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
-import { ISetting } from "@/project/core/ISetting";
+import type { ISetting } from "@/project/core/ISetting";
 import IPage from "@/components/ihec/IPage.vue";
 import { showSuccessToast } from "vant";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";

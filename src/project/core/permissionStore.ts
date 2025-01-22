@@ -36,6 +36,8 @@ export const usePermissionsStore = defineStore("PermissionStore", () => {
     router.push("/unauthorized");
   };
   function hasCommonItems(subArray: string[], array: string[]): boolean {
+    if (subArray == undefined || array == undefined) return true;
+    if (subArray.length == 0 || array.length == 0) return true;
     return subArray.some((subItem) =>
       array.some((item) => item.toLowerCase() === subItem.toLowerCase())
     );

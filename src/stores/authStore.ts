@@ -7,7 +7,6 @@ import type { IUser } from "@/project/user/IUser";
 import { useRouter } from "vue-router";
 import CryptoJS from "crypto-js";
 import { useLocalStorage } from "@/compositions/uselocalStorage";
-const router = useRouter();
 // Create a secret key for encryption (ideally from an environment variable)
 export enum EnumNameToken {
   tokenENCRYPT = "TENCRYPT",
@@ -20,11 +19,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const isAuthenticated = ref<boolean | any>(false);
   const token = ref<string | any>("");
   const user = ref<IUser>();
+  const router = useRouter();
 
   const { setPermissions } = usePermissionsStore();
   const login = async (payload: { email: string; password: string }) => {
     return await new Promise((resolve, reject) => {
-      console.log(Api.defaults.headers.common["Authorization"]);
       Api.post("/login", payload)
         .then((response) => {
           if (response.status == 200) {
@@ -121,11 +120,10 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
 });
 
-export const removeUnUsedLogin = () => {
+export const removeUnUsedLogin = () => { 
   localStorage.removeItem(EnumNameToken.tokenENCRYPT);
   localStorage.removeItem(EnumNameToken.userENCRYPT);
-  localStorage.removeItem(EnumNameToken.isAuthenticated);
-  router.push("/login");
+  localStorage.removeItem(EnumNameToken.isAuthenticated); 
 };
 export const setSecureToken = (token: string) => {
   // Add additional browser-specific identifier

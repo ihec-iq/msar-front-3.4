@@ -128,8 +128,8 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
     <IPageContent>
-      <IRow :col="4" :col-md="4" :col-lg="4">
-        <ISearchBar :getDataButton="getFilterData">
+      <IRow class="overflow-x-auto">
+        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px]  overflow-x-auto" >
           <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
             <IInput
               :label="t('Title')"
@@ -212,6 +212,7 @@ const headers = ref<Array<ITableHeader>>([
       </IRow>
       <IRow><div id="PageDataEnd"></div></IRow>
     </IPageContent>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>
 <style></style>

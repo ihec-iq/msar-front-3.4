@@ -48,7 +48,7 @@ export default defineConfig({
           related_applications: [
             {
               platform: "webapp",
-              url: "https://10.10.10.10/10/manifest.webmanifest",
+              url: "https://10.10.10.10/erp-msar/manifest.webmanifest",
             },
           ],
           icons: [
@@ -132,7 +132,7 @@ export default defineConfig({
   define: {
     "process.env": process.env,
   },
-  base: process.env.NODE_ENV === "production" ? "/10/" : "/",
+  base: process.env.NODE_ENV === "production" ? "/ihec/" : "/",
   server: {
     watch: {
       usePolling: true

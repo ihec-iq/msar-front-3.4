@@ -7,7 +7,8 @@ import CardArchiveTypeIndex from "./CardArchiveTypeIndex.vue";
 import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
 
 const archiveTypeStore = useArchiveTypeStore();
-const { archiveTypes } = storeToRefs(useArchiveTypeStore());const ischecked = ref(false);
+const { archiveTypes } = storeToRefs(useArchiveTypeStore());
+const ischecked = ref(false);
 const emits = defineEmits<{
   getFilterData: [number, number]; // Define the event structure with three parameters
 }>();

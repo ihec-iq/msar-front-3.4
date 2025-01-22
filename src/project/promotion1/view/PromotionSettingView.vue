@@ -10,7 +10,7 @@ import { ErrorToast, SuccessToast } from "@/utilities/Toast";
 import { prepareFormData } from "@/utilities/crudTool";
 import { useSettingStore } from "@/project/core/settingStore";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
-import { ISetting } from "@/project/core/ISetting";
+import type { ISetting } from "@/project/core/ISetting";
 import IPage from "@/components/ihec/IPage.vue";
 import { showSuccessToast } from "vant";
 import IInput from "@/components/inputs/IInput.vue";
@@ -22,7 +22,7 @@ const { checkPermissionAccessArray } = usePermissionsStore();
 const SettingStore = useSettingStore();
 const SettingPromotionData = ref<ISetting>({
   id: 0,
-  key: EnumSetting.SettingPromotionAlertData,
+  key: EnumSetting.SettingNumberDayesAlertPromotion,
 });
 
 const isLoading = ref(false);

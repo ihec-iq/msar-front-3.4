@@ -43,7 +43,7 @@ const composeErrorHandler = (error : any) => {
   switch (statusCode) {
     case 404:
       console.error("The requested resource does not exist or has been deleted.");
-      router.back();
+      //router.back();
       break;
 
     case 401:

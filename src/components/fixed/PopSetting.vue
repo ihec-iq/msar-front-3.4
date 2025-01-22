@@ -53,7 +53,7 @@ const colorMode = useColorMode({
       <Icon icon="mdi-cog-outline" class="text-[25px]"></Icon>
     </button>
   </div>
-  <van-popup class="bg-customer h-screen z-[999999] lg:w-[30%] md:w-full xs:w-full dark:bg-content flex overflow-hidden"
+  <van-popup class="bg-customer h-screen z-[999999] w-full lg:w-[30%] md:w-[40%] sm:w-[50%] xs:w-full dark:bg-content flex overflow-hidden"
     v-model:show="showPop" round>
     <div class="dark:text-textLight w-full">
       <div class="text-2xl text-center text-text dark:text-textLight p-2 font-bold mt-6">

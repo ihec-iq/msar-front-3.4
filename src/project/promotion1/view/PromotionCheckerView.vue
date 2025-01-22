@@ -27,13 +27,13 @@ import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission, EnumSetting } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
-import { IEmployee } from "@/project/employee/IEmployee";
+import type { IEmployee } from "@/project/employee/IEmployee";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import { useSettingStore } from "@/project/core/settingStore";
-import { ISetting } from "@/project/core/ISetting";
+import type { ISetting } from "@/project/core/ISetting";
 import ITable from "@/components/ihec/ITable.vue";
-import { EnumInputType } from "@/components/inputs/IInput.vue";
-const route = useRoute();
+import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+ const route = useRoute();
 const router = useRouter();
 watch(
     () => route.params.search,
@@ -59,7 +59,7 @@ const makeFastSearch = () => {
 const SettingStore = useSettingStore();
 const SettingNumberDayesAlertPromotion = ref<ISetting>({ // Updated to use promotion setting
     id: 0,
-    key: EnumSetting.SettingPromotionAlertData,
+    key: EnumSetting.SettingNumberDayesAlertPromotion,
 });
 const searchFilter = ref<IPromotionFilter>({ // Updated to use promotion filter
     employeeName: "",

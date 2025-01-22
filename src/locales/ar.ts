@@ -1,6 +1,5 @@
-import { Search } from "vant";
-
 export default {
+  Check: "تحقق",
   Logout: "تسجيل الخروج",
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
   Warehouse: { Index: "نظام المخازن" },
@@ -146,6 +145,7 @@ export default {
   Months: "اشهر",
   Number: "الرقم",
   ShowNotes: "عرض الملاحظات", 
+  CheckTable:"#",
   Setting :{
     Name : "الاعدادات",
     Add: "اضافة اعدادات",
@@ -163,6 +163,7 @@ export default {
     Open: "فتح ملفات الاضبارة" 
   },
   Employee: {
+    Hr:"الموارد البشرية",
     Title: "الموظف",
     HistoryReport: "كشف ذمة",
     Info: "معلومات الموظف",
@@ -192,21 +193,26 @@ export default {
     Add: "اضافة علاوة",
     Update: "تعديل علاوة",
     Open: "فتح العلاوات",
+    OpenDocuments: "فتح كتب العلاوات",
     Portal: "بوابة العلاوات",
     dateWorth: "تاريخ اخر استحقاق",
     dateNextBonus: "تاريخ الاستحقاق القادم",
     difNextBonusDate: "المتبقي للاستحقاق القادم",
     numberLastBonus: "رقم اخر علاوة",
-    currentEmployeeData: "بيانات الموظف الحالية",
+    numberLastBonusCurrent: "رقم العلاوة الحالية",
+    EmployeeDataCurrent: "بيانات الموظف الحالية",
     JobTitle: "العنوان الوظيفي",
+    JobTitleCurrent: "العنوان الوظيفي الحالي",
     JobTitleAdd: "اضافة عنوان وظيفي",
     JobTitleUpdate: "تعديل عنوان وظيفي",
     Study: "التحصيل الدراسي",
     Certificate: "الشهادة الدراسية",
     DegreeStage: "الدرجة الوظيفية",
+    DegreeStageCurrent: "الدرجة الوظيفية الحالي",
     Employee: "الموظف",
     issueDate: "تاريخ الاصدار",
     dateLastBonus: "تاريخ اخر علاوة",
+    dateLastBonusCurrent: "تاريخ العلاوة الحالية",
     salary: "الراتب",
     yearlyBonus: "العلاوة السنوية",
     yearlyService: "الخدمة السنوية",
