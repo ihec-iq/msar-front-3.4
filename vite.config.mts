@@ -132,7 +132,7 @@ export default defineConfig({
   define: {
     "process.env": process.env,
   },
-  base: process.env.NODE_ENV === "production" ? "/ihec/" : "/",
+  base: process.env.NODE_ENV === "production" ? "/erp-msar/" : "/",
   server: {
     watch: {
       usePolling: true

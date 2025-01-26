@@ -120,8 +120,8 @@ onMounted(async () => {
           <div class="text-center">
             <img
               class="h-24 mx-auto"
-              src="@/assets/logo-512x512.png"
-              alt="Apple"
+              src="@/assets/logo.png"
+              alt="MSAR ERP LOGO"
             />
 
             <span
