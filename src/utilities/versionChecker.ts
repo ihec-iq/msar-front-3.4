@@ -54,7 +54,6 @@ export function useVersionChecker(repoOwner: string, repoName: string) {
         try {
             // For direct execution (if allowed by browser)
             window.location.href = `UpdaterMsarERP://update/${latestVersion.value}`;
-
             // Fallback if protocol handler not registered
             setTimeout(() => {
                 if (!document.hidden) {

@@ -19,7 +19,6 @@ declare module 'vue' {
     CardItem: typeof import('./src/components/ui/card-3d/CardItem.vue')['default']
     CardPortalComponent: typeof import('./src/components/CardPortalComponent.vue')['default']
     CardSkeleton: typeof import('./src/components/general/CardSkeleton.vue')['default']
-    copy: typeof import('./src/components/ui/ParticleImage/ParticleImage copy.vue')['default']
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DuplicateButton: typeof import('./src/components/dropDown/DuplicateButton.vue')['default']
     EditButton: typeof import('./src/components/dropDown/EditButton.vue')['default']
