@@ -6,12 +6,7 @@ import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { Links } from "./FixedMenu";
 import { usePermissionsStore } from "@/project/core/permissionStore";
-
-import { t } from "@/utilities/I18nPlugin";
-// import { useUserStore } from "@/stores/accounting/accounts/user";
-// import type IUser from "@/types/accounting/accounts/IUser";
-// const { get } = useUserStore();
-
+import { Icon } from "@iconify/vue";
 const userData = ref<any>({});
 const changeStackSideBar = () => {
   isCloseStick.value = !isCloseStick.value;
@@ -43,13 +38,6 @@ const secondTab = ref("2");
 const router = useRouter();
 const activeNames = ref(["1"]);
 
-//const route = useRoute()
-// const nav = computed(()=> route.meta.nav?.toString())
-// watch(nav, newSearchQuery => {
-//   if(nav.value != "undefined" || nav.value != undefined ){
-//     tab.value=nav.value?.toString()
-//   }
-// } )
 
 //#region nav menu
 const { UserPermissions } = storeToRefs(usePermissionsStore());
@@ -69,32 +57,15 @@ const checkPermission = (per: string) => {
       UserPermissions.value.includes(per) || permission == "public"
   );
 };
-// watch(nav, newSearchQuery => {
-//   if(nav.value != "undefined" || nav.value != undefined ){
-//     tab.value=nav.value?.toString()
-//   }
-// } )
-
-//#endregion
 
 const authStore = useAuthStore();
-const logout = () => {
-  authStore.logout();
-};
-const settingPop = ref<boolean>(false);
-
-const setting = () => {
-  router.push({
-    name: "setting",
-  });
-};
+const { user } = storeToRefs(useAuthStore());
 onMounted(() => {
   userData.value = authStore.user;
 });
 
-const { user } = storeToRefs(useAuthStore());
 </script>
-<template> 
+<template>
   <div
     class="LeftNav flex-col  ltr:pl-2 rtl:pr-2 flex fixed h-full z-[999] bg-sideNav dark:bg-[#25293c] nav print:hidden duration-500 overflow-y-auto overflow-x-hidden"
     :class="[isClose ? 'lg:w-20 sm:w-20 xs:w-[68px]' : 'lg:w-120 md:w-120 sm:w-64  ']" @mouseenter="handleMouseEnter"
@@ -143,7 +114,17 @@ const { user } = storeToRefs(useAuthStore());
           <router-link :to="{ name: Link.routerName }" @click.prevent="tab = Link.tab" @mouseover="tab = Link.tab">
             <button
               class="bg-[#FEFEFE] shadow-md text-[#23A559] hover:text-[#FEFEFE] hover:bg-[#23A559] duration-500 fadeOut 2s ease-in-out btn-outline hover:rounded-2xl p-4 rounded-full border-none border-2 m-1"
-              :title="Link.title" v-html="Link.icon"></button></router-link>
+              :title="Link.title" v-if="Link?.mdi">
+              <Icon :icon="Link?.mdi" class="text-[24px]" />
+            </button>
+            <button v-else
+              class="bg-[#FEFEFE] shadow-md text-[#23A559] hover:text-[#FEFEFE] hover:bg-[#23A559] duration-500 fadeOut 2s ease-in-out btn-outline hover:rounded-2xl p-4 rounded-full border-none border-2 m-1"
+              :title="Link.title" v-html="Link.icon">
+            </button> 
+
+
+
+          </router-link>
           <!-- children -->
           <div>
             <!-- <div
@@ -176,8 +157,7 @@ const { user } = storeToRefs(useAuthStore());
 
 </template>
 
-<style scoped> 
- 
+<style scoped>
 .form-control:focus {
   box-shadow: none;
 }
