@@ -13,8 +13,24 @@ import IPageContent from "@/components/ihec/IPageContent.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
-//region"Drag and Drop"
-
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+const { validate, required, isObject } = useValidation();
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const rules: Array<IFieldValidation> = [
+  {
+    field: "name",
+    caption: t("Item.Name"),
+    rules: [required()],
+  }, 
+];
+import { WarningToast } from "@/utilities/Toast";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { prepareFormData } from "@/utilities/crudTool";
 //#endregion
 
 //#region Vars
@@ -34,10 +50,13 @@ const errors = ref<string | null>();
 //#region CURD
 const store = () => {
   errors.value = null;
-  const formData = new FormData();
-  formData.append("id", category.value.id.toString());
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
+  validationResult.value = validate(category.value, rules);
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+  errors.value = null;
+  const formData = prepareFormData(category.value);
 
   itemCategoryStore
     .store(formData)
@@ -65,9 +84,14 @@ const store = () => {
 };
 function update() {
   errors.value = null;
-  const formData = new FormData();
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
+  validationResult.value = validate(category.value, rules);
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+  errors.value = null;
+  const formData = prepareFormData(category.value);
+
   itemCategoryStore
     .update(category.value.id, formData)
     .then((response) => {
@@ -183,6 +207,7 @@ const reset = () => {
               :type="EnumInputType.Text" />
           </ICol>
         </IRow>
+        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
         <IFooterCrud :isAdd="category.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
       </IRow>
     </IPageContent>

@@ -93,8 +93,6 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  console.log("in index catitem");
-
   await getFilterData(1);
   isLoading.value = false;
 });

@@ -148,7 +148,22 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
     };
   }
   async function get_filter(params: IEmployeeFilter, page: number) {
-    return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
+    try {
+      return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
+    } catch (error : any) {
+      // Handle errors where response might not exist
+      console.error('Error:', error.response?.data || error.message);
+    }
+    return ; 
+  }
+  async function get_light_filter(params: IEmployeeFilter, page: number) {
+    try {
+      return await Api.get(`${pathUrl}/filter/lite?page=${page}`, { params: params });
+    } catch (error: any) {
+      // Handle errors where response might not exist
+      console.error('Error:', error.response?.data || error.message);
+    }
+    return;
   }
   async function get_employee_positions(hardRefresh: boolean = false) {
     if (hardRefresh == false || employees_positions.value.length == 0) {
@@ -192,7 +207,7 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
     });
   }
   async function store(prams: object) {
-    return await Api.post(`${pathUrl}/store/`, prams);
+    return await Api.post(`${pathUrl}/store`, prams);
   }
   async function update(id: number, params: object) {
     return await Api.post(`${pathUrl}/update/${id}`, params);
@@ -218,6 +233,7 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
     employees_positions,
     get,
     get_filter,
+    get_light_filter,
     getItemHistory,
     get_employees,
     get_employee_positions,

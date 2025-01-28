@@ -1,6 +1,5 @@
 // Import necessary modules and dependencies
 import axios from "axios";
-import Swal from "sweetalert2";
 import router from "@/router";
 import envConfig from "./envConfig";
 import { useToast, POSITION } from "vue-toastification";
@@ -14,7 +13,8 @@ const Api = axios.create({
 // Set default Axios configurations
 Api.defaults.withCredentials = true;
 Api.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-Api.defaults.headers.common["Access-Control-Allow-Methods"] = "DELETE, POST, GET, PUT";
+Api.defaults.headers.common["Access-Control-Allow-Methods"] = "*";
+Api.defaults.headers.common["Access-Control-Allow-Headers"] = "*";
 Api.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 // Attach authorization token lazily

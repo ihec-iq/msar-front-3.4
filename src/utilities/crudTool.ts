@@ -1,8 +1,6 @@
 import Swal from "sweetalert2";
 import { t } from "@/utilities/I18nPlugin";
-import { useRouter } from "vue-router";
 import { SuccessToast } from "./Toast";
-const router = useRouter();
 
 interface DeleteParams {
   store: any;

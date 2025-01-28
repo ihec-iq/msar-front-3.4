@@ -92,6 +92,17 @@ export function useValidation() {
     };
     return validator;
   }
+  function string(options: { message: string } = { message: t("ValidationErrors.FieldMustBeString") }): IValidator {
+    const validator: IValidator = {
+      name: 'string',
+      regexp: /^[\u0600-\u06FFa-zA-Z\s]+$/,
+      message: options.message,
+      check: (field1: any) => {
+        return typeof field1 === "string" ? true : false
+      }
+    };
+    return validator;
+  }
 
   function required(
     options: { message: string } = { message: t("ValidationErrors.FieldRequired") }
@@ -256,6 +267,7 @@ export function useValidation() {
     number,
     integer,
     float,
+    string,
     min,
     max,
     sameAs,

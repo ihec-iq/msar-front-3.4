@@ -685,6 +685,7 @@ export default {
     FieldNotSame: "تحقق من الحقول يجب ان تكون متطابقة",
     isObject: "يجب ان تختار البيانات المحددة",
     isArray: "يجب ان تحتوي على عنصر واحد على الاقل",
+    FieldMustBeString: "يجب ان يكون الحقل نصي",
   },
   ToastMessages: {
     Success: "تمت العملية بنجاح",

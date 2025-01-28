@@ -43,6 +43,7 @@ const addItem = () => {
   employee.value.name = "";
   employee.value.Section = { name: "", id: 0 };
   employee.value.isPerson = 0;
+  useEmployeeStore().resetData();
   router.push({
     name: "Employee.Add",
   });
@@ -72,19 +73,18 @@ const searchFilter = ref<IEmployeeFilter>({
 });
 const getFilterData = async (page = 1) => {
   localStorage.setItem("indexEmployee", page.toString());
-
   isLoading.value = true;
   searchFilter.value.name = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
-      if (response.status == 200) {
-        if (response.data.length == 0) {
+      if (response?.status == 200) {
+        if (response?.data?.length == 0) {
           isLoading.value = false;
           //window.location.reload();
         }
-        dataPage.value = response.data.data;
-        data.value = response.data.data.data;
-        dataBase.value = response.data.data.data;
+        dataPage.value = response?.data?.data;
+        data.value = response?.data?.data?.data;
+        dataBase.value = response?.data?.data?.data;
       }
     })
     .catch((error) => {
@@ -137,20 +137,21 @@ const headers = ref<Array<ITableHeader>>([
     <IPageContent>
 
       <IRow>
-        <ISearchBar :getDataButton="getFilterData" class="w-full overflow-x-auto border-b-2 border-gray-200 min-w-[300px]">
-            <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4" class="min-w-[50px]" >
+        <ISearchBar :getDataButton="getFilterData"
+          class="w-full overflow-x-auto border-b-2 border-gray-200 min-w-[300px]">
+          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4" class="min-w-[50px]">
             <IInput :label="t('SearchForUser')" :placeholder="t('Search')" v-model="fastSearch" type="text"
               :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
-          <ICol :span-lg="1" :span-md="2" :span="1" >
-            <ISelect :label="t('Employee.Section')"  v-model="searchFilter.sectionId" name="archiveTypeId"
+          <ICol :span-lg="1" :span-md="2" :span="1">
+            <ISelect :label="t('Employee.Section')" v-model="searchFilter.sectionId" name="archiveTypeId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol>
         </ISearchBar>
-      </IRow> 
-      <IRow>
-        <SimpleLoading v-if="isLoading"/>
+      </IRow>
+      <IRow class="z-[999]">
+        <SimpleLoading v-if="isLoading" />
         <ITable :items="data" :headers="headers">
           <template v-slot:section="{ row }">
             <span>{{ row.Section.name }}</span>

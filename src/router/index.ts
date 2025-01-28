@@ -115,15 +115,33 @@ const router = createRouter({
   ],
 });
 router.beforeResolve(async (to, from, next) => {
-  const middlewares: unknown = to.meta.middleware;
-  if (middlewares) {
-    // If middlewares are defined for the route
-    for (const middleware of middlewares as Function[]) {
-      await middleware(to, from, next);
-    }
+  const middlewares = to.meta.middleware as Function[] | undefined;
+
+  if (!middlewares) {
+    next(); // No middlewares: proceed immediately
+    return;
   }
-  next();
-  return;
+
+  // Track if next() has been called
+  let nextCalled = false;
+
+  // Create a wrapped next() function to block multiple calls
+  const wrappedNext: typeof next = (to?: any) => {
+    if (nextCalled) return;
+    nextCalled = true;
+    next(to);
+  };
+
+  // Execute middlewares sequentially
+  for (const middleware of middlewares) {
+    await middleware(to, from, wrappedNext);
+    if (nextCalled) break; // Stop if next() was called
+  }
+
+  // If no middleware called next(), proceed
+  if (!nextCalled) {
+    next();
+  }
 });
 router.onError(err => {
   console.log('<!-- router error: ' + err.message + ' -->')

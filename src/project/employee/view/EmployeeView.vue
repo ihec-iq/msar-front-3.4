@@ -35,6 +35,14 @@ import { Icon } from "@iconify/vue";
 import { getError } from "@/utilities/helpers";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { WarningToast } from "@/utilities/Toast";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { makeFormDataFromObject } from "@/utilities/tools";
+import OpenButton from "@/components/dropDown/OpenButton.vue";
+import IRow from "@/components/ihec/IRow.vue";
+import IRow2 from "@/components/ihec/IRow2.vue";
+import ICol2 from "@/components/ihec/ICol2.vue";
+import ICol from "@/components/ihec/ICol.vue";
 //region"Drag and Drop"
 
 //#endregion
@@ -68,19 +76,8 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
-import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
-import { makeFormDataFromObject } from "@/utilities/tools";
-import OpenButton from "@/components/dropDown/OpenButton.vue";
-import IRow from "@/components/ihec/IRow.vue";
-import IRow2 from "@/components/ihec/IRow2.vue";
-import ICol2 from "@/components/ihec/ICol2.vue";
-import ICol from "@/components/ihec/ICol.vue";
-
 const { validate, isArray, required, isObject } = useValidation();
-
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });
-
 const rules: Array<IFieldValidation> = [
   {
     field: "Section",

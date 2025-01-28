@@ -14,9 +14,30 @@ import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import { prepareFormData } from "@/utilities/crudTool";
 
-//region"Drag and Drop"
-
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+const { validate, required, isObject } = useValidation();
+let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const rules: Array<IFieldValidation> = [
+  {
+    field: "name",
+    caption: t("Item.Name"),
+    rules: [required()],
+  }, 
+  {
+    field: "Category",
+    caption: t("Item.Category"),
+    rules: [isObject({ key: "id", message: "" })],
+  }, 
+];
+import { WarningToast } from "@/utilities/Toast";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 //#endregion
 
 //#region Vars
@@ -38,13 +59,13 @@ const errors = ref<String | null>();
 //#region CURD
 const store = () => {
   errors.value = null;
-  const formData = new FormData();
-  formData.append("id", String(item.value.id));
-  formData.append("name", item.value.name);
-  formData.append("description", item.value.description);
-  formData.append("code", item.value.code);
-  formData.append("measuringUnit", item.value.measuringUnit);
-  formData.append("Category", JSON.stringify(item.value.Category));
+  validationResult.value = validate(item.value, rules);
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+  errors.value = null;
+  const formData = prepareFormData(item.value);
   itemStore
     .store(formData)
     .then((response) => {
@@ -71,12 +92,7 @@ const store = () => {
 };
 function update() {
   errors.value = null;
-  const formData = new FormData();
-  formData.append("name", item.value.name.toString());
-  formData.append("description", item.value.description.toString());
-  formData.append("code", item.value.code.toString());
-  formData.append("measuringUnit", item.value.measuringUnit.toString());
-  formData.append("Category", JSON.stringify(item.value.Category));
+  const formData = prepareFormData(item.value);
   itemStore
     .update(item.value.id, formData)
     .then((response) => {
@@ -183,68 +199,38 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="t(namePage)">
     <template #HeaderButtons>
-      <IButton2
-        color="green"
-        width="28"
-        :type="EnumButtonType.Outlined"
-        pre-icon="view-grid-plus"
-        :onClick="reset"
-        :text="t('New')"
-      />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>
         <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="1" span-sm="1">
-              <IInput
-                :label="t('Item.Name')"
-                name="name"
-                v-model="item.name"
-                :type="EnumInputType.Text"
-            /></ICol>
+              <IInput :label="t('Item.Name')" name="name" v-model="item.name" :type="EnumInputType.Text" />
+            </ICol>
             <ICol span="1" span-md="1" span-sm="1">
-              <IInput
-                :label="t('Item.Code')"
-                name="code"
-                v-model="item.code"
-                :type="EnumInputType.Text"
-            /></ICol>
+              <IInput :label="t('Item.Code')" name="code" v-model="item.code" :type="EnumInputType.Text" />
+            </ICol>
             <ICol span="1" span-md="1" span-sm="1">
-              <ISelect
-                :label="t('Item.Category')"
-                v-model="item.Category.id"
-                name="Item.Category"
-                :options="categories"
-                :IsRequire="true"
-              />
+              <ISelect :label="t('Item.Category')" v-model="item.Category.id" name="Item.Category" :options="categories"
+                :IsRequire="true" />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput
-                :label="t('Item.Unit')"
-                name="Item.Unit"
-                v-model="item.measuringUnit"
-                :type="EnumInputType.Text"
-            /></ICol>
+              <IInput :label="t('Item.Unit')" name="Item.Unit" v-model="item.measuringUnit"
+                :type="EnumInputType.Text" />
+            </ICol>
           </IRow>
           <IRow>
             <ICol>
-              <IInput
-                :label="t('Description')"
-                name="name"
-                v-model="item.description"
-                :type="EnumInputType.Text"
-            /></ICol>
+              <IInput :label="t('Description')" name="name" v-model="item.description" :type="EnumInputType.Text" />
+            </ICol>
           </IRow>
         </IForm>
       </IRow>
       <IRow>
-        <IFooterCrud
-          :isAdd="item.id == 0"
-          :onCreate="store"
-          :onUpdate="update"
-          :onDelete="Delete"
-        />
+        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
+        <IFooterCrud :isAdd="item.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
       </IRow>
     </IPageContent>
   </IPage>
