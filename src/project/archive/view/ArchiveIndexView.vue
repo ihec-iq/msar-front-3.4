@@ -48,14 +48,7 @@ watch(
 );
 
 const addArchive = () => {
-  archive.id = 0;
-  archive.title = "";
-  archive.issueDate = new Date().toISOString().split("T")[0];
-  archive.Files = [];
-  archive.number = "";
-  archive.description = "";
-  archive.isIn = 1;
-  archive.archiveTypeId = 0;
+  useArchiveStore().resetData();
   router.push({
     name: "archiveAdd",
   });

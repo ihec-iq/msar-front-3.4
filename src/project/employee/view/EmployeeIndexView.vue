@@ -135,7 +135,6 @@ const headers = ref<Array<ITableHeader>>([
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-
       <IRow>
         <ISearchBar :getDataButton="getFilterData"
           class="w-full overflow-x-auto border-b-2 border-gray-200 min-w-[300px]">

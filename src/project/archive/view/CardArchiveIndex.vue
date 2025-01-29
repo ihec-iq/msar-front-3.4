@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import type { IDocument } from "../IArchive";
+import type { IArchive, IDocument } from "../IArchive";
 import { t } from "@/utilities/I18nPlugin";
+import { PropType } from "vue";
 const router = useRouter();
 const update = (id: number) => {
   router.push({
@@ -11,7 +12,7 @@ const update = (id: number) => {
 };
 const props = defineProps({
   item: {
-    type: Object,
+    type: Object as PropType<IArchive>,
     required: true,
   },
 });
@@ -35,7 +36,7 @@ const getPath = (files: Array<IDocument>) => {
   <div
     class="bg-cardLight hover:bg-[#E8F6FD] dark:bg-[#22262A] flex w-full p-5 rounded-md border border-gray-200 shadow-sm shadow-gray-600 duration-500 hover:border hover:border-gray-400 hover:shadow-sm hover:shadow-gray-600">
     <div class="w-1/4">
-      <img @click="update(item.id)" class="rounded-lg cursor-pointer" :src="getPath(item.files).toString()" alt="" />
+      <img @click="update(item.id)" class="rounded-lg cursor-pointer" :src="getPath(item.Files).toString()" alt="" />
     </div>
     <div class="w-3/4 overflow-hidden">
       <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
@@ -48,7 +49,7 @@ const getPath = (files: Array<IDocument>) => {
         <div class="text-text dark:text-textGray mb-2 justify-between">
           <span>{{ t("Date") }}: {{ item.issueDate.split(" ")[0] }}</span>
           <span class="float-left flex">
-            {{ item.files.length }}
+            {{ item.Files.length }}
             <img src="@/assets/svg/document.svg" :alt="item.title" />
           </span>
         </div>
@@ -63,4 +64,3 @@ const getPath = (files: Array<IDocument>) => {
     </div>
   </div>
 </template>
-@/utilities/I18nPlugin

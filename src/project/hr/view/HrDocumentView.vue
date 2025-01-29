@@ -106,6 +106,7 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import { prepareFormData } from "@/utilities/crudTool";
 
 const SelectedSection = ref<ISection>({ id: 0, name: "" });
 const ChosePushBy = ref(0);
@@ -128,17 +129,7 @@ const store = async () => {
 
   if (result.value === false || result.value === undefined) return;
 
-  const formData = new FormData();
-  formData.append("addDays", hrDocument.value.addDays.toString());
-  formData.append("addMonths", hrDocument.value.addMonths.toString());
-  formData.append("title", hrDocument.value.title);
-  formData.append("number", hrDocument.value.number);
-  formData.append("issueDate", hrDocument.value.issueDate);
-  formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
-  formData.append("employeeId", hrDocument.value.Employee.id.toString());
-  formData.append("isActive", hrDocument.value.isActive == true ? "1" : "0");
-  formData.append("notes", hrDocument.value.notes);
-
+  const formData = prepareFormData(hrDocument.value); 
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
     formData.append("selectedSectionId", SelectedSection.value.id.toString());
@@ -147,10 +138,9 @@ const store = async () => {
       "SelectedEmployeesData",
       JSON.stringify(SelectedEmployeesData.value)
     );
-
   const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
-    formData.append("files[]", files[i]);
+    formData.append("FilesDocument[]", files[i]);
   }
   HrDocumentStore.store(formData)
     .then((response) => {
@@ -179,16 +169,7 @@ const update = async () => {
 
   if (result.value === false || result.value === undefined) return;
 
-  const formData = new FormData();
-  formData.append("addDays", hrDocument.value.addDays.toString());
-  formData.append("addMonths", hrDocument.value.addMonths.toString());
-  formData.append("number", hrDocument.value.number);
-  formData.append("title", hrDocument.value.title);
-  formData.append("issueDate", hrDocument.value.issueDate);
-  formData.append("hrDocumentTypeId", hrDocument.value.Type.id.toString());
-  formData.append("employeeId", hrDocument.value.Employee.id.toString());
-  formData.append("isActive", hrDocument.value.isActive == true ? "1" : "0");
-  formData.append("notes", hrDocument.value.notes);
+  const formData = prepareFormData(hrDocument.value);
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
     formData.append("selectedSectionId", SelectedSection.value.id.toString());
@@ -199,7 +180,7 @@ const update = async () => {
     );
   const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
-    formData.append("files[]", files[i]);
+    formData.append("FilesDocument[]", files[i]);
   }
   HrDocumentStore.update(hrDocument.value.id, formData)
     .then((response) => {
@@ -334,9 +315,9 @@ const showData = async () => {
         hrDocument.value.number = response.data.data.number;
         hrDocument.value.issueDate = response.data.data.issueDate;
         hrDocument.value.notes = response.data.data.notes;
-        hrDocument.value.Type = response.data.data.Type;
+        hrDocument.value.HrDocumentType = response.data.data.HrDocumentType;
         hrDocument.value.Employee = response.data.data.Employee;
-        hrDocument.value.Files = response.data.data.Files;
+        hrDocument.value.FilesDocument = response.data.data.FilesDocument;
         hrDocument.value.isActive = response.data.data.isActive == 1 ? true : false;
         ChosePushBy.value = EnumTypeChoseShareDocument.toEmployee;
       }
@@ -396,12 +377,15 @@ onMounted(async () => {
   isLoading.value = false;
 });
 const changeSelectedType = () => {
-  hrDocument.value.addDays = hrDocument.value.Type.addDays ? Number(hrDocument.value.Type.addDays) : 0;
-  hrDocument.value.addMonths = hrDocument.value.Type.addMonths ? Number(hrDocument.value.Type.addMonths) : 0;
+  hrDocument.value.addDays = hrDocument.value.HrDocumentType.addDays ? Number(hrDocument.value.HrDocumentType.addDays) : 0;
+  hrDocument.value.addMonths = hrDocument.value.HrDocumentType.addMonths ? Number(hrDocument.value.HrDocumentType.addMonths) : 0;
 }
 </script>
 <template>
+
+
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
+
     <template #HeaderButtons>
       <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
         :text="t('New')" />
@@ -427,7 +411,7 @@ const changeSelectedType = () => {
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="hrDocument.Type" :options="hrDocumentTypes"
+                  v-model="hrDocument.HrDocumentType" :options="hrDocumentTypes"
                   :reduce="(hrDocumentType: IHrDocumentType) => hrDocumentType" label="name" :getOptionLabel="(hrDocumentType: IHrDocumentType) => hrDocumentType.name
                     " @update:modelValue="changeSelectedType">
                   <template #option="{ name, addDays, addMonths }">
@@ -473,19 +457,19 @@ const changeSelectedType = () => {
             </IRow>
             <!-- file -->
             <IRow col-lg="1" col-md="1" col-sm="1">
-              <div class="collapse align-middle w-full" v-if="ToNumber(hrDocument.Files?.length) > 0">
+              <div class="collapse align-middle w-full" v-if="ToNumber(hrDocument.FilesDocument?.length) > 0">
                 <input type="checkbox" class="" v-model="openSectionDocument" checked />
                 <div
                   class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2">
                   <span class="mx-2 px-2">
-                    لديك {{ hrDocument.Files?.length }} ملفات مرفقة , اضغط للعرض
+                    لديك {{ hrDocument.FilesDocument?.length }} ملفات مرفقة , اضغط للعرض
                     الملفات
                   </span>
                   <Icon icon="mingcute:attachment-fill" />
                 </div>
                 <div class="collapse-content grid grid-cols-4">
                   <div class="mt-5"></div>
-                  <ICol span="1" span-md="2" span-sm="1" class="" v-for="document in hrDocument.Files"
+                  <ICol span="1" span-md="2" span-sm="1" class="" v-for="document in hrDocument.FilesDocument"
                     :key="document.name">
                     <FilePreview :file="document" @updateList="showData" />
                   </ICol>

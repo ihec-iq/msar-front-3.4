@@ -1,9 +1,9 @@
 {
   "name": "ihec-iraq",
   "main": "main.ts",
-  "version": "25.1.26",
+  "version": "25.1.29",
   "description": "This MSAR ERP",
-  "keywords": [],
+  "keywords": ["erp", "msar", "iraq"],
   "author": "Ali7med",
   "scripts": {
     "build": "run-p type-check build-only",

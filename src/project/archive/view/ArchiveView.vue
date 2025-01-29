@@ -9,7 +9,7 @@ import DragDrop from "./DragDrop.vue";
 import { useDragDropStore } from "../dragDrop";
 import { t } from "@/utilities/I18nPlugin";
 import IPage from "@/components/ihec/IPage.vue";
-import { crud_delete } from "@/utilities/crudTool";
+import { crud_delete, prepareFormData } from "@/utilities/crudTool";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
@@ -24,7 +24,8 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-const { validate, min, required, foreignKey, max, sameAs } = useValidation();
+const { validate, min, required, foreignKey, max, sameAs, isObject } = useValidation();
+
 
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
@@ -37,9 +38,9 @@ const rules: Array<IFieldValidation> = [
     rules: [required(), min(3), max(100)],
   },
   {
-    field: "archiveTypeId",
+    field: "ArchiveType",
     caption: t("ArchiveType"),
-    rules: [foreignKey()],
+    rules: [isObject()],
   },
   {
     field: "issueDate",
@@ -69,27 +70,17 @@ const reset = () => {
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const store = () => {
+  errors.value = null;
   validationResult.value = validate(archive.value, rules);
-
   if (!validationResult.value.success) {
     WarningToast(t("ValidationFails"));
     return;
   }
-
-  errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
-  const formData = new FormData();
-  formData.append("id", archive.value.id.toString());
-  formData.append("title", archive.value.title.toString());
-  formData.append("description", archive.value.description.toString());
-  formData.append("issueDate", archive.value.issueDate.toString());
-  formData.append("number", archive.value.number.toString());
-  formData.append("way", archive.value.way.toString());
-  formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
-  formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
+  const formData: FormData = prepareFormData(archive.value);
   const files = filesDataInput.value;
   for (let i = 0; i < files.length; i++) {
-    formData.append("files[]", files[i]);
+    formData.append("Files[]", files[i]);
   }
 
   archiveStore
@@ -109,7 +100,6 @@ const store = () => {
 
 function update() {
   validationResult.value = validate(archive.value, rules);
-
   if (!validationResult.value.success) {
     WarningToast(t("ValidationFails"));
     return;
@@ -117,35 +107,15 @@ function update() {
 
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
-  const formData = new FormData();
-
-  formData.append("id", archive.value.id.toString());
-
-  formData.append("title", archive.value.title.toString());
-  formData.append(
-    "description",
-    archive.value.description == null
-      ? ""
-      : archive.value.description.toString()
-  );
-  formData.append("issueDate", archive.value.issueDate.toString());
-  formData.append(
-    "number",
-    archive.value.number == null ? "" : archive.value.number.toString()
-  );
-  formData.append(
-    "way",
-    archive.value.way == null ? "" : archive.value.way.toString()
-  );
-  formData.append("archiveTypeId", archive.value.archiveTypeId.toString());
-  formData.append("isIn", archive.value.isIn == 0 ? "0" : "1");
-
-  const files = filesDataInput.value;
-  for (let i = 0; i < files.length; i++) {
-    formData.append("files[]", files[i]);
-  }
+  const formData: FormData = prepareFormData(archive.value);
+  const files = filesDataInput.value; 
+  files.forEach((file: File) => {
+    formData.append("FilesDocument[]", file);
+  });
+ 
   archiveStore
     .update(archive.value.id, formData)
+
     .then((response) => {
       if (response.status === 200) {
         SuccessToast();
@@ -170,7 +140,7 @@ const Delete = () => {
 
 const showData = async () => {
   isLoading.value = true;
-  archive.value.Files = [];
+  archive.value.FilesDocument = [];
   await archiveStore
     .show(id.value)
     .then((response) => {
@@ -181,9 +151,10 @@ const showData = async () => {
         archive.value.issueDate = response.data.data.issueDate.split(" ")[0];
         archive.value.number = response.data.data.number;
         archive.value.way = response.data.data.way;
-        archive.value.archiveTypeId = response.data.data.archiveTypeId;
+        archive.value.ArchiveType = response.data.data.ArchiveType;
         archive.value.isIn = response.data.data.isIn;
-        archive.value.Files = response.data.data.Files;
+        isIn.value = response.data.data.isIn == 0 ? false : true;
+        archive.value.FilesDocument = response.data.data.FilesDocument;
         isIn.value = response.data.data.isIn == 0 ? false : true;
         archive.value.isInWord = response.data.data.isInWord;
       }
@@ -202,10 +173,10 @@ const updateList = () => {
 
 //#endregion
 window.onerror = function (msg, url, line, col, error) {
-     //code to handle or report error goes here
-     console.log(msg)
-     
- }
+  //code to handle or report error goes here
+  console.log(msg)
+
+}
 onMounted(async () => {
   isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowArchives]);
@@ -228,7 +199,7 @@ const chackArchiveTypeLoad = async () => {
     archiveTypes.value == undefined ||
     archiveTypes.value == null
   )
-  await useArchiveTypeStore().getBySectionUser();
+    await useArchiveTypeStore().getBySectionUser();
 };
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
@@ -236,92 +207,53 @@ import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
+import ISelectObject from "@/components/inputs/ISelectObject.vue";
+import { formDataToObject } from "@/utilities/formDataUtils";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton2
-        color="green"
-        width="28"
-        :type="EnumButtonType.Outlined"
-        pre-icon="view-grid-plus"
-        :onClick="reset"
-        :text="t('New')"
-      />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <IRow>
         <IForm>
           <IRow>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput
-                :label="t('Title')"
-                v-model="archive.title"
-                name="title"
-                :type="EnumInputType.Text"
-                :IsRequire="true"
-            /></ICol>
+              <IInput :label="t('Title')" v-model="archive.title" name="title" :type="EnumInputType.Text"
+                :IsRequire="true" />
+            </ICol>
           </IRow>
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput
-                :label="t('NumberBook')"
-                v-model="archive.number"
-                name="number"
-                :type="EnumInputType.Text"
-            /></ICol>
+              <IInput :label="t('NumberBook')" v-model="archive.number" name="number" :type="EnumInputType.Text" />
+            </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput
-                :label="t('Date')"
-                v-model="archive.issueDate"
-                name="issueDate"
-                :type="EnumInputType.Date"
-                :IsRequire="true"
-            /></ICol>
+              <IInput :label="t('Date')" v-model="archive.issueDate" name="issueDate" :type="EnumInputType.Date"
+                :IsRequire="true" />
+            </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <ISelect
-                :label="t('ArchiveType')"
-                v-model="archive.archiveTypeId"
-                name="archiveTypeId"
-                :options="archiveTypes"
-                :IsRequire="true"
-                @click=chackArchiveTypeLoad()
-            /></ICol>
+              <ISelectObject :label="t('ArchiveType')" v-model="archive.ArchiveType" name="ArchiveType"
+                :options="archiveTypes" :IsRequire="true" @click=chackArchiveTypeLoad() />
+            </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput
-                :label="t('way')"
-                v-model="archive.way"
-                name="way"
-                :type="EnumInputType.Text"
-            /></ICol>
+              <IInput :label="t('way')" v-model="archive.way" name="way" :type="EnumInputType.Text" />
+            </ICol>
             <ICol span="4" span-md="4" span-sm="4">
-              <IInput
-                :label="t('Description')"
-                v-model="archive.description"
-                name="description"
-                :type="EnumInputType.Text"
-                class="w-full"
-            /></ICol>
+              <IInput :label="t('Description')" v-model="archive.description" name="description"
+                :type="EnumInputType.Text" class="w-full" />
+            </ICol>
           </IRow>
           <IRow>
             <ICol span="1" span-md="2" span-sm="1">
-              <ICheckbox
-                :label="`${t('TypeBook')}: ${isIn ? t('In') : t('Out')}`"
-                v-model="isIn"
-                :checked="true"
-                :IsRequire="true"
-            /></ICol>
+              <ICheckbox :label="`${t('TypeBook')}: ${isIn ? t('In') : t('Out')}`" v-model="isIn" :checked="true"
+                :IsRequire="true" />
+            </ICol>
           </IRow>
           <!-- file -->
-          <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol
-              span="1"
-              span-md="2"
-              span-sm="1"
-              class=""
-              v-for="document in archive.Files"
-              :key="document.name"
-            >
+          <IRow col-lg="4" col-md="4" col-sm="2">
+            <ICol span="3" span-md="3" span-sm="2"  v-for="document in archive.FilesDocument" :key="document.name">
               <FilePreview :file="document" @updateList="updateList">
               </FilePreview>
             </ICol>
@@ -332,12 +264,9 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
               <div class="w-64 content-center" v-if="isLoading">
                 <div
                   class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                  role="status"
-                >
+                  role="status">
                   <span
-                    class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-                    >Loading...</span
-                  >
+                    class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
                 </div>
               </div>
             </div>
@@ -349,12 +278,7 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud
-        :isAdd="archive.id == 0"
-        :onCreate="store"
-        :onUpdate="update"
-        :onDelete="Delete"
-      />
+      <IFooterCrud :isAdd="archive.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
     </template>
   </IPage>
 </template>
@@ -363,6 +287,7 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
   direction: rtl;
   text-align: right;
 }
+
 .drop-area {
   width: 100%;
   max-width: 800px;
@@ -372,18 +297,22 @@ import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   transition: 0.2s ease;
 }
+
 .drop-area[data-active="true"] {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   background: rgba(255, 255, 255, 0.8);
 }
+
 label {
   font-size: 36px;
   cursor: pointer;
   display: block;
 }
+
 label span {
   display: block;
 }
+
 label input[type="file"]:not(:focus-visible) {
   position: absolute !important;
   width: 1px !important;
@@ -395,9 +324,11 @@ label input[type="file"]:not(:focus-visible) {
   white-space: nowrap !important;
   border: 0 !important;
 }
+
 label .smaller {
   font-size: 16px;
 }
+
 .image-list {
   display: flex;
   list-style: none;
@@ -405,12 +336,14 @@ label .smaller {
   padding: 0;
   margin-bottom: 35px;
 }
+
 .preview-card {
   display: flex;
   border: 1px solid #a2a2a2;
   padding: 5px;
   margin: 5px;
 }
+
 .upload-button {
   display: block;
   appearance: none;
@@ -424,9 +357,11 @@ label .smaller {
   color: #fff;
   text-transform: uppercase;
 }
+
 button {
   cursor: pointer;
 }
+
 html.dark {
   --w-e-textarea-bg-color: #333;
   --w-e-textarea-color: #fff;

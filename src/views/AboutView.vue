@@ -10,15 +10,14 @@
         <div class="max-w-3xl mx-auto text-center z-10">
           <h1
             class="text-3xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]  animate-pulse font-extrabold text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-[black] via-[white] to-[black]">
-            نظام سير العمل
+            نظام ادارة تخطيط موراد المؤسسات مسار
 
             <span class="sm:block"> </span>
           </h1>
 
           <p class="max-w-xl mx-auto mt-4 text-gray-100 bg-opacity-50 
           font-Tajawal sm:leading-relaxed sm:text-xl">
-            اهلا وسهلا بك في نظام سير العمل في المفوضية العليا المستقلة في
-            العراق.
+            اهلا وسهلا بك في نظام مسار.
           </p>
 
           <div class="flex flex-wrap justify-center mt-8 gap-4">

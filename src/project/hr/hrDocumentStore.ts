@@ -16,7 +16,7 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
       id: 0,
       name: ""
     },
-    Type: {
+    HrDocumentType: {
       id: 0,
       name: ""
     },
@@ -54,7 +54,7 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
         id: 0,
         name: ""
       },
-      Type: {
+      HrDocumentType: {
         id: 0,
         name: ""
       },

@@ -6,7 +6,7 @@ import type { IArchiveType } from "../IArchive";
 
 const pathBase = "/archiveSys/archiveType";
 
-export const useArchiveTypeStore = defineStore("archiveTypeStore", () => {
+export const useArchiveTypeStore = defineStore("useArchiveTypeStore", () => {
   const archiveType = ref<IArchiveType>({ id: 0, name: "", description: "" });
   const archiveTypes = ref<IArchiveType[]>([]);
 

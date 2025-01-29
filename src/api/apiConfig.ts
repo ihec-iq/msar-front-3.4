@@ -16,6 +16,8 @@ Api.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 Api.defaults.headers.common["Access-Control-Allow-Methods"] = "*";
 Api.defaults.headers.common["Access-Control-Allow-Headers"] = "*";
 Api.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+Api.defaults.headers.common["Content-Type"] = "multipart/form-data";
+
 
 // Attach authorization token lazily
 // Api.interceptors.request.use((config) => {

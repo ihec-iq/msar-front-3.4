@@ -2,6 +2,7 @@
 import { useRouter } from "vue-router";
 import moment from "moment";
 import { useDragDropStore } from "../dragDrop";
+import { IArchiveType, IDocument } from "@/project/archive/IArchive";
 
 const { generateIcon } = useDragDropStore();
 
@@ -14,10 +15,11 @@ const props = defineProps<{
     number: string;
     description: string;
     issueDate: string;
-    archiveTypeName: string;
-    Files: { title: string; path: string; extension: string }[];
+    ArchiveType: IArchiveType;
+    FilesDocument: Array<IDocument>;
   };
 }>();
+
 
 const openFile = (path: string) => {
   const fileUrl = path;
@@ -65,19 +67,21 @@ const formatArchiveDate = (value: string) => {
       >
     </div>
 
-    <div v-if="item.Files.length != 0" class="flex px-6 pb-2">
+    <div  class="flex px-6 pb-2">
       <!-- empty div -->
       <div class="flex basis-96"></div>
       <span
           class="text-gray text-sm rounded-lg opacity-80 dark:bg-gray-800  bg-orange-100 border-1 border border-orange-300 p-1 px-2 mx-2"
-          >{{ item.archiveTypeName }}</span
+          >{{ item.ArchiveType.name }}</span
         >
       <!-- chip -->
       <div
-        v-if="item.Files.length < 3"
-        v-for="(file, index) in item.Files"
+
+        v-if="item.FilesDocument.length < 3"
+        v-for="(file, index) in item.FilesDocument"
         :key="index"
         @click="openFile(file.path)"
+
         class="rtl:ml-3 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer hover:bg-gray-50 hover:text-gray-600 relative grid select-none items-center whitespace-nowrap rounded-lg border border-gray-900 py-1.5 px-3 font-sans text-xs font-bold uppercase text-gray-700"
       >
         <div class="absolute top-2/4 right-1.5 h-5 w-5 -translate-y-2/4">
@@ -93,27 +97,26 @@ const formatArchiveDate = (value: string) => {
       <div v-else class="flex">
         <div
           v-for="i in 2"
-          @click="openFile(item.Files[i].path)"
+          @click="openFile(item.FilesDocument[i].path)"
           class="rtl:ml-3 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 cursor-pointer hover:bg-gray-50 hover:text-gray-600 relative grid select-none items-center whitespace-nowrap rounded-lg border border-gray-900 py-1.5 px-3 font-sans text-xs font-bold uppercase text-gray-700"
         >
           <div class="absolute top-2/4 right-1.5 h-5 w-5 -translate-y-2/4">
             <img
               width="16"
               height="16"
-              :src="generateIcon(item.Files[i].extension)"
+              :src="generateIcon(item.FilesDocument[i].extension)"
               alt="file"
             />
           </div>
-          <span class="mr-[18px]">{{ item.Files[i].title }}</span>
+          <span class="mr-[18px]">{{ item.FilesDocument[i].title }}</span>
         </div>
         <div
-          v-if="item.Files.length > 2"
+          v-if="item.FilesDocument.length > 2"
           class="rtl:ml-3 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 hover:bg-gray-50 hover:text-gray-600 relative grid select-none items-center whitespace-nowrap rounded-lg border border-gray-900 py-1.5 px-3 font-sans text-xs font-bold uppercase text-gray-700"
         >
-          <span>+{{ item.Files.length - 2 }}</span>
+          <span>+{{ item.FilesDocument.length - 2 }}</span>
         </div>
       </div>
     </div>
   </div>
 </template>
-@/project/archive/dragDrop

@@ -36,13 +36,15 @@ export const crud_delete = async ({ store, id }: DeleteParams) => {
   }
 };
 
-export const prepareFormData = (data : object) => {
+export const prepareFormData = (data: object) => {
   const formData = new FormData();
   Object.entries(data).forEach(([key, value]) => {
     const formattedKey = key.replace(/ /g, "_").replace(/([A-Z])/g, "_$1").replace(/^_/, "").toLowerCase();
     if (value !== null && value !== undefined) {
-      formData.append(formattedKey + (typeof value === 'object' ? "_id" : ""), value['id'] || String(value));
+      formData.append(formattedKey + (typeof value === 'object' ? "_id" : ""), value['id'] ||
+        (typeof value === 'boolean' ? (value ? 1 : 0) : String(value)));
     }
   });
   return formData;
+
 }

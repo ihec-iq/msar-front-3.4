@@ -13,15 +13,13 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     id: 0,
     title: "",
     issueDate: new Date().toISOString().split("T")[0],
-    Files: [],
+    FilesDocument: [],
     description: "",
     way: "",
     number: "",
     isIn: 1,
     isInWord: "",
-    archiveType: { id: 0, name: "" },
-    archiveTypeId: 0,
-    archiveTypeName: ""
+    ArchiveType: { id: 0, name: "" },
   });
   const archiveType = ref<IArchiveType>({ id: 0, name: "", description: "" });
   const archiveTypes = ref<IArchiveType[]>([]);
@@ -70,15 +68,13 @@ export const useArchiveStore = defineStore("archiveStore", () => {
       id: 0,
       title: "",
       issueDate: new Date().toISOString().split("T")[0],
-      Files: [],
+      FilesDocument: [],
       description: "",
       way: "",
       number: "",
       isIn: 1,
       isInWord: "",
-      archiveType: { id: 0, name: "" },
-      archiveTypeId: 0,
-      archiveTypeName: ""
+      ArchiveType: { id: 0, name: "" },
     };
   };
   return {
