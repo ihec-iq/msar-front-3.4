@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
-import { useStockStore } from "../../stockStore";
+import { useStockStore } from "../../settingVoucher/stock/stockStore";
 import { useOutputVoucherStore } from "./../outputVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import type { IOutputVoucherItem } from "../IOutputVoucher";

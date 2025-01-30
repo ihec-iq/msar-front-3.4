@@ -58,7 +58,12 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     inputVouchers.value = await Api.get(`${pathUrl}`);
   }
   async function get_filter(params: IInputVoucherFilter, page: number) {
-    return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
+    try {
+      return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
+    } catch (error) {
+      console.log("in get_filter inputVoucher : " + error);
+      return null;
+    }
   }
   async function store(prams: object) {
     return await Api.post(`${pathUrl}/store`, prams);

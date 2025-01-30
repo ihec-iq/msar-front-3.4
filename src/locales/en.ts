@@ -2,7 +2,10 @@ export default {
   Check: "Check",
   Logout: "Logout",
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
-  Warehouse: { Index: "Warehouse System" },
+  Warehouse: {
+    Index: "Warehouse System",
+    Setting: "Setting",
+  },
   RetrievalVoucher: {
     Index: "Retrieval Voucher",
     Add: "Add Retrieval",
@@ -160,7 +163,7 @@ export default {
     Update: "Update Document",
     AddDayes: "Add Dayes Bonus",
     AddMonths: "Add Months Bonus",
-    Open: "Open Documents" 
+    Open: "Open Documents"
   },
   Employee: {
     Title: "Employee",

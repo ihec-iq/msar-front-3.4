@@ -1,6 +1,6 @@
 import type { IItem } from "../item/IItem";
 import type { ISection } from "@/project/section/ISection";
-import type { IStock } from "../warehouse/IStock";
+import type { IStock } from "../warehouse/settingVoucher/stock/IStock";
 import type { IUser } from "../user/IUser";
 import type { IVacationDaily } from "../vacation/vacationDaily/IVacationDaily";
 import type { IVacationSick } from "../vacation/vacationSick/IVacationSick";

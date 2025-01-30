@@ -17,7 +17,7 @@ const props = defineProps({
 });
 
 const truncatedNotes = computed(() => {
-  if (props.item.notes) return props.item.notes.slice(0, 20) + "...";
+  if (props.item.notes) return props.item.notes.replace(/<[^>]*>/g, '').slice(0, 20) + "...";
   else return "";
 });
 </script>

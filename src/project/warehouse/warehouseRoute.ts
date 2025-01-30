@@ -32,4 +32,12 @@ export default [
       middleware: [authMiddleware],
     },
   },
+  {
+    path: "/WarehouseSettingPortalView",
+    name: "WarehouseSettingPortalView",
+    component: () => import("./view/WarehouseSettingPortalView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
 ];

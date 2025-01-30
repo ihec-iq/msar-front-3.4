@@ -108,6 +108,7 @@ const buttonClass = computed(() => {
     :class="buttonClass"
     class="flex flex-row mx-2"
     style="align-items: center"
+    type="button"
   >
     <slot name="icon"></slot>
 

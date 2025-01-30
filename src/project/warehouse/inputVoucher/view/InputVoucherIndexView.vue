@@ -69,15 +69,16 @@ const getFilterData = async (page = 1) => {
   if (fastSearch.value != "") searchFilter.value.name = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
-      if (response.status == 200) {
+      console.log(response);
+      if (response != null && response.status == 200) {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
       }
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    // .catch((error) => {
+    //   console.log(error);
+    // });
   isLoading.value = false;
 };
 //#endregion

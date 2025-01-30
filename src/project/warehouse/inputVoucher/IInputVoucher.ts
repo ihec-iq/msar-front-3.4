@@ -1,6 +1,6 @@
 import type { IItem } from "@/project/item/IItem";
 import type { ISection } from "@/project/section/ISection"; 
-import type { IStock } from "../IStock";
+import type { IStock } from "../settingVoucher/stock/IStock";
 
 export interface IInputVoucher {
   id: number;

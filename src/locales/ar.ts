@@ -2,13 +2,17 @@ export default {
   Check: "تحقق",
   Logout: "تسجيل الخروج",
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
-  Warehouse: { Index: "نظام المخازن" },
+  Warehouse: {
+    Index: "نظام المخازن",
+    Setting: "الاعدادات",
+  },
   RetrievalVoucher: {
     Index: "مستند ارجاع",
     Add: "اضافة مستند ارجاع",
     Update: "تعديل مستند ارجاع",
     Number: "رقم مستند",
     Employee: "الموظف",
+    Setting: "الاعدادات",
   },
   noData: "لا توجد بيانات",
   ID: "المعرف",
@@ -138,19 +142,19 @@ export default {
   ConfigServer: "اعدادات الاتصال بالسيرفر",
   ConnectionString: "عنوان السيرفر",
   Organization: "المؤوسسة",
-  IsActive : "تفعيل",
+  IsActive: "تفعيل",
   Day: "يوم",
   Days: "ايام",
   Month: "شهر",
   Months: "اشهر",
   Number: "الرقم",
-  ShowNotes: "عرض الملاحظات", 
-  CheckTable:"#",
-  Setting :{
-    Name : "الاعدادات",
+  ShowNotes: "عرض الملاحظات",
+  CheckTable: "#",
+  Setting: {
+    Name: "الاعدادات",
     Add: "اضافة اعدادات",
-    Update : "تعديل الاعدادات",
-    SettingNumberDayesAlertBonus : "عدد الايام الداخلة في التنبيهات"
+    Update: "تعديل الاعدادات",
+    SettingNumberDayesAlertBonus: "عدد الايام الداخلة في التنبيهات"
   },
   HrDocument: {
     Index: "ملفات الاضابير",
@@ -160,10 +164,10 @@ export default {
     Update: "تعديل ملف الى الاضبارة",
     AddDayes: "ايام المظافة",
     AddMonths: "اشهر المظافة",
-    Open: "فتح ملفات الاضبارة" 
+    Open: "فتح ملفات الاضبارة"
   },
   Employee: {
-    Hr:"الموارد البشرية",
+    Hr: "الموارد البشرية",
     Title: "الموظف",
     HistoryReport: "كشف ذمة",
     Info: "معلومات الموظف",
@@ -216,8 +220,8 @@ export default {
     salary: "الراتب",
     yearlyBonus: "العلاوة السنوية",
     yearlyService: "الخدمة السنوية",
-    Alert : "تنبيهات العلاوات",
-    Refresh: "تحديث النتائج", 
+    Alert: "تنبيهات العلاوات",
+    Refresh: "تحديث النتائج",
     ReCalculate: "اعادة حساب العلاوات",
     IsBoundFilter: "عرض الاستحقاق فقط خلال الفترة",
     number: "رقم العلاوة",
@@ -231,7 +235,7 @@ export default {
     dateWorth: "تاريخ اخر استحقاق",
     dateNextPromotion: "تاريخ الاستحقاق القادم",
     difNextPromotionDate: "المتبقي للاستحقاق القادم",
-    numberLastPromotion: "رقم اخر ترفيع", 
+    numberLastPromotion: "رقم اخر ترفيع",
     Study: "التحصيل الدراسي",
     DegreeStage: "الدرجة الوظيفية",
     Employee: "الموظف",
@@ -245,7 +249,7 @@ export default {
     number: "رقم الترفيع",
     notes: "ملاحظات"
   },
-  Refresh :"تحديث",
+  Refresh: "تحديث",
   UserIndex: "بيانات المستخدمين",
 
   Help: "مساعدة",
@@ -354,7 +358,7 @@ export default {
   "Type Room": "نوع الغرفة",
   Finish: "أنهاء",
   Room: "الغرفة",
-  Support: "الدعم", 
+  Support: "الدعم",
   "Log Out": "تسجيل خروج",
   "Last LogIn": " اخر تسجيل دخول",
   Role: "كروب الصلاحيات",
