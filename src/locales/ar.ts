@@ -5,6 +5,22 @@ export default {
   Warehouse: {
     Index: "نظام المخازن",
     Setting: "الاعدادات",
+    Stock : {
+      Index: "المخازن",
+      Add: "اضافة مخزن",
+      Update: "تعديل مخزن",
+      Name: "اسم المخزن",
+      Description: "الوصف",
+      Search: "ابحث عن اسم المخزن",
+    },
+    InputVoucherState: {
+      Index: "حالة الاستلام",
+      Add: "اضافة حالة الاستلام",
+      Update: "تعديل حالة الاستلام",
+      Name: "اسم حالة الاستلام",
+      Description: "الوصف",
+      Search: "ابحث عن اسم حالة الاستلام",
+    }
   },
   RetrievalVoucher: {
     Index: "مستند ارجاع",

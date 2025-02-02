@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useStockStore } from "../stockStore";
-import type { IStock } from "../IStock";
-import { TailwindPagination } from "laravel-vue-pagination";
+import { useInputVoucherStateStore } from "../inputVoucherStateStore";
+import type { IInputVoucherState } from "../IInputVoucherState";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 
 const isLoading = ref(false);
-const data = ref<Array<IStock>>([]);
+const data = ref<Array<IInputVoucherState>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IStock>>([]);
-const { stock } = useStockStore();
-const StockStore = useStockStore();
-import CardStockIndex from "./CardItemStockIndex.vue";
+const dataBase = ref<Array<IInputVoucherState>>([]);
+const { inputVoucherState } = useInputVoucherStateStore();
+const InputVoucherStateStore = useInputVoucherStateStore();
+import CardInputVoucherStateIndex from "./CardInputVoucherStateIndex.vue";
 
-import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import IPage from "@/components/ihec/IPage.vue";
 import IInput from "@/components/inputs/IInput.vue";
@@ -34,22 +32,21 @@ watch(
   }
 );
 const addItem = () => {
-  stock.id = 0;
-  stock.name = "";
+  inputVoucherState.id = 0;
+  inputVoucherState.name = "";
   router.push({
-    name: "StockAdd",
+    name: "inputVoucherStateAdd",
   });
 };
 
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IStock) => {
+const filterByIDName = (item: IInputVoucherState) => {
   if (item.name.includes(fastSearch.value)) {
     return true;
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -60,13 +57,13 @@ const makeFastSearch = () => {
  
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-   await StockStore
+   await InputVoucherStateStore
     .get()
-    .then((response) => {
+     .then((response) => {
       if (response.status == 200) {
-        dataPage.value = response.data.data;
-        data.value = response.data.data.data;
-        dataBase.value = response.data.data.data;
+        dataPage.value = response.data;
+        data.value = response.data.data;
+        dataBase.value = response.data.data;
       }
     })
     .catch((error) => {
@@ -77,7 +74,7 @@ const getFilterData = async (page: number = 1) => {
 //#endregion
 const update = (id: number) => {
   router.push({
-    name: "StockUpdate",
+    name: "stockUpdate",
     params: { id: id },
   });
 };
@@ -86,7 +83,8 @@ const update = (id: number) => {
 //#endregion
 onMounted(async () => {
   isLoading.value = true;
-  checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
+  //checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
+  checkPermissionAccessArray([EnumPermission.ShowWarehouseSettings]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -94,9 +92,9 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('Item.Category')" :is-loading="isLoading">
+  <IPage :HeaderTitle="t('Warehouse.InputVoucherState.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton width="28" :onClick="addItem" :text="t('Add')" />
+      <IButton width="28" :onClick="addItem" :text="t('Warehouse.InputVoucherState.Add')" />
     </template>
     <IPageContent>
       <IRow :col="5" :col-md="2" :col-lg="4">
@@ -114,7 +112,7 @@ onMounted(async () => {
       </IRow>
       <IRow :col="2" :colMd="2" :colLg="2">
         <ICol class="p-3" :span="2" v-for="item in data" :key="item.id">
-          <CardStockIndex :item="item" />
+          <CardInputVoucherStateIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
         </ICol>
       </IRow> 

@@ -33,7 +33,7 @@ import { prepareFormData } from "@/utilities/crudTool";
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionsStore();
+const { checkPermissionAccessArray, can } = usePermissionsStore();
 const namePage = ref("Item.Category");
 const route = useRoute();
 const id = ref(Number(route.params.id));
@@ -48,6 +48,7 @@ const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const store = () => {
+  if(!can(EnumPermission.AddWarehouseSetting)) return;
   errors.value = null;
   validationResult.value = validate(stock.value, rules);
   if (!validationResult.value.success) {
@@ -60,7 +61,7 @@ const store = () => {
   StockStore
     .store(formData)
     .then((response) => {
-      if (response.status === 200) {
+      if (response.status == 200) {
         Swal.fire({
           icon: "success",
           title: "Your item has been saved",
@@ -173,7 +174,7 @@ const showData = async () => {
 //#endregion
 onMounted(async () => {
   isLoding.value = true;
-  checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
+  checkPermissionAccessArray([EnumPermission.ShowWarehouseSettings]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("Add") + " " + t("Item.Category");
     stock.value.id = 0;
@@ -207,7 +208,7 @@ const reset = () => {
           </ICol>
         </IRow>
         <IErrorMessages :validationResult="validationResult" ref="someRefName" />
-        <IFooterCrud :isAdd="stock.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+        <IFooterCrud :isAdd="stock.id == 0 && can(EnumPermission.AddWarehouseSetting)" :isUpdate="stock.id != 0 && can(EnumPermission.EditWarehouseSetting)" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
       </IRow>
     </IPageContent>
   </IPage>

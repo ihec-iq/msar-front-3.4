@@ -6,13 +6,14 @@ import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { prepareFormData } from "@/utilities/crudTool";
 const emit = defineEmits(["setItem"]);
 //region"Props"
 
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray } = usePermissionsStore();
+const { checkPermissionAccessArray,can } = usePermissionsStore();
 const itemStore = useItemStore();
 const { item } = storeToRefs(useItemStore());
 const itemCategoryStore = useItemCategoryStore();
@@ -22,21 +23,16 @@ const errors = ref<String | null>();
 //#endregion
 //#region CURD
 const store = () => {
+  if(!can(EnumPermission.AddItem)) return;
   errors.value = null;
-  const formData = new FormData();
-  formData.append("id", item.value.id.toString());
-  formData.append("name", item.value.name.toString());
-  formData.append("description", item.value.description.toString());
-  formData.append("code", item.value.code.toString());
-  formData.append("measuringUnit", item.value.measuringUnit.toString());
-  formData.append("Category", JSON.stringify(item.value.Category));
+  const formData = prepareFormData(item.value); 
   itemStore
     .store(formData)
-    .then(async (response) => {
+    .then(async (response) => {console.log(response); 
       if (response.status === 200) {
         emit("setItem", response.data.data);
         await useItemStore().get_items();
-        reset();
+        reset(); 
         let popClose = document.getElementById("closePopItem");
         popClose?.click();
       }
@@ -150,7 +146,7 @@ onMounted(async () => {
             <button
               v-if="item.id == 0"
               @click="store()"
-              class="bg-create focus:outline-none focus:ring-0 focus:border-gray-900 hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-30 sm:w-30 md:w-30 rounded-lg text-white"
+              class="bg-create focus:outline-none focus:ring-1 focus:bg-gray-900 focus:border-gray-900 hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-30 sm:w-30 md:w-30 rounded-lg text-white"
             >
               {{ t("Create") }}
             </button>

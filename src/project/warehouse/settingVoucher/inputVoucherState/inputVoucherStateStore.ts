@@ -2,27 +2,25 @@ import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IStock } from "./IStock";
+import type { IInputVoucherState } from "./IInputVoucherState";
 
-export const useStockStore = defineStore("StockStore", () => {
-  const stock = reactive<IStock>({
+export const useInputVoucherStateStore = defineStore("InputVoucherStateStore", () => {
+  const inputVoucherState = reactive<IInputVoucherState>({
     id: 0,
     name: "",
-    description: "",
   });
-
-  const stocks = ref<IStock[]>([]);
+  const inputVoucherStates = ref<IInputVoucherState[]>([]);
   const pathBase = "/stockSys";
-  const pathUrl = `${pathBase}/stock`;
-  async function get_stocks() {
+  const pathUrl = `${pathBase}/inputVoucherState`;
+  async function get_inputVoucherStates() {
     await Api.get(`${pathUrl}`)
       .then((response) => {
         if (response.status == 200) {
-          stocks.value = response.data.data;
+          inputVoucherStates.value = response.data.data;
         }
       })
       .catch((errors) => {
-        console.log("in get stocks : " + errors);
+        console.log("in get inputVoucherStates : " + errors);
       });
   }
   async function get() {
@@ -41,14 +39,13 @@ export const useStockStore = defineStore("StockStore", () => {
     return await Api.delete(`${pathUrl}/destroy/${id}`);
   };
   function resetData() {
-    stock.id = 0;
-    stock.name = "";
-    stock.description = "";
+    inputVoucherState.id = 0;
+    inputVoucherState.name = "";
   }
   return {
-    stock,
-    stocks,
-    get_stocks,
+    inputVoucherState,
+    inputVoucherStates,
+    get_inputVoucherStates,
     get,
     show,
     getError,

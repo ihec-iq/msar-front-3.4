@@ -1,6 +1,7 @@
 import type { IItem } from "@/project/item/IItem";
 import type { ISection } from "@/project/section/ISection"; 
 import type { IStock } from "../settingVoucher/stock/IStock";
+import type { IInputVoucherState } from "../settingVoucher/inputVoucherState/IInputVoucherState";
 
 export interface IInputVoucher {
   id: number;
@@ -46,10 +47,6 @@ export interface IInputVoucherEmployee {
   id: number;
   name: string;
   section?: ISection;
-}
-export interface IInputVoucherState {
-  id: number;
-  name: string;
 }
 export interface IInputVoucherFilter {
   id?: number;

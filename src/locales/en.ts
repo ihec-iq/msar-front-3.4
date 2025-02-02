@@ -5,6 +5,22 @@ export default {
   Warehouse: {
     Index: "Warehouse System",
     Setting: "Setting",
+    Stock: {
+      Index: "Warehouse",
+      Add: "Add Warehouse",
+      Update: "Update Warehouse",
+      Name: "Name",
+      Description: "Description",
+      Search: "Search by Name",
+    },
+    InputVoucherState: {
+      Index: "Input Voucher State",
+      Add: "Add Input Voucher State",
+      Update: "Update Input Voucher State",
+      Name: "Name",
+      Description: "Description",
+      Search: "Search by Name",
+    },
   },
   RetrievalVoucher: {
     Index: "Retrieval Voucher",

@@ -3,11 +3,15 @@ import inputVoucherRoute from "./inputVoucher/inputVoucherRoute";
 import outputVoucherRoute from "./outputVoucher/outputVoucherRoute";
 import retrievalVoucherRoute from "./retrievalVoucher/retrievalVoucherRoute";
 import directVoucherRoute from "./directVoucher/directVoucherRoute";
+import stockRoute from "./settingVoucher/stock/StockRoute";
+import inputVoucherStateRoute from "./settingVoucher/inputVoucherState/InputVoucherStateRoute";
 export default [
   ...inputVoucherRoute,
   ...outputVoucherRoute,
   ...retrievalVoucherRoute,
   ...directVoucherRoute,
+  ...stockRoute,
+  ...inputVoucherStateRoute,
   {
     path: "/warehousePortal",
     name: "warehousePortal",

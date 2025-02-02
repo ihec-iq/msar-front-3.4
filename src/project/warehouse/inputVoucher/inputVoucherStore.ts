@@ -7,9 +7,9 @@ import type {
   IInputVoucherEmployee,
   IInputVoucherFilter,
   IInputVoucherItem,
-  IInputVoucherState,
   IInputVoucherItemVSelect,
 } from "./IInputVoucher";
+import type { IInputVoucherState } from "../settingVoucher/inputVoucherState/IInputVoucherState";
 
 export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   const inputVoucher = ref<IInputVoucher>({
@@ -21,7 +21,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     Items: [],
     signaturePerson: "",
     requestedBy: "",
-    Stock: { name: "", id: 0 },
+    Stock: { name: "", id: 0, description: "" },
     numberBill: "",
     dateBill: new Date().toISOString().split("T")[0],
     dateReceive: new Date().toISOString().split("T")[0],
@@ -77,17 +77,6 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
-  async function getState() {
-    return await Api.get(`${pathBase}/inputVoucherState`)
-      .then((response) => {
-        if (response.status == 200) {
-          inputVoucherStates.value = response.data.data;
-        }
-      })
-      .catch((errors) => {
-        console.log("in get Categories : " + errors);
-      });
-  }
   async function getItems() {
     inputVoucherItems.value = [];
     return await Api.get(`${pathBase}/inputVoucherItem`)
@@ -100,7 +89,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         console.log("in get input Voucher Items : " + errors);
       });
   }
-  async function getAvailableItemsVSelect(storeId : string = "0") {
+  async function getAvailableItemsVSelect(storeId: string = "0") {
     inputVoucherItemsVSelect.value = [];
     return await Api.get(`${pathBase}/inputVoucherItem/getAvailableItemsVSelect/${storeId}`)
       .then((response) => {
@@ -180,7 +169,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       Items: [],
       signaturePerson: "",
       requestedBy: "",
-      Stock: { name: "", id: 0 },
+      Stock: { name: "", id: 0, description: "" },
     };
   }
   return {
@@ -196,8 +185,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     editItem,
     removeItem,
     get,
-    get_filter,
-    getState,
+    get_filter, 
     getItems,
     getEmployees,
     getAvailableItemsVSelect,

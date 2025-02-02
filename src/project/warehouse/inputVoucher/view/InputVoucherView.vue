@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { useStockStore } from "../../settingVoucher/stock/stockStore";
+import { useInputVoucherStateStore } from "../../settingVoucher/inputVoucherState/inputVoucherStateStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import { useItemStore } from "@/project/item/itemStore";
 import type { IInputVoucherItem } from "../IInputVoucher";
@@ -41,6 +42,7 @@ const editorOptions = ref({
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
 const { item } = storeToRefs(useItemStore());
+const { inputVoucherStates } = storeToRefs(useInputVoucherStateStore());
 //#endregion
 //#region Validation
 import {
@@ -89,7 +91,7 @@ const route = useRoute();
 const id = ref(Number(route.params.id));
 
 const inputVoucherStore = useInputVoucherStore();
-const { inputVoucher, inputVoucherStates } = storeToRefs(
+const { inputVoucher } = storeToRefs(
   useInputVoucherStore()
 );
 //#region popUp
@@ -345,7 +347,7 @@ const back = () => {
 onMounted(async () => {
   Loading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowInputVouchers]);
-  await inputVoucherStore.getState();
+  await useInputVoucherStateStore().get_inputVoucherStates();
   await inputVoucherStore.getEmployees();
   if (Number.isNaN(id.value) || id.value === undefined) {
     inputVoucher.value.id = 0;
@@ -398,6 +400,7 @@ function clearSelected(event: { target: { value: string } }) {
   }
 }
 const setItemFromChild = (_item: IItem) => {
+  console.log(_item);
   _item.code = "";
   _item.description = "";
   _item.measuringUnit = "";
@@ -471,7 +474,7 @@ const headers = ref<Array<ITableHeader>>([
             </ICol>
           </IRow>
           <IRow>
-            <ICol  >
+            <ICol>
               <ILabel :title="t('Notes')">
                 <QuillEditor theme="snow" toolbar="minimal" :options="editorOptions"
                   v-model:content="inputVoucher.notes" contentType="html" />
@@ -564,7 +567,7 @@ const headers = ref<Array<ITableHeader>>([
                 </div>
               </template>
             </vSelect>
-            <IButton :text="t('refresh')" color="blue" :type="EnumButtonType.Default" />
+            <IButton :text="t('Refresh')" color="blue" :type="EnumButtonType.Default" />
             <AddItemPopup :setItem="setItemFromChild"></AddItemPopup>
           </ICol>
           <ICol span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1" v-if="VoucherItemTemp.Item == null"
