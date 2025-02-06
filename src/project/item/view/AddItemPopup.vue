@@ -7,32 +7,36 @@ import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { prepareFormData } from "@/utilities/crudTool";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import IButton2 from "@/components/ihec/IButton2.vue";
 const emit = defineEmits(["setItem"]);
 //region"Props"
 
 //#endregion
 
 //#region Vars
-const { checkPermissionAccessArray,can } = usePermissionsStore();
+const { checkPermissionAccessArray, can } = usePermissionsStore();
 const itemStore = useItemStore();
 const { item } = storeToRefs(useItemStore());
 const itemCategoryStore = useItemCategoryStore();
 const { categories } = storeToRefs(useItemCategoryStore());
 
 const errors = ref<String | null>();
+const loading = ref(false);
 //#endregion
 //#region CURD
 const store = () => {
-  if(!can(EnumPermission.AddItem)) return;
+  if (!can(EnumPermission.AddItem)) return;
   errors.value = null;
-  const formData = prepareFormData(item.value); 
+  const formData = prepareFormData(item.value);
   itemStore
     .store(formData)
-    .then(async (response) => {console.log(response); 
+    .then(async (response) => {
+      console.log(response);
       if (response.status === 200) {
         emit("setItem", response.data.data);
         await useItemStore().get_items();
-        reset(); 
+        reset();
         let popClose = document.getElementById("closePopItem");
         popClose?.click();
       }
@@ -56,98 +60,83 @@ onMounted(async () => {
   //console.log(can("show items1"));
   reset()
   checkPermissionAccessArray([EnumPermission.ShowItems]);
-  await itemCategoryStore.getFast();
+  await refreshCategories();
   item.value.id = 0;
   //el.value?.focus();
 });
+const refreshCategories = async () => {
+  loading.value = true;
+  await useItemCategoryStore().getFast(); 
+  loading.value = false;
+};
 </script>
 <template>
+
+
   <input type="checkbox" id="my_modal_7" class="modal-toggle" />
   <div class="modal w-full">
-    <div class="modal-box w-11/12 max-w-5xl bg-slate-300 dark:bg-input">
-      <div class="w-full p-4 grid lg:grid-cols-2 xs:grid-cols-2">
-        <div class="w-12/12 mx-2">
-          <div
-            class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-          >
+    <div class="modal-box w-11/12 max-w-5xl bg-slate-200 dark:bg-input">
+      <div v-if="loading"
+        class="h-8 w-8 animate-spin rounded-full fixed top-0 left-0 m-1   bottom-0 bg-slate-300 dark:bg-input border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+        role="status">
+        <span
+          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+      </div>
+      <div class="p-4 grid lg:grid-cols-2 xs:grid-cols-2">
+        <div class="w-12/12">
+          <div class="mt-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
             {{ t("Name") }}
           </div>
-          <input
-            ref="el"
-            id="NameItemEnterNew"
-            v-model="item.name"
-            type="text"
-            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          />
+          <input ref="el" id="NameItemEnterNew" v-model="item.name" type="text"
+            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
         </div>
         <div class="w-11/12 mr-2">
-          <div
-            class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-          >
+          <div class="mt-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
             {{ t("Item.Category") }}
           </div>
-
-          <select
-            v-model="item.Category.id"
-            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          >
-            <option
-              v-for="category in categories"
-              :key="category.id"
-              :value="category.id"
-            >
-              {{ category.name }}
-            </option>
-          </select>
+          <div class="flex flex-row">
+            <select v-model="item.Category.id"
+              class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight">
+              <option v-for="category in categories" :key="category.id" :value="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+            <IButton2 class="h-full" :text="t('Refresh')" :onClick="refreshCategories" post-icon="refresh" color="blue"
+              :type="EnumButtonType.Outlined" />
+          </div>
         </div>
-        <div class="w-12/12 mx-2">
-          <div
-            class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-          >
+
+        <div class="w-12/12">
+
+
+          <div class="mt-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
             {{ t("Item.Code") }}
           </div>
-          <input
-            v-model="item.code"
-            type="text"
-            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 border-2 border-gray-500 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          />
+          <input v-model="item.code" type="text"
+            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 border-2 border-gray-500 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
         </div>
         <div class="w-11/12 mx-2">
-          <div
-            class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-          >
+          <div class="mt-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
             {{ t("Item.Unit") }}
           </div>
-          <input
-            v-model="item.measuringUnit"
-            type="text"
-            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          />
+          <input v-model="item.measuringUnit" type="text"
+            class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
         </div>
       </div>
-      <div class="w-12/12 mx-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
+      <div class="px-4">
+        <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
           {{ t("Description") }}
         </div>
-        <input
-          v-model="item.description"
-          type="text"
-          class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10 px-3 py-2 border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
+        <input v-model="item.description" type="text"
+          class="w-full focus:outline-none focus:ring-0 focus:border-gray-900 outline-none h-10  border-2 border-gray-500 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
       </div>
       <!-- bottom tool bar -->
       <div
-        class="dark:bg-bottomTool duration-700 mt-5 bg-ideNavLight p-2 rounded-lg flex items-center justify-end print:hidden"
-      >
+        class="dark:bg-bottomTool duration-700 mt-5 bg-ideNavLight p-2 rounded-lg flex items-center justify-end print:hidden">
         <div class="flex ltr:ml-8 rtl:mr-8">
           <div class="items-center m-3">
-            <button
-              v-if="item.id == 0"
-              @click="store()"
-              class="bg-create focus:outline-none focus:ring-1 focus:bg-gray-900 focus:border-gray-900 hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-30 sm:w-30 md:w-30 rounded-lg text-white"
-            >
+            <button v-if="item.id == 0" @click="store()"
+              class="bg-create focus:outline-none focus:ring-1 focus:bg-gray-900 focus:border-gray-900 hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-30 sm:w-30 md:w-30 rounded-lg text-white">
               {{ t("Create") }}
             </button>
           </div>
@@ -155,8 +144,6 @@ onMounted(async () => {
       </div>
       <div class="border-red-800 border-[1px]" v-if="errors">{{ errors }}</div>
     </div>
-    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem"
-      >Close</label
-    >
+    <label class="modal-backdrop visible" for="my_modal_7" id="closePopItem">Close</label>
   </div>
 </template>

@@ -138,11 +138,11 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t('Store.ItemHistory')" :isLoading="isLoading">
     <IPageContent>
-      <IRow :col="4" :col-md="4" :col-lg="4">
+      <IRow  >
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
             <IInput
-              :label="t('Title')"
+              :label="t('Employee.Name')"
               :placeholder="t('Search')"
               v-model="fastSearch"
               :type="EnumInputType.Text"
@@ -153,10 +153,12 @@ const headers = ref<Array<ITableHeader>>([
             <ISelect
               :options="outputVoucherEmployees"
               @onChange="getFilterData()"
-              :label="t('Employee')"
-              :name="t('Employee')"
+              :label="t('Employee.Section')"
+              name="EmployeeSection"
             >
             </ISelect>
+
+
           </ICol>
           <!-- report type -->
           <ICol :span-lg="1" :span-md="1" :span="1">

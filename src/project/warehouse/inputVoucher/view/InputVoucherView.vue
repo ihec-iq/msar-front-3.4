@@ -55,6 +55,7 @@ import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import IButton2 from "@/components/ihec/IButton2.vue";
+import { formatNumber } from "vant/lib/utils";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -182,6 +183,7 @@ const ChangeValueTotal = () => {
   VoucherItemTemp.value.value = VoucherItemTemp.value.count * VoucherItemTemp.value.price;
 };
 const indexSelectedVoucherItem = ref(0);
+
 const EditItem = () => {
   VoucherItemTemp.value.value = VoucherItemTemp.value.count * VoucherItemTemp.value.price;
   inputVoucherStore.editItem(indexSelectedVoucherItem.value, VoucherItemTemp.value);
@@ -357,12 +359,22 @@ onMounted(async () => {
     namePage.value = "InputVoucherUpdate";
   }
   await useStockStore().get_stocks();
+  await refreshItems();
+  Loading.value = false;
+
+});
+const refreshItems = async () => {
+  Loading.value = true;
   await useItemStore().get_items();
   Loading.value = false;
-});
+};
+
+
+
 const handleEnter = (event: KeyboardEvent) => {
   const enteredValue = (event.target as HTMLInputElement).value;
   const matchingOption = items.value.find(
+
     (option: IItem) => option.name === enteredValue
   );
   if (matchingOption === undefined && enteredValue.length > 0) {
@@ -400,7 +412,7 @@ function clearSelected(event: { target: { value: string } }) {
   }
 }
 const setItemFromChild = (_item: IItem) => {
-  console.log(_item);
+  //console.log(_item);
   _item.code = "";
   _item.description = "";
   _item.measuringUnit = "";
@@ -484,7 +496,8 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
           <IRow>
             <ICol>
-              <IButton2 :text="t('Item.Add')" color="blue" :type="EnumButtonType.Default" @click="AddPopup()" />
+              <IButton2 :text="t('Item.Choose')" class="w-[150px]" color="blue" post-icon="add"
+                :type="EnumButtonType.Outlined" @click="AddPopup()" />
             </ICol>
           </IRow>
           <IRow>
@@ -517,59 +530,64 @@ const headers = ref<Array<ITableHeader>>([
       </IContainer>
     </IPageContent>
     <IContainer>
-      <van-popup class="overflow-hidden dark:bg-darkNav" v-model:show="showPop" round position="bottom">
+      <van-popup class="p-2 overflow-hidden dark:bg-darkNav" v-model:show="showPop" round position="bottom">
         <!-- for search Item -->
         <IRow col-lg="4" col-md="1" col-sm="1" col-xs="1">
           <ICol>
-            <div class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300">
-              {{ t("Item.Add") }}
+
+            <div class="mb-1 md:text-md text-base ml-2 font-bold dark:text-gray-300">
+              {{ t("Item.Choose") }}
             </div>
-            <vSelect
-              class="capitalize rounded-md border-2 p-2 dark:text-gray-200 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
-              v-model="VoucherItemTemp.Item" :options="items" :reduce="(_item: IItem) => _item"
-              :get-option-label="(_item: IItem) => _item.name" @keydown.enter="handleEnter" :create-option="(_item: IItem) => ({
-                input_voucher_id: 0,
-                Item: {
-                  name: '',
-                  id: 0,
-                  code: 0,
-                  description: 0,
-                  Category: { id: 0, name: '' },
-                  measuringUnit: '',
-                },
-                describtion: '',
-                count: 0,
-                price: 0,
-                value: 0,
-                notes: '',
-              })
-                ">
-              <template #option="{ code, Category, description, name }">
-                <div class="rtl:text-right border-2 p-2 rounded-md">
-                  <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold">
-                    {{ name }}
+            <div class="flex flex-row">
+              <vSelect
+                class="capitalize w-full rounded-md border-2 p-2 dark:text-gray-200 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
+                v-model="VoucherItemTemp.Item" :options="items" :reduce="(_item: IItem) => _item"
+                :get-option-label="(_item: IItem) => _item.name" @keydown.enter="handleEnter" :create-option="(_item: IItem) => ({
+                  input_voucher_id: 0,
+                  Item: {
+                    name: '',
+                    id: 0,
+                    code: 0,
+                    description: 0,
+                    Category: { id: 0, name: '' },
+                    measuringUnit: '',
+                  },
+                  describtion: '',
+                  count: 0,
+                  price: 0,
+                  value: 0,
+                  notes: '',
+                })
+                  ">
+                <template #option="{ code, Category, description, name }">
+                  <div class="rtl:text-right border-2 p-2 rounded-md">
+                    <div
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold">
+                      {{ name }}
+                    </div>
+                    <cite>
+                      <div
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
+                        {{ t("Code") }}: {{ code }}
+                      </div>
+                      <div
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
+                        {{ t("Category") }}: {{ Category.name }}
+                      </div>
+                    </cite>
+                    <br />
+                    <cite>
+                      {{ description }}
+                    </cite>
                   </div>
-                  <cite>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
-                      {{ t("Code") }}: {{ code }}
-                    </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
-                      {{ t("Category") }}: {{ Category.name }}
-                    </div>
-                  </cite>
-                  <br />
-                  <cite>
-                    {{ description }}
-                  </cite>
-                </div>
-              </template>
-            </vSelect>
-            <IButton :text="t('Refresh')" color="blue" :type="EnumButtonType.Default" />
-            <AddItemPopup :setItem="setItemFromChild"></AddItemPopup>
+                </template>
+              </vSelect>
+              <IButton class="h-full" :text="t('Refresh')" :onClick="refreshItems" post-icon="refresh" color="blue"
+                :type="EnumButtonType.Outlined" />
+            </div>
+            <AddItemPopup @setItem="setItemFromChild"></AddItemPopup>
           </ICol>
+
           <ICol span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1" v-if="VoucherItemTemp.Item == null"
             class="border-2 border-dotted border-gray-600">
             <div class="w-full text-center align-middle border-gray-600">
@@ -579,14 +597,14 @@ const headers = ref<Array<ITableHeader>>([
             </div>
           </ICol>
           <ICol :span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1"
-            v-else-if="VoucherItemTemp.Item.name != ''">
+            v-else-if="VoucherItemTemp.Item.name != ''" class="border-2 rounded-md border-dotted border-gray-500">
             <IRow col="4">
               <ICol span="1">
-                <ILabel :title="t('Code')">
+                <ILabel :title="t('Code')"  >
                   {{ VoucherItemTemp.Item.code }}</ILabel>
               </ICol>
               <ICol span="1">
-                <ILabel :title="t('Category')">
+                <ILabel :title="t('Category')" >
                   {{ VoucherItemTemp.Item.Category.name }}</ILabel>
               </ICol>
               <ICol span="1">
@@ -618,6 +636,8 @@ const headers = ref<Array<ITableHeader>>([
               v-model="VoucherItemTemp.price" :min="1" />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
+
+
             <IInput :label="t('Total')" :type="EnumInputType.Number" v-model="VoucherItemTemp.value" />
           </ICol>
           <ICol :span="4" span-lg="4" span-xl="1" span-md="1">

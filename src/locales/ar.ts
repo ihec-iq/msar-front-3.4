@@ -78,12 +78,14 @@ export default {
     Unit: "الوحدة",
     Category: "صنف المادة",
     Sum: "المواد",
-    Description: "الوصف"
+    Description: "الوصف",
+    Choose: "اختر المادة"
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
   SearchForUser: "ابحث عن اسم الموظف",
   ItemUpdate: "تحديث المادة",
+
   InputVoucher: {
     Index: "ادخال مخزني",
     Add: "",
@@ -183,6 +185,7 @@ export default {
     Open: "فتح ملفات الاضبارة"
   },
   Employee: {
+    Name: "اسم الموظف",
     Hr: "الموارد البشرية",
     Title: "الموظف",
     HistoryReport: "كشف ذمة",

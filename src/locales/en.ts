@@ -95,13 +95,15 @@ export default {
     Unit: "Unit Item",
     Category: "Category Item",
     Sum: "Items",
-    Description: "Description"
+    Description: "Description",
+    Choose: "Choose Item"
   },
   Items: "Items",
   ItemAdd: "Add Item",
   InputVoucherNumber: "Number",
   InputVoucherEmployeeRequest: "Employee Request",
   InputVoucherSignaturePerson: "Signature Person",
+
   OutputVoucher: "Output Voucher",
   AddOutputVoucher: "Add Output Voucher",
   UpdateOutputVoucher: "Update Output Voucher",
@@ -182,6 +184,7 @@ export default {
     Open: "Open Documents"
   },
   Employee: {
+    Name: "Employee Name",
     Title: "Employee",
     HistoryReport: "History Report",
     Info: "Employee Info",

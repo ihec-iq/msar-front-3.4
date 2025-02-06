@@ -12,9 +12,10 @@ const props = defineProps({
       {{ title }}
     </div>
     <div
-      class="rounded-md border-2 focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-300 p-2 m-2 font-bold"
+      class="rounded-md border-2 min-h-10 focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-300 p-2 m-2 font-bold"
     >
       <slot></slot>
     </div>
+
   </div>
 </template>
