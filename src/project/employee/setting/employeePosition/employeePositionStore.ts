@@ -27,7 +27,7 @@ export const useEmployeePositionStore = defineStore("EmployeePositionStore", () 
 
       })
       .catch((errors) => {
-        console.log("in get employeeTypes : " + errors);
+        console.log("in get employeePositions : " + errors);
       });
   }
   async function get() {

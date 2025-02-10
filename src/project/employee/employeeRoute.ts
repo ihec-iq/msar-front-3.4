@@ -1,10 +1,12 @@
 import authMiddleware from "@/router/middleware/authMiddleware";
 import EmployeeTypeRoute from "./setting/employeeType/EmployeeTypeRoute";
 import EmployeeCenterRoute from "./setting/employeeCenter/EmployeeCenterRoute";
+import EmployeePositionRoute from "./setting/employeePosition/EmployeePositionRoute";
 
 export default [
   ...EmployeeTypeRoute,
   ...EmployeeCenterRoute,
+  ...EmployeePositionRoute,
   {
     path: "/employees/:search?",
     name: "Employee.Index",

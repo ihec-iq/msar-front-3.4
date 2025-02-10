@@ -4,7 +4,7 @@ const router = useRouter();
 
 const update = (id: number) => {
   router.push({
-    name: "EmployeeTypeUpdate",
+    name: "EmployeePositionUpdate",
     params: { id: id },
   });
 };
