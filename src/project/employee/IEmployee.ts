@@ -7,6 +7,9 @@ import type { IVacationSick } from "../vacation/vacationSick/IVacationSick";
 import type { IVacationTime } from "../vacation/vacationTime/IVacationTime";
 import type { IDegreeStage, IBonusJobTitle, IStudy, ICertificate } from "../bonus/IBonus";
 import type { IDocument } from "../archive/IArchive";
+import type { IEmployeeType } from "./setting/employeeType/IEmployeeType";
+import type { IEmployeeCenter } from "./setting/employeeCenter/IEmployeeCenter";
+import type { IEmployeePosition } from "./setting/employeePosition/IEmployeePosition";
 
 export interface IEmployee {
   id: number;
@@ -105,18 +108,5 @@ export interface IEmployeeFilter {
   checked?: boolean;
   employeeId?: number;
 }
-export interface IEmployeeType {
-  id: number; 
-  name: string; 
-}
-export interface IEmployeeCenter {
-  id: number; 
-  name: string; 
-  code: string; 
-}
-export interface IEmployeePosition {
-  id: number; 
-  name: string; 
-  level: string; 
-  code: string; 
-}
+ 
+  

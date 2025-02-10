@@ -15,6 +15,10 @@ defineProps({
     type: String,
     default: "",
   },
+  caption: {
+    type: String,
+    default: "",
+  },
   showNoData: {
     type: Boolean,
     default: false,
@@ -27,8 +31,8 @@ defineProps({
     <IRowHeader v-if="title" :title="title" />
     <div v-motion :initial="{ opacity: 1, y: -15 }" :enter="{ opacity: 1, y: 0 }" :variants="{ custom: { scale: 5 } }"
       :delay="200" v-if="items.length > 0" class="overflow-auto">
-      <table class="w-full pb-5 mb-10">
-        <caption></caption>
+      <table class="w-full pb-5 mb-20">
+        <caption>{{ caption }}</caption>
         <thead class="dark:bg-tableHead  bg-[#23A559] text-[#fff] shadow">
           <tr>
             <th class="text-lg font-bold   border-r border-gray-400 text-gray-50 dark:text-white py-2"

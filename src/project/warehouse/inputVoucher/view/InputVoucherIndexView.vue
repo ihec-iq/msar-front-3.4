@@ -69,7 +69,6 @@ const getFilterData = async (page = 1) => {
   if (fastSearch.value != "") searchFilter.value.name = fastSearch.value;
   await get_filter(searchFilter.value, page)
     .then((response) => {
-      console.log(response)
       if (response != null && response.status == 200) {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
@@ -97,6 +96,11 @@ onMounted(async () => {
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
 });
+
+
+import { Button } from '@/components/ui/button'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+
 </script>
 <template>
   <IPage :HeaderTitle="t('InputVoucher.Index')" :is-loading="isLoading">
@@ -105,29 +109,25 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- Search Bar -->
+      <Button>Click me</Button>
+      <Alert>
+        <AlertTitle>Heads up!</AlertTitle>
+        <AlertDescription>
+          You can add components to your app using the cli.
+        </AlertDescription>
+      </Alert>
+
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput
-              :label="t('Search')"
-              :placeholder="t('Search')"
-              v-model="fastSearch"
-              :type="EnumInputType.Text"
-              :OnKeyEnter="getFilterData"
-            />
+            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
       <IRow :col="4" :col-lg="4" :col-md="3" :col-sm="1" :col-xs="1">
-        <ICol
-          class="my-2"
-          :span="1"
-          :span-lg="1"
-          :span-md="1"
-          v-for="item in data"
-          :key="item.id"
-        >
+        <ICol class="my-2" :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.id">
           <!-- card -->
           <CardInputVoucherIndex :item="item" />
           <!-- end card -->
@@ -137,22 +137,12 @@ onMounted(async () => {
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-4/5 hidden">
-            <TailwindPagination
-              class="flex justify-center mt-6"
-              :data="dataPage"
-              @pagination-change-page="getFilterData"
-              :limit="searchFilter.limit"
-            />
+            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
           </div>
           <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect
-              :label="t('Limit')"
-              v-model="searchFilter.limit"
-              name="archiveTypeId"
-              :options="limits"
-              :IsRequire="true"
-              @onChange="getFilterData()"
-            />
+            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+              :IsRequire="true" @onChange="getFilterData()" />
           </div>
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>

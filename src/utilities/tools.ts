@@ -65,7 +65,7 @@ export const dateWithoutTime = function (date: string) {
 export const timeWithoutDate = function (date: string) {
   return date ? date.split("T")[0] : ""
 }
-export const ConvertToMoneyFormat = function (number: string) {
+export const ConvertToMoneyFormat = function (number: string | any) {
   return (number).toLocaleString().replace(/,/g, ",",)
 }
 

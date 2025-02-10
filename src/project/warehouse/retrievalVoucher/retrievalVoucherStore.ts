@@ -25,7 +25,8 @@ export const useRetrievalVoucherStore = defineStore("RetrievalVoucherStore", () 
     TypeId: 0,
     Stock: {
       id: 0,
-      name: ""
+      name: "",
+      description : ""
     }
   });
   

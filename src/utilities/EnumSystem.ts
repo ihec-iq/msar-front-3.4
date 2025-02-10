@@ -83,6 +83,10 @@ export enum EnumPermission {
   EditPromotionSetting = "edit promotion setting",
   DeletePromotionSetting = "delete promotion setting",
   HasSectionOnly = "has section only",
+  AddEmployeeSetting = "add employee setting",
+  EditEmployeeSetting = "edit employee setting",
+  DeleteEmployeeSetting = "delete employee setting",
+  ShowEmployeeSetting = "show employee setting",
 }
 export enum EnumDirection {
   RTL = "rtl",

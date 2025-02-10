@@ -1,6 +1,10 @@
 import authMiddleware from "@/router/middleware/authMiddleware";
+import EmployeeTypeRoute from "./setting/employeeType/EmployeeTypeRoute";
+import EmployeeCenterRoute from "./setting/employeeCenter/EmployeeCenterRoute";
 
 export default [
+  ...EmployeeTypeRoute,
+  ...EmployeeCenterRoute,
   {
     path: "/employees/:search?",
     name: "Employee.Index",
@@ -25,6 +29,7 @@ export default [
       middleware: [authMiddleware],
     },
   },
+
   {
     path: "/employee/:id",
     name: "Employee.Update",
@@ -37,6 +42,13 @@ export default [
     path: "/employee/bonus/:id",
     name: "Employee.Update.Info.Bonus",
     component: () => import("./view/EmployeeBonusInfoView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },{
+    path: "/employeeSettingPortal",
+    name: "employeeSettingPortal",
+    component: () => import("./view/EmployeeSettingPortalView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

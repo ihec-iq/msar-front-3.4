@@ -191,6 +191,27 @@
     flex w-full rounded-lg border border-gray-300 shadow-sm shadow-gray-500 
     duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600;
   }
+  .bg-lightInput{
+    @apply bg-gray-300
+  }
+  .text-text{
+
+  }
+  .text-textLight{
+
+  }
+  .bg-sideNavActive{
+
+  }
+  .border-sideNavActiveBorder{
+
+  }
+  .bg-sideNavLightActive{
+
+  }
+  .border-sideNavLightActiveBorder{
+
+  }
   ._input {
     @apply w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight;
   }

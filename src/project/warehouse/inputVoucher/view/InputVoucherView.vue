@@ -43,6 +43,9 @@ const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
 const { item } = storeToRefs(useItemStore());
 const { inputVoucherStates } = storeToRefs(useInputVoucherStateStore());
+import { ConvertToMoneyFormat, makeFormDataFromObject } from "@/utilities/tools";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import IButton2 from "@/components/ihec/IButton2.vue";
 //#endregion
 //#region Validation
 import {
@@ -52,10 +55,6 @@ import {
 } from "@/utilities/Validation";
 import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
-import { makeFormDataFromObject } from "@/utilities/tools";
-import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
-import IButton2 from "@/components/ihec/IButton2.vue";
-import { formatNumber } from "vant/lib/utils";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -520,13 +519,13 @@ const headers = ref<Array<ITableHeader>>([
                 </template>
               </ITable>
             </ICol>
-          </IRow>
-          <IRow>
-            <ICol>
-              <IErrorMessages :validationResult="validationResult" />
-            </ICol>
-          </IRow>
+          </IRow> 
         </IForm>
+        <IRow>
+          <ICol>
+            <IErrorMessages :validationResult="validationResult" />
+          </ICol>
+        </IRow>
       </IContainer>
     </IPageContent>
     <IContainer>
@@ -600,11 +599,11 @@ const headers = ref<Array<ITableHeader>>([
             v-else-if="VoucherItemTemp.Item.name != ''" class="border-2 rounded-md border-dotted border-gray-500">
             <IRow col="4">
               <ICol span="1">
-                <ILabel :title="t('Code')"  >
+                <ILabel :title="t('Code')">
                   {{ VoucherItemTemp.Item.code }}</ILabel>
               </ICol>
               <ICol span="1">
-                <ILabel :title="t('Category')" >
+                <ILabel :title="t('Category')">
                   {{ VoucherItemTemp.Item.Category.name }}</ILabel>
               </ICol>
               <ICol span="1">
@@ -636,9 +635,7 @@ const headers = ref<Array<ITableHeader>>([
               v-model="VoucherItemTemp.price" :min="1" />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-
-
-            <IInput :label="t('Total')" :type="EnumInputType.Number" v-model="VoucherItemTemp.value" />
+            <ILabel :title="t('Total')">{{ ConvertToMoneyFormat(VoucherItemTemp.value) }}</ILabel>
           </ICol>
           <ICol :span="4" span-lg="4" span-xl="1" span-md="1">
             <IInput :label="t('Notes')" :type="EnumInputType.Text" v-model="VoucherItemTemp.notes" />

@@ -2,7 +2,8 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IEmployee, IEmployeeCenter, IEmployeeFilter, IEmployeePosition, IEmployeeType } from "@/project/employee/IEmployee";
+import type { IEmployee, IEmployeeCenter, IEmployeeFilter, IEmployeePosition } from "@/project/employee/IEmployee";
+import type { IEmployeeType } from "./setting/employeeType/IEmployeeType";
 
 export const useEmployeeStore = defineStore("useEmployeeStore", () => {
   const employee = ref<IEmployee>({

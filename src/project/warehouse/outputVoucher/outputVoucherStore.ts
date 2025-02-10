@@ -19,7 +19,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     Items: [],
     signaturePerson: "",
     Employee: { name: "", id: 0 },
-    Stock: { name: "", id: 0 },
+    Stock: { name: "", id: 0, description: '' },
   });
   const outputVouchers = ref<IOutputVoucher[]>([]);
   const outputVoucherStates = ref<IOutputVoucherState[]>([]);
@@ -79,7 +79,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     if (Number(outputVoucher.Items[index]?.id) > 0) {
       return await Api.delete(
         `${pathBase}/outputVoucherItem/delete/` +
-          String(outputVoucher.Items[index]?.id)
+        String(outputVoucher.Items[index]?.id)
       )
         .then((response) => {
           if (response.status == 200) {
@@ -100,7 +100,7 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     outputVoucher.Items = [];
     outputVoucher.signaturePerson = "";
     outputVoucher.Employee = { name: "", id: 0 };
-    outputVoucher.Stock = { name: "", id: 0 };
+    outputVoucher.Stock = { name: "", id: 0, description: ''};
   }
   return {
     outputVoucher,

@@ -1,12 +1,13 @@
 import type { IconLink } from "@/components/fixed/FixedMenu";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { t } from "@/utilities/I18nPlugin";
 
- 
+
 export const EmployeeLinks: Array<IconLink> = [
   {
     routerName: "employeePortal",
     title: "الموارد البشرية",
-    mdi:"mdi-account-group",
+    mdi: "mdi-account-group",
     tab: "employeePortal",
     description: "جميع معلومات الموظفين",
     permissions: [EnumPermission.ShowEmployees],
@@ -22,6 +23,16 @@ export const EmployeeLinks: Array<IconLink> = [
         description: "جميع معلومات الموظفين",
         permissions: [EnumPermission.ShowEmployees],
         isActive: true,
+        children: [
+          {
+            routerName: "EmployeeTypeIndex",
+            title: t('Employee.Type'),
+            mdi:"setting",
+            tab: "employeePortal",
+            description: "",
+            permissions: [EnumPermission.ShowEmployees],
+            isActive: true,
+          },]
       },
       {
         routerName: "hrDocumentIndex",
@@ -56,7 +67,47 @@ export const EmployeeLinks: Array<IconLink> = [
         description: "اضافة الترفيعات للموظفين",
         isActive: true,
         permissions: [EnumPermission.ShowEmployees]
+      },
+      {
+        routerName: "employeeSettingPortal",
+        title: t('Setting.Name'),
+        mdi:"mdi-cog",
+        tab: "employeePortal",
+        description: "",
+        isActive: true,
+        permissions: [EnumPermission.ShowEmployeeSetting],
+        children:[
+          {
+            routerName: "EmployeeTypeIndex",
+            title: t('EmployeeType.Index'),
+            mdi: "mdi-cog",
+            tab: "employeePortal",
+            description: "",
+            isActive: true,
+            permissions: [EnumPermission.ShowEmployeeSetting],
+          },
+          {
+            routerName: "EmployeeCenterIndex",
+            title: t('EmployeeCenter.Index'),
+            mdi: "mdi-cog",
+            tab: "employeePortal",
+            description: "",
+            isActive: true,
+            permissions: [EnumPermission.ShowEmployeeSetting],
+          },
+          {
+            routerName: "EmployeePositionIndex",
+            title: t('EmployeePosition.Index'),
+            mdi: "mdi-cog",
+            tab: "employeePortal",
+            description: "",
+            isActive: true,
+            permissions: [EnumPermission.ShowEmployeeSetting],
+          }   
+        ]
       }
     ]
+
+
   }
 ];

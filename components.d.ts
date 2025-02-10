@@ -9,6 +9,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     _ITable: typeof import('./src/components/ihec/_ITable.vue')['default']
     AdminNav: typeof import('./src/components/general/AdminNav.vue')['default']
+    Alert: typeof import('./src/components/ui/alert/Alert.vue')['default']
+    AlertDescription: typeof import('./src/components/ui/alert/AlertDescription.vue')['default']
+    AlertTitle: typeof import('./src/components/ui/alert/AlertTitle.vue')['default']
     AuroraBackground: typeof import('./src/components/ui/AuroraBackground.vue')['default']
     Back: typeof import('./src/components/general/back.vue')['default']
     BlockButton: typeof import('./src/components/dropDown/BlockButton.vue')['default']

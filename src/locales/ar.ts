@@ -211,9 +211,29 @@ export default {
     Active: "الموظفين النشطين",
     Inactive: "الموظفين الغير نشطين",
   },
+  EmployeeType: {
+    Index: "المكان",
+    Add: "اضافة مكان",
+    Update: "تعديل المكان",
+  },
+  EmployeeCenter: {
+    Index: "المركز",
+    Add: "اضافة مركز",
+    Update: "تعديل المركز",
+  },
+  EmployeePosition: {
+    Index: "المنصب",
+    Add: "اضافة منصب",
+    Update: "تعديل المنصب",
+    Name: "اسم المنصب",
+    Level: "الدرجة الوظيفية",
+    Code: "الرمز الوظيفي",
+  },
+
   Bonus: {
     Index: "العلاوات",
     Add: "اضافة علاوة",
+
     Update: "تعديل علاوة",
     Open: "فتح العلاوات",
     OpenDocuments: "فتح كتب العلاوات",

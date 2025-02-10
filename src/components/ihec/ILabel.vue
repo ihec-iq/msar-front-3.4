@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 <template>
   <div class="w-full">
-    <div class="mb-1 md:text-sm text-base ml-2 mr-2 font-bold dark:text-gray-300">
+    <div class="mb-0 md:text-sm text-base ml-2 mr-2 font-bold dark:text-gray-300">
       {{ title }}
     </div>
     <div
