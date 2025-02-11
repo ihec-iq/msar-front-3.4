@@ -3,7 +3,10 @@ import { Links } from "@/components/fixed/FixedMenu";
 import { t } from "@/utilities/I18nPlugin";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
+import { useAuthStore } from "@/stores/authStore";
+import router from "@/router";
+import { EnumPermission } from "@/utilities/EnumSystem";
 //#region nav menu
 const { UserPermissions } = storeToRefs(usePermissionsStore());
 const filteredLinks = computed(() =>
@@ -16,6 +19,12 @@ const filteredLinks = computed(() =>
   })
 ); 
 //#endregion
+
+const { checkPermissionAccessArray } = usePermissionsStore();
+
+ onMounted(() => {
+  checkPermissionAccessArray([EnumPermission.Dashboard]);
+});
 </script>
 <template>
   <IPage :HeaderTitle="t('Dashboard')">

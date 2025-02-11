@@ -200,12 +200,12 @@ const reset = () => {
   inputVoucherStore.resetData();
 };
 const store = () => {
-  // validationResult.value = validate(inputVoucher.value, rules);
+  validationResult.value = validate(inputVoucher.value, rules);
 
-  // if (!validationResult.value.success) {
-  //   WarningToast(t("ValidationFails"));
-  //   return;
-  // }
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
   errors.value = null;
   const sendData = makeFormDataFromObject(inputVoucher.value);
 
@@ -215,7 +215,7 @@ const store = () => {
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
-          title: "Your item has been saved",
+          title: t("ToastMessages.Success"),
           showConfirmButton: false,
           timer: 1500,
         });
@@ -227,7 +227,7 @@ const store = () => {
       errors.value = inputVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
-        title: "create new data fails!!!",
+        title: t("ToastMessages.Error"),
         text: error.response.data.message,
         footer: "",
       });
@@ -242,26 +242,13 @@ function update() {
   }
   errors.value = null;
   const sendData = makeFormDataFromObject(inputVoucher.value);
-  //#region Old Schema
-  // const formData = new FormData();
-  // formData.append("number", inputVoucher.value.number);
-  // formData.append("notes", inputVoucher.value.notes);
-  // formData.append("date", inputVoucher.value.date);
-  // formData.append("items", JSON.stringify(inputVoucher.value.Items));
-  // formData.append("State", JSON.stringify(inputVoucher.value.State));
-  // formData.append("requestedBy", inputVoucher.value.requestedBy);
-  // formData.append(
-  //   "signaturePerson",
-  //   String(inputVoucher.value.signaturePerson)
-  // );
-  //#endregion
   inputVoucherStore
     .update(inputVoucher.value.id, sendData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
-          title: "Your Item has been updated",
+          title: t("ToastMessages.Success"),
           showConfirmButton: false,
           timer: 1500,
         });
@@ -273,7 +260,7 @@ function update() {
       errors.value = inputVoucherStore.getError(error);
       Swal.fire({
         icon: "error",
-        title: "updating data fails!!!",
+        title: t("ToastMessages.Error"),
         text: error.response.data.message,
         footer: "",
       });

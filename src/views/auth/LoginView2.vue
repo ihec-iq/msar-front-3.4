@@ -71,8 +71,9 @@ const Login = async () => {
     });
   isLoading.value = false;
 };
+const isAuthenticated = storeToRefs(useAuthStore());
 onMounted(async () => {
-  if (authStore.isAuthenticated) router.push({ name: "Dashboard" });
+  if (isAuthenticated) router.push({ name: "Dashboard" });
   await useConfigStore()
     .load()
     .then(() => {

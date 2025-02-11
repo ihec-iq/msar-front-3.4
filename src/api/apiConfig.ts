@@ -51,7 +51,7 @@ const composeErrorHandler = (error : any) => {
     case 401:
       showErrorToast("Your session has expired. Redirecting to the login page.");
       authStore.logout();
-      router.push("/login");
+      //router.push("/login");
       break;
 
     default:
@@ -68,13 +68,13 @@ const handleNetworkErrors = (error : any) => {
     case "ERR_NETWORK":
       showErrorToast("Server connection is unavailable. Please contact technical support.");
       authStore.logout();
-      router.push("/login");
+      //router.push("/login");
       break;
 
     case "ERR_CONNECTION_REFUSED":
       showErrorToast("Connection refused by the server. Redirecting to login.");
       authStore.logout();
-      router.push("/login");
+      //router.push("/login");
       break;
 
     default:

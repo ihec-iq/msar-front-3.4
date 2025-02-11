@@ -6,7 +6,11 @@ export default async function authMiddleware(
   next: NavigationGuardNext
 ) {
   // Perform your authentication logic here
-  await getSecureToken();
+  const token = await getSecureToken();
+  if (token == null) {
+    next({ name: "login" });
+    return;
+  }
   next();
   return;
 }

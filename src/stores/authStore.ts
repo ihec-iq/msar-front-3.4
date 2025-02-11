@@ -145,7 +145,10 @@ export const getSecureToken = async () => {
     key: EnumNameToken.tokenENCRYPT,
     withEncrypt: true,
   });
-  if (!storedData) return null;
+  if (!storedData || storedData == null) {
+    removeUnUsedLogin();
+    return null;
+  }
   try {
     const { token, fingerprint, timestamp } = JSON.parse(storedData.toString());
     // Check token age (e.g., expire after 7 days)

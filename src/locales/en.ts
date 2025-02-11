@@ -204,6 +204,24 @@ export default {
     Update: "Update Employee",
     Store: "Store",
   },
+  EmployeeType: {
+    Index: "Employee Type",
+    Add: "Add Employee Type",
+    Update: "Update Employee Type",
+  },
+  EmployeeCenter: {
+    Index: "Employee Center",
+    Add: "Add Employee Center",
+    Update: "Update Employee Center",
+  },
+  EmployeePosition: {
+    Index: "Employee Position",
+    Add: "Add Employee Position",
+    Update: "Update Employee Position",
+    Name: "Employee Position Name",
+    Level: "Employee Position Level",
+    Code: "Employee Position Code",
+  },
   Bonus: {
     Index: "Bonuses",
     Add: "Add Bonuses",
