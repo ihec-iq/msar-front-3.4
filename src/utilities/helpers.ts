@@ -11,6 +11,7 @@ export const getError = (error: {
   if (typeof error === 'object') {
     if (!error.response) {
       console.error(`API ${error.config} not found`);
+      window.location.reload();
       return errorMessage;
     }
     if (process.env.NODE_ENV === "development") {

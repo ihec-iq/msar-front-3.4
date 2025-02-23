@@ -80,6 +80,8 @@ declare module 'vue' {
     'ParticleImage copy': typeof import('./src/components/ui/ParticleImage/ParticleImage copy.vue')['default']
     PopSetting: typeof import('./src/components/fixed/PopSetting.vue')['default']
     RadiantText: typeof import('./src/components/ui/RadiantText.vue')['default']
+    RadioGroup: typeof import('./src/components/ui/radio-group/RadioGroup.vue')['default']
+    RadioGroupItem: typeof import('./src/components/ui/radio-group/RadioGroupItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SettingsComponent: typeof import('./src/components/fixed/SettingsComponent.vue')['default']

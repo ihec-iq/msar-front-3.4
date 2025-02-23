@@ -1,6 +1,7 @@
 export default {
   Check: "Check",
   Logout: "Logout",
+  notFound: "Not Found",
   SearhFilter: { enableDateFilter: "Enable Date Filter" },
   Warehouse: {
     Index: "Warehouse System",

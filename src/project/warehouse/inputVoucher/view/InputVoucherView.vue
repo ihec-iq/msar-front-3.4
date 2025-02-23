@@ -336,7 +336,7 @@ onMounted(async () => {
   Loading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowInputVouchers]);
   await useInputVoucherStateStore().get_inputVoucherStates();
-  await inputVoucherStore.getEmployees();
+  //await inputVoucherStore.getEmployees();
   if (Number.isNaN(id.value) || id.value === undefined) {
     inputVoucher.value.id = 0;
   } else {

@@ -1,6 +1,7 @@
 export default {
   Check: "تحقق",
   Logout: "تسجيل الخروج",
+  notFound : "لا يوجد",
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
   Warehouse: {
     Index: "نظام المخازن",

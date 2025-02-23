@@ -169,7 +169,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       Items: [],
       signaturePerson: "",
       requestedBy: "",
-      Stock: { name: "", id: 0, description: "" },
+      Stock: { name: "", id: 1, description: "" },
     };
   }
   return {

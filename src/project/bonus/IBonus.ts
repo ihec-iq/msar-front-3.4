@@ -38,13 +38,14 @@ export interface IBonusEmployeeChecker {
   stage: string;
   degree: string;
   salary: string;
+  notesBonus : string;
   degreeStageNext: string;
   stageNext: string;
   degreeNext: string;
   salaryNext: string;
   notes: string;
   notesNext: string;
-  lastBonus: IBonusChecker;
+  lastBonus?: IBonusChecker;
 }
 export interface IBonusChecker {
   id: number;

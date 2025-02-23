@@ -266,9 +266,9 @@ const getFiles = async (page = 1, employeeId: number = 0) => {
   //searchFilter.value.title = fastSearch.value.toString();
   await useHrDocumentStore()
     .get_filter(searchDocumentFilter.value, page)
-    .then((response) => {console.log(response);
+    .then((response) => {
+      console.log(response);
       if (response.status == 200 && response.data.data) {
-        console.log(response.data.data.data);
         dataBaseFiles.value = response.data.data.data;
       }
     })
@@ -338,13 +338,13 @@ const openFileHrDocument = (id: number) => {
             :span-lg="3"
             :span-md="3"
             :span="1"
-            class="flex items-center justify-center"
+            class="flex items-center justify-center" v-if="data.length > 0"
           >
             <IButton :onClick="printAll" :text="t('Print')" />
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow id="PrintArea hidden">
+      <IRow id="PrintArea ">
         <div id="printMe" class="[print-color-adjust:exact] p-1 hidden">
           <div class="overflow-auto">
             <div
@@ -509,7 +509,8 @@ const openFileHrDocument = (id: number) => {
                     <div
                       class="inline-block w-[165px] align-top h-full border-r-2 border-b-2 border-black"
                     >
-                      {{ row.lastBonus.notes }}
+                      
+                      {{ Number(row.lastBonus?.notes.length)>1 ? row.lastBonus?.notes : t('notFound') }}
                     </div>
                   </td>
                   <td class="p-0 m-0 align-top">
