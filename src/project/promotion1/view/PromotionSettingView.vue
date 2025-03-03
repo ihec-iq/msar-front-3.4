@@ -12,7 +12,6 @@ import { useSettingStore } from "@/project/core/settingStore";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import type { ISetting } from "@/project/core/ISetting";
 import IPage from "@/components/ihec/IPage.vue";
-import { showSuccessToast } from "vant";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 

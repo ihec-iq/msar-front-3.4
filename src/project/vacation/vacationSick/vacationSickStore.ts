@@ -42,8 +42,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         },
         EmployeeCenter: {
           id: 0,
-          name: "",
-          code: ""
+          name: ""
         }
       },
       record: 0,
@@ -104,8 +103,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         },
         EmployeeCenter: {
           id: 0,
-          name: "",
-          code: ""
+          name: ""
         }
       },
       record: 0,

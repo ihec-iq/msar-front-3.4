@@ -6,14 +6,6 @@
   --primaryLight: #d0d0d0;
   --secondaryLight: #92969a;
   --secondaryHoverLight: #818181;
-
-  /* vant dropDown reset */
-  --van-collapse-item-content-background-color: none;
-  --van-cell-background-color: none;
-  --van-cell-active-color: none;
-  --van-cell-horizontal-padding: 12px;
-  --van-collapse-item-content-padding: 0px 10px;
-  /* vant */
 }
 
 .accordion-button::after {

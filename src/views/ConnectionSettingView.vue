@@ -14,7 +14,7 @@ import { useConfigStore } from "@/stores/configStore";
 import { ref, getCurrentInstance, onMounted } from "vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
-const { ConnectionString, Organization } = storeToRefs(useConfigStore());
+const { Config } = storeToRefs(useConfigStore());
 const { is } = storeToRefs(rtlStore);
 
 //region""
@@ -68,7 +68,7 @@ const back = () => {
 };
 const store = async () => {
   await useConfigStore()
-    .store(String(ConnectionString.value), String(Organization.value))
+    .store(String(Config.value.connectionString), String(Config.value.organization))
     .then(() => {
       Swal.fire({
         icon: "success",
@@ -86,7 +86,7 @@ const successConnection = ref(0);
 const checkConnection = async () => {
   successConnection.value = 1;
   await useConfigStore()
-    .checkConnection(String(ConnectionString.value))
+    .checkConnection(String(Config.value.connectionString))
     .then((response) => {
       const success: Boolean = Boolean(response);
       if (success) {
@@ -106,11 +106,11 @@ onMounted(async () => {
   await useConfigStore()
     .load()
     .then(() => {
-      if (ConnectionString.value == null || ConnectionString.value == "") {
-        ConnectionString.value = envConfig._baseURL;
+      if (Config.value.connectionString == null || Config.value.connectionString == "") {
+        Config.value.connectionString = envConfig._baseURL;
       }
-      if (Organization.value == null || Organization.value == "") {
-        Organization.value = "المفوضية العليا المستقلة للانتخابات";
+      if (Config.value.organization == null || Config.value.organization == "") {
+        Config.value.organization = "المفوضية العليا المستقلة للانتخابات";
       }
     });
 });
@@ -128,7 +128,7 @@ onMounted(async () => {
         </div>
         <div class="flex">
           <input
-            v-model="ConnectionString"
+            v-model="Config.connectionString"
             type="text"
             class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
           />
@@ -170,7 +170,7 @@ onMounted(async () => {
           {{ t("Organization") }}
         </div>
         <input
-          v-model="Organization"
+          v-model="Config.organization"
           type="text"
           class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
         />

@@ -327,13 +327,3 @@ li:hover > button svg {
   min-width: 8rem;
 }
 </style>
-<!-- vant drop down need to css edits -->
-<!-- <li>
-            <van-collapse v-model="activeNames">
-              <van-collapse-item title="Financial" name="1">
-                Check Out</van-collapse-item
-              >
-            </van-collapse>
-          </li> -->
-<!-- end vant -->
-@/stores/permissionStore@/project/user/permissionStore

@@ -43,8 +43,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
         },
         EmployeeCenter: {
           id: 0,
-          name: "",
-          code: ""
+          name: ""
         }
       },
       id: 0,
@@ -92,8 +91,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       },
       EmployeeCenter: {
         id: 0,
-        name: "",
-        code: ""
+        name: ""
       }, 
       isChecked: false
     },
@@ -140,8 +138,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
         },
         EmployeeCenter: {
           id: 0,
-          name: "",
-          code: ""
+          name: ""
         }
       },
       id: 0,
@@ -188,8 +185,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       },
       EmployeeCenter: {
         id: 0,
-        name: "",
-        code: ""
+        name: ""
       },
       isChecked: false
     };

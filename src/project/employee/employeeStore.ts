@@ -2,8 +2,10 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IEmployee, IEmployeeCenter, IEmployeeFilter, IEmployeePosition } from "@/project/employee/IEmployee";
+import type { IEmployee, IEmployeeFilter } from "@/project/employee/IEmployee";
 import type { IEmployeeType } from "./setting/employeeType/IEmployeeType";
+import type { IEmployeePosition } from "./setting/employeePosition/IEmployeePosition";
+import type { IEmployeeCenter } from "./setting/employeeCenter/IEmployeeCenter";
 
 export const useEmployeeStore = defineStore("useEmployeeStore", () => {
   const employee = ref<IEmployee>({
@@ -35,8 +37,7 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
     isMoveSection: 0,
     EmployeeCenter: {
       id: 0,
-      name: "",
-      code: ""
+      name: ""
     },
     BonusJobTitle: {
       id: 0,
@@ -116,8 +117,7 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
       },
       EmployeeCenter: {
         id: 0,
-        name: "",
-        code: ""
+        name: ""
       },
       BonusJobTitle: {
         id: 0,

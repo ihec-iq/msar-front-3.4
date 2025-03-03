@@ -13,7 +13,7 @@ import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
 import SimpleLoading from "@/components/general/SimpleLoading.vue";
 import CardContainer from "@/components/ui/card-3d/CardContainer.vue";
-const { ConnectionString } = storeToRefs(useConfigStore());
+const { Config } = storeToRefs(useConfigStore());
 
 const version = (import.meta as any).env.VITE_APP_VERSION; // Get the version from package.json
 const loginForm = reactive<{
@@ -76,7 +76,7 @@ onMounted(async () => {
   await useConfigStore()
     .load()
     .then(() => {
-      if (ConnectionString.value == null || ConnectionString.value == "") {
+      if (Config.value.connectionString == null || Config.value.connectionString == "") {
         const swalWithBootstrapButtons = Swal.mixin({
           customClass: {
             confirmButton: "btn m-2 bg-red-700",

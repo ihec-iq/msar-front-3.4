@@ -98,8 +98,6 @@ onMounted(async () => {
 });
 
 
-import { Button } from '@/components/ui/button'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 </script>
 <template>
@@ -109,13 +107,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <Button>Click me</Button>
-      <Alert>
-        <AlertTitle>Heads up!</AlertTitle>
-        <AlertDescription>
-          You can add components to your app using the cli.
-        </AlertDescription>
-      </Alert>
+      
 
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">

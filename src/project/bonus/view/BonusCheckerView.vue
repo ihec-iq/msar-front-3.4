@@ -344,8 +344,8 @@ const openFileHrDocument = (id: number) => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow id="PrintArea ">
-        <div id="printMe" class="[print-color-adjust:exact] p-1 hidden">
+      <IRow id="PrintArea" class="hidden">
+        <div id="printMe" class="[print-color-adjust:exact] p-1">
           <div class="overflow-auto">
             <div
               class="flex items-center content-center justify-center text-md font-bold w-[1040px] border-black border-x-2 border-t-2"

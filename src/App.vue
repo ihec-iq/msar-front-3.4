@@ -6,7 +6,7 @@ import { useAuthStore } from "@/stores/authStore";
 //import { usePermissionsStore } from "@/project/core/permissionStore";
 import Api from "./api/apiConfig";
 import { useConfigStore } from "@/stores/configStore";
-const { ConnectionString } = storeToRefs(useConfigStore());
+const { Config } = storeToRefs(useConfigStore());
 
 // const { getUser } = useAuthStore();
 // const { setPermissions } = usePermissionsStore();
@@ -36,7 +36,7 @@ document.onkeydown = function (s) {
 // htmlEl?.setAttribute("data-theme", "cupcake");
 onMounted(async () => {
   await useConfigStore().load();
-  Api.defaults.baseURL = String(ConnectionString.value);
+  Api.defaults.baseURL = String(Config.value.connectionString);
 
   useAuthStore().CheckAuth();
   //const user = await getUser();

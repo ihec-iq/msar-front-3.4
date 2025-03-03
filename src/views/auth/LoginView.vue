@@ -44,7 +44,7 @@ const changeDark = () => {
   themeDark.value = !themeDark.value;
   toggleDark(themeDark.value);
 };
-const { ConnectionString } = storeToRefs(useConfigStore());
+const { Config } = storeToRefs(useConfigStore());
 interface ILogin {
   email: string;
   password: string;
@@ -97,7 +97,7 @@ onMounted(async () => {
   await useConfigStore()
     .load()
     .then(() => {
-      if (ConnectionString.value == null || ConnectionString.value == "") {
+      if (Config.value.connectionString == null ||  Config.value.connectionString == "") {
         const swalWithBootstrapButtons = Swal.mixin({
           customClass: {
             confirmButton: "btn m-2 bg-red-700",

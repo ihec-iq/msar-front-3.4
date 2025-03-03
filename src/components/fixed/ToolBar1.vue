@@ -9,7 +9,7 @@ import { t } from "@/utilities/I18nPlugin";
 const route = useRoute();
 import { useConfigStore } from "@/stores/configStore";
 import PopSetting from "./PopSetting.vue";
-const { Organization } = storeToRefs(useConfigStore());
+const { Config } = storeToRefs(useConfigStore());
 
 //#region Theme Setting
 let isDark = useDark();
@@ -67,7 +67,7 @@ onMounted(async () => {
     <div class="flex items-center">
       <div class="text-gray-500 text-2xl rtl:mr-2 ltr:ml-2"><!-- # --></div>
       <div class="text-sm text-text dark:text-textLight">
-        {{ Organization }}
+        {{ Config.organization }}
       </div>
   </div>
   <div class="relative w-56 duration-500 ease-in-out max-w-md mx-auto" :class="{ 'lg:w-[700px] xs:w-56': searchInput }">

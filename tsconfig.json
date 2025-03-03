@@ -28,6 +28,6 @@
   },
   "include": [
     "src/**/*",
-    "package.json" // <---
-, "automateWhatsApp.js"  ]
+    "package.json"
+   ]
 }
