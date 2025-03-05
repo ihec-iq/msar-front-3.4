@@ -387,7 +387,7 @@ const headers = ref<Array<ITableHeader>>([
                 :type="EnumInputType.Text" />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('Date')" name="InputVoucherNumber" v-model="retrievalVoucher.date"
+              <IInput :label="t('Date')" name="InputVoucher.Number" v-model="retrievalVoucher.date"
                 :type="EnumInputType.Date" />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
@@ -407,7 +407,7 @@ const headers = ref<Array<ITableHeader>>([
               </vSelect>
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('InputVoucherSignaturePerson')" name="InputVoucherNumer"
+              <IInput :label="t('SignaturePerson')" name="InputVoucherNumer"
                 v-model="retrievalVoucher.signaturePerson" :type="EnumInputType.Text" />
             </ICol>
           </IRow>

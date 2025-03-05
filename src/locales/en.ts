@@ -52,6 +52,18 @@ export default {
     State: "State",
     Number: "Number"
   },
+  OutputVoucher: {
+    Add: "اضافة سند الاخراج المخزني",
+    Update: "تعديل سند الاخراج المخزني",
+    Index: "الاخراج المخزني",
+    DateBill: "تاريخ الطلبية",
+    Date: "تاريخ",
+    NumberBill: "رقم الطلبية",
+    Number: "الرقم",
+    State: "من قبل",
+  },
+  SignaturePerson: "توقيع الموظف",
+  EmployeeRequest: "طلبت من",
   noData: "No Data !!!",
 
   ID: "ID",
@@ -101,18 +113,7 @@ export default {
   },
   Items: "Items",
   ItemAdd: "Add Item",
-  InputVoucherNumber: "Number",
-  InputVoucherEmployeeRequest: "Employee Request",
-  InputVoucherSignaturePerson: "Signature Person",
-
-  OutputVoucher: "Output Voucher",
-  AddOutputVoucher: "Add Output Voucher",
-  UpdateOutputVoucher: "Update Output Voucher",
-  OutputVoucherSignaturePerson: "Signature Person",
-  OutputVoucherNumber: "Voucher Number",
-  OutputVoucherEmployeeRequest: "Employee Request",
-  OutputVoucherEmployeeAlter: "Employee Alter",
-
+  InputVoucherNumber: "Number", 
   NumberVoucher: "Number Voucher",
   AvailableInStock: "Available",
   RecordDaily: "Days",

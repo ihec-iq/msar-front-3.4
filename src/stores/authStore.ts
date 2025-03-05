@@ -161,6 +161,8 @@ export const getSecureToken = async () => {
 
     // Verify browser fingerprint
     if (fingerprint !== generateBrowserFingerprint()) {
+      console.log("Fingerprint stored:", fingerprint);
+      console.log("Fingerprint current:", generateBrowserFingerprint());
       console.log("Fingerprint mismatch");
       removeUnUsedLogin();
       return null;
@@ -173,7 +175,6 @@ export const getSecureToken = async () => {
     return null;
   }
 };
-
 // Generate a unique browser fingerprint
 export const generateBrowserFingerprint = () => {
   return CryptoJS.MD5(

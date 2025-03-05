@@ -292,7 +292,7 @@ const headers = ref<Array<ITableHeader>>([
                   <div
                     class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                   >
-                    {{ t("InputVoucherSignaturePerson") }}
+                    {{ t("SignaturePerson") }}
                     <input
                       v-model="RetrievalVoucher.signaturePerson"
                       type="text"
@@ -304,7 +304,7 @@ const headers = ref<Array<ITableHeader>>([
                   <div
                     class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                   >
-                    {{ t("InputVoucherEmployeeRequest") }}
+                    {{ t("EmployeeRequest") }}
 
                     <select
                       v-model="RetrievalVoucher.requestEmployeeId"

@@ -58,13 +58,14 @@ import {
 } from "@/utilities/Validation";
 import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import ISelect from "@/components/inputs/ISelect.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
-  { field: "number", caption: t("InputVoucherNumber"), rules: [required()] },
+  { field: "number", caption: t("InputVoucher.Number"), rules: [required()] },
   // {
   //   field: "Employee",
   //   caption: t("OutputVoucherEmployeeRequest"),
@@ -81,7 +82,7 @@ const rules: Array<IFieldValidation> = [
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref("InputVoucherAdd");
+const namePage = ref("InputVoucher.Add");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
@@ -359,7 +360,7 @@ const handleEnter = (event: KeyboardEvent) => {
     (option: IItem) => option.name === enteredValue
   );
   if (matchingOption === undefined && enteredValue.length > 0) {
-    IsAddItem.value=!IsAddItem.value;
+    IsAddItem.value = !IsAddItem.value;
     //let btn = document.getElementById("my_modal_7");
     item.value.name = enteredValue;
     item.value.code = "";
@@ -393,7 +394,7 @@ function clearSelected(event: { target: { value: string } }) {
     };
   }
 }
-const  IsAddItem= ref(false);
+const IsAddItem = ref(false);
 const setItemFromChild = (_item: IItem) => {
   //console.log(_item);
   _item.code = "";
@@ -429,64 +430,64 @@ const headers = ref<Array<ITableHeader>>([
       <IContainer>
         <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="1" span-md="2" span-sm="1">
+            <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
               <IInput
+              class="w-[50%]"
                 :label="t('InputVoucher.Number')"
                 name="InputVoucher.Number"
                 v-model="inputVoucher.number"
                 :type="EnumInputType.Text"
               />
-            </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
               <IInput
+              class="w-[50%]"
                 :label="t('Date')"
                 name="InputVoucher.Date"
                 v-model="inputVoucher.date"
                 :type="EnumInputType.Date"
               />
             </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
+            <!-- <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('InputVoucher.DateReceive')"
                 name="InputVoucher.DateReceive"
                 v-model="inputVoucher.dateReceive"
                 :type="EnumInputType.Date"
               />
-            </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
+            </ICol> -->
+            <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
               <IInput
+                class="w-[50%]"
+                :label="t('InputVoucher.NumberBill')"
+                name="InputVoucher.NumberBill"
+                v-model="inputVoucher.numberBill"
+                :type="EnumInputType.Text"
+              />
+              <IInput
+                class="w-[50%]"
                 :label="t('InputVoucher.DateBill')"
                 name="InputVoucherNumer"
                 v-model="inputVoucher.dateBill"
                 :type="EnumInputType.Date"
               />
             </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
-              <IInput
-                :label="t('InputVoucher.NumberBill')"
-                name="InputVoucher.NumberBill"
-                v-model="inputVoucher.numberBill"
-                :type="EnumInputType.Text"
-              />
-            </ICol>
-            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-              <div class="mb-2">
-                <label class="_inputLabel">
-                  <span class="text-red-600">*</span> {{ t("Stock") }}
-                </label>
-                <select v-model="inputVoucher.Stock" class="_input">
-                  <option
-                    v-for="stock in stocks"
-                    :key="stock.id"
-                    :value="stock"
-                  >
-                    {{ stock.name }}
-                  </option>
-                </select>
-              </div>
-            </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
+            <ICol
+              :span="1"
+              span-lg="1"
+              span-xl="1"
+              span-md="1"
+              class="flex flex-row"
+            >
               <ISelect
+                class="w-[50%]"
+                :label="t('Stock')"
+                v-model="inputVoucher.Stock"
+                name="inputVoucherStockId"
+                :options="stocks"
+                :IsRequire="true"
+              >
+              </ISelect>
+              <ISelect
+                class="w-[50%]"
                 :label="t('InputVoucher.State')"
                 v-model="inputVoucher.State.id"
                 name="inputVoucherStateId"
@@ -496,7 +497,7 @@ const headers = ref<Array<ITableHeader>>([
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
-                :label="t('InputVoucherEmployeeRequest')"
+                :label="t('EmployeeRequest')"
                 name="InputVoucherNumer"
                 v-model="inputVoucher.requestedBy"
                 :type="EnumInputType.Text"
@@ -504,7 +505,7 @@ const headers = ref<Array<ITableHeader>>([
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
-                :label="t('InputVoucherSignaturePerson')"
+                :label="t('SignaturePerson')"
                 name="InputVoucherNumer"
                 v-model="inputVoucher.signaturePerson"
                 :type="EnumInputType.Text"
@@ -649,16 +650,21 @@ const headers = ref<Array<ITableHeader>>([
                 :type="EnumButtonType.Outlined"
               />
               <IButton
+                v-if="!IsAddItem"
                 class="h-full"
                 :text="t('Add')"
-                :onClick="()=>{IsAddItem=!IsAddItem}"
+                :onClick="
+                  () => {
+                    IsAddItem = !IsAddItem;
+                  }
+                "
                 post-icon="add"
                 color="blue"
                 :type="EnumButtonType.Outlined"
               />
             </div>
             <AddItemPopup
-              @setItem="setItemFromChild" 
+              @setItem="setItemFromChild"
               v-model="IsAddItem"
             ></AddItemPopup>
           </ICol>

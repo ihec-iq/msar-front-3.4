@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import envConfig from "@/api/envConfig";
+import axios from "axios";
 
 interface ConfigState {
   organization: string | null;
@@ -60,9 +61,8 @@ export const useConfigStore = defineStore("ConfigStore", () => {
    */
   const checkConnection = async (server: string): Promise<boolean> => {
     try {
-      const response = await Api.get(`${server}/check`);
-      return response.status === 200 && 
-             response.data.state === "ERP MSAR API running...";
+      const response = await axios.get(`${server}/check`);
+      return response.status === 200 && response.data.state === "ERP MSAR API running...";
     } catch (error) {
       console.error("Connection check failed:", error);
       return false;
@@ -95,7 +95,6 @@ export const useConfigStore = defineStore("ConfigStore", () => {
   return {
     // Expose state properties
     Config,
-    
     // Actions
     store,
     checkConnection,

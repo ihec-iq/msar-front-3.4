@@ -1,32 +1,39 @@
 import { t } from "@/utilities/I18nPlugin";
 export const getError = (error: {
-  response: {
-    data: { errors: { [s: string]: unknown } | ArrayLike<unknown> };
-    status: any;
-    headers: any;
-  };
+  data: { [s: string]: unknown } |
+  { code: string; message: string } |
+  ArrayLike<unknown> |
+  string;
+
+  status: any;
+  headers: any;
   config: { url: any };
-} | string) => {
-  const errorMessage = t("Server is down, please try again.");
+}
+  | string
+) => {
+  if (process.env.NODE_ENV === "development") {
+    console.error(error);
+  }
+  let errorMessage = t("Server is down, please try again.");
   if (typeof error === 'object') {
-    if (!error.response) {
+    if (!error.data) {
       console.error(`API ${error.config} not found`);
-      window.location.reload();
+      //window.location.reload(); 
       return errorMessage;
     }
-    if (process.env.NODE_ENV === "development") {
-      console.error(error.response.data);
-      console.error(error.response.status);
-      console.error(error.response.headers);
+    if (typeof error.data === 'object' && 'message' in error.data) {
+      errorMessage = error.data.message as string;
     }
-    if (error.response.data && error.response.data.errors) {
-      return Object.values(error.response.data.errors).flat().join();
+    else if (typeof error.data === 'object') {
+      errorMessage = Object.values(error.data).flat().join();
+    } else if (typeof error.data === 'string') {
+      errorMessage = error.data;
     }
   } else {
     window.location.reload();
-    return error; 
+    return error;
   }
-  
+
 
   return errorMessage;
 };

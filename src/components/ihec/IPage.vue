@@ -28,7 +28,7 @@ const reloadPage = () => {
 </script>
 
 <template>
-  <div class="mx-auto p-3 m-3 w-[99%]">
+  <div class="mx-auto p-3 m-3 w-[99%] border-[1px] rounded-md">
 
 
     <div

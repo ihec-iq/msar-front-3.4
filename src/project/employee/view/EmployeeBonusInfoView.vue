@@ -86,7 +86,7 @@ let validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "Section",
-    caption: t("InputVoucherNumber"),
+    caption: t("InputVoucher.Number"),
     rules: [required()],
   },
   // {

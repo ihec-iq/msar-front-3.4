@@ -425,7 +425,7 @@ onMounted(async () => {
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
-                :label="t('InputVoucherSignaturePerson')"
+                :label="t('SignaturePerson')"
                 name="InputVoucherNumer"
                 v-model="directVoucher.signaturePerson"
                 type="text"
