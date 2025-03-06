@@ -97,7 +97,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('OutputVoucher')">
+  <IPage :HeaderTitle="t('OutputVoucher.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>

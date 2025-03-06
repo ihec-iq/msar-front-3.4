@@ -82,7 +82,7 @@ const rules: Array<IFieldValidation> = [
 
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref("InputVoucher.Add");
+const namePage = ref("InputVoucher.Index");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
@@ -342,7 +342,7 @@ onMounted(async () => {
   } else {
     inputVoucher.value.id = id.value;
     await showData(id.value);
-    namePage.value = "InputVoucherUpdate";
+    namePage.value = "InputVoucher.Update";
   }
   await useStockStore().get_stocks();
   await refreshItems();
@@ -397,9 +397,9 @@ function clearSelected(event: { target: { value: string } }) {
 const IsAddItem = ref(false);
 const setItemFromChild = (_item: IItem) => {
   //console.log(_item);
-  _item.code = "";
-  _item.description = "";
-  _item.measuringUnit = "";
+  // _item.code = "";
+  // _item.description = "";
+  // _item.measuringUnit = "";
   VoucherItemTemp.value.Item = _item;
 };
 const headers = ref<Array<ITableHeader>>([
@@ -480,7 +480,7 @@ const headers = ref<Array<ITableHeader>>([
               <ISelect
                 class="w-[50%]"
                 :label="t('Stock')"
-                v-model="inputVoucher.Stock"
+                v-model="inputVoucher.Stock.id"
                 name="inputVoucherStockId"
                 :options="stocks"
                 :IsRequire="true"

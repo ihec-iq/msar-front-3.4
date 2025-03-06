@@ -13,9 +13,20 @@ export const getError = (error: {
 ) => {
   if (process.env.NODE_ENV === "development") {
     console.error(error);
-  }
+  } 
   let errorMessage = t("Server is down, please try again.");
-  if (typeof error === 'object') {
+  if (typeof error === 'object') { 
+    if (error.status === 401) {
+      return t("ResponseError.401");
+    } else if (error.status === 403) {
+      return t("ResponseError.403");
+    } else if (error.status === 404) {
+      return t("ResponseError.404");
+    } else if (error.status === 500) {
+      return t("ResponseError.500");
+    } else if (error.status === 422) {
+      return t("ResponseError.422");
+    }
     if (!error.data) {
       console.error(`API ${error.config} not found`);
       //window.location.reload(); 

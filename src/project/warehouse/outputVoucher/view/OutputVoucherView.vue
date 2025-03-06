@@ -345,6 +345,8 @@ const showData = async (id: number) => {
         outputVoucher.value.Items = response.data.data.Items;
         outputVoucher.value.Employee = response.data.data.Employee;
         outputVoucher.value.Stock = response.data.data.Stock;
+        outputVoucher.value.numberBill = response.data.data.numberBill;
+        outputVoucher.value.dateBill = response.data.data.dateBill;
         outputVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
       }
@@ -367,7 +369,6 @@ const { stocks } = storeToRefs(useStockStore());
 
 onMounted(async () => {
   Loading.value = true;
-
   checkPermissionAccessArray([EnumPermission.ShowOutputVouchers]);
   await outputVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -377,7 +378,7 @@ onMounted(async () => {
   } else {
     outputVoucher.value.id = id.value;
     await showData(id.value);
-    namePage.value = "UpdateOutputVoucher";
+    namePage.value = "OutputVoucher.Update";
   }
   await useStockStore().get_stocks();
   await useInputVoucherStore().getAvailableItemsVSelect();
@@ -385,7 +386,6 @@ onMounted(async () => {
 });
 const ChangeStock = async () => {
   Loading.value = true;
-
   await useInputVoucherStore()
     .getAvailableItemsVSelect(outputVoucher.value.Stock.id.toString())
     .then(() => {
@@ -420,51 +420,69 @@ const headers = ref<Array<ITableHeader>>([
       <IContainer>
         <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="1" span-md="2" span-sm="1">
+            <ICol span="1" span-md="2" span-sm="1" class="flex flex-wrap">
               <IInput
                 :label="t('OutputVoucher.Number')"
+                class="w-[50%]"
                 name="Number"
                 v-model="outputVoucher.number"
                 :type="EnumInputType.Text"
               />
-            </ICol>
-            <ICol span="1" span-md="2" span-sm="1" class="flex flex-wrap">
               <IInput
                 :label="t('Date')"
                 class="w-[50%]"
-                name="InputVoucherNumer"
+                name="OutputVoucherDate"
                 v-model="outputVoucher.date"
                 :type="EnumInputType.Date"
+              />
+            </ICol>
+            <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
+              <IInput
+                class="w-[50%]"
+                :label="t('InputVoucher.NumberBill')"
+                name="OutputVoucher.NumberBill"
+                v-model="outputVoucher.numberBill"
+                :type="EnumInputType.Text"
               />
               <IInput
                 class="w-[50%]"
                 :label="t('OutputVoucher.DateBill')"
-                name="InputVoucherNumer"
+                name="OutputVoucherNumer"
                 v-model="outputVoucher.dateBill"
                 :type="EnumInputType.Date"
               />
             </ICol>
-
-            <ICol span="1" span-md="2" span-sm="1">
-              <div
-                class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              >
-                {{ t("EmployeeRequest") }}
-              </div>
-              <vSelect
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="outputVoucher.Employee"
-                :options="outputVoucherEmployees"
-                :reduce="(employee: IEmployee) => employee"
-                label="name"
-                :getOptionLabel="(employee: IEmployee) => employee.name"
-              >
-                <template #option="{ name }">
-                  <div>
-                    <span>{{ name }}</span>
-                  </div>
-                </template>
-              </vSelect>
+            <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
+              <div class="w-[50%]">
+                <div
+                  class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
+                  {{ t("EmployeeRequest") }}
+                </div>
+                <vSelect
+                  class="w-full outline-none focus:border-gray-800 h-10 mt-1 px-3 py-1 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="outputVoucher.Employee"
+                  :options="outputVoucherEmployees"
+                  :reduce="(employee: IEmployee) => employee"
+                  label="name"
+                  :getOptionLabel="(employee: IEmployee) => employee.name"
+                >
+                  <template #option="{ name }">
+                    <div>
+                      <span>{{ name }}</span>
+                    </div>
+                  </template>
+                </vSelect>
+              </div> 
+              <!-- @change="ChangeStock()" -->
+              <ISelect
+                class="w-[50%]"
+                :label="t('Stock')"
+                v-model="outputVoucher.Stock.id"
+                name="inputVoucherStockId"
+                :options="stocks"
+                :IsRequire="true"
+              ></ISelect>
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
@@ -476,26 +494,6 @@ const headers = ref<Array<ITableHeader>>([
             </ICol>
           </IRow>
           <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-              <div class="mb-2">
-                <label class="_inputLabel">
-                  <span class="text-red-600">*</span> {{ t("Stock") }}
-                </label>
-                <select
-                  v-model="outputVoucher.Stock"
-                  class="_input"
-                  @change="ChangeStock()"
-                >
-                  <option
-                    v-for="stock in stocks"
-                    :key="stock.id"
-                    :value="stock"
-                  >
-                    {{ stock.name }}
-                  </option>
-                </select>
-              </div>
-            </ICol>
             <ICol span="3">
               <IInput
                 :label="t('Notes')"

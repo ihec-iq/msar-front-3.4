@@ -232,16 +232,11 @@ const showData = async () => {
 };
 //#endregion
 const back = () => {
-  router.push({
-    name: "Employee.Index",
-  });
+  router.push({ name: "Employee.Index" });
 };
 const ShowUser = () => {
   let userId = employee.value.User?.id;
-  router.push({
-    name: "userUpdate",
-    params: { id: userId },
-  });
+  router.push({ name: "userUpdate", params: { id: userId } });
 };
 const isLoading = ref(false);
 onMounted(async () => {
@@ -346,40 +341,22 @@ const headerBonus = ref<Array<ITableHeader>>([
   { caption: t("Date"), value: "issueDate" },
 ]);
 const openFileHrDocument = (id: number) => {
-  router.push({
-    name: "hrDocumentUpdate",
-    params: { id: id },
-  });
+  router.push({ name: "hrDocumentUpdate", params: { id: id } });
 };
 const addHrDocument = (id: number) => {
-  router.push({
-    name: "hrDocumentAddByEmployee",
-    params: { employeeId: id },
-  });
+  router.push({ name: "hrDocumentAddByEmployee", params: { employeeId: id } });
 };
 const openHrDocument = (id: number) => {
-  router.push({
-    name: "hrDocumentIndex",
-    params: { employeeId: id },
-  });
+  router.push({ name: "hrDocumentIndex", params: { employeeId: id } });
 };
 const openFileBonus = (id: number) => {
-  router.push({
-    name: "bonusUpdate",
-    params: { id: id },
-  });
+  router.push({ name: "bonusUpdate", params: { id: id } });
 };
 const addBonus = (id: number) => {
-  router.push({
-    name: "bonusAddByEmployee",
-    params: { employeeId: id },
-  });
+  router.push({ name: "bonusAddByEmployee", params: { employeeId: id } });
 };
 const openBonus = (id: number) => {
-  router.push({
-    name: "bonusIndex",
-    params: { employeeId: id },
-  });
+  router.push({ name: "bonusIndex", params: { employeeId: id } });
 };
 const loadData = (tab: any) => {
   if (tab.name == "files") getFiles();
@@ -391,8 +368,14 @@ const active = ref(0);
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :type="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
@@ -400,88 +383,158 @@ const active = ref(0);
           <van-tab title="معلومات الموظف" name="employee">
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Name')" name="Name" v-model="employee.name" :type="EnumInputType.Text" />
+                <IInput
+                  :label="t('Name')"
+                  name="Name"
+                  v-model="employee.name"
+                  :type="EnumInputType.Text"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.Number')" name="Employee.Number" v-model="employee.number"
-                  :type="EnumInputType.Text" />
+                <IInput
+                  :label="t('Employee.Number')"
+                  name="Employee.Number"
+                  v-model="employee.number"
+                  :type="EnumInputType.Text"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.Telegram')" name="EmployeeTelegram" v-model="employee.telegramId"
-                  :type="EnumInputType.Text" />
+                <IInput
+                  :label="t('Employee.Telegram')"
+                  name="EmployeeTelegram"
+                  v-model="employee.telegramId"
+                  :type="EnumInputType.Text"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.IdCard')" name="EmployeeIdCard" v-model="employee.idCard"
-                  :type="EnumInputType.Text" />
+                <IInput
+                  :label="t('Employee.IdCard')"
+                  name="EmployeeIdCard"
+                  v-model="employee.idCard"
+                  :type="EnumInputType.Text"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Employee.DateWork')" name="EmployeeDateWork" v-model="employee.dateWork"
-                  :type="EnumInputType.Date" />
+                <IInput
+                  :label="t('Employee.DateWork')"
+                  name="EmployeeDateWork"
+                  v-model="employee.dateWork"
+                  :type="EnumInputType.Date"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect :label="t('Employee.Section')" v-model="employee.Section.id" name="archiveTypeId"
-                  :options="sections" :IsRequire="true" class="focus:border-red-200" />
+                <ISelect
+                  :label="t('Employee.Section')"
+                  v-model="employee.Section.id"
+                  name="archiveTypeId"
+                  :options="sections"
+                  :IsRequire="true"
+                  class="focus:border-red-200"
+                />
               </ICol>
 
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect :label="t('Employee.Position')" v-model="employee.EmployeePosition.id" name="PostionId"
-                  :options="employees_positions" :IsRequire="true" />
+                <ISelect
+                  :label="t('Employee.Position')"
+                  v-model="employee.EmployeePosition.id"
+                  name="PostionId"
+                  :options="employees_positions"
+                  :IsRequire="true"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect :label="t('Employee.Type')" v-model="employee.EmployeeType.id" name="TypeId"
-                  :options="employees_types" :IsRequire="true" />
+                <ISelect
+                  :label="t('Employee.Type')"
+                  v-model="employee.EmployeeType.id"
+                  name="TypeId"
+                  :options="employees_types"
+                  :IsRequire="true"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelect :label="t('Employee.Center')" v-model="employee.EmployeeCenter.id" name="CecnterId"
-                  :options="employees_centers" :IsRequire="true" />
+                <ISelect
+                  :label="t('Employee.Center')"
+                  v-model="employee.EmployeeCenter.id"
+                  name="CecnterId"
+                  :options="employees_centers"
+                  :IsRequire="true"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <ICheckbox v-model="isPerson" :checked="isPerson">
                   {{ t("Employee.IsPerson") }} :
-                  {{ isPerson ? " شخص " : " قسم " }}</ICheckbox>
+                  {{ isPerson ? " شخص " : " قسم " }}</ICheckbox
+                >
               </ICol>
               <ICol span="1" span-md="1" span-sm="1" class="mt-5">
                 <div class="flex-col">
                   <div>
-                    <ICheckbox v-model="isMoveSection" :checked="isMoveSection" class="">
+                    <ICheckbox
+                      v-model="isMoveSection"
+                      :checked="isMoveSection"
+                      class=""
+                    >
                       {{ t("Employee.isMoveSection") }} :
-                      {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox>
+                      {{ isMoveSection ? " نعم " : " كلا " }}</ICheckbox
+                    >
                   </div>
                   <div>
-                    <ISelect v-if="isMoveSection" :label="t('Employee.MoveSection')" v-model="employee.MoveSection.id"
-                      name="MoveSectionId" :options="sections" :IsRequire="true" />
+                    <ISelect
+                      v-if="isMoveSection"
+                      :label="t('Employee.MoveSection')"
+                      v-model="employee.MoveSection.id"
+                      name="MoveSectionId"
+                      :options="sections"
+                      :IsRequire="true"
+                    />
                   </div>
                 </div>
               </ICol>
               <ICol>
                 <div class="flex justify-between">
                   <div class="w-[49%]">
-                    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                    <div
+                      class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                    >
                       {{ t("Bonus.Study") }}
                     </div>
                     <vSelect
-                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                      v-model="employee.Study" :options="BonusStore.Studies" :reduce="(Study: IStudy) => Study"
-                      label="name" :getOptionLabel="(Study: IStudy) => Study.name">
+                      class="_input focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px] border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input text-text dark:text-textLight"
+                      v-model="employee.Study"
+                      :options="BonusStore.Studies"
+                      :reduce="(Study: IStudy) => Study"
+                      label="name"
+                      :getOptionLabel="(Study: IStudy) => Study.name"
+                    >
                       <template #option="{ name }">
-                        <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                        <div
+                          class="dir-rtl text-right p-1 border-2 border-solid border-red-700"
+                        >
                           <span>{{ name }}</span>
                         </div>
                       </template>
                     </vSelect>
                   </div>
                   <div class="w-[49%]">
-                    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                    <div
+                      class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                    >
                       {{ t("Bonus.Certificate") }}
                     </div>
                     <vSelect
-                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                      v-model="employee.Certificate" :options="BonusStore.Certificates"
-                      :reduce="(Certificate: ICertificate) => Certificate" label="name" :getOptionLabel="
+                      class="_input focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px] border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input text-text dark:text-textLight"
+                      v-model="employee.Certificate"
+                      :options="BonusStore.Certificates"
+                      :reduce="(Certificate: ICertificate) => Certificate"
+                      label="name"
+                      :getOptionLabel="
                         (Certificate: ICertificate) => Certificate.name
-                      ">
+                      "
+                    >
                       <template #option="{ name }">
-                        <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                        <div
+                          class="dir-rtl text-right p-1 border-2 border-solid border-red-700"
+                        >
                           <span>{{ name }}</span>
                         </div>
                       </template>
@@ -516,29 +569,42 @@ const active = ref(0);
             </IRow>
             <IRow col-lg="4" col-md="2" col-sm="1">
               <ICol span="1" span-md="2" span-sm="4">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
                   {{ t("Bonus.DegreeStage") }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="employee.DegreeStage" :options="BonusStore.DegreeStages"
-                  :reduce="(DegreeStage: IDegreeStage) => DegreeStage" label="title" :getOptionLabel="
+                  v-model="employee.DegreeStage"
+                  :options="BonusStore.DegreeStages"
+                  :reduce="(DegreeStage: IDegreeStage) => DegreeStage"
+                  label="title"
+                  :getOptionLabel="
                     (DegreeStage: IDegreeStage) => DegreeStage.title
-                  " @update:model-value="ChangeDegreeStage">
-                  <template #option="{ title, salary, yearlyBonus, yearlyService }">
-                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                  "
+                  @update:model-value="ChangeDegreeStage"
+                >
+                  <template
+                    #option="{ title, salary, yearlyBonus, yearlyService }"
+                  >
+                    <div
+                      class="dir-rtl text-right p-1 border-2 border-solid border-red-700"
+                    >
                       <span>{{ title }} </span><br />
-                      <span>{{
-                        t("Bonus.salary") +
-                        " :" +
-                        ConvertToMoneyFormat(salary)
+                      <span
+                        >{{
+                          t("Bonus.salary") +
+                          " :" +
+                          ConvertToMoneyFormat(salary)
                         }}
                       </span>
                       -
-                      <span>{{
-                        t("Bonus.yearlyBonus") +
-                        " :" +
-                        ConvertToMoneyFormat(yearlyBonus)
+                      <span
+                        >{{
+                          t("Bonus.yearlyBonus") +
+                          " :" +
+                          ConvertToMoneyFormat(yearlyBonus)
                         }}
                       </span>
                       <!-- <span>{{ t('Bonus.yearlyService') + ' :' + ConvertToMoneyFormat(yearlyService) }} </span> -->
@@ -547,17 +613,24 @@ const active = ref(0);
                 </vSelect>
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
                   {{ t("Bonus.JobTitle") }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="employee.BonusJobTitle" :options="BonusStore.BonusJobTitles"
-                  :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle" :getOptionLabel="
+                  v-model="employee.BonusJobTitle"
+                  :options="BonusStore.BonusJobTitles"
+                  :reduce="(BonusJobTitle: IBonusJobTitle) => BonusJobTitle"
+                  :getOptionLabel="
                     (BonusJobTitle: IBonusJobTitle) => BonusJobTitle.name
-                  ">
+                  "
+                >
                   <template #option="{ name }">
-                    <div class="dir-rtl text-right p-1 border-2 border-solid border-red-700">
+                    <div
+                      class="dir-rtl text-right p-1 border-2 border-solid border-red-700"
+                    >
                       <span>{{ name }}</span>
                     </div>
                   </template>
@@ -566,44 +639,93 @@ const active = ref(0);
               <ICol>
                 <div class="flex justify-between">
                   <div class="w-[49%]">
-                    <IInput :label="t('Bonus.numberLastBonus')" name="numberLastBonus"
-                      v-model="employee.numberLastBonus" :type="EnumInputType.Text" />
+                    <IInput
+                      :label="t('Bonus.numberLastBonus')"
+                      name="numberLastBonus"
+                      v-model="employee.numberLastBonus"
+                      :type="EnumInputType.Text"
+                    />
                   </div>
                   <div class="w-[49%]">
-                    <IInput :label="t('Bonus.dateLastBonus')" name="dateLastBonus" v-model="employee.dateLastBonus"
-                      :type="EnumInputType.Date" />
+                    <IInput
+                      :label="t('Bonus.dateLastBonus')"
+                      name="dateLastBonus"
+                      v-model="employee.dateLastBonus"
+                      :type="EnumInputType.Date"
+                    />
                   </div>
                 </div>
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Bonus.dateNextBonus')" name="dateNextBonus" disabled v-model="employee.dateNextBonus"
-                  :type="EnumInputType.Date" />
+                <IInput
+                  :label="t('Bonus.dateNextBonus')"
+                  name="dateNextBonus"
+                  disabled
+                  v-model="employee.dateNextBonus"
+                  :type="EnumInputType.Date"
+                />
               </ICol>
             </IRow>
             <div class="mt-2">
               <label for="showUserPanel">اظهار معلومات المستخدم</label>
-              <input class="right-0" type="checkbox" id="showUserPanel" v-model="showUserPanel" />
+              <input
+                class="right-0"
+                type="checkbox"
+                id="showUserPanel"
+                v-model="showUserPanel"
+              />
             </div>
-            <IRow col-lg="3" col-md="2" col-sm="1" class="bg-[#C2D7FB]" v-if="showUserPanel">
+            <IRow
+              col-lg="3"
+              col-md="2"
+              col-sm="1"
+              class="bg-[#C2D7FB]"
+              v-if="showUserPanel"
+            >
               <ICol span="1" span-md="1" span-sm="1">
-                <IVSelect :label="t('User')" v-model="employee.User" name="archiveTypeId" :options="SelectedUsers"
-                  :IsRequire="true" />
+                <IVSelect
+                  :label="t('User')"
+                  v-model="employee.User"
+                  name="archiveTypeId"
+                  :options="SelectedUsers"
+                  :IsRequire="true"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IButton2 :type="EnumButtonType.Outlined" class="mt-3" v-if="employee.User?.id" :on-click="ShowUser"
-                  :text="t('Open')" />
+                <IButton2
+                  :type="EnumButtonType.Outlined"
+                  class="mt-3"
+                  v-if="employee.User?.id"
+                  :on-click="ShowUser"
+                  :text="t('Open')"
+                />
               </ICol>
             </IRow>
           </van-tab>
           <van-tab title="ملفات الضبارة" v-if="employee.id > 0" name="files">
             <IRow class="flex justify-between spin-out-3">
               <div class="flex">
-                <EditButton class="mt-3 border-gray border-2 ml-2" v-if="employee.id != 0"
-                  @click="addHrDocument(employee.id)" title="HrDocument.Add" icon="mdi-plus-box" />
-                <EditButton class="mt-3 border-gray border-2 ml-2" v-if="employee.id != 0" @click="getFiles"
-                  :title="t('Refresh')" icon="mdi-refresh" />
-                <EditButton class="mt-3 border-gray border-2 ml-2" v-if="employee.id != 0"
-                  @click="openHrDocument(employee.id)" title="HrDocument.Open" icon="mdi-open-in-new" />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="addHrDocument(employee.id)"
+                  title="HrDocument.Add"
+                  icon="mdi-plus-box"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="getFiles"
+                  :title="t('Refresh')"
+                  icon="mdi-refresh"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="openHrDocument(employee.id)"
+                  title="HrDocument.Open"
+                  icon="mdi-open-in-new"
+                />
               </div>
             </IRow>
 
@@ -611,14 +733,24 @@ const active = ref(0);
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseFiles" :headers="headerFiles">
                   <template v-slot:isActive="{ row }">
-                    <span v-if="row.isActive"
-                      class="flex justify-center w-full items-center border-2 rounded-md dark:text-textLight text-text border-green-400 bg-green-100 dark:bg-green-950 p-0">
-                      <Icon icon="mdi-check-circle" class="text-green-600"></Icon>
+                    <span
+                      v-if="row.isActive"
+                      class="flex justify-center w-full items-center border-2 rounded-md dark:text-textLight text-text border-green-400 bg-green-100 dark:bg-green-950 p-0"
+                    >
+                      <Icon
+                        icon="mdi-check-circle"
+                        class="text-green-600"
+                      ></Icon>
                       مفعل
                     </span>
-                    <span v-else
-                      class="flex justify-center w-full items-center border-2 dark:text-textLight text-text border-red-400 rounded-md bg-red-100 dark:bg-red-950 p-0">
-                      <Icon icon="mdi-pause-octagon" class="text-red-600"></Icon>
+                    <span
+                      v-else
+                      class="flex justify-center w-full items-center border-2 dark:text-textLight text-text border-red-400 rounded-md bg-red-100 dark:bg-red-950 p-0"
+                    >
+                      <Icon
+                        icon="mdi-pause-octagon"
+                        class="text-red-600"
+                      ></Icon>
                       <span>غير مفعل</span>
                     </span>
                   </template>
@@ -626,28 +758,55 @@ const active = ref(0);
                     <span>{{ row.Type.name }}</span>
                   </template>
                   <template v-slot:actions="{ row }">
-                    <OpenButton title="Open" @click="openFileHrDocument(row.id)" class="m-1" />
+                    <OpenButton
+                      title="Open"
+                      @click="openFileHrDocument(row.id)"
+                      class="m-1"
+                    />
                   </template>
                 </ITable>
               </ICol>
             </IRow>
           </van-tab>
-          <van-tab title="العلاوات والترفيعات" v-if="employee.id > 0" name="bonus">
+          <van-tab
+            title="العلاوات والترفيعات"
+            v-if="employee.id > 0"
+            name="bonus"
+          >
             <IRow class="flex justify-between spin-out-3">
               <div class="flex">
-                <EditButton class="mt-3 border-gray border-2 ml-2" v-if="employee.id != 0"
-                  @click="addBonus(employee.id)" title="Bonus.Add" icon="mdi-plus-box" />
-                <EditButton class="mt-3 border-gray border-2 ml-2" v-if="employee.id != 0" @click="getBonus"
-                  :title="t('Refresh')" icon="mdi-refresh" />
-                <EditButton class="mt-3 border-gray border-2" v-if="employee.id != 0" @click="openBonus(employee.id)"
-                  title="Bonus.Open" icon="mdi-open-in-new" />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="addBonus(employee.id)"
+                  title="Bonus.Add"
+                  icon="mdi-plus-box"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="getBonus"
+                  :title="t('Refresh')"
+                  icon="mdi-refresh"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2"
+                  v-if="employee.id != 0"
+                  @click="openBonus(employee.id)"
+                  title="Bonus.Open"
+                  icon="mdi-open-in-new"
+                />
               </div>
             </IRow>
             <IRow col-lg="1" col-md="1" col-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseBonus" :headers="headerBonus">
                   <template v-slot:actions="{ row }">
-                    <OpenButton title="Open" @click="openFileBonus(row.id)" class="m-1" />
+                    <OpenButton
+                      title="Open"
+                      @click="openFileBonus(row.id)"
+                      class="m-1"
+                    />
                   </template>
                 </ITable>
               </ICol>
@@ -663,7 +822,12 @@ const active = ref(0);
     </IPageContent>
 
     <template #Footer>
-       <IFooterCrud :isAdd="employee.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+      <IFooterCrud
+        :isAdd="employee.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
     </template>
   </IPage>
 </template>

@@ -10,7 +10,7 @@ import type {
   IOutputVoucherState,
 } from "./IOutputVoucher";
 
-export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
+export const useOutputVoucherStore = defineStore("useOutputVoucherStore", () => {
   const outputVoucher = reactive<IOutputVoucher>({
     id: 0,
     number: "",
@@ -18,6 +18,8 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     notes: "",
     Items: [],
     signaturePerson: "",
+    dateBill: new Date().toISOString().split("T")[0],
+    numberBill: "",
     Employee: { name: "", id: 0 },
     Stock: { name: "", id: 0, description: '' },
   });
@@ -101,6 +103,8 @@ export const useOutputVoucherStore = defineStore("OutputVoucherStore", () => {
     outputVoucher.signaturePerson = "";
     outputVoucher.Employee = { name: "", id: 0 };
     outputVoucher.Stock = { name: "", id: 0, description: ''};
+    outputVoucher.dateBill= new Date().toISOString().split("T")[0];
+    outputVoucher. numberBill= "";
   }
   return {
     outputVoucher,

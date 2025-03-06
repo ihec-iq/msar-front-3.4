@@ -119,6 +119,13 @@ export default {
     Number: "الرقم",
     State: "من قبل",
   },
+  ResponseError:{
+    401 : "غير مصرح",
+    403 : "غير مصرح",
+    404 : "غير موجود",
+    422 : "هناك مدخلات غير صحيحة او نقص",
+    500 : "خطأ في السيرفر",
+  },
   SignaturePerson: "توقيع الموظف",
   EmployeeRequest: "طلبت من",
   EmployeeAlter: "البديل",

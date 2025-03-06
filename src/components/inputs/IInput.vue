@@ -6,32 +6,29 @@ const modelValue = defineModel<any>();
 import { t } from "@/utilities/I18nPlugin";
 const props = defineProps({
   type: {
-    type: String as () => "text" | "number" | "email" | "password" | "date" | "time" | "datetime" | "color" | "file" | "hidden" | "search" | "range" | "tel" | "url" ,
+    type: String as () =>
+      | "text"
+      | "number"
+      | "email"
+      | "password"
+      | "date"
+      | "time"
+      | "datetime"
+      | "color"
+      | "file"
+      | "hidden"
+      | "search"
+      | "range"
+      | "tel"
+      | "url",
     default: "text",
   },
-  label: {
-    type: String,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  IsRequire: {
-    type: Boolean,
-    default: false,
-  },
-  max: {
-    type: Number,
-    default: null,
-  },
-  min: {
-    type: Number,
-    default: null,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
+  label: { type: String },
+  placeholder: { type: String, default: "" },
+  IsRequire: { type: Boolean, default: false },
+  max: { type: Number, default: null },
+  min: { type: Number, default: null },
+  disabled: { type: Boolean, default: false },
   dir: {
     type: String as () => EnumDirection, // Cast to the enum type
     default: EnumDirection.Auto, // Default value (optional)
@@ -44,14 +41,8 @@ const props = defineProps({
     type: Function, // Cast to the enum type
     default: () => {}, // Default value (optional)
   },
-  cached: {
-    type: Boolean,
-    default: false,
-  },
-  cachedName: {
-    type: String,
-    default: "",
-  },
+  cached: { type: Boolean, default: false },
+  cachedName: { type: String, default: "" },
 });
 
 const keydown = () => {
@@ -98,6 +89,7 @@ onMounted(async () => {
       @input="onInput()"
       :max="max"
       :min="min"
+      class="focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px]  border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input  text-text dark:text-textLight"
     />
   </div>
 </template>

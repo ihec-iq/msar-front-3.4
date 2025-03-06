@@ -62,6 +62,13 @@ export default {
     Number: "الرقم",
     State: "من قبل",
   },
+  ResponseError: {
+    401: "Unauthorized",
+    403: "Unauthorized",
+    404: "Not Found",
+    422: "Unprocessable Entity",
+    500: "Internal Server Error",
+  },
   SignaturePerson: "توقيع الموظف",
   EmployeeRequest: "طلبت من",
   noData: "No Data !!!",
