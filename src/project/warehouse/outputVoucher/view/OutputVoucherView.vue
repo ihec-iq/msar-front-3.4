@@ -505,13 +505,12 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
           <IRow>
             <ICol>
-              <van-button
-                class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                type="success"
-                is-link
-                @click="AddPopup()"
-                >{{ t("Item.Add") }}
-              </van-button>
+            <IButton2
+              :text="t('Add')"
+              color="blue"
+              :type="EnumButtonType.Default"
+              :on-click="AddPopup" 
+              />
             </ICol>
           </IRow>
           <IRow>

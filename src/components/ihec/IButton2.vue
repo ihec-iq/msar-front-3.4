@@ -106,7 +106,7 @@ const buttonClass = computed(() => {
   <button
     @click="onClick()"
     :class="buttonClass"
-    class="flex flex-row mx-2"
+    class="flex flex-row mx-2 focus:border-none focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-opacity-80"
     style="align-items: center"
     type="button"
   >

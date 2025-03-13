@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import IButton2 from "@/components/ihec/IButton2.vue";
 import { t } from "@/utilities/I18nPlugin";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -47,10 +49,13 @@ const props = defineProps({
         </div>
       </div>
     </div>
-    <IDropdown>
-      <li>
-        <EditButton @click="update(item.id)" />
-      </li>
-    </IDropdown>
+
+    <IButton2
+      :type="EnumButtonType.Outlined"
+      @click="update(item.id)"
+      class="w-[80px] h-10 rounded-full text-gray-800"
+      :text="t('Open')"
+      pre-icon="folder-open"
+    />
   </div>
 </template>
