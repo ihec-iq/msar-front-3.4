@@ -22,7 +22,6 @@ defineProps({
 });
 
 const reloadPage = () => {
-  console.log("loading");
   window.location.reload();
 };
 </script>

@@ -508,7 +508,8 @@ const headers = ref<Array<ITableHeader>>([
             <IButton2
               :text="t('Add')"
               color="blue"
-              :type="EnumButtonType.Default"
+              :type="EnumButtonType.Outlined"
+              post-icon="plus"
               :on-click="AddPopup" 
               />
             </ICol>
@@ -579,10 +580,10 @@ const headers = ref<Array<ITableHeader>>([
                 #option="{ Item, outValue, inValue, notes, description }"
               >
                 <div
-                  class="rtl:text-right border-2 p-2 rounded-md dark:bg-gray-800 bg-gray-100"
+                  class="rtl:text-right border-2 p-2 rounded-md dark:bg-gray-800 bg-gray-100 "
                 >
                   <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 text-gray-800"
                   >
                     {{ Item.name.toString() }}
                   </div>

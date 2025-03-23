@@ -31,6 +31,7 @@ export const usePermissionsStore = defineStore("PermissionStore", () => {
     router.push("/unauthorized");
   };
   const checkPermissionAccessArray = (names: string[]) => {
+    // console.log(hasCommonItems(names, UserPermissions.value))
     if (UserPermissions.value?.length == 0) router.push("/unauthorized");
     if (hasCommonItems(names, UserPermissions.value)) return true;
     router.push("/unauthorized");

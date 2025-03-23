@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { defineProps, PropType } from 'vue'
+import { Button } from "@/components/ui/button";
+import { defineProps } from "vue";
+import type { PropType } from "vue";
 
 defineProps({
   options: {
     type: Array as PropType<IDropdownMenuOption[]>,
     required: true,
   },
-  caption : {
+  caption: {
     type: String,
     required: true,
-  }
-})
+  },
+});
 interface IDropdownMenuOption {
-    label: string
-    children?: IDropdownMenuOption[]
-    disabled?: boolean
-    icon?: string
-    isSeparator?: boolean
-    click?: () => void
-    shortcut?: string
-    
+  label: string;
+  children?: IDropdownMenuOption[];
+  disabled?: boolean;
+  icon?: string;
+  isSeparator?: boolean;
+  click?: () => void;
+  shortcut?: string;
 }
 import {
   DropdownMenu,
@@ -35,7 +35,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 import {
   Cloud,
   CreditCard,
@@ -51,7 +51,7 @@ import {
   User,
   UserPlus,
   Users,
-} from 'lucide-vue-next'
+} from "lucide-vue-next";
 </script>
 
 <template>
@@ -62,7 +62,7 @@ import {
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent class="w-56">
-      <DropdownMenuLabel >My Account</DropdownMenuLabel>
+      <DropdownMenuLabel>My Account</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
         <DropdownMenuItem>

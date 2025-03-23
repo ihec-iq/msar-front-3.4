@@ -24,20 +24,20 @@ import IButton from "@/components/ihec/IButton2.vue";
 import IContainer from "@/components/ihec/IContainer.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
-// Define the editor options with RTL direction
-const editorOptions = ref({
-  theme: "snow",
-  modules: {
-    toolbar: [
-      // Add your toolbar options here
-    ],
-  },
-  placeholder: "اكتب شيئًا...",
-  direction: "rtl", // Set the direction to RTL
-});
-//#endregion
+// import { QuillEditor } from "@vueup/vue-quill";
+// import "@vueup/vue-quill/dist/vue-quill.snow.css";
+// // Define the editor options with RTL direction
+// const editorOptions = ref({
+//   theme: "snow",
+//   modules: {
+//     toolbar: [
+//       // Add your toolbar options here
+//     ],
+//   },
+//   placeholder: "اكتب شيئًا...",
+//   direction: "rtl", // Set the direction to RTL
+// });
+// //#endregion
 //#region store
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
@@ -432,14 +432,14 @@ const headers = ref<Array<ITableHeader>>([
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
               <IInput
-              class="w-[50%]"
+                class="w-[50%]"
                 :label="t('InputVoucher.Number')"
                 name="InputVoucher.Number"
                 v-model="inputVoucher.number"
                 :type="EnumInputType.Text"
               />
               <IInput
-              class="w-[50%]"
+                class="w-[50%]"
                 :label="t('Date')"
                 name="InputVoucher.Date"
                 v-model="inputVoucher.date"
@@ -514,15 +514,12 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
           <IRow>
             <ICol>
-              <ILabel :title="t('Notes')">
-                <QuillEditor
-                  theme="snow"
-                  toolbar="minimal"
-                  :options="editorOptions"
-                  v-model:content="inputVoucher.notes"
-                  contentType="html"
-                />
-              </ILabel>
+              <IInput
+                :label="t('Notes')"
+                name="Notes"
+                v-model="inputVoucher.notes"
+                :type="EnumInputType.Text"
+              />
             </ICol>
           </IRow>
           <IRow>
