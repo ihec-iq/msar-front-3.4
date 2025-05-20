@@ -59,7 +59,9 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   }
   async function get_filter(params: IInputVoucherFilter, page: number) {
     try {
-      return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
+      return await Api.get(`${pathUrl}/filter?page=${page}`, {
+        params: params,
+      });
     } catch (error) {
       console.log("in get_filter inputVoucher : " + error);
       return null;
@@ -91,7 +93,9 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
   }
   async function getAvailableItemsVSelect(storeId: string = "0") {
     inputVoucherItemsVSelect.value = [];
-    return await Api.get(`${pathBase}/inputVoucherItem/getAvailableItemsVSelect/${storeId}`)
+    return await Api.get(
+      `${pathBase}/inputVoucherItem/getAvailableItemsVSelect/${storeId}`
+    )
       .then((response) => {
         if (response.status == 200) {
           inputVoucherItemsVSelect.value = response.data.data;
@@ -109,7 +113,21 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         if (response.status == 200) {
           inputVoucherItemsVSelect.value = response.data.data;
           //console.log(response.data.data)
-
+        }
+      })
+      .catch((errors) => {
+        console.log("in get input get Items For VSelect : " + errors);
+      });
+  }
+  async function getAllItemsVSelectByEmployeeId(employeeId: number = 0) {
+    inputVoucherItemsVSelect.value = [];
+    return await Api.get(
+      `${pathBase}/inputVoucherItem/getAvailableItemsVSelectByEmployeeId/${employeeId}`
+    )
+      .then((response) => {
+        if (response.status == 200) {
+          inputVoucherItemsVSelect.value = response.data.data;
+          //console.log(response.data.data)
         }
       })
       .catch((errors) => {
@@ -144,7 +162,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     }
     return await Api.delete(
       `${pathBase}/inputVoucherItem/delete/` +
-      String(inputVoucher.value.Items[index]?.id)
+        String(inputVoucher.value.Items[index]?.id)
     )
       .then((response) => {
         if (response.status == 200) {
@@ -185,11 +203,12 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     editItem,
     removeItem,
     get,
-    get_filter, 
+    get_filter,
     getItems,
     getEmployees,
     getAvailableItemsVSelect,
     getAllItemsVSelect,
+    getAllItemsVSelectByEmployeeId,
     show,
     store,
     update,

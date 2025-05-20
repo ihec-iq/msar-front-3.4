@@ -151,7 +151,6 @@ const printWindow = () => {
   }, 250);
 };
 const getFilterData = async (page = 1) => {
-
   localStorage.setItem("index" + IdPage, page.toString());
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;

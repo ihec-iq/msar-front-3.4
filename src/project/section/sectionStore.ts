@@ -19,13 +19,13 @@ export const useSectionStore = defineStore("sectionStore", () => {
     if (hardRefresh == false || sections.value.length == 0) {
       await Api.get(`${pathUrl}`)
         .then((response) => {
-        if (response.status == 200) {
-          sections.value = response.data.data;
-        }
-      })
-      .catch((errors) => {
-        console.log("in get section : " + errors);
-      });
+          if (response.status == 200) {
+            sections.value = response.data.data;
+          }
+        })
+        .catch((errors) => {
+          console.log("in get section : " + errors);
+        });
     }
   }
   async function store(prams: object) {

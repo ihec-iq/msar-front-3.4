@@ -68,6 +68,7 @@ declare module 'vue' {
     IDropdownMenu: typeof import('./src/components/ihec/IDropdownMenu.vue')['default']
     IErrorMessages: typeof import('./src/components/ihec/IErrorMessages.vue')['default']
     IFlex: typeof import('./src/components/ihec/IFlex.vue')['default']
+    IFooter: typeof import('./src/components/ihec/IFooter.vue')['default']
     IFooterCrud: typeof import('./src/components/ihec/IFooterCrud.vue')['default']
     IForm: typeof import('./src/components/ihec/IForm.vue')['default']
     IFullRow: typeof import('./src/components/ihec/IFullRow.vue')['default']

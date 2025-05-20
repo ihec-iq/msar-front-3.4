@@ -23,9 +23,9 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
 import ITable from "@/components/ihec/ITable.vue";
-import IDropdown from "@/components/ihec/IDropdown.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import dropdownmenu from "../component/dropdownmenu.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -129,7 +129,10 @@ const headers = ref<Array<ITableHeader>>([
   <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
     <IPageContent>
       <IRow class="overflow-x-auto">
-        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px]  overflow-x-auto" >
+        <ISearchBar
+          :getDataButton="getFilterData"
+          class="min-w-[500px] overflow-x-auto"
+        >
           <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
             <IInput
               :label="t('Title')"
@@ -155,11 +158,7 @@ const headers = ref<Array<ITableHeader>>([
       <IRow>
         <ITable :items="data" :headers="headers">
           <template v-slot:actions="{ row }">
-            <IDropdown>
-              <li >
-                <ShowButton @click="openItem(row.itemId)" />
-              </li>
-            </IDropdown>
+            <dropdownmenu :openFn="() => openItem(row.itemId)" />
           </template>
           <template v-slot:in="{ row }">
             <span
@@ -180,9 +179,10 @@ const headers = ref<Array<ITableHeader>>([
             <span
               class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
               >{{
-                (Number(row.in) + Number(row.reIn)) -
+                Number(row.in) +
+                Number(row.reIn) -
                 (Number(row.out) + Number(row.reOut))
-              }} 
+              }}
             </span></template
           >
         </ITable>

@@ -172,7 +172,7 @@ const headers = ref<Array<ITableHeader>>([
             <span>{{ row.Employee.name }}</span>
           </template>
           <template v-slot:HrDocumentype="{ row }">
-            <span>{{ row.Type.name }}</span>
+            <span>{{ row.HrDocumentType.name }}</span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>

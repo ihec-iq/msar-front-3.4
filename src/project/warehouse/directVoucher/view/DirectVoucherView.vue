@@ -426,7 +426,7 @@ onMounted(async () => {
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('SignaturePerson')"
-                name="InputVoucherNumer"
+                name="InputVoucherNumber"
                 v-model="directVoucher.signaturePerson"
                 type="text"
               />
@@ -523,7 +523,7 @@ onMounted(async () => {
                     Category: { id: 0, name: '' },
                     measuringUnit: '',
                   },
-                  describtion: '',
+                  description: '',
                   count: 0,
                   price: 0,
                   value: 0,

@@ -18,7 +18,6 @@ const retrievalVoucherStore = useRetrievalVoucherStore();
 
 const { employees } = storeToRefs(useEmployeeStore());
 
-
 const isLoading = ref(false);
 const IsShowRetrieval = ref(false);
 const data = ref<Array<IEmployeeHistory>>([]);
@@ -91,7 +90,8 @@ const getFilterData = async (page = 1) => {
   await useEmployeeStore()
     .getItemHistory(searchFilter.value, page)
     .then((response) => {
-      if (response.status == 200) {console.log(response.data.data,searchFilter.value)
+      if (response.status == 200) {
+        console.log(response.data.data, searchFilter.value);
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
         dataBase.value = dataPage.value.data;
@@ -105,14 +105,14 @@ const getFilterData = async (page = 1) => {
 };
 //#endregion
 const openItem = (id: number, billType: string) => {
-  if (billType == "In") {
+  if (billType == "سند تصدير") {
     router.push({
       name: "outputVoucherUpdate",
       params: { id: id },
     });
-  } else {
+  } else if (billType == "سند ارجاع") {
     router.push({
-      name: "inputVoucherUpdate",
+      name: "retrievalVoucherUpdate",
       params: { id: id },
     });
   }
@@ -160,7 +160,7 @@ const headers = ref<Array<ITableHeader>>([
 ]);
 </script>
 <template>
-  <IPage :HeaderTitle="t('Store.Index')">
+  <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
     <IPageContent>
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
@@ -359,7 +359,7 @@ const headers = ref<Array<ITableHeader>>([
                         تفعيل سند اتلاف
                       </div>
                       <table class="min-w-full text-center">
-                        <thead class="border-b bg-[#0003] text-gray-300">
+                        <thead class="border-b bg-blue-400">
                           <tr>
                             <th
                               scope="col"
@@ -418,14 +418,14 @@ const headers = ref<Array<ITableHeader>>([
                             </th>
                           </tr>
                         </thead>
-                        <tbody class="bg-[#1f2937]">
+                        <tbody class="dark:bg-[#1f2937] text-gray-800">
                           <tr
                             v-for="row in data"
                             :key="row.id"
-                            class="border-b border-black h-14 text-gray-100"
+                            class="border-b border-black h-14 text-gray-500]"
                             :class="{
-                              'bg-[#19472a26]': row.count > 0,
-                              'bg-[#d7000017]': row.count < 0,
+                              'dark:bg-[#19472a26]': row.count > 0,
+                              'dark:bg-[#d7000017]': row.count < 0,
                             }"
                           >
                             <th v-if="IsShowRetrieval">
@@ -515,8 +515,8 @@ const headers = ref<Array<ITableHeader>>([
             </div>
           </div>
         </div>
-        
       </IRow>
     </IPageContent>
   </IPage>
-</template>@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem
+</template>
+@/utilities/I18nPlugin@/utilities/defaultParams@/utilities/EnumSystem

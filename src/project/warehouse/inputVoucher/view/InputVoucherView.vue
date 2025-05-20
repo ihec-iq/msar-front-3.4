@@ -463,9 +463,10 @@ const headers = ref<Array<ITableHeader>>([
                 :type="EnumInputType.Text"
               />
               <IInput
+                v-if="inputVoucher.numberBill != ''"
                 class="w-[50%]"
                 :label="t('InputVoucher.DateBill')"
-                name="InputVoucherNumer"
+                name="InputVoucherNumber"
                 v-model="inputVoucher.dateBill"
                 :type="EnumInputType.Date"
               />
@@ -475,10 +476,10 @@ const headers = ref<Array<ITableHeader>>([
               span-lg="1"
               span-xl="1"
               span-md="1"
-              class="flex flex-row"
+              class="flex flex-row w-full"
             >
               <ISelect
-                class="w-[50%]"
+                class="w-[50%] sm:w-full"
                 :label="t('Stock')"
                 v-model="inputVoucher.Stock.id"
                 name="inputVoucherStockId"
@@ -487,7 +488,7 @@ const headers = ref<Array<ITableHeader>>([
               >
               </ISelect>
               <ISelect
-                class="w-[50%]"
+                class="w-[50%] sm:w-full"
                 :label="t('InputVoucher.State')"
                 v-model="inputVoucher.State.id"
                 name="inputVoucherStateId"
@@ -495,25 +496,25 @@ const headers = ref<Array<ITableHeader>>([
                 :IsRequire="true"
               />
             </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
+            <ICol class="flex flex-row w-full" :span="1">
               <IInput
+                class="w-[50%] sm:w-full"
                 :label="t('EmployeeRequest')"
-                name="InputVoucherNumer"
+                name="InputVoucherNumber"
                 v-model="inputVoucher.requestedBy"
                 :type="EnumInputType.Text"
               />
-            </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
               <IInput
+                class="w-[50%] sm:w-full"
                 :label="t('SignaturePerson')"
-                name="InputVoucherNumer"
+                name="InputVoucherNumber"
                 v-model="inputVoucher.signaturePerson"
                 :type="EnumInputType.Text"
               />
             </ICol>
           </IRow>
           <IRow>
-            <ICol>
+            <ICol class="w-full">
               <IInput
                 :label="t('Notes')"
                 name="Notes"
@@ -604,7 +605,7 @@ const headers = ref<Array<ITableHeader>>([
                       Category: { id: 0, name: '' },
                       measuringUnit: '',
                     },
-                    describtion: '',
+                    description: '',
                     count: 0,
                     price: 0,
                     value: 0,

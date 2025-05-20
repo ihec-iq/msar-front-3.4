@@ -184,13 +184,14 @@ onMounted(async () => {
         <IRow v-if="isLoading">
           <div class="skeleton h-32 w-full"></div>
         </IRow>
+        
         <IRow2
           v-else-if="Bonus.Employee.BonusJobTitle.id != 0"
           :title="t('Bonus.EmployeeDataCurrent')"
           :gap="2"
-          class="rounded-sm border-2 border-solid border-red-400"
+          class="rounded-sm pb-3 border-2 border-solid border-red-400"
         >
-          <ICol2 :md="6" :lg="6">
+          <ICol2 :md="6" :lg="6" class="m-1">
             <ILabel :title="t('Bonus.JobTitle')">
               {{ Bonus.Employee.BonusJobTitle.name }}
             </ILabel>

@@ -27,6 +27,7 @@ export const useStoringStore = defineStore("StoringStore", () => {
       params: params,
     });
   }
+  //outputVoucherEmployees;
   async function get_item(params: IStoreItemFilter, page: number) {
     return await Api.get(
       `${pathUrl}/item/history/${params.itemId}?page=${page}`,

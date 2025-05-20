@@ -72,7 +72,7 @@ export const useSettingStore = defineStore("SettingStore", () => {
       return response;
     }
   }
-  async function updateByKey(setting : any , id : string) {
+  async function updateById(setting : any , id : string) {
     isLoading.value = true;
     let response;
     try {
@@ -90,7 +90,42 @@ export const useSettingStore = defineStore("SettingStore", () => {
       return response;
     }
   }
-
+  async function updateByKeyInt(key : any , value : number) {
+    isLoading.value = true;
+    let response;
+    try {
+      response = await Api.post(`${pathUrl}/updatebykey`, { key: key, val_int: value }  );
+      if (response.status === 200) {
+        const index = Settings.value.findIndex(seting => seting.key ===  key);
+        if (index !== -1) {
+          Settings.value[index] = response.data.data;
+        }
+      }
+    } catch (err: any) {
+      error.value = err.message;
+    } finally {
+      isLoading.value = false;
+      return response;
+    }
+  }
+  async function updateByKeyStr(key: any, value: string) {
+    isLoading.value = true;
+    let response;
+    try {
+      response = await Api.post(`${pathUrl}/updatebykey`, { key: key, val_str: value });
+      if (response.status === 200) {
+        const index = Settings.value.findIndex(seting => seting.key === key);
+        if (index !== -1) {
+          Settings.value[index] = response.data.data;
+        }
+      }
+    } catch (err: any) {
+      error.value = err.message;
+    } finally {
+      isLoading.value = false;
+      return response;
+    }
+  }
   async function show(id: string) {
     isLoading.value = true;
     try {
@@ -127,7 +162,9 @@ export const useSettingStore = defineStore("SettingStore", () => {
     getSettings,
     store,
     update,
-    updateByKey,
+    updateByKeyInt,
+    updateByKeyStr,
+    updateById,
     show,
     showByKey
   };

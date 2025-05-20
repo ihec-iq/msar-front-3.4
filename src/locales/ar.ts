@@ -2,6 +2,9 @@ export default {
   Check: "تحقق",
   Logout: "تسجيل الخروج",
   notFound : "لا يوجد",
+  Option : {
+    basic : "الخيارات الاساسية",
+  },
   SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
   Warehouse: {
     Index: "نظام المخازن",
@@ -48,7 +51,7 @@ export default {
   SerialNumber: "رقم السيريال",
   Selected: "تأشير",
   BillType: "نوع القائمة",
-  Available: "التوفر",
+  Available: "الرصيد",
   Price: "السعر",
   Stock: "المخزن",
   Actions: "اجرائات",
@@ -73,9 +76,9 @@ export default {
     Name: "اسم",
     Index: "مادة",
     Add: "اضف مادة",
-    Out: 'الصادر',
+    Out: 'الخارج',
     In: 'الداخل',
-    Code: "كود المادة",
+    Code: "رمز المادة",
     Unit: "الوحدة",
     Category: "صنف المادة",
     Sum: "المواد",
@@ -95,7 +98,7 @@ export default {
     DateReceive: "تاريخ الاستلام",
     DateBill: "تاريخ الطلبية",
     NumberBill: "رقم الطلبية",
-    State: "من قبل",
+    State: "المصدر",
     Number: "الرقم"
   },
   DirectVoucher: {

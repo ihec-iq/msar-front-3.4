@@ -447,7 +447,7 @@ const headers = ref<Array<ITableHeader>>([
               <IInput
                 class="w-[50%]"
                 :label="t('OutputVoucher.DateBill')"
-                name="OutputVoucherNumer"
+                name="OutputVoucherNumber"
                 v-model="outputVoucher.dateBill"
                 :type="EnumInputType.Date"
               />
@@ -487,7 +487,7 @@ const headers = ref<Array<ITableHeader>>([
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('SignaturePerson')"
-                name="InputVoucherNumer"
+                name="InputVoucherNumber"
                 v-model="outputVoucher.signaturePerson"
                 :type="EnumInputType.Text"
               />
@@ -497,7 +497,7 @@ const headers = ref<Array<ITableHeader>>([
             <ICol span="3">
               <IInput
                 :label="t('Notes')"
-                name="InputVoucherNumer"
+                name="InputVoucherNumber"
                 v-model="outputVoucher.notes"
                 :type="EnumInputType.Text"
               />

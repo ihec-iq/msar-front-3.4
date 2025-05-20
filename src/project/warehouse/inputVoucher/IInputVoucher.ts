@@ -1,5 +1,5 @@
 import type { IItem } from "@/project/item/IItem";
-import type { ISection } from "@/project/section/ISection"; 
+import type { ISection } from "@/project/section/ISection";
 import type { IStock } from "../settingVoucher/stock/IStock";
 import type { IInputVoucherState } from "../settingVoucher/inputVoucherState/IInputVoucherState";
 
@@ -22,14 +22,16 @@ export interface IInputVoucherItem {
   id?: number;
   inputVoucherId?: number;
   Item: IItem;
+  count: number;
+  countIn?: number;
+  countOut?: number;
+  countReIn?: number;
+  countReOut?: number;
   description: string;
   ItemDescription?: string;
-  count: number;
   price: number;
   value: number;
   notes?: string;
-  inValue?: number;
-  outValue?: number;
 }
 export interface IInputVoucherItemVSelect {
   id?: number;

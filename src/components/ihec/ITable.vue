@@ -23,6 +23,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  showRowNumber: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 <template>
@@ -35,6 +39,7 @@ defineProps({
         <caption>{{ caption }}</caption>
         <thead class="dark:bg-tableHead  bg-[#23A559] text-[#fff] shadow">
           <tr>
+            <th v-if="showRowNumber"></th>
             <th class="text-lg font-bold   border-r border-gray-400 text-gray-50 dark:text-white py-2"
               v-for="(header, index) in headers" :key="index">
               {{ header.caption }}
@@ -44,8 +49,9 @@ defineProps({
         <tbody>
           <tr
             class="dark:hover:bg-tableBodyHover  bg-gray-100 dark:bg-tableBody hover:bg-gray-300 duration-300 border-t border-gray-400 dark:border-gray-900"
-            v-for="(row, rowIndex) in items" :key="rowIndex">
-            <td class="text-sm font-light border-y border-x text-center border-gray-400 whitespace-nowrap" dir="auto"
+            v-for="(row, rowIndex) in items" :key="rowIndex" :class="{ 'bg-gray-200 dark:bg-tableBodyHover': rowIndex % 2 === 0 }">
+            <td class="p-1" v-if="showRowNumber">{{ rowIndex+1 }}</td>
+            <td class="text-sm font-light border-y p-1 border-x text-center border-gray-400 whitespace-nowrap" dir="auto"
               v-for="(header, index) in headers" :key="index">
               <slot :name="header.value" :row="row" :cell="row[index]" :rowIndex="rowIndex" :cellIndex="index" class="">
                 {{ row[header.value] }}

@@ -39,6 +39,8 @@ export interface IStoreItemFilter {
   description?: string;
   limit: number;
   summation?: boolean;
+  sectionId?: number;
+  isSection: boolean;
   isEmployee: boolean;
   employeeId?: number;
 }
