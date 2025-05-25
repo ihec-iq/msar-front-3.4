@@ -1,15 +1,47 @@
 export default {
   Check: "تحقق",
   Logout: "تسجيل الخروج",
-  notFound : "لا يوجد",
-  Option : {
-    basic : "الخيارات الاساسية",
+  notFound: "لا يوجد",
+  Option: {
+    basic: "الخيارات الاساسية",
   },
-  SearhFilter: { enableDateFilter: "تفعيل التاريخ" },
+  showColumns: "عرض الاعمدة",
+  hideAll: "اخفاء الكل",
+  showAll: "اظهار الكل",
+  columns: "الاعمدة",
+  of: "من",
+  visible: "اظهار",
+  next: "التالي",
+  previous: "السابق",
+  print: "طباعة",
+  printAll: "طباعة الكل",
+  printSelected: "طباعة المختارة",
+  printPreview: "معاينة الطباعة",
+  printPreviewSelected: "معاينة الطباعة المختارة",
+  exportExcel: "تصدير الى Excel",
+  exportPdf: "تصدير الى PDF",
+  exportCsv: "تصدير الى CSV",
+  exportTxt: "تصدير الى Txt",
+  exportXml: "تصدير الى Xml",
+  exportJson: "تصدير الى Json",
+  exportYaml: "تصدير الى Yaml",
+  exportWord: "تصدير الى Word",
+  showing : "اظهار",
+  results :"النتائج",
+  prev : "السابق",
+  page : "الصفحة",
+  search : "بحث",
+  show : "اظهار",
+  rows : "الصفوف",
+  total: "الاجمالي",
+  totalOf: "اجمالي",
+  noResults : "لا توجد نتائج",
+  rowsPerPage : "الصفوف لكل صفحة",
+  searchFilter: { enableDateFilter: "تفعيل التاريخ" },
   Warehouse: {
     Index: "نظام المخازن",
     Setting: "الاعدادات",
-    Stock : {
+    Stock: {
       Index: "المخازن",
       Add: "اضافة مخزن",
       Update: "تعديل مخزن",
@@ -24,7 +56,7 @@ export default {
       Name: "اسم حالة الاستلام",
       Description: "الوصف",
       Search: "ابحث عن اسم حالة الاستلام",
-    }
+    },
   },
   RetrievalVoucher: {
     Index: "مستند ارجاع",
@@ -76,14 +108,14 @@ export default {
     Name: "اسم",
     Index: "مادة",
     Add: "اضف مادة",
-    Out: 'الخارج',
-    In: 'الداخل',
+    Out: "الخارج",
+    In: "الداخل",
     Code: "رمز المادة",
     Unit: "الوحدة",
     Category: "صنف المادة",
     Sum: "المواد",
     Description: "الوصف",
-    Choose: "اختر المادة"
+    Choose: "اختر المادة",
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -99,7 +131,7 @@ export default {
     DateBill: "تاريخ الطلبية",
     NumberBill: "رقم الطلبية",
     State: "المصدر",
-    Number: "الرقم"
+    Number: "الرقم",
   },
   DirectVoucher: {
     Index: "الصرف المباشر",
@@ -110,11 +142,11 @@ export default {
     DateBill: "تاريخ الطلبية",
     NumberBill: "رقم الطلبية",
     State: "من قبل",
-    Number: "الرقم"
+    Number: "الرقم",
   },
-  OutputVoucher :{
-    Add : "اضافة سند الاخراج المخزني",
-    Update : "تعديل سند الاخراج المخزني",
+  OutputVoucher: {
+    Add: "اضافة سند الاخراج المخزني",
+    Update: "تعديل سند الاخراج المخزني",
     Index: "الاخراج المخزني",
     DateBill: "تاريخ الطلبية",
     Date: "تاريخ السند",
@@ -122,12 +154,12 @@ export default {
     Number: "الرقم",
     State: "من قبل",
   },
-  ResponseError:{
-    401 : "غير مصرح",
-    403 : "غير مصرح",
-    404 : "غير موجود",
-    422 : "هناك مدخلات غير صحيحة او نقص",
-    500 : "خطأ في السيرفر",
+  ResponseError: {
+    401: "غير مصرح",
+    403: "غير مصرح",
+    404: "غير موجود",
+    422: "هناك مدخلات غير صحيحة او نقص",
+    500: "خطأ في السيرفر",
   },
   SignaturePerson: "توقيع الموظف",
   EmployeeRequest: "طلبت من",
@@ -145,7 +177,7 @@ export default {
   VacationDaily: {
     Title: "اجازة اعتيادية",
     Add: "اضافة اجازة اعتيادية",
-    Update: "تعديل اجازة اعتيادية"
+    Update: "تعديل اجازة اعتيادية",
   },
   VacationTime: {
     Title: "اجازة زمنية",
@@ -168,7 +200,11 @@ export default {
   VacationSumSickReport: "الاجازات المرضية",
   VacationSearch: "ابحث عن اسم الموظف",
   VacationReason: "سبب الاجازة",
-  Store: { Index: "المخزنية", ItemHistory: "مخزنية المادة المحددة", TypeReport: "نوع التقرير" },
+  Store: {
+    Index: "المخزنية",
+    ItemHistory: "مخزنية المادة المحددة",
+    TypeReport: "نوع التقرير",
+  },
   ConfigServer: "اعدادات الاتصال بالسيرفر",
   ConnectionString: "عنوان السيرفر",
   Organization: "المؤوسسة",
@@ -184,7 +220,7 @@ export default {
     Name: "الاعدادات",
     Add: "اضافة اعدادات",
     Update: "تعديل الاعدادات",
-    SettingNumberDayesAlertBonus: "عدد الايام الداخلة في التنبيهات"
+    SettingNumberDayesAlertBonus: "عدد الايام الداخلة في التنبيهات",
   },
   HrDocument: {
     Index: "ملفات الاضابير",
@@ -194,7 +230,7 @@ export default {
     Update: "تعديل ملف الى الاضبارة",
     AddDayes: "ايام المظافة",
     AddMonths: "اشهر المظافة",
-    Open: "فتح ملفات الاضبارة"
+    Open: "فتح ملفات الاضبارة",
   },
   Employee: {
     Name: "اسم الموظف",
@@ -276,7 +312,7 @@ export default {
     ReCalculate: "اعادة حساب العلاوات",
     IsBoundFilter: "عرض الاستحقاق فقط خلال الفترة",
     number: "رقم العلاوة",
-    notes: "ملاحظات"
+    notes: "ملاحظات",
   },
   Promotion: {
     Index: "الترفيعات",
@@ -298,7 +334,7 @@ export default {
     ReCalculate: "اعادة حساب الترفيعات",
     IsBoundFilter: "عرض الاستحقاق فقط خلال الفترة",
     number: "رقم الترفيع",
-    notes: "ملاحظات"
+    notes: "ملاحظات",
   },
   Refresh: "تحديث",
   UserIndex: "بيانات المستخدمين",
@@ -573,7 +609,7 @@ export default {
   Print: "طباعة",
   "Are You Sure?": "هل انت متأكد ؟",
   "You Won't Be Able To Revert This!": "لن تكون قادرًا على التراجع عن هذا!",
-  "ConfirmDelete": "هل انت متأكد من عملية الحذف",
+  ConfirmDelete: "هل انت متأكد من عملية الحذف",
   "Yes, delete it!": " نعم , احذف",
   "Yes, do it": " نعم , اكد ذلك",
   "No, cancel!": "لا , الغي",

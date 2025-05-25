@@ -5,15 +5,17 @@ export interface IStore {
   itemName: string;
   code: string;
   description: string;
+  descriptionItem: string;
   stockName: string;
   categoryName: string;
   price?: number;
   count: number;
-  in?: number;
-  out?: number;
-  reIn?: number;
-  reOut?: number;
+  countIn?: number;
+  countOut?: number;
+  countReIn?: number;
+  countReOut?: number;
 }
+ 
 export interface IStoreItemHistory {
   voucherId: number;
   itemId: number;

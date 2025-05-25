@@ -36,14 +36,7 @@ const showPopup = () => {
 };
 const closePopup = () => {
   showPop.value = false;
-};
-let isDark = useDark();
-let themeDark = ref(false);
-const toggleDark = useToggle(isDark);
-const changeDark = () => {
-  themeDark.value = !themeDark.value;
-  toggleDark(themeDark.value);
-};
+}; 
 const { Config } = storeToRefs(useConfigStore());
 interface ILogin {
   email: string;

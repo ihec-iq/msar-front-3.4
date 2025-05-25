@@ -87,6 +87,7 @@ onMounted(() => {
         </svg>
       </button>
     </div>
+    
     <!-- logo and co Name  -->
     <div class="font-bold items-start flex flex-col text-black mt-5"
       :class="{ 'w-14': isClose, 'w-full lg:ml-0 xs:ml-1': !isClose }">

@@ -163,7 +163,7 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:in="{ row }">
             <span
               class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
-              >↓{{ Number(row.in) + Number(row.reIn) }}</span
+              >↓{{ Number(row.countIn) + Number(row.countReIn) }}</span
             >
           </template>
           <template v-slot:price="{ row }">
@@ -172,16 +172,14 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:out="{ row }">
             <span
               class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
-              >↑{{ Number(row.out) + Number(row.reOut) }}</span
+              >↑{{ Number(row.countOut) + Number(row.countReOut) }}</span
             ></template
           >
           <template v-slot:count="{ row }">
             <span
               class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
               >{{
-                Number(row.in) +
-                Number(row.reIn) -
-                (Number(row.out) + Number(row.reOut))
+                Number(row.count)  
               }}
             </span></template
           >

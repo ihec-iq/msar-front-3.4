@@ -22,7 +22,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Name"), value: "name" },
   { caption: t("Email"), value: "email" },
   { caption: t("Role"), value: "roles" },
-  { caption: t("Details"), value: "actions" },
+  { caption: t("Details"), value: "actions", print: false },
 ]);
 const { get_filter } = useUserStore();
 import { limits } from "@/utilities/defaultParams";

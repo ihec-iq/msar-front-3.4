@@ -327,8 +327,8 @@ const showData = async (id: number) => {
         retrievalVoucher.value.date = response.data.data.date;
         retrievalVoucher.value.number = response.data.data.number;
         retrievalVoucher.value.notes = response.data.data.notes;
-        retrievalVoucher.value.Items = response.data.data.Items;
         retrievalVoucher.value.Employee = response.data.data.Employee;
+        retrievalVoucher.value.Items = response.data.data.Items;
         retrievalVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
       }
@@ -373,12 +373,13 @@ onMounted(async () => {
 watch(
   () => retrievalVoucher.value.Employee,
   (newX) => {
-    useInputVoucherStore()
-      .getAllItemsVSelectByEmployeeId(retrievalVoucher.value.Employee.id)
-      .then(() => {
-        resetVoucherItem();
-        retrievalVoucherStore.resetItem();
-      });
+    if (Loading.value != true)
+      useInputVoucherStore()
+        .getAllItemsVSelectByEmployeeId(retrievalVoucher.value.Employee.id)
+        .then(() => {
+          resetVoucherItem();
+          retrievalVoucherStore.resetItem();
+        });
   }
 );
 
@@ -389,7 +390,6 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Count"), value: "count" },
   { caption: t("Price"), value: "price" },
   { caption: t("Total"), value: "Total" },
-  { caption: t("Stock"), value: "Stock" },
   { caption: t("Notes"), value: "notes" },
   { caption: t("Actions"), value: "Actions" },
 ]);
@@ -492,9 +492,7 @@ const headers = ref<Array<ITableHeader>>([
                 <template v-slot:Item="{ row }">
                   {{ row.InputVoucherItem.Item.name }}
                 </template>
-                <template v-slot:Stock="{ row }">
-                  {{ row.InputVoucherItem.Stock.name }}
-                </template>
+
                 <template v-slot:Total="{ row }">
                   {{ row.count * row.price }}
                 </template>

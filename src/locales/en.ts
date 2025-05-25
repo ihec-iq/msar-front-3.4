@@ -5,7 +5,38 @@ export default {
   Option: {
     basic: "Basic Options",
   },
-  SearhFilter: { enableDateFilter: "Enable Date Filter" },
+  showColumns: "Show Columns",
+  hideAll: "Hide All",
+  showAll: "Show All",
+  columns: "Columns",
+  of: "of",
+  visible: "Visible",
+  next: "next",
+  previous: "previous",
+  print: "print",
+  printAll: "print All",
+  printSelected: "print Selected",
+  printPreview: "print Preview",
+  printPreviewSelected: "print Preview Selected",
+  exportExcel: "Export to Excel",
+  exportPdf: "Export to Pdf",
+  exportCsv: "Export to Csv",
+  exportTxt: "Export to Txt",
+  exportXml: "Export to Xml",
+  exportJson: "Export to Json",
+  exportYaml: "Export to Yaml",
+  exportWord: "Export to Word",
+  showing: "Showing",
+  results: "results",
+  prev: "prev",
+  page: "page",
+  search: "search",
+  show: "show",
+  rows: "rows",
+  total: "total",
+  totalOf: "total of",
+  noResults: "no results",
+  searchFilter: { enableDateFilter: "Enable Date Filter" },
   Warehouse: {
     Index: "Warehouse System",
     Setting: "Setting",
@@ -42,7 +73,7 @@ export default {
     DateBill: "Bill Date",
     NumberBill: "Number Bill",
     State: "State",
-    Number: "Number"
+    Number: "Number",
   },
   DirectVoucher: {
     Index: "Direct Voucher",
@@ -53,7 +84,7 @@ export default {
     DateBill: "Bill Date",
     NumberBill: "Number Bill",
     State: "State",
-    Number: "Number"
+    Number: "Number",
   },
   OutputVoucher: {
     Add: "Add Output Voucher",
@@ -111,18 +142,18 @@ export default {
     Name: "Name",
     Index: "Item",
     Add: "Add Item",
-    Out: 'Item Out',
-    In: 'Item In',
+    Out: "Item Out",
+    In: "Item In",
     Code: "Item Code",
     Unit: "Unit Item",
     Category: "Category Item",
     Sum: "Items",
     Description: "Description",
-    Choose: "Choose Item"
+    Choose: "Choose Item",
   },
   Items: "Items",
   ItemAdd: "Add Item",
-  InputVoucherNumber: "Number", 
+  InputVoucherNumber: "Number",
   NumberVoucher: "Number Voucher",
   AvailableInStock: "Available",
   RecordDaily: "Days",
@@ -138,7 +169,7 @@ export default {
   VacationDaily: {
     Title: "Daily Vacation",
     Add: "Add Daily Vacation",
-    Update: "Update Daily Vacation"
+    Update: "Update Daily Vacation",
   },
   VacationTime: {
     Title: "Time Vacation",
@@ -162,7 +193,11 @@ export default {
 
   VacationSearch: "Search by Employee name",
   VacationReason: "Vacation Reason",
-  Store: { Index: "Store", ItemHistory: "Store Histoy Item", TypeReport: "Type Report" },
+  Store: {
+    Index: "Store",
+    ItemHistory: "Store Histoy Item",
+    TypeReport: "Type Report",
+  },
   StoreIndex: "",
   StoreTypeReport: "",
   SearchForItem: "Search by name or description",
@@ -182,7 +217,7 @@ export default {
     Name: "Setting",
     Add: "Add Setting",
     Update: "Update Setting",
-    SettingNumberDayesAlertBonus: "Number Dayes Show Alert Bonus"
+    SettingNumberDayesAlertBonus: "Number Dayes Show Alert Bonus",
   },
   HrDocument: {
     Index: "Employee Document",
@@ -192,7 +227,7 @@ export default {
     Update: "Update Document",
     AddDayes: "Add Dayes Bonus",
     AddMonths: "Add Months Bonus",
-    Open: "Open Documents"
+    Open: "Open Documents",
   },
   Employee: {
     Name: "Employee Name",
@@ -266,7 +301,7 @@ export default {
     ReCalculate: "Recalculate Data",
     IsBoundFilter: "Filter Rusult on ",
     number: "Number Bonus",
-    notes: "Notes"
+    notes: "Notes",
   },
   Promotion: {
     Index: "Promotions",
@@ -288,7 +323,7 @@ export default {
     ReCalculate: "Recalculate Promotions",
     IsBoundFilter: "Show only within the period",
     number: "Number Promotion",
-    notes: "Notes"
+    notes: "Notes",
   },
   Refresh: "Refresh",
   UserIndex: "User System",
@@ -378,7 +413,7 @@ export default {
   Permissions: "Permissions",
   "Are You Sure?": "Are You Sure?",
   "You Won't Be Able To Revert This!": "You Won't Be Able To Revert This!",
-  "ConfirmDelete": "Delete Operation , Are You Sure?",
+  ConfirmDelete: "Delete Operation , Are You Sure?",
   "Yes, delete it!": "Yes, delete it!",
   "Yes, do it": "Yes, do it",
   "No, cancel!": "No, cancel!",

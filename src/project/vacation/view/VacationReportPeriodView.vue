@@ -218,7 +218,7 @@ const headersSick = ref<Array<ITableHeader>>([
               for="default-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              {{ t("SearhFilter.enableDateFilter") }}</label
+              {{ t("searchFilter.enableDateFilter") }}</label
             >
           </ICol>
           <ICol :span-lg="1" :span-md="2" :span="1">
