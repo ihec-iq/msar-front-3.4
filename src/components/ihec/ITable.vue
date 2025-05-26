@@ -41,11 +41,22 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  showSearch: {
+    type: Boolean,
+    default: true,
+  },
+  showPagination: {
+    type: Boolean,
+    default: true,
+  },
+  pageSize: {
+    type: Number,
+    default: 10,
+  },
 });
 
 const searchQuery = ref("");
 const currentPage = ref(1);
-const pageSize = 10;
 const sortKey = ref("");
 const sortAsc = ref(true);
 const visibleColumns = ref(props.headers.map((h) => h.value));
@@ -79,12 +90,12 @@ const sortedItems = computed(() => {
 });
 
 const paginatedItems = computed(() => {
-  const start = (currentPage.value - 1) * pageSize;
-  return sortedItems.value.slice(start, start + pageSize);
+  const start = (currentPage.value - 1) * props.pageSize;
+  return sortedItems.value.slice(start, start + props.pageSize);
 });
 
 const totalPages = computed(() => {
-  return Math.ceil(sortedItems.value.length / pageSize);
+  return Math.ceil(sortedItems.value.length / props.pageSize);
 });
 
 const toggleSort = (key: string) => {
@@ -121,6 +132,36 @@ const printTable = () => {
   const printContent = document.getElementById("printable-table");
   if (!printContent) return;
 
+  // Create a clean copy of the table for printing
+  const tableClone = printContent.cloneNode(true) as HTMLElement;
+
+  // Remove columns marked with print: false
+  const hiddenColumns: number[] = [];
+  props.headers.forEach((header, index) => {
+    if (header.print === false) {
+      hiddenColumns.push(index + (props.showRowNumber ? 1 : 0)); // Account for row number column
+    }
+  });
+
+  // Remove header cells for hidden columns
+  const headerRow = tableClone.querySelector("thead tr");
+  if (headerRow) {
+    hiddenColumns.reverse().forEach((colIndex) => {
+      const cell = headerRow.children[colIndex];
+      if (cell) cell.remove();
+    });
+  }
+
+  // Remove body cells for hidden columns
+  const bodyRows = tableClone.querySelectorAll("tbody tr");
+  bodyRows.forEach((row) => {
+    hiddenColumns.reverse().forEach((colIndex) => {
+      const cell = row.children[colIndex];
+      if (cell) cell.remove();
+    });
+    hiddenColumns.reverse(); // Restore order for next row
+  });
+
   const newWindow = window.open("", "_blank");
   if (!newWindow) return;
 
@@ -137,6 +178,23 @@ const printTable = () => {
         th { background-color: #f5f5f5; font-weight: bold; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         .print-hide { display: none !important; }
+        
+        /* Hide columns with print: false - backup CSS method */
+        ${props.headers
+          .map((header, index) => {
+            if (header.print === false) {
+              const colIndex = index + (props.showRowNumber ? 2 : 1); // CSS nth-child is 1-based
+              return `
+              th:nth-child(${colIndex}),
+              td:nth-child(${colIndex}) {
+                display: none !important;
+              }
+            `;
+            }
+            return "";
+          })
+          .join("")}
+        
         @media print { 
           body { margin: 0; }
           .print-caption { page-break-after: avoid; }
@@ -146,7 +204,7 @@ const printTable = () => {
     </head>
     <body>
       ${props.caption || props.title ? `<div class="print-caption">${props.caption || props.title}</div>` : ""}
-      ${printContent.innerHTML}
+      ${tableClone.outerHTML}
     </body>
     </html>
   `);
@@ -178,7 +236,7 @@ const toggleAllColumns = () => {
     <div class="mb-4 flex flex-wrap justify-between items-center gap-4">
       <div class="flex items-center gap-3">
         <!-- Search Input -->
-        <div class="relative">
+        <div class="relative" v-if="showSearch">
           <div
             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
           >
@@ -208,6 +266,7 @@ const toggleAllColumns = () => {
         <div class="relative" v-if="showColumnsButton">
           <button
             @click="showColumnPopup = !showColumnPopup"
+            type="button"
             class="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
           >
             <div class="relative">
@@ -334,6 +393,12 @@ const toggleAllColumns = () => {
                     class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors"
                   >
                     {{ header.caption }}
+                    <span
+                      v-if="header.print === false"
+                      class="ml-2 text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full"
+                    >
+                      Print Hidden
+                    </span>
                   </span>
                 </label>
               </div>
@@ -410,9 +475,6 @@ const toggleAllColumns = () => {
               v-show="visibleColumns.includes(header.value)"
               :class="[
                 'px-4 py-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 select-none text-left border-r border-gray-200 dark:border-gray-600 last:border-r-0 transition-all duration-150',
-                {
-                  'print-hide-column': header.print === false || !header.print,
-                },
               ]"
               @click="toggleSort(header.value)"
             >
@@ -423,6 +485,7 @@ const toggleAllColumns = () => {
                   <span
                     v-if="header.print === false"
                     class="ml-1 text-gray-400 dark:text-gray-500 print-hide"
+                    title="This column will be hidden when printing"
                   >
                     <svg
                       class="w-4 h-4 inline-block"
@@ -481,10 +544,7 @@ const toggleAllColumns = () => {
               v-for="header in props.headers"
               :key="header.value"
               v-show="visibleColumns.includes(header.value)"
-              :class="[
-                'px-4 py-3 text-sm text-gray-900 dark:text-gray-100 border-r border-gray-200 dark:border-gray-700 last:border-r-0',
-                { 'print-hide-column': header.print === false },
-              ]"
+              class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 border-r border-gray-200 dark:border-gray-700 last:border-r-0"
             >
               <slot :name="header.value" :row="row" :value="row[header.value]">
                 {{ row[header.value] }}
@@ -496,7 +556,7 @@ const toggleAllColumns = () => {
     </div>
 
     <!-- Pagination -->
-    <div class="mt-4 flex justify-between items-center">
+    <div class="mt-4 flex justify-between items-center" v-if="showPagination">
       <div class="text-sm text-gray-600 dark:text-gray-400">
         {{ t("showing") || "Showing" }}
         <span class="font-medium text-gray-900 dark:text-gray-100">{{

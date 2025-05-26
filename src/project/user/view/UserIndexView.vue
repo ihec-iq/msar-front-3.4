@@ -150,11 +150,9 @@ const trns = app?.appContext.config.globalProperties.$trns;
       <IRow>
         <ITable :items="data" :headers="headers">
           <template v-slot:actions="{ row }">
-            <IDropdown>
-              <li>
+             
                 <EditButton @click="update(row.id)" />
-              </li>
-            </IDropdown>
+              
           </template>
           <template v-slot:roles="{ row }">
             <span v-if="row.roles != '[]'" class="flex justify-center">

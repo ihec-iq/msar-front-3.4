@@ -191,7 +191,6 @@ const handleBlur = (e: FocusEvent) => {
 
 // Toggle dropdown
 const toggleDropdown = () => {
-  console.log("toggle");
   if (!props.isDisabled) {
     dropdownOpen.value = !dropdownOpen.value;
   }

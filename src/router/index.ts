@@ -71,6 +71,13 @@ const router = createRouter({
           meta: {
             middleware: [authMiddleware],
           },
+        },{
+          path: "/div",
+          name: "div",
+          component: () => import("@/views/DivView.vue"),
+          meta: {
+            middleware: [authMiddleware],
+          },
         },
         {
           path: "/whatsapp",

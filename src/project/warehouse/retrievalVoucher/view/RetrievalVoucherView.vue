@@ -458,6 +458,40 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
           <IFlex>
             <IBasis base="1/4" base-sm="1/2" base-md="1/2">
+              <IInput
+                :label="t('RetrievalVoucher.Number')"
+                name="Number"
+                v-model="retrievalVoucher.number"
+                :type="EnumInputType.Text"
+              />
+            </IBasis>
+            <IBasis base="1/4" base-sm="1/2" base-md="1/2">
+              <IInput
+                :label="t('RetrievalVoucher.Number')"
+                name="Number"
+                v-model="retrievalVoucher.number"
+                :type="EnumInputType.Text"
+              />
+            </IBasis>
+            <IBasis base="1/4" base-sm="1/2" base-md="1/2">
+              <IInput
+                :label="t('RetrievalVoucher.Number')"
+                name="Number"
+                v-model="retrievalVoucher.number"
+                :type="EnumInputType.Text"
+              />
+            </IBasis>
+            <IBasis base="1/4" base-sm="1/2" base-md="1/2">
+              <IInput
+                :label="t('RetrievalVoucher.Number')"
+                name="Number"
+                v-model="retrievalVoucher.number"
+                :type="EnumInputType.Text"
+              />
+            </IBasis>
+          </IFlex>
+          <IFlex>
+            <IBasis base="1/4" base-sm="1/2" base-md="1/2">
               <ISelect
                 :label="t('Type')"
                 v-model="retrievalVoucher.TypeId"
@@ -488,7 +522,16 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
           <IRow>
             <ICol>
-              <ITable :items="retrievalVoucher.Items" :headers="headers">
+              <ITable
+                :items="retrievalVoucher.Items"
+                :headers="headers"
+                :showSearch="false"
+                :showPrintButton="false"
+                :showExportButton="false"
+                :showColumnsButton="false"
+                :showFilter="false"
+                :showPagination="false"
+              >
                 <template v-slot:Item="{ row }">
                   {{ row.InputVoucherItem.Item.name }}
                 </template>

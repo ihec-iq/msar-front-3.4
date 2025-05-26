@@ -21,6 +21,7 @@ declare module 'vue' {
     CardContainer: typeof import('./src/components/ui/card-3d/CardContainer.vue')['default']
     CardItem: typeof import('./src/components/ui/card-3d/CardItem.vue')['default']
     CardPortalComponent: typeof import('./src/components/CardPortalComponent.vue')['default']
+    CardPortalSingleComponent: typeof import('./src/components/CardPortalSingleComponent.vue')['default']
     CardSkeleton: typeof import('./src/components/general/CardSkeleton.vue')['default']
     Combobox: typeof import('./src/components/ui/combobox/Combobox.vue')['default']
     ComboboxAnchor: typeof import('./src/components/ui/combobox/ComboboxAnchor.vue')['default']
