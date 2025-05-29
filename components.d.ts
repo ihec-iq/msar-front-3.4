@@ -110,6 +110,7 @@ declare module 'vue' {
     RadioGroupItem: typeof import('./src/components/ui/radio-group/RadioGroupItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ScreenSizeComponent: typeof import('./src/components/ScreenSizeComponent.vue')['default']
     SettingsComponent: typeof import('./src/components/fixed/SettingsComponent.vue')['default']
     ShowButton: typeof import('./src/components/dropDown/ShowButton.vue')['default']
     ShowInputNumber: typeof import('./src/components/inputs/ShowInputNumber.vue')['default']

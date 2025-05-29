@@ -331,7 +331,7 @@ const headerFiles = ref<Array<ITableHeader>>([
   { caption: t("Date"), value: "issueDate" },
   { caption: t("HrDocument.Type"), value: "HrDocumentype" },
   { caption: t("HrDocument.AddMonths"), value: "addMonths" },
-  { caption: t("HrDocument.AddDayes"), value: "addDays" },
+  { caption: t("HrDocument.AddDays"), value: "addDays" },
   { caption: t("Notes"), value: "notes" },
 ]);
 const headerBonus = ref<Array<ITableHeader>>([

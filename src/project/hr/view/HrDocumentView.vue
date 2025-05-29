@@ -416,7 +416,7 @@ const changeSelectedType = () => {
                   <template #option="{ name, addDays, addMonths }">
                     <div class="dir:rtl text-right p-1 border-2 border-solid border-red-700">
                       <span>{{ name }}</span> <br /><span v-if="addDays > 0" class="dark:text-gray-100 text-gray-600">{{
-                        t('HrDocument.AddDayes') }} {{ addDays }} {{ t('Day') }}</span>
+                        t('HrDocument.AddDays') }} {{ addDays }} {{ t('Day') }}</span>
                       <span v-if="addMonths > 0" class="dark:text-gray-100 text-gray-600">{{
                         t('HrDocument.AddMonths') }} {{ addMonths }} {{ t('Month') }}</span>
                     </div>
@@ -424,7 +424,7 @@ const changeSelectedType = () => {
                 </vSelect>
               </ICol>
               <ICol span="1" span-md="2" span-sm="4" class="flex flex-row">
-                <IInput :label="t('HrDocument.AddDayes')" name="AddDayes" v-model="hrDocument.addDays" class="w-40 mx-2"
+                <IInput :label="t('HrDocument.AddDays')" name="AddDays" v-model="hrDocument.addDays" class="w-40 mx-2"
                   :type="EnumInputType.Number" />
                 <IInput :label="t('HrDocument.AddMonths')" name="AddMonths" v-model="hrDocument.addMonths"
                   class="w-40 mx-2" :type="EnumInputType.Number" />

@@ -10,7 +10,13 @@ const props = defineProps({
     required: true,
   },
   items: {
-    type: Array as () => ITableItem[],
+    _type: Array as () => ITableItem[],
+    get type() {
+      return this._type;
+    },
+    set type(value) {
+      this._type = value;
+    },
     required: true,
   },
   title: {
@@ -227,6 +233,21 @@ const toggleAllColumns = () => {
   } else {
     visibleColumns.value = props.headers.map((h) => h.value);
   }
+};
+const getColumnStyle = (key: string) => {
+  const header = props.headers.find((h) => h.value === key);
+  if (header?.width) {
+    return { width: header.width };
+  }
+
+  const values = props.items.map((item) => String(item[key] ?? ""));
+  const maxLength = Math.max(...values.map((v) => v.length), key.length);
+  const charWidth = 8; // estimated width of one character
+  const padding = 24; // extra padding
+  return {
+    minWidth: `${maxLength * charWidth + padding}px`,
+    whiteSpace: "nowrap",
+  };
 };
 </script>
 
@@ -473,14 +494,15 @@ const toggleAllColumns = () => {
               v-for="header in props.headers"
               :key="header.value"
               v-show="visibleColumns.includes(header.value)"
+              :style="getColumnStyle(header.value)"
               :class="[
                 'px-4 py-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 select-none text-left border-r border-gray-200 dark:border-gray-600 last:border-r-0 transition-all duration-150',
               ]"
               @click="toggleSort(header.value)"
             >
-              <div class="flex items-center justify-between group">
+              <div class="flex items-center justify-between group content-center">
                 <span
-                  class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider"
+                  class="text-xs font-bold text-gray-700 text-center dark:text-gray-200 uppercase tracking-wider"
                   >{{ header.caption }}
                   <span
                     v-if="header.print === false"
@@ -544,6 +566,7 @@ const toggleAllColumns = () => {
               v-for="header in props.headers"
               :key="header.value"
               v-show="visibleColumns.includes(header.value)"
+              :style="getColumnStyle(header.value)"
               class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 border-r border-gray-200 dark:border-gray-700 last:border-r-0"
             >
               <slot :name="header.value" :row="row" :value="row[header.value]">

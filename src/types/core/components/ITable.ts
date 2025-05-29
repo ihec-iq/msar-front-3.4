@@ -1,5 +1,5 @@
 
-export interface ITableItem   {
+export interface ITableItem {
   [key: string]: any;
 }
 export interface ITableHeader {
@@ -10,4 +10,5 @@ export interface ITableHeader {
   sortKey?: string;
   sortAsc?: boolean;
   print?: boolean; // Default: true
+  width?: string;
 }
