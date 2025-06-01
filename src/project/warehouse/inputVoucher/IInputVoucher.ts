@@ -2,6 +2,7 @@ import type { IItem } from "@/project/item/IItem";
 import type { ISection } from "@/project/section/ISection";
 import type { IStock } from "../settingVoucher/stock/IStock";
 import type { IInputVoucherState } from "../settingVoucher/inputVoucherState/IInputVoucherState";
+import type { IDocument } from "@/project/archive/IArchive";
 
 export interface IInputVoucher {
   id: number;
@@ -17,6 +18,7 @@ export interface IInputVoucher {
   signaturePerson: string;
   requestedBy: string;
   itemsCount?: number;
+  FilesDocument?: Array<IDocument>;
 }
 export interface IInputVoucherItem {
   id?: number;

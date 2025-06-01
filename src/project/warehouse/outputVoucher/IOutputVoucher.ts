@@ -1,6 +1,7 @@
 import type { IInputVoucherItem } from "../inputVoucher/IInputVoucher";
 import type { IItem } from "@/project/item/IItem";
 import type { IStock } from "../settingVoucher/stock/IStock";
+import type { IDocument } from "@/project/archive/IArchive";
 
 export interface IOutputVoucher {
   id: number;
@@ -14,6 +15,7 @@ export interface IOutputVoucher {
   Stock: IStock;
   Employee: IOutputVoucherEmployee;
   itemsCount?: number;
+  FilesDocument?: Array<IDocument>;
 }
 export interface IOutputVoucherItem {
   id?: number;

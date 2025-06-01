@@ -122,8 +122,6 @@ import { getCurrentInstance } from "vue";
 import ITable from "@/components/ihec/ITable.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IInput from "@/components/inputs/IInput.vue";
-import { Icon } from "@iconify/vue";
-import IDropdown from "@/components/ihec/IDropdown.vue";
 import IPage from "@/components/ihec/IPage.vue";
 const app = getCurrentInstance();
 const trns = app?.appContext.config.globalProperties.$trns;
@@ -149,10 +147,8 @@ const trns = app?.appContext.config.globalProperties.$trns;
       </IRow>
       <IRow>
         <ITable :items="data" :headers="headers">
-          <template v-slot:actions="{ row }">
-             
+          <template v-slot:actions="{ row }">         
                 <EditButton @click="update(row.id)" />
-              
           </template>
           <template v-slot:roles="{ row }">
             <span v-if="row.roles != '[]'" class="flex justify-center">

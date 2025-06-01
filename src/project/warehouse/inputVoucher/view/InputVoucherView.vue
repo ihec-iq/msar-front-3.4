@@ -38,6 +38,12 @@ import IPage from "@/components/ihec/IPage.vue";
 //   direction: "rtl", // Set the direction to RTL
 // });
 // //#endregion
+//#region Drag & Drop
+import { useDragDropStore } from "@/project/archive/dragDrop";
+const { filesDataInput } = storeToRefs(useDragDropStore());
+const updateList = () => {
+  if (id.value>0) showData(id.value);
+};
 //#region store
 const { stocks } = storeToRefs(useStockStore());
 const { items } = storeToRefs(useItemStore());
@@ -59,6 +65,8 @@ import {
 import { WarningToast } from "@/utilities/Toast";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
+import FilePreview from "@/project/archive/view/FilePreview.vue";
+import DragDrop from "@/project/archive/view/DragDrop.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -208,7 +216,10 @@ const store = () => {
   }
   errors.value = null;
   const sendData = makeFormDataFromObject(inputVoucher.value);
-
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    sendData.append("FilesDocument[]", files[i]);
+  }
   inputVoucherStore
     .store(sendData)
     .then((response) => {
@@ -219,6 +230,7 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        filesDataInput.value = [];
         router.go(-1);
       }
     })
@@ -242,6 +254,10 @@ function update() {
   }
   errors.value = null;
   const sendData = makeFormDataFromObject(inputVoucher.value);
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    sendData.append("FilesDocument[]", files[i]);
+  }
   inputVoucherStore
     .update(inputVoucher.value.id, sendData)
     .then((response) => {
@@ -252,6 +268,7 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
+        filesDataInput.value = [];
         showData(inputVoucher.value.id);
       }
     })
@@ -307,11 +324,12 @@ const showData = async (id: number) => {
         inputVoucher.value.date = response.data.data.date;
         inputVoucher.value.number = response.data.data.number;
         inputVoucher.value.notes = response.data.data.notes;
-        inputVoucher.value.Items = response.data.data.items;
+        inputVoucher.value.Items = response.data.data.Items;
         inputVoucher.value.requestedBy = response.data.data.requestedBy;
         inputVoucher.value.signaturePerson = response.data.data.signaturePerson;
         inputVoucher.value.State = response.data.data.State;
         inputVoucher.value.Stock = response.data.data.Stock;
+        inputVoucher.value.FilesDocument = response.data.data.FilesDocument;
       }
     })
     .catch((errors) => {
@@ -334,6 +352,8 @@ const back = () => {
 
 onMounted(async () => {
   Loading.value = true;
+  filesDataInput.value = [];
+
   checkPermissionAccessArray([EnumPermission.ShowInputVouchers]);
   await useInputVoucherStateStore().get_inputVoucherStates();
   //await inputVoucherStore.getEmployees();
@@ -523,6 +543,7 @@ const headers = ref<Array<ITableHeader>>([
               />
             </ICol>
           </IRow>
+
           <IRow>
             <ICol>
               <IButton2
@@ -564,6 +585,20 @@ const headers = ref<Array<ITableHeader>>([
             </ICol>
           </IRow>
         </IForm>
+        <!-- file -->
+        <IRow col-lg="4" col-md="4" col-sm="2" :title="t('files')">
+          <ICol
+            span="3"
+            span-md="3"
+            span-sm="2"
+            v-for="document in inputVoucher.FilesDocument"
+            :key="document.name"
+          >
+            <FilePreview :file="document" @updateList="updateList">
+            </FilePreview>
+          </ICol>
+        </IRow>
+        <DragDrop></DragDrop>
         <IRow>
           <ICol>
             <IErrorMessages :validationResult="validationResult" />

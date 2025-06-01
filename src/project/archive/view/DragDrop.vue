@@ -6,6 +6,12 @@ import { useDragDropStore } from "../dragDrop";
 import { ref } from "vue";
 import { useDropZone } from "@vueuse/core";
 
+const props = defineProps({
+  title: {
+    type: [String],
+    default: t("DropFiles"),
+  },
+});
 const dropZoneRef = ref<HTMLDivElement>();
 const { isOverDropZone } = useDropZone(dropZoneRef, onDropFile);
 function onDropFile(files: File[] | null) {
@@ -41,7 +47,7 @@ const { filesDataInput } = storeToRefs(useDragDropStore());
               @change="onInputChange"
             />
             <label for="dropZoneRef">
-              <div v-if="isOverDropZone" v-html="t('DropFiles')"></div>
+              <div v-if="isOverDropZone" :v-html="title"></div>
               <div v-else v-html="t('ReleaseFiles')"></div>
             </label>
           </div>
@@ -110,4 +116,3 @@ button {
   cursor: pointer;
 }
 </style>
-@/project/archive/dragDrop@/utilities/I18nPlugin

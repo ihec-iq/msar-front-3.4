@@ -52,7 +52,14 @@ const rules: Array<IFieldValidation> = [
   { field: "Items", caption: t("Item.Sum"), rules: [isArray()] },
 ];
 //#endregion
-
+//#region Drag & Drop
+import { useDragDropStore } from "@/project/archive/dragDrop";
+import FilePreview from "@/project/archive/view/FilePreview.vue";
+import DragDrop from "@/project/archive/view/DragDrop.vue";
+const { filesDataInput } = storeToRefs(useDragDropStore());
+const updateList = () => {
+  if (id.value > 0) showData(id.value);
+};
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("OutputVoucher.Add");
@@ -235,6 +242,10 @@ const store = () => {
 
   errors.value = null;
   const sendData = makeFormDataFromObject(outputVoucher.value);
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    sendData.append("FilesDocument[]", files[i]);
+  }
   sendData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -249,6 +260,7 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        filesDataInput.value = [];
         router.go(-1);
       }
     })
@@ -272,6 +284,10 @@ function update() {
   }
   errors.value = null;
   const sendData = makeFormDataFromObject(outputVoucher.value);
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    sendData.append("FilesDocument[]", files[i]);
+  }
   sendData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -287,6 +303,7 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
+        filesDataInput.value = [];
         showData(outputVoucher.value.id);
       }
     })
@@ -327,6 +344,7 @@ const Delete = async () => {
             t("Deleted successfully ."),
             "success"
           );
+          filesDataInput.value = [];
           router.go(-1);
         });
       }
@@ -347,6 +365,8 @@ const showData = async (id: number) => {
         outputVoucher.value.Stock = response.data.data.Stock;
         outputVoucher.value.numberBill = response.data.data.numberBill;
         outputVoucher.value.dateBill = response.data.data.dateBill;
+        outputVoucher.value.FilesDocument = response.data.data.FilesDocument;
+        filesDataInput.value = [];
         outputVoucher.value.signaturePerson =
           response.data.data.signaturePerson;
       }
@@ -359,6 +379,7 @@ const showData = async (id: number) => {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
+        filesDataInput.value = [];
         router.go(-1);
       });
     });
@@ -369,6 +390,7 @@ const { stocks } = storeToRefs(useStockStore());
 
 onMounted(async () => {
   Loading.value = true;
+  filesDataInput.value = [];
   checkPermissionAccessArray([EnumPermission.ShowOutputVouchers]);
   await outputVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -473,7 +495,7 @@ const headers = ref<Array<ITableHeader>>([
                     </div>
                   </template>
                 </vSelect>
-              </div> 
+              </div>
               <!-- @change="ChangeStock()" -->
               <ISelect
                 class="w-[50%]"
@@ -503,14 +525,15 @@ const headers = ref<Array<ITableHeader>>([
               />
             </ICol>
           </IRow>
+
           <IRow>
             <ICol>
-            <IButton2
-              :text="t('Add')"
-              color="blue"
-              :type="EnumButtonType.Outlined"
-              post-icon="plus"
-              :on-click="AddPopup" 
+              <IButton2
+                :text="t('Add')"
+                color="blue"
+                :type="EnumButtonType.Outlined"
+                post-icon="plus"
+                :on-click="AddPopup"
               />
             </ICol>
           </IRow>
@@ -545,6 +568,20 @@ const headers = ref<Array<ITableHeader>>([
               </ITable>
             </ICol>
           </IRow>
+          <!-- file -->
+          <IRow col-lg="4" col-md="4" col-sm="2" :title="t('files')">
+            <ICol
+              span="3"
+              span-md="3"
+              span-sm="2"
+              v-for="document in outputVoucher.FilesDocument"
+              :key="document.name"
+            >
+              <FilePreview :file="document" @updateList="updateList">
+              </FilePreview>
+            </ICol>
+          </IRow>
+          <DragDrop></DragDrop>
           <IRow>
             <ICol>
               <IErrorMessages :validationResult="validationResult" />
@@ -580,7 +617,7 @@ const headers = ref<Array<ITableHeader>>([
                 #option="{ Item, outValue, inValue, notes, description }"
               >
                 <div
-                  class="rtl:text-right border-2 p-2 rounded-md dark:bg-gray-800 bg-gray-100 "
+                  class="rtl:text-right border-2 p-2 rounded-md dark:bg-gray-800 bg-gray-100"
                 >
                   <div
                     class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 text-gray-800"
@@ -693,8 +730,10 @@ const headers = ref<Array<ITableHeader>>([
               :type="EnumInputType.Number"
               v-model="OutputVoucherItem.count"
               :max="
-                Number(OutputVoucherItem.InputVoucherItem.inValue) -
-                Number(OutputVoucherItem.InputVoucherItem.outValue)
+                Number(OutputVoucherItem.InputVoucherItem.countIn) -
+                Number(OutputVoucherItem.InputVoucherItem.countOut) +
+                Number(OutputVoucherItem.InputVoucherItem.countReIn) -
+                Number(OutputVoucherItem.InputVoucherItem.countReOut)
               "
               :min="1"
             />
