@@ -31,7 +31,7 @@ const namePage = ref("Setting.PromotionName");
 const update = async () => {
   errors.value = null;
   try {
-    await SettingStore.updateByKey(prepareFormData(SettingPromotionData.value), SettingPromotionData.value.id.toString());
+    await SettingStore.updateByKeyStr(prepareFormData(SettingPromotionData.value), SettingPromotionData.value.id.toString());
     SuccessToast();
   } catch (e: any) {
     ErrorToast(e.toString());

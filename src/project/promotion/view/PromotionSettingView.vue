@@ -31,7 +31,7 @@ const namePage = ref("Setting.Name");
 const update = async () => {
   errors.value = null;
   try { 
-      await SettingStore.updateByKey(prepareFormData(SettingNumberDayesAlertPromotion.value),SettingNumberDayesAlertPromotion.value.id.toString())
+      await SettingStore.updateByKeyStr(prepareFormData(SettingNumberDayesAlertPromotion.value),SettingNumberDayesAlertPromotion.value.id.toString())
       SuccessToast();
   } catch (e: any) {
     ErrorToast(e.toString())

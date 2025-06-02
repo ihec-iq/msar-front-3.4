@@ -61,6 +61,7 @@ const searchFilter = ref<IStoreItemFilter>({
   summation: true,
   isEmployee: false,
   employeeId: 0,
+  isSection: false
 });
 const getFilterData = async (page = 1) => {
   dataPage.value = [];

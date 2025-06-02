@@ -32,7 +32,6 @@ declare module 'vue' {
     ComboboxList: typeof import('./src/components/ui/combobox/ComboboxList.vue')['default']
     ComboboxSeparator: typeof import('./src/components/ui/combobox/ComboboxSeparator.vue')['default']
     ComboboxTrigger: typeof import('./src/components/ui/combobox/ComboboxTrigger.vue')['default']
-    copy: typeof import('./src/components/ui/ParticleImage/ParticleImage copy.vue')['default']
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DropdownMenu: typeof import('./src/components/ui/dropdown-menu/DropdownMenu.vue')['default']
     DropdownMenuCheckboxItem: typeof import('./src/components/ui/dropdown-menu/DropdownMenuCheckboxItem.vue')['default']
@@ -84,7 +83,6 @@ declare module 'vue' {
     IPageHeader: typeof import('./src/components/ihec/IPageHeader.vue')['default']
     IPagination: typeof import('./src/components/ihec/IPagination.vue')['default']
     IRadio: typeof import('./src/components/inputs/IRadio.vue')['default']
-    IRichtext: typeof import('./src/components/ihec/IRichtext.vue')['default']
     IRow: typeof import('./src/components/ihec/IRow.vue')['default']
     IRow2: typeof import('./src/components/ihec/IRow2.vue')['default']
     IRow22: typeof import('./src/components/ihec/test/IRow22.vue')['default']
@@ -132,7 +130,6 @@ declare module 'vue' {
     VanTab: typeof import('vant/es')['Tab']
     VanTabs: typeof import('vant/es')['Tabs']
     VersionChecker: typeof import('./src/components/VersionChecker.vue')['default']
-    WangEditor: typeof import('./src/components/WangEditor.vue')['default']
     WindowsDesign: typeof import('./src/components/general/WindowsDesign.vue')['default']
     WindowsDesign2: typeof import('./src/components/general/WindowsDesign2.vue')['default']
   }

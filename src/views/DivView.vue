@@ -10,8 +10,8 @@
         size="1/2"
         md="1/3"
         lg="1/3"
-        sm="1/1"
-        xs="1"
+        sm="full"
+        xs="full"
         custom-class="example-box"
         height="200px"
       >
@@ -29,8 +29,8 @@
         size="1/2"
         md="1/3"
         lg="1/3"
-        sm="1/1"
-        xs="1"
+        sm="full"
+        xs="full"
         custom-class="example-box"
         height="200px"
       >

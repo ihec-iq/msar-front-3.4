@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType } from "vue";
+import type { PropType } from "vue";
 import type { IconLink } from "./fixed/FixedMenu";
 import { t } from "@/utilities/I18nPlugin";
 import { Icon } from "@iconify/vue";
