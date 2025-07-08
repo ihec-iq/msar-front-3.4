@@ -132,11 +132,12 @@ export default defineConfig({
   define: {
     "process.env": process.env,
   },
-  base: process.env.NODE_ENV === "production" ? "/erp-msar/" : "/",
-  server: {
-    watch: {
-      usePolling: true
-    },
-    port: 1990
-  },
+  //base: process.env.NODE_ENV === "production" ? "/erp-msar/" : "/",
+  base: process.env.NODE_ENV === "production" ? "/" : "/",
+  // server: {
+  //   watch: {
+  //     usePolling: true
+  //   },
+  //   port: 1990
+  // },
 });
