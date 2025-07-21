@@ -12,7 +12,7 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { ErrorToast, SuccessToast, WarningToast } from "@/utilities/Toast";
+import { ErrorToast, SuccessToast, WarningToast } from "@/utilities/Toast2";
 import IForm from "@/components/ihec/IForm.vue";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 const { validate, min, required, max } = useValidation();

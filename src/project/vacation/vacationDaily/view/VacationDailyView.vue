@@ -15,7 +15,7 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 
 const { validate, min, required, foreignKey, max, number } = useValidation();
 

@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission, EnumSetting } from "@/utilities/EnumSystem";
-import { ErrorToast, SuccessToast } from "@/utilities/Toast";
+import { ErrorToast, SuccessToast } from "@/utilities/Toast2";
 import { prepareFormData } from "@/utilities/crudTool";
 import { useSettingStore } from "@/project/core/settingStore";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";

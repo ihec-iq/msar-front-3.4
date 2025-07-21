@@ -8,7 +8,7 @@ import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import vSelect from "vue-select";
 import { usePromotionStore } from "@/project/promotion/promotionStore"; // Updated store import
-import { SuccessToast } from "@/utilities/Toast";
+import { SuccessToast } from "@/utilities/Toast2";
 import type { IEmployeeLite } from "@/project/employee/IEmployee";
 import type { IDegreeStage } from "@/project/bonus/IBonus"; // Updated interfaces
 import { prepareFormData } from "@/utilities/crudTool";

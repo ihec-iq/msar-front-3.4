@@ -6,6 +6,7 @@ export default {
     basic: "Basic Options",
   },
   files: "Files",
+  FailedValidation: "Data validation failed",
   showColumns: "Show Columns",
   hideAll: "Hide All",
   showAll: "Show All",

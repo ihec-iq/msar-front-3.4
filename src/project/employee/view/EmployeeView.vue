@@ -29,13 +29,13 @@ import type {
   IStudy,
 } from "@/project/bonus/IBonus";
 import { prepareFormData } from "@/utilities/crudTool";
-import { ErrorToast, SuccessToast } from "@/utilities/Toast";
+import { ErrorToast, SuccessToast } from "@/utilities/Toast2";
 import EditButton from "@/components/dropDown/EditButton.vue";
 import { Icon } from "@iconify/vue";
 import { getError } from "@/utilities/helpers";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
 import OpenButton from "@/components/dropDown/OpenButton.vue";

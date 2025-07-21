@@ -19,7 +19,7 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
  

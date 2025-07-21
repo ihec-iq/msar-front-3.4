@@ -20,7 +20,7 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import { makeFormDataFromObject } from "@/utilities/tools";
 
 const { validate, min, required, isObject, foreignKey, max, number } =

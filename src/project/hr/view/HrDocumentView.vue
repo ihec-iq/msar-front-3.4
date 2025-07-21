@@ -20,7 +20,7 @@ import { Icon } from "@iconify/vue";
 import { ToNumber } from "@/utilities/tools";
 
 const { filesDataInput } = storeToRefs(useDragDropStore());
-import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast";
+import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast2";
 
 //region"Drag and Drop"
 import vSelect from "vue-select";

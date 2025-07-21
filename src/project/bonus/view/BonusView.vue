@@ -8,7 +8,7 @@ import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import vSelect from "vue-select";
 import { useBonusStore } from "@/project/bonus/bonusStore";
-import { SuccessToast } from "@/utilities/Toast";
+import { SuccessToast } from "@/utilities/Toast2";
 import type { IEmployeeLite } from "@/project/employee/IEmployee";
 import type { IDegreeStage } from "@/project/bonus/IBonus";
 import { ConvertToMoneyFormat } from "@/utilities/tools";

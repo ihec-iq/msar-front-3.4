@@ -18,7 +18,17 @@ import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import IForm from "@/components/ihec/IForm.vue";
 import IRow from "@/components/ihec/IRow.vue";
 import ICol from "@/components/ihec/ICol.vue";
-import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast";
+import { SuccessToast, ErrorToast, WarningToast } from "@/utilities/Toast2";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import { EnumPermission } from "@/utilities/EnumSystem";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
+import ISelectObject from "@/components/inputs/ISelectObject.vue";
+import { formDataToObject } from "@/utilities/formDataUtils";
+import { showToast } from "@/utilities/toast";
+
 import {
   useValidation,
   type IValidationResult,
@@ -73,7 +83,16 @@ const store = () => {
   errors.value = null;
   validationResult.value = validate(archive.value, rules);
   if (!validationResult.value.success) {
-    WarningToast(t("ValidationFails"));
+    //WarningToast(t("ValidationFails"));
+    let messages = validationResult.value.errors[0].messages.join('، ')
+    showToast(t('FailedValidation')+" : "+validationResult.value.errors[0].fieldName, {
+      description: messages,
+      status: "warning",
+      action: {
+        label: "Done",
+        onClick: () => { },
+      },
+    });
     return;
   }
   archive.value.isIn = isIn.value ? 1 : 0;
@@ -108,11 +127,11 @@ function update() {
   errors.value = null;
   archive.value.isIn = isIn.value ? 1 : 0;
   const formData: FormData = prepareFormData(archive.value);
-  const files = filesDataInput.value; 
+  const files = filesDataInput.value;
   files.forEach((file: File) => {
     formData.append("FilesDocument[]", file);
   });
- 
+
   archiveStore
     .update(archive.value.id, formData)
 
@@ -201,14 +220,7 @@ const chackArchiveTypeLoad = async () => {
   )
     await useArchiveTypeStore().getBySectionUser();
 };
-import IButton2 from "@/components/ihec/IButton2.vue";
-import { EnumPermission } from "@/utilities/EnumSystem";
-import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
-import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
-import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
-import ISelectObject from "@/components/inputs/ISelectObject.vue";
-import { formDataToObject } from "@/utilities/formDataUtils";
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
@@ -253,7 +265,7 @@ import { formDataToObject } from "@/utilities/formDataUtils";
           </IRow>
           <!-- file -->
           <IRow col-lg="4" col-md="4" col-sm="2">
-            <ICol span="3" span-md="3" span-sm="2"  v-for="document in archive.FilesDocument" :key="document.name">
+            <ICol span="3" span-md="3" span-sm="2" v-for="document in archive.FilesDocument" :key="document.name">
               <FilePreview :file="document" @updateList="updateList">
               </FilePreview>
             </ICol>

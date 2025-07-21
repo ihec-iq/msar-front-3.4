@@ -42,6 +42,7 @@ const userInfo = ref<IUser>({
   created: "",
   expire_date: "",
 });
+
 const random = Math.floor(Math.random() * 10)
   .toString()
   .repeat(8);
@@ -101,7 +102,7 @@ onMounted(async () => {
                 type="text"
                 :disabled="true"
               />
-            </IBasis>
+            </IBasis> 
             <IBasis base="1/2">
               <IInput
                 :label="t('Email')"
@@ -172,5 +173,4 @@ onMounted(async () => {
       />
     </template>
   </IPage>
-</template>
-@/views/role/role/roles/roleStore @/utilities/I18nPlugin
+</template> 

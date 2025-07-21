@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { t } from "@/utilities/I18nPlugin";
-import { SuccessToast } from "./Toast";
+import { SuccessToast } from "./Toast2";
 
 interface DeleteParams {
   store: any;

@@ -5,6 +5,7 @@ export default {
   Option: {
     basic: "الخيارات الاساسية",
   },
+  FailedValidation : "فشل التحقق من صحة البيانات",
   files: "الملفات",
   showColumns: "عرض الاعمدة",
   hideAll: "اخفاء الكل",

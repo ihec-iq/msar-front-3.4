@@ -28,7 +28,7 @@ const rules: Array<IFieldValidation> = [
     rules: [required()],
   }, 
 ];
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { prepareFormData } from "@/utilities/crudTool";
 //#endregion

@@ -6,8 +6,9 @@ import { useAuthStore } from "@/stores/authStore";
 //import { usePermissionsStore } from "@/project/core/permissionStore";
 import Api from "./api/apiConfig";
 import { useConfigStore } from "@/stores/configStore";
+import { Toaster } from "@/components/ui/sonner";
 const { Config } = storeToRefs(useConfigStore());
-
+import "vue-sonner/style.css";
 // const { getUser } = useAuthStore();
 // const { setPermissions } = usePermissionsStore();
 // const { CheckAuth } = useAuthStore();
@@ -58,6 +59,7 @@ onMounted(async () => {
 
 <template>
   <div class="font-Tajawal image-bg p-0 m-0">
+    <Toaster />
     <RouterView></RouterView>
   </div>
 </template>

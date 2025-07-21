@@ -7,7 +7,7 @@ import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { useBonusStore } from "@/project/bonus/bonusStore";
-import { SuccessToast } from "@/utilities/Toast";
+import { SuccessToast } from "@/utilities/Toast2";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";

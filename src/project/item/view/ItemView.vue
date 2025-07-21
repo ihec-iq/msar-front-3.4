@@ -36,7 +36,7 @@ const rules: Array<IFieldValidation> = [
     rules: [isObject({ key: "id", message: "" })],
   }, 
 ];
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 //#endregion
 
