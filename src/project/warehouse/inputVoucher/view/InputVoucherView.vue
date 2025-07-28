@@ -42,7 +42,7 @@ import IPage from "@/components/ihec/IPage.vue";
 import { useDragDropStore } from "@/project/archive/dragDrop";
 const { filesDataInput } = storeToRefs(useDragDropStore());
 const updateList = () => {
-  if (id.value>0) showData(id.value);
+  if (id.value > 0) showData(id.value);
 };
 //#region store
 const { stocks } = storeToRefs(useStockStore());
@@ -67,6 +67,7 @@ import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import FilePreview from "@/project/archive/view/FilePreview.vue";
 import DragDrop from "@/project/archive/view/DragDrop.vue";
+import { title } from "process";
 
 const { validate, isArray, required, isObject } = useValidation();
 
@@ -374,22 +375,27 @@ const refreshItems = async () => {
   Loading.value = false;
 };
 
+const addItemPopupRef = ref<InstanceType<typeof AddItemPopup>>();
+
 const handleEnter = (event: KeyboardEvent) => {
   const enteredValue = (event.target as HTMLInputElement).value;
   const matchingOption = items.value.find(
     (option: IItem) => option.name === enteredValue
   );
   if (matchingOption === undefined && enteredValue.length > 0) {
-    IsAddItem.value = !IsAddItem.value;
+    IsAddItem.value = true;
     //let btn = document.getElementById("my_modal_7");
     item.value.name = enteredValue;
     item.value.code = "";
     item.value.description = "";
     item.value.measuringUnit = "";
-    //btn?.click();
-    let NameItemEnterNew = document.getElementById("NameItemEnterNew");
-    NameItemEnterNew?.focus();
-    //xxx
+
+    makeInputPopFocus();
+  }
+};
+const makeInputPopFocus = () => {
+  if (addItemPopupRef.value) {
+    addItemPopupRef.value.focus();
   }
 };
 function clearSelected(event: { target: { value: string } }) {
@@ -415,6 +421,7 @@ function clearSelected(event: { target: { value: string } }) {
   }
 }
 const IsAddItem = ref(false);
+
 const setItemFromChild = (_item: IItem) => {
   //console.log(_item);
   // _item.code = "";
@@ -437,34 +444,18 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="Loading">
     <template #HeaderButtons>
-      <IButton2
-        color="green"
-        width="28"
-        :type="EnumButtonType.Outlined"
-        pre-icon="view-grid-plus"
-        :onClick="reset"
-        :text="t('New')"
-      />
+      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+        :text="t('New')" />
     </template>
     <IPageContent>
       <IContainer>
         <IForm>
           <IRow col-lg="4" col-md="2" col-sm="1">
             <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
-              <IInput
-                class="w-[50%]"
-                :label="t('InputVoucher.Number')"
-                name="InputVoucher.Number"
-                v-model="inputVoucher.number"
-                :type="EnumInputType.Text"
-              />
-              <IInput
-                class="w-[50%]"
-                :label="t('Date')"
-                name="InputVoucher.Date"
-                v-model="inputVoucher.date"
-                :type="EnumInputType.Date"
-              />
+              <IInput class="w-[50%]" :label="t('InputVoucher.Number')" name="InputVoucher.Number"
+                v-model="inputVoucher.number" :type="EnumInputType.Text" />
+              <IInput class="w-[50%]" :label="t('Date')" name="InputVoucher.Date" v-model="inputVoucher.date"
+                :type="EnumInputType.Date" />
             </ICol>
             <!-- <ICol span="1" span-md="2" span-sm="1">
               <IInput
@@ -475,90 +466,40 @@ const headers = ref<Array<ITableHeader>>([
               />
             </ICol> -->
             <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
-              <IInput
-                class="w-[50%]"
-                :label="t('InputVoucher.NumberBill')"
-                name="InputVoucher.NumberBill"
-                v-model="inputVoucher.numberBill"
-                :type="EnumInputType.Text"
-              />
-              <IInput
-                v-if="inputVoucher.numberBill != ''"
-                class="w-[50%]"
-                :label="t('InputVoucher.DateBill')"
-                name="InputVoucherNumber"
-                v-model="inputVoucher.dateBill"
-                :type="EnumInputType.Date"
-              />
+              <IInput class="w-[50%]" :label="t('InputVoucher.NumberBill')" name="InputVoucher.NumberBill"
+                v-model="inputVoucher.numberBill" :type="EnumInputType.Text" />
+              <IInput v-if="inputVoucher.numberBill != ''" class="w-[50%]" :label="t('InputVoucher.DateBill')"
+                name="InputVoucherNumber" v-model="inputVoucher.dateBill" :type="EnumInputType.Date" />
             </ICol>
-            <ICol
-              :span="1"
-              span-lg="1"
-              span-xl="1"
-              span-md="1"
-              class="flex flex-row w-full"
-            >
-              <ISelect
-                class="w-[50%] sm:w-full"
-                :label="t('Stock')"
-                v-model="inputVoucher.Stock.id"
-                name="inputVoucherStockId"
-                :options="stocks"
-                :IsRequire="true"
-              >
+            <ICol :span="1" span-lg="1" span-xl="1" span-md="1" class="flex flex-row w-full">
+              <ISelect class="w-[50%] sm:w-full" :label="t('Stock')" v-model="inputVoucher.Stock.id"
+                name="inputVoucherStockId" :options="stocks" :IsRequire="true">
               </ISelect>
-              <ISelect
-                class="w-[50%] sm:w-full"
-                :label="t('InputVoucher.State')"
-                v-model="inputVoucher.State.id"
-                name="inputVoucherStateId"
-                :options="inputVoucherStates"
-                :IsRequire="true"
-              />
+              <ISelect class="w-[50%] sm:w-full" :label="t('InputVoucher.State')" v-model="inputVoucher.State.id"
+                name="inputVoucherStateId" :options="inputVoucherStates" :IsRequire="true" />
             </ICol>
             <ICol class="flex flex-row w-full" :span="1">
-              <IInput
-                class="w-[50%] sm:w-full"
-                :label="t('EmployeeRequest')"
-                name="InputVoucherNumber"
-                v-model="inputVoucher.requestedBy"
-                :type="EnumInputType.Text"
-              />
-              <IInput
-                class="w-[50%] sm:w-full"
-                :label="t('SignaturePerson')"
-                name="InputVoucherNumber"
-                v-model="inputVoucher.signaturePerson"
-                :type="EnumInputType.Text"
-              />
+              <IInput class="w-[50%] sm:w-full" :label="t('EmployeeRequest')" name="InputVoucherNumber"
+                v-model="inputVoucher.requestedBy" :type="EnumInputType.Text" />
+              <IInput class="w-[50%] sm:w-full" :label="t('SignaturePerson')" name="InputVoucherNumber"
+                v-model="inputVoucher.signaturePerson" :type="EnumInputType.Text" />
             </ICol>
           </IRow>
           <IRow>
             <ICol class="w-full">
-              <IInput
-                :label="t('Notes')"
-                name="Notes"
-                v-model="inputVoucher.notes"
-                :type="EnumInputType.Text"
-              />
+              <IInput :label="t('Notes')" name="Notes" v-model="inputVoucher.notes" :type="EnumInputType.Text" />
             </ICol>
           </IRow>
 
           <IRow>
             <ICol>
-              <IButton2
-                :text="t('Item.Choose')"
-                class="w-[150px]"
-                color="blue"
-                post-icon="add"
-                :type="EnumButtonType.Outlined"
-                @click="AddPopup()"
-              />
+              <IButton2 :text="t('Item.Choose')" class="w-[150px]" color="blue" post-icon="add"
+                :type="EnumButtonType.Outlined" @click="AddPopup()" />
             </ICol>
           </IRow>
           <IRow>
             <ICol>
-              <ITable :items="inputVoucher.Items" :headers="headers">
+              <ITable :items="inputVoucher.Items" :headers="headers" titleNoData="NoItems" :showColumnsButton="false">
                 <template v-slot:Item="{ row }">
                   {{ row.Item.name }}
                 </template>
@@ -566,20 +507,31 @@ const headers = ref<Array<ITableHeader>>([
                   {{ row.count * row.price }}
                 </template>
                 <template v-slot:Actions="{ row, rowIndex }">
-                  <van-button
-                    class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"
-                    type="success"
-                    is-link
-                    @click="updatePopup(rowIndex, row)"
-                    >{{ t("Edit") }}
-                  </van-button>
-                  |
-                  <van-button
-                    class="duration-500 rounded-lg m-2 bg-white hover:bg-deleteHover border-red-700 border-2"
-                    is-link
-                    @click="deleteItem(rowIndex)"
-                    >{{ t("Delete") }}
-                  </van-button>
+                  <div class="flex flex-row items-center justify-center gap-2">
+                    <button type="button" @click="updatePopup(rowIndex, row)" class=" bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700
+                    dark:text-green-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200
+                    hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2
+                    focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                      </svg>
+                      {{ t("Edit") }}
+                    </button>
+                    <button type="button" @click="deleteItem(rowIndex)" class="bg-red-100 hover:bg-red-200 dark:bg-red-900
+                      dark:hover:bg-red-800 text-red-700 dark:text-red-200 px-4 py-2 rounded-lg flex items-center
+                      gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5
+                      focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2
+                      dark:focus:ring-offset-gray-800">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                      </svg>
+                      {{ t("Delete") }}
+                    </button>
+                  </div>
                 </template>
               </ITable>
             </ICol>
@@ -587,13 +539,7 @@ const headers = ref<Array<ITableHeader>>([
         </IForm>
         <!-- file -->
         <IRow col-lg="4" col-md="4" col-sm="2" :title="t('files')">
-          <ICol
-            span="3"
-            span-md="3"
-            span-sm="2"
-            v-for="document in inputVoucher.FilesDocument"
-            :key="document.name"
-          >
+          <ICol span="3" span-md="3" span-sm="2" v-for="document in inputVoucher.FilesDocument" :key="document.name">
             <FilePreview :file="document" @updateList="updateList">
             </FilePreview>
           </ICol>
@@ -607,63 +553,47 @@ const headers = ref<Array<ITableHeader>>([
       </IContainer>
     </IPageContent>
     <IContainer>
-      <van-popup
-        class="p-2 overflow-hidden dark:bg-darkNav"
-        v-model:show="showPop"
-        round
-        position="bottom"
-      >
+      <van-popup class="p-2 overflow-hidden dark:bg-darkNav" v-model:show="showPop" round position="bottom">
         <!-- for search Item -->
         <IRow col-lg="4" col-md="1" col-sm="1" col-xs="1">
           <ICol>
-            <div
-              class="mb-1 md:text-md text-base ml-2 font-bold dark:text-gray-300"
-            >
+            <div class="mb-1 md:text-md text-base ml-2 font-bold dark:text-gray-300">
               {{ t("Item.Choose") }}
             </div>
             <div class="flex flex-row">
               <vSelect
                 class="capitalize w-full rounded-md border-2 p-2 dark:text-gray-200 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
-                v-model="VoucherItemTemp.Item"
-                :options="items"
-                :reduce="(_item: IItem) => _item"
-                :get-option-label="(_item: IItem) => _item.name"
-                @keydown.enter="handleEnter"
-                :create-option="
-                  (_item: IItem) => ({
-                    input_voucher_id: 0,
-                    Item: {
-                      name: '',
-                      id: 0,
-                      code: 0,
-                      description: 0,
-                      Category: { id: 0, name: '' },
-                      measuringUnit: '',
-                    },
-                    description: '',
-                    count: 0,
-                    price: 0,
-                    value: 0,
-                    notes: '',
-                  })
-                "
-              >
+                v-model="VoucherItemTemp.Item" :options="items" :reduce="(_item: IItem) => _item"
+                :get-option-label="(_item: IItem) => _item.name" @keydown.enter="handleEnter" :create-option="(_item: IItem) => ({
+                  input_voucher_id: 0,
+                  Item: {
+                    name: '',
+                    id: 0,
+                    code: 0,
+                    description: 0,
+                    Category: { id: 0, name: '' },
+                    measuringUnit: '',
+                  },
+                  description: '',
+                  count: 0,
+                  price: 0,
+                  value: 0,
+                  notes: '',
+                })
+                  ">
                 <template #option="{ code, Category, description, name }">
                   <div class="rtl:text-right border-2 p-2 rounded-md">
                     <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
-                    >
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold">
                       {{ name }}
                     </div>
                     <cite>
                       <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
-                      >
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
                         {{ t("Code") }}: {{ code }}
                       </div>
                       <div
-                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
-                      >
+                        class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
                         {{ t("Category") }}: {{ Category.name }}
                       </div>
                     </cite>
@@ -674,94 +604,68 @@ const headers = ref<Array<ITableHeader>>([
                   </div>
                 </template>
               </vSelect>
-              <IButton
-                class="h-full"
-                :text="t('Refresh')"
-                :onClick="refreshItems"
-                post-icon="refresh"
-                color="green"
-                :type="EnumButtonType.Outlined"
-              />
-              <IButton
-                v-if="!IsAddItem"
-                class="h-full"
-                :text="t('Add')"
-                :onClick="
-                  () => {
-                    IsAddItem = !IsAddItem;
-                  }
-                "
-                post-icon="add"
-                color="blue"
-                :type="EnumButtonType.Outlined"
-              />
+              <IButton class="h-full" :text="t('Refresh')" :onClick="refreshItems" post-icon="refresh" color="green"
+                :type="EnumButtonType.Outlined" />
+              <IButton v-if="!IsAddItem" class="h-full" :text="t('Add')" :onClick="() => {
+                IsAddItem = !IsAddItem;
+                makeInputPopFocus();
+
+              }
+                " post-icon="add" color="blue" :type="EnumButtonType.Outlined" />
             </div>
-            <AddItemPopup
-              @setItem="setItemFromChild"
-              v-model="IsAddItem"
-            ></AddItemPopup>
+            <AddItemPopup @setItem="setItemFromChild" v-model="IsAddItem" ref="addItemPopupRef"></AddItemPopup>
           </ICol>
 
-          <ICol
-            span="3"
-            span-xl="3"
-            span-lg="3"
-            span-md="1"
-            span-sm="1"
-            span-xs="1"
-            v-if="VoucherItemTemp.Item == null"
-            class="border-2 border-dotted border-gray-600"
-          >
+          <ICol span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1" v-if="VoucherItemTemp.Item == null"
+            class="border-2 border-dotted border-gray-600">
             <div class="w-full text-center align-middle border-gray-600">
-              <div
-                class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
-              >
+              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
                 قم بأختيار مادة
               </div>
             </div>
           </ICol>
-          <ICol
-            :span="3"
-            span-xl="3"
-            span-lg="3"
-            span-md="1"
-            span-sm="1"
-            span-xs="1"
+          <ICol :span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1"
             v-else-if="VoucherItemTemp.Item.name != ''"
-            class="border-2 rounded-md border-dotted border-gray-500"
-          >
-            <IRow col="4">
-              <ICol span="1">
+            class="relative border-2 pb-2 rounded-md border-dotted border-gray-500 overflow-hidden  ">
+            <!-- Watermark background text -->
+            <div class="absolute inset-0 flex flex-col justify-center items-center pointer-events-none select-none"
+              style="z-index:0;">
+              <span class="text-6xl font-bold text-gray-300 dark:text-gray-500 opacity-20"
+                style="transform: rotate(-10deg); white-space:nowrap; letter-spacing:0.2em;">
+                {{ t('Item.Properties') }} {{ t('Item.Properties') }}
+              </span>
+              <span class="text-6xl font-bold text-gray-300 dark:text-gray-500  opacity-20 mt-10"
+                style="transform: rotate(-10deg); white-space:nowrap; letter-spacing:0.2em;">
+                {{ t('Item.Properties') }} {{ t('Item.Properties') }}
+              </span>
+            </div>
+            <!-- Foreground content -->
+            <div
+              class="hover:text-gray-300 dark:hover:text-gray-700 duration-300 text-lg font-bold header-title text-blue-700 dark:text-blue-300 py-2 w-full basis-full px-2 bg-gray-200 dark:bg-gray-800">
+              {{ t('Item.Properties') }}
+            </div>
+            <div class="w-full flex flex-row items-center justify-center text-center">
+              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-[25%]">
                 <ILabel :title="t('Code')">
-                  {{ VoucherItemTemp.Item.code }}</ILabel
-                >
-              </ICol>
-              <ICol span="1">
+                  {{ VoucherItemTemp.Item.code }}
+                </ILabel>
+              </div>
+              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-[25%]">
                 <ILabel :title="t('Category')">
-                  {{ VoucherItemTemp.Item.Category.name }}</ILabel
-                >
-              </ICol>
-              <ICol span="1">
+                  {{ VoucherItemTemp.Item.Category.name }}
+                </ILabel>
+              </div>
+              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
                 <ILabel :title="t('Description')">
-                  {{ VoucherItemTemp.Item.description }}</ILabel
-                >
-              </ICol>
-            </IRow>
+                  {{ VoucherItemTemp.Item.description }}
+                </ILabel>
+              </div>
+            </div>
           </ICol>
-          <ICol
-            span="3"
-            span-xl="3"
-            span-lg="3"
-            span-md="1"
-            span-sm="1"
-            span-xs="1"
-            v-else
-            class="border-2 border-dotted border-gray-600"
-          >
+          <ICol span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1" v-else
+            class="border-2 border-dotted border-gray-600">
             <div class="w-full text-center align-middle border-gray-600">
-              <div
-                class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
-              >
+              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
                 قم بأختيار مادة
               </div>
             </div>
@@ -770,28 +674,15 @@ const headers = ref<Array<ITableHeader>>([
         <!-- for insert item proparties -->
         <IRow col-lg="4" :col="4" col-xl="4" col-md="2" col-sm="1" col-xs="1">
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('Item.Description')"
-              v-model="VoucherItemTemp.description"
-            />
+            <IInput :label="t('Item.Description')" v-model="VoucherItemTemp.description" />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('Count')"
-              :on-input="ChangeValueTotal"
-              :type="EnumInputType.Number"
-              v-model="VoucherItemTemp.count"
-              :min="1"
-            />
+            <IInput :label="t('Count')" :on-input="ChangeValueTotal" :type="EnumInputType.Number"
+              v-model="VoucherItemTemp.count" :min="1" />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('Price')"
-              :on-input="ChangeValueTotal"
-              :type="EnumInputType.Number"
-              v-model="VoucherItemTemp.price"
-              :min="1"
-            />
+            <IInput :label="t('Price')" :on-input="ChangeValueTotal" :type="EnumInputType.Number"
+              v-model="VoucherItemTemp.price" :min="1" />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <ILabel :title="t('Total')">{{
@@ -799,47 +690,20 @@ const headers = ref<Array<ITableHeader>>([
             }}</ILabel>
           </ICol>
           <ICol :span="4" span-lg="4" span-xl="1" span-md="1">
-            <IInput
-              :label="t('Notes')"
-              :type="EnumInputType.Text"
-              v-model="VoucherItemTemp.notes"
-            />
+            <IInput :label="t('Notes')" :type="EnumInputType.Text" v-model="VoucherItemTemp.notes" />
           </ICol>
         </IRow>
         <!-- buttons -->
         <IContainer class="flex flex-row my-10">
-          <IButton
-            :text="t('Add')"
-            color="blue"
-            :type="EnumButtonType.Default"
-            :on-click="AddItem"
-            v-if="IsAdd"
-          />
-          <IButton
-            :text="t('Update')"
-            color="blue"
-            :type="EnumButtonType.Default"
-            :on-click="EditItem"
-            v-else
-          />
-          <IButton
-            class=""
-            pre-icon="close-box"
-            :text="t('Close')"
-            color="blue"
-            :type="EnumButtonType.Text"
-            :on-click="() => (showPop = false)"
-          />
+          <IButton :text="t('Add')" color="blue" :type="EnumButtonType.Default" :on-click="AddItem" v-if="IsAdd" />
+          <IButton :text="t('Update')" color="blue" :type="EnumButtonType.Default" :on-click="EditItem" v-else />
+          <IButton class="" pre-icon="close-box" :text="t('Close')" color="blue" :type="EnumButtonType.Text"
+            :on-click="() => (showPop = false)" />
         </IContainer>
       </van-popup>
     </IContainer>
     <template #Footer>
-      <IFooterCrud
-        :isAdd="inputVoucher.id == 0"
-        :onCreate="store"
-        :onUpdate="update"
-        :onDelete="Delete"
-      />
+      <IFooterCrud :isAdd="inputVoucher.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
     </template>
   </IPage>
 </template>

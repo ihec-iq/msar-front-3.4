@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { EnumDirection } from "@/utilities/EnumSystem";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 const modelValue = defineModel<any>();
 import { t } from "@/utilities/I18nPlugin";
 const props = defineProps({
@@ -35,15 +35,26 @@ const props = defineProps({
   },
   OnKeyEnter: {
     type: Function, // Cast to the enum type
-    default: () => {}, // Default value (optional)
+    default: () => { }, // Default value (optional)
   },
   onInput: {
     type: Function, // Cast to the enum type
-    default: () => {}, // Default value (optional)
+    default: () => { }, // Default value (optional)
   },
   cached: { type: Boolean, default: false },
   cachedName: { type: String, default: "" },
 });
+// دالة التركيز
+
+const inputRef = ref<HTMLInputElement>()
+async function focus() {
+  await nextTick()
+  inputRef.value?.focus();
+}
+
+
+// تعريض الدالة للأب
+defineExpose({ focus })
 
 const keydown = () => {
   if (props.cached && props.cachedName != "")
@@ -74,22 +85,12 @@ onMounted(async () => {
 </script>
 <template>
   <div class="mb-2 px-1">
-    <label class="_inputLabel w-full" for="Control1" v-if="label">
+    <label class="_inputLabel w-full" v-if="label">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
-    <input
-      @change="keydown"
-      @focusout="checkRequired"
-      :disabled="disabled"
-      :class="inputClasses"
-      :type="type"
-      v-model="modelValue"
-      :placeholder="customPlaceholder"
-      :style="{ direction: dir }"
-      @input="onInput()"
-      :max="max"
-      :min="min"
-      class="focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px]  border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input  text-text dark:text-textLight"
-    />
+    <input @change="keydown" @focusout="checkRequired" ref="inputRef" :disabled="disabled" :class="inputClasses"
+      :type="type" v-model="modelValue" :placeholder="customPlaceholder" :style="{ direction: dir }" @input="onInput()"
+      :max="max" :min="min"
+      class="focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px]  border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input  text-text dark:text-textLight" />
   </div>
 </template>

@@ -5,6 +5,7 @@ export default {
   Option: {
     basic: "Basic Options",
   },
+  NoItems: "No Items",
   files: "Files",
   FailedValidation: "Data validation failed",
   showColumns: "Show Columns",
@@ -152,6 +153,7 @@ export default {
     Sum: "Items",
     Description: "Description",
     Choose: "Choose Item",
+    Properties: "Item Properties",
   },
   Items: "Items",
   ItemAdd: "Add Item",

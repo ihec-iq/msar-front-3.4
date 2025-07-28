@@ -34,6 +34,8 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
+import { makeFormDataFromObject } from "@/utilities/tools";
+import { ImageResizer } from "@/utilities/imageResizer";
 const { validate, min, required, foreignKey, max, sameAs, isObject } = useValidation();
 
 
@@ -79,13 +81,13 @@ const reset = () => {
 
 let validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
-const store = () => {
+const store = async () => {
   errors.value = null;
   validationResult.value = validate(archive.value, rules);
   if (!validationResult.value.success) {
     //WarningToast(t("ValidationFails"));
     let messages = validationResult.value.errors[0].messages.join('، ')
-    showToast(t('FailedValidation')+" : "+validationResult.value.errors[0].fieldName, {
+    showToast(t('FailedValidation') + " : " + validationResult.value.errors[0].fieldName, {
       description: messages,
       status: "warning",
       action: {
@@ -95,11 +97,13 @@ const store = () => {
     });
     return;
   }
+
   archive.value.isIn = isIn.value ? 1 : 0;
   const formData: FormData = prepareFormData(archive.value);
   const files = filesDataInput.value;
-  for (let i = 0; i < files.length; i++) {
-    formData.append("Files[]", files[i]);
+  for (const file of files) {
+    const _file = await ImageResizer(file, 1000);
+    formData.append("FilesDocument[]", _file);
   }
 
   archiveStore
@@ -117,7 +121,7 @@ const store = () => {
     });
 };
 
-function update() {
+const update = async () => {
   validationResult.value = validate(archive.value, rules);
   if (!validationResult.value.success) {
     WarningToast(t("ValidationFails"));
@@ -128,10 +132,10 @@ function update() {
   archive.value.isIn = isIn.value ? 1 : 0;
   const formData: FormData = prepareFormData(archive.value);
   const files = filesDataInput.value;
-  files.forEach((file: File) => {
-    formData.append("FilesDocument[]", file);
-  });
-
+  for (const file of files) {
+    const _file = await ImageResizer(file, 1000);
+    formData.append("FilesDocument[]", _file);
+  }
   archiveStore
     .update(archive.value.id, formData)
 

@@ -5,6 +5,7 @@ export default {
   Option: {
     basic: "الخيارات الاساسية",
   },
+  NoItems : "لا توجد مواد",
   FailedValidation : "فشل التحقق من صحة البيانات",
   files: "الملفات",
   showColumns: "عرض الاعمدة",
@@ -118,6 +119,7 @@ export default {
     Sum: "المواد",
     Description: "الوصف",
     Choose: "اختر المادة",
+    Properties: "مواصفات المادة",
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",

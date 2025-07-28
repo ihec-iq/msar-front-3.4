@@ -18,6 +18,7 @@ export interface IInputVoucher {
   signaturePerson: string;
   requestedBy: string;
   itemsCount?: number;
+  documnetsCount?: number;
   FilesDocument?: Array<IDocument>;
 }
 export interface IInputVoucherItem {
