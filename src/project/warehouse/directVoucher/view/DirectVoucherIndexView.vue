@@ -36,8 +36,7 @@ const addItem = () => {
   directVoucher.number = "";
   directVoucher.date = "";
   directVoucher.notes = "";
-  directVoucher.Items = [];
-  directVoucher.signaturePerson = "";
+  directVoucher.Items = []; 
   router.push({
     name: "directVoucherAdd",
   });

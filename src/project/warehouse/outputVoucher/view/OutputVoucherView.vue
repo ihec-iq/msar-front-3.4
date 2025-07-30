@@ -4,7 +4,6 @@ import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
-import { useStockStore } from "../../settingVoucher/stock/stockStore";
 import { useOutputVoucherStore } from "./../outputVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import type { IOutputVoucherItem } from "../IOutputVoucher";
@@ -19,7 +18,7 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 import type { IEmployee } from "@/project/employee/IEmployee";
 import IBasis from "@/components/ihec/IBasis.vue";
 import IFlex from "@/components/ihec/IFlex.vue";
-import { makeFormDataFromObject } from "@/utilities/tools";
+import { ConvertToMoneyFormat, makeFormDataFromObject } from "@/utilities/tools";
 const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
 
 //region"Validation"
@@ -42,11 +41,6 @@ const rules: Array<IFieldValidation> = [
   {
     field: "Employee",
     caption: t("EmployeeRequest"),
-    rules: [isObject({ key: "id", message: "" })],
-  },
-  {
-    field: "Stock",
-    caption: t("Stock"),
     rules: [isObject({ key: "id", message: "" })],
   },
   { field: "Items", caption: t("Item.Sum"), rules: [isArray()] },
@@ -380,13 +374,10 @@ const showData = async (id: number) => {
         outputVoucher.value.notes = response.data.data.notes;
         outputVoucher.value.Items = response.data.data.Items;
         outputVoucher.value.Employee = response.data.data.Employee;
-        outputVoucher.value.Stock = response.data.data.Stock;
         outputVoucher.value.numberBill = response.data.data.numberBill;
         outputVoucher.value.dateBill = response.data.data.dateBill;
         outputVoucher.value.FilesDocument = response.data.data.FilesDocument;
         filesDataInput.value = [];
-        outputVoucher.value.signaturePerson =
-          response.data.data.signaturePerson;
       }
     })
     .catch((errors) => {
@@ -404,7 +395,6 @@ const showData = async (id: number) => {
   Loading.value = false;
 };
 //#endregion
-const { stocks } = storeToRefs(useStockStore());
 
 onMounted(async () => {
   Loading.value = true;
@@ -420,19 +410,10 @@ onMounted(async () => {
     await showData(id.value);
     namePage.value = "OutputVoucher.Update";
   }
-  await useStockStore().get_stocks();
   await useInputVoucherStore().getAvailableItemsVSelect();
   Loading.value = false;
 });
-const ChangeStock = async () => {
-  Loading.value = true;
-  await useInputVoucherStore()
-    .getAvailableItemsVSelect(outputVoucher.value.Stock.id.toString())
-    .then(() => {
-      //console.log("Get Store ");
-    });
-  Loading.value = false;
-};
+
 const headers = ref<Array<ITableHeader>>([
   { caption: t("ID"), value: "id" },
   { caption: t("Item.Index"), value: "Item" },
@@ -483,17 +464,8 @@ const headers = ref<Array<ITableHeader>>([
                   </template>
                 </vSelect>
               </div>
-              <!-- @change="ChangeStock()" -->
-              <ISelect class="w-[50%]" :label="t('Stock')" v-model="outputVoucher.Stock.id" name="inputVoucherStockId"
-                :options="stocks" :IsRequire="true"></ISelect>
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('SignaturePerson')" name="InputVoucherNumber" v-model="outputVoucher.signaturePerson"
-                :type="EnumInputType.Text" />
-            </ICol>
-          </IRow>
-          <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="3">
               <IInput :label="t('Notes')" name="InputVoucherNumber" v-model="outputVoucher.notes"
                 :type="EnumInputType.Text" />
             </ICol>
@@ -507,7 +479,7 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
           <IRow>
             <ICol>
-              <ITable :items="outputVoucher.Items" :headers="headers">
+              <ITable :items="outputVoucher.Items" :headers="headers" :show-columns-button="false">
                 <template v-slot:Item="{ row }">
                   {{ row.InputVoucherItem.Item.name }}
                 </template>
@@ -515,7 +487,7 @@ const headers = ref<Array<ITableHeader>>([
                   {{ row.InputVoucherItem.description }}
                 </template>
                 <template v-slot:Total="{ row }">
-                  {{ row.count * row.price }}
+                  {{ ConvertToMoneyFormat(row.count * row.price) }}
                 </template>
                 <template v-slot:Actions="{ row, rowIndex }">
                   <van-button class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"

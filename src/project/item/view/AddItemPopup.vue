@@ -27,6 +27,10 @@ const loading = ref(false);
 //#region CURD
 const store = () => {
   if (!can(EnumPermission.AddItem)) return;
+  if (!item.value.name || !item.value.Category.id) {
+    errors.value = t("Item.CategoryRequired");
+    return;
+  }
   loading.value = true;
   errors.value = null;
   const formData = prepareFormData(item.value);
@@ -143,9 +147,26 @@ const refreshCategories = async () => {
               </div>
             </div>
           </div>
-          <div class="border-red-800 border-[1px] content-center rounded-lg p-2 text-center" v-if="errors">
-            {{ errors }}
-          </div>
+          <transition name="fade" mode="out-in">
+            <div v-if="errors"
+              class="flex items-center justify-center gap-2 border border-red-400 bg-red-50 dark:bg-red-900/40 text-red-700 dark:text-red-200 rounded-lg p-3 my-2 shadow-sm animate-pulse">
+              <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 8v4m0 4h.01M21 12A9 9 0 1 1 3 12a9 9 0 0 1 18 0Z" />
+              </svg>
+              <span class="font-semibold">{{ errors }}</span>
+            </div>
+          </transition>
+          <transition name="fade">
+            <div v-if="!errors && !loading"
+              class="flex items-center justify-center gap-2 border border-green-400 bg-green-50 dark:bg-green-900/40 text-green-700 dark:text-green-200 rounded-lg p-3 my-2 shadow-sm">
+              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="font-semibold">{{ t('SavedSuccessfully') }}</span>
+            </div>
+          </transition>
         </div>
       </AlertDescription>
     </Alert>

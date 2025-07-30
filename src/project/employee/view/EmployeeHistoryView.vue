@@ -30,14 +30,12 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 
 const RetrievalVoucher = ref<{
   number: string;
-  date: string;
-  signaturePerson: string;
+  date: string; 
   requestEmployeeId: string;
   Items?: Array<IEmployeeHistory>;
 }>({
   number: "",
-  date: new Date().toISOString().split("T")[0],
-  signaturePerson: "",
+  date: new Date().toISOString().split("T")[0], 
   requestEmployeeId: "1",
 });
 
@@ -287,19 +285,7 @@ const headers = ref<Array<ITableHeader>>([
                       class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                     />
                   </div>
-                </div>
-                <div class="w-4/12 mr-2 flex">
-                  <div
-                    class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-                  >
-                    {{ t("SignaturePerson") }}
-                    <input
-                      v-model="RetrievalVoucher.signaturePerson"
-                      type="text"
-                      class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
-                    />
-                  </div>
-                </div>
+                </div> 
                 <div class="w-4/12 mr-2 flex">
                   <div
                     class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"

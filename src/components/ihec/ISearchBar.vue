@@ -14,7 +14,7 @@ const props = defineProps({
   <div class="flex flex-row items-center justify-center">
     <slot></slot>
     <!-- search button -->
-    <div class="rtl:ml-2 ltr:mr-2 lg:mt-0 xs:mt-2">
+    <div class="rtl:ml-2 ltr:mr-2   xs:mt-2 mt-4">
       <IButton2 color="green" :type="EnumButtonType.Outlined" :text="t('Search')" preIcon="magnify"
         :onClick="props.getDataButton" class="mt-0" width="25" />
     </div>

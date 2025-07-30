@@ -80,7 +80,7 @@ export default {
   FileBook: "تحميل الكتاب",
   TypeBook: "تصنيف الكتاب",
   Language: "العربية",
-  Description: "تفاصيل",
+  Description: "الوصف",
   Open: "فتح",
   Title: "عنوان",
   SerialNumber: "رقم السيريال",
@@ -120,6 +120,7 @@ export default {
     Description: "الوصف",
     Choose: "اختر المادة",
     Properties: "مواصفات المادة",
+    CategoryRequired : "يجب ان تختار صنف المادة "
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",

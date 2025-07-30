@@ -17,7 +17,6 @@ export const useOutputVoucherStore = defineStore("useOutputVoucherStore", () => 
     date: new Date().toISOString().split("T")[0],
     notes: "",
     Items: [],
-    signaturePerson: "",
     dateBill: new Date().toISOString().split("T")[0],
     numberBill: "",
     Employee: { name: "", id: 0 },
@@ -100,7 +99,6 @@ export const useOutputVoucherStore = defineStore("useOutputVoucherStore", () => 
     outputVoucher.date = "";
     outputVoucher.notes = "";
     outputVoucher.Items = [];
-    outputVoucher.signaturePerson = "";
     outputVoucher.Employee = { name: "", id: 0 };
     outputVoucher.Stock = { name: "", id: 0, description: ''};
     outputVoucher.dateBill= new Date().toISOString().split("T")[0];

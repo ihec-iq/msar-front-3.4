@@ -19,7 +19,6 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     notes: "",
     State: { name: "", id: 1 },
     Items: [],
-    signaturePerson: "",
     requestedBy: "",
     Stock: { name: "", id: 0, description: "" },
     numberBill: "",
@@ -103,7 +102,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         }
       })
       .catch((errors) => {
-        console.log("in get input get Items For VSelect : " + errors);
+        console.log("in get input get Items For getAvailableItemsVSelect : " + errors);
       });
   }
   async function getAllItemsVSelect() {
@@ -116,7 +115,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         }
       })
       .catch((errors) => {
-        console.log("in get input get Items For VSelect : " + errors);
+        console.log("in get input get Items For getAllItemsVSelect : " + errors);
       });
   }
   async function getAllItemsVSelectByEmployeeId(employeeId: number = 0) {
@@ -131,7 +130,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
         }
       })
       .catch((errors) => {
-        console.log("in get input get Items For VSelect : " + errors);
+        console.log("in get input get Items For getAllItemsVSelectByEmployeeId : " + errors);
       });
   }
   async function getEmployees() {
@@ -185,7 +184,6 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       notes: "",
       State: { name: "", id: 1 },
       Items: [],
-      signaturePerson: "",
       requestedBy: "",
       Stock: { name: "", id: 1, description: "" },
     };

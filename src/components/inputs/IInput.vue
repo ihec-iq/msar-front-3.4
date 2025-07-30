@@ -88,9 +88,23 @@ onMounted(async () => {
     <label class="_inputLabel w-full" v-if="label">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
-    <input @change="keydown" @focusout="checkRequired" ref="inputRef" :disabled="disabled" :class="inputClasses"
-      :type="type" v-model="modelValue" :placeholder="customPlaceholder" :style="{ direction: dir }" @input="onInput()"
-      :max="max" :min="min"
-      class="focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px]  border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input  text-text dark:text-textLight" />
+    <input
+      @change="keydown"
+      @focusout="checkRequired"
+      ref="inputRef"
+      :disabled="disabled"
+      :type="type"
+      v-model="modelValue"
+      :placeholder="customPlaceholder"
+      :style="{ direction: dir }"
+      @input="onInput()"
+      :max="max"
+      :min="min"
+      :class="[
+        inputClasses,
+        disabled ? 'bg-gray-200 dark:bg-gray-700 cursor-not-allowed opacity-60' : '',
+        'focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px]  border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input  text-text dark:text-textLight'
+      ]"
+    />
   </div>
 </template>

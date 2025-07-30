@@ -327,7 +327,6 @@ const showData = async (id: number) => {
         inputVoucher.value.notes = response.data.data.notes;
         inputVoucher.value.Items = response.data.data.Items;
         inputVoucher.value.requestedBy = response.data.data.requestedBy;
-        inputVoucher.value.signaturePerson = response.data.data.signaturePerson;
         inputVoucher.value.State = response.data.data.State;
         inputVoucher.value.Stock = response.data.data.Stock;
         inputVoucher.value.FilesDocument = response.data.data.FilesDocument;
@@ -389,6 +388,7 @@ const handleEnter = (event: KeyboardEvent) => {
     item.value.code = "";
     item.value.description = "";
     item.value.measuringUnit = "";
+    item.value.Category.id = 0;
 
     makeInputPopFocus();
   }
@@ -457,18 +457,10 @@ const headers = ref<Array<ITableHeader>>([
               <IInput class="w-[50%]" :label="t('Date')" name="InputVoucher.Date" v-model="inputVoucher.date"
                 :type="EnumInputType.Date" />
             </ICol>
-            <!-- <ICol span="1" span-md="2" span-sm="1">
-              <IInput
-                :label="t('InputVoucher.DateReceive')"
-                name="InputVoucher.DateReceive"
-                v-model="inputVoucher.dateReceive"
-                :type="EnumInputType.Date"
-              />
-            </ICol> -->
             <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
               <IInput class="w-[50%]" :label="t('InputVoucher.NumberBill')" name="InputVoucher.NumberBill"
                 v-model="inputVoucher.numberBill" :type="EnumInputType.Text" />
-              <IInput v-if="inputVoucher.numberBill != ''" class="w-[50%]" :label="t('InputVoucher.DateBill')"
+              <IInput :disabled="inputVoucher.numberBill == ''" class="w-[50%]" :label="t('InputVoucher.DateBill')"
                 name="InputVoucherNumber" v-model="inputVoucher.dateBill" :type="EnumInputType.Date" />
             </ICol>
             <ICol :span="1" span-lg="1" span-xl="1" span-md="1" class="flex flex-row w-full">
@@ -478,19 +470,10 @@ const headers = ref<Array<ITableHeader>>([
               <ISelect class="w-[50%] sm:w-full" :label="t('InputVoucher.State')" v-model="inputVoucher.State.id"
                 name="inputVoucherStateId" :options="inputVoucherStates" :IsRequire="true" />
             </ICol>
-            <ICol class="flex flex-row w-full" :span="1">
-              <IInput class="w-[50%] sm:w-full" :label="t('EmployeeRequest')" name="InputVoucherNumber"
-                v-model="inputVoucher.requestedBy" :type="EnumInputType.Text" />
-              <IInput class="w-[50%] sm:w-full" :label="t('SignaturePerson')" name="InputVoucherNumber"
-                v-model="inputVoucher.signaturePerson" :type="EnumInputType.Text" />
-            </ICol>
-          </IRow>
-          <IRow>
             <ICol class="w-full">
               <IInput :label="t('Notes')" name="Notes" v-model="inputVoucher.notes" :type="EnumInputType.Text" />
             </ICol>
           </IRow>
-
           <IRow>
             <ICol>
               <IButton2 :text="t('Item.Choose')" class="w-[150px]" color="blue" post-icon="add"
@@ -514,8 +497,7 @@ const headers = ref<Array<ITableHeader>>([
                     focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
+                          d="M15.232 5.232l3.536 3.536m-2.036-1.5a2.5 2.5 0 113.536 3.536L7.5 21H3v-4.5L16.732 6.768z" />
                       </svg>
                       {{ t("Edit") }}
                     </button>
@@ -526,8 +508,7 @@ const headers = ref<Array<ITableHeader>>([
                       dark:focus:ring-offset-gray-800">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
+                          d="M6 18L18 6M6 6l12 12" />
                       </svg>
                       {{ t("Delete") }}
                     </button>
@@ -609,7 +590,6 @@ const headers = ref<Array<ITableHeader>>([
               <IButton v-if="!IsAddItem" class="h-full" :text="t('Add')" :onClick="() => {
                 IsAddItem = !IsAddItem;
                 makeInputPopFocus();
-
               }
                 " post-icon="add" color="blue" :type="EnumButtonType.Outlined" />
             </div>

@@ -15,7 +15,6 @@ export interface IInputVoucher {
   Stock: IStock;
   State: IInputVoucherState;
   Items: Array<IInputVoucherItem>;
-  signaturePerson: string;
   requestedBy: string;
   itemsCount?: number;
   documnetsCount?: number;

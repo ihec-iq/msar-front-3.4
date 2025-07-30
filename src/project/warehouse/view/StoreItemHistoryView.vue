@@ -202,17 +202,7 @@ onMounted(async () => {
                 <input type="checkbox" v-model="searchFilter.isSection" />
               </template>
             </ISelect>
-          </ICol>
-          <ICol :span-lg="1" :span-md="1" :span="1">
-            <ICheckbox
-              v-model="searchFilter.summation"
-              :checked="searchFilter.summation"
-              @change="getFilterData()"
-            >
-              {{ t("Store.TypeReport") }}:
-              {{ searchFilter.summation ? " تجميعي " : " مفصل " }}
-            </ICheckbox>
-          </ICol>
+          </ICol> 
         </ISearchBar>
       </IRow>
 

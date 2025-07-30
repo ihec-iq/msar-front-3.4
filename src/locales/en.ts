@@ -154,6 +154,7 @@ export default {
     Description: "Description",
     Choose: "Choose Item",
     Properties: "Item Properties",
+    CategoryRequired: "Must to choose Category",
   },
   Items: "Items",
   ItemAdd: "Add Item",

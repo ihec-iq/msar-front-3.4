@@ -277,7 +277,7 @@ const getColumnStyle = (key: string) => {
           <!-- Beautiful Column Visibility Button -->
           <div class="relative" v-if="showColumnsButton">
             <button @click="showColumnPopup = !showColumnPopup" type="button"
-              class="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                class="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-200 to-blue-200 dark:from-purple-700 dark:to-blue-700 hover:from-purple-300 hover:to-blue-300 dark:hover:from-purple-800 dark:hover:to-blue-800 text-purple-800 dark:text-blue-100 font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-700 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
               <div class="relative">
                 <svg class="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                   viewBox="0 0 24 24">

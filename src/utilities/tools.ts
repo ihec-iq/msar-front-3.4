@@ -71,6 +71,23 @@ export const ConvertToMoneyFormat = function (number: string | any) {
 
 export const makeFormDataFromObject = (object: any, keys: Array<string> = []) =>
   Object.keys(object).reduce((formData, key) => {
+    if (keys.length > 0 && !keys.includes(key)) return formData;
+
+    let value = object[key];
+
+    if (value === null || value === undefined) {
+      formData.append(key, '');
+    } else if (typeof value === 'object') {
+      formData.append(key, JSON.stringify(value));
+    } else {
+      formData.append(key, value);
+    }
+
+    return formData;
+  }, new FormData());
+
+export const makeFormDataFromObjectOld = (object: any, keys: Array<string> = []) =>
+  Object.keys(object).reduce((formData, key) => {
     if (keys.length>0){
       if (keys.includes(key)) {
         let value = object[key];

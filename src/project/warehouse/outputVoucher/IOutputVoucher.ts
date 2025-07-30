@@ -11,7 +11,6 @@ export interface IOutputVoucher {
   numberBill: string;
   notes: string;
   Items: Array<IOutputVoucherItem>;
-  signaturePerson: string;
   Stock: IStock;
   Employee: IOutputVoucherEmployee;
   itemsCount?: number;
