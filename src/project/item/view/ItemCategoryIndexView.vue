@@ -106,18 +106,13 @@ onMounted(async () => {
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput
-              :label="t('Search')"
-              :placeholder="t('Search')"
-              v-model="fastSearch"
-              :type="EnumInputType.Text"
-              :OnKeyEnter="getFilterData"
-            />
+            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow :col="2" :colMd="2" :colLg="2">
-        <ICol class="p-3" :span="2" v-for="item in data" :key="item.id">
+        <ICol class="p-3" :span="2" v-for="item   in data" :key="item.id">
           <CardItemCategoryIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
         </ICol>
@@ -126,32 +121,16 @@ onMounted(async () => {
         <div class="py-4 min-w-full w-full h-full lg:px-8">
           <!-- card -->
           <div class="rounded-xl" v-if="isLoading == false">
-            <div
-              v-motion
-              :initial="{ opacity: 0, y: -15 }"
-              :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }"
-              :delay="200"
-              v-if="data.length > 0"
-            >
+            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
               <div class="w-full flex flex-row">
                 <div class="basis-4/5 overflow-x-auto font-Tajawal">
-                  <TailwindPagination
-                    class="flex justify-center mt-6"
-                    :data="dataPage"
-                    @pagination-change-page="getFilterData"
-                    :limit="searchFilter.limit"
-                  />
+                  <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+                    @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
                 </div>
                 <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                  <ISelect
-                    :label="t('Limit')"
-                    v-model="searchFilter.limit"
-                    name="archiveTypeId"
-                    :options="limits"
-                    :IsRequire="true"
-                    @onChange="getFilterData()"
-                  />
+                  <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+                    :IsRequire="true" @onChange="getFilterData()" />
                 </div>
               </div>
             </div>
@@ -161,6 +140,6 @@ onMounted(async () => {
         </div>
       </IRow>
     </IPageContent>
-    <IFooterCrud :is-add="true" :show-add="false"/>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>

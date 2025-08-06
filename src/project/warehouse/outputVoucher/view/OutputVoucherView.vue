@@ -18,8 +18,7 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 import type { IEmployee } from "@/project/employee/IEmployee";
 import IBasis from "@/components/ihec/IBasis.vue";
 import IFlex from "@/components/ihec/IFlex.vue";
-import { ConvertToMoneyFormat, makeFormDataFromObject } from "@/utilities/tools";
-const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
+import { ConvertToMoneyFormat, makeFormDataFromObject, ToNumberShow } from "@/utilities/tools";
 
 //region"Validation"
 import {
@@ -41,9 +40,9 @@ const rules: Array<IFieldValidation> = [
   {
     field: "Employee",
     caption: t("EmployeeRequest"),
-    rules: [isObject({ key: "id", message: "" })],
+    rules: [isObject({ key: "id", message: "يجب ان تقوم بأختيار الموظف" })],
   },
-  { field: "Items", caption: t("Item.Sum"), rules: [isArray()] },
+  { field: "Items", caption: t("Item.Sum"), rules: [isArray({ message: 'يجب ان يحتوي السند على مواد' })] },
 ];
 //#endregion
 //#region Drag & Drop
@@ -51,6 +50,9 @@ import { useDragDropStore } from "@/project/archive/dragDrop";
 import FilePreview from "@/project/archive/view/FilePreview.vue";
 import DragDrop from "@/project/archive/view/DragDrop.vue";
 import { showToast } from "@/utilities/toast";
+import ISelectObject from "@/components/inputs/ISelectObject.vue";
+import ISelect from "@/components/inputs/ISelect.vue";
+import ISelect2 from "@/components/inputs/ISelect2.vue";
 const { filesDataInput } = storeToRefs(useDragDropStore());
 const updateList = () => {
   if (id.value > 0) showData(id.value);
@@ -76,7 +78,7 @@ const OutputVoucherItem = ref<IOutputVoucherItem>({
     name: "",
     code: "",
     description: "",
-    Category: { id: 1, name: "" },
+    Category: { id: 1, name: "", description: "" },
     measuringUnit: "",
   },
   description: "",
@@ -91,7 +93,7 @@ const OutputVoucherItem = ref<IOutputVoucherItem>({
       name: "",
       code: "",
       description: "",
-      Category: { id: 0, name: "" },
+      Category: { id: 0, name: "", description: "" },
       measuringUnit: "",
     },
     description: "",
@@ -115,7 +117,7 @@ const resetVoucherItem = () => {
       name: "",
       code: "",
       description: "",
-      Category: { id: 1, name: "" },
+      Category: { id: 1, name: "", description: "" },
       measuringUnit: "",
     },
     description: "",
@@ -131,7 +133,7 @@ const resetVoucherItem = () => {
         name: "",
         code: "",
         description: "",
-        Category: { id: 0, name: "" },
+        Category: { id: 0, name: "", description: "" },
         measuringUnit: "",
       },
       description: "",
@@ -200,7 +202,7 @@ const ChangeValueTotal = () => {
 
 // for change the value of total in form item
 watch(
-  () => OutputVoucherItem.value.InputVoucherItem.price,
+  () => OutputVoucherItem.value.InputVoucherItem || null,
   (newX) => {
     ChangeValueTotal();
   }
@@ -263,6 +265,7 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        useInputVoucherStore().getAvailableItemsVSelect();
         filesDataInput.value = [];
         router.go(-1);
       }
@@ -316,6 +319,7 @@ function update() {
           timer: 1500,
         });
         filesDataInput.value = [];
+        useInputVoucherStore().getAvailableItemsVSelect();
         showData(outputVoucher.value.id);
       }
     })
@@ -395,7 +399,10 @@ const showData = async (id: number) => {
   Loading.value = false;
 };
 //#endregion
-
+const inputVoucherItemsVSelect = ref<IInputVoucherItem[]>([]);
+const getItemsVSelect = async (query?: string | undefined) => {
+  inputVoucherItemsVSelect.value = await useInputVoucherStore().getItemsVSelect2(query);
+}
 onMounted(async () => {
   Loading.value = true;
   filesDataInput.value = [];
@@ -419,7 +426,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Item.Index"), value: "Item" },
   { caption: t("Item.Description"), value: "Description" },
   { caption: t("Count"), value: "count" },
-  { caption: t("Price"), value: "price" },
+  { caption: t("Price"), value: "Price" },
   { caption: t("Total"), value: "Total" },
   { caption: t("Notes"), value: "notes" },
   { caption: t("Actions"), value: "Actions" },
@@ -473,7 +480,7 @@ const headers = ref<Array<ITableHeader>>([
 
           <IRow>
             <ICol>
-              <IButton2 :text="t('Add')" color="blue" :type="EnumButtonType.Outlined" post-icon="plus"
+              <IButton2 :text="t('Item.Choose')" color="blue" :type="EnumButtonType.Outlined" post-icon="plus"
                 :on-click="AddPopup" />
             </ICol>
           </IRow>
@@ -489,13 +496,16 @@ const headers = ref<Array<ITableHeader>>([
                 <template v-slot:Total="{ row }">
                   {{ ConvertToMoneyFormat(row.count * row.price) }}
                 </template>
-                <template v-slot:Actions="{ row, rowIndex }">
+                <template v-slot:Price="{ row }">
+                  {{ ToNumberShow(row.price) }}
+                </template>
+                <template v-slot:Actions="{ row }">
                   <van-button class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"
-                    type="success" is-link @click="updatePopup(rowIndex, row)">{{ t("Edit") }}
+                    type="success" is-link @click="updatePopup(outputVoucher.Items.indexOf(row), row)">{{ t("Edit") }}
                   </van-button>
                   |
                   <van-button class="duration-500 rounded-lg m-2 bg-white hover:bg-deleteHover border-red-700 border-2"
-                    is-link @click="deleteItem(rowIndex)">{{ t("Delete") }}
+                    is-link @click="deleteItem(outputVoucher.Items.indexOf(row))">{{ t("Delete") }}
                   </van-button>
                 </template>
               </ITable>
@@ -507,7 +517,7 @@ const headers = ref<Array<ITableHeader>>([
               <FilePreview :file="document" @updateList="updateList">
               </FilePreview>
             </ICol>
-          </IRow>
+          </IRow>{{ inputVoucherItemsVSelect }}
           <DragDrop></DragDrop>
           <IRow>
             <ICol>
@@ -520,54 +530,66 @@ const headers = ref<Array<ITableHeader>>([
     <IContainer class="w-full">
       <van-popup class="overflow-hidden dark:bg-darkNav" v-model:show="showPop" round position="bottom">
         <!-- for search Item -->
-
         <IFlex class="p-2">
           <IBasis base="1/4">
             <div class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300">
               {{ t("Item.Name") }}
             </div>
-            <vSelect
-              class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 dark:text-gray-200 mb-10"
-              v-model="OutputVoucherItem.InputVoucherItem" :options="inputVoucherItemsVSelect"
-              :reduce="(_item: IInputVoucherItem) => _item"
-              :get-option-label="(_item: IInputVoucherItem) => _item.Item.name">
-              <template #option="{ Item, outValue, inValue, notes, description }">
-                <div class="rtl:text-right border-2 p-2 rounded-md dark:bg-gray-800 bg-gray-100">
-                  <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 text-gray-800">
-                    {{ Item.name.toString() }}
+            <ISelect2 v-model="OutputVoucherItem.InputVoucherItem" :options="inputVoucherItemsVSelect"
+              label-key="Item.name" track-by="fingerprint" placeholder="Select a Item" :async="true"
+              :fetch-function="useInputVoucherStore().getItemsVSelect2">
+              <template #item="{ option }">
+                <div class="w-full rounded-xl border p-4 transition-shadow duration-300
+              bg-gradient-to-br from-gray-50 to-gray-100
+              dark:from-slate-800 dark:to-slate-900
+              border-gray-200 dark:border-gray-700
+              hover:shadow-xl">
+
+                  <div class="mb-4 flex items-start justify-between">
+                    <div class="flex items-center gap-x-3">
+                      <div
+                        class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-700">
+                        <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-14L4 7v10l8 4m0-14L4 7" />
+                        </svg>
+                      </div>
+                      <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                        {{ option.Item.name }}
+                      </h3>
+                    </div>
+                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold
+                   bg-emerald-100 text-emerald-800
+                   dark:bg-emerald-900/70 dark:text-emerald-200">
+                      {{ t("Available") }}: {{ ConvertToMoneyFormat(option.count) }}
+                    </span>
                   </div>
-                  <cite>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
-                      {{ t("Code") }}: {{ Item.code }}
+
+                  <div class="grid grid-cols-[auto,1fr] gap-x-4 gap-y-1.5 text-sm">
+                    <div class="font-medium text-gray-500 dark:text-gray-400">{{ t("Code") }}:</div>
+                    <div class="font-mono text-gray-700 dark:text-gray-300">{{ option.Item.code }}</div>
+
+                    <div class="font-medium text-gray-500 dark:text-gray-400">{{ t("Category") }}:</div>
+                    <div class="text-gray-700 dark:text-gray-300">{{ option.Item.Category.name }}</div>
+
+                    <div class="font-medium text-gray-500 dark:text-gray-400">{{ t("Price") }}:</div>
+                    <div class="font-semibold text-gray-800 dark:text-gray-200">{{ ConvertToMoneyFormat(option.price) }}
                     </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
-                      {{ t("Category") }}:
-                      {{ Item.Category.name.toString() }}
-                    </div>
-                    <div v-if="description"
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
-                      {{ t("Item.Description") }}:
-                      {{ description.toString() }}
-                    </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1">
-                      {{ t("Available") }}:
-                      {{ Number(inValue) - Number(outValue) }}
-                    </div>
-                    <cite class="flex flex-wrap text-left text-xs w-fit">
-                      {{ notes }}
-                    </cite>
-                  </cite>
-                  <!-- <br />
-                  <cite>
-                    {{ Item.description }}
-                  </cite> -->
+                  </div>
+
+                  <div v-if="option.description || option.notes"
+                    class="mt-4 space-y-3 border-t border-gray-200/80 pt-3 dark:border-gray-700/60">
+                    <p v-if="option.description" class="text-sm text-gray-600 dark:text-gray-400">
+                      {{ option.description }}
+                    </p>
+                    <p v-if="option.notes"
+                      class="whitespace-pre-wrap rounded-md bg-gray-100 p-2 text-xs italic text-gray-500 dark:bg-gray-900/50 dark:text-gray-500">
+                      {{ option.notes }}
+                    </p>
+                  </div>
                 </div>
               </template>
-            </vSelect>
+            </ISelect2>
           </IBasis>
           <IBasis base="3/4" v-if="OutputVoucherItem.InputVoucherItem == null"
             class="border-2 border-dotted border-gray-600">
@@ -589,7 +611,15 @@ const headers = ref<Array<ITableHeader>>([
                 <ILabel :title="t('Category')">
                   {{
                     OutputVoucherItem.InputVoucherItem.Item?.Category.name
-                  }}</ILabel>
+                  }}
+                </ILabel>
+              </IBasis>
+              <IBasis base="1/4">
+                <ILabel :title="t('Price')">
+                  {{
+                    ConvertToMoneyFormat(OutputVoucherItem.InputVoucherItem.price)
+                  }}
+                </ILabel>
               </IBasis>
               <IBasis base="1/2">
                 <ILabel :title="t('Description')">
@@ -628,7 +658,7 @@ const headers = ref<Array<ITableHeader>>([
           </div>
           <div class="w-1/4">
             <ILabel :title="t('Total')">
-              {{ OutputVoucherItem.value }}
+              {{ ConvertToMoneyFormat(OutputVoucherItem.value) }}
             </ILabel>
           </div>
         </div>

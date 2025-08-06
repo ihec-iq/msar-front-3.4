@@ -107,14 +107,16 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      
-
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
               :OnKeyEnter="getFilterData" />
           </ICol>
+          <div class="basis-1/5" v-if="data.length >= limits[0].id">
+            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+              :IsRequire="true" @onChange="getFilterData()" />
+          </div>
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
@@ -131,11 +133,7 @@ onMounted(async () => {
           <div class="basis-4/5 hidden">
             <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
               @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-          </div>
-          <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-              :IsRequire="true" @onChange="getFilterData()" />
-          </div>
+          </div> 
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>

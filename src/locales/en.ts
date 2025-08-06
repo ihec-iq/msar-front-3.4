@@ -424,7 +424,7 @@ export default {
   "No, cancel!": "No, cancel!",
   "Deleted!": "Deleted !",
   "Deleted Successfully .": "Deleted Successfully .",
-
+  "Deleted not successfully .":"Deleted not Successfully .",
   "Print Settings": "Print Settings",
   "General Settings": "General Settings",
   "Change Language": "Change Language",

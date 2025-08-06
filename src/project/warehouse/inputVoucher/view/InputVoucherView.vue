@@ -52,6 +52,7 @@ const { inputVoucherStates } = storeToRefs(useInputVoucherStateStore());
 import {
   ConvertToMoneyFormat,
   makeFormDataFromObject,
+  ToNumberShow,
 } from "@/utilities/tools";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import IButton2 from "@/components/ihec/IButton2.vue";
@@ -165,7 +166,7 @@ const deleteItem = (index: number) => {
       if (result.isConfirmed) {
         await inputVoucherStore.removeItem(index);
       }
-    });
+    })
 };
 const updatePopup = (index: number, item: IInputVoucherItem) => {
   VoucherItemTemp.value = item;
@@ -327,6 +328,7 @@ const showData = async (id: number) => {
         inputVoucher.value.notes = response.data.data.notes;
         inputVoucher.value.Items = response.data.data.Items;
         inputVoucher.value.requestedBy = response.data.data.requestedBy;
+        inputVoucher.value.numberBill = response.data.data.numberBill;
         inputVoucher.value.State = response.data.data.State;
         inputVoucher.value.Stock = response.data.data.Stock;
         inputVoucher.value.FilesDocument = response.data.data.FilesDocument;
@@ -434,7 +436,7 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Item.Name"), value: "Item" },
   { caption: t("Item.Description"), value: "description" },
   { caption: t("Count"), value: "count" },
-  { caption: t("Price"), value: "price" },
+  { caption: t("Price"), value: "Price" },
   { caption: t("Total"), value: "Total" },
   { caption: t("Notes"), value: "notes" },
   { caption: t("Details"), value: "Actions" },
@@ -487,11 +489,14 @@ const headers = ref<Array<ITableHeader>>([
                   {{ row.Item.name }}
                 </template>
                 <template v-slot:Total="{ row }">
-                  {{ row.count * row.price }}
+                  {{ ConvertToMoneyFormat(row.count * row.price) }}
                 </template>
-                <template v-slot:Actions="{ row, rowIndex }">
+                <template v-slot:Price="{ row }">
+                  {{ ConvertToMoneyFormat(row.price) }}
+                </template>
+                <template v-slot:Actions="{ row }">
                   <div class="flex flex-row items-center justify-center gap-2">
-                    <button type="button" @click="updatePopup(rowIndex, row)" class=" bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700
+                    <button type="button" @click="updatePopup(inputVoucher.Items.indexOf(row), row)" class=" bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700
                     dark:text-green-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200
                     hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2
                     focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
@@ -501,7 +506,7 @@ const headers = ref<Array<ITableHeader>>([
                       </svg>
                       {{ t("Edit") }}
                     </button>
-                    <button type="button" @click="deleteItem(rowIndex)" class="bg-red-100 hover:bg-red-200 dark:bg-red-900
+                    <button type="button" @click="deleteItem(inputVoucher.Items.indexOf(row))" class="bg-red-100 hover:bg-red-200 dark:bg-red-900
                       dark:hover:bg-red-800 text-red-700 dark:text-red-200 px-4 py-2 rounded-lg flex items-center
                       gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5
                       focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2

@@ -142,6 +142,15 @@ const Delete = async () => {
             "success"
           );
           router.go(-1);
+        }).catch((error) => {
+          //errors.value = Object.values(error.response.data.errors).flat().join();
+          errors.value = itemCategoryStore.getError(error);
+          Swal.fire({
+            icon: "error",
+            title: t("Deleted not successfully ."),
+            text: error.response.data.message,
+            footer: "",
+          });
         });
       }
     });

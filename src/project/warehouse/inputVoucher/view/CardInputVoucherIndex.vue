@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { t } from "@/utilities/I18nPlugin";
 import { useRouter } from "vue-router";
-import { computed } from "vue";
+
 const router = useRouter();
-const update = (id: number) => {
-  router.push({
-    name: "inputVoucherUpdate",
-    params: { id: id },
-  });
-};
+
 const props = defineProps({
   item: {
     type: Object,
@@ -16,96 +11,62 @@ const props = defineProps({
   },
 });
 
-const truncatedNotes = computed(() => {
-  if (props.item.notes) return props.item.notes.replace(/<[^>]*>/g, '').slice(0, 20) + "...";
-  else return "";
-});
+/**
+ * Navigates to the update page for the voucher.
+ * Triggered by clicking anywhere on the card.
+ */
+const goToDetails = (id: number) => {
+  router.push({
+    name: "inputVoucherUpdate",
+    params: { id },
+  });
+};
 </script>
+
 <template>
+  <!-- 
+    Main Card Container
+    - The entire card is a clickable element for better UX.
+    - 'group' allows child elements to be styled on card hover.
+    - Subtle transitions and a "lift" effect on hover create a more dynamic feel.
+    - A flexible height with padding ensures content fits without being cut off.
+  -->
   <div
-    class="w-full max-w-sm min-h-36 max-h-36 bg-gray-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+    @click="goToDetails(item.id)"
+    class="group flex h-full w-full max-w-sm cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary/50"
   >
-    <div
-      class="flex justify-between px-4 pt-3 rounded-t-md bg-[#7192AD] dark:bg-slate-600 h-10 text-white"
-    >
-      <span class="">{{ item.date }}</span>
-      <button
-        @click="update(item.id)"
-        class="inline-block text-gray-500 dark:text-gray-400 hover:bg-slate-400 dark:hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm mb-2"
-        type="button"
-      >
-        <span class="sr-only">Open dropdown</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-pen"
-          color="white"
-          viewBox="0 0 16 16"
-        >
-          <path
-            d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"
-          />
+    <!-- Card Header: Contains meta-information like date and item count -->
+    <div class="flex items-start justify-between border-b border-gray-200 bg-gray-50/50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
+      <!-- Date -->
+      <div class="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17 12H12V17H17V12M16 1V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H18V1M19 19H5V8H19V19Z" />
         </svg>
-      </button>
-      <!-- <button
-        id="dropdownButton"
-        data-dropdown-toggle="dropdown"
-        class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
-        type="button"
-      >
-        <span class="sr-only">Open dropdown</span>
-        <svg
-          class="w-5 h-5"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 16 3"
-        >
-          <path
-            d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
-          />
-        </svg>
-      </button> -->
-      <div
-        id="dropdown"
-        class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-      >
-        <ul class="py-2" aria-labelledby="dropdownButton">
-          <li>
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >Edit</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >Export Data</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >Delete</a
-            >
-          </li>
-        </ul>
+        <span>{{ item.date }}</span>
       </div>
+      <!-- Item Count Badge -->
+      <span class="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary dark:bg-secondary/20 dark:text-secondary/80">
+        {{ item.itemsCount }} {{ t("items") }}
+      </span>
     </div>
-    <div class="flex flex-col items-center pb-10 pt-5">
-      <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+
+    <!-- Card Body: Contains the main content -->
+    <div class="flex flex-grow flex-col p-4">
+      <!-- Voucher Number (Primary Identifier) -->
+      <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
         {{ item.number }}
       </h5>
-      <span class="text-sm text-gray-500 dark:text-gray-400">{{
-        truncatedNotes
-      }}</span>
-      <div class="badge badge-primary badge-outline">{{ item.itemsCount }}</div>
+
+      <!-- Notes (Clamped to 2 lines for consistency) -->
+      <p v-if="item.notes" class="line-clamp-2 flex-grow text-sm text-gray-600 dark:text-gray-400" v-html="item.notes" />
+
+      <!-- Action Link: Appears on hover for a cleaner look -->
+      <div class="mt-4 flex items-center justify-end text-sm font-semibold text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:text-secondary">
+        <span>{{ t("View Details") }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+        </svg>
+      </div>
     </div>
   </div>
 </template>
-

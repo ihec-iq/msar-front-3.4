@@ -620,6 +620,7 @@ export default {
   "No, cancel!": "لا , الغي",
   "Deleted!": "تم الحذف !",
   "Deleted successfully .": ". تم الحذف بنجاح",
+  "Deleted not successfully .": "لم يتم الحذف",
   "Your Expense Voucher has been add": "تم اضافة سند صرف بنجاح",
   "Your Expense Voucher has been updated": "تم التعديل على سند الصرف بنجاح",
   "Your receipt has been add": "تم اضافة سند قبض بنجاح",

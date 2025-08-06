@@ -1,5 +1,5 @@
-import { reactive, ref } from "vue";
-import { defineStore, type StoreOnActionListener } from "pinia";
+import { ref } from "vue";
+import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
 import type {
@@ -7,24 +7,28 @@ import type {
   IInputVoucherEmployee,
   IInputVoucherFilter,
   IInputVoucherItem,
-  IInputVoucherItemVSelect,
 } from "./IInputVoucher";
 import type { IInputVoucherState } from "../settingVoucher/inputVoucherState/IInputVoucherState";
+import Swal from "sweetalert2";
+import { t } from "@/utilities/I18nPlugin";
 
 export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
+  const today = () => new Date().toISOString().split("T")[0];
+
   const inputVoucher = ref<IInputVoucher>({
     id: 0,
     number: "",
-    date: new Date().toISOString().split("T")[0],
+    date: today(),
     notes: "",
     State: { name: "", id: 1 },
     Items: [],
     requestedBy: "",
     Stock: { name: "", id: 0, description: "" },
     numberBill: "",
-    dateBill: new Date().toISOString().split("T")[0],
-    dateReceive: new Date().toISOString().split("T")[0],
+    dateBill: today(),
+    dateReceive: today(),
   });
+
   const inputVouchers = ref<IInputVoucher[]>([]);
   const inputVoucherItem = ref<IInputVoucherItem>({
     id: 0,
@@ -34,10 +38,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       name: "",
       code: "",
       description: "",
-      Category: {
-        id: 0,
-        name: "",
-      },
+      Category: { id: 0, name: "", description: "" },
       measuringUnit: "",
     },
     description: "",
@@ -47,140 +48,158 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     value: 0,
     notes: "",
   });
+
   const inputVoucherItems = ref<IInputVoucherItem[]>([]);
   const inputVoucherItemsVSelect = ref<IInputVoucherItem[]>([]);
   const inputVoucherStates = ref<IInputVoucherState[]>([]);
   const inputVoucherEmployees = ref<IInputVoucherEmployee[]>([]);
+
   const pathBase = "/stockSys";
   const pathUrl = `${pathBase}/inputVoucher`;
+
   async function get() {
     inputVouchers.value = await Api.get(`${pathUrl}`);
   }
+
   async function get_filter(params: IInputVoucherFilter, page: number) {
     try {
-      return await Api.get(`${pathUrl}/filter?page=${page}`, {
-        params: params,
-      });
+      return await Api.get(`${pathUrl}/filter?page=${page}`, { params });
     } catch (error) {
-      console.log("in get_filter inputVoucher : " + error);
+      console.error("Error in get_filter:", error);
       return null;
     }
   }
-  async function store(prams: object) {
-    return await Api.post(`${pathUrl}/store`, prams);
+
+  async function store(params: object) {
+    return await Api.post(`${pathUrl}/store`, params);
   }
+
   async function update(inputVoucher_id: number, params: object) {
     return await Api.post(`${pathUrl}/update/${inputVoucher_id}`, params);
   }
+
   async function show(id: number) {
     return await Api.get(`${pathUrl}/${id}`);
   }
+
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
+
   async function getItems() {
     inputVoucherItems.value = [];
-    return await Api.get(`${pathBase}/inputVoucherItem`)
-      .then((response) => {
-        if (response.status == 200) {
-          inputVoucherItems.value = response.data.data;
-        }
-      })
-      .catch((errors) => {
-        console.log("in get input Voucher Items : " + errors);
-      });
+    try {
+      const response = await Api.get(`${pathBase}/inputVoucherItem`);
+      if (response.status === 200) {
+        inputVoucherItems.value = response.data.data;
+      }
+    } catch (error) {
+      console.error("Error in getItems:", error);
+    }
   }
-  async function getAvailableItemsVSelect(storeId: string = "0") {
+
+  async function fetchItemsVSelect(endpoint: string, params: object = {}) {
     inputVoucherItemsVSelect.value = [];
-    return await Api.get(
-      `${pathBase}/inputVoucherItem/getAvailableItemsVSelect/${storeId}`
-    )
-      .then((response) => {
-        if (response.status == 200) {
-          inputVoucherItemsVSelect.value = response.data.data;
-          //console.log(response.data.data)
-        }
-      })
-      .catch((errors) => {
-        console.log("in get input get Items For getAvailableItemsVSelect : " + errors);
-      });
+    try {
+      console.log(`fetchItemsVSelect`);
+      const response = await Api.get(endpoint, { params: params });
+      if (response.status === 200 && Array.isArray(response.data?.data)) {
+        inputVoucherItemsVSelect.value = response.data.data;
+        console.log(response.data.data);
+      }
+    } catch (error) {
+      console.error(`Error in fetchItemsVSelect (${endpoint}):`, error);
+    }
   }
-  async function getAllItemsVSelect() {
-    inputVoucherItemsVSelect.value = [];
-    return await Api.get(`${pathBase}/inputVoucherItem/getAllItemsVSelect`)
-      .then((response) => {
-        if (response.status == 200) {
-          inputVoucherItemsVSelect.value = response.data.data;
-          //console.log(response.data.data)
-        }
-      })
-      .catch((errors) => {
-        console.log("in get input get Items For getAllItemsVSelect : " + errors);
-      });
+
+  function getAvailableItemsVSelect(query?: string | undefined) {
+    if (query === undefined || query === "") {
+      inputVoucherItemsVSelect.value = [];
+      return;
+    }
+    return fetchItemsVSelect(
+      `${pathBase}/inputVoucherItem/getAvailableItemsVSelect`,
+      { itemName: query }
+    );
   }
-  async function getAllItemsVSelectByEmployeeId(employeeId: number = 0) {
-    inputVoucherItemsVSelect.value = [];
-    return await Api.get(
+  const getItemsVSelect2 = async (query?: string | undefined) => {
+    if (query === undefined || query === "") {
+      return [];
+    }
+    let endpoint = `${pathBase}/inputVoucherItem/getAvailableItemsVSelect`;
+    try {
+      const response = await Api.get(endpoint, { params: { itemName: query } });
+      if (response.status === 200 && Array.isArray(response.data?.data)) {
+        //console.log(response.data.data);
+        return response.data.data;
+      }
+    } catch (error) {
+      console.error(`Error in fetchItemsVSelect (${endpoint}):`, error);
+    }
+  };
+
+  function getAllItemsVSelect() {
+    return fetchItemsVSelect(`${pathBase}/inputVoucherItem/getAllItemsVSelect`);
+  }
+
+  function getAllItemsVSelectByEmployeeId(employeeId: number = 0) {
+    return fetchItemsVSelect(
       `${pathBase}/inputVoucherItem/getAvailableItemsVSelectByEmployeeId/${employeeId}`
-    )
-      .then((response) => {
-        if (response.status == 200) {
-          inputVoucherItemsVSelect.value = response.data.data;
-          //console.log(response.data.data)
-        }
-      })
-      .catch((errors) => {
-        console.log("in get input get Items For getAllItemsVSelectByEmployeeId : " + errors);
-      });
+    );
   }
+
   async function getEmployees() {
-    return await Api.get(`employee/lite`)
-      .then((response) => {
-        if (response.status == 200) {
-          inputVoucherEmployees.value = response.data.data;
-        }
-      })
-      .catch((errors) => {
-        console.log("in get Employees : " + errors);
-      });
+    try {
+      const response = await Api.get(`employee/lite`);
+      if (response.status === 200) {
+        inputVoucherEmployees.value = response.data.data;
+      }
+    } catch (error) {
+      console.error("Error in getEmployees:", error);
+    }
   }
+
   function addItem(item: IInputVoucherItem) {
-    inputVoucher.value.Items = [item].concat(inputVoucher.value.Items);
+    inputVoucher.value.Items = [item, ...inputVoucher.value.Items];
   }
+
   function editItem(index: number, item: IInputVoucherItem) {
     inputVoucher.value.Items[index] = item;
   }
+
   async function removeItem(index: number) {
-    if (
-      String(inputVoucher.value.Items[index]?.id) == undefined ||
-      inputVoucher.value.Items[index]?.id === undefined ||
-      inputVoucher.value.Items[index].id === undefined
-    ) {
-      inputVoucher.value.Items?.splice(index, 1);
+    const itemId = inputVoucher.value.Items[index]?.id;
+    if (!itemId) {
+      inputVoucher.value.Items.splice(index, 1);
       return false;
     }
-    return await Api.delete(
-      `${pathBase}/inputVoucherItem/delete/` +
-        String(inputVoucher.value.Items[index]?.id)
-    )
-      .then((response) => {
-        if (response.status == 200) {
-          inputVoucher.value.Items?.splice(index, 1);
-          return true;
-        }
-      })
-      .catch((errors) => {
-        console.log("in removeItem inputVoucherItem : " + errors);
+
+    try {
+      const response = await Api.delete(
+        `${pathBase}/inputVoucherItem/delete/${itemId}`
+      );
+      if (response.status === 200) {
+        inputVoucher.value.Items.splice(index, 1);
+        return true;
+      }
+    } catch (error: any) {
+      Swal.fire({
+        icon: "error",
+        title: t("Deleted not successfully ."),
+        text: error.response?.data?.message || "An error occurred",
+        footer: "",
       });
+    }
   }
+
   function resetData() {
     inputVoucher.value = {
       id: 0,
       number: "",
       numberBill: "",
-      date: new Date().toISOString().split("T")[0],
-      dateBill: new Date().toISOString().split("T")[0],
-      dateReceive: new Date().toISOString().split("T")[0],
+      date: today(),
+      dateBill: today(),
+      dateReceive: today(),
       notes: "",
       State: { name: "", id: 1 },
       Items: [],
@@ -188,6 +207,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
       Stock: { name: "", id: 1, description: "" },
     };
   }
+
   return {
     inputVoucher,
     inputVouchers,
@@ -205,6 +225,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     getItems,
     getEmployees,
     getAvailableItemsVSelect,
+    getItemsVSelect2,
     getAllItemsVSelect,
     getAllItemsVSelectByEmployeeId,
     show,

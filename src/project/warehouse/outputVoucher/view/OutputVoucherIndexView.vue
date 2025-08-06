@@ -9,7 +9,7 @@ import type {
   IOutputVoucher,
   IOutputVoucherFilter,
 } from "../IOutputVoucher";
- import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
+import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { t } from "@/utilities/I18nPlugin";
 const isLoading = ref(false);
 const data = ref<Array<IOutputVoucher>>([]);
@@ -106,25 +106,18 @@ onMounted(async () => {
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput
-              :label="t('Search')"
-              :placeholder="t('Search')"
-              v-model="fastSearch"
-              :type="EnumInputType.Text"
-              :OnKeyEnter="getFilterData"
-            />
+            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData" />
           </ICol>
+          <div class="basis-1/5" v-if="data.length >= limits[0].id">
+            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+              :IsRequire="true" @onChange="getFilterData()" />
+          </div>
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
       <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
-        <ICol
-          :span="1"
-          :span-lg="1"
-          :span-md="1"
-          v-for="item in data"
-          :key="item.id"
-        >
+        <ICol :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.id">
           <!-- card -->
           <CardOutputVoucherIndex :item="item" />
           <!-- end card -->
@@ -134,22 +127,12 @@ onMounted(async () => {
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-4/5 hidden">
-            <TailwindPagination
-              class="flex justify-center mt-6"
-              :data="dataPage"
-              @pagination-change-page="getFilterData"
-              :limit="searchFilter.limit"
-            />
+            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
           </div>
           <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect
-              :label="t('Limit')"
-              v-model="searchFilter.limit"
-              name="archiveTypeId"
-              :options="limits"
-              :IsRequire="true"
-              @onChange="getFilterData()"
-            />
+            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+              :IsRequire="true" @onChange="getFilterData()" />
           </div>
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
@@ -158,4 +141,3 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
- 

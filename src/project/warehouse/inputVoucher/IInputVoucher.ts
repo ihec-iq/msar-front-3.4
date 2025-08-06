@@ -24,17 +24,20 @@ export interface IInputVoucherItem {
   id?: number;
   inputVoucherId?: number;
   Item: IItem;
-  count: number;
+  count?: number;
   countIn?: number;
   countOut?: number;
   countReIn?: number;
   countReOut?: number;
+  Stock?: IStock;
   description: string;
   ItemDescription?: string;
-  price: number;
+  price?: number;
   value: number;
   notes?: string;
+  fingerprint? : string;
 }
+
 export interface IInputVoucherItemVSelect {
   id?: number;
   itemName: string;
