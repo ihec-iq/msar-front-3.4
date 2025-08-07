@@ -1,11 +1,10 @@
-import type { ICategoryItem } from "./ICategoryItem";
-
+ 
 export interface IItem {
   id: number;
   name: string;
   code: string;
   description: string;
-  Category: ICategoryItem;
+  Category: IItemCategory;
   measuringUnit: string;
 }
 export interface IItemFilter {

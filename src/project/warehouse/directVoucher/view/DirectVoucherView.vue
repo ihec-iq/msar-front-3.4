@@ -43,7 +43,7 @@ const VoucherItemTemp = ref<IDirectVoucherItem>({
     id: 0,
     code: "",
     description: "",
-    Category: { id: 0, name: "" },
+    Category: { id: 0, name: "", description: "" },
     measuringUnit: "",
   },
   description: "",
@@ -66,7 +66,7 @@ const resetVoucherItem = () => {
       id: 0,
       code: "",
       description: "",
-      Category: { id: 0, name: "" },
+      Category: { id: 0, name: "", description: "" },
       measuringUnit: "",
     },
     description: "",
@@ -450,21 +450,21 @@ onMounted(async () => {
               class="capitalize rounded-md border-2 p-2 dark:text-gray-200 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
               v-model="VoucherItemTemp.Item" :options="items" :reduce="(_item: IItem) => _item"
               :get-option-label="(_item: IItem) => _item.name" @keydown.enter="handleEnter" :create-option="(_item: IItem) => ({
-                  input_voucher_id: 0,
-                  Item: {
-                    name: '',
-                    id: 0,
-                    code: 0,
-                    description: 0,
-                    Category: { id: 0, name: '' },
-                    measuringUnit: '',
-                  },
-                  description: '',
-                  count: 0,
-                  price: 0,
-                  value: 0,
-                  notes: '',
-                })
+                input_voucher_id: 0,
+                Item: {
+                  name: '',
+                  id: 0,
+                  code: 0,
+                  description: 0,
+                  Category: { id: 0, name: '' },
+                  measuringUnit: '',
+                },
+                description: '',
+                count: 0,
+                price: 0,
+                value: 0,
+                notes: '',
+              })
                 ">
               <template #option="{ code, Category, description, name }">
                 <div class="rtl:text-right border-2 p-2 rounded-md">

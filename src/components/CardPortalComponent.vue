@@ -1,47 +1,57 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { IconLink } from "./fixed/FixedMenu"; 
-import ICol2 from "./ihec/ICol2.vue";
-import IRow2 from "./ihec/IRow2.vue";
+import type { IconLink } from "./fixed/FixedMenu";
+// The CardPortalSingleComponent is the visual representation of your link.
+// It will be placed inside the Material Design card container.
+import CardPortalSingleComponent from "./CardPortalSingleComponent.vue"; // Assuming path
+
 const props = defineProps({
   links: {
-    type: Array<Object>,
+    type: Array as () => IconLink[],
     required: false,
-    default: [],
+    default: () => [],
   },
 });
+
 const LinksBase = computed(() => {
-  return props.links as Array<IconLink>;
+  return props.links;
 });
 </script>
 
 <template>
-  <IRow2 :gap="5">
-    <ICol2   v-for="Link in LinksBase" :key="Link.routerName">
-      <router-link :to="{ name: Link.routerName }">
-        <CardPortalSingleComponent :Link="Link"></CardPortalSingleComponent>
-      </router-link>
-    </ICol2>
-  </IRow2>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 p-4 md:p-6">
+    <router-link
+      v-for="link in LinksBase"
+      :key="link.routerName"
+      :to="{ name: link.routerName }"
+      class="
+        relative block overflow-hidden rounded-2xl
+        bg-neutral-50 dark:bg-neutral-800
+        shadow-sm
+        transition-all duration-200 ease-out
+        hover:shadow-md hover:-translate-y-1
+        active:scale-[0.98] active:duration-100
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+        focus-visible:ring-blue-600 dark:focus-visible:ring-blue-400
+      "
+    >
+      <CardPortalSingleComponent :Link="link" />
+
+      <div
+        class="
+          absolute inset-0
+          bg-black
+          opacity-0
+          transition-opacity
+          duration-200
+          hover:opacity-[0.05]
+          active:opacity-[0.08]
+        "
+      ></div>
+    </router-link>
+  </div>
 </template>
 
 <style scoped>
-.animate-shake {
-  animation: shake 0.5s infinite;
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-
-  25% {
-    transform: rotate(-5deg);
-  }
-
-  75% {
-    transform: rotate(5deg);
-  }
-}
+/* The 'jiggle' animation is no longer needed for this cleaner Material Design feel. */
 </style>

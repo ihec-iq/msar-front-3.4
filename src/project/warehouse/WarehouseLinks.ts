@@ -1,5 +1,6 @@
 import type { IconLink } from "@/components/fixed/FixedMenu";
 import { EnumPermission } from "@/utilities/EnumSystem";
+import { ItemLinks } from "../item/ItemLinks";
 
 export const WarehouseLinks: Array<IconLink> = [
   {
@@ -9,7 +10,7 @@ export const WarehouseLinks: Array<IconLink> = [
     iconX:
       '<svg    xmlns="http://www.w3.org/2000/svg"    width="64" height="64"    viewBox="0 0 24 24" stroke="currentColor"    >    <path  fill="currentColor"  d="M8 11.5V10h8v1.5H8Zm1 3V13h6v1.5H9ZM1 20V4h22v16H1Zm5-2h12V6H6v12Z"    />  </svg>',
     tab: "warehousePortal",
-    description: "لوحة التحكم بالمخزن",
+    description: "المخازن",
     permissions: [EnumPermission.ShowStorage],
     isActive: true,
     children: [
@@ -110,6 +111,7 @@ export const WarehouseLinks: Array<IconLink> = [
           },
         ],
       },
+      ...ItemLinks,
     ],
   }
 ];

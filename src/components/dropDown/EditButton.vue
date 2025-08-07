@@ -11,7 +11,7 @@ onMounted(() => {});
 </script>
 <template>
   <button
-    class="flex justify-between w-fit 
+    class="flex justify-between  w-full
       text-sm 
     py-2 px-4 font-normal whitespace-nowrap  
      text-text dark:text-textLight  

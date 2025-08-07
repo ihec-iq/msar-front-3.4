@@ -106,7 +106,7 @@ onMounted(async () => {
     <IPageContent>
       <IRow :col="5" :col-md="2" :col-lg="4">
         <ISearchBar :getDataButton="getFilterData">
-          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
+          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4" class="flex">
             <IInput
               :label="t('Search')"
               :placeholder="t('Search')"
@@ -114,6 +114,16 @@ onMounted(async () => {
               type="text"
               :OnKeyEnter="getFilterData"
             />
+            <div class="basis-1/5" v-if="data.length >= limits[0].id">
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </div>
           </ICol>
         </ISearchBar>
       </IRow>
@@ -134,7 +144,7 @@ onMounted(async () => {
             v-if="data.length > 0"
           >
             <div class="w-full flex flex-row">
-              <div class="basis-4/5 overflow-x-auto font-Tajawal">
+              <div class="basis-5/5 overflow-x-auto font-Tajawal">
                 <TailwindPagination
                   class="flex justify-center mt-6"
                   :data="dataPage"
@@ -142,16 +152,7 @@ onMounted(async () => {
                   :limit="searchFilter.limit"
                 />
               </div>
-              <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                <ISelect
-                  :label="t('Limit')"
-                  v-model="searchFilter.limit"
-                  name="archiveTypeId"
-                  :options="limits"
-                  :IsRequire="true"
-                  @onChange="getFilterData()"
-                />
-              </div>
+             
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import type { IconLink } from "@/components/fixed/FixedMenu";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
+import { VacationLinks } from "../vacation/VacationLinks";
 
 
 export const EmployeeLinks: Array<IconLink> = [
@@ -9,7 +10,7 @@ export const EmployeeLinks: Array<IconLink> = [
     title: "الموارد البشرية",
     mdi: "mdi-account-group",
     tab: "employeePortal",
-    description: "جميع معلومات الموظفين",
+    description: "الموارد البشرية",
     permissions: [EnumPermission.ShowEmployees],
     isActive: true,
     children: [
@@ -36,13 +37,13 @@ export const EmployeeLinks: Array<IconLink> = [
       },
       {
         routerName: "hrDocumentIndex",
-        title: "ضبارة الموظفين",
+        title: "اضبارة الموظفين",
         icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 20 20" fill="currentColor"  >    <path  d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"    />  </svg>',
         iconX:
           '<svg xmlns="http://www.w3.org/2000/svg"   width="64"    height="64" viewBox="0 0 20 20" fill="currentColor"  >    <path  d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"    />  </svg>',
         tab: "employeePortal",
         description:
-          "البوابة الاساسية لضبارة الموظفين ومن خلالها تستطيع الدخول على كاف خدمات النظام",
+          "البوابة الاساسية لضبارة الموظفين ومن خلالها تستطيع الدخول على كافة خدمات النظام",
         isActive: true,
         permissions: [EnumPermission.ShowEmployees]
       },
@@ -68,6 +69,7 @@ export const EmployeeLinks: Array<IconLink> = [
         isActive: true,
         permissions: [EnumPermission.ShowEmployees]
       },
+      ...VacationLinks,
       {
         routerName: "employeeSettingPortal",
         title: t('Setting.Name'),

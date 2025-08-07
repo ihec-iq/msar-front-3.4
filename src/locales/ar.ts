@@ -5,8 +5,8 @@ export default {
   Option: {
     basic: "الخيارات الاساسية",
   },
-  NoItems : "لا توجد مواد",
-  FailedValidation : "فشل التحقق من صحة البيانات",
+  NoItems: "لا توجد مواد",
+  FailedValidation: "فشل التحقق من صحة البيانات",
   files: "الملفات",
   showColumns: "عرض الاعمدة",
   hideAll: "اخفاء الكل",
@@ -120,7 +120,7 @@ export default {
     Description: "الوصف",
     Choose: "اختر المادة",
     Properties: "مواصفات المادة",
-    CategoryRequired : "يجب ان تختار صنف المادة "
+    CategoryRequired: "يجب ان تختار صنف المادة ",
   },
   Items: "مواد",
   SearchForItem: "ابحث عن اسم او وصف المادة",
@@ -137,6 +137,10 @@ export default {
     NumberBill: "رقم الطلبية",
     State: "المصدر",
     Number: "الرقم",
+    ItemRequired: "يجب ان تضيف مادة واحدة على الاقل",
+    NumberRequired: "رقم المستند مطلوب",
+    BillExists: "السند موجود مسبقا",
+    BillNotExists : "السند غير موجود"
   },
   DirectVoucher: {
     Index: "الصرف المباشر",

@@ -109,7 +109,7 @@ const VoucherItemTemp = ref<IInputVoucherItem>({
     id: 0,
     code: "",
     description: "",
-    Category: { id: 0, name: "" },
+    Category: { id: 0, name: "" ,description:"" },
     measuringUnit: "",
   },
   description: "",
@@ -133,7 +133,7 @@ const resetVoucherItemTemp = () => {
       id: 0,
       code: "",
       description: "",
-      Category: { id: 1, name: "" },
+      Category: { id: 1, name: "" ,description:"" },
       measuringUnit: "",
     },
     description: "",
@@ -145,6 +145,10 @@ const resetVoucherItemTemp = () => {
 };
 //#region Item Row
 const deleteItem = (index: number) => {
+  if(inputVoucher.value.Items.length <= 1) {
+    WarningToast(t("InputVoucher.ItemRequired"));
+    return;
+  }
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn m-2 bg-red-700",
@@ -178,20 +182,20 @@ const updatePopup = (index: number, item: IInputVoucherItem) => {
 const AddItem = () => {
   if (VoucherItemTemp.value.Item.name == "") return false;
   VoucherItemTemp.value.value =
-    VoucherItemTemp.value.count * VoucherItemTemp.value.price;
+    Number(VoucherItemTemp.value.count) * Number(VoucherItemTemp.value.price);
   inputVoucherStore.addItem(VoucherItemTemp.value);
   resetVoucherItemTemp();
   showPop.value = false;
 };
 const ChangeValueTotal = () => {
   VoucherItemTemp.value.value =
-    VoucherItemTemp.value.count * VoucherItemTemp.value.price;
+    Number(VoucherItemTemp.value.count) * Number(VoucherItemTemp.value.price);
 };
 const indexSelectedVoucherItem = ref(0);
 
 const EditItem = () => {
   VoucherItemTemp.value.value =
-    VoucherItemTemp.value.count * VoucherItemTemp.value.price;
+    Number(VoucherItemTemp.value.count) * Number(VoucherItemTemp.value.price);
   inputVoucherStore.editItem(
     indexSelectedVoucherItem.value,
     VoucherItemTemp.value
@@ -411,7 +415,7 @@ function clearSelected(event: { target: { value: string } }) {
         id: 0,
         code: "",
         description: "",
-        Category: { id: 0, name: "" },
+        Category: { id: 0, name: "" ,description:"" },
         measuringUnit: "",
       },
       description: "",

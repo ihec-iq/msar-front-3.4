@@ -1,3 +1,4 @@
+import { makeFormDataFromObject } from './../../../utilities/tools';
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -8,7 +9,7 @@ import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 
 import { t } from "@/utilities/I18nPlugin";
-import type { IItem } from "../IItem";
+import type { IItem, IItemCategory } from "../IItem";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import IInput from "@/components/inputs/IInput.vue";
@@ -103,7 +104,8 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
-        showData();
+        //showData();
+        router.replace({ params: { id: item.value.id } })
       }
     })
     .catch((error) => {
@@ -164,7 +166,11 @@ const showData = async () => {
     .then((response) => {
       if (response.status == 200) {
         item.value.name = response.data.data.name;
-        item.value = response.data.data as IItem;
+        item.value.Category = response.data.data.Category as IItemCategory;
+        item.value.code = response.data.data.code;
+        item.value.description = response.data.data.description;
+        item.value.id = response.data.data.id 
+        item.value.measuringUnit = response.data.data.measuringUnit
       }
     })
     .catch((errors) => {

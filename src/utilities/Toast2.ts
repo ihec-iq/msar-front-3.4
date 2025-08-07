@@ -49,9 +49,16 @@ function WarningToast(message: String = t("ToastMessages.Warning")) {
     draggable: true,
     showCloseButtonOnHover: false,
     hideProgressBar: false,
-    closeButton: "button",
+    closeButton: {
+      component: 'button',
+      label: 'Click me'
+    },
     icon: true,
     rtl: isRtl,
+    onClick: () => {
+      // Handle button click
+      console.log("Warning toast button clicked");
+    },
   });
 }
 

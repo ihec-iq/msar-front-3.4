@@ -9,7 +9,7 @@ export const VacationLinks: Array<IconLink> = [
     iconX:
       ' <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 3.25L5.16 6.72L4 5.34l4.14-3.47l1.15 1.38M22 5.35l-1.16 1.38l-4.14-3.48l1.16-1.38L22 5.35M13 4a8 8 0 0 1 8 8a8 8 0 0 1-8 8a8 8 0 0 1-8-8a8 8 0 0 1 8-8m0 2a6 6 0 0 0-6 6a6 6 0 0 0 6 6a6 6 0 0 0 6-6a6 6 0 0 0-6-6m-1 1.5h1.5v4.53l3.22 1.47l-.62 1.36L12 13V7.5M1 14c0-2.5 1.13-4.7 2.91-6.17A9.975 9.975 0 0 0 3 12l.06 1.13L3 14c0 2.28 1.27 4.26 3.14 5.28c1.3 1.22 2.93 2.11 4.75 2.5c-.61.14-1.24.22-1.89.22a8 8 0 0 1-8-8Z"/></svg>',
     tab: "vacationPortal",
-    description: "الاجازات الزمنية والدورية والمرضية الخاصة بالموظفين",
+    description: "الاجازات",
     permissions: [EnumPermission.VacationCenter, EnumPermission.VacationOffice],
     isActive: true,
     children: [
@@ -21,7 +21,7 @@ export const VacationLinks: Array<IconLink> = [
           '<svg xmlns="http://www.w3.org/2000/svg"   width="64"    height="64" viewBox="0 0 20 20" fill="currentColor"  >    <path  d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"    />  </svg>',
         tab: "vacationPortal",
         description:
-          "البوابة الاساسية للنظام ومن خلالها تستطيع الدخول على كاف خدمات النظام",
+          "البوابة الاساسية للنظام ومن خلالها تستطيع الدخول على كافة  خدمات النظام",
         isActive: true,
         permissions: [EnumPermission.ShowVacationsDaily, EnumPermission.ShowVacationsTime, EnumPermission.ShowVacationsSick]
       },
