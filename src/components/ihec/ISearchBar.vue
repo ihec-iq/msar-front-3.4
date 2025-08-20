@@ -11,7 +11,7 @@ const props = defineProps({
 });
 </script>
 <template>
-  <div class="flex flex-row items-center justify-center">
+  <div class="flex flex-row items-center justify-center  z-[999999999]">
     <slot></slot>
     <!-- search button -->
     <div class="rtl:ml-2 ltr:mr-2   xs:mt-2 mt-4">

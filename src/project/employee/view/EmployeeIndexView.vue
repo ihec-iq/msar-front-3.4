@@ -137,16 +137,20 @@ const headers = ref<Array<ITableHeader>>([
     <IPageContent>
       <IRow>
         <ISearchBar :getDataButton="getFilterData"
-          class="w-full overflow-x-auto border-b-2 border-gray-200 min-w-[300px]">
-          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4" class="min-w-[50px]">
+          class="w-full  border-b-2 border-gray-200 ">
+          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4"  >
             <IInput :label="t('SearchForUser')" :placeholder="t('Search')" v-model="fastSearch" type="text"
               :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
-          <ICol :span-lg="1" :span-md="2" :span="1">
+          <ICol :span-lg="1" :span-md="2" :span="1" class="min-w-[150px]">
             <ISelect :label="t('Employee.Section')" v-model="searchFilter.sectionId" name="archiveTypeId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
-          </ICol>
+          </ICol> 
+          <ICol :span-lg="1" v-if="data.length >= limits[0].id" :span-md="2" :span="1">
+           <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
+            @onChange="getFilterData()" /> 
+          </ICol> 
         </ISearchBar>
       </IRow>
       <IRow class="z-[999]">
@@ -181,16 +185,10 @@ const headers = ref<Array<ITableHeader>>([
             :get-filter-data="getFilterData"
             :searchFilter="searchFilter"
           ></IPagination> -->
-          <div class="w-full flex flex-row">
-            <div class="basis-4/5 overflow-auto">
+             <div class="w-full overflow-auto">
               <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
                 @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-            </div>
-            <div class="basis-1/5" v-if="data.length >= limits[0].id">
-              <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-                @onChange="getFilterData()" />
-            </div>
-          </div>
+           </div>
         </IRow>
       </IRow>
       <IRow>

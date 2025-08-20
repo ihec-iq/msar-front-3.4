@@ -52,9 +52,15 @@ const Login = async () => {
   await authStore
     .login(loginForm)
     .then(() => {
+      const redirectPath = localStorage.getItem("redirectPathMsar");
+    if (redirectPath) {
+      router.push({ name: redirectPath as string });
+      localStorage.removeItem("redirectPathMsar")
+    } else {
       router.push({
         name: "Dashboard",
       });
+    }
     })
     .catch((error) => {
       isLoading.value = false;
@@ -72,8 +78,12 @@ const Login = async () => {
 };
 const isAuthenticated = storeToRefs(useAuthStore());
 onMounted(async () => {
-  if (isAuthenticated) router.push({ name: "Dashboard" });
-  await useConfigStore()
+  if (authStore.isAuthenticated) { 
+      router.push({
+        name: "Dashboard",
+      }); 
+  }
+    await useConfigStore()
     .load()
     .then(() => {
       if (Config.value.connectionString == null || Config.value.connectionString == "") {

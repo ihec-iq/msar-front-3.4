@@ -39,21 +39,19 @@ Api.interceptors.response.use(
 
 // Compose a global error handler function
 const composeErrorHandler = (error : any) => {
+  // console.log("composeErrorHandler")
   const statusCode = error.response ? error.response.status : null;
-  const authStore = useAuthStore();
-
   switch (statusCode) {
     case 404:
       console.error("The requested resource does not exist or has been deleted.");
       //router.back();
       break;
-
     case 401:
+       const authStore = useAuthStore(); 
       showErrorToast("Your session has expired. Redirecting to the login page.");
       authStore.logout();
       //router.push("/login");
       break;
-
     default:
       handleNetworkErrors(error);
       break;
@@ -63,7 +61,7 @@ const composeErrorHandler = (error : any) => {
 // Handle specific network-related errors
 const handleNetworkErrors = (error : any) => {
   const authStore = useAuthStore();
-
+  // console.log("handleNetworkErrors")
   switch (error.code) {
     case "ERR_NETWORK":
       showErrorToast("Server connection is unavailable. Please contact technical support.");

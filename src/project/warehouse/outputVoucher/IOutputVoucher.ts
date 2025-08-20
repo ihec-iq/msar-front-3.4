@@ -2,7 +2,9 @@ import type { IInputVoucherItem } from "../inputVoucher/IInputVoucher";
 import type { IItem } from "@/project/item/IItem";
 import type { IStock } from "../settingVoucher/stock/IStock";
 import type { IDocument } from "@/project/archive/IArchive";
+import type { IUserFilter, IUserLite } from "@/project/user/IUser";
 
+ 
 export interface IOutputVoucher {
   id: number;
   number: string;
@@ -15,6 +17,7 @@ export interface IOutputVoucher {
   Employee: IOutputVoucherEmployee;
   itemsCount?: number;
   FilesDocument?: Array<IDocument>;
+  UserCreated?:IUserLite 
 }
 export interface IOutputVoucherItem {
   id?: number;

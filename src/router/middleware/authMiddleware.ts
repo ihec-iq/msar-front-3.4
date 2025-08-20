@@ -8,6 +8,7 @@ export default async function authMiddleware(
   // Perform your authentication logic
   const token = await getSecureToken();
   if (token == null) {
+    localStorage.setItem("redirectPathMsar", to.name?.toString() || "");
     next({ name: "login" });
     return;
   }
