@@ -160,13 +160,14 @@ export const getSecureToken = async () => {
     }
 
     // Verify browser fingerprint
-    if (fingerprint !== generateBrowserFingerprint()) {
-      console.log("Fingerprint stored:", fingerprint);
-      console.log("Fingerprint current:", generateBrowserFingerprint());
-      console.log("Fingerprint mismatch");
-      removeUnUsedLogin();
-      return null;
-    }
+    // temporary disable
+    // if (fingerprint !== generateBrowserFingerprint()) {
+    //   console.log("Fingerprint stored:", fingerprint);
+    //   console.log("Fingerprint current:", generateBrowserFingerprint());
+    //   console.log("Fingerprint mismatch");
+    //   removeUnUsedLogin();
+    //   return null;
+    // }
     Api.defaults.headers.common["Authorization"] = "Bearer " + token;
     return token;
   } catch (error) {

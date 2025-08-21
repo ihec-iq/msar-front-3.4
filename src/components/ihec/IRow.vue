@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { Icon } from "@iconify/vue";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps({
   title: {
@@ -34,6 +35,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  collapse: {
+    type: Boolean,
+    default: true,
+  },
+  OpenCollapse: {
+    type: Boolean,
+    default: true,
+  },
 });
 const colClass = computed(() => {
   let classStyle = "grid ";
@@ -49,17 +58,25 @@ const debugClass = computed(() => {
   if (props.debug) return `border border-1 border-red-500`;
   return "";
 });
+const isOpen = ref(props.OpenCollapse);
+watch(() => props.OpenCollapse, (newValue) => {
+  isOpen.value = newValue;
+});
 </script>
 <template>
   <div class="w-full">
-    <div v-if="title"
-      class="hover:text-gray-300 dark:hover:text-gray-700 duration-300 text-lg font-bold header-title text-blue-700 dark:text-blue-300 py-2 w-full basis-full px-2 bg-gray-200 dark:bg-gray-800">
+    <div v-if="title" @click="isOpen = !isOpen"
+      class="hover:text-gray-300 dark:hover:text-gray-700 duration-300 text-lg font-bold header-title text-blue-700 dark:text-blue-300 py-2 w-full basis-full px-2 bg-gray-200 dark:bg-gray-800 flex justify-between items-center cursor-pointer">
       {{ title }}
+      <Icon :icon="props.collapse ? (isOpen ? 'mdi:chevron-up' : 'mdi:chevron-down') : ''" />
+      <Icon icon="'mdi:chevron-up" />
     </div>
-    <div name="Row#" :class="[colClass, debugClass]" class="lg:justify-around xs:items-center mt-4 w-full px-1">
-      <div v-if="debug">{{ colClass }}</div>
-      <slot></slot>
-    </div>
+    <transition name="collapse">
+      <div v-show="isOpen" name="Row#" :class="[colClass, debugClass]" class="lg:justify-around xs:items-center mt-4 w-full px-1">
+        <div v-if="debug">{{ colClass }}</div>
+        <slot></slot>
+      </div>
+    </transition>
   </div>
 
 </template>

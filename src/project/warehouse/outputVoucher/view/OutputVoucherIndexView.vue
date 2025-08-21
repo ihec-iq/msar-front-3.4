@@ -103,7 +103,7 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow>
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"

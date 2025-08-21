@@ -62,6 +62,7 @@ import ISelectObject from "@/components/inputs/ISelectObject.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 import ISelect2 from "@/components/inputs/ISelect2.vue";
 import IButton from "@/components/ihec/IButton.vue";
+import IRow from "@/components/ihec/IRow.vue";
 const { filesDataInput } = storeToRefs(useDragDropStore());
 const updateList = () => {
   if (id.value > 0) showData(id.value);
@@ -542,8 +543,8 @@ const checkBillExists = () => {
                 :type="EnumInputType.Date"
               />
             </ICol>
-            <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
-              <div class="w-[50%]">
+            <ICol span="2" span-md="2" span-sm="2" class="flex flex-row">
+              <div class="w-[100%]">
                 <div
                   class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
@@ -576,13 +577,14 @@ const checkBillExists = () => {
           </IRow>
 
           <IRow>
-            <ICol>
+            <ICol span="2" span-md="2" span-sm="2">
               <IButton2
                 :text="t('Item.Choose')"
                 color="blue"
                 :type="EnumButtonType.Outlined"
                 post-icon="plus"
                 :on-click="AddPopup"
+                class="w-fit" 
               />
             </ICol>
           </IRow>
@@ -634,7 +636,8 @@ const checkBillExists = () => {
             </ICol>
           </IRow>
           <!-- file -->
-          <IRow col-lg="4" col-md="4" col-sm="2" :title="t('files')">
+          <IRow :collapse="true" :OpenCollapse="false" :title="t('files')">
+
             <ICol
               span="3"
               span-md="3"
@@ -644,9 +647,11 @@ const checkBillExists = () => {
             >
               <FilePreview :file="document" @updateList="updateList">
               </FilePreview>
-            </ICol> </IRow
-          >{{ inputVoucherItemsVSelect }}
-          <DragDrop></DragDrop>
+            </ICol> 
+            <DragDrop></DragDrop>
+            </IRow
+          >
+          
           <IRow>
             <ICol>
               <IErrorMessages :validationResult="validationResult" />
