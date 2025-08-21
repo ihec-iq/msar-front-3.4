@@ -1,160 +1,138 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onBeforeUnmount, type PropType } from 'vue';
-import axios, { CancelTokenSource } from 'axios';
+import { ref, watch, onMounted, onBeforeUnmount, computed, type PropType } from 'vue'
+import axios, { CancelTokenSource } from 'axios'
 
-// Props
+// ربط ثنائي مباشر
+const model = defineModel<Record<string, any> | null>({ default: null })
+
 const props = defineProps({
-  modelValue: {
-    type: Object as PropType<Record<string, any> | null>,
-    required: true,
-  },
-  labelKey: {
-    type: String,
-    default: 'name',
-  },
-  trackBy: {
-    type: String,
-    required: true,
-  },
-  placeholder: {
-    type: String,
-    default: 'اختر عنصرًا',
-  },
-  noResultsText: {
-    type: String,
-    default: 'لا توجد نتائج مطابقة',
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  async: {
-    type: Boolean,
-    default: false,
-  },
+  labelKey: { type: String, default: 'name' },
+  trackBy: { type: String, required: true },
+  placeholder: { type: String, default: 'اختر عنصرًا' },
+  noResultsText: { type: String, default: 'لا توجد نتائج مطابقة' },
+  disabled: { type: Boolean, default: false },
+  async: { type: Boolean, default: false },
   fetchFunction: {
     type: Function as PropType<(query: string) => Promise<Record<string, any>[]>>,
     required: false,
   },
-});
-
-const emit = defineEmits(['update:modelValue']);
+})
 
 // State
-const isOpen = ref(false);
-const inputTerm = ref('');
-const filteredOptions = ref<Record<string, any>[]>([]);
-const loading = ref(false);
-const selectContainer = ref<HTMLDivElement | null>(null);
-const highlightedIndex = ref(-1);
-let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
-let cancelToken: CancelTokenSource | null = null;
+const isOpen = ref(false)
+const searchTerm = ref('')
+const filteredOptions = ref<Record<string, any>[]>([])
+const isLoading = ref(false)
+const selectContainer = ref<HTMLDivElement | null>(null)
+const highlightedIndex = ref(-1)
+let debounceTimer: ReturnType<typeof setTimeout> | null = null
+let cancelToken: CancelTokenSource | null = null
+
+// Derived
+const hasSelection = computed(() => !!model.value)
+const activeDescendant = computed(() =>
+  highlightedIndex.value >= 0 && filteredOptions.value.length > 0
+    ? `option-${highlightedIndex.value}`
+    : undefined
+)
 
 // Helpers
 const resolveNestedProperty = (obj: Record<string, any>, path: string): any => {
   try {
-    return path.split('.').reduce((o, key) => (o && o[key] !== undefined ? o[key] : null), obj);
+    return path.split('.').reduce((o, key) => (o && o[key] !== undefined ? o[key] : null), obj)
   } catch {
-    return null;
+    return null
   }
-};
+}
 
 // Fetch async results
 const fetchAsyncResults = async (query: string) => {
-  if (!props.fetchFunction) return;
-
-  if (cancelToken) cancelToken.cancel();
-  cancelToken = axios.CancelToken.source();
-  loading.value = true;
-
+  if (!props.fetchFunction) return
+  if (cancelToken) cancelToken.cancel()
+  cancelToken = axios.CancelToken.source()
+  isLoading.value = true
   try {
-    const results = await props.fetchFunction(query);
-    // Vue reactive safe update
-    filteredOptions.value.splice(0, filteredOptions.value.length, ...(results || []));
+    const results = await props.fetchFunction(query)
+    filteredOptions.value.splice(0, filteredOptions.value.length, ...(results || []))
   } catch (err) {
     if (!axios.isCancel(err)) {
-      console.error('API Error:', err);
-      filteredOptions.value = [];
+      console.error('API Error:', err)
+      filteredOptions.value = []
     }
   } finally {
-    loading.value = false;
+    isLoading.value = false
   }
-};
+}
 
-// Watch inputTerm with debounce
-watch(inputTerm, (val) => {
-  if (debounceTimeout) clearTimeout(debounceTimeout);
-
-  debounceTimeout = setTimeout(async () => {
+// Debounce search
+watch(searchTerm, (val) => {
+  if (debounceTimer) clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(async () => {
     if (props.async && props.fetchFunction) {
-      await fetchAsyncResults(val);
+      await fetchAsyncResults(val)
     }
-  }, 300);
-});
-
-// Input
-const handleInput = () => {
-  if (!isOpen.value) openDropdown();
-};
+  }, 300)
+})
 
 // Actions
 const openDropdown = () => {
-  if (props.disabled) return;
-  isOpen.value = true;
-  highlightedIndex.value = -1;
-};
+  if (props.disabled) return
+  isOpen.value = true
+  highlightedIndex.value = -1
+}
 
 const closeDropdown = () => {
-  isOpen.value = false;
-  highlightedIndex.value = -1;
-};
+  isOpen.value = false
+  highlightedIndex.value = -1
+}
 
 const selectOption = (option: Record<string, any>) => {
-  emit('update:modelValue', option);
-  inputTerm.value = resolveNestedProperty(option, props.labelKey) || '';
-  closeDropdown();
-};
+  model.value = option
+  searchTerm.value = resolveNestedProperty(option, props.labelKey) || ''
+  closeDropdown()
+}
 
 const clearSelection = () => {
-  emit('update:modelValue', null);
-  inputTerm.value = '';
-};
+  searchTerm.value = ''
+  model.value = null
+  filteredOptions.value = []
+  highlightedIndex.value = -1
+}
 
 // Keyboard
 const highlightNext = () => {
-  if (highlightedIndex.value < filteredOptions.value.length - 1) highlightedIndex.value++;
-};
-
+  if (highlightedIndex.value < filteredOptions.value.length - 1) highlightedIndex.value++
+}
 const highlightPrevious = () => {
-  if (highlightedIndex.value > 0) highlightedIndex.value--;
-};
-
+  if (highlightedIndex.value > 0) highlightedIndex.value--
+}
 const selectHighlighted = () => {
   if (highlightedIndex.value >= 0) {
-    selectOption(filteredOptions.value[highlightedIndex.value]);
+    selectOption(filteredOptions.value[highlightedIndex.value])
   }
-};
+}
 
-// Outside Click
+// Outside click
 const handleClickOutside = (event: MouseEvent) => {
   if (selectContainer.value && !selectContainer.value.contains(event.target as Node)) {
-    closeDropdown();
+    closeDropdown()
   }
-};
+}
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
-
-watch(isOpen, (val) => {
-  if (!val && props.modelValue) {
-    inputTerm.value = resolveNestedProperty(props.modelValue, props.labelKey) || '';
+  document.addEventListener('click', handleClickOutside)
+  if (model.value) {
+    searchTerm.value = resolveNestedProperty(model.value, props.labelKey) || ''
   }
-});
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
+// sync when parent changes value
+watch(model, (val) => {
+  searchTerm.value = val ? resolveNestedProperty(val, props.labelKey) || '' : ''
+})
 </script>
 
 <template>
@@ -162,8 +140,7 @@ watch(isOpen, (val) => {
     <div class="relative">
       <input
         type="text"
-        v-model="inputTerm"
-        @input="handleInput"
+        v-model="searchTerm"
         @focus="openDropdown"
         @keydown.down.prevent="highlightNext"
         @keydown.up.prevent="highlightPrevious"
@@ -175,13 +152,14 @@ watch(isOpen, (val) => {
         aria-autocomplete="list"
         :aria-expanded="isOpen ? 'true' : 'false'"
         aria-haspopup="listbox"
-        :aria-activedescendant="highlightedIndex >= 0 && filteredOptions.length > 0 ? `option-${highlightedIndex}` : undefined"
+        :aria-activedescendant="activeDescendant"
         class="w-full px-4 py-2 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
       />
 
+      <!-- زر المسح -->
       <button
-        v-if="modelValue"
-        @click.stop="clearSelection"
+        v-if="hasSelection"
+        @mousedown.prevent.stop="clearSelection"
         type="button"
         class="absolute inset-y-0 right-0 flex items-center pr-3 group"
         aria-label="Clear selection"
@@ -200,11 +178,11 @@ watch(isOpen, (val) => {
 
     <!-- Dropdown -->
     <ul
-      v-if="isOpen && (loading || filteredOptions.length > 0 || inputTerm)"
+      v-if="isOpen && (isLoading || filteredOptions.length > 0 || searchTerm)"
       class="absolute z-10 w-full mt-1 overflow-y-auto bg-white border border-gray-300 rounded-lg shadow-lg max-h-60"
       role="listbox"
     >
-      <li v-if="loading" class="px-4 py-2 text-gray-500 text-center select-none">
+      <li v-if="isLoading" class="px-4 py-2 text-gray-500 text-center select-none">
         جاري التحميل...
       </li>
 
@@ -227,7 +205,7 @@ watch(isOpen, (val) => {
       </template>
 
       <li
-        v-else-if="!loading && inputTerm"
+        v-else-if="!isLoading && searchTerm"
         class="px-4 py-2 text-gray-500 text-center select-none"
       >
         {{ noResultsText }}
@@ -235,7 +213,3 @@ watch(isOpen, (val) => {
     </ul>
   </div>
 </template>
-
-<style scoped>
-/* Custom styling */
-</style>

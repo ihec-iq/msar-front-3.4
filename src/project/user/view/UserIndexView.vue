@@ -74,8 +74,7 @@ const getFilterData = async (page = 1) => {
       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
-        dataBase.value = dataPage.value.data;
-        console.log(data.value);
+        dataBase.value = dataPage.value.data; 
         makeExcel(data.value);
       }
     })

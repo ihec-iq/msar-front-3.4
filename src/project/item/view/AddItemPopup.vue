@@ -64,15 +64,12 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import IInput from "@/components/inputs/IInput.vue";
 import ISelect from "@/components/inputs/ISelect.vue";
 
-const refFocus = ref<typeof IInput>();
-// دالة التركيز
+const refFocus = ref<typeof IInput>(); 
 async function focus() {
   await nextTick()
-  refFocus.value?.focus()
-  console.log("input focused");
+  refFocus.value?.focus() 
 }
-
-// تعريض الدالة للأب
+ 
 defineExpose({ focus })
 
 onMounted(async () => {

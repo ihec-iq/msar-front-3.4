@@ -126,14 +126,10 @@ onMounted(async () => {
       <!-- Pagination -->
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
-          <div class="basis-4/5 hidden">
+          <div class="basis-5/5 hidden">
             <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
               @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-          </div>
-          <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-              :IsRequire="true" @onChange="getFilterData()" />
-          </div>
+          </div> 
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>

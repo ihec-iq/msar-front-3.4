@@ -50,22 +50,20 @@ const goToDetails = () => {
           </div>
           <div class="flex items-center gap-1.5" title="Items count">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20 6H16V4C16 2.89 15.11 2 14 2H10C8.89 2 8 2.89 8 4V6H4C2.89 6 2 6.89 2 8V19C2 20.11 2.89 21 4 21H20C21.11 21 22 20.11 22 19V8C22 6.89 21.11 6 20 6M10 4H14V6H10V4M20 19H4V8H20V19M18 13H6V11H18V13Z" />
+              <path d="M12 4A4 4 0 0 1 16 8A4 4 0 0 1 12 12A4 4 0 0 1 8 8A4 4 0 0 1 12 4M12 14C16.42 14 20 15.79 20 18V20H4V18C4 15.79 7.58 14 12 14Z" />
             </svg>
             <span>{{ item.Employee.name }}  </span>
           </div>
           <div class="flex items-center gap-1.5" title="Items count">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 4A4 4 0 0 1 16 8A4 4 0 0 1 12 12A4 4 0 0 1 8 8A4 4 0 0 1 12 4M12 14C16.42 14 20 15.79 20 18V20H4V18C4 15.79 7.58 14 12 14Z" />
+              <path d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
             </svg>
-            <span>{{ item.UserCreated.name }} {{ t("User") }}</span>
+            <span>{{ t("CreatedBy") }} {{ item.UserCreated.name }} </span>
           </div>
         </div>
-
         <p v-if="item.notes" class="line-clamp-2 text-sm text-text dark:text-textLight" v-html="item.notes" />
       </div>
     </div>
-
     <div class="flex-shrink-0 self-center">
       <div class="rounded-full bg-gray-100 p-2 transition-colors duration-300 group-hover:bg-primary/20 dark:bg-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-colors duration-300 group-hover:text-primary dark:text-gray-400" viewBox="0 0 24 24" fill="currentColor">

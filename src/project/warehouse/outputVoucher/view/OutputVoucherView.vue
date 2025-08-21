@@ -120,6 +120,7 @@ const AddPopup = () => {
 const resetVoucherItem = () => {
   IsAdd.value = true;
   indexSelectedVoucherItem.value = 0;
+  
   OutputVoucherItem.value = {
     id: 0,
     Item: {
@@ -202,13 +203,26 @@ const AddItem = () => {
   outputVoucherStore.addItem(OutputVoucherItem.value);
 
   resetVoucherItem();
+  OutputVoucherItem.value.InputVoucherItem = {
+    Item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      Category: { id: 0, name: "", description: "" },
+      measuringUnit: "",
+    },
+    description: "",
+    count: 1,
+    price: 1,
+    value: 1,
+  };
   showPop.value = false;
 };
-const ChangeValueTotal = () => {
-  console.log("ChangeValueTotal");
+const ChangeValueTotal = () => { 
   OutputVoucherItem.value.value =
-    OutputVoucherItem.value.count *
-    Number(OutputVoucherItem.value.InputVoucherItem.price);
+  (Number(OutputVoucherItem.value.count)|| 0) *
+    (OutputVoucherItem.value.InputVoucherItem?.price || 0);
 };
 
 // for change the value of total in form item
@@ -238,6 +252,20 @@ const errors = ref<string | null>();
 //#region CURD
 const reset = () => {
   outputVoucherStore.resetData();
+  OutputVoucherItem.value.InputVoucherItem = {
+    Item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      Category: { id: 0, name: "", description: "" },
+      measuringUnit: "",
+    },
+    description: "",
+    count: 1,
+    price: 1,
+    value: 1,
+  };
 };
 
 const store = () => {
@@ -675,12 +703,14 @@ const checkBillExists = () => {
             >
               {{ t("Item.Name") }}
             </div>
+            {{ OutputVoucherItem.InputVoucherItem }}
             <ISelect2
               v-model="OutputVoucherItem.InputVoucherItem"
               :options="inputVoucherItemsVSelect"
               label-key="Item.name"
               track-by="fingerprint"
-              placeholder="Select a Item"
+              :placeholder="t('Item.Choose')"
+
               :async="true"
               :fetch-function="useInputVoucherStore().getItemsVSelect2"
             >
@@ -912,3 +942,4 @@ const checkBillExists = () => {
     </template>
   </IPage>
 </template>
+ 
