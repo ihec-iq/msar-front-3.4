@@ -702,8 +702,7 @@ const checkBillExists = () => {
               class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
             >
               {{ t("Item.Name") }}
-            </div>
-            {{ OutputVoucherItem.InputVoucherItem }}
+            </div> 
             <ISelect2
               v-model="OutputVoucherItem.InputVoucherItem"
               :options="inputVoucherItemsVSelect"
