@@ -8,15 +8,15 @@ import { useStoringStore } from "../storingStore";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
-const data = ref<Array<IStore>>([]);
+const data = ref<Array<IBarrenSectionReportIndex>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IStore>>([]);
+const dataBase = ref<Array<IBarrenSectionReportIndex>>([]);
 
-const { get_filter, get_summation } = useStoringStore();
+
+const { get_BarrenSection } = useStoringStore();
 
 import { limits } from "@/utilities/defaultParams";
 import ICol from "@/components/ihec/ICol.vue";
-import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
@@ -25,7 +25,6 @@ import { ConvertToMoneyFormat } from "@/utilities/tools";
 import ITable from "@/components/ihec/ITable.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
-import dropdownmenu from "../component/dropdownmenu.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -38,10 +37,10 @@ watch(
 );
 //#region Fast Search
 const fastSearch = ref("");
-const filterByIDName = (item: IStore) => {
+const filterByIDName = (item: IBarrenSectionReportIndex) => {
   if (
-    item.itemName.includes(fastSearch.value) ||
-    item.description.includes(fastSearch.value)
+    item.name.includes(fastSearch.value) ||
+    item.number.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -69,7 +68,7 @@ const getFilterData = async (page = 1) => {
   searchFilter.value.item = fastSearch.value;
   searchFilter.value.description = fastSearch.value;
 
-  await get_summation(searchFilter.value, page)
+  await get_BarrenSection(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data.data;
@@ -100,6 +99,10 @@ onMounted(async () => {
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
 });
+interface IBarrenSectionReportIndex {
+  name: string;
+  number: string; 
+}
 
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Item.Name"), value: "itemName" },
@@ -115,42 +118,20 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
     <IPageContent>
-      <IRow class="z-[999999]">
-      <ISearchBar :getDataButton="getFilterData" class="min-w-[500px] ">
-        <ICol>
-          <IInput :label="t('Title')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
-            :OnKeyEnter="getFilterData" />       
-        </ICol>
-        <ICol v-if="data.length >= limits[0].id" >
-              <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-                :IsRequire="true" @onChange="getFilterData()" /> 
-        </ICol> 
-    </ISearchBar>
+      <IRow  >
+        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px] ">
+          <ICol>
+            <IInput :label="t('Title')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData" />       
+          </ICol>
+          <ICol v-if="data.length >= limits[0].id" >
+                <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+                  :IsRequire="true" @onChange="getFilterData()" /> 
+          </ICol> 
+        </ISearchBar>
       </IRow>
       <IRow>
-        <ITable :items="data" :headers="headers">
-          <template v-slot:actions="{ row }">
-            <dropdownmenu :openFn="() => openItem(row.itemId)" />
-          </template>
-          <template v-slot:in="{ row }">
-            <span
-              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2">↓{{
-                Number(row.countIn) + Number(row.countReIn) }}</span>
-          </template>
-          <template v-slot:price="{ row }">
-            <span> {{ ConvertToMoneyFormat(row.price) }}</span>
-          </template>
-          <template v-slot:out="{ row }">
-            <span
-              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2">↑{{
-                Number(row.countOut) + Number(row.countReOut) }}</span></template>
-          <template v-slot:count="{ row }">
-            <span
-              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2">{{
-                Number(row.count)
-              }}
-            </span></template>
-        </ITable>
+      <CardBarrenSectionReportIndex :item="item" v-for="item in data" :key="item.name" />
       </IRow>
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">

@@ -49,7 +49,8 @@ const composeErrorHandler = (error : any) => {
     case 401:
        const authStore = useAuthStore(); 
       showErrorToast("Your session has expired. Redirecting to the login page.");
-      authStore.logout();
+      window.location.reload();
+      //authStore.logout();
       //router.push("/login");
       break;
     default:

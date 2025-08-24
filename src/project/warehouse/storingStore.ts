@@ -27,6 +27,11 @@ export const useStoringStore = defineStore("StoringStore", () => {
       params: params,
     });
   }
+  async function get_BarrenSection(params: IStoreFilter, page: number) {
+    return await Api.get(`${pathUrl}/barrenSection?page=${page}`, {
+      params: params,
+    });
+  }
   //outputVoucherEmployees;
   async function get_item(params: IStoreItemFilter, page: number) {
     return await Api.get(

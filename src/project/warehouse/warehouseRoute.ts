@@ -27,6 +27,13 @@ export default [
     meta: {
       middleware: [authMiddleware],
     },
+  },{
+    path: "/barrenIndex",
+    name: "barrenIndex",
+    component: () => import("./view/StoreBarrenView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
   },
   {
     path: "/ItemHistory/:id",
