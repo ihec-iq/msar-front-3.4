@@ -2,21 +2,12 @@
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 import { t } from "@/utilities/I18nPlugin";
+import { IOutputVoucher } from "@/project/warehouse/outputVoucher/IOutputVoucher";
 
 const router = useRouter();
 
-interface PersonRef { name?: string | null }
-interface OutputVoucherItem {
-  id: number;
-  number: string;
-  date: string;
-  itemsCount: number;
-  notes?: string | null;
-  Employee?: PersonRef | null;
-  UserCreated?: PersonRef | null;
-}
-
-const props = defineProps<{ item: OutputVoucherItem }>();
+  
+const props = defineProps<{ item: IOutputVoucher }>();
 
 const formattedDate = computed(() => {
   const raw = props.item?.date ?? "";
