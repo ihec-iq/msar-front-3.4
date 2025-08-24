@@ -115,18 +115,15 @@ onMounted(async () => {
           </div>
         </ISearchBar>
       </IRow>
-      <!-- Show Data -->
       <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
         <ICol :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.id">
-          <!-- card -->
           <CardOutputVoucherIndex :item="item" />
-          <!-- end card -->
         </ICol>
       </IRow>
       <!-- Pagination -->
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
-          <div class="basis-5/5 hidden">
+          <div class="">
             <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
               @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
           </div> 

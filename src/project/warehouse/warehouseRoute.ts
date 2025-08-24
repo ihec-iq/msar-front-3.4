@@ -27,10 +27,19 @@ export default [
     meta: {
       middleware: [authMiddleware],
     },
-  },{
-    path: "/barrenIndex",
-    name: "barrenIndex",
-    component: () => import("./view/StoreBarrenView.vue"),
+  },
+  {
+    path: "/barren/section",
+    name: "barrenSectionIndex",
+    component: () => import("./view/StoreBarrenSectionIndex.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
+    path: "/barren/section/:id",
+    name: "barrenSectionReport",
+    component: () => import("./view/StoreBarrenSectionView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

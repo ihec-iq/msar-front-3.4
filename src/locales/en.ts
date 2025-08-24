@@ -204,8 +204,9 @@ export default {
   VacationReason: "Vacation Reason",
   Store: {
     Index: "Store",
-    ItemHistory: "Store Histoy Item",
+    ItemHistory: "Store History Item",
     TypeReport: "Type Report",
+    BarrenSectionIndex: "Barren Section Index",
   },
   StoreIndex: "",
   StoreTypeReport: "",

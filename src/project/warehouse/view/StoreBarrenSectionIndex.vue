@@ -25,6 +25,7 @@ import { ConvertToMoneyFormat } from "@/utilities/tools";
 import ITable from "@/components/ihec/ITable.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import CardBarrenSectionReportIndex from "../component/CardBarrenSectionReportIndex.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -39,8 +40,8 @@ watch(
 const fastSearch = ref("");
 const filterByIDName = (item: IBarrenSectionReportIndex) => {
   if (
-    item.name.includes(fastSearch.value) ||
-    item.number.includes(fastSearch.value)
+    item.sectionName.includes(fastSearch.value) ||
+    item.count.includes(fastSearch.value)
   ) {
     return true;
   } else return false;
@@ -56,7 +57,7 @@ const makeFastSearch = () => {
 //#region Search
 const searchFilter = ref<IStoreFilter>({
   item: "",
-  limit: 10,
+  limit: 999999999,
   description: "",
   summation: true,
 });
@@ -100,23 +101,15 @@ onMounted(async () => {
   await getFilterData(1);
 });
 interface IBarrenSectionReportIndex {
-  name: string;
-  number: string; 
+  sectionId: number;
+  sectionName: string; 
+  count: string; 
 }
 
-const headers = ref<Array<ITableHeader>>([
-  { caption: t("Item.Name"), value: "itemName" },
-  { caption: t("Details"), value: "actions" },
-  { caption: t("Description"), value: "description" },
-  { caption: t("In"), value: "in" },
-  { caption: t("Out"), value: "out" },
-  { caption: t("AvailableInStock"), value: "count" },
-  { caption: t("Price"), value: "price" },
-  { caption: t("Stock"), value: "stockName" },
-]);
+ 
 </script>
 <template>
-  <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
+  <IPage :HeaderTitle="t('Store.BarrenSectionIndex')" :isLoading="isLoading">
     <IPageContent>
       <IRow  >
         <ISearchBar :getDataButton="getFilterData" class="min-w-[500px] ">
@@ -131,7 +124,11 @@ const headers = ref<Array<ITableHeader>>([
         </ISearchBar>
       </IRow>
       <IRow>
-      <CardBarrenSectionReportIndex :item="item" v-for="item in data" :key="item.name" />
+      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
+        <ICol :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.sectionId">
+          <CardBarrenSectionReportIndex :item="item" />
+        </ICol>
+      </IRow>
       </IRow>
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">

@@ -18,8 +18,8 @@ const props = defineProps({
  */
 const goToDetails = () => {
   router.push({
-    name: "outputVoucherUpdate",
-    params: { id: props.item.id },
+    name: "barrenSectionReport",
+    params: { id: props.item.sectionId },
   });
 };
 </script>
@@ -32,31 +32,14 @@ const goToDetails = () => {
     <div class="flex-1 overflow-hidden">
       <div class="space-y-3">
         <p class="truncate text-xl font-bold text-primary dark:text-secondary">
-          {{ item.name  }}
+          {{ item.sectionName  }}
         </p>
         <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-textGray">
           <div class="flex items-center gap-1.5">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
               <path d="M17 12H12V17H17V12M16 1V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H18V1M19 19H5V8H19V19Z" />
             </svg>
-            <span>{{ item.Employee.name }}  </span>
-          </div>
-          <div class="flex items-center gap-1.5" title="Items count">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M2.5 7.56L12 13L21.5 7.56L12 2L2.5 7.56M12 14.5L2 9L12 19.5L22 9L12 14.5Z" />
-            </svg>
-            <span>{{ item.itemsCount }} {{ t("items") }}</span>
-          </div>
-          <div class="flex items-center gap-1.5" title="Items count">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 4A4 4 0 0 1 16 8A4 4 0 0 1 12 12A4 4 0 0 1 8 8A4 4 0 0 1 12 4M12 14C16.42 14 20 15.79 20 18V20H4V18C4 15.79 7.58 14 12 14Z" />
-            </svg>
-            <span>{{ item.Employee.name }}  </span>
-          </div>
-          <div class="flex items-center gap-1.5" title="Items count">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
-            </svg>
+            <span>{{ item.count }}  </span>
           </div>
         </div>
         <p v-if="item.notes" class="line-clamp-2 text-sm text-text dark:text-textLight" v-html="item.notes" />

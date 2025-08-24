@@ -213,6 +213,7 @@ export default {
     Index: "المخزنية",
     ItemHistory: "مخزنية المادة المحددة",
     TypeReport: "نوع التقرير",
+    BarrenSectionIndex: "جرد الاقسام",
   },
   ConfigServer: "اعدادات الاتصال بالسيرفر",
   ConnectionString: "عنوان السيرفر",

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { PropType, watch } from 'vue';
+
 const modelValue = defineModel<boolean>();
 
-defineProps({
+const props = defineProps({
   label: {
     type: String,
     default: "",
@@ -18,8 +20,17 @@ defineProps({
     type: Boolean,
     default: false,
   },
-});
+  onChange: {
+    type: Function as PropType<() => void>,
+    required: false,
+  }
+}); 
 
+watch(modelValue, (newValue) => {
+if (props.onChange) {
+  props.onChange();
+}
+});
 // import { useI18n } from "@/stores/i18n/useI18n";
 // const { t } = useI18n();
 </script>

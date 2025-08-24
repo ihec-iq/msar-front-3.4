@@ -34,6 +34,7 @@ export interface IStoreFilter {
   employeeName?: string;
   limit: number;
   summation?: boolean;
+  id?: number;
 }
 export interface IStoreItemFilter {
   stock?: string;

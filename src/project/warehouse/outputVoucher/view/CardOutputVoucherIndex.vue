@@ -1,75 +1,114 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { computed } from "vue";
 import { t } from "@/utilities/I18nPlugin";
-// Note: The IButton2 component is no longer needed as we've opted for a more integrated UI.
 
 const router = useRouter();
 
-const props = defineProps({
-  item: {
-    type: Object,
-    required: true,
-  },
+interface PersonRef { name?: string | null }
+interface OutputVoucherItem {
+  id: number;
+  number: string;
+  date: string;
+  itemsCount: number;
+  notes?: string | null;
+  Employee?: PersonRef | null;
+  UserCreated?: PersonRef | null;
+}
+
+const props = defineProps<{ item: OutputVoucherItem }>();
+
+const formattedDate = computed(() => {
+  const raw = props.item?.date ?? "";
+  const d = new Date(raw);
+  if (isNaN(d.getTime())) return raw || t("noDate");
+  return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
 });
 
-/**
- * Navigates to the detail page for the voucher.
- * This is triggered by clicking anywhere on the card.
- */
-const goToDetails = () => {
-  router.push({
-    name: "outputVoucherUpdate",
-    params: { id: props.item.id },
-  });
-};
+const employeeName = computed(() => props.item?.Employee?.name || t("unknown"));
+const createdByName = computed(() => props.item?.UserCreated?.name || t("unknown"));
+
+function goToDetails() {
+  router.push({ name: "outputVoucherUpdate", params: { id: props.item.id } });
+}
 </script>
 
 <template>
+  <!-- اجعل البطاقة RTL ومُحاذاة يمين -->
   <div
+    dir="rtl"
     @click="goToDetails"
-    class="group flex m-1 cursor-pointer items-start justify-between gap-6 rounded-xl bg-cardLight p-5 shadow-sm transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg dark:bg-card dark:shadow-black/20 dark:hover:border-primary/50"
+    class="group relative m-1 cursor-pointer rounded-xl border border-gray-200 bg-white p-4 text-right shadow-sm transition-all duration-200 hover:shadow-md dark:border-gray-700 dark:bg-card"
   >
-    <div class="flex-1 overflow-hidden">
-      <div class="space-y-3">
-        <p class="truncate text-xl font-bold text-primary dark:text-secondary">
-          {{ item.number }}
-        </p>
-
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-textGray">
-          <div class="flex items-center gap-1.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17 12H12V17H17V12M16 1V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H18V1M19 19H5V8H19V19Z" />
-            </svg>
-            <span>{{ item.date }}</span>
-          </div>
-          <div class="flex items-center gap-1.5" title="Items count">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M2.5 7.56L12 13L21.5 7.56L12 2L2.5 7.56M12 14.5L2 9L12 19.5L22 9L12 14.5Z" />
-            </svg>
-            <span>{{ item.itemsCount }} {{ t("items") }}</span>
-          </div>
-          <div class="flex items-center gap-1.5" title="Items count">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 4A4 4 0 0 1 16 8A4 4 0 0 1 12 12A4 4 0 0 1 8 8A4 4 0 0 1 12 4M12 14C16.42 14 20 15.79 20 18V20H4V18C4 15.79 7.58 14 12 14Z" />
-            </svg>
-            <span>{{ item.Employee.name }}  </span>
-          </div>
-          <div class="flex items-center gap-1.5" title="Items count">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
-            </svg>
-            <span>{{ t("CreatedBy") }} {{ item.UserCreated.name }} </span>
-          </div>
+    <!-- الرأس: رقم السند + التاريخ -->
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0">
+        <h3 class="truncate text-lg font-semibold text-gray-900 dark:text-gray-100">
+          {{ props.item.number }}
+        </h3>
+        <div class="mt-1 inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+          <!-- calendar -->
+          <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 14H5V9h14v9Z"/>
+          </svg>
+          <span class="truncate">{{ formattedDate }}</span>
         </div>
-        <p v-if="item.notes" class="line-clamp-2 text-sm text-text dark:text-textLight" v-html="item.notes" />
       </div>
-    </div>
-    <div class="flex-shrink-0 self-center">
-      <div class="rounded-full bg-gray-100 p-2 transition-colors duration-300 group-hover:bg-primary/20 dark:bg-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-colors duration-300 group-hover:text-primary dark:text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z" />
+
+      <!-- سهم للانتقال (يُناسب RTL) -->
+      <div class="rounded-full bg-gray-100 p-1.5 transition-transform duration-200 group-hover:-translate-x-0.5 dark:bg-gray-700" aria-hidden="true">
+        <svg class="h-4 w-4 text-gray-500 dark:text-gray-300" viewBox="0 0 24 24" fill="currentColor">
+          <!-- chevron-left -->
+          <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59Z"/>
         </svg>
       </div>
     </div>
+
+    <!-- فاصل -->
+    <div class="my-3 h-px w-full bg-gray-100 dark:bg-gray-700/60"></div>
+
+    <!-- الجسم: معلومات موظف/منشئ -->
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <!-- معلومات الشخص -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-start gap-2 text-sm text-gray-700 dark:text-gray-200">
+          <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4Z"/>
+          </svg>
+          <span class="font-medium">{{ employeeName }}</span>
+          <span class="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+            {{ t("employee") }}
+          </span>
+        </div>
+
+        <div class="flex items-center justify-start gap-2 text-sm text-gray-700 dark:text-gray-200">
+          <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25ZM20.71 7.04a1 1 0 0 0 0-1.41L18.37 3.3a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.84Z"/>
+          </svg>
+          <span class="font-medium">  {{ createdByName }}</span>
+          <span class="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+            {{ t("created") }}
+          </span>
+        </div>
+      </div>
+
+      <!-- بادجات مختصرة -->
+      <div class="flex flex-wrap items-center justify-start gap-2 sm:justify-end">
+        <div class="inline-flex items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-medium text-blue-700 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-300">
+          <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M2.5 7.56 12 13l9.5-5.44L12 2 2.5 7.56ZM12 14.5 2 9l10 10.5L22 9 12 14.5Z"/>
+          </svg>
+          <span class="tabular-nums">{{ props.item.itemsCount }}</span>
+          <span class="hidden sm:inline">{{ t("items") }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ملاحظات -->
+    <p
+      v-if="props.item.notes"
+      class="mt-3 line-clamp-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300"
+      v-html="props.item.notes"
+    />
   </div>
 </template>
