@@ -620,8 +620,9 @@ const checkBillExists = () => {
             <ICol>
               <ITable
                 :items="outputVoucher.Items"
-                :headers="headers"
-                :show-columns-button="false"
+                :headers="headers" 
+                :showRowNumber=true  
+                :showColumnsButton="false"
               >
                 <template v-slot:Item="{ row }">
                   {{ row.InputVoucherItem.Item.name }}

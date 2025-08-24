@@ -166,6 +166,10 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Price"), value: "price" },
   { caption: t("Note"), value: "note" },
 ]);
+const headersWithEmployee = ref<Array<ITableHeader>>([
+  ...headers.value, 
+  { caption: t("Item.Name"), value: "employeeName" },
+]);
 const groupedData = computed(() => groupByEmployee(data.value));
 const checkGroup = ref(true);
 const showGroupedData = () => {
@@ -202,8 +206,8 @@ const goToDetails = (id : number) => {
           </ICol> 
         </ISearchBar>
       </IRow>
-      <IRow>
-        <ITable :items="data" :headers="headers" v-if="!checkGroup">
+      <IRow v-if="!checkGroup">
+        <ITable :items="data" :headers="headersWithEmployee" :showRowNumber=true  :showColumnsButton="false" >
           <template v-slot:actions="{ row }">
              <button class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"  @click="goToDetails(row.OutputId)">
               <i class="fas fa-external-link-alt mr-1"></i>{{ t('Open') }}
@@ -219,14 +223,16 @@ const goToDetails = (id : number) => {
             <span> {{ ConvertToMoneyFormat(row.price) }}</span>
           </template>  
         </ITable>
-        <div v-else> 
-              <div v-for="item in groupedData">
-                <div class="bg-gray-100 p-2 rounded-md">
+      </IRow>
+      <div class="w-full" v-else>
+        <div class=""> 
+              <div v-for="item in groupedData" class="mb-2">
+                <div class="bg-gray-50 border border-gray-300 p-2 rounded-md">
                   <div class="flex justify-between items-center">
                     <div class="font-bold">{{ item.employeeName }}</div>
                   </div>
                   <div class="mt-2">
-                    <ITable :items="item.items" :headers="headers"   >
+                    <ITable :items="item.items" :headers="headers" :showRowNumber=true  :showColumnsButton="false"   >
                     <template v-slot:actions="{ row }">
                       <button class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"  @click="goToDetails(row.OutputId)">
                         <i class="fas fa-external-link-alt mr-1"></i>{{ t('Open') }}
@@ -246,7 +252,7 @@ const goToDetails = (id : number) => {
                 </div>
               </div>
         </div>
-      </IRow>
+      </div>
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-5/5 hidden">
