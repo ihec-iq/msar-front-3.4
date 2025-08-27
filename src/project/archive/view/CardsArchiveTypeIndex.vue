@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { useArchiveStore } from "../archiveStore";
 import { storeToRefs } from "pinia";
-import { onMounted, defineEmits, ref, type PropType } from "vue";
+import { onMounted, ref, type PropType } from "vue";
 import { Icon } from "@iconify/vue";
 import CardArchiveTypeIndex from "./CardArchiveTypeIndex.vue";
 import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
 
 const archiveTypeStore = useArchiveTypeStore();
 const { archiveTypes } = storeToRefs(useArchiveTypeStore());
-const ischecked = ref(false);
+const isChecked = ref(false);
 const emits = defineEmits<{
   getFilterData: [number, number]; // Define the event structure with three parameters
 }>();
@@ -21,7 +20,7 @@ const props = defineProps({
 const onClick = (index: number) => {
   //emits("getFilterData", 1, index);
   props.OnClick(1, index);
-  ischecked.value = false;
+  isChecked.value = false;
 };
 onMounted(async () => {
   await archiveTypeStore.getBySectionUser();
@@ -29,7 +28,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="collapse align-middle" v-if="archiveTypes.length > 0">
-    <input type="checkbox" class="" v-model="ischecked" />
+    <input type="checkbox" class="" v-model="isChecked" />
     <div
       class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
     >

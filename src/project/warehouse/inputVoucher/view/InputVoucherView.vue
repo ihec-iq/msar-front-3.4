@@ -545,12 +545,15 @@ const headers = ref<Array<ITableHeader>>([
     <IContainer>
       <van-popup class="p-2 overflow-hidden dark:bg-darkNav" v-model:show="showPop" round position="bottom">
         <!-- for search Item -->
-        <IRow col-lg="4" col-md="1" col-sm="1" col-xs="1">
+        <IRow>
+          <AddItemPopup @setItem="setItemFromChild" v-model="IsAddItem" ref="addItemPopupRef"></AddItemPopup>
+        </IRow>
+        <IRow col-lg="2" col-md="1" col-sm="1" col-xs="1">
           <ICol>
             <div class="mb-1 md:text-md text-base ml-2 font-bold dark:text-gray-300">
               {{ t("Item.Choose") }}
             </div>
-            <div class="flex flex-row">
+            <div class="flex flex-row w-full">
               <vSelect
                 class="capitalize w-full rounded-md border-2 p-2 dark:text-gray-200 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
                 v-model="VoucherItemTemp.Item" :options="items" :reduce="(_item: IItem) => _item"
@@ -602,7 +605,6 @@ const headers = ref<Array<ITableHeader>>([
               }
                 " post-icon="add" color="blue" :type="EnumButtonType.Outlined" />
             </div>
-            <AddItemPopup @setItem="setItemFromChild" v-model="IsAddItem" ref="addItemPopupRef"></AddItemPopup>
           </ICol>
 
           <ICol span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1" v-if="VoucherItemTemp.Item == null"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
- import { IItemCategory } from "@/project/item/IItem";
-import { PropType } from "vue";
+ import type { IItemCategory } from "@/project/item/IItem";
+import type { PropType } from "vue";
 import { useRouter } from "vue-router";
 
 // Define props first for better readability

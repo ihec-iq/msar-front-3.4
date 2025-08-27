@@ -2,7 +2,7 @@
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 import { t } from "@/utilities/I18nPlugin";
-import { IOutputVoucher } from "@/project/warehouse/outputVoucher/IOutputVoucher";
+import type { IOutputVoucher } from "@/project/warehouse/outputVoucher/IOutputVoucher";
 
 const router = useRouter();
 

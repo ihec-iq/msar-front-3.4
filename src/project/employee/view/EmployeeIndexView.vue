@@ -155,7 +155,7 @@ const headers = ref<Array<ITableHeader>>([
       </IRow>
       <IRow class="z-[999]">
         <SimpleLoading v-if="isLoading" />
-        <ITable :items="data" :headers="headers">
+        <ITable :items="data" :headers="headers"  :showRowNumber="true" :showColumnsButton="false" :showSearch="false">
           <template v-slot:section="{ row }">
             <span>{{ row.Section.name }}</span>
           </template>
