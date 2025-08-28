@@ -63,6 +63,8 @@ import ISelect from "@/components/inputs/ISelect.vue";
 import ISelect2 from "@/components/inputs/ISelect2.vue";
 import IButton from "@/components/ihec/IButton.vue";
 import IRow from "@/components/ihec/IRow.vue";
+import SearchableTableItemsOutputVOucher from "../../component/SearchableTableItemsOutputVoucher.vue";
+import SearchableTableItemsOutputVoucher from "../../component/SearchableTableItemsOutputVoucher.vue";
 const { filesDataInput } = storeToRefs(useDragDropStore());
 const updateList = () => {
   if (id.value > 0) showData(id.value);
@@ -514,6 +516,12 @@ const checkBillExists = () => {
       SuccessToast(t("InputVoucher.BillNotExists"));
     });
 };
+ 
+
+function fetchFn(query: string, page?: number) {
+  // تأكد أن الدالة ترجع Promise<{ items, nextPage? }>
+  return useInputVoucherStore().getItemsVSelect3(query);
+}
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="Loading">
@@ -697,7 +705,18 @@ const checkBillExists = () => {
         position="bottom"
       >
         <!-- for search Item -->
-        <IFlex class="p-2">
+        <IFlex class="p-2"> 
+          
+          <SearchableTableItemsOutputVoucher
+            v-model="OutputVoucherItem.InputVoucherItem"
+            :options="inputVoucherItemsVSelect"
+            label-key="Item.name"
+            track-by="fingerprint"
+            :placeholder="$t('Item.Choose')"
+            :async="true"
+            :fetch-function="fetchFn"
+            :dialog-z-index="9999"  
+          />
           <IBasis base="1/4">
             <div
               class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
