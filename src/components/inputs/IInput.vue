@@ -151,7 +151,7 @@ onMounted(async () => {
     <div class="flex flex-row relative items-center">
       <i
         v-if="FunIcon"
-        @click="FnClick"
+        @click="FnClick()"
         class="cursor-pointer absolute left-2 text-gray-500"
         :title="FnTooltip"
       >

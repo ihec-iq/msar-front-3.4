@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { PropType, watch } from 'vue';
+import { watch } from 'vue';
+import type {PropType} from 'vue'
 
 const modelValue = defineModel<boolean>();
 

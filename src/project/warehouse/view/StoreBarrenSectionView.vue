@@ -210,7 +210,7 @@ const goToDetails = (id : number) => {
         <ITable :items="data" :headers="headersWithEmployee" :showRowNumber=true  :showColumnsButton="false" >
           <template v-slot:actions="{ row }">
              <button class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"  @click="goToDetails(row.OutputId)">
-              <i class="fas fa-external-link-alt mr-1"></i>{{ t('Open') }}
+              <i class="fas fa-external-link-alt mr-1"></i>{{ t('Open') }} {{ row.OutputId }}
             </button>
           </template>
           <template v-slot:count="{ row }">
@@ -229,7 +229,7 @@ const goToDetails = (id : number) => {
               <div v-for="item in groupedData" class="mb-2">
                 <div class="bg-gray-50 border border-gray-300 p-2 rounded-md">
                   <div class="flex justify-between items-center">
-                    <div class="font-bold">{{ item.employeeName }}</div>
+                       <div class="font-bold">{{ item.employeeName }}</div>
                   </div>
                   <div class="mt-2">
                     <ITable :items="item.items" :headers="headers" :showRowNumber=true  :showColumnsButton="false"   >

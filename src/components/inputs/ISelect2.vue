@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onBeforeUnmount, computed, type PropType } from 'vue'
-import axios, { CancelTokenSource } from 'axios'
-
+import axios  from 'axios'
+import type { CancelTokenSource } from 'axios'
 // ربط ثنائي مباشر
 const model = defineModel<Record<string, any> | null>({ default: null })
 

@@ -95,8 +95,6 @@ export const useOutputVoucherStore = defineStore(
     }
 
     async function removeItem(index: number) {
-      console.log(index);
-      console.log(outputVoucher.Items[index]?.id);
       if (Number(outputVoucher.Items[index]?.id) > 0) {
         return await Api.delete(
           `${pathBase}/outputVoucherItem/delete/` +
