@@ -146,7 +146,7 @@ const trns = app?.appContext.config.globalProperties.$trns;
         </ISearchBar>
       </IRow>
       <IRow>
-        <ITable :items="data" :headers="headers">
+        <ITable :items="data" :headers="headers" :showRowNumber="true">
           <template v-slot:actions="{ row }">         
                 <EditButton @click="update(row.id)" />
           </template>
