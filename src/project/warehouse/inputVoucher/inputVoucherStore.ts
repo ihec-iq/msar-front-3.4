@@ -138,6 +138,26 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     }
   };
 
+  const getItemsVSelect3 = async (query?: string | undefined ,page:number = 1) => {
+     if (query === undefined || query === "") {
+      return [];
+    }
+     let endpoint = `${pathBase}/voucherItemHistory/reportStorage?page=${page}`;
+    try {
+      const response = await Api.get(endpoint, { params: { name: query } });
+      if (response.status === 200 && Array.isArray(response.data?.data)) {
+        //console.log(response.data.data);
+        return response.data.data;
+      }
+
+    } catch (error) {
+      console.error(`Error in fetchItemsVSelect (${endpoint}):`, error);
+    }
+    return {
+      data: [],
+    };
+  };
+
   function getAllItemsVSelect() {
     return fetchItemsVSelect(`${pathBase}/inputVoucherItem/getAllItemsVSelect`);
   }
@@ -226,6 +246,7 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     getEmployees,
     getAvailableItemsVSelect,
     getItemsVSelect2,
+    getItemsVSelect3,
     getAllItemsVSelect,
     getAllItemsVSelectByEmployeeId,
     show,
