@@ -138,18 +138,17 @@ export const useInputVoucherStore = defineStore("InputVoucherStore", () => {
     }
   };
 
-  const getItemsVSelect3 = async (query?: string | undefined) => {
-    if (query === undefined || query === "") {
+  const getItemsVSelect3 = async (query?: string | undefined ,page:number = 1) => {
+     if (query === undefined || query === "") {
       return [];
     }
-    let endpoint = `${pathBase}/inputVoucherItem/getAvailableItemsVSelect`;
+     let endpoint = `${pathBase}/voucherItemHistory/reportStorage?page=${page}`;
     try {
-        await Api.get(endpoint, { params: { itemName: query } }).then((response) => {
-          if (response.status === 200 && Array.isArray(response.data?.data)) {
-            //console.log(response.data.data);
-            return response.data.data;
-          }
-        });
+      const response = await Api.get(endpoint, { params: { name: query } });
+      if (response.status === 200 && Array.isArray(response.data?.data)) {
+        //console.log(response.data.data);
+        return response.data.data;
+      }
 
     } catch (error) {
       console.error(`Error in fetchItemsVSelect (${endpoint}):`, error);
