@@ -416,7 +416,7 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading" id="printMe1">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
         :text="t('New')" />
     </template>
     <IPageContent>
@@ -505,11 +505,11 @@ const reset = () => {
         :showAdd="can(EnumPermission.AddVacationDaily) == 1" :showUpdate="can(EnumPermission.EditVacationDaily) == 1"
         :showDelete="can(EnumPermission.DeleteVacationDaily) == 1">
         <template #Pre>
-          <IButton2 v-if="vacationDaily.id != 0" :text="t('Print')" pre-icon="printer" :type="EnumButtonType.Outlined"
+          <IButton2 v-if="vacationDaily.id != 0" :text="t('Print')" pre-icon="printer" :variant="EnumButtonType.Outlined"
             :onClick="printWindow" />
-          <IButton2 v-if="vacationDaily.id == 0" :text="t('CreateWithPrint')" :type="EnumButtonType.Outlined"
+          <IButton2 v-if="vacationDaily.id == 0" :text="t('CreateWithPrint')" :variant="EnumButtonType.Outlined"
             pre-icon="printer-pos-plus" :onClick="storeWithPrint" />
-          <IButton2 v-if="vacationDaily.id == 0" text="Test" :type="EnumButtonType.Outlined" pre-icon="printer-pos-plus"
+          <IButton2 v-if="vacationDaily.id == 0" text="Test" :variant="EnumButtonType.Outlined" pre-icon="printer-pos-plus"
             :onClick="printWindow" />
         </template>
       </IFooterCrud>

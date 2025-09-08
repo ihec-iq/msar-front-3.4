@@ -252,7 +252,7 @@ const ChangeDateRecord = () => {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"

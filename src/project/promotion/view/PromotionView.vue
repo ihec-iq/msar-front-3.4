@@ -170,7 +170,7 @@ onMounted(async () => {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         preIcon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -309,7 +309,7 @@ onMounted(async () => {
         <IRow>
           <ICol span="1" span-md="1" span-sm="1">
             <IButton2
-              :type="EnumButtonType.Outlined"
+              :variant="EnumButtonType.Outlined"
               :onClick="
                 () => {
                   Promotion.notes = ' ';

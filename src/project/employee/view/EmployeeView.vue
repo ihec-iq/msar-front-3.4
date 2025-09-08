@@ -371,7 +371,7 @@ const active = ref(0);
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -693,7 +693,7 @@ const active = ref(0);
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IButton2
-                  :type="EnumButtonType.Outlined"
+                  :variant="EnumButtonType.Outlined"
                   class="mt-3"
                   v-if="employee.User?.id"
                   :on-click="ShowUser"

@@ -106,7 +106,7 @@ onMounted(async () => {
 <template>
     <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
         <template #headerButtons>
-            <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" preIcon="view-grid-plus" :onClick="reset"
+            <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" preIcon="view-grid-plus" :onClick="reset"
                 :text="t('New')" />
         </template>
         <IPageContent>

@@ -111,7 +111,7 @@ const colorMode = useColorMode({
             {{ t("Logout") }}
           </div>
           <div class="flex items-center">
-            <IButton2 :type="EnumButtonType.Outlined" pre-icon="logout" color="red" :text="t('Logout')" :on-click="logout"
+            <IButton2 :variant="EnumButtonType.Outlined" pre-icon="logout" color="red" :text="t('Logout')" :on-click="logout"
               width="32" />
           </div>
         </div>

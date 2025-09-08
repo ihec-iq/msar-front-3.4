@@ -1,3 +1,4 @@
+ 
 export default {
   Check: "تحقق",
   Logout: "تسجيل الخروج",
@@ -72,7 +73,11 @@ export default {
   noData: "لا توجد بيانات",
   ID: "المعرف",
   Profile: "الملف الشخصي",
-  Archive: "الارشيف",
+  Archive: {
+    Portal : "لوحة تحكم الارشيف",
+    Index : "الارشيف",
+    Title:"الارشيف"
+  },
   AllArchives: "الارشيف الكامل",
   Name: "اسم",
   "User Name(for login)": "اسم المستخدم للدخول",
@@ -108,6 +113,7 @@ export default {
   Code: "الرمز",
   Category: "الصنف",
   Item: {
+    Portal : "لوحة تحكم المواد",
     Name: "اسم",
     Index: "مادة",
     Add: "اضف مادة",

@@ -201,7 +201,7 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
         :text="t('New')" />
     </template>
     <IPageContent>

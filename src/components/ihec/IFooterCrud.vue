@@ -80,7 +80,7 @@ const goBack = () => {
       color="red"
       :onClick="goBack"
       pre-icon="arrow-left-top"
-      :type="EnumButtonType.Text"
+      :variant="EnumButtonType.Text"
       :text="t('Back')"
       class="text-lg"
     />
