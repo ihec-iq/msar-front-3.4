@@ -5,6 +5,7 @@ import { t } from "@/utilities/I18nPlugin";
 import IButton from "./IButton.vue";
 import IButton2 from "./IButton2.vue";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import { Icon } from "@iconify/vue";
 
 const props = defineProps({
   onCreate: {
@@ -76,9 +77,10 @@ const goBack = () => {
       <slot name="Post"></slot>
 
     </div>
+     
     <IButton2
       color="red"
-      :onClick="goBack"
+      :onClick="goBack" 
       pre-icon="arrow-left-top"
       :variant="EnumButtonType.Text"
       :text="t('Back')"

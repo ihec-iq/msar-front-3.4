@@ -107,13 +107,13 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :col="1" :col-md="2" :col-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
               :OnKeyEnter="getFilterData" />
           </ICol>
-          <div class="basis-1/5" v-if="data.length >= limits[0].id">
+          <div   v-if="data.length >= limits[0].id">
             <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
               :IsRequire="true" @onChange="getFilterData()" />
           </div>
@@ -123,7 +123,15 @@ onMounted(async () => {
       <IRow :col="4" :col-lg="4" :col-md="3" :col-sm="1" :col-xs="1">
         <ICol class="my-2" :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.id">
           <!-- card -->
-          <CardInputVoucherIndex :item="item" />
+           <CardInputVoucherIndex
+            :item="item"
+            :notesAreHtml="true"
+            :loading="isLoading"
+            :disabled="false"
+            routeName="inputVoucherUpdate"
+            tone="brand" 
+            density="compact"
+          />
           <!-- end card -->
         </ICol>
       </IRow>

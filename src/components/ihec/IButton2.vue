@@ -128,7 +128,10 @@ const ariaLabel = computed(() => {
 
 function handleClick(event: MouseEvent) {
   if (props.disabled || props.loading) return;
-  if (props.onClick) props.onClick(); // back-compat
+  if (props.onClick) {
+    props.onClick(); // back-compat
+    return
+  }
   emit("click", event);
 }
 </script>
