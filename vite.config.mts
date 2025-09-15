@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => {
     // ✅ لا تمرّر بورت للعميل؛ استعمل VITE_PORT لو حاب تغيّره محليًا
     server: {
       watch: { usePolling: true },
-      port: Number(env.VITE_PORT ?? 1991),
+      // port: Number(env.VITE_PORT ?? 1991),
     },
 
     // يضمن أن Vite يمرّر فقط VITE_* للمتصفح
