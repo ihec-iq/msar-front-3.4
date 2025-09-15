@@ -103,15 +103,19 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :col="1" :col-md="1" :col-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
               :OnKeyEnter="getFilterData" />
           </ICol>
+          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4" v-if="data.length >= limits[0].id">
+            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+                    :IsRequire="true" @onChange="getFilterData()" />
+          </ICol> 
         </ISearchBar>
       </IRow>
-      <IRow :col="2" :colMd="2" :colLg="2">
+      <IRow :col="4" :col-md="4" :col-lg="4">
         <ICol class="p-3" :span="2" v-for="item   in data" :key="item.id">
           <CardItemCategoryIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
@@ -127,11 +131,7 @@ onMounted(async () => {
                 <div class="basis-4/5 overflow-x-auto font-Tajawal">
                   <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
                     @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-                </div>
-                <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                  <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-                    :IsRequire="true" @onChange="getFilterData()" />
-                </div>
+                </div> 
               </div>
             </div>
           </div>

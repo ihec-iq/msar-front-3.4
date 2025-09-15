@@ -568,7 +568,7 @@ async function fetchFn(query: string, page = 1) {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -656,7 +656,7 @@ async function fetchFn(query: string, page = 1) {
               <IButton2
                 :text="t('Item.Choose')"
                 color="blue"
-                :type="EnumButtonType.Outlined"
+                :variant="EnumButtonType.Outlined"
                 post-icon="plus"
                 :on-click="AddPopup"
                 class="w-fit"
@@ -960,14 +960,14 @@ async function fetchFn(query: string, page = 1) {
           <IButton2
             :text="t('Add')"
             color="blue"
-            :type="EnumButtonType.Default"
+            :variant="EnumButtonType.Default"
             :on-click="AddItem"
             v-if="IsAdd"
           />
           <IButton2
             :text="t('Update')"
             color="blue"
-            :type="EnumButtonType.Default"
+            :variant="EnumButtonType.Default"
             :on-click="EditItem"
             v-else
           />
@@ -976,7 +976,7 @@ async function fetchFn(query: string, page = 1) {
             pre-icon="close-box"
             :text="t('Close')"
             color="blue"
-            :type="EnumButtonType.Text"
+            :variant="EnumButtonType.Text"
             :on-click="() => (showPop = false)"
           />
         </IContainer>

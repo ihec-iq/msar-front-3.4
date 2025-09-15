@@ -27,30 +27,27 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="collapse align-middle" v-if="archiveTypes.length > 0">
-    <input type="checkbox" class="" v-model="isChecked" />
-    <div
+  <div class="align-middle bg-opacity-50  bg-blue-100 py-2 px-2 rounded-lg" v-if="archiveTypes.length > 0">
+     <div
       class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
     >
-      <span class="mx-2 px-2"> للاطلاع على كافة الكتب حسب نوع الكتاب </span>
+      <span class="mx-2 px-2"> للاطلاع على  الكتب حسب نوع الكتاب </span>
       <Icon icon="mdi:filter-check" />
+      
     </div>
-    <div class="collapse-content grid grid-cols-4">
-      <div class="mt-5"></div>
-      <CardArchiveTypeIndex
+    <div class="grid grid-cols-6 mt-2 gap-2 place-items-center justify-center items-center  " >
+       <CardArchiveTypeIndex
         title="عرض الجميع"
-        count="0"
-        class="col-span-4"
+        :count="archiveTypes.length" 
         @click="onClick(-1)"
-      ></CardArchiveTypeIndex>
+      />
       <CardArchiveTypeIndex
         v-for="archiveType in archiveTypes"
-        :key="archiveType.id"
-        class="col-span-4"
+        :key="archiveType.id" 
         :title="archiveType.name"
         :count="archiveType.archives?.toString()"
         @click="onClick(archiveType.id)"
-      ></CardArchiveTypeIndex>
+        />
     </div>
   </div>
 </template>

@@ -111,7 +111,7 @@ const refreshCategories = async () => {
                 <ISelect class="w-[50%]" :label="t('Item.Category')" v-model="item.Category.id"
                   name="inputVoucherStockId" :options="categories" :IsRequire="true" />
                 <IButton2 class="h-full mt-5" :text="t('Refresh')" :onClick="refreshCategories" post-icon="refresh"
-                  color="blue" :type="EnumButtonType.Outlined" />
+                  color="blue" :variant="EnumButtonType.Outlined" />
               </div>
             </div>
 

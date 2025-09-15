@@ -158,7 +158,7 @@ function groupByEmployee(data: IBarrenSectionReportView[]): IGroupedReport[] {
 }
 
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Details"), value: "actions" },
+  { caption: t("Details"), value: "actions" , print: false ,sortable:false , width:"30"},
   { caption: t("Item.Name"), value: "itemName" },
   { caption: t("Count"), value: "count" },
   { caption: t("OutputVoucher.Number"), value: "numberOutput" },
@@ -185,7 +185,17 @@ const goToDetails = (id : number) => {
     params: { id:  id },
   });
 };
+import { nextTick } from "vue";
+import IButton2 from "@/components/ihec/IButton2.vue";
+import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 
+const printTable = async () => {
+  // Make sure Vue finished rendering rows before printing
+  await nextTick();
+
+  // Trigger browser print dialog
+  window.print();
+};
 </script>
 <template>
   <IPage :HeaderTitle="t('Store.BarrenSectionIndex') + ' - ' + sectionName" :isLoading="isLoading">
@@ -204,12 +214,16 @@ const goToDetails = (id : number) => {
                 <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
                   :IsRequire="true" @onChange="getFilterData()" /> 
           </ICol> 
+          <ICol v-if="data.length >0" >
+                  <IButton2 class="rtl:ml-2 ltr:mr-2 xs:mt-2 mt-4" color="amber" :variant="EnumButtonType.Outlined" :text="t('Print')" preIcon="printer"
+        :onClick="printTable" width="25" />
+          </ICol> 
         </ISearchBar>
       </IRow>
-      <IRow v-if="!checkGroup">
-        <ITable :items="data" :headers="headersWithEmployee" :showRowNumber=true  :showColumnsButton="false" >
+      <IRow v-if="!checkGroup">m
+        <ITable :items="data" :headers="headersWithEmployee" :showRowNumber=true  :showColumnsButton="false"  :page-size="100"   :page-size-options="[100,250,500]">
           <template v-slot:actions="{ row }">
-             <button class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"  @click="goToDetails(row.OutputId)">
+             <button class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"  @click="goToDetails(row.OutputId as number)">
               <i class="fas fa-external-link-alt mr-1"></i>{{ t('Open') }} {{ row.OutputId }}
             </button>
           </template>
@@ -227,14 +241,14 @@ const goToDetails = (id : number) => {
       <div class="w-full" v-else>
         <div class=""> 
               <div v-for="item in groupedData" class="mb-2">
-                <div class="bg-gray-50 border border-gray-300 p-2 rounded-md">
-                  <div class="flex justify-between items-center">
-                       <div class="font-bold">{{ item.employeeName }}</div>
-                  </div>
+                <div class="bg-gray-50 border border-gray-300 p-2 rounded-md"> 
                   <div class="mt-2">
-                    <ITable :items="item.items" :headers="headers" :showRowNumber=true  :showColumnsButton="false"   >
+                    <ITable :items="item.items" :headers="headers" :showRowNumber=true  :showColumnsButton="false"  :page-size="100"   :page-size-options="[100,250,500]"   >
+                    <template v-slot:headerTitle>
+                      <div class="font-bold text-lg bg-gray-100 p-2 rounded-md shadow-sm border border-gray-200 mb-2 text-center print:text-center print:bg-gray-100 print:border print:shadow-sm print:p-2">ذمة الموظف {{ item.employeeName }}</div> 
+                    </template>
                     <template v-slot:actions="{ row }">
-                      <button class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"  @click="goToDetails(row.OutputId)">
+                      <button class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"  @click="goToDetails(row.OutputId as number)">
                         <i class="fas fa-external-link-alt mr-1"></i>{{ t('Open') }}
                       </button>
                     </template>
@@ -270,4 +284,10 @@ const goToDetails = (id : number) => {
     <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>
-<style></style>
+<style>
+@media print {
+  .table-container > *:not(#printable-table) {
+    display: none !important;
+  }
+}
+</style>

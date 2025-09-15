@@ -114,8 +114,12 @@ export default {
   EmployeeRequest: "Employee Request",
   noData: "No Data !!!",
   ID: "ID",
-  Profile: "Profile",
-  Archive: "Archive",
+  Profile: "Profile", 
+  Archive: {
+    Portal : "Archive Portal",
+    Index : "Archive",
+    Title:"Archive"
+  },
   AllArchives: "All Archives",
   Title: "Title",
   SerialNumber: "Serial Number",
@@ -146,6 +150,7 @@ export default {
   Code: "Code",
   Category: "Category",
   Item: {
+    Portal : "Items Portal",
     Name: "Name",
     Index: "Item",
     Add: "Add Item",

@@ -450,7 +450,7 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="Loading">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
+      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
         :text="t('New')" />
     </template>
     <IPageContent>
@@ -483,7 +483,7 @@ const headers = ref<Array<ITableHeader>>([
           <IRow>
             <ICol>
               <IButton2 :text="t('Item.Choose')" class="w-[150px]" color="blue" post-icon="add"
-                :type="EnumButtonType.Outlined" @click="AddPopup()" />
+                :variant="EnumButtonType.Outlined" @click="AddPopup()" />
             </ICol>
           </IRow>
           <IRow>
@@ -598,12 +598,12 @@ const headers = ref<Array<ITableHeader>>([
                 </template>
               </vSelect>
               <IButton class="h-full" :text="t('Refresh')" :onClick="refreshItems" post-icon="refresh" color="green"
-                :type="EnumButtonType.Outlined" />
+                :variant="EnumButtonType.Outlined" />
               <IButton v-if="!IsAddItem" class="h-full" :text="t('Add')" :onClick="() => {
                 IsAddItem = !IsAddItem;
                 makeInputPopFocus();
               }
-                " post-icon="add" color="blue" :type="EnumButtonType.Outlined" />
+                " post-icon="add" color="blue" :variant="EnumButtonType.Outlined" />
             </div>
           </ICol>
 
@@ -686,9 +686,9 @@ const headers = ref<Array<ITableHeader>>([
         </IRow>
         <!-- buttons -->
         <IContainer class="flex flex-row my-10">
-          <IButton :text="t('Add')" color="blue" :type="EnumButtonType.Default" :on-click="AddItem" v-if="IsAdd" />
-          <IButton :text="t('Update')" color="blue" :type="EnumButtonType.Default" :on-click="EditItem" v-else />
-          <IButton class="" pre-icon="close-box" :text="t('Close')" color="blue" :type="EnumButtonType.Text"
+          <IButton :text="t('Add')" color="blue" :variant="EnumButtonType.Default" :on-click="AddItem" v-if="IsAdd" />
+          <IButton :text="t('Update')" color="blue" :variant="EnumButtonType.Default" :on-click="EditItem" v-else />
+          <IButton class="" pre-icon="close-box" :text="t('Close')" color="blue" :variant="EnumButtonType.Text"
             :on-click="() => (showPop = false)" />
         </IContainer>
       </van-popup>

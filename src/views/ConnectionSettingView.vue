@@ -135,7 +135,7 @@ onMounted(async () => {
           <IButton2
             :text="t('Check')"
             @click="checkConnection"
-            :type="EnumButtonType.Outlined"
+            :variant="EnumButtonType.Outlined"
             class="ml-2"
             :class="{
               'bg-create': successConnection == 2,

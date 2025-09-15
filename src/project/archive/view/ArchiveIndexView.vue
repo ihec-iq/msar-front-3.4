@@ -164,8 +164,8 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow>
-        <CardsArchiveTypeIndex :OnClick="getFilterData"></CardsArchiveTypeIndex>
+      <IRow class="mt-0">
+        <CardsArchiveTypeIndex :OnClick="getFilterData" />
       </IRow>
       <IRow>
         <EmailCardArchiveIndex
