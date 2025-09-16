@@ -101,15 +101,21 @@ export const useOutputVoucherStore = defineStore(
             String(outputVoucher.Items[index]?.id)
         )
           .then((response) => {
+            console.log(response);
             if (response.status == 200) {
-              /* empty */
+              outputVoucher.Items?.splice(index, 1);
+              return;
             }
           })
           .catch((errors) => {
             console.log("in removeItem outputVoucher : " + errors);
           });
       }
-      outputVoucher.Items?.splice(index, 1);
+      try {
+        outputVoucher.Items?.splice(index, 1);
+      } catch (error) {
+        console.log("delete item in outputVoucher items : ",error);
+      }
     }
     function resetData() {
       outputVoucher.id = 0;

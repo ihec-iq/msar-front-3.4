@@ -30,6 +30,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  title: {
+    type: String,
+    default: ''
+  }
 });
 const colClass = computed(() => {
   let classStyle = "";
@@ -66,7 +70,8 @@ const debugClass = computed(() => {
 
 <template>
   <div :class="[colClass, debugClass]" class="ltr:mr-2 rtl:ml-2">
-    <div v-if="debug" class="">{{ colClass }}</div>
+    <h3 v-if="title" class="text-lg font-medium mb-2 bg-opacity-75 bg-gray-200 px-2">{{ title }}</h3>
+    <div v-if="debug" class="bg-opacity-75">{{ colClass }}</div>
     <slot></slot>
   </div>
 </template>
