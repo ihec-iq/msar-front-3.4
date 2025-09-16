@@ -188,11 +188,11 @@ const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   indexSelectedVoucherItem.value = index;
   OutputVoucherItem.value = itemX;
   OutputVoucherItem.value.inputVoucherItemId = Number(
-    itemX.InputVoucherItem.id
+    itemX.inputVoucherItemId
   );
 };
 const AddItem = () => {
-  OutputVoucherItem.value.Item = OutputVoucherItem.value.InputVoucherItem?.Item;
+  OutputVoucherItem.value.Item = OutputVoucherItem.value.Item;
   OutputVoucherItem.value.description = String(
     OutputVoucherItem.value.InputVoucherItem?.description
   );
