@@ -19,6 +19,9 @@ const { is } = storeToRefs(rtlStore);
 
 //region""
 import { useToast, POSITION } from "vue-toastification";
+import IRow from "@/components/ihec/IRow.vue";
+import ICol from "@/components/ihec/ICol.vue";
+import ILabel from "@/components/ihec/ILabel.vue";
 // Utility function to show error toasts
 const toast = useToast();
 const showErrorToast = (message = "") => {
@@ -115,182 +118,45 @@ onMounted(async () => {
     });
 });
 </script>
+<style></style>
 <template>
-  <PageTitle> {{ namePage }}</PageTitle>
-
-  <div class="w-full">
-    <div class="w-full p-6 grid lg:grid-cols-1 xs:grid-cols-1">
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("ConnectionString") }}
-        </div>
-        <div class="flex">
-          <input
-            v-model="Config.connectionString"
-            type="text"
-            class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-          />
-          <IButton2
-            :text="t('Check')"
-            @click="checkConnection"
-            :variant="EnumButtonType.Outlined"
-            class="ml-2"
-            :class="{
-              'bg-create': successConnection == 2,
-              'border-red-500 border-2': successConnection == 3,
-            }"
-          >
+  <IPage :HeaderTitle="namePage">
+    <IPageContent>
+      <div class="h-5"> .</div>
+      <IRow col-lg="2" col-md="2" col-sm="1">
+        <ICol span="1" span-md="1" span-sm="1" class="flex">
+          <div class="mb-2 md:text-sm text-base mr-3 font-bold mx-2 text-text dark:text-textLight">
+            {{ t("ConnectionString") }}
+          </div>
+          <input v-model="Config.connectionString" type="text"
+            class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+          <IButton2 :text="t('Check')" @click="checkConnection" :variant="EnumButtonType.Outlined" class="mx-2" :class="{
+            'bg-create': successConnection == 2,
+            'border-red-500 border-2': successConnection == 3,
+          }">
             <template #icon>
-              <Icon
-                v-if="successConnection == 1"
-                icon="mdi:loading"
-                class="grow-0 animate-spin"
-              >
+              <Icon v-if="successConnection == 1" icon="mdi:loading" class="grow-0 animate-spin">
               </Icon>
-              <Icon
-                v-else-if="successConnection == 2"
-                icon="mdi:check-circle"
-                class="grow-0"
-              />
-              <Icon
-                v-else-if="successConnection == 3"
-                icon="fa6-solid:circle-exclamation"
-                class="grow-0 text-red-500"
-              />
+              <Icon v-else-if="successConnection == 2" icon="mdi:check-circle" class="grow-0" />
+              <Icon v-else-if="successConnection == 3" icon="fa6-solid:circle-exclamation"
+                class="grow-0 text-red-500" />
             </template>
           </IButton2>
-        </div>
-      </div>
-      <div class="w-11/12 mr-2">
-        <div
-          class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-        >
-          {{ t("Organization") }}
-        </div>
-        <input
-          v-model="Config.organization"
-          type="text"
-          class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-        />
-      </div>
-    </div>
-    <!-- bottom tool bar -->
-    <div
-      :class="{
-        'lg:w-[99.2%] xs:w-[97%] lg:mx-2 xs:mx-2 bottom': is,
-        'lg:w-[95%] md:w-[90%] xs:w-[75%] lg:mr-0 ltr:xs:ml-3 rtl:xs:mr-3 bottom':
-          !is,
-      }"
-      class="dark:bg-bottomTool duration-700 bg-ideNavLight p-2 rounded-lg flex items-center justify-end fixed bottom-0 print:hidden"
-    >
-      <div class="flex ltr:ml-8 rtl:mr-8">
-        <div class="items-center mr-3">
-          <button
-            @click="store()"
-            class="bg-create hover:bg-createHover ml-1 duration-500 h-10 lg:w-32 xs:w-20 rounded-lg text-white"
-          >
-            {{ t("Save") }}
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      :class="{
-        'ltr:left-4 rtl:right-4': is,
-        'ltr:left-28 rtl:right-28': !is,
-      }"
-      class="backBtn z-10 fixed bottom-2 lg:ml-3 xs:ml-0 print:hidden"
-    >
-      <button
-        @click="back()"
-        class="bg-back hover:bg-backHover h-10 duration-500 lg:w-32 xs:w-20 p-2 rounded-md text-white"
-      >
-        {{ t("Back") }}
-      </button>
-    </div>
-    <!-- end bottom tool -->
-  </div>
+        </ICol>
+
+      </IRow>
+      <IRow col-lg="2" col-md="2" col-sm="1"> 
+        <ICol span="1" span-md="1" span-sm="1" class="flex">
+          <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight mx-2">
+            {{ t("Organization") }}
+          </div>
+          <input v-model="Config.organization" type="text"
+            class="w-full text-left outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+        </ICol>
+      </IRow>
+    </IPageContent>
+    <template #Footer>
+      <IFooterCrud :show-add="false" :onCreate="store" :show-delete="false" class="" />
+    </template>
+  </IPage>
 </template>
-<style scoped>
-.drop-area {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 50px;
-  background: rgba(255, 255, 255, 0.333);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: 0.2s ease;
-}
-
-.drop-area[data-active="true"] {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background: rgba(255, 255, 255, 0.8);
-}
-
-label {
-  font-size: 36px;
-  cursor: pointer;
-  display: block;
-}
-
-label span {
-  display: block;
-}
-
-label input[type="file"]:not(:focus-visible) {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-label .smaller {
-  font-size: 16px;
-}
-
-.image-list {
-  display: flex;
-  list-style: none;
-  flex-wrap: wrap;
-  padding: 0;
-  margin-bottom: 35px;
-}
-
-.preview-card {
-  display: flex;
-  border: 1px solid #a2a2a2;
-  padding: 5px;
-  margin: 5px;
-}
-
-.upload-button {
-  display: block;
-  appearance: none;
-  border: 0;
-  border-radius: 50px;
-  padding: 0.75rem 3rem;
-  margin: 1rem auto;
-  font-size: 1.25rem;
-  font-weight: bold;
-  background: #369;
-  color: #fff;
-  text-transform: uppercase;
-}
-
-button {
-  cursor: pointer;
-}
-
-.custom-quill .ql-editor {
-  direction: rtl !important;
-  text-align: right !important;
-}
-</style>
-@/project/user/permissionStore@/utilities/I18nPlugin

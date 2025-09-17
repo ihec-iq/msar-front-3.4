@@ -42,7 +42,7 @@ const props = defineProps({
   nativeType: { type: String as PropType<"button" | "submit" | "reset">, default: "button" },
 
   /** Back-compat: prefer @click instead. */
-  onClick: { type: Function as PropType<() => void>, default: undefined },
+  onClick: { type: Function as PropType<(...args: any[]) => void>, default: undefined },
 });
 
 const emit = defineEmits<{ (e: "click", event: MouseEvent): void }>();

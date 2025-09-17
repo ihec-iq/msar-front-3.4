@@ -23,7 +23,7 @@ export interface IOutputVoucherItem {
   id?: number;
   outputVoucherId: number;
   Item?: IItem;
-  inputVoucherItemId: number;
+  inputVoucherItemId: number; 
   InputVoucherItem: IInputVoucherItem; 
   description: string;
   count: number; 
