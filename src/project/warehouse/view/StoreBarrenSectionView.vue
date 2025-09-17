@@ -180,10 +180,11 @@ const showGroupedData = () => {
   }
 }
 const goToDetails = (id: number) => {
-  router.push({
+  const routeUrl = router.resolve({
     name: "outputVoucherUpdate",
     params: { id: id },
   });
+  window.open(routeUrl.href, "_blank");
 };
 import { nextTick } from "vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
