@@ -776,18 +776,7 @@ async function fetchFn(query: string, page = 1) {
                   {{ OutputVoucherItem.InputVoucherItem.notes }}</ILabel>
               </IBasis>
             </IFlex>
-          </IBasis>
-          <IBasis base="3/4" v-else class="border-2 border-dotted border-gray-600">
-            <div class="w-full text-center align-middle border-gray-600">
-              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
-                قم بأختيار مادة
-              </div>
-            </div>
-          </IBasis>
-        </IFlex>
-        <!-- for insert item Properties -->
-        <div v-if="OutputVoucherItem.inputVoucherItemId > 0">
-          <div class="flex p-2">
+            <div class="flex p-2">
             <div class="w-full">
               <ILabel title="ملاحظات سند الادخال">
                 {{ OutputVoucherItem.InputVoucherItem.description }}
@@ -802,15 +791,27 @@ async function fetchFn(query: string, page = 1) {
                 v-model="OutputVoucherItem.InputVoucherItem.price"
               />
             </div> -->
-            <div class="w-1/4 flex">
+            <div class="w-2/5 flex">
               <ILabel title="سعر سند الادخال" class="mx-1">
                 {{ ConvertToMoneyFormat(OutputVoucherItem.InputVoucherItem.price) }}
               </ILabel>
-              <IButton2 class="mt-5" text="فتح سند الادخال" color="blue" :variant="EnumButtonType.Text" pre-icon="folder"
+              <IButton2 class="mt-5" text="فتح السند" color="blue" :variant="EnumButtonType.Text" pre-icon="folder"
                 :onClick="() => goToInputVoucher(OutputVoucherItem.InputVoucherItem.inputVoucherId ?? 0)" />
             </div>
 
           </div>
+          </IBasis>
+          <IBasis base="3/4" v-else class="border-2 border-dotted border-gray-600">
+            <div class="w-full text-center align-middle border-gray-600">
+              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
+                قم بأختيار مادة
+              </div>
+            </div>
+          </IBasis>
+        </IFlex>
+        <!-- for insert item Properties -->
+        <div v-if="OutputVoucherItem.inputVoucherItemId > 0">
+          
           <IRow>
             <ICol class="flex ">
               <div class="w-1/5">
