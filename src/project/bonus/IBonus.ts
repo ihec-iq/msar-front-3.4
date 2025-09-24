@@ -1,7 +1,10 @@
-import type { IUser } from "../user/IUser";
 import type { IEmployeeLiteBonus } from "../employee/IEmployee";
-import type { IDocument } from "../archive/IArchive";
-
+import type { ISection } from "@/project/section/ISection";
+import type { IUser } from "@/project/user/IUser";
+import type { IDocument } from "@/project/archive/IArchive";
+import type { IEmployeeType } from "@/project/employee/setting/employeeType/IEmployeeType";
+import type { IEmployeeCenter } from "@/project/employee/setting/employeeCenter/IEmployeeCenter";
+import type { IEmployeePosition } from "@/project/employee/setting/employeePosition/IEmployeePosition";
 
 export interface IBonus {
   id: number;
@@ -14,7 +17,56 @@ export interface IBonus {
   UserUpdate?: IUser;
   notes: string;
 }
-
+export interface IDocBouns {
+  title: string;
+  number: string;
+  addDays: number;
+  addMonths: number;
+  issueDate: string;
+  isActive: number;
+}
+export interface IBonusTotal {
+  id: number;
+  name: string;
+  currentDateBonus: string;
+  numberIncreseDayes: number;
+  numberIncreseMonths: number;
+  DegreeStage: {
+    id: number;
+    title: string;
+  };
+  nextDateBonus: string;
+  Documents: Array<IDocBouns>;
+  TotalDocuments: Array<IDocBouns>;
+}
+export interface IBonusEmployeeTotal {
+   id: number;
+  checked: boolean;
+  name: string;
+  dateWork: string;
+  current: {
+    number: string;
+    dateBonus: string;
+    numberPromotion: string;
+    datePromotion: string;
+    degreeStage: string;
+    stage: string;
+    degree: string;
+    salary: string;
+    notes: string;
+  }; 
+  position: string;
+  center: string;
+  section: string;
+  department: string;
+  type: string;
+  jobTitle: string;
+  study: string;
+  certificate: string;
+  notes: string;
+  LastBonus?: IBonusChecker;
+  getBonusEmployeeTotal: Array<IBonusTotal>;
+}
 export interface IBonusEmployeeChecker {
   id: number;
   checked: boolean;
@@ -104,5 +156,4 @@ export interface IBonusFilter {
   name?: string;
   isBound?: boolean;
   bound?: number;
-
 }

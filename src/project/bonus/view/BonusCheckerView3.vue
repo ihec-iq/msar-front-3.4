@@ -9,18 +9,18 @@ import { storeToRefs } from "pinia";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IBonus, IBonusEmployeeChecker, IBonusFilter } from "../IBonus";
+import type { IBonus, IBonusEmployeeChecker, IBonusEmployeeTotal, IBonusFilter } from "../IBonus";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
 const { Bonus } = storeToRefs(useBonusStore());
 const { sections } = storeToRefs(useSectionStore());
 
-const IdPage = "BonusChecker";
-const data = ref<Array<IBonusEmployeeChecker>>([]);
+const IdPage = "BonusChecker3";
+const data = ref<Array<IBonusEmployeeTotal>>([]);
 const dataPage = ref();
-const dataBase = ref<Array<IBonusEmployeeChecker>>([]);
-const { get_checkBonus, calculateBonus } = useBonusStore();
+const dataBase = ref<Array<IBonusEmployeeTotal>>([]);
+const { filterWithBonus, calculateBonus } = useBonusStore();
 
 import { limits } from "@/utilities/defaultParams";
 import IButton from "@/components/ihec/IButton.vue";
@@ -54,7 +54,7 @@ watch(
 );
 
 //#region Fast Search
-const fastSearch = ref("");
+const fastSearch = ref("نجم");
 const filterByIDName = (Bonus: IBonus) => {
   if (Bonus.Employee.name.includes(fastSearch.value)) {
     return true;
@@ -156,7 +156,7 @@ const getFilterData = async (page = 1) => {
   searchFilter.value.employeeName = fastSearch.value;
   searchFilter.value.bound =
     searchFilter.value.bound == 0 ? 0 : searchFilter.value.bound;
-  await get_checkBonus(searchFilter.value, page)
+  await filterWithBonus(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data.data;
@@ -354,7 +354,7 @@ const openFileHrDocument = (id: number) => {
         <div id="printMe" class="[print-color-adjust:exact] p-1">
           <div class="overflow-auto">
             <div
-              class="flex items-center content-center justify-center text-md font-bold w-[1040px] border-black border-x-2 border-t-2"
+              class="flex items-center content-center justify-center text-md font-bold w-[1140px] border-black border-x-2 border-t-2"
             >
               استحقاق العلاوة السنوية لموظفي كادر مكتب انتخابات كربلاء
             </div>
@@ -402,6 +402,20 @@ const openFileHrDocument = (id: number) => {
                   <th class="tdborderx w-[120px]">
                     كتب الشكر والتقدير والعقوبات والغيابات والاجازات
                   </th>
+                  <th colspan="3" class="tdborderx w-[70px]">
+                    تاريخ الاستحقاق
+                  </th>
+                  <th
+                    class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180"
+                  >
+                    الدرجة
+                  </th>
+                  <th
+                    class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180"
+                  >
+                    المرحلة
+                  </th>
+                  <th class="tdborderx w-[44px]">مقدار الراتب</th>
                 </tr>
                 <tr class="bg-gray-300">
                   <th class="tdborderx w-[30px]"></th>
@@ -412,10 +426,13 @@ const openFileHrDocument = (id: number) => {
                   <th class="tdborderx w-[60px]"></th>
                   <th class="tdborderx w-[60px]"></th>
                   <th
-                    colspan="7"
+                    colspan="6"
                     class="tdborderx w-[280px] border-t-2 text-center"
                   >
                     الاستحقاق السابق
+                  </th>
+                  <th colspan="7" class="tdborderx border-t-2 text-center">
+                    الاستحقاق الجديد
                   </th>
                   <th colspan="7" class="tdborderx border-t-2 text-center">
                     الاستحقاق الجديد
@@ -447,21 +464,26 @@ const openFileHrDocument = (id: number) => {
                   <td class="tdborderx">{{ row.current.degree }}</td>
                   <td class="tdborderx">{{ row.current.stage }}</td>
                   <td class="tdborderx">{{ row.current.salary }}</td>
-                  <td class="tdborderx">{{ row.next.notes }}</td>
-
-                  <td class="tdborderx">
-                    {{ row.next.dateBonus?.slice(8, 10) }}
+                  <td class="tdborderx">note1</td>
+                  <td class="tdborderx"> 
                   </td>
-                  <td class="tdborderx">
-                    {{ row.next.dateBonus?.slice(5, 7) }}
+                  <td class="tdborderx"> 
                   </td>
-                  <td class="tdborderx text-[10px] font-bold">
-                    {{ row.next.dateBonus?.slice(0, 4) }}
+                  <td class="tdborderx text-[10px] font-bold"> 
                   </td>
-                  <td class="tdborderx">{{ row.next.degree }}</td>
-                  <td class="tdborderx">{{ row.next.stage }}</td>
-                  <td class="tdborderx">{{ row.next.salary }}</td>
-                  <td class="tdborderx">{{ row.next.notes }}</td>
+                  <td class="tdborderx"> </td>
+                  <td class="tdborderx"> </td>
+                  <td class="tdborderx"> </td>
+                  <td class="tdborderx">note2</td>
+                  <td class="tdborderx"> 
+                  </td>
+                  <td class="tdborderx"> 
+                  </td>
+                  <td class="tdborderx text-[10px] font-bold"> 
+                  </td>
+                  <td class="tdborderx"> </td>
+                  <td class="tdborderx"> </td>
+                  <td class="tdborderx"> </td>
                 </tr>
               </tbody>
             </table>
@@ -485,10 +507,10 @@ const openFileHrDocument = (id: number) => {
             <span>{{ row.current.dateBonus }} </span>
           </template>
           <template v-slot:next.difBonusDate="{ row }">
-            <span>{{ row.next.difBonusDate + " " + t("Day") }} </span>
+            <span>{{ row.current.difBonusDate + " " + t("Day") }} </span>
           </template>
           <template v-slot:next.dateBonus="{ row }">
-            <span>{{ row.next.dateBonus + " " + t("Day") }} </span>
+            <span>{{ row.current.dateBonus + " " + t("Day") }} </span>
           </template>
 
           <template v-slot:actions="{ row }">
