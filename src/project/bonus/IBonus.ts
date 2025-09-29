@@ -21,6 +21,7 @@ export interface IDocBouns {
   title: string;
   number: string;
   addDays: number;
+  date : string;
   addMonths: number;
   issueDate: string;
   isActive: number;
@@ -34,6 +35,9 @@ export interface IBonusTotal {
   DegreeStage: {
     id: number;
     title: string;
+    stage?: string;
+    degree?: string;
+    salary?: string;
   };
   nextDateBonus: string;
   Documents: Array<IDocBouns>;
@@ -54,6 +58,7 @@ export interface IBonusEmployeeTotal {
     degree: string;
     salary: string;
     notes: string;
+    difBonusDate: string
   }; 
   position: string;
   center: string;

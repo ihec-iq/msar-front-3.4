@@ -44,6 +44,7 @@ import { Icon } from "@iconify/vue";
 import axios from "axios";
 import { DropdownMenuArrow } from "radix-vue";
 import { forEach } from "lodash";
+import PrintCombo from "@/components/PrintCombo.vue";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -144,12 +145,15 @@ const printWindow = () => {
     header: "Header of the Page",
     footer: "Footer of the Page",
   };
-  setTimeout(function () {
-    // wait until all resources loaded
-    WinPrint?.document.close(); // necessary for IE >= 10
-    WinPrint?.focus(); // necessary for IE >= 10
-    WinPrint?.print(); // change window to winPrint
-    WinPrint?.close(); // change window to winPrint
+  setTimeout(() => {
+    WinPrint?.document.close();
+    WinPrint?.focus();
+    WinPrint?.print();
+
+    // close after a delay so dialog works
+    setTimeout(() => {
+      WinPrint?.close();
+    }, 1000);
   }, 250);
 };
 const getFilterData = async (page = 1) => {
@@ -289,6 +293,15 @@ const openFileHrDocument = (id: number) => {
   });
 };
 //#endregion
+const drowHtmlData = (): string => {
+  let html = ""
+
+  for (let index = 0; index < data.value.length; index++) {
+    const element = data.value[index];
+    html += drowRow(element);
+  }
+  return html
+}
 const drowRow = (row: IBonusEmployeeTotal): string => {
   // if (row.getBonusEmployeeTotal.length <= 1)
   //   return `<tr class="border-2 border-black text-[12px] text-center">
@@ -327,7 +340,10 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
   //   <td class="tdborderx"></td>
   // </tr>`;
   let html = "";
-  const length = row.getBonusEmployeeTotal.length / 2 + 1; console.log(length);
+  // Calculate length based on division by 2, rounding up for odd numbers
+  const length = row.getBonusEmployeeTotal.length % 2 === 0
+    ? Math.floor(row.getBonusEmployeeTotal.length / 2)
+    : Math.floor(row.getBonusEmployeeTotal.length / 2) + 1;
   let indexSub = 0
   for (let i = 0; i < length; i++) {
     //begin of row
@@ -336,62 +352,166 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
     // build the first of row (Name, Department, Study, Certificate, JobTitle)
     if (i == 0) {
       html += `
-              <td class="tdborderx border-black border-x-2 border-solid">${row.id}[${row.getBonusEmployeeTotal.length}]</td>
-              <td class="tdborderx" style="width: 200px;">${row.name}</td>
-              <td class="tdborderx">مكتب انتخابات كربلاء</td>
-              <td class="tdborderx">${row.department}</td>
-              <td class="tdborderx">${row.study}</td>
-              <td class="tdborderx">${row.certificate}</td>
-              <td class="tdborderx">${row.jobTitle}</td>
-              <td class="tdborderx w-[15px]">
+              <td class="border-black border-x-2 border-solid">${row.id}</td>
+              <td class="border-black border-x-2 border-solid" style="width: 200px;">${row.name}</td>
+              <td class="border-black border-x-2 border-solid">مكتب انتخابات كربلاء</td>
+              <td class="border-black border-x-2 border-solid">${row.department}</td>
+              <td class="border-black border-x-2 border-solid">${row.study}</td>
+              <td class="border-black border-x-2 border-solid">${row.certificate}</td>
+              <td class="border-black border-x-2 border-solid">${row.jobTitle}</td>
+              <td class="border-black border-x-2 border-solid w-[15px]">  
                 ${row.current.dateBonus?.slice(8, 10)}
               </td>
-              <td class="tdborderx w-[15px]">
+              <td class="border-black border-x-2 border-solid w-[15px]">
                 ${row.current.dateBonus?.slice(5, 7)}
               </td>
-              <td class="tdborderx w-[full] text-[10px] font-bold">
+              <td class="border-black border-x-2 border-solid w-[full] text-[10px] font-bold">
                 ${row.current.dateBonus?.slice(0, 4)}
               </td>
-              <td class="tdborderx">${row.current.degree}</td>
-              <td class="tdborderx">${row.current.stage}</td>
-              <td class="tdborderx">${row.current.salary}</td>
+              <td class="border-black border-x-2 border-solid">${row.current.degree}</td>
+              <td class="border-black border-x-2 border-solid">${row.current.stage}</td>
+              <td class="border-black border-x-2 border-solid">${row.current.salary}</td>
               `;
     } else {
       html += `
-    <td class="tdborderx border-black border-x-2 border-solid" span="13">....</td> `;
+    <td class=" border-black border-x-2 border-solid" colspan="13">ملحق  علاوة ${row.name}</td> `;
     }
     // build the repeated Bonus (Degree, Stage, Salary)
     try {
       for (let j = 0; j < 2; j++) {
         html += `<td class="
-        <td class="tdborderx">`
-          forEach(row.getBonusEmployeeTotal[indexSub].Documents, (item, index) => {
-            if (indexSub == index) {
-              html += item.title+" , ";
-            }
-          })
+        <td class="border-black border-x-2 border-solid">`
+        forEach(row.getBonusEmployeeTotal[indexSub].Documents, (item, index) => {
+          html += item.title + " " + item.number + " في " + item.date + " , ";
+        })
         html +=
-        `</td>
-        <td class="tdborderx">2</td>
-        <td class="tdborderx">3</td>
-        <td class="tdborderx">4</td>
-        <td class="tdborderx">5</td>
-        <td class="tdborderx">6</td>
-        <td class="tdborderx">7</td> 
+          `</td>
+        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(8, 10)}</td>
+        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(5, 7)}</td>
+        <td class="border-black border-x-2 border-solid text-[10px] ">${row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(0, 4)}</td>
+        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].DegreeStage.degree}</td>
+        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].DegreeStage.stage}</td>
+        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].DegreeStage.salary}</td> 
         `;
+        indexSub += 1
+
       }
     } catch (error) {
       console.log(error);
-    } 
+    }
 
     // end of row
     html += `</tr>`;
 
   }
-  console.log(row.name);
   return html;
-
 }
+
+
+//#region PrintCombo
+// أنواع الأحجام والاتجاه
+type PageSize = "A4" | "A5";
+type Orientation = "portrait" | "landscape";
+
+// خيارات الطباعة
+interface PrintOption {
+  label: string;      // النص الظاهر
+  elementId: string;  // الـ id للعنصر
+}
+
+const props = defineProps<{
+  printOptions: PrintOption[];
+  header?: string;
+  footer?: string;
+}>();
+
+const selectedElementId = ref("");
+const pageSize = ref<PageSize>("A4");
+const orientation = ref<Orientation>("portrait");
+
+// دالة إنشاء HTML للطباعة
+function buildPrintHtml(contentHtml: string, headerHtml?: string, footerHtml?: string) {
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    @page { size: ${pageSize.value} ${orientation.value}; margin: 15mm; }
+    body { font-family: sans-serif; }
+    .header { text-align: center; margin-bottom: 20px; }
+    .footer { text-align: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  ${headerHtml ? `<div class="header">${headerHtml}</div>` : ""}
+  ${contentHtml}
+  ${footerHtml ? `<div class="footer">${footerHtml}</div>` : ""}
+</body>
+</html>`;
+}
+
+// الطباعة عبر iframe
+function printWithIframe(elementId: string) {
+  const target = document.getElementById(elementId);
+  if (!target) {
+    console.warn("العنصر غير موجود:", elementId);
+    return;
+  }
+
+  const html = buildPrintHtml(target.innerHTML, props.header, props.footer);
+
+  const iframe = document.createElement("iframe");
+  iframe.style.position = "fixed";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.style.border = "0";
+  document.body.appendChild(iframe);
+
+  const frameDoc = iframe.contentDocument;
+  if (!frameDoc) return;
+
+  frameDoc.open();
+  frameDoc.write(html);
+  frameDoc.close();
+
+  iframe.onload = () => {
+    const frameWin = iframe.contentWindow;
+    if (frameWin) {
+      frameWin.focus();
+      setTimeout(() => {
+        frameWin.print();
+        document.body.removeChild(iframe);
+      }, 300);
+    }
+  };
+}
+
+function printSelected() {
+  if (!selectedElementId.value) {
+    alert("اختر عنصر للطباعة");
+    return;
+  }
+  printWithIframe(selectedElementId.value);
+}
+
+//#endregion PrintCombo
+
+
+const printRef = ref<InstanceType<typeof PrintCombo> | null>(null);
+
+function onClickExternalPrint() {
+  printRef.value?.printNow({
+    elementId: "printMe",
+    header: "<h3 style='margin:0'>جامعة بغداد</h3>",
+    footer: "<small>سجل الطباعة</small>",
+    pageSize: "A4",
+    orientation: "portrait",
+    includeHeader: true,
+    includeFooter: true,
+    includePageNumbers: true,
+  });
+}
+
 </script>
 <template>
   <IPage :HeaderTitle="t('Bonus.Alert')" :is-loading="isLoading">
@@ -419,14 +539,23 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
             <IInput v-model="searchFilter.bound" :disabled="!searchFilter.isBound" :type="EnumInputType.Number"
               class="w-[100px]" @keyup.enter="getFilterData" />
           </ICol>
-          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center" v-if="data.length > 0">{{
-            ShowPrint }}
-            <ICheckbox :model-value="ShowPrint">عرض الطباعة</ICheckbox>
-            <IButton :onClick="printAll" :text="t('Print')" />
+          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center" v-if="data.length > 0">
+            <ICheckbox v-model="ShowPrint">عرض الطباعة</ICheckbox>
+            <IButton :onClick="printAll" :text="t('Print')" v-if="ShowPrint" />
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow id="PrintArea" class="hiddenss" v-if="!ShowPrint">
+      <button @click="onClickExternalPrint">طباعة هذا الجدول</button>
+
+      <PrintCombo
+      :printOptions="[
+        { label: 'جدول الطلاب', elementId: 'printMe' }
+      ]"
+      header="<h3>جامعة بغداد</h3>"
+      footer="<p>قسم التسجيل</p>"
+    />
+
+      <IRow id="PrintArea" class="hiddenss" v-if="ShowPrint">
         <div id="printMe" class="[print-color-adjust:exact] p-1">
           <div class="overflow-auto">
             <div
@@ -499,11 +628,8 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
                   </th>
                 </tr>
               </thead>
-              <tbody class="text-[12px]">
-                <tr v-for="row in data" :key="row.id" class="border-2 border-black text-[12px] text-center"
-                  v-html="drowRow(row)">
+              <tbody class="text-[12px]" v-html="drowHtmlData()">
 
-                </tr>
               </tbody>
             </table>
           </div>

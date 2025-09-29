@@ -105,6 +105,7 @@ declare module 'vue' {
     ParticleImage: typeof import('./src/components/ui/ParticleImage/ParticleImage.vue')['default']
     'ParticleImage copy': typeof import('./src/components/ui/ParticleImage/ParticleImage copy.vue')['default']
     PopSetting: typeof import('./src/components/fixed/PopSetting.vue')['default']
+    PrintCombo: typeof import('./src/components/PrintCombo.vue')['default']
     RadiantText: typeof import('./src/components/ui/RadiantText.vue')['default']
     RadioGroup: typeof import('./src/components/ui/radio-group/RadioGroup.vue')['default']
     RadioGroupItem: typeof import('./src/components/ui/radio-group/RadioGroupItem.vue')['default']
