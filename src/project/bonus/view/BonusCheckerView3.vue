@@ -57,7 +57,7 @@ watch(
 );
 
 //#region Fast Search
-const fastSearch = ref("نجم");
+const fastSearch = ref("");
 const filterByIDName = (Bonus: IBonus) => {
   if (Bonus.Employee.name.includes(fastSearch.value)) {
     return true;
@@ -408,110 +408,6 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
 }
 
 
-//#region PrintCombo
-// أنواع الأحجام والاتجاه
-type PageSize = "A4" | "A5";
-type Orientation = "portrait" | "landscape";
-
-// خيارات الطباعة
-interface PrintOption {
-  label: string;      // النص الظاهر
-  elementId: string;  // الـ id للعنصر
-}
-
-const props = defineProps<{
-  printOptions: PrintOption[];
-  header?: string;
-  footer?: string;
-}>();
-
-const selectedElementId = ref("");
-const pageSize = ref<PageSize>("A4");
-const orientation = ref<Orientation>("portrait");
-
-// دالة إنشاء HTML للطباعة
-function buildPrintHtml(contentHtml: string, headerHtml?: string, footerHtml?: string) {
-  return `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <style>
-    @page { size: ${pageSize.value} ${orientation.value}; margin: 15mm; }
-    body { font-family: sans-serif; }
-    .header { text-align: center; margin-bottom: 20px; }
-    .footer { text-align: center; margin-top: 20px; }
-  </style>
-</head>
-<body>
-  ${headerHtml ? `<div class="header">${headerHtml}</div>` : ""}
-  ${contentHtml}
-  ${footerHtml ? `<div class="footer">${footerHtml}</div>` : ""}
-</body>
-</html>`;
-}
-
-// الطباعة عبر iframe
-function printWithIframe(elementId: string) {
-  const target = document.getElementById(elementId);
-  if (!target) {
-    console.warn("العنصر غير موجود:", elementId);
-    return;
-  }
-
-  const html = buildPrintHtml(target.innerHTML, props.header, props.footer);
-
-  const iframe = document.createElement("iframe");
-  iframe.style.position = "fixed";
-  iframe.style.width = "0";
-  iframe.style.height = "0";
-  iframe.style.border = "0";
-  document.body.appendChild(iframe);
-
-  const frameDoc = iframe.contentDocument;
-  if (!frameDoc) return;
-
-  frameDoc.open();
-  frameDoc.write(html);
-  frameDoc.close();
-
-  iframe.onload = () => {
-    const frameWin = iframe.contentWindow;
-    if (frameWin) {
-      frameWin.focus();
-      setTimeout(() => {
-        frameWin.print();
-        document.body.removeChild(iframe);
-      }, 300);
-    }
-  };
-}
-
-function printSelected() {
-  if (!selectedElementId.value) {
-    alert("اختر عنصر للطباعة");
-    return;
-  }
-  printWithIframe(selectedElementId.value);
-}
-
-//#endregion PrintCombo
-
-
-const printRef = ref<InstanceType<typeof PrintCombo> | null>(null);
-
-function onClickExternalPrint() {
-  printRef.value?.printNow({
-    elementId: "printMe",
-    header: "<h3 style='margin:0'>جامعة بغداد</h3>",
-    footer: "<small>سجل الطباعة</small>",
-    pageSize: "A4",
-    orientation: "portrait",
-    includeHeader: true,
-    includeFooter: true,
-    includePageNumbers: true,
-  });
-}
-
 </script>
 <template>
   <IPage :HeaderTitle="t('Bonus.Alert')" :is-loading="isLoading">
@@ -543,17 +439,20 @@ function onClickExternalPrint() {
             <ICheckbox v-model="ShowPrint">عرض الطباعة</ICheckbox>
             <IButton :onClick="printAll" :text="t('Print')" v-if="ShowPrint" />
           </ICol>
+          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center" v-if="data.length > 0">
+            <PrintCombo :printOptions="[
+              { label: '', elementId: 'printMe' }
+            ]" header="<h3>مكتب كربلاء الانتخابي  </h3>" footer="<p>كل الحقوق محفوظة - نظام مسار لادارة المؤوسسات</p>" />
+          </ICol>
+          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center"
+            v-if="data.length >= limits[0].id">
+            <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
+              @onChange="getFilterData()" />
+          </ICol>
         </ISearchBar>
       </IRow>
-      <button @click="onClickExternalPrint">طباعة هذا الجدول</button>
 
-      <PrintCombo
-      :printOptions="[
-        { label: 'جدول الطلاب', elementId: 'printMe' }
-      ]"
-      header="<h3>جامعة بغداد</h3>"
-      footer="<p>قسم التسجيل</p>"
-    />
+
 
       <IRow id="PrintArea" class="hiddenss" v-if="ShowPrint">
         <div id="printMe" class="[print-color-adjust:exact] p-1">
@@ -678,13 +577,9 @@ function onClickExternalPrint() {
             :searchFilter="searchFilter"
           ></IPagination> -->
           <div class="w-full flex flex-row">
-            <div class="basis-4/5 overflow-auto">
+            <div class="overflow-auto">
               <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
                 @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-            </div>
-            <div class="basis-1/5" v-if="data.length >= limits[0].id">
-              <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-                @onChange="getFilterData()" />
             </div>
           </div>
           <SimpleLoading v-if="isLoading">.</SimpleLoading>
