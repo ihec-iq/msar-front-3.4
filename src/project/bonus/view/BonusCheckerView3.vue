@@ -379,6 +379,27 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
     // build the repeated Bonus (Degree, Stage, Salary)
     try {
       for (let j = 0; j < 2; j++) {
+        let yearNow = new Date().getFullYear().toString()
+        let year = row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(8, 10)
+
+        let month = parseInt(year) <= parseInt(yearNow)
+          ? row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(5, 7)
+          : ""
+        let day = parseInt(year) <= parseInt(yearNow)
+          ? row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(0, 4)
+          : ""
+        let degree = parseInt(year) <= parseInt(yearNow)
+          ? row.getBonusEmployeeTotal[indexSub].DegreeStage.degree
+          : ""
+        let stage = parseInt(year) <= parseInt(yearNow)
+          ? row.getBonusEmployeeTotal[indexSub].DegreeStage.stage
+          : ""
+        let salary = parseInt(year) <= parseInt(yearNow)
+          ? row.getBonusEmployeeTotal[indexSub].DegreeStage.salary
+          : ""
+        year = parseInt(year) <= parseInt(yearNow)
+          ? year
+          : ""
         html += `<td class="
         <td class="border-black border-x-2 border-solid">`
         forEach(row.getBonusEmployeeTotal[indexSub].Documents, (item, index) => {
@@ -386,12 +407,12 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
         })
         html +=
           `</td>
-        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(8, 10)}</td>
-        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(5, 7)}</td>
-        <td class="border-black border-x-2 border-solid text-[10px] ">${row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(0, 4)}</td>
-        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].DegreeStage.degree}</td>
-        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].DegreeStage.stage}</td>
-        <td class="border-black border-x-2 border-solid">${row.getBonusEmployeeTotal[indexSub].DegreeStage.salary}</td> 
+        <td class="border-black border-x-2 border-solid">${year}</td>
+        <td class="border-black border-x-2 border-solid">${month}</td>
+        <td class="border-black border-x-2 border-solid text-[10px] ">${day}</td>
+        <td class="border-black border-x-2 border-solid">${degree}</td>
+        <td class="border-black border-x-2 border-solid">${stage}</td>
+        <td class="border-black border-x-2 border-solid">${salary}</td> 
         `;
         indexSub += 1
 
@@ -441,8 +462,12 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
           </ICol>
           <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center" v-if="data.length > 0">
             <PrintCombo :printOptions="[
-              { label: '', elementId: 'printMe' }
-            ]" header="<h3>مكتب كربلاء الانتخابي  </h3>" footer="<p>كل الحقوق محفوظة - نظام مسار لادارة المؤوسسات</p>" />
+              { label: 'جدول العلاوات', elementId: 'printMe' }
+            ]" :headerHtml="`<div style='font-weight:700'>مكتب كربلاء الانتخابي</div><div>تقرير آلي</div>`"
+              :pageFooterHtml="`<p>كل الحقوق محفوظة - نظام مسار لادارة المؤوسسات</p>`"
+              :reportFooterHtml="`توقيع المدير • التاريخ: ${new Date().toLocaleDateString()}`"
+              :reportFooterNewPage="false" footerAlign="center" :defaultPageSize="'A4'" :defaultOrientation="'portrait'"
+              :defaultMarginMm="15" />
           </ICol>
           <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center"
             v-if="data.length >= limits[0].id">

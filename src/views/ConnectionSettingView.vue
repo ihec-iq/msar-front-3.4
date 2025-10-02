@@ -156,7 +156,7 @@ onMounted(async () => {
       </IRow>
     </IPageContent>
     <template #Footer>
-      <IFooterCrud :show-add="false" :onCreate="store" :show-delete="false" class="" />
+      <IFooterCrud :show-add="false" :onUpdate="store" :show-delete="false" class="" />
     </template>
   </IPage>
 </template>
