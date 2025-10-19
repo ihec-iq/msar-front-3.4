@@ -32,7 +32,6 @@ declare module 'vue' {
     ComboboxList: typeof import('./src/components/ui/combobox/ComboboxList.vue')['default']
     ComboboxSeparator: typeof import('./src/components/ui/combobox/ComboboxSeparator.vue')['default']
     ComboboxTrigger: typeof import('./src/components/ui/combobox/ComboboxTrigger.vue')['default']
-    copy: typeof import('./src/components/ui/ParticleImage/ParticleImage copy.vue')['default']
     DeleteButton: typeof import('./src/components/dropDown/DeleteButton.vue')['default']
     DropdownMenu: typeof import('./src/components/ui/dropdown-menu/DropdownMenu.vue')['default']
     DropdownMenuCheckboxItem: typeof import('./src/components/ui/dropdown-menu/DropdownMenuCheckboxItem.vue')['default']
