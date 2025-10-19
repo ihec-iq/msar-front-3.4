@@ -98,6 +98,7 @@ declare module 'vue' {
     Loading: typeof import('./src/components/general/loading.vue')['default']
     LoadingFull: typeof import('./src/components/general/loadingFull.vue')['default']
     LoadingScreen: typeof import('./src/components/LoadingScreen.vue')['default']
+    Model: typeof import('./src/components/Model.vue')['default']
     MovingList: typeof import('./src/components/MovingList.vue')['default']
     NamePage: typeof import('./src/components/general/namePage.vue')['default']
     NavBar1: typeof import('./src/components/fixed/NavBar1.vue')['default']

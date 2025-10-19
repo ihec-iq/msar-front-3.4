@@ -429,9 +429,10 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
 }
 
 
+const isOpenModel = ref(false)
 </script>
 <template>
-  <IPage :HeaderTitle="t('Bonus.Alert')" :is-loading="isLoading">
+  <IPage :HeaderTitle="t('Bonus.Alert')" :is-loading="isLoading" :isOpenModel="isOpenModel" @update:isOpenModel="isOpenModel = $event">
     <template #HeaderButtons>
       <IButton class="w-[200px]" :onClick="recheck" :text="t('Bonus.ReCalculate')" />
     </template>
@@ -560,10 +561,15 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
         </div>
       </IRow>
       <IRow>
+        <!-- <div>
+          <button @click="isOpenModel = true" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+            فتح النافذة
+          </button> 
+        </div> -->
         <ITable :items="data" :headers="headers">
           <template v-slot:checkId="{ row }">
-            <div class="cursor-pointer h-full w-full">
-              <input type="checkbox" v-model="row.checked" clas s="cursor-pointer" :id="'checkId' + row.id" />
+            <div class="cursor-pointer h-full w-full" @click="row.checked = !row.checked">
+              <input type="checkbox" v-model="row.checked" class="cursor-pointer" :id="'checkId' + row.id" />
             </div>
           </template>
           <template v-slot:current.dateBonus="{ row }">
