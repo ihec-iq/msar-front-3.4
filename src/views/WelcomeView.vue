@@ -34,12 +34,24 @@ onMounted(async () => {
             <RadiantText
                 class="inline-flex w-full items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400"
                 :duration="5">
-                <div class="text-3xl font-bold">✨ Msar Enterprise resource planning</div>
+                <div class="text-3xl font-bold">
+                    ✨ Msar
+                    <span class="text-sm font-bold">
+                        Enterprise resource planning
+                    </span>
+                </div>
             </RadiantText>
+        </div>
+        <div class="flex flex-col w-full items-center justify-center cursor-pointer" @click="navigateTo('/login')">
             <RadiantText
                 class="inline-flex w-full  items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400"
                 :duration="5">
-                <div class="text-3xl font-bold">نظام مسار لتخطيط موارد المؤسسة</div>
+                <div class="text-3xl font-bold">
+                    نظام مسار
+                    <span class="text-sm font-bold">
+                        لتخطيط موارد المؤسسة
+                    </span>
+                </div>
             </RadiantText>
         </div>
     </div>

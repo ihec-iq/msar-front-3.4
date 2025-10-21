@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Toolbar from "@/components/fixed/ToolBar1.vue";
-import Navbar from "@/components/fixed/NavBar1.vue";
+import Toolbar from "@/components/fixed/ToolBar.vue";
+import Navbar from "@/components/fixed/NavBar.vue"
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 const rtlStore = useRtlStore();
