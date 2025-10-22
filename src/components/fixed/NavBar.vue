@@ -100,7 +100,7 @@ onUnmounted(() => {
 <template>
   <div class="bg-sideNav dark:bg-[#2c3147] h-full ">
 <!-- Mobile hamburger (hidden on lg+) -->
-  <div class="lg:hidden fixed top-3 ltr:left-3 rtl:right-3 z-[1001]">
+  <div class="lg:hidden  fixed top-0 ltr:left-3 rtl:right-1 z-[1001]">
     <button @click="toggleMobileMenu" class="p-2 rounded-xl shadow bg-white/90 dark:bg-[#2b2f42]" aria-label="Open menu"
       aria-controls="mobile-drawer" :aria-expanded="showMobileMenu">
       <Icon icon="mdi:menu" class="text-2xl" />

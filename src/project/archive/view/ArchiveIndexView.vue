@@ -110,7 +110,7 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
 //#endregion
 </script>
 <template>
-  <IPage :HeaderTitle="t('Archive')">
+  <IPage :HeaderTitle="t('Archive.Index')">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addArchive" :text="t('Add')" />
     </template>
@@ -164,10 +164,10 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow class="mt-0">
+      <IRow class="mt-0 overflow-x-auto">
         <CardsArchiveTypeIndex :OnClick="getFilterData" />
       </IRow>
-      <IRow>
+      <IRow class="mt-0 overflow-x-auto">
         <EmailCardArchiveIndex
           v-for="(item, index) in data"
           :key="index"
