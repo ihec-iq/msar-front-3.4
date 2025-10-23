@@ -119,7 +119,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -134,7 +134,7 @@ onMounted(async () => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :col="2" :col-lg="2" :col-md="2">
+      <IRow :cols="2"  :cols-lg="2" :cols-md="2">
         <ICol
           :span="1"
           :span-lg="1"

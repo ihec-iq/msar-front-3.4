@@ -37,7 +37,7 @@ import ICol from "@/components/ihec/ICol.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ILabel from "@/components/ihec/ILabel.vue";
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 import type { IVacationFilter } from "../IVacation";
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
@@ -195,7 +195,7 @@ const headersSick = ref<Array<ITableHeader>>([
     :is-loading="isLoadingDaily && isLoadingTime && isLoadingSick"
   >
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput

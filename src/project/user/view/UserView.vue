@@ -144,7 +144,7 @@ onMounted(async () => {
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <IPageContent>
       <IRow>
-        <IRow col="2" col-lg="2" col-md="1" col-sm="1">
+        <IRow  cols="2" cols-lg="2" cols-md="1" cols-sm="1">
           <ICol>
             <IInput
               :label="t('Name')"

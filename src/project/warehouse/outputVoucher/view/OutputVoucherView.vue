@@ -583,7 +583,7 @@ async function fetchFn(query: string, page = 1) {
     <IPageContent>
       <IContainer>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="2" span-sm="1" class="flex flex-wrap items-center">
               <IInput :label="t('OutputVoucher.Number')" class="w-[50%]" name="Number" v-model="outputVoucher.number"
                 :type="EnumInputType.Text" :FnClick="checkBillExists" FunIcon="search"

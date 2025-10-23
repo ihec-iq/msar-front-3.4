@@ -22,7 +22,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import CardBarrenSectionReportIndex from "../component/CardBarrenSectionReportIndex.vue";
@@ -124,7 +124,7 @@ interface IBarrenSectionReportIndex {
         </ISearchBar>
       </IRow>
       <IRow>
-      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
+      <IRow :cols="2"  :cols-lg="2" :cols-md="2" :cols-sm="1" >
         <ICol :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.sectionId">
           <CardBarrenSectionReportIndex :item="item" />
         </ICol>

@@ -22,7 +22,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import dropdownmenu from "../component/dropdownmenu.vue";

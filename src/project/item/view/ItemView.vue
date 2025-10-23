@@ -220,7 +220,7 @@ const reset = () => {
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="1" span-sm="1">
               <IInput :label="t('Item.Name')" name="name" v-model="item.name" :type="EnumInputType.Text" />
             </ICol>

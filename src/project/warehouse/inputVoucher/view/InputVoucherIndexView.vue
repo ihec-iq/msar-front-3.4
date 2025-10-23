@@ -107,7 +107,7 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :col="1" :col-md="2" :col-lg="1">
+      <IRow :cols="1" :cols-md="2"  :cols-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
@@ -120,7 +120,7 @@ onMounted(async () => {
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
-      <IRow :col="4" :col-lg="4" :col-md="3" :col-sm="1" :col-xs="1">
+      <IRow :cols="4"  :cols-lg="4" :cols-md="3" :cols-sm="1" >
         <ICol class="my-2" :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.id">
           <!-- card -->
            <CardInputVoucherIndex

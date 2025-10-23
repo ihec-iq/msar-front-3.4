@@ -456,7 +456,7 @@ const headers = ref<Array<ITableHeader>>([
     <IPageContent>
       <IContainer>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
               <IInput class="w-[50%]" :label="t('InputVoucher.Number')" name="InputVoucher.Number"
                 v-model="inputVoucher.number" :type="EnumInputType.Text" />
@@ -528,7 +528,7 @@ const headers = ref<Array<ITableHeader>>([
           </IRow>
         </IForm>
         <!-- file -->
-        <IRow col-lg="4" col-md="4" col-sm="2" :title="t('files')">
+        <IRow cols-lg="4" cols-md="4" cols-sm="2" :title="t('files')">
           <ICol span="3" span-md="3" span-sm="2" v-for="document in inputVoucher.FilesDocument" :key="document.name">
             <FilePreview :file="document" @updateList="updateList">
             </FilePreview>
@@ -548,7 +548,7 @@ const headers = ref<Array<ITableHeader>>([
         <IRow>
           <AddItemPopup @setItem="setItemFromChild" v-model="IsAddItem" ref="addItemPopupRef"></AddItemPopup>
         </IRow>
-        <IRow col-lg="2" col-md="1" col-sm="1" col-xs="1">
+        <IRow cols-lg="2" cols-md="1" cols-sm="1" >
           <ICol>
             <div class="mb-1 md:text-md text-base ml-2 font-bold dark:text-gray-300">
               {{ t("Item.Choose") }}
@@ -663,7 +663,7 @@ const headers = ref<Array<ITableHeader>>([
           </ICol>
         </IRow>
         <!-- for insert item proparties -->
-        <IRow col-lg="4" :col="4" col-xl="4" col-md="2" col-sm="1" col-xs="1">
+        <IRow cols-lg="4"  :cols="4" cols-xl="4" cols-md="2" cols-sm="1">
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput :label="t('Item.Description')" v-model="VoucherItemTemp.description" />
           </ICol>

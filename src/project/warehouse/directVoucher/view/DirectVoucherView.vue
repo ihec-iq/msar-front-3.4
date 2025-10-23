@@ -368,7 +368,7 @@ onMounted(async () => {
     <IPageContent>
       <IContainer>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
               <IInput :label="t('InputVoucher.Number')" name="directVoucher.Number" v-model="directVoucher.number"
                 type="text" />
@@ -441,7 +441,7 @@ onMounted(async () => {
     <IContainer>
       <van-popup class="overflow-hidden dark:bg-darkNav" v-model:show="showPop" round position="bottom">
         <!-- for search Item -->
-        <IRow col-lg="4" col-md="1" col-sm="1" col-xs="1">
+        <IRow cols-lg="4" cols-md="1" cols-sm="1">
           <ICol>
             <div class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300">
               {{ t("Item") }}
@@ -501,7 +501,7 @@ onMounted(async () => {
           </ICol>
           <ICol :span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1"
             v-else-if="VoucherItemTemp.Item.name != ''">
-            <IRow col="4">
+            <IRow  cols="4">
               <ICol span="1">
                 <ILabel :title="t('Code')">
                   {{ VoucherItemTemp.Item.code }}</ILabel>
@@ -526,7 +526,7 @@ onMounted(async () => {
           </ICol>
         </IRow>
         <!-- for insert item proparties -->
-        <IRow col-lg="4" :col="4" col-xl="4" col-md="2" col-sm="1" col-xs="1">
+        <IRow cols-lg="4"  :cols="4" cols-xl="4" cols-md="2" cols-sm="1">
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput :label="t('Item.Description')" v-model="VoucherItemTemp.description" />
           </ICol>

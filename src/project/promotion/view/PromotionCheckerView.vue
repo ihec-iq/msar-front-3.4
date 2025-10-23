@@ -31,7 +31,7 @@ import type { IEmployee } from "@/project/employee/IEmployee";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import { useSettingStore } from "@/project/core/settingStore";
 import type { ISetting } from "@/project/core/ISetting";
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import { getError } from "@/utilities/helpers";
 import Swal from "sweetalert2";
@@ -164,7 +164,7 @@ const headers = ref<Array<ITableHeader>>([
       <IButton width="28" :onClick="recheck" :text="t('Promotion.ReCalculate')" />
     </template>
     <IPageContent>
-      <IRow :col="1" :col-md="1" :col-lg="1" class="scroll-auto">
+      <IRow :cols="1" :cols-md="1"  :cols-lg="1" class="scroll-auto">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="3" :span-md="3" :span="2" :span-sm="4">
             <IInput   :placeholder="t('SearchForUser')" v-model="fastSearch"

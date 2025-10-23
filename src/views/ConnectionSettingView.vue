@@ -123,7 +123,7 @@ onMounted(async () => {
   <IPage :HeaderTitle="namePage">
     <IPageContent>
       <div class="h-5"> .</div>
-      <IRow col-lg="2" col-md="2" col-sm="1">
+      <IRow cols-lg="2" cols-md="2" cols-sm="1">
         <ICol span="1" span-md="1" span-sm="1" class="flex">
           <div class="mb-2 md:text-sm text-base mr-3 font-bold mx-2 text-text dark:text-textLight">
             {{ t("ConnectionString") }}
@@ -145,7 +145,7 @@ onMounted(async () => {
         </ICol>
 
       </IRow>
-      <IRow col-lg="2" col-md="2" col-sm="1"> 
+      <IRow cols-lg="2" cols-md="2" cols-sm="1"> 
         <ICol span="1" span-md="1" span-sm="1" class="flex">
           <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight mx-2">
             {{ t("Organization") }}

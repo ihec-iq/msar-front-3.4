@@ -412,9 +412,9 @@ const active = ref(0);
           <van-tab title="معلومات العلاوات" name="employee">
             <IRow
               title="معلومات العلاوة الحالية"
-              col-lg="4"
-              col-md="2"
-              col-sm="1"
+              cols-lg="4"
+              cols-md="2"
+              cols-sm="1"
             >
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput
@@ -437,7 +437,7 @@ const active = ref(0);
                 />
               </ICol>
             </IRow>
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="2" span-sm="4">
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -591,7 +591,7 @@ const active = ref(0);
                 />
               </div>
             </IRow>
-            <IRow col-lg="1" col-md="1" col-sm="1">
+            <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseFiles" :headers="headerFiles">
                   <template v-slot:isActive="{ row }">
@@ -660,7 +660,7 @@ const active = ref(0);
                 />
               </div>
             </IRow>
-            <IRow col-lg="1" col-md="1" col-sm="1">
+            <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseBonus" :headers="headerBonus">
                   <template v-slot:actions="{ row }">
