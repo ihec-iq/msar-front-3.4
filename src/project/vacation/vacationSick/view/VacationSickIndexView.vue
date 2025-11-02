@@ -116,7 +116,7 @@ let index = 1;
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -132,7 +132,7 @@ let index = 1;
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
-      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
+      <IRow :cols="2"  :cols-lg="2" :cols-md="2" :cols-sm="1" >
         <ICol
           :span="1"
           :span-lg="1"

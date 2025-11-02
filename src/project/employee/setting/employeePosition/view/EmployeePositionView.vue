@@ -212,7 +212,7 @@ const reset = () => {
     </template>
     <IPageContent>
       <IRow>
-        <IRow col-lg="2" col="2" col-md="2">
+        <IRow cols-lg="2"  cols="2" cols-md="2">
           <ICol>
             <IInput :label="t('EmployeePosition.Name')" name="name" v-model="employeePosition.name" :type="EnumInputType.Text" />
           </ICol>

@@ -393,7 +393,7 @@ const changeSelectedType = () => {
       <IRow>
         <van-tabs v-model:active="ActiveTab">
           <van-tab title="معلومات الكتاب">
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Title')" name="Name" v-model="hrDocument.title" :type="EnumInputType.Text" />
               </ICol>
@@ -449,13 +449,13 @@ const changeSelectedType = () => {
               </ICol>
 
             </IRow>
-            <IRow col-lg="1" col-md="1" col-sm="1">
+            <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput :label="t('Notes')" v-model="hrDocument.notes" name="notes" />
               </ICol>
             </IRow>
             <!-- file -->
-            <IRow col-lg="1" col-md="1" col-sm="1">
+            <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <div class="collapse align-middle w-full" v-if="ToNumber(hrDocument.FilesDocument?.length) > 0">
                 <input type="checkbox" class="" v-model="openSectionDocument" checked />
                 <div
@@ -491,12 +491,12 @@ const changeSelectedType = () => {
             </div>
           </van-tab>
           <van-tab title="توزيع متعدد" v-if="hrDocument.id == 0 && disabledChangeEmployee == false">
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IRadio label="توزيع مفرد  " name="ChosePushBy" v-model="ChosePushBy" value="0" />
               </ICol>
             </IRow>
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IRadio label="توزيع حسب القسم" name="ChosePushBy" v-model="ChosePushBy" value="1" />
               </ICol>
@@ -507,12 +507,12 @@ const changeSelectedType = () => {
                     " />
               </ICol>
             </IRow>
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IRadio label="توزيع لجميع الموظفين" name="ChosePushBy" v-model="ChosePushBy" value="2" />
               </ICol>
             </IRow>
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IRadio label="توزيع محدد" name="ChosePushBy" v-model="ChosePushBy" value="3" />
               </ICol>

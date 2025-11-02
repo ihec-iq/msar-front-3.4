@@ -37,7 +37,7 @@ import ICol from "@/components/ihec/ICol.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ILabel from "@/components/ihec/ILabel.vue";
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
 const namePage = ref("");
@@ -217,7 +217,7 @@ const headersSick = ref<Array<ITableHeader>>([
     :is-loading="isLoadingDaily && isLoadingTime && isLoadingSick"
   >
     <IPageContent>
-      <IRow :col="3" :col-md="2" :col-lg="3">
+      <IRow :cols="3" :cols-md="2"  :cols-lg="3">
         <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
           <IInput
             :disabled="true"

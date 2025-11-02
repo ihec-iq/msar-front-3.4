@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { watch } from 'vue';
-import type {PropType} from 'vue'
+import { ref, watch } from 'vue';
+import type { PropType } from 'vue'
 
-const modelValue = defineModel<boolean>();
+const emit = defineEmits(['update:modelValue']);
+const localValue = ref(false);
 
 const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: false
+  },
   label: {
     type: String,
     default: "",
@@ -25,15 +30,18 @@ const props = defineProps({
     type: Function as PropType<() => void>,
     required: false,
   }
-}); 
-
-watch(modelValue, (newValue) => {
-if (props.onChange) {
-  props.onChange();
-}
 });
-// import { useI18n } from "@/stores/i18n/useI18n";
-// const { t } = useI18n();
+
+watch(() => props.modelValue, (newValue) => {
+  localValue.value = newValue;
+});
+
+const handleChange = () => {
+  emit('update:modelValue', localValue.value);
+  if (props.onChange) {
+    props.onChange();
+  }
+};
 </script>
 
 <template>
@@ -47,8 +55,9 @@ if (props.onChange) {
       :disabled="disabled"
       type="checkbox"
       class="toggle toggle-secondary mx-2"
-      v-model="modelValue"
+      v-model="localValue"
       :checked="checked"
+      @change="handleChange"
     />
   </div>
 </template>

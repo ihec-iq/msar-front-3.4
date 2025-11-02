@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import loading from "../general/loading.vue";
 import IButton2 from "./IButton2.vue";
+import Modal from '@/components/Model.vue'
 
-defineProps({
+const props = defineProps({
   HeaderTitle: {
     type: String,
     default: "IHEC",
@@ -19,10 +20,20 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  isOpenModel: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const emit = defineEmits(['update:isOpenModel']);
 
 const reloadPage = () => {
   window.location.reload();
+};
+
+const handleCloseModal = () => {
+  emit('update:isOpenModel', false);
 };
 </script>
 
@@ -52,7 +63,7 @@ const reloadPage = () => {
           </span>
           <span v-if="isLoading == false" class="flex">
             <IButtonIcon color="green" width="15" type="outlined" icon="autorenew" :onClick="reloadPage" />
-            <slot name="HeaderButtons" ></slot>
+            <slot name="HeaderButtons"></slot>
           </span>
         </div>
       </div>
@@ -65,4 +76,11 @@ const reloadPage = () => {
       <slot name="Footer"></slot>
     </div>
   </div>
+  <Modal :isOpenModel="isOpenModel" @close="handleCloseModal">
+    <h2 class="text-xl font-semibold mb-4">📦 Changelog</h2>
+    <p class="text-gray-700 dark:text-gray-300">
+      الإصدار الحالي: <strong>v4.0.0-beta.434</strong><br />
+      تم إصلاح بيئة التشغيل وإضافة دعم SERVICE_NAME في Docker Compose.
+    </p>
+  </Modal>
 </template>

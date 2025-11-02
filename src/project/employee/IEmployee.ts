@@ -1,15 +1,15 @@
 import type { IItem } from "../item/IItem";
 import type { ISection } from "@/project/section/ISection";
-import type { IStock } from "../warehouse/settingVoucher/stock/IStock";
-import type { IUser } from "../user/IUser";
-import type { IVacationDaily } from "../vacation/vacationDaily/IVacationDaily";
-import type { IVacationSick } from "../vacation/vacationSick/IVacationSick";
-import type { IVacationTime } from "../vacation/vacationTime/IVacationTime";
-import type { IDegreeStage, IBonusJobTitle, IStudy, ICertificate } from "../bonus/IBonus";
-import type { IDocument } from "../archive/IArchive";
-import type { IEmployeeType } from "./setting/employeeType/IEmployeeType";
-import type { IEmployeeCenter } from "./setting/employeeCenter/IEmployeeCenter";
-import type { IEmployeePosition } from "./setting/employeePosition/IEmployeePosition";
+import type { IStock } from "@/project/warehouse/settingVoucher/stock/IStock";
+import type { IUser } from "@/project/user/IUser";
+import type { IVacationDaily } from "@/project/vacation/vacationDaily/IVacationDaily";
+import type { IVacationSick } from "@/project/vacation/vacationSick/IVacationSick";
+import type { IVacationTime } from "@/project/vacation/vacationTime/IVacationTime";
+import type { IDegreeStage, IBonusJobTitle, IStudy, ICertificate } from "@/project/bonus/IBonus";
+import type { IDocument } from "@/project/archive/IArchive";
+import type { IEmployeeType } from "@/project/employee/setting/employeeType/IEmployeeType";
+import type { IEmployeeCenter } from "@/project/employee/setting/employeeCenter/IEmployeeCenter";
+import type { IEmployeePosition } from "@/project/employee/setting/employeePosition/IEmployeePosition";
 
 export interface IEmployee {
   id: number;

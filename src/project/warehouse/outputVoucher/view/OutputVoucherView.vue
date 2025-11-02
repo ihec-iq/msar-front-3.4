@@ -99,8 +99,9 @@ const OutputVoucherItem = ref<IOutputVoucherItem>({
   price: 1,
   value: 1,
   notes: "",
-  inputVoucherItemId: 0,
+  inputVoucherItemId: 0, 
   InputVoucherItem: {
+    inputVoucherId: 0,
     Item: {
       id: 0,
       name: "",
@@ -520,7 +521,14 @@ const checkBillExists = () => {
       SuccessToast(t("InputVoucher.BillNotExists"));
     });
 };
-
+const goToInputVoucher = (id: number) => {
+  const routeUrl = router.resolve({
+    name: "inputVoucherUpdate",
+    params: { id: id },
+  });
+  window.open(routeUrl.href, "_blank");
+  return;
+};
 // في نفس الصفحة اللي تستعمل بيها الكومبوننت
 const inputVoucherItemsVSelect = ref<IInputVoucherItem[]>([]);
 
@@ -575,7 +583,7 @@ async function fetchFn(query: string, page = 1) {
     <IPageContent>
       <IContainer>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="2" span-sm="1" class="flex flex-wrap items-center">
               <IInput :label="t('OutputVoucher.Number')" class="w-[50%]" name="Number" v-model="outputVoucher.number"
                 :type="EnumInputType.Text" :FnClick="checkBillExists" FunIcon="search"
@@ -768,18 +776,7 @@ async function fetchFn(query: string, page = 1) {
                   {{ OutputVoucherItem.InputVoucherItem.notes }}</ILabel>
               </IBasis>
             </IFlex>
-          </IBasis>
-          <IBasis base="3/4" v-else class="border-2 border-dotted border-gray-600">
-            <div class="w-full text-center align-middle border-gray-600">
-              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
-                قم بأختيار مادة
-              </div>
-            </div>
-          </IBasis>
-        </IFlex> 
-        <!-- for insert item Properties -->
-        <div v-if="OutputVoucherItem.inputVoucherItemId>0">
-          <div class="flex p-2">
+            <div class="flex p-2">
             <div class="w-full">
               <ILabel title="ملاحظات سند الادخال">
                 {{ OutputVoucherItem.InputVoucherItem.description }}
@@ -794,13 +791,27 @@ async function fetchFn(query: string, page = 1) {
                 v-model="OutputVoucherItem.InputVoucherItem.price"
               />
             </div> -->
-            <div class="w-1/4">
+            <div class="w-2/5 flex">
               <ILabel title="سعر سند الادخال" class="mx-1">
                 {{ ConvertToMoneyFormat(OutputVoucherItem.InputVoucherItem.price) }}
               </ILabel>
+              <IButton2 class="mt-5" text="فتح السند" color="blue" :variant="EnumButtonType.Text" pre-icon="folder"
+                :onClick="() => goToInputVoucher(OutputVoucherItem.InputVoucherItem.inputVoucherId ?? 0)" />
             </div>
-            
+
           </div>
+          </IBasis>
+          <IBasis base="3/4" v-else class="border-2 border-dotted border-gray-600">
+            <div class="w-full text-center align-middle border-gray-600">
+              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
+                قم بأختيار مادة
+              </div>
+            </div>
+          </IBasis>
+        </IFlex>
+        <!-- for insert item Properties -->
+        <div v-if="OutputVoucherItem.inputVoucherItemId > 0">
+          
           <IRow>
             <ICol class="flex ">
               <div class="w-1/5">
@@ -812,19 +823,21 @@ async function fetchFn(query: string, page = 1) {
                     " :auto-correct="false" :min="1" />
               </div>
               <div class="w-1/5">
-              <ILabel :title="t('Total')">
-                {{ ConvertToMoneyFormat(OutputVoucherItem.value) }}
-              </ILabel>
-            </div>
+                <ILabel :title="t('Total')">
+                  {{ ConvertToMoneyFormat(OutputVoucherItem.value) }}
+                </ILabel>
+              </div>
               <IInput class="w-3/5" :label="t('Note')" :type="EnumInputType.Text" v-model="OutputVoucherItem.notes" />
             </ICol>
           </IRow>
         </div>
 
         <!-- buttons -->
-        <IContainer class="flex flex-row my-10 px-2" >
-          <IButton2 :text="t('Add')" color="blue" :variant="EnumButtonType.Default" :on-click="AddItem" v-if="IsAdd && OutputVoucherItem.inputVoucherItemId>0" />
-          <IButton2 :text="t('Update')" color="green" :variant="EnumButtonType.Outlined" :on-click="EditItem" v-if="IsAdd==false && OutputVoucherItem.inputVoucherItemId>0" />
+        <IContainer class="flex flex-row my-10 px-2">
+          <IButton2 :text="t('Add')" color="blue" :variant="EnumButtonType.Default" :on-click="AddItem"
+            v-if="IsAdd && OutputVoucherItem.inputVoucherItemId > 0" />
+          <IButton2 :text="t('Update')" color="green" :variant="EnumButtonType.Outlined" :on-click="EditItem"
+            v-if="IsAdd == false && OutputVoucherItem.inputVoucherItemId > 0" />
           <IButton2 class="mx-2" pre-icon="close-box" :text="t('Close')" color="blue" :variant="EnumButtonType.Outlined"
             :on-click="() => (showPop = false)" />
         </IContainer>

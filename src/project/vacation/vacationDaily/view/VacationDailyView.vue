@@ -422,7 +422,7 @@ const reset = () => {
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col="4" col-lg="4" col-md="2" col-sm="1">
+          <IRow  cols="4" cols-lg="4" cols-md="2" cols-sm="1">
             <ICol>
               <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
                 {{ t("DateFrom") }}

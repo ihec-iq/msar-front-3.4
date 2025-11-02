@@ -185,9 +185,9 @@ onMounted(async () => {
         <IRow
           v-else
           :title="t('Promotion.EmployeeDataCurrent')"
-          col-lg="4"
-          col-md="2"
-          col-sm="1"
+          cols-lg="4"
+          cols-md="2"
+          cols-sm="1"
           class="rounded-sm border-2 border-solid border-red-400"
         >
           <ICol span="1" span-md="2" span-sm="4">
@@ -227,7 +227,7 @@ onMounted(async () => {
         </IRow>
 
         <!-- for new Promotion of employee -->
-        <IRow col-lg="4" col-md="2" col-sm="1">
+        <IRow cols-lg="4" cols-md="2" cols-sm="1">
           <ICol span="1" span-md="2" span-sm="4">
             <div
               class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"

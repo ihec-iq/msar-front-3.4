@@ -114,6 +114,9 @@ export const useBonusStore = defineStore("BonusStore", () => {
   async function get_checkBonus(params: IBonusFilter, page: number) {
     return await Api.get(`${pathEmployeeUrl}/bonus/check?page=${page}`, { params });
   }
+  async function filterWithBonus(params: IBonusFilter, page: number) {
+    return await Api.get(`${pathEmployeeUrl}/filter/with/bonus?page=${page}`, { params });
+  }
   async function calculateBonus(params: IBonusFilter) {
     return await Api.get(`${pathEmployeeUrl}/bonus/calculate`, { params });
   }
@@ -302,6 +305,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
     get,
     get_filter,
     get_checkBonus,
+    filterWithBonus,
     calculateBonus,
     get_Bonuses,
     get_BonusJobTitle,

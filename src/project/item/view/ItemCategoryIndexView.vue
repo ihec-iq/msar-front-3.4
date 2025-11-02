@@ -103,7 +103,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="1" :col-md="1" :col-lg="1">
+      <IRow :cols="1" :cols-md="1"  :cols-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
@@ -115,7 +115,7 @@ onMounted(async () => {
           </ICol> 
         </ISearchBar>
       </IRow>
-      <IRow :col="4" :col-md="4" :col-lg="4">
+      <IRow :cols="4" :cols-md="4"  :cols-lg="4">
         <ICol class="p-3" :span="2" v-for="item   in data" :key="item.id">
           <CardItemCategoryIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>

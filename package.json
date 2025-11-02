@@ -13,7 +13,8 @@
   ],
   "author": "Ali7med",
   "scripts": {
-    "build": "run-p type-check build-only",
+    "build": "vite build",
+    "build-with-types": "run-p type-check build-only",
     "test:unit": "vitest --environment jsdom",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "build-only": "vite build",
@@ -70,6 +71,7 @@
     "@types/node": "^20.17.31",
     "@types/vue-select": "^2.5.1",
     "@vitejs/plugin-vue": "^5.2.3",
+    "@vitejs/plugin-vue-jsx": "^5.0.0",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^12.0.0",
     "@vue/test-utils": "^2.4.6",

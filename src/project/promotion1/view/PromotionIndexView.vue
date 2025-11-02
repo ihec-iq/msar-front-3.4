@@ -78,7 +78,7 @@ const headers = ref<Array<ITableHeader>>([
       <IButton width="28" :onClick="add" :text="t('Promotion.Add')" /> <!-- Updated button text -->
     </template>
     <IPageContent>
-      <IRow :col="3" :col-md="2" :col-lg="3">
+      <IRow :cols="3" :cols-md="2"  :cols-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
             <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch"

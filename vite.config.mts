@@ -40,7 +40,8 @@ export default defineConfig(({ mode }) => {
     },
 
     // ✅ استخدم متغيّر عام VITE_BASE أو افتراضي
-    base: mode === "production" ? (env.VITE_BASE ?? "/erp-msar/") : "/",
+    base: mode === "production" ? (env.VITE_BASE ?? "/") : "/",
+    //base: mode === "production" ? (env.VITE_BASE ?? "/erp-msar/") : "/",
 
     // ✅ لا تمرّر بورت للعميل؛ استعمل VITE_PORT لو حاب تغيّره محليًا
     server: {

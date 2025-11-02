@@ -214,7 +214,7 @@ onMounted(async () => {
         </IRow2>
 
         <!-- for new Bonus of employee -->
-        <IRow col-lg="4" col-md="2" col-sm="1">
+        <IRow cols-lg="4" cols-md="2" cols-sm="1">
           <ICol span="1" span-md="2" span-sm="4">
             <div
               class="md:text-sm text-base mr-3 mb-2 font-bold text-text dark:text-textLight"

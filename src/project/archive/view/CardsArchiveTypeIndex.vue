@@ -25,17 +25,18 @@ const onClick = (index: number) => {
 onMounted(async () => {
   await archiveTypeStore.getBySectionUser();
 });
+const visibleCard = ref(false);
 </script>
 <template>
-  <div class="align-middle bg-opacity-50  bg-blue-100 py-2 px-2 rounded-lg" v-if="archiveTypes.length > 0">
+  <div class=" bg-opacity-50  bg-blue-100 py-2 px-2 rounded-lg overflow-x-auto" v-if="archiveTypes.length > 0">
      <div
-      class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
+      class="collapse-title w-full hover:cursor-pointer flex border-dotted border-gray-200 border-2"
+      @click="visibleCard = !visibleCard"
     >
-      <span class="mx-2 px-2"> للاطلاع على  الكتب حسب نوع الكتاب </span>
-      <Icon icon="mdi:filter-check" />
-      
+      <span class="mx-2 mb-1 px-2"> للاطلاع على  الكتب حسب نوع الكتاب </span>
+      <Icon icon="mdi:filter-check" class="mt-1" /> 
     </div>
-    <div class="grid grid-cols-6 mt-2 gap-2 place-items-center justify-center items-center  " >
+    <div class="flex mt-2 gap-2" v-if="visibleCard">
        <CardArchiveTypeIndex
         title="عرض الجميع"
         :count="archiveTypes.length" 

@@ -119,7 +119,7 @@ onMounted(async () => {
 });
 import { getCurrentInstance } from "vue";
 
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import IPage from "@/components/ihec/IPage.vue";
@@ -132,7 +132,7 @@ const trns = app?.appContext.config.globalProperties.$trns;
       <IButton width="28" :onClick="add" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1">
             <IInput

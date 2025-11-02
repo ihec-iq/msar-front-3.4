@@ -241,7 +241,7 @@ const chackArchiveTypeLoad = async () => {
                 :IsRequire="true" />
             </ICol>
           </IRow>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
               <IInput :label="t('NumberBook')" v-model="archive.number" name="number" :type="EnumInputType.Text" />
             </ICol>
@@ -268,7 +268,7 @@ const chackArchiveTypeLoad = async () => {
             </ICol>
           </IRow>
           <!-- file -->
-          <IRow col-lg="4" col-md="4" col-sm="2">
+          <IRow cols-lg="4" cols-md="4" cols-sm="2">
             <ICol span="3" span-md="3" span-sm="2" v-for="document in archive.FilesDocument" :key="document.name">
               <FilePreview :file="document" @updateList="updateList">
               </FilePreview>

@@ -104,7 +104,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="1" :col-md="2" :col-lg="1">
+      <IRow :cols="1" :cols-md="2"  :cols-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4" class="flex">
             <IInput
@@ -127,7 +127,7 @@ onMounted(async () => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :col="4" :colMd="2" :colLg="4">
+      <IRow :cols="4" :colMd="2" :colLg="4">
         <ICol class="p-3" :span="2" v-for="item in data" :key="item.id">
           <CardItemIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>

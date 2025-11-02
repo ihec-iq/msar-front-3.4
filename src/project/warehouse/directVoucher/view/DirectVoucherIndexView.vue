@@ -106,7 +106,7 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -120,7 +120,7 @@ onMounted(async () => {
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
-      <IRow :col="4" :col-lg="4" :col-md="3" :col-sm="1" :col-xs="1">
+      <IRow :cols="4"  :cols-lg="4" :cols-md="3" :cols-sm="1" >
         <ICol
           class="my-2"
           :span="1"
