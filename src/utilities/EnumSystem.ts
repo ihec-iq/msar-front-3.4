@@ -87,6 +87,16 @@ export enum EnumPermission {
   EditEmployeeSetting = "edit employee setting",
   DeleteEmployeeSetting = "delete employee setting",
   ShowEmployeeSetting = "show employee setting",
+  // Backup System Permissions
+  ShowBackups = "show backups",
+  CreateBackup = "create backup",
+  DeleteBackup = "delete backup",
+  RestoreBackup = "restore backup",
+  DownloadBackup = "download backup",
+  ManageBackupSettings = "manage backup settings",
+  ManageBackupAdmins = "manage backup admins",
+  ShowBackupLogs = "show backup logs",
+  ShowBackupHealth = "show backup health",
 }
 export enum EnumDirection {
   RTL = "rtl",

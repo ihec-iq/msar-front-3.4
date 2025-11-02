@@ -12,6 +12,7 @@ import roleRoute from "@/project/role/roleRoute";
 import warehouseRoute from "@/project/warehouse/warehouseRoute";
 import employeeRoute from "@/project/employee/employeeRoute";
 import hrRoute from '@/project/hr/hrRoute';
+import backupRoute from "@/project/backup/backupRoute";
 
 //#endregion
 import DefaultLayout from "@/views/layouts/MainView.vue";
@@ -65,6 +66,7 @@ const router = createRouter({
         ...promotionRoute,
         ...employeeRoute,
         ...hrRoute,
+        ...backupRoute,
         {
           path: "/dashboard",
           name: "Dashboard",
