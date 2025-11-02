@@ -89,7 +89,7 @@ const successConnection = ref(0);
 const checkConnection = async () => {
   successConnection.value = 1;
   await useConfigStore()
-    .checkConnection(String(Config.value.connectionString))
+    .checkConnection(String(Config.value.connectionString+"/api"))
     .then((response) => {
       const success: Boolean = Boolean(response);
       if (success) {
@@ -110,7 +110,7 @@ onMounted(async () => {
     .load()
     .then(() => {
       if (Config.value.connectionString == null || Config.value.connectionString == "") {
-        Config.value.connectionString = envConfig._baseURL;
+        Config.value.connectionString = envConfig._baseURL+"/api";
       }
       if (Config.value.organization == null || Config.value.organization == "") {
         Config.value.organization = "المفوضية العليا المستقلة للانتخابات";

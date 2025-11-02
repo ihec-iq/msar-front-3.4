@@ -82,10 +82,10 @@ export const useBackupStore = defineStore("backupStore", () => {
   const backupProgress = ref(0);
 
   // API Base Paths
-  const pathBase = "/api/backup";
+  const pathBase = "/backup";
   const pathSettings = `${pathBase}/settings`;
   const pathAdmins = `${pathBase}/admins`;
-  const pathHealth = "/api/health/backup";
+  const pathHealth = `/health/backup`;
 
   // ============================
   // Computed Properties
@@ -123,7 +123,7 @@ export const useBackupStore = defineStore("backupStore", () => {
     isLoadingBackups.value = true;
     try {
       const response = await Api.get(`${pathBase}/list`);
-      backupFiles.value = response.data || [];
+      backupFiles.value = response.data.data || response.data || [];
       return response;
     } catch (error) {
       console.error("Error fetching backup list:", error);
@@ -140,7 +140,7 @@ export const useBackupStore = defineStore("backupStore", () => {
     isLoadingBackups.value = true;
     try {
       const response = await Api.get(`${pathBase}/list`, { params: filters });
-      backupFiles.value = response.data || [];
+      backupFiles.value = response.data.data || response.data || [];
       return response;
     } catch (error) {
       console.error("Error fetching filtered backup list:", error);
@@ -267,7 +267,7 @@ export const useBackupStore = defineStore("backupStore", () => {
     isLoadingSettings.value = true;
     try {
       const response = await Api.get(pathSettings);
-      settings.value = response.data;
+      settings.value = response.data.data || response.data;
       return response;
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -284,7 +284,7 @@ export const useBackupStore = defineStore("backupStore", () => {
     isLoadingSettings.value = true;
     try {
       const response = await Api.put(pathSettings, params);
-      settings.value = { ...settings.value, ...response.data };
+      settings.value = { ...settings.value, ...(response.data.data || response.data) };
       return response;
     } catch (error) {
       console.error("Error updating settings:", error);
@@ -305,7 +305,7 @@ export const useBackupStore = defineStore("backupStore", () => {
     isLoadingAdmins.value = true;
     try {
       const response = await Api.get(pathAdmins);
-      admins.value = response.data || [];
+      admins.value = response.data.data || response.data || [];
       return response;
     } catch (error) {
       console.error("Error fetching admins:", error);
@@ -343,8 +343,9 @@ export const useBackupStore = defineStore("backupStore", () => {
 
       // Update local state
       const index = admins.value.findIndex((admin) => admin.id === id);
-      if (index !== -1 && response.data) {
-        admins.value[index] = response.data;
+      const updatedAdmin = response.data.data || response.data;
+      if (index !== -1 && updatedAdmin) {
+        admins.value[index] = updatedAdmin;
       }
 
       return response;
@@ -382,7 +383,7 @@ export const useBackupStore = defineStore("backupStore", () => {
     isLoadingHealth.value = true;
     try {
       const response = await Api.get(pathHealth);
-      healthCheck.value = response.data;
+      healthCheck.value = response.data.data || response.data;
       return response;
     } catch (error) {
       console.error("Error fetching health check:", error);
@@ -435,7 +436,9 @@ export const useBackupStore = defineStore("backupStore", () => {
     isLoadingLogs.value = true;
     try {
       const response = await Api.get(`${pathBase}/logs`, { params: filters });
-      logs.value = response.data || [];
+      console.log("BackupLogs API Response:", response.data);
+      logs.value = response.data.data || response.data || [];
+      console.log("Logs value after assignment:", logs.value);
       return response;
     } catch (error) {
       console.error("Error fetching backup logs:", error);

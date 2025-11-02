@@ -1,10 +1,21 @@
- 
 export default {
   Check: "تحقق",
   Logout: "تسجيل الخروج",
   notFound: "لا يوجد",
   Option: {
     basic: "الخيارات الاساسية",
+  },
+  Backup: {
+    Index: "نظام النسخ الاحتياطي",
+    Create: "انشاء نسخة احتياطية",
+    Restore: "استعادة نسخة احتياطية",
+    Download: "تحميل النسخة الاحتياطية",
+    Delete: "حذف النسخة الاحتياطية",
+    Settings: "اعدادات النسخ الاحتياطي",
+    Admins: "مدراء النسخ الاحتياطي",
+    List: "قائمة النسخ الاحتياطي",
+    Health: "حالة النسخ الاحتياطي",
+    RunBackup: "تشغيل النسخ الاحتياطي",
   },
   NoItems: "لا توجد مواد",
   FailedValidation: "فشل التحقق من صحة البيانات",
@@ -74,9 +85,9 @@ export default {
   ID: "المعرف",
   Profile: "الملف الشخصي",
   Archive: {
-    Portal : "لوحة تحكم الارشيف",
-    Index : "الارشيف",
-    Title:"الارشيف"
+    Portal: "لوحة تحكم الارشيف",
+    Index: "الارشيف",
+    Title: "الارشيف",
   },
   AllArchives: "الارشيف الكامل",
   Name: "اسم",
@@ -113,7 +124,7 @@ export default {
   Code: "الرمز",
   Category: "الصنف",
   Item: {
-    Portal : "لوحة تحكم المواد",
+    Portal: "لوحة تحكم المواد",
     Name: "اسم",
     Index: "مادة",
     Add: "اضف مادة",
@@ -146,7 +157,7 @@ export default {
     ItemRequired: "يجب ان تضيف مادة واحدة على الاقل",
     NumberRequired: "رقم المستند مطلوب",
     BillExists: "السند موجود مسبقا",
-    BillNotExists : "السند غير موجود"
+    BillNotExists: "السند غير موجود",
   },
   DirectVoucher: {
     Index: "الصرف المباشر",
@@ -223,7 +234,7 @@ export default {
   },
   ConfigServer: "اعدادات الاتصال بالسيرفر",
   ConnectionString: "عنوان السيرفر",
-  Organization: "المؤوسسة",
+  Organization: "المؤسسة",
   IsActive: "تفعيل",
   Day: "يوم",
   Days: "ايام",

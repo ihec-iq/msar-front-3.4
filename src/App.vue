@@ -37,7 +37,7 @@ document.onkeydown = function (s) {
 // htmlEl?.setAttribute("data-theme", "cupcake");
 onMounted(async () => {
   await useConfigStore().load();
-  Api.defaults.baseURL = String(Config.value.connectionString);
+  Api.defaults.baseURL = String(Config.value.connectionString)+"/api";
 
   useAuthStore().CheckAuth();
   //const user = await getUser();

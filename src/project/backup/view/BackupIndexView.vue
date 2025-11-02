@@ -8,7 +8,8 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import type { IBackupFile, IBackupFileFilter } from "../IBackup";
 import SimpleLoading from "@/components/general/loading.vue";
 import Swal from "sweetalert2";
-import dayjs from "dayjs";
+import moment from "moment";
+import { storeToRefs } from "pinia";
 
 const { checkPermissionAccessArray } = usePermissionsStore();
 const router = useRouter();
@@ -21,7 +22,7 @@ const {
   totalBackups,
   totalSizeMB,
   lastBackup,
-} = backupStore;
+} = storeToRefs(backupStore);
 
 const {
   getBackupList,
@@ -56,7 +57,7 @@ const loadBackups = async () => {
 };
 
 const filteredBackups = computed(() => {
-  let filtered = [...backupFiles];
+  let filtered = [...backupFiles.value];
 
   // Search filter
   if (searchQuery.value) {
@@ -96,7 +97,7 @@ const formatFileSize = (bytes: number): string => {
 };
 
 const formatDate = (timestamp: number): string => {
-  return dayjs.unix(timestamp).format("YYYY-MM-DD HH:mm:ss");
+  return moment.unix(timestamp).format("YYYY-MM-DD HH:mm:ss");
 };
 
 const getFileName = (path: string): string => {

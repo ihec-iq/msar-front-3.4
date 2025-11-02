@@ -79,9 +79,12 @@ export interface IBackupSettings {
   // Notification Settings
   notify_enabled: boolean;
   notify_on: "success" | "failure" | "both";
+  email_enabled: boolean;
   emails: string;
+  telegram_enabled: boolean;
   telegram_bot_token: string;
   telegram_chat_ids: string;
+  webhook_enabled: boolean;
   webhook_urls: string;
   webhook_secret: string;
 
@@ -133,10 +136,10 @@ export interface IBackupAdminUpdateRequest {
 
 export interface IBackupLog {
   id: number;
-  backup_type: "manual" | "auto";
+  type: "manual" | "auto";
   status: "success" | "failed" | "running" | "pending";
   include_files: boolean;
-  size?: number;
+  total_size?: number;
   duration?: number;
   message?: string;
   error_details?: string;
@@ -152,7 +155,7 @@ export interface IBackupLog {
 export interface IBackupLogFilter {
   limit?: number;
   status?: "success" | "failed" | "running" | "pending" | "all";
-  backup_type?: "manual" | "auto" | "all";
+  type?: "manual" | "auto" | "all";
   date_from?: string;
   date_to?: string;
   page?: number;
@@ -163,32 +166,8 @@ export interface IBackupLogFilter {
 // ============================
 
 export interface IBackupHealthCheck {
-  overall_status: "healthy" | "warning" | "error";
-  checks: {
-    last_backup_success: {
-      status: "pass" | "fail" | "warning";
-      message: string;
-      last_backup_time?: string;
-    };
-    disk_space: {
-      status: "pass" | "fail" | "warning";
-      message: string;
-      available_space_mb?: number;
-      used_space_mb?: number;
-      percentage_used?: number;
-    };
-    configuration: {
-      status: "pass" | "fail" | "warning";
-      message: string;
-      issues?: string[];
-    };
-    stale_backup: {
-      status: "pass" | "fail" | "warning";
-      message: string;
-      hours_since_last_backup?: number;
-    };
-  };
-  last_checked_at: string;
+  status: "ok" | "error" | "warning";
+  last_success_at: string;
 }
 
 // ============================

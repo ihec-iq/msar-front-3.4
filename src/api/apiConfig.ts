@@ -7,9 +7,8 @@ import { useAuthStore, getSecureToken } from "@/stores/authStore";
 
 // Initialize Axios instance
 const Api = axios.create({
-  baseURL: envConfig._baseURL,
+  baseURL: envConfig._baseURL+"/api",
 });
-
 // Set default Axios configurations
 Api.defaults.withCredentials = true;
 Api.defaults.headers.common["Access-Control-Allow-Origin"] = "*";

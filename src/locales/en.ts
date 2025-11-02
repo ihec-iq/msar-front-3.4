@@ -5,6 +5,18 @@ export default {
   Option: {
     basic: "Basic Options",
   },
+  Backup: {
+    Index: "Backup System",
+    Create: "Create Backup",
+    Restore: "Restore Backup",
+    Download: "Download Backup",
+    Delete: "Delete Backup",
+    Settings: "Backup Settings",
+    Admins: "Backup Admins",
+    List: "Backup List",
+    Health: "Backup Health",
+    RunBackup: "Run Backup",
+  },
   NoItems: "No Items",
   files: "Files",
   FailedValidation: "Data validation failed",

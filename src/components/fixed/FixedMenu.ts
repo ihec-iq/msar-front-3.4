@@ -1,4 +1,5 @@
 import { ArchiveLinks } from "@/project/archive/ArchiveLinks";
+import { BackupLinks } from "@/project/backup/BackupLinks";
 import { EmployeeLinks } from "@/project/employee/EmployeeLinks";
 import { ItemLinks } from "@/project/item/ItemLinks";
 import { UserLinks } from "@/project/user/UserLinks";
@@ -49,6 +50,7 @@ export const Links: Array<IconLink> = [
   ...WarehouseLinks,
   ...EmployeeLinks,
   ...UserLinks, 
+  ...BackupLinks,
   {
     routerName: "settingPortal",
     title: "الاعدادات",
@@ -59,5 +61,6 @@ export const Links: Array<IconLink> = [
     description: "الاعدادات العامة",
     permissions: [EnumPermission.Setting],
     isActive: true,
-  }
+  }, 
+
 ];

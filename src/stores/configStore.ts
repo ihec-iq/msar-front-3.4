@@ -36,7 +36,7 @@ export const useConfigStore = defineStore("ConfigStore", () => {
     try {
       localStorage.setItem("ConnectionString", config);
       Config.value.connectionString = config;
-      Api.defaults.baseURL = config;
+      Api.defaults.baseURL = config+"/api";
     } catch (error) {
       console.error("Error writing connection config:", error);
       throw new Error("Failed to store connection string");
@@ -83,7 +83,7 @@ export const useConfigStore = defineStore("ConfigStore", () => {
       
       // Initialize API base URL
       if (Config.value.connectionString) {
-        Api.defaults.baseURL = Config.value.connectionString;
+        Api.defaults.baseURL = Config.value.connectionString+"/api";
       }
     } catch (error) {
       console.error("Error loading configuration:", error);
