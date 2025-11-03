@@ -172,30 +172,18 @@ const tabs = [
 <template>
   <IPage :HeaderTitle="t('Backup.Settings')">
     <template #HeaderButtons>
-      <IButton
-        width="24"
-        :onClick="saveSettings"
-        :text="t('Save')"
-        :disabled="isSaving"
-      />
-    </template>
-
+      <IButton width="24" :onClick="saveSettings" :text="t('Save')" :disabled="isSaving" />
+    </template> 
     <IPageContent>
       <div class="bg-white rounded-lg shadow-lg">
         <!-- Tabs Navigation -->
         <div class="border-b border-gray-200">
           <nav class="flex -mb-px overflow-x-auto">
-            <button
-              v-for="tab in tabs"
-              :key="tab.id"
-              @click="activeTab = tab.id"
-              class="whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm transition-colors"
-              :class="
-                activeTab === tab.id
+            <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
+              class="whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm transition-colors" :class="activeTab === tab.id
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              "
-            >
+                ">
               <span class="me-2">{{ tab.icon }}</span>
               {{ tab.label }}
             </button>
@@ -214,25 +202,17 @@ const tabs = [
                 <p class="text-sm text-gray-500">تفعيل أو تعطيل نظام النسخ الاحتياطي</p>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  v-model="formData.enabled"
-                  class="sr-only peer"
-                />
+                <input type="checkbox" v-model="formData.enabled" class="sr-only peer" />
                 <div
-                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-                ></div>
+                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                </div>
               </label>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >المنطقة الزمنية</label
-              >
-              <select
-                v-model="formData.timezone"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <label class="block text-sm font-medium text-gray-700 mb-2">المنطقة الزمنية</label>
+              <select v-model="formData.timezone"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="Asia/Baghdad">بغداد (Asia/Baghdad)</option>
                 <option value="Asia/Riyadh">الرياض (Asia/Riyadh)</option>
                 <option value="Asia/Dubai">دبي (Asia/Dubai)</option>
@@ -243,15 +223,9 @@ const tabs = [
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >الحد الأقصى للمساحة (ميغابايت)</label
-              >
-              <input
-                type="number"
-                v-model.number="formData.max_storage_mb"
-                min="100"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <label class="block text-sm font-medium text-gray-700 mb-2">الحد الأقصى للمساحة (ميغابايت)</label>
+              <input type="number" v-model.number="formData.max_storage_mb" min="100"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
               <p class="mt-1 text-sm text-gray-500">
                 {{ (formData.max_storage_mb / 1024).toFixed(2) }} GB
               </p>
@@ -263,15 +237,9 @@ const tabs = [
             <h3 class="text-lg font-semibold text-gray-900 mb-4">إعدادات الجدولة</h3>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >تعبير Cron</label
-              >
-              <input
-                type="text"
-                v-model="formData.cron"
-                placeholder="0 2 * * *"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <label class="block text-sm font-medium text-gray-700 mb-2">تعبير Cron</label>
+              <input type="text" v-model="formData.cron" placeholder="0 2 * * *"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md font-mono focus:outline-none focus:ring-2 focus:ring-blue-500" />
               <p class="mt-2 text-sm text-gray-500">
                 الجدول الحالي: {{ formData.cron }}
               </p>
@@ -297,66 +265,42 @@ const tabs = [
                 <p class="text-sm text-gray-500">نسخ الملفات مع قاعدة البيانات</p>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  v-model="formData.include_files"
-                  class="sr-only peer"
-                />
+                <input type="checkbox" v-model="formData.include_files" class="sr-only peer" />
                 <div
-                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-                ></div>
+                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                </div>
               </label>
             </div>
 
             <div class="flex items-center justify-between">
               <div>
-                <label class="text-sm font-medium text-gray-700"
-                  >نسخ عدة قواعد بيانات</label
-                >
+                <label class="text-sm font-medium text-gray-700">نسخ عدة قواعد بيانات</label>
                 <p class="text-sm text-gray-500">تفعيل نسخ قواعد بيانات متعددة</p>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  v-model="formData.multi_db"
-                  class="sr-only peer"
-                />
+                <input type="checkbox" v-model="formData.multi_db" class="sr-only peer" />
                 <div
-                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-                ></div>
+                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                </div>
               </label>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >مسارات إضافية للنسخ</label
-              >
+              <label class="block text-sm font-medium text-gray-700 mb-2">مسارات إضافية للنسخ</label>
               <div class="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  v-model="includePathsInput"
-                  placeholder="/path/to/include"
+                <input type="text" v-model="includePathsInput" placeholder="/path/to/include"
                   class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  @keypress.enter="addPath('include')"
-                />
-                <button
-                  @click="addPath('include')"
-                  class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
+                  @keypress.enter="addPath('include')" />
+                <button @click="addPath('include')"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                   إضافة
                 </button>
               </div>
               <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="(path, index) in formData.include_paths"
-                  :key="index"
-                  class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                >
+                <span v-for="(path, index) in formData.include_paths" :key="index"
+                  class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                   {{ path }}
-                  <button
-                    @click="removePath('include', index)"
-                    class="ms-2 text-blue-600 hover:text-blue-800"
-                  >
+                  <button @click="removePath('include', index)" class="ms-2 text-blue-600 hover:text-blue-800">
                     ×
                   </button>
                 </span>
@@ -364,35 +308,20 @@ const tabs = [
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >مسارات لاستثناءها</label
-              >
+              <label class="block text-sm font-medium text-gray-700 mb-2">مسارات لاستثناءها</label>
               <div class="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  v-model="excludePathsInput"
-                  placeholder="/path/to/exclude"
+                <input type="text" v-model="excludePathsInput" placeholder="/path/to/exclude"
                   class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  @keypress.enter="addPath('exclude')"
-                />
-                <button
-                  @click="addPath('exclude')"
-                  class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                >
+                  @keypress.enter="addPath('exclude')" />
+                <button @click="addPath('exclude')" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
                   إضافة
                 </button>
               </div>
               <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="(path, index) in formData.exclude_paths"
-                  :key="index"
-                  class="inline-flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm"
-                >
+                <span v-for="(path, index) in formData.exclude_paths" :key="index"
+                  class="inline-flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm">
                   {{ path }}
-                  <button
-                    @click="removePath('exclude', index)"
-                    class="ms-2 text-red-600 hover:text-red-800"
-                  >
+                  <button @click="removePath('exclude', index)" class="ms-2 text-red-600 hover:text-red-800">
                     ×
                   </button>
                 </span>
@@ -405,54 +334,29 @@ const tabs = [
             <h3 class="text-lg font-semibold text-gray-900 mb-4">إعدادات التخزين</h3>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >وجهة التخزين</label
-              >
+              <label class="block text-sm font-medium text-gray-700 mb-2">وجهة التخزين</label>
               <div class="space-y-2">
                 <label class="flex items-center">
-                  <input
-                    type="radio"
-                    v-model="formData.disk"
-                    value="local"
-                    class="me-2"
-                  />
+                  <input type="radio" v-model="formData.disk" value="local" class="me-2" />
                   <span>محلي (Local Storage)</span>
                 </label>
                 <label class="flex items-center">
-                  <input
-                    type="radio"
-                    v-model="formData.disk"
-                    value="google"
-                    class="me-2"
-                  />
+                  <input type="radio" v-model="formData.disk" value="google" class="me-2" />
                   <span>Google Drive</span>
                 </label>
               </div>
             </div>
 
             <div v-if="formData.disk === 'google'">
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >مجلد Google Drive</label
-              >
-              <input
-                type="text"
-                v-model="formData.drive_folder"
-                placeholder="Backups"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <label class="block text-sm font-medium text-gray-700 mb-2">مجلد Google Drive</label>
+              <input type="text" v-model="formData.drive_folder" placeholder="Backups"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >مدة صلاحية رابط التحميل (دقائق)</label
-              >
-              <input
-                type="number"
-                v-model.number="formData.temp_link_expiry"
-                min="1"
-                max="1440"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <label class="block text-sm font-medium text-gray-700 mb-2">مدة صلاحية رابط التحميل (دقائق)</label>
+              <input type="number" v-model.number="formData.temp_link_expiry" min="1" max="1440"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
             <div class="flex items-center justify-between">
@@ -461,14 +365,10 @@ const tabs = [
                 <p class="text-sm text-gray-500">التحقق من سلامة الملفات</p>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  v-model="formData.checksum_enabled"
-                  class="sr-only peer"
-                />
+                <input type="checkbox" v-model="formData.checksum_enabled" class="sr-only peer" />
                 <div
-                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-                ></div>
+                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                </div>
               </label>
             </div>
           </div>
@@ -483,25 +383,17 @@ const tabs = [
                 <p class="text-sm text-gray-500">إرسال إشعارات عن حالة النسخ</p>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  v-model="formData.notify_enabled"
-                  class="sr-only peer"
-                />
+                <input type="checkbox" v-model="formData.notify_enabled" class="sr-only peer" />
                 <div
-                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-                ></div>
+                  class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                </div>
               </label>
             </div>
 
             <div v-if="formData.notify_enabled">
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >الإشعار عند</label
-              >
-              <select
-                v-model="formData.notify_on"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <label class="block text-sm font-medium text-gray-700 mb-2">الإشعار عند</label>
+              <select v-model="formData.notify_on"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="success">النجاح فقط</option>
                 <option value="failure">الفشل فقط</option>
                 <option value="both">كلاهما</option>
@@ -516,53 +408,31 @@ const tabs = [
                   <p class="text-sm text-gray-500">إرسال إشعارات عبر البريد الإلكتروني</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    v-model="formData.email_enabled"
-                    class="sr-only peer"
-                  />
+                  <input type="checkbox" v-model="formData.email_enabled" class="sr-only peer" />
                   <div
-                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-                  ></div>
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                  </div>
                 </label>
               </div>
 
               <div v-if="formData.email_enabled">
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >البريد الإلكتروني</label
-                >
+                <label class="block text-sm font-medium text-gray-700 mb-2">البريد الإلكتروني</label>
                 <div class="flex gap-2 mb-2">
-                  <input
-                    type="email"
-                    v-model="newEmail"
-                    placeholder="admin@example.com"
+                  <input type="email" v-model="newEmail" placeholder="admin@example.com"
                     class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    @keypress.enter="addEmail"
-                  />
-                  <button
-                    @click="addEmail"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                  >
+                    @keypress.enter="addEmail" />
+                  <button @click="addEmail" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                     إضافة
                   </button>
-                  <button
-                    @click="testEmail"
-                    class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-                  >
+                  <button @click="testEmail" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
                     اختبار
                   </button>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <span
-                    v-for="(email, index) in emailsArray"
-                    :key="index"
-                    class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                  >
+                  <span v-for="(email, index) in emailsArray" :key="index"
+                    class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                     {{ email }}
-                    <button
-                      @click="removeEmail(index)"
-                      class="ms-2 text-blue-600 hover:text-blue-800"
-                    >
+                    <button @click="removeEmail(index)" class="ms-2 text-blue-600 hover:text-blue-800">
                       ×
                     </button>
                   </span>
@@ -578,40 +448,25 @@ const tabs = [
                   <p class="text-sm text-gray-500">إرسال إشعارات عبر Telegram</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    v-model="formData.telegram_enabled"
-                    class="sr-only peer"
-                  />
+                  <input type="checkbox" v-model="formData.telegram_enabled" class="sr-only peer" />
                   <div
-                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-                  ></div>
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                  </div>
                 </label>
               </div>
 
               <div v-if="formData.telegram_enabled" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2"
-                    >Telegram Bot Token</label
-                  >
-                  <input
-                    type="text"
-                    v-model="formData.telegram_bot_token"
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Telegram Bot Token</label>
+                  <input type="text" v-model="formData.telegram_bot_token"
                     placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2"
-                    >Telegram Chat IDs</label
-                  >
-                  <input
-                    type="text"
-                    v-model="formData.telegram_chat_ids"
-                    placeholder="123456789, 987654321"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Telegram Chat IDs</label>
+                  <input type="text" v-model="formData.telegram_chat_ids" placeholder="123456789, 987654321"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                   <p class="mt-1 text-sm text-gray-500">افصل بينها بفاصلة</p>
                 </div>
               </div>
@@ -625,41 +480,25 @@ const tabs = [
                   <p class="text-sm text-gray-500">إرسال إشعارات عبر Webhook</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    v-model="formData.webhook_enabled"
-                    class="sr-only peer"
-                  />
+                  <input type="checkbox" v-model="formData.webhook_enabled" class="sr-only peer" />
                   <div
-                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-                  ></div>
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                  </div>
                 </label>
               </div>
 
               <div v-if="formData.webhook_enabled" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2"
-                    >Webhook URLs</label
-                  >
-                  <input
-                    type="text"
-                    v-model="formData.webhook_urls"
-                    placeholder="https://your-webhook.com/endpoint"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Webhook URLs</label>
+                  <input type="text" v-model="formData.webhook_urls" placeholder="https://your-webhook.com/endpoint"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                   <p class="mt-1 text-sm text-gray-500">إذا كان لديك أكثر من webhook، افصل بينها بفاصلة</p>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2"
-                    >Webhook Secret</label
-                  >
-                  <input
-                    type="password"
-                    v-model="formData.webhook_secret"
-                    placeholder="your-secret-key"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Webhook Secret</label>
+                  <input type="password" v-model="formData.webhook_secret" placeholder="your-secret-key"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                   <p class="mt-1 text-sm text-gray-500">مفتاح سري للتحقق من صحة الطلبات</p>
                 </div>
               </div>
@@ -678,51 +517,27 @@ const tabs = [
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >النسخ اليومية (أيام)</label
-                >
-                <input
-                  type="number"
-                  v-model.number="formData.keep_daily_days"
-                  min="0"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <label class="block text-sm font-medium text-gray-700 mb-2">النسخ اليومية (أيام)</label>
+                <input type="number" v-model.number="formData.keep_daily_days" min="0"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >النسخ الأسبوعية (أسابيع)</label
-                >
-                <input
-                  type="number"
-                  v-model.number="formData.keep_weekly_weeks"
-                  min="0"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <label class="block text-sm font-medium text-gray-700 mb-2">النسخ الأسبوعية (أسابيع)</label>
+                <input type="number" v-model.number="formData.keep_weekly_weeks" min="0"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >النسخ الشهرية (أشهر)</label
-                >
-                <input
-                  type="number"
-                  v-model.number="formData.keep_monthly_months"
-                  min="0"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <label class="block text-sm font-medium text-gray-700 mb-2">النسخ الشهرية (أشهر)</label>
+                <input type="number" v-model.number="formData.keep_monthly_months" min="0"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >النسخ السنوية (سنوات)</label
-                >
-                <input
-                  type="number"
-                  v-model.number="formData.keep_yearly_years"
-                  min="0"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <label class="block text-sm font-medium text-gray-700 mb-2">النسخ السنوية (سنوات)</label>
+                <input type="number" v-model.number="formData.keep_yearly_years" min="0"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
             </div>
           </div>
@@ -731,22 +546,21 @@ const tabs = [
         <!-- Save Button (Fixed at bottom) -->
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
           <div class="flex justify-end gap-4">
-            <button
-              @click="router.push({ name: 'backupIndex' })"
-              class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-            >
+            <button @click="router.push({ name: 'backupIndex' })"
+              class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
               إلغاء
             </button>
-            <button
-              @click="saveSettings"
+            <button @click="saveSettings"
               class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-              :disabled="isSaving"
-            >
+              :disabled="isSaving">
               {{ isSaving ? "جاري الحفظ..." : "حفظ الإعدادات" }}
             </button>
           </div>
         </div>
       </div>
     </IPageContent>
+    <template #Footer>
+      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+    </template>
   </IPage>
 </template>

@@ -55,6 +55,9 @@ export const useBackupStore = defineStore("backupStore", () => {
     keep_weekly_weeks: 4,
     keep_monthly_months: 6,
     keep_yearly_years: 1,
+    email_enabled: false,
+    telegram_enabled: false,
+    webhook_enabled: false
   });
   const isLoadingSettings = ref(false);
 
@@ -516,6 +519,9 @@ export const useBackupStore = defineStore("backupStore", () => {
       keep_weekly_weeks: 4,
       keep_monthly_months: 6,
       keep_yearly_years: 1,
+      email_enabled: false,
+      telegram_enabled: false,
+      webhook_enabled: false
     };
   };
 

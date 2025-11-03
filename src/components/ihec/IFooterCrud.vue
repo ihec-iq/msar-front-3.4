@@ -22,7 +22,7 @@ const props = defineProps({
   },
   isAdd: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   showUpdate: {
     type: Boolean,

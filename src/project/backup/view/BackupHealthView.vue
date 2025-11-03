@@ -80,12 +80,7 @@ const timeSinceLastBackup = computed(() => {
 <template>
   <IPage :HeaderTitle="t('Backup.Health')">
     <template #HeaderButtons>
-      <IButton
-        width="28"
-        :onClick="loadHealth"
-        text="تحديث"
-        :disabled="isLoadingHealth"
-      />
+      <IButton width="28" :onClick="loadHealth" text="تحديث" :disabled="isLoadingHealth" />
     </template>
 
     <IPageContent>
@@ -103,10 +98,7 @@ const timeSinceLastBackup = computed(() => {
           <div class="text-6xl mb-4">
             {{ statusIcon }}
           </div>
-          <h2
-            class="text-2xl font-bold mb-2"
-            :class="`text-${statusColor}-700`"
-          >
+          <h2 class="text-2xl font-bold mb-2" :class="`text-${statusColor}-700`">
             {{ statusText }}
           </h2>
           <p class="text-gray-600 text-sm">
@@ -151,16 +143,13 @@ const timeSinceLastBackup = computed(() => {
 
             <div class="space-y-2">
               <div class="flex justify-between items-center p-3 rounded"
-                :class="statusColor === 'green' ? 'bg-green-50' : statusColor === 'yellow' ? 'bg-yellow-50' : 'bg-red-50'"
-              >
+                :class="statusColor === 'green' ? 'bg-green-50' : statusColor === 'yellow' ? 'bg-yellow-50' : 'bg-red-50'">
                 <span class="text-sm font-medium"
-                  :class="statusColor === 'green' ? 'text-green-700' : statusColor === 'yellow' ? 'text-yellow-700' : 'text-red-700'"
-                >
+                  :class="statusColor === 'green' ? 'text-green-700' : statusColor === 'yellow' ? 'text-yellow-700' : 'text-red-700'">
                   الحالة
                 </span>
                 <span class="text-sm font-semibold"
-                  :class="statusColor === 'green' ? 'text-green-900' : statusColor === 'yellow' ? 'text-yellow-900' : 'text-red-900'"
-                >
+                  :class="statusColor === 'green' ? 'text-green-900' : statusColor === 'yellow' ? 'text-yellow-900' : 'text-red-900'">
                   {{ statusText }}
                 </span>
               </div>
@@ -168,8 +157,8 @@ const timeSinceLastBackup = computed(() => {
               <div class="p-3 bg-blue-50 rounded">
                 <p class="text-sm text-blue-800">
                   {{ healthCheck.status === 'ok'
-                     ? 'جميع أنظمة النسخ الاحتياطي تعمل بشكل طبيعي'
-                     : 'يرجى التحقق من إعدادات النسخ الاحتياطي' }}
+                    ? 'جميع أنظمة النسخ الاحتياطي تعمل بشكل طبيعي'
+                    : 'يرجى التحقق من إعدادات النسخ الاحتياطي' }}
                 </p>
               </div>
             </div>
@@ -191,5 +180,8 @@ const timeSinceLastBackup = computed(() => {
         </div>
       </div>
     </IPageContent>
+    <template #Footer>
+      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+    </template>
   </IPage>
 </template>

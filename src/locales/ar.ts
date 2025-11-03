@@ -6,6 +6,7 @@ export default {
     basic: "الخيارات الاساسية",
   },
   Backup: {
+    Portal: "لوحة تحكم النسخ الاحتياطي",
     Index: "نظام النسخ الاحتياطي",
     Create: "انشاء نسخة احتياطية",
     Restore: "استعادة نسخة احتياطية",
@@ -16,6 +17,9 @@ export default {
     List: "قائمة النسخ الاحتياطي",
     Health: "حالة النسخ الاحتياطي",
     RunBackup: "تشغيل النسخ الاحتياطي",
+  },
+  HealthCheack: {
+    Index: "حالة النظام",
   },
   NoItems: "لا توجد مواد",
   FailedValidation: "فشل التحقق من صحة البيانات",

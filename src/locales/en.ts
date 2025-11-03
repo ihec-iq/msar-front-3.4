@@ -6,6 +6,7 @@ export default {
     basic: "Basic Options",
   },
   Backup: {
+    Portal: "Backup Portal",
     Index: "Backup System",
     Create: "Create Backup",
     Restore: "Restore Backup",
@@ -16,6 +17,9 @@ export default {
     List: "Backup List",
     Health: "Backup Health",
     RunBackup: "Run Backup",
+  },
+  HealthCheack: {
+    Index: "System Health",
   },
   NoItems: "No Items",
   files: "Files",

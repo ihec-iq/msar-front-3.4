@@ -100,7 +100,8 @@ const deleteAdmin = async (id: number) => {
               <td class="px-6 py-4 text-sm text-gray-900">{{ admin.name }}</td>
               <td class="px-6 py-4 text-sm text-gray-500">{{ admin.email }}</td>
               <td class="px-6 py-4">
-                <span class="px-2 py-1 text-xs rounded-full" :class="admin.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                <span class="px-2 py-1 text-xs rounded-full"
+                  :class="admin.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
                   {{ admin.active ? "فعال" : "غير فعال" }}
                 </span>
               </td>
@@ -137,5 +138,8 @@ const deleteAdmin = async (id: number) => {
         </div>
       </div>
     </IPageContent>
+    <template #Footer>
+      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+    </template>
   </IPage>
 </template>

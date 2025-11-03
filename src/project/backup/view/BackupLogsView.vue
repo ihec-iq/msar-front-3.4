@@ -114,12 +114,7 @@ const filteredLogsCount = computed(() => logs.value.length);
 <template>
   <IPage :HeaderTitle="t('Backup.Logs')">
     <template #HeaderButtons>
-      <IButton
-        width="24"
-        :onClick="refreshLogs"
-        text="تحديث"
-        :disabled="isLoadingLogs"
-      />
+      <IButton width="24" :onClick="refreshLogs" text="تحديث" :disabled="isLoadingLogs" />
     </template>
 
     <IPageContent>
@@ -129,10 +124,8 @@ const filteredLogsCount = computed(() => logs.value.length);
           <!-- Status Filter -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">الحالة</label>
-            <select
-              v-model="filters.status"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            <select v-model="filters.status"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="all">الكل</option>
               <option value="success">نجح</option>
               <option value="failed">فشل</option>
@@ -144,10 +137,8 @@ const filteredLogsCount = computed(() => logs.value.length);
           <!-- Backup Type Filter -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">النوع</label>
-            <select
-              v-model="filters.type"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            <select v-model="filters.type"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option value="all">الكل</option>
               <option value="manual">يدوي</option>
               <option value="auto">تلقائي</option>
@@ -157,10 +148,8 @@ const filteredLogsCount = computed(() => logs.value.length);
           <!-- Limit Filter -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">عدد النتائج</label>
-            <select
-              v-model.number="filters.limit"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            <select v-model.number="filters.limit"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option :value="10">10</option>
               <option :value="25">25</option>
               <option :value="50">50</option>
@@ -170,18 +159,14 @@ const filteredLogsCount = computed(() => logs.value.length);
 
           <!-- Action Buttons -->
           <div class="flex items-end gap-2">
-            <button
-              @click="applyFilters"
+            <button @click="applyFilters"
               class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-              :disabled="isLoadingLogs"
-            >
+              :disabled="isLoadingLogs">
               تطبيق
             </button>
-            <button
-              @click="clearFilters"
+            <button @click="clearFilters"
               class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 disabled:opacity-50"
-              :disabled="isLoadingLogs"
-            >
+              :disabled="isLoadingLogs">
               إعادة تعيين
             </button>
           </div>
@@ -218,10 +203,7 @@ const filteredLogsCount = computed(() => logs.value.length);
             <tbody class="bg-white divide-y divide-gray-200">
               <template v-for="log in logs" :key="log.id">
                 <!-- Main Row -->
-                <tr
-                  class="hover:bg-gray-50 cursor-pointer transition-colors"
-                  @click="toggleExpand(log.id)"
-                >
+                <tr class="hover:bg-gray-50 cursor-pointer transition-colors" @click="toggleExpand(log.id)">
                   <td class="px-4 py-4 text-center">
                     <button class="text-gray-400 hover:text-gray-600">
                       <span v-if="expandedLogId === log.id">▼</span>
@@ -230,10 +212,8 @@ const filteredLogsCount = computed(() => logs.value.length);
                   </td>
                   <td class="px-6 py-4 text-sm text-gray-900">{{ log.id }}</td>
                   <td class="px-6 py-4">
-                    <span
-                      class="px-2 py-1 text-xs rounded-full"
-                      :class="log.type === 'auto' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'"
-                    >
+                    <span class="px-2 py-1 text-xs rounded-full"
+                      :class="log.type === 'auto' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'">
                       {{ log.type === "auto" ? "تلقائي" : "يدوي" }}
                     </span>
                   </td>
@@ -264,11 +244,8 @@ const filteredLogsCount = computed(() => logs.value.length);
                         <div v-if="log.databases && log.databases.length > 0">
                           <span class="font-semibold text-gray-700">قواعد البيانات:</span>
                           <div class="mt-1 flex flex-wrap gap-1">
-                            <span
-                              v-for="db in log.databases"
-                              :key="db"
-                              class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
-                            >
+                            <span v-for="db in log.databases" :key="db"
+                              class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
                               {{ db }}
                             </span>
                           </div>
@@ -319,6 +296,9 @@ const filteredLogsCount = computed(() => logs.value.length);
         </div>
       </div>
     </IPageContent>
+    <template #Footer>
+      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+    </template>
   </IPage>
 </template>
 

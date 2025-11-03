@@ -17,7 +17,7 @@ Api.defaults.headers.common["Access-Control-Allow-Headers"] = "*";
 Api.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 Api.defaults.headers.common["Content-Type"] = "multipart/form-data";
 
-
+//  await Api.get("/sanctum/csrf-cookie"); 
 // Attach authorization token lazily
 // Api.interceptors.request.use((config) => {
 //   const token = getSecureToken(); // Get the token when needed

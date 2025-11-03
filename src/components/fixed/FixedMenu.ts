@@ -1,9 +1,8 @@
+import { SettingsLinks } from "@/project/settings/SettingsLinks";
 import { ArchiveLinks } from "@/project/archive/ArchiveLinks";
 import { BackupLinks } from "@/project/backup/BackupLinks";
 import { EmployeeLinks } from "@/project/employee/EmployeeLinks";
-import { ItemLinks } from "@/project/item/ItemLinks";
 import { UserLinks } from "@/project/user/UserLinks";
-import { VacationLinks } from "@/project/vacation/VacationLinks";
 import { WarehouseLinks } from "@/project/warehouse/WarehouseLinks";
 import { EnumPermission } from "@/utilities/EnumSystem";
 
@@ -19,7 +18,7 @@ export interface IconLink {
   permissions: Array<string>;
   isActive: boolean;
   children?: Array<IconLink>;
-  mdi?: string
+  mdi?: string;
 }
 
 export const Links: Array<IconLink> = [
@@ -49,8 +48,10 @@ export const Links: Array<IconLink> = [
   ...ArchiveLinks,
   ...WarehouseLinks,
   ...EmployeeLinks,
-  ...UserLinks, 
+  ...UserLinks,
   ...BackupLinks,
+  ...SettingsLinks,
+
   {
     routerName: "settingPortal",
     title: "الاعدادات",
@@ -61,6 +62,5 @@ export const Links: Array<IconLink> = [
     description: "الاعدادات العامة",
     permissions: [EnumPermission.Setting],
     isActive: true,
-  }, 
-
+  },
 ];

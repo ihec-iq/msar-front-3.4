@@ -11,16 +11,17 @@ import userRoute from "@/project/user/userRoute";
 import roleRoute from "@/project/role/roleRoute";
 import warehouseRoute from "@/project/warehouse/warehouseRoute";
 import employeeRoute from "@/project/employee/employeeRoute";
-import hrRoute from '@/project/hr/hrRoute';
+import hrRoute from "@/project/hr/hrRoute";
 import backupRoute from "@/project/backup/backupRoute";
+import settingsRoute from "@/project/settings/settingsRoute";
 
 //#endregion
 import DefaultLayout from "@/views/layouts/MainView.vue";
 import bonusRoute from "@/project/bonus/bonusRoute";
 import promotionRoute from "@/project/promotion/promotionRoute";
 const router = createRouter({
-    history: createWebHistory(
-    process.env.NODE_ENV === "production" ? "/erp-msar/" : "/",
+  history: createWebHistory(
+    process.env.NODE_ENV === "production" ? "/erp-msar/" : "/"
     // process.env.NODE_ENV === "production" ? "/" : "/",
   ), //import.meta.env.BASE_URL
   linkExactActiveClass: "linkExactActiveClass",
@@ -67,6 +68,7 @@ const router = createRouter({
         ...employeeRoute,
         ...hrRoute,
         ...backupRoute,
+        ...settingsRoute,
         {
           path: "/dashboard",
           name: "Dashboard",
@@ -74,14 +76,15 @@ const router = createRouter({
           meta: {
             middleware: [authMiddleware],
           },
-        },{
+        },
+        {
           path: "/div",
           name: "div",
           component: () => import("@/views/DivView.vue"),
           meta: {
             middleware: [authMiddleware],
           },
-        },
+        }, 
         {
           path: "/whatsapp",
           name: "whatsapp",
@@ -153,7 +156,7 @@ router.beforeResolve(async (to, from, next) => {
     next();
   }
 });
-router.onError(err => {
-  console.log('<!-- router error: ' + err.message + ' -->')
-})
+router.onError((err) => {
+  console.log("<!-- router error: " + err.message + " -->");
+});
 export default router;
