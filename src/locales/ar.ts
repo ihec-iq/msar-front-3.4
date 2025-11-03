@@ -21,6 +21,10 @@ export default {
   HealthCheack: {
     Index: "حالة النظام",
   },
+  Loges: {
+    Index: "سجلات النظام",
+    View: "عرض السجلات",
+  },
   NoItems: "لا توجد مواد",
   FailedValidation: "فشل التحقق من صحة البيانات",
   files: "الملفات",

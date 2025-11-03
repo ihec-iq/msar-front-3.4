@@ -80,9 +80,11 @@ const saveSettings = async () => {
   try {
     // Convert arrays back to comma-separated strings
     formData.value.emails = emailsArray.value.join(", ");
-
-    await backupStore.updateSettings(formData.value);
-
+    const response = await backupStore.updateSettings(formData.value);
+    console.log("Update response:", response);
+    if(response.data) {
+      console.log("Settings updated:", response.data);
+    }
     await Swal.fire({
       icon: "success",
       title: "نجاح",
@@ -173,7 +175,7 @@ const tabs = [
   <IPage :HeaderTitle="t('Backup.Settings')">
     <template #HeaderButtons>
       <IButton width="24" :onClick="saveSettings" :text="t('Save')" :disabled="isSaving" />
-    </template> 
+    </template>
     <IPageContent>
       <div class="bg-white rounded-lg shadow-lg">
         <!-- Tabs Navigation -->
@@ -181,8 +183,8 @@ const tabs = [
           <nav class="flex -mb-px overflow-x-auto">
             <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
               class="whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm transition-colors" :class="activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 ">
               <span class="me-2">{{ tab.icon }}</span>
               {{ tab.label }}

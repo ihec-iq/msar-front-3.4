@@ -50,7 +50,7 @@ const showSuccessToast = (message = "") => {
 
 //#region Vars (الأصلية)
 const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref(t("Loges"));
+const namePage = ref(t("Loges.View"));
 const route = useRoute();
 const Loading = ref(false);
 const router = useRouter();
@@ -79,9 +79,9 @@ const logUpdatedAtHuman = computed(() => {
 const fetchLogMeta = () => settingsStore.get_meta().catch((e) => showErrorToast(e?.message || "فشل في جلب معلومات اللوج"));
 const fetchLogTail = () => settingsStore.get_tail(logTailCount.value).catch((e) => showErrorToast(e?.message || "فشل في جلب ذيل الملف"));
 const openLog = () => {
-  const url = settingsStore.getDownloadUrl();
-  if (!url) return showErrorToast("Base URL غير مهيأ");
-  window.open(url, "_blank");
+  const url = settingsStore.download_log();
+  // if (!url) return showErrorToast("Base URL غير مهيأ");
+  // window.open(url, "_blank");
 };
 const clearLog = async () => {
   if (!confirm("متأكد تريد تفريغ الملف؟ هذه العملية لا يمكن التراجع عنها.")) return;

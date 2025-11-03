@@ -57,7 +57,7 @@ export const useBackupStore = defineStore("backupStore", () => {
     keep_yearly_years: 1,
     email_enabled: false,
     telegram_enabled: false,
-    webhook_enabled: false
+    webhook_enabled: false,
   });
   const isLoadingSettings = ref(false);
 
@@ -97,13 +97,18 @@ export const useBackupStore = defineStore("backupStore", () => {
   const totalBackups = computed(() => backupFiles.value.length);
 
   const totalSizeMB = computed(() => {
-    return backupFiles.value.reduce((sum, file) => sum + (file.size || 0), 0) / (1024 * 1024);
+    return (
+      backupFiles.value.reduce((sum, file) => sum + (file.size || 0), 0) /
+      (1024 * 1024)
+    );
   });
 
   const lastBackup = computed(() => {
     if (backupFiles.value.length === 0) return null;
     return backupFiles.value.reduce((latest, current) => {
-      return (current.lastModified || 0) > (latest.lastModified || 0) ? current : latest;
+      return (current.lastModified || 0) > (latest.lastModified || 0)
+        ? current
+        : latest;
     });
   });
 
@@ -160,7 +165,10 @@ export const useBackupStore = defineStore("backupStore", () => {
     isRunningBackup.value = true;
     backupProgress.value = 0;
     try {
-      const response = await Api.post<IBackupRunResponse>(`${pathBase}/run`, params);
+      const response = await Api.post<IBackupRunResponse>(
+        `${pathBase}/run`,
+        params
+      );
 
       // Refresh the backup list after successful run
       if (response.data.status === "ok") {
@@ -187,7 +195,9 @@ export const useBackupStore = defineStore("backupStore", () => {
       });
 
       // Remove from local state
-      backupFiles.value = backupFiles.value.filter((file) => file.path !== path);
+      backupFiles.value = backupFiles.value.filter(
+        (file) => file.path !== path
+      );
 
       return response;
     } catch (error) {
@@ -283,11 +293,15 @@ export const useBackupStore = defineStore("backupStore", () => {
   /**
    * Update backup settings
    */
-  async function updateSettings(params: Partial<IBackupSettings>) {
+  async function updateSettings(params: IBackupSettings) {
     isLoadingSettings.value = true;
+    console.log("Updating settings with params:", params);
     try {
-      const response = await Api.put(pathSettings, params);
-      settings.value = { ...settings.value, ...(response.data.data || response.data) };
+      const response = await Api.post(pathSettings, params);
+      settings.value = {
+        ...settings.value,
+        ...(response.data.data || response.data),
+      };
       return response;
     } catch (error) {
       console.error("Error updating settings:", error);
@@ -521,7 +535,7 @@ export const useBackupStore = defineStore("backupStore", () => {
       keep_yearly_years: 1,
       email_enabled: false,
       telegram_enabled: false,
-      webhook_enabled: false
+      webhook_enabled: false,
     };
   };
 

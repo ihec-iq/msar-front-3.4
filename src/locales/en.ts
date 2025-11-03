@@ -21,6 +21,10 @@ export default {
   HealthCheack: {
     Index: "System Health",
   },
+  Loges: {
+    Index: "System Logs",
+    View: "View Logs",
+  },
   NoItems: "No Items",
   files: "Files",
   FailedValidation: "Data validation failed",
