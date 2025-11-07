@@ -59,40 +59,40 @@ export interface IBackupSettings {
 
   // General Settings
   enabled: boolean;
-  cron: string;
-  timezone: string;
+  backup_path: string;
   max_storage_mb: number;
 
-  // Backup Scope
-  include_files: boolean;
-  include_paths: string[];
-  exclude_paths: string[];
-  multi_db: boolean;
-  selected_databases: string[];
-
-  // Storage Settings
-  disk: "local" | "google";
-  drive_folder: string;
-  temp_link_expiry: number;
-  checksum_enabled: boolean;
-
-  // Notification Settings
-  notify_enabled: boolean;
-  notify_on: "success" | "failure" | "both";
-  email_enabled: boolean;
-  emails: string;
-  telegram_enabled: boolean;
-  telegram_bot_token: string;
-  telegram_chat_ids: string;
-  webhook_enabled: boolean;
-  webhook_urls: string;
-  webhook_secret: string;
+  // Auto Backup Settings
+  auto_backup_enabled: boolean;
+  auto_backup_interval: number;
+  auto_backup_type: "db" | "files" | "both";
+  last_auto_backup_at?: string;
 
   // Retention Policy
   keep_daily_days: number;
   keep_weekly_weeks: number;
   keep_monthly_months: number;
-  keep_yearly_years: number;
+
+  // Notification Settings
+  notify_enabled: boolean;
+  notify_on_success: boolean;
+  notify_on_failure: boolean;
+  stale_hours: number | null;
+  notify_admins: boolean;
+
+  // Email Notification
+  email_enabled: boolean;
+  email_recipients: string[] | null;
+
+  // Telegram Notification
+  telegram_enabled: boolean;
+  telegram_bot_token: string | null;
+  telegram_chat_ids: string[] | null;
+
+  // Webhook Notification
+  webhook_enabled: boolean;
+  webhook_urls: string | null;
+  webhook_secret: string | null;
 
   // Timestamps
   created_at?: string;
@@ -108,7 +108,8 @@ export interface IBackupAdmin {
   name: string;
   email: string;
   telegram_id?: string;
-  notify_via: ("email" | "telegram")[];
+  webhook_url?: string;
+  notify_via: ("email" | "telegram" | "webhook")[];
   active: boolean;
   created_at?: string;
   updated_at?: string;
@@ -118,6 +119,7 @@ export interface IBackupAdminCreateRequest {
   name: string;
   email: string;
   telegram_id?: string;
+  webhook_url?: string;
   notify_via: string[];
   active: boolean;
 }
@@ -126,6 +128,7 @@ export interface IBackupAdminUpdateRequest {
   name?: string;
   email?: string;
   telegram_id?: string;
+  webhook_url?: string;
   notify_via?: string[];
   active?: boolean;
 }

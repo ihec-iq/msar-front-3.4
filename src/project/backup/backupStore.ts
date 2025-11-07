@@ -32,32 +32,27 @@ export const useBackupStore = defineStore("backupStore", () => {
   // Settings State
   const settings = ref<IBackupSettings>({
     enabled: false,
-    cron: "0 2 * * *",
-    timezone: "Asia/Baghdad",
+    backup_path: "storage/app/backups",
     max_storage_mb: 10240,
-    include_files: true,
-    include_paths: [],
-    exclude_paths: [],
-    multi_db: false,
-    selected_databases: [],
-    disk: "local",
-    drive_folder: "",
-    temp_link_expiry: 60,
-    checksum_enabled: true,
-    notify_enabled: false,
-    notify_on: "both",
-    emails: "",
-    telegram_bot_token: "",
-    telegram_chat_ids: "",
-    webhook_urls: "",
-    webhook_secret: "",
+    auto_backup_enabled: false,
+    auto_backup_interval: 1440,
+    auto_backup_type: "both",
     keep_daily_days: 7,
     keep_weekly_weeks: 4,
     keep_monthly_months: 6,
-    keep_yearly_years: 1,
+    notify_enabled: false,
+    notify_on_success: true,
+    notify_on_failure: true,
+    stale_hours: 48,
+    notify_admins: false,
     email_enabled: false,
+    email_recipients: null,
     telegram_enabled: false,
+    telegram_bot_token: null,
+    telegram_chat_ids: null,
     webhook_enabled: false,
+    webhook_urls: null,
+    webhook_secret: null,
   });
   const isLoadingSettings = ref(false);
 
@@ -295,7 +290,6 @@ export const useBackupStore = defineStore("backupStore", () => {
    */
   async function updateSettings(params: IBackupSettings) {
     isLoadingSettings.value = true;
-    console.log("Updating settings with params:", params);
     try {
       const response = await Api.post(pathSettings, params);
       settings.value = {
@@ -356,7 +350,7 @@ export const useBackupStore = defineStore("backupStore", () => {
    */
   async function updateAdmin(id: number, params: IBackupAdminUpdateRequest) {
     try {
-      const response = await Api.put(`${pathAdmins}/${id}`, params);
+      const response = await Api.post(`${pathAdmins}/${id}`, params);
 
       // Update local state
       const index = admins.value.findIndex((admin) => admin.id === id);
@@ -423,6 +417,32 @@ export const useBackupStore = defineStore("backupStore", () => {
       return response;
     } catch (error) {
       console.error("Error sending test email:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send test telegram
+   */
+  async function sendTestTelegram() {
+    try {
+      const response = await Api.post(`${pathBase}/test-telegram`);
+      return response;
+    } catch (error) {
+      console.error("Error sending test telegram:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send test webhook
+   */
+  async function sendTestWebhook(host : string) {
+    try {
+      const response = await Api.get(`${host}`);
+      return response;
+    } catch (error) {
+      console.error("Error sending test webhook:", error);
       throw error;
     }
   }
@@ -510,32 +530,27 @@ export const useBackupStore = defineStore("backupStore", () => {
   const resetSettings = () => {
     settings.value = {
       enabled: false,
-      cron: "0 2 * * *",
-      timezone: "Asia/Baghdad",
+      backup_path: "storage/app/backups",
       max_storage_mb: 10240,
-      include_files: true,
-      include_paths: [],
-      exclude_paths: [],
-      multi_db: false,
-      selected_databases: [],
-      disk: "local",
-      drive_folder: "",
-      temp_link_expiry: 60,
-      checksum_enabled: true,
-      notify_enabled: false,
-      notify_on: "both",
-      emails: "",
-      telegram_bot_token: "",
-      telegram_chat_ids: "",
-      webhook_urls: "",
-      webhook_secret: "",
+      auto_backup_enabled: false,
+      auto_backup_interval: 1440,
+      auto_backup_type: "both",
       keep_daily_days: 7,
       keep_weekly_weeks: 4,
       keep_monthly_months: 6,
-      keep_yearly_years: 1,
+      notify_enabled: false,
+      notify_on_success: true,
+      notify_on_failure: true,
+      stale_hours: 48,
+      notify_admins: false,
       email_enabled: false,
+      email_recipients: null,
       telegram_enabled: false,
+      telegram_bot_token: null,
+      telegram_chat_ids: null,
       webhook_enabled: false,
+      webhook_urls: null,
+      webhook_secret: null,
     };
   };
 
@@ -624,6 +639,8 @@ export const useBackupStore = defineStore("backupStore", () => {
 
     // Testing Actions
     sendTestEmail,
+    sendTestTelegram,
+    sendTestWebhook,
     previewEmail,
 
     // Logs Actions
