@@ -58,7 +58,7 @@ export interface IBackupSettings {
   id?: number;
 
   // General Settings
-  enabled: boolean;
+  enabled?: boolean;
   backup_path: string;
   max_storage_mb: number;
 
