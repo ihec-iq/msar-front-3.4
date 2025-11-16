@@ -55,8 +55,7 @@ import LanguageSelect from "./setting/LanguageSelect.vue";
       <Icon icon="mdi-cog-outline" class="text-[25px]" />
     </button>
   </div>
-  <!-- Popup -->
-
+  <!-- Popup --> 
   <van-popup v-model:show="showPop" class="bg-customer dark:bg-content w-full sm:w-[80%] md:w-[50%] lg:w-[35%] xl:w-[30%]
            h-screen flex flex-col justify-between overflow-hidden z-[999999] rounded-t-xl" round lock-scroll>
       <!-- Header -->
