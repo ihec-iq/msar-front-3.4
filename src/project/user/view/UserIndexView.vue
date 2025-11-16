@@ -153,7 +153,7 @@ const trns = app?.appContext.config.globalProperties.$trns;
           <template v-slot:roles="{ row }">
             <span v-if="row.roles != '[]'" class="flex justify-center">
               <p
-                v-for="role in row.roles.slice(0, 3)"
+                v-for="role  in row.roles.slice(0, 3)"
                 :key="role.id"
                 class="text-sm leading-none text-text dark:text-textLight ml-2 flex-shrink"
               >

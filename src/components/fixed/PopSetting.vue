@@ -56,16 +56,15 @@ import LanguageSelect from "./setting/LanguageSelect.vue";
     </button>
   </div>
   <!-- Popup -->
-  <transition name="slide-fade">
-    <van-popup v-model:show="showPop" class="bg-customer dark:bg-content w-full sm:w-[80%] md:w-[50%] lg:w-[35%] xl:w-[30%]
+
+  <van-popup v-model:show="showPop" class="bg-customer dark:bg-content w-full sm:w-[80%] md:w-[50%] lg:w-[35%] xl:w-[30%]
            h-screen flex flex-col justify-between overflow-hidden z-[999999] rounded-t-xl" round lock-scroll>
       <!-- Header -->
       <div class="p-4 border-b border-gray-300 dark:border-gray-700 text-center">
         <h2 class="text-2xl font-bold text-text dark:text-textLight">
           {{ t("Setting.Name") }}
         </h2>
-      </div>
-
+      </div> 
       <!-- Body -->
       <div class="flex-1 overflow-y-auto py-4 space-y-6 px-6 text-text dark:text-textLight">
         <!-- Theme -->
@@ -97,8 +96,7 @@ import LanguageSelect from "./setting/LanguageSelect.vue";
           <IButton2 :variant="EnumButtonType.Outlined" pre-icon="logout" color="red" :text="t('Logout')"
             :on-click="logout" width="32" />
         </div>
-      </div>
-
+      </div> 
       <!-- Footer -->
       <div class="flex justify-between gap-3 p-4 border-t border-gray-300 dark:border-gray-700">
         <button @click="
@@ -111,9 +109,8 @@ import LanguageSelect from "./setting/LanguageSelect.vue";
           class="flex-1 bg-red-500 text-white py-2 rounded-lg text-lg font-semibold hover:opacity-90">
           {{ t('Close') }}
         </button>
-      </div>
-    </van-popup>
-  </transition>
+      </div>  
+  </van-popup>
 </template>
 
 <style scoped>

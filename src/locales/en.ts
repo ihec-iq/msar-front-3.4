@@ -25,6 +25,7 @@ export default {
     Index: "System Logs",
     View: "View Logs",
   },
+  "Any Device": "All Devices",
   NoItems: "No Items",
   files: "Files",
   FailedValidation: "Data validation failed",

@@ -92,6 +92,7 @@ const Login = async () => {
   isLoading.value = false;
 };
 onMounted(async () => {
+  authStore.CheckAuth();
   if (authStore.isAuthenticated) {
     const redirectPath = localStorage.getItem("redirectPathMsar");
     if (redirectPath) {

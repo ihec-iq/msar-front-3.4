@@ -100,6 +100,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         ? true
         : false;
     token.value = await getSecureToken();
+    checkToken(token.value);
     user.value = await getUser();
     if (user.value) setPermissions(user.value.permissions);
   };

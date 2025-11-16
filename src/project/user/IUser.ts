@@ -13,7 +13,7 @@ export interface IUser {
   password_confirmation?: string;
   active?: number;
   any_device?: number;
-  roles: Array<IRole>;
+  roles: Array<IRole> | Array<number>;
   permissions: Array<string>;
   Employee?: IEmployee;
 }

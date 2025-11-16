@@ -25,6 +25,7 @@ export default {
     Index: "سجلات النظام",
     View: "عرض السجلات",
   },
+  "Any Device": "جميع الاجهزة",
   NoItems: "لا توجد مواد",
   FailedValidation: "فشل التحقق من صحة البيانات",
   files: "الملفات",
