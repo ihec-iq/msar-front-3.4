@@ -9,7 +9,7 @@ import IPage from "@/components/ihec/IPage.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IButton from "@/components/ihec/IButton.vue";
 import SimpleLoading from "@/components/general/loading.vue";
-import moment from "moment";
+import dayjs from "dayjs";
 import { storeToRefs } from "pinia";
 
 const { checkPermissionAccessArray } = usePermissionsStore();
@@ -71,7 +71,7 @@ const toggleExpand = (logId: number) => {
 
 const formatDate = (date: string) => {
   if (!date) return "-";
-  return moment(date).format("YYYY-MM-DD HH:mm:ss");
+  return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
 };
 
 const formatDuration = (duration?: number) => {

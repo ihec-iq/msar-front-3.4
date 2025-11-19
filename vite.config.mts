@@ -6,7 +6,6 @@ import { VantResolver } from "unplugin-vue-components/resolvers";
 import AutoImport from "unplugin-auto-import/vite";
 
 export default defineConfig(({ mode }) => {
-  // نحمل فقط المفاتيح التي تبدأ بـ VITE_ (لن تُسرّب غيرها)
   const env = loadEnv(mode, process.cwd(), "VITE_");
 
   return {
@@ -32,24 +31,32 @@ export default defineConfig(({ mode }) => {
       },
     },
 
-    // ✅ لا تسرّب process.env — نُعرّف NODE_ENV فقط للمكتبات التي تحتاجه
-    // (esbuild يعطي أولوية للتطابق الأطول، لذا NODE_ENV يتقدّم على process.env)
     define: {
-      "process.env": {}, // يمنع كسر مكتبات تفحص وجوده
+      "process.env": {},
       "process.env.NODE_ENV": JSON.stringify(mode),
     },
 
-    // ✅ استخدم متغيّر عام VITE_BASE أو افتراضي
     base: mode === "production" ? (env.VITE_BASE ?? "/") : "/",
-    //base: mode === "production" ? (env.VITE_BASE ?? "/erp-msar/") : "/",
 
-    // ✅ لا تمرّر بورت للعميل؛ استعمل VITE_PORT لو حاب تغيّره محليًا
-    server: {
-      watch: { usePolling: true },
-      // port: Number(env.VITE_PORT ?? 1991),
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vue-vendor': ['vue', 'vue-router', 'pinia'],
+            'ui-vendor': ['@headlessui/vue', '@heroicons/vue', 'sweetalert2', 'vue-sonner'],
+            'form-vendor': ['vee-validate', '@vuelidate/core', 'yup'],
+            'table-vendor': ['@tanstack/vue-table', 'laravel-vue-pagination'],
+            'utils': ['axios', 'dayjs', 'crypto-js'],
+          },
+        },
+      },
+      chunkSizeWarningLimit: 600,
     },
 
-    // يضمن أن Vite يمرّر فقط VITE_* للمتصفح
+    server: {
+      watch: { usePolling: true },
+    },
+
     envPrefix: ["VITE_"],
   };
 });

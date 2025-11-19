@@ -9,7 +9,7 @@ import IPageContent from "@/components/ihec/IPageContent.vue";
 import IButton from "@/components/ihec/IButton.vue";
 import SimpleLoading from "@/components/general/loading.vue";
 import { storeToRefs } from "pinia";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const { checkPermissionAccessArray } = usePermissionsStore();
 const backupStore = useBackupStore();
@@ -60,15 +60,15 @@ const statusText = computed(() => {
 
 const formatDate = (date: string) => {
   if (!date) return "-";
-  return moment(date).format("YYYY-MM-DD HH:mm:ss");
+  return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
 };
 
 const timeSinceLastBackup = computed(() => {
   if (!healthCheck.value?.last_success_at) return null;
-  const lastBackup = moment(healthCheck.value.last_success_at);
-  const now = moment();
-  const hours = now.diff(lastBackup, 'hours');
-  const minutes = now.diff(lastBackup, 'minutes') % 60;
+  const lastBackup = dayjs(healthCheck.value.last_success_at);
+  const now = dayjs();
+  const hours = now.diff(lastBackup, 'hour');
+  const minutes = now.diff(lastBackup, 'minute') % 60;
 
   if (hours < 1) return `منذ ${minutes} دقيقة`;
   if (hours < 24) return `منذ ${hours} ساعة و ${minutes} دقيقة`;

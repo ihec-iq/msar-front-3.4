@@ -8,7 +8,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import type { IBackupFile, IBackupFileFilter } from "../IBackup";
 import SimpleLoading from "@/components/general/loading.vue";
 import Swal from "sweetalert2";
-import moment from "moment";
+import dayjs from "dayjs";
 import { storeToRefs } from "pinia";
 
 const { checkPermissionAccessArray } = usePermissionsStore();
@@ -97,7 +97,7 @@ const formatFileSize = (bytes: number): string => {
 };
 
 const formatDate = (timestamp: number): string => {
-  return moment.unix(timestamp).format("YYYY-MM-DD HH:mm:ss");
+  return dayjs.unix(timestamp).format("YYYY-MM-DD HH:mm:ss");
 };
 
 const getFileName = (path: string): string => {
