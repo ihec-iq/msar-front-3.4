@@ -28,6 +28,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import EditButton from "@/components/dropDown/EditButton.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -72,7 +73,11 @@ const searchFilter = ref<IEmployeeFilter>({
   limit: 10,
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexEmployee", page.toString());
+  useLocalStorage().set({
+    key: "indexEmployee",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.name = fastSearch.value;
   await get_filter(searchFilter.value, page)
@@ -136,9 +141,8 @@ const headers = ref<Array<ITableHeader>>([
     </template>
     <IPageContent>
       <IRow>
-        <ISearchBar :getDataButton="getFilterData"
-          class="w-full  border-b-2 border-gray-200 ">
-          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4"  >
+        <ISearchBar :getDataButton="getFilterData" class="w-full  border-b-2 border-gray-200 ">
+          <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
             <IInput :label="t('SearchForUser')" :placeholder="t('Search')" v-model="fastSearch" type="text"
               :OnKeyEnter="getFilterData" />
           </ICol>
@@ -146,16 +150,16 @@ const headers = ref<Array<ITableHeader>>([
           <ICol :span-lg="1" :span-md="2" :span="1" class="min-w-[150px]">
             <ISelect :label="t('Employee.Section')" v-model="searchFilter.sectionId" name="archiveTypeId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
-          </ICol> 
+          </ICol>
           <ICol :span-lg="1" v-if="data.length >= limits[0].id" :span-md="2" :span="1">
-           <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-            @onChange="getFilterData()" /> 
-          </ICol> 
+            <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
+              @onChange="getFilterData()" />
+          </ICol>
         </ISearchBar>
       </IRow>
       <IRow class="z-[999]">
         <SimpleLoading v-if="isLoading" />
-        <ITable :items="data" :headers="headers"  :showRowNumber="true" :showColumnsButton="false" :showSearch="false">
+        <ITable :items="data" :headers="headers" :showRowNumber="true" :showColumnsButton="false" :showSearch="false">
           <template v-slot:section="{ row }">
             <span>{{ row.Section.name }}</span>
           </template>
@@ -185,10 +189,10 @@ const headers = ref<Array<ITableHeader>>([
             :get-filter-data="getFilterData"
             :searchFilter="searchFilter"
           ></IPagination> -->
-             <div class="w-full overflow-auto">
-              <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-           </div>
+          <div class="w-full overflow-auto">
+            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+          </div>
         </IRow>
       </IRow>
       <IRow>

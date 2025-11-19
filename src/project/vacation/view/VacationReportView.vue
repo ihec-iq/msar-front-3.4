@@ -26,6 +26,7 @@ import ITable from "@/components/ITable/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -58,7 +59,11 @@ const searchFilter = ref<IVacationFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexVacationReport", page.toString());
+  useLocalStorage().set({
+    key: "indexVacationReport",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
@@ -81,7 +86,7 @@ const getFilterData = async (page = 1) => {
 
   isLoading.value = false;
 };
-const makeExcel = (data: any) => {};
+const makeExcel = (data: any) => { };
 //#endregion
 const openItem = (id: number) => {
   router.push({
@@ -152,31 +157,19 @@ const headersExcel = {
 <template>
   <IPage :HeaderTitle="t('VacationIndex')">
     <template #HeaderButtons>
-      <button
-        @click="getFilterData()"
-        class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white"
-      >
-        <JsonExcel
-          :data="data"
-          :fields="headersExcel"
-          type="xlsx"
-          name="filename.xlsx"
-        >
+      <button @click="getFilterData()"
+        class="bg-create hover:bg-createHover duration-500 h-10 w-32 rounded-lg text-white">
+        <JsonExcel :data="data" :fields="headersExcel" type="xlsx" name="filename.xlsx">
           Download Excel
         </JsonExcel>
       </button>
     </template>
     <IPageContent>
-      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput
-              :label="t('Search')"
-              :placeholder="t('Search')"
-              v-model="fastSearch"
-              type="text"
-              :OnKeyEnter="getFilterData"
-            />
+            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" type="text"
+              :OnKeyEnter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>
@@ -185,14 +178,8 @@ const headersExcel = {
           <div class="inline-block min-w-full">
             <!-- card -->
             <div class="rounded-xl" v-if="isLoading == false">
-              <div
-                v-motion
-                :initial="{ opacity: 0, y: -15 }"
-                :enter="{ opacity: 1, y: 0 }"
-                :variants="{ custom: { scale: 2 } }"
-                :delay="200"
-                v-if="data.length > 0"
-              >
+              <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
+                :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
                 <div class="mb-5">
                   <ITable :items="data" :headers="headers">
                     <template v-slot:name="{ row }">
@@ -215,8 +202,7 @@ const headersExcel = {
                     </template>
                     <template v-slot:currentYearDailyVacations="{ row }">
                       <span>
-                        {{ ToNumberShow(row.currentYearDailyVacations) }}</span
-                      >
+                        {{ ToNumberShow(row.currentYearDailyVacations) }}</span>
                     </template>
                     <template v-slot:deservedSickRecord="{ row }">
                       <span> {{ ToNumberShow(row.deservedSickRecord) }}</span>
@@ -246,22 +232,12 @@ const headersExcel = {
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-4/5">
-            <TailwindPagination
-              class="flex justify-center mt-6"
-              :data="dataPage"
-              @pagination-change-page="getFilterData"
-              :limit="searchFilter.limit"
-            />
+            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
           </div>
           <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect
-              :label="t('Limit')"
-              v-model="searchFilter.limit"
-              name="archiveTypeId"
-              :options="limits"
-              :IsRequire="true"
-              @onChange="getFilterData()"
-            />
+            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+              :IsRequire="true" @onChange="getFilterData()" />
           </div>
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>

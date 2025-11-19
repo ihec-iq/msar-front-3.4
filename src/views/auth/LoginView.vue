@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import SimpleLoading from "@/components/general/SimpleLoading.vue";
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
@@ -77,7 +78,7 @@ const Login = async () => {
     .then(() => {
       const redirectPath = localStorage.getItem("redirectPathMsar");
       if (redirectPath) {
-        localStorage.removeItem("redirectPathMsar");
+        useLocalStorage().remove("redirectPathMsar");
         router.push(redirectPath);
       } else {
         router.push({

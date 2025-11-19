@@ -33,7 +33,7 @@ import { useSettingStore } from "@/project/core/settingStore";
 import type { ISetting } from "@/project/core/ISetting";
 import ITable from "@/components/ITable/ITable.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
- const route = useRoute();
+const route = useRoute();
 const router = useRouter();
 watch(
     () => route.params.search,
@@ -68,7 +68,11 @@ const searchFilter = ref<IPromotionFilter>({ // Updated to use promotion filter
     isBound: true
 });
 const getFilterData = async (page = 1) => {
-    localStorage.setItem("checkPromotion", page.toString()); // Updated to use promotion
+    useLocalStorage().set({
+        key: "checkPromotion",
+        value: page.toString(),
+        withEncrypt: false,
+    });
     isLoading.value = true;
     searchFilter.value.employeeName = fastSearch.value;
     await get_checkPromotion(searchFilter.value, page) // Updated to use promotion store
@@ -131,7 +135,7 @@ const headers = ref<Array<ITableHeader>>([
             <IButton width="28" :onClick="recheck" :text="t('Promotion.ReCalculate')" /> <!-- Updated for promotion -->
         </template>
         <IPageContent>
-            <IRow :cols="3" :cols-md="2"  :cols-lg="3">
+            <IRow :cols="3" :cols-md="2" :cols-lg="3">
                 <ISearchBar :getDataButton="getFilterData">
                     <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
                         <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch"

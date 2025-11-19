@@ -35,7 +35,7 @@ import ITable from "@/components/ITable/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import { getError } from "@/utilities/helpers";
 import Swal from "sweetalert2";
-import IInput from "@/components/inputs/IInput.vue"; 
+import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 const route = useRoute();
@@ -80,7 +80,11 @@ const searchFilter = ref<IPromotionFilter>({
   bound: 0
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("checkPromotion", page.toString());
+  useLocalStorage().set({
+    key: "checkPromotion",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
   searchFilter.value.bound = searchFilter.value.bound == 0 ? 0 : searchFilter.value.bound;
@@ -164,11 +168,11 @@ const headers = ref<Array<ITableHeader>>([
       <IButton width="28" :onClick="recheck" :text="t('Promotion.ReCalculate')" />
     </template>
     <IPageContent>
-      <IRow :cols="1" :cols-md="1"  :cols-lg="1" class="scroll-auto">
+      <IRow :cols="1" :cols-md="1" :cols-lg="1" class="scroll-auto">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="3" :span-md="3" :span="2" :span-sm="4">
-            <IInput   :placeholder="t('SearchForUser')" v-model="fastSearch"
-              :type="EnumInputType.Text" :OnKeyEnter="getFilterData" />
+            <IInput :placeholder="t('SearchForUser')" v-model="fastSearch" :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData" />
           </ICol>
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
@@ -178,7 +182,8 @@ const headers = ref<Array<ITableHeader>>([
           <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center">
             <ICheckbox :label="t('Promotion.IsBoundFilter') + ' ' + t('Days')" v-model="searchFilter.isBound"
               :IsRequire="true" @onChange="getFilterData()" class="flex items-center justify-center" />
-            <IInput v-model="searchFilter.bound" :disabled="!searchFilter.isBound" :type="EnumInputType.Number" class="w-[100px]" @keyup.enter="getFilterData" />
+            <IInput v-model="searchFilter.bound" :disabled="!searchFilter.isBound" :type="EnumInputType.Number"
+              class="w-[100px]" @keyup.enter="getFilterData" />
           </ICol>
         </ISearchBar>
       </IRow>

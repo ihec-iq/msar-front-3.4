@@ -52,7 +52,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const setToken = async (_token: string) => {
     if (!_token || _token == "") return logout();
     token.value = _token;
-    localStorage.setItem(EnumNameToken.isAuthenticated, "1");
+    useLocalStorage().set({
+      key: EnumNameToken.isAuthenticated,
+      value: 1,
+      withEncrypt: false,
+    });
     Api.defaults.headers.common["Authorization"] = `Bearer ${_token}`;
     isAuthenticated.value = true;
     setSecureToken(_token);
@@ -121,10 +125,10 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
 });
 
-export const removeUnUsedLogin = () => { 
-  localStorage.removeItem(EnumNameToken.tokenENCRYPT);
-  localStorage.removeItem(EnumNameToken.userENCRYPT);
-  localStorage.removeItem(EnumNameToken.isAuthenticated); 
+export const removeUnUsedLogin = () => {
+  useLocalStorage().remove(EnumNameToken.isAuthenticated);
+  useLocalStorage().remove(EnumNameToken.userENCRYPT);
+  useLocalStorage().remove(EnumNameToken.tokenENCRYPT);
 };
 export const setSecureToken = (token: string) => {
   // Add additional browser-specific identifier

@@ -3,6 +3,7 @@ import { ref } from "vue";
 import type { IBackupSettings } from "../../IBackup";
 import { useBackupStore } from "../../backupStore";
 import Swal from "sweetalert2";
+import { t } from "@/utilities/I18nPlugin";
 
 const props = defineProps<{
   formData: IBackupSettings;
@@ -24,8 +25,43 @@ const addTelegramChatId = () => {
 
 const removeTelegramChatId = (index: number) => {
   if (props.formData.telegram_chat_ids) {
-    props.formData.telegram_chat_ids.splice(index, 1);
-  }
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn m-2 bg-red-700",
+        cancelButton: "btn bg-grey-400",
+      },
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: t("Are You Sure?"),
+        text: t("You Won't Be Able To Revert This!"),
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: t("Yes, delete it!"),
+        cancelButtonText: t("No, cancel!"),
+        reverseButtons: true,
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await backupStore.updateSettings(dataToSave);
+
+          await archiveTypeStore._delete(archiveType.id).then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            props.formData.telegram_chat_ids.splice(index, 1);
+
+          });
+        }
+      })
+      .catch((error) => {
+        ErrorToast();
+      });
+  };
+}
 };
 
 // Helper functions
@@ -99,8 +135,8 @@ const testTelegram = async () => {
           status === "success" || status === "ok" || status === "completed"
             ? "success"
             : status === "error" || status === "failed" || status === "failure"
-            ? "error"
-            : "error";
+              ? "error"
+              : "error";
 
         return {
           chat_id: r?.chat_id ?? null,
@@ -143,23 +179,23 @@ const testTelegram = async () => {
       const badgeCls = isSuccess
         ? "bg-green-100 text-green-700 border-green-200"
         : isError
-        ? "bg-red-100 text-red-700 border-red-200"
-        : "bg-amber-100 text-amber-800 border-amber-200";
+          ? "bg-red-100 text-red-700 border-red-200"
+          : "bg-amber-100 text-amber-800 border-amber-200";
       const lineCls = isSuccess ? "text-green-700" : isError ? "text-red-700" : "text-amber-800";
       const http =
         r.http_status != null
           ? `HTTP ${escapeHtml(r.http_status)}`
           : r.error_code != null
-          ? `ERR ${escapeHtml(r.error_code)}`
-          : "—";
+            ? `ERR ${escapeHtml(r.error_code)}`
+            : "—";
       const who = r.chat_id != null ? `<strong>${escapeHtml(String(r.chat_id))}</strong>` : `#${idx + 1}`;
 
       const short =
         r.description != null
           ? ` — ${escapeHtml(String(r.description))}`
           : r.message != null
-          ? ` — ${escapeHtml(typeof r.message === "string" ? r.message : "")}`
-          : "";
+            ? ` — ${escapeHtml(typeof r.message === "string" ? r.message : "")}`
+            : "";
 
       return `
         <li class="border rounded-lg p-3 md:p-4 bg-white">
@@ -248,51 +284,36 @@ const testTelegram = async () => {
       <label class="relative inline-flex items-center cursor-pointer">
         <input type="checkbox" v-model="formData.telegram_enabled" class="sr-only peer" />
         <div
-          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-        ></div>
+          class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+        </div>
       </label>
     </div>
 
     <div v-if="formData.telegram_enabled" class="space-y-4">
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Telegram Bot Token</label>
-        <input
-          type="text"
-          v-model="formData.telegram_bot_token"
-          placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
-          class="w-full px-3 py-2 border  text-gray-600  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <input type="text" v-model="formData.telegram_bot_token" placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+          class="w-full px-3 py-2 border  text-gray-600  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
 
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Telegram Chat IDs</label>
         <div class="flex gap-2 mb-2">
-          <input
-            type="text"
-            v-model="newTelegramChatId"
-            placeholder="123456789"
+          <input type="text" v-model="newTelegramChatId" placeholder="123456789"
             class="flex-1 px-3 py-2 border border-gray-300 text-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            @keypress.enter="addTelegramChatId"
-          />
-          <button
-            @click="addTelegramChatId"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
-          >
+            @keypress.enter="addTelegramChatId" />
+          <button @click="addTelegramChatId"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
             إضافة
           </button>
-          <button
-            @click="testTelegram"
-            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
-          >
+          <button @click="testTelegram"
+            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium">
             اختبار
           </button>
         </div>
         <div class="flex flex-wrap gap-2">
-          <span
-            v-for="(chatId, index) in formData.telegram_chat_ids"
-            :key="index"
-            class="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm border border-blue-200"
-          >
+          <span v-for="(chatId, index) in formData.telegram_chat_ids" :key="index"
+            class="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm border border-blue-200">
             {{ chatId }}
             <button @click="removeTelegramChatId(index)" class="ms-2 text-blue-600 hover:text-blue-800 font-bold">
               ×

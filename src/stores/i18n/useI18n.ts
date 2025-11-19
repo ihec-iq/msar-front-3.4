@@ -4,6 +4,7 @@ import { createI18n } from "vue-i18n";
 
 import en from "@/locales/en";
 import ar from "@/locales/ar";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 //import axios from "axios";
 
 // Define the available locales and their translations
@@ -74,7 +75,11 @@ export function useI18n() {
   // Set the locale and store it in localStorage
   function setLocale(locale: ILanguage) {
     currentLocale.value = locale;
-    localStorage.setItem("locale", JSON.stringify(locale));
+    useLocalStorage().set({
+      key: "locale",
+      value: JSON.stringify(locale),
+      withEncrypt: false,
+    });
     i18n.global.locale = currentLocale.value.code as "ar" | "en";
     const htmlEl = document.querySelector("html");
     htmlEl?.setAttribute("lang", currentLocale.value.code);

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, nextTick } from "vue";
 import { Icon } from "@iconify/vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 type PageSize = "A4" | "A5";
 type Orientation = "portrait" | "landscape";
@@ -43,9 +44,9 @@ onMounted(() => {
 watch(
   [includeHeader, includePageFooter, includePageNumbers, pageSize, orientation, footerAlign, marginMm, selectedElementId],
   () => {
-    localStorage.setItem(
-      "printComboSettings",
-      JSON.stringify({
+    useLocalStorage().set({
+      key: "printComboSettings",   
+      value: JSON.stringify({
         includeHeader: includeHeader.value,
         includePageFooter: includePageFooter.value,
         includePageNumbers: includePageNumbers.value,
@@ -54,8 +55,9 @@ watch(
         footerAlign: footerAlign.value,
         marginMm: marginMm.value,
         selectedElementId: selectedElementId.value,
-      })
-    );
+      }),
+      withEncrypt: false,
+    });
   }
 );
 
@@ -125,11 +127,11 @@ function wrapPage(contentHtml: string, pageNum: number, total: number): string {
 /* بناء مستند الطباعة */
 function buildPrintDoc(pages: string[], total: number) {
   const styles = copyStyles();
-  const body = pages.map((p, i) => wrapPage(p, i+1, total)).join(`<div class="break"></div>`);
+  const body = pages.map((p, i) => wrapPage(p, i + 1, total)).join(`<div class="break"></div>`);
 
   const reportFooter = props.reportFooterHtml
     ? (props.reportFooterNewPage ? `<div class="break"></div>` : "") +
-      `<div class="report-footer" style="text-align:${footerAlign.value}">${props.reportFooterHtml}</div>`
+    `<div class="report-footer" style="text-align:${footerAlign.value}">${props.reportFooterHtml}</div>`
     : "";
 
   return `<!DOCTYPE html>
@@ -187,19 +189,19 @@ async function printSelected() {
 <template>
   <div style="display:flex; align-items:center; gap:8px; position:relative;">
     <button @click="printSelected"
-            style="background:#2563eb; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">
+      style="background:#2563eb; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">
       طباعة
     </button>
 
     <div style="position:relative;">
       <button @click="showSettings = !showSettings"
-              style="background:#f3f4f6; border:1px solid #ccc; border-radius:6px; padding:6px; cursor:pointer;">
+        style="background:#f3f4f6; border:1px solid #ccc; border-radius:6px; padding:6px; cursor:pointer;">
         <Icon icon="mdi:dots-vertical" width="20" />
       </button>
 
       <transition name="fade-slide">
         <div v-if="showSettings"
-             style="position:absolute; right:0; margin-top:4px; background:#fff; border:1px solid #ddd; border-radius:8px; padding:10px; box-shadow:0 2px 6px rgba(0,0,0,.2); z-index:999; min-width:240px;">
+          style="position:absolute; right:0; margin-top:4px; background:#fff; border:1px solid #ddd; border-radius:8px; padding:10px; box-shadow:0 2px 6px rgba(0,0,0,.2); z-index:999; min-width:240px;">
           <strong>الشيتات</strong>
           <div v-for="opt in props.printOptions" :key="opt.elementId" style="margin:6px 0;">
             <label><input type="radio" v-model="selectedElementId" :value="opt.elementId" /> {{ opt.label }}</label>
@@ -247,6 +249,14 @@ async function printSelected() {
 </template>
 
 <style scoped>
-.fade-slide-enter-active, .fade-slide-leave-active { transition: all .2s ease; }
-.fade-slide-enter-from, .fade-slide-leave-to { opacity: 0; transform: translateY(-6px); }
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all .2s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
 </style>

@@ -19,6 +19,7 @@ import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardVactionTimeIndex from "./CardVactionTimeIndex.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -61,8 +62,11 @@ const searchFilter = ref<IVacationTimeFilter>({
   employeeName: "",
 });
 const getFilterData = async (page: number = 1) => {
-    localStorage.setItem("indexVacationTime", page.toString());
-
+  useLocalStorage().set({
+    key: "indexVacationTime",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
   await useVacationTimeStore()
@@ -106,29 +110,16 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :cols="2" :cols-md="2"  :cols-lg="2" :sm="1">
+      <IRow :cols="2" :cols-md="2" :cols-lg="2" :sm="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput
-              :label="t('Search')"
-              :placeholder="t('Search')"
-              v-model="fastSearch"
-              type="text"
-              :OnKeyEnter="getFilterData"
-              :cached="true"
-              cached-name="searchVacationTime"
-            />
+            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" type="text"
+              :OnKeyEnter="getFilterData" :cached="true" cached-name="searchVacationTime" />
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :cols="2"  :cols-lg="2" :cols-md="2" :cols-sm="1" >
-        <ICol
-          :span="1"
-          :span-lg="1"
-          :span-md="1"
-          v-for="item in data"
-          :key="item.id"
-        >
+      <IRow :cols="2" :cols-lg="2" :cols-md="2" :cols-sm="1">
+        <ICol :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.id">
           <!-- card -->
           <CardVactionTimeIndex :item="item" />
           <!-- end card -->
@@ -138,22 +129,12 @@ onMounted(async () => {
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-4/5">
-            <TailwindPagination
-              class="flex justify-center mt-6"
-              :data="dataPage"
-              @pagination-change-page="getFilterData"
-              :limit="searchFilter.limit"
-            />
+            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
           </div>
           <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect
-              :label="t('Limit')"
-              v-model="searchFilter.limit"
-              name="archiveTypeId"
-              :options="limits"
-              :IsRequire="true"
-              @onChange="getFilterData()"
-            />
+            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+              :IsRequire="true" @onChange="getFilterData()" />
           </div>
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>

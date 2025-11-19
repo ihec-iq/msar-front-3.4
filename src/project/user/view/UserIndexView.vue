@@ -87,7 +87,7 @@ const getFilterData = async (page = 1) => {
 //#endregion
 
 //#endregion
-const update = (id: number) => {
+const update = (id: number | any) => {
   router.push({
     name: "userUpdate",
     params: { id: id },
@@ -123,6 +123,7 @@ import ITable from "@/components/ITable/ITable.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import IRole from "@/project/role/IRole";
 const app = getCurrentInstance();
 const trns = app?.appContext.config.globalProperties.$trns;
 </script>
@@ -153,7 +154,7 @@ const trns = app?.appContext.config.globalProperties.$trns;
           <template v-slot:roles="{ row }">
             <span v-if="row.roles != '[]'" class="flex justify-center">
               <p
-                v-for="role  in row.roles.slice(0, 3)"
+                v-for="role  in (row.roles as Array<IRole>).slice(0, 3)"
                 :key="role.id"
                 class="text-sm leading-none text-text dark:text-textLight ml-2 flex-shrink"
               >

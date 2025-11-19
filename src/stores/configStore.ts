@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import envConfig from "@/api/envConfig";
 import axios from "axios";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 interface ConfigState {
   organization: string | null;
@@ -13,7 +14,7 @@ export const useConfigStore = defineStore("ConfigStore", () => {
   // State with proper types according to ConfigState interface
   const Config = ref<ConfigState>({
     organization: null,
-    connectionString: null
+    connectionString: null,
   });
 
   /**
@@ -34,9 +35,13 @@ export const useConfigStore = defineStore("ConfigStore", () => {
    */
   const storeConnection = async (config: string): Promise<void> => {
     try {
-      localStorage.setItem("ConnectionString", config);
+      useLocalStorage().set({
+        key: "ConnectionString",
+        value: config,
+        withEncrypt: false,
+      });
       Config.value.connectionString = config;
-      Api.defaults.baseURL = config+"/api";
+      Api.defaults.baseURL = config + "/api";
     } catch (error) {
       console.error("Error writing connection config:", error);
       throw new Error("Failed to store connection string");
@@ -48,7 +53,11 @@ export const useConfigStore = defineStore("ConfigStore", () => {
    */
   const storeOrganization = async (orgName: string): Promise<void> => {
     try {
-      localStorage.setItem("Organization", orgName);
+      useLocalStorage().set({
+        key: "Organization",
+        value: orgName,
+        withEncrypt: false,
+      });
       Config.value.organization = orgName;
     } catch (error) {
       console.error("Error writing organization config:", error);
@@ -62,7 +71,10 @@ export const useConfigStore = defineStore("ConfigStore", () => {
   const checkConnection = async (server: string): Promise<boolean> => {
     try {
       const response = await axios.get(`${server}/check`);
-      return response.status === 200 && response.data.state === "ERP MSAR API running...";
+      return (
+        response.status === 200 &&
+        response.data.state === "ERP MSAR API running..."
+      );
     } catch (error) {
       console.error("Connection check failed:", error);
       return false;
@@ -77,13 +89,13 @@ export const useConfigStore = defineStore("ConfigStore", () => {
       // Load connection string with fallback to environment config
       const storedUrl = localStorage.getItem("ConnectionString");
       Config.value.connectionString = storedUrl || envConfig._baseURL;
-      
+
       // Load organization
       Config.value.organization = localStorage.getItem("Organization");
-      
+
       // Initialize API base URL
       if (Config.value.connectionString) {
-        Api.defaults.baseURL = Config.value.connectionString+"/api";
+        Api.defaults.baseURL = Config.value.connectionString + "/api";
       }
     } catch (error) {
       console.error("Error loading configuration:", error);

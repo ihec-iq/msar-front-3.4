@@ -13,6 +13,7 @@ import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
 import SimpleLoading from "@/components/general/SimpleLoading.vue";
 import CardContainer from "@/components/ui/card-3d/CardContainer.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 const { Config } = storeToRefs(useConfigStore());
 
 const version = (import.meta as any).env.VITE_APP_VERSION; // Get the version from package.json
@@ -54,8 +55,8 @@ const Login = async () => {
     .then(() => {
       const redirectPath = localStorage.getItem("redirectPathMsar");
     if (redirectPath) {
-      router.push({ name: redirectPath as string });
-      localStorage.removeItem("redirectPathMsar")
+      router.push({ name: redirectPath as string }); 
+      useLocalStorage().remove("redirectPathMsar");
     } else {
       router.push({
         name: "Dashboard",

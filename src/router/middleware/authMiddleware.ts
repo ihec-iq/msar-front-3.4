@@ -1,3 +1,4 @@
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 import { getSecureToken } from "@/stores/authStore";
 import type { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 export default async function authMiddleware(
@@ -8,7 +9,11 @@ export default async function authMiddleware(
   // Perform your authentication logic
   const token = await getSecureToken();
   if (token == null) {
-    localStorage.setItem("redirectPathMsar", to.name?.toString() || "");
+    useLocalStorage().set({
+      key: "redirectPathMsar",
+      value: to.name?.toString() || "",
+      withEncrypt: false,
+    });
     next({ name: "login" });
     return;
   }

@@ -1,6 +1,7 @@
 import { ReactiveRepository } from "./ReactiveRepository";
 import { readonly } from "vue";
 import axios from "axios";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 export interface I18nInformation {
   info: { lang: string };
@@ -54,8 +55,11 @@ class I18nRepository extends ReactiveRepository<I18nInformation> {
   }
   public changeLanguage(lang: string): void {
     console.log("change to local : " + lang);
-    localStorage.setItem("lang", lang);
-    console.log(localStorage.getItem("lang"));
+    useLocalStorage().set({
+      key: "lang",
+      value: lang,
+      withEncrypt: false,
+    });
     this.setLanguage(lang);
   }
 }

@@ -157,7 +157,11 @@ const printWindow = () => {
   }, 250);
 };
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("index" + IdPage, page.toString());
+  useLocalStorage().set({
+    key: "index" + IdPage,
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
   searchFilter.value.bound =
@@ -231,10 +235,11 @@ onMounted(async () => {
   //isLoading.value = false;
 });
 const changeCheck = () => {
-  localStorage.setItem(
-    "check" + IdPage,
-    searchFilter.value.isBound ? "1" : "0"
-  );
+  useLocalStorage().set({
+    key: "check" + IdPage,
+    value: searchFilter.value.isBound ? "1" : "0",
+    withEncrypt: false,
+  });
 };
 const headers = ref<Array<ITableHeader>>([
   { caption: t("CheckTable"), value: "checkId" },
@@ -432,12 +437,13 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
 const isOpenModel = ref(false)
 </script>
 <template>
-  <IPage :HeaderTitle="t('Bonus.Alert')" :is-loading="isLoading" :isOpenModel="isOpenModel" @update:isOpenModel="isOpenModel = $event">
+  <IPage :HeaderTitle="t('Bonus.Alert')" :is-loading="isLoading" :isOpenModel="isOpenModel"
+    @update:isOpenModel="isOpenModel = $event">
     <template #HeaderButtons>
       <IButton class="w-[200px]" :onClick="recheck" :text="t('Bonus.ReCalculate')" />
     </template>
     <IPageContent>
-      <IRow :cols="1" :cols-md="1"  :cols-lg="1" class="scroll-auto">
+      <IRow :cols="1" :cols-md="1" :cols-lg="1" class="scroll-auto">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="3" :span-md="3" :span="2" :span-sm="4">
             <IInput :placeholder="t('SearchForUser')" v-model="fastSearch" :type="EnumInputType.Text"

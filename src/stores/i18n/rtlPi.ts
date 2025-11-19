@@ -12,11 +12,19 @@ export const useRtlStore = defineStore("rtlStore", () => {
     isRtl.value = !isRtl.value;
     // console.log("New RTL : " + isRtl.value);
     if (isRtl.value) {
-      localStorage.setItem("dir", "rtl");
+      useLocalStorage().set({
+        key: "dir",
+        value: "rtl",
+        withEncrypt: false,
+      });
       //localStorage.setItem("isRtl", "true");
     } else {
       //localStorage.setItem("isRtl", "false");
-      localStorage.setItem("dir", "ltr");
+      useLocalStorage().set({
+        key: "dir",
+        value: "ltr",
+        withEncrypt: false,
+      });
     }
     const htmlEl = document.querySelector("html");
     // let dir: string | any = "ltr";

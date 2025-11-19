@@ -130,7 +130,11 @@ watch(
   visibleColumns,
   (value) => {
     if (props.persistKey) {
-      localStorage.setItem(persistenceStorageKey(), JSON.stringify(value));
+      useLocalStorage().set({
+        key: persistenceStorageKey(),
+        value: JSON.stringify(value),
+        withEncrypt: false,
+      });
     }
     emit("columns-change", value);
   },
@@ -450,23 +454,19 @@ const printTable = async (): Promise<void> => {
           <!-- Search -->
           <div class="relative" v-if="showSearch">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
             </div>
-            <input
-              v-model="rawSearchText"
-              :placeholder="t('search') || 'Search...'"
-              class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <input v-model="rawSearchText" :placeholder="t('search') || 'Search...'"
+              class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
           </div>
 
           <!-- Column visibility -->
           <div class="relative" v-if="showColumnsButton">
-            <button
-              @click="showColumnPopup = !showColumnPopup"
-              type="button"
+            <button @click="showColumnPopup = !showColumnPopup" type="button"
               class="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-200 to-blue-200 dark:from-purple-700 dark:to-blue-700 hover:from-purple-300 hover:to-blue-300 dark:hover:from-purple-800 dark:hover:to-blue-800 text-purple-800 dark:text-blue-100 font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-700 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -474,45 +474,37 @@ const printTable = async (): Promise<void> => {
                 </path>
               </svg>
               <span class="text-sm font-semibold">{{ t("columns") || "Columns" }}</span>
-              <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': showColumnPopup }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': showColumnPopup }" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
 
             <!-- Popup -->
-            <div
-              v-if="showColumnPopup"
-              class="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl z-50 min-w-72 backdrop-blur-sm"
-            >
+            <div v-if="showColumnPopup"
+              class="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl z-50 min-w-72 backdrop-blur-sm">
               <div class="p-5">
                 <div class="mb-4 flex justify-between items-center">
                   <span class="text-sm text-gray-600 dark:text-gray-400">
                     {{ t("visible") }} {{ visibleColumns.length }} {{ t("of") }} {{ props.headers.length }}
                   </span>
-                  <button
-                    @click="toggleAllColumns"
-                    class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
-                  >
-                    {{ visibleColumns.length === props.headers.length ? (t("hideAll") || "Hide All") : (t("showAll") || "Show All") }}
+                  <button @click="toggleAllColumns"
+                    class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
+                    {{ visibleColumns.length === props.headers.length ? (t("hideAll") || "Hide All") : (t("showAll") ||
+                    "Show All") }}
                   </button>
                 </div>
 
                 <div class="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
-                  <label
-                    v-for="header in props.headers"
-                    :key="header.value"
-                    class="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors group"
-                  >
-                    <input
-                      type="checkbox"
-                      :value="header.value"
-                      v-model="visibleColumns"
-                      class="w-4 h-4 text-blue-600 border-2 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 bg-white dark:bg-gray-700"
-                    />
+                  <label v-for="header in props.headers" :key="header.value"
+                    class="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors group">
+                    <input type="checkbox" :value="header.value" v-model="visibleColumns"
+                      class="w-4 h-4 text-blue-600 border-2 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 bg-white dark:bg-gray-700" />
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {{ header.caption }}
                       <span v-if="header.print === false"
-                            class="ml-2 text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full">Print Hidden</span>
+                        class="ml-2 text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full">Print
+                        Hidden</span>
                     </span>
                   </label>
                 </div>
@@ -531,33 +523,25 @@ const printTable = async (): Promise<void> => {
             <span class="text-sm text-gray-600 dark:text-gray-400">{{ t("rowsPerPage") || "Rows" }}</span>
             <select
               class="px-2 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100"
-              v-model.number="currentPageSize"
-              @change="emit('update:pageSize', currentPageSize); resetPage();"
-            >
+              v-model.number="currentPageSize" @change="emit('update:pageSize', currentPageSize); resetPage();">
               <option v-for="size in pageSizeOptions" :key="size" :value="size">{{ size }}</option>
             </select>
           </div>
 
-          <button
-            v-if="showExportButton"
-            @click="exportToExcel"
-            class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-          >
+          <button v-if="showExportButton" @click="exportToExcel"
+            class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             {{ t("exportExcel") || "Export Excel" }}
           </button>
 
-          <button
-            v-if="showPrintButton"
-            @click="printTable"
-            class="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
-          >
+          <button v-if="showPrintButton" @click="printTable"
+            class="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
             </svg>
             {{ t("print") || "Print" }}
           </button>
@@ -568,61 +552,48 @@ const printTable = async (): Promise<void> => {
       </div>
 
       <!-- Printable Table Container -->
-      <div
-        id="printable-table"
-        class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700"
-        role="grid"
-        :aria-rowcount="sortedItems.length"
-      >
+      <div id="printable-table" class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700"
+        role="grid" :aria-rowcount="sortedItems.length">
         <slot name="headerTitle"></slot>
 
         <table class="w-full border-collapse">
           <thead>
             <tr
-              class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-750 border-b border-gray-200 dark:border-gray-600"
-            >
+              class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-750 border-b border-gray-200 dark:border-gray-600">
               <th v-if="selectable"
-                  class="px-4 py-3 text-center text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600"
-                  :class="{'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700': stickyHeader}"
-              >
-                <input type="checkbox" :checked="allRowsOnPageSelected" @change="toggleSelectAllOnPage" aria-label="Select all on page" />
+                class="px-4 py-3 text-center text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600"
+                :class="{ 'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700': stickyHeader }">
+                <input type="checkbox" :checked="allRowsOnPageSelected" @change="toggleSelectAllOnPage"
+                  aria-label="Select all on page" />
               </th>
 
               <th v-if="props.showRowNumber"
-                  class="px-4 py-3 text-center text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-700"
-                  :class="{'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700': stickyHeader}"
-              >
+                class="px-4 py-3 text-center text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-700"
+                :class="{ 'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700': stickyHeader }">
                 #
               </th>
 
-              <th
-                v-for="header in props.headers"
-                :key="header.value"
-                v-show="visibleColumns.includes(header.value)"
-                :style="getColumnStyle(header.value)"
-                :aria-sort="ariaSortForHeader(header)"
-                :class="[
+              <th v-for="header in props.headers" :key="header.value" v-show="visibleColumns.includes(header.value)"
+                :style="getColumnStyle(header.value)" :aria-sort="ariaSortForHeader(header)" :class="[
                   'px-4 py-3 select-none text-left border-r border-gray-200 dark:border-gray-600 last:border-r-0',
                   stickyHeader ? 'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700' : '',
                   header.align === 'center' ? 'text-center' : header.align === 'right' ? 'text-right' : 'text-left',
-                ]"
-              >
-                <button
-                  type="button"
-                  class="w-full flex items-center justify-between focus:outline-none"
+                ]">
+                <button type="button" class="w-full flex items-center justify-between focus:outline-none"
                   :class="header.sortable === false ? 'cursor-default' : 'cursor-pointer hover:opacity-80'"
-                  @click="toggleSortForColumn(header)"
-                >
+                  @click="toggleSortForColumn(header)">
                   <span class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
                     {{ header.caption }}
-                    <span v-if="header.print === false" class="ml-1 text-gray-400 dark:text-gray-500 print-hide" title="Hidden on print">
+                    <span v-if="header.print === false" class="ml-1 text-gray-400 dark:text-gray-500 print-hide"
+                      title="Hidden on print">
                       <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                       </svg>
                     </span>
                   </span>
-                  <span v-if="sortKey === (header.sortKey || header.value)" class="text-blue-600 dark:text-blue-400 font-bold text-sm">
+                  <span v-if="sortKey === (header.sortKey || header.value)"
+                    class="text-blue-600 dark:text-blue-400 font-bold text-sm">
                     {{ sortAscending ? "↑" : "↓" }}
                   </span>
                 </button>
@@ -631,39 +602,30 @@ const printTable = async (): Promise<void> => {
           </thead>
 
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            <tr
-              v-for="(row, rowIndexOnPage) in paginatedItems"
+            <tr v-for="(row, rowIndexOnPage) in paginatedItems"
               :key="getRowKey(row, rowIndexOnPage + (currentPage - 1) * currentPageSize)"
               class="hover:bg-blue-50 dark:hover:bg-gray-700/50 transition-all duration-150 group"
-              @click="onRowClick(row, rowIndexOnPage)"
-            >
+              @click="onRowClick(row, rowIndexOnPage)">
               <td v-if="selectable"
-                  class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 font-medium border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50"
-              >
-                <input
-                  type="checkbox"
+                class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 font-medium border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <input type="checkbox"
                   :checked="selectedRowKeys.includes(getRowKey(row, rowIndexOnPage + (currentPage - 1) * currentPageSize))"
                   @change="toggleRowSelected(row, rowIndexOnPage + (currentPage - 1) * currentPageSize)"
-                  aria-label="Select row"
-                />
+                  aria-label="Select row" />
               </td>
 
               <td v-if="props.showRowNumber"
-                  class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 font-medium border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 group-hover:bg-blue-100 dark:group-hover:bg-gray-600/50">
+                class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 font-medium border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 group-hover:bg-blue-100 dark:group-hover:bg-gray-600/50">
                 {{ rowIndexOnPage + 1 + (currentPage - 1) * currentPageSize }}
               </td>
 
-              <td
-                v-for="header in props.headers"
-                :key="header.value"
-                v-show="visibleColumns.includes(header.value)"
+              <td v-for="header in props.headers" :key="header.value" v-show="visibleColumns.includes(header.value)"
                 :style="getColumnStyle(header.value)"
                 class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 border-r border-gray-200 dark:border-gray-700 last:border-r-0"
                 :class="[
                   props.dense ? 'py-2' : 'py-3',
                   header.align === 'center' ? 'text-center' : header.align === 'right' ? 'text-right' : 'text-left',
-                ]"
-              >
+                ]">
                 <slot :name="header.value" :row="row" :value="getCellValue(row, header.value)">
                   <!-- Fallback to formatter or raw value -->
                   <template v-if="header.format">
@@ -683,20 +645,20 @@ const printTable = async (): Promise<void> => {
       <div class="mt-4 flex justify-between items-center" v-if="showPagination && !serverSide">
         <div class="text-sm text-gray-600 dark:text-gray-400">
           {{ t("showing") || "Showing" }}
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{ (currentPage - 1) * currentPageSize + 1 }}</span>
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{ (currentPage - 1) * currentPageSize + 1
+            }}</span>
           -
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{ Math.min(currentPage * currentPageSize, sortedItems.length) }}</span>
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{ Math.min(currentPage * currentPageSize,
+            sortedItems.length) }}</span>
           {{ t("of") || "of" }}
           <span class="font-medium text-gray-900 dark:text-gray-100">{{ sortedItems.length }}</span>
           {{ t("results") || "results" }}
         </div>
 
         <div class="flex items-center gap-2">
-          <button
-            @click="currentPage = currentPage - 1; emit('update:currentPage', currentPage)"
+          <button @click="currentPage = currentPage - 1; emit('update:currentPage', currentPage)"
             :disabled="currentPage === 1"
-            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:text-gray-100"
-          >
+            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:text-gray-100">
             {{ t("prev") || "Prev" }}
           </button>
 
@@ -707,11 +669,9 @@ const printTable = async (): Promise<void> => {
             <span class="font-medium text-gray-900 dark:text-gray-100">{{ totalPages }}</span>
           </span>
 
-          <button
-            @click="currentPage = currentPage + 1; emit('update:currentPage', currentPage)"
+          <button @click="currentPage = currentPage + 1; emit('update:currentPage', currentPage)"
             :disabled="currentPage >= totalPages"
-            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:text-gray-100"
-          >
+            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:text-gray-100">
             {{ t("next") || "Next" }}
           </button>
         </div>
@@ -722,12 +682,14 @@ const printTable = async (): Promise<void> => {
     </div>
 
     <!-- No Data Message -->
-    <div v-else-if="!props.items.length && props.showNoData" class="text-center mt-8 py-8 text-gray-500 dark:text-gray-400">
+    <div v-else-if="!props.items.length && props.showNoData"
+      class="text-center mt-8 py-8 text-gray-500 dark:text-gray-400">
       <div class="text-lg">{{ t(props.titleNoData) || t("noData") }}</div>
     </div>
 
     <!-- No Results Message -->
-    <div v-else-if="!filteredItems.length" class="text-center py-4 text-gray-500 dark:text-gray-400 border-2 border-dotted border-gray-400 rounded-lg">
+    <div v-else-if="!filteredItems.length"
+      class="text-center py-4 text-gray-500 dark:text-gray-400 border-2 border-dotted border-gray-400 rounded-lg">
       <div class="text-lg">{{ t(props.titleNoData) || "No results found for your search" }}</div>
     </div>
 
@@ -737,12 +699,24 @@ const printTable = async (): Promise<void> => {
 </template>
 
 <style scoped>
-.table-container { position: relative; }
+.table-container {
+  position: relative;
+}
 
 /* Custom scrollbar for column popup */
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: rgb(243 244 246); border-radius: 4px; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: rgb(209 213 219); border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgb(243 244 246);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(209 213 219);
+  border-radius: 4px;
+}
 
 /* Dark theme gradient support */
 .dark .bg-gradient-to-r.from-gray-50.to-gray-100 {
@@ -750,18 +724,26 @@ const printTable = async (): Promise<void> => {
 }
 
 /* Optional sticky first column (when you enable stickyFirstColumn you may set a class on the first <td>) */
-.sticky-first-col { position: sticky; left: 0; z-index: 5; background: inherit; }
+.sticky-first-col {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: inherit;
+}
 
 /* Print simplifications */
- 
+
 @media print {
+
   /* Hide everything under this component… */
-  .table-container, .table-container * {
+  .table-container,
+  .table-container * {
     visibility: hidden;
   }
 
   /* …except the actual printable area */
-  #printable-table, #printable-table * {
+  #printable-table,
+  #printable-table * {
     visibility: visible;
   }
 
@@ -776,15 +758,34 @@ const printTable = async (): Promise<void> => {
     border-radius: 0 !important;
   }
 
-  thead { display: table-header-group; }
-  tfoot { display: table-footer-group; }
-  tr { page-break-inside: avoid; page-break-after: auto; }
-  th, td { background: white !important; color: black !important; }
-  th { background: #f5f5f5 !important; }
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  th,
+  td {
+    background: white !important;
+    color: black !important;
+  }
+
+  th {
+    background: #f5f5f5 !important;
+  }
 }
 
 /* Optional utility class for any controls you want hidden on print */
 @media print {
-  .print-hide { display: none !important; }
+  .print-hide {
+    display: none !important;
+  }
 }
 </style>
