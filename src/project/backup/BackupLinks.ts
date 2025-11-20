@@ -5,9 +5,7 @@ export const BackupLinks: Array<IconLink> = [
   {
     routerName: "backupPortal",
     title: "النسخ الاحتياطي",
-    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
-    iconX:
-      '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+    mdi: "mdi-backup",
     tab: "backupPortal",
     description: "نظام إدارة النسخ الاحتياطي",
     permissions: [EnumPermission.ShowBackups],
@@ -38,9 +36,7 @@ export const BackupLinks: Array<IconLink> = [
       {
         routerName: "backupSettings",
         title: "إعدادات النظام",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H5m13.2 5.2l-4.2-4.2m0-6l4.2-4.2"/></svg>',
-        iconX:
-          '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H5m13.2 5.2l-4.2-4.2m0-6l4.2-4.2"/></svg>',
+        mdi: "mdi-settings",
         tab: "backupPortal",
         description: "إعدادات النسخ الاحتياطي",
         permissions: [EnumPermission.ManageBackupSettings],

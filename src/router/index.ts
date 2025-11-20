@@ -14,6 +14,7 @@ import employeeRoute from "@/project/employee/employeeRoute";
 import hrRoute from "@/project/hr/hrRoute";
 import backupRoute from "@/project/backup/backupRoute";
 import settingsRoute from "@/project/settings/settingsRoute";
+import dashboardRoute from "@/project/dashboard/dashboardRoute";
 
 //#endregion
 import DefaultLayout from "@/views/layouts/MainView.vue";
@@ -56,6 +57,7 @@ const router = createRouter({
       name: "main",
       component: DefaultLayout,
       children: [
+        ...dashboardRoute,
         ...archiveRoute,
         ...itemRoute,
         ...itemCategoryRoute,
@@ -70,8 +72,8 @@ const router = createRouter({
         ...backupRoute,
         ...settingsRoute,
         {
-          path: "/dashboard",
-          name: "Dashboard",
+          path: "/home",
+          name: "Home",
           component: () => import("@/views/HomeView.vue"),
           meta: {
             middleware: [authMiddleware],
@@ -84,7 +86,7 @@ const router = createRouter({
           meta: {
             middleware: [authMiddleware],
           },
-        }, 
+        },
         {
           path: "/whatsapp",
           name: "whatsapp",

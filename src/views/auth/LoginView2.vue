@@ -54,14 +54,14 @@ const Login = async () => {
     .login(loginForm)
     .then(() => {
       const redirectPath = localStorage.getItem("redirectPathMsar");
-    if (redirectPath) {
-      router.push({ name: redirectPath as string }); 
-      useLocalStorage().remove("redirectPathMsar");
-    } else {
-      router.push({
-        name: "Dashboard",
-      });
-    }
+      if (redirectPath) {
+        router.push({ name: redirectPath as string });
+        useLocalStorage().remove("redirectPathMsar");
+      } else {
+        router.push({
+          name: "Home",
+        });
+      }
     })
     .catch((error) => {
       isLoading.value = false;
@@ -80,12 +80,12 @@ const Login = async () => {
 const isAuthenticated = storeToRefs(useAuthStore());
 onMounted(async () => {
   await authStore.CheckAuth();
-  if (authStore.isAuthenticated) { 
-      router.push({
-        name: "Dashboard",
-      }); 
+  if (authStore.isAuthenticated) {
+    router.push({
+      name: "Home",
+    });
   }
-    await useConfigStore()
+  await useConfigStore()
     .load()
     .then(() => {
       if (Config.value.connectionString == null || Config.value.connectionString == "") {

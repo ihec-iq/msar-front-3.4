@@ -81,7 +81,7 @@ onMounted(async () => {
   if (authStore.user) {
     userInfo.value = authStore.user as IUser;
   } else {
-    router.push({ name: "Dashboard" });
+    router.push({ name: "Home" });
   }
   check_active.value = userInfo.value.active?.toString() == "1";
   check_any_device.value = userInfo.value.any_device?.toString() == "1";
@@ -95,82 +95,44 @@ onMounted(async () => {
         <IForm>
           <IFlex>
             <IBasis base="1/2">
-              <IInput
-                :label="t('Name')"
-                name="Name"
-                v-model="userInfo.name"
-                type="text"
-                :disabled="true"
-              />
-            </IBasis> 
+              <IInput :label="t('Name')" name="Name" v-model="userInfo.name" type="text" :disabled="true" />
+            </IBasis>
             <IBasis base="1/2">
-              <IInput
-                :label="t('Email')"
-                name="email"
-                v-model="userInfo.email"
-                type="text"
-                :disabled="true"
-              />
+              <IInput :label="t('Email')" name="email" v-model="userInfo.email" type="text" :disabled="true" />
             </IBasis>
           </IFlex>
           <IFlex>
             <IBasis base="1/3">
-              <IVSelect
-                :label="t('Role')"
-                v-model="userInfo.roles"
-                name="roles"
-                :options="roleStore.roles"
-                :IsRequire="true"
-                :multiple="true"
-                :disabled="true"
-              />
+              <IVSelect :label="t('Role')" v-model="userInfo.roles" name="roles" :options="roleStore.roles"
+                :IsRequire="true" :multiple="true" :disabled="true" />
             </IBasis>
             <IBasis base="1/3">
               <ICheckbox v-model="check_any_device" :checked="check_any_device">
                 {{ t("AnyDevice") }} :
-                {{ check_any_device ? " مفعل " : " غير مفعل " }}</ICheckbox
-              >
+                {{ check_any_device ? " مفعل " : " غير مفعل " }}</ICheckbox>
             </IBasis>
 
             <IBasis base="1/3">
-              <ICheckbox
-                v-model="check_active"
-                :checked="check_active"
-                :disabled="true"
-              >
+              <ICheckbox v-model="check_active" :checked="check_active" :disabled="true">
                 {{ t("Active") }} :
-                {{ check_active ? " مفعل " : " غير مفعل " }}</ICheckbox
-              ></IBasis
-            >
+                {{ check_active ? " مفعل " : " غير مفعل " }}</ICheckbox>
+            </IBasis>
           </IFlex>
           <ISection :title="t('Change Password')"></ISection>
           <IFlex>
             <IBasis base="1/3">
-              <IInput
-                :label="t('Password')"
-                name="Name"
-                v-model="UserPassword.password"
-                type="password"
-            /></IBasis>
+              <IInput :label="t('Password')" name="Name" v-model="UserPassword.password" type="password" />
+            </IBasis>
             <IBasis base="1/3">
-              <IInput
-                :label="t('Rewrite Password')"
-                name="Name"
-                v-model="UserPassword.rePassword"
-                type="password"
-            /></IBasis>
+              <IInput :label="t('Rewrite Password')" name="Name" v-model="UserPassword.rePassword" type="password" />
+            </IBasis>
           </IFlex>
         </IForm>
       </IRow>
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud
-        :isAdd="userInfo.id == 0"
-        :show-add="false"
-        :show-delete="false"
-        :on-update="update"
-      />
+      <IFooterCrud :isAdd="userInfo.id == 0" :show-add="false" :show-delete="false" :on-update="update" />
     </template>
   </IPage>
-</template> 
+</template>
