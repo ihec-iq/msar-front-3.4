@@ -13,7 +13,7 @@ export interface IStore {
   countIn?: number;
   countOut?: number;
   countReIn?: number;
-  countReOut?: number;
+  countReOut?: number; 
 }
  
 export interface IStoreItemHistory {
@@ -35,6 +35,11 @@ export interface IStoreFilter {
   limit: number;
   summation?: boolean;
   id?: number;
+}
+export interface IInventoryFilter {
+  itemName?: string; 
+  itemId?: string; 
+  limit: number;
 }
 export interface IStoreItemFilter {
   stock?: string;

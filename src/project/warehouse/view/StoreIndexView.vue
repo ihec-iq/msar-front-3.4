@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utilities/I18nPlugin";
-import type { IStore, IStoreFilter } from "../IStore";
+import type { IInventoryFilter, IStore, IStoreFilter } from "../IStore";
 import { useStoringStore } from "../storingStore";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
@@ -12,7 +12,7 @@ const data = ref<Array<IStore>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IStore>>([]);
 
-const { get_filter, get_summation } = useStoringStore();
+const { get_filter } = useStoringStore();
 
 import { limits } from "@/utilities/defaultParams";
 import ICol from "@/components/ihec/ICol.vue";
@@ -55,21 +55,18 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
-const searchFilter = ref<IStoreFilter>({
-  item: "",
+const searchFilter = ref<IInventoryFilter>({
+  itemName: "",
   limit: 10,
-  description: "",
-  summation: true,
 });
 const getFilterData = async (page = 1) => {
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
   isLoading.value = true;
-  searchFilter.value.item = fastSearch.value;
-  searchFilter.value.description = fastSearch.value;
+  searchFilter.value.itemName = fastSearch.value;
 
-  await get_summation(searchFilter.value, page)
+  await get_filter(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data.data;
@@ -85,7 +82,7 @@ const getFilterData = async (page = 1) => {
   isLoading.value = false;
 };
 //#endregion
-const openItem = (id: number) => {
+const openItem = (id: number | null) => {
   router.push({
     name: "ItemHistory",
     params: { id: id },
@@ -104,10 +101,7 @@ onMounted(async () => {
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Item.Name"), value: "itemName" },
   { caption: t("Details"), value: "actions" },
-  { caption: t("Description"), value: "description" },
-  { caption: t("In"), value: "in" },
-  { caption: t("Out"), value: "out" },
-  { caption: t("AvailableInStock"), value: "count" },
+  { caption: t("AvailableInStock"), value: "balance" },
   { caption: t("Price"), value: "price" },
   { caption: t("Stock"), value: "stockName" },
 ]);
@@ -116,21 +110,21 @@ const headers = ref<Array<ITableHeader>>([
   <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
     <IPageContent>
       <IRow class="z-[999999]">
-      <ISearchBar :getDataButton="getFilterData" class="min-w-[500px] ">
-        <ICol>
-          <IInput :label="t('Title')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
-            :OnKeyEnter="getFilterData" />       
-        </ICol>
-        <ICol v-if="data.length >= limits[0].id" >
-              <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-                :IsRequire="true" @onChange="getFilterData()" /> 
-        </ICol> 
-    </ISearchBar>
+        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px] ">
+          <ICol>
+            <IInput :label="t('Title')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData" />
+          </ICol>
+          <ICol v-if="data.length >= limits[0].id">
+            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
+              :IsRequire="true" @onChange="getFilterData()" />
+          </ICol>
+        </ISearchBar>
       </IRow>
       <IRow>
-        <ITable :items="data" :headers="headers">
+        <ITable :items="data" :headers="headers" :show-pagination="false" :is-loading="isLoading">
           <template v-slot:actions="{ row }">
-            <dropdownmenu :openFn="() => openItem(row.itemId)" />
+            <dropdownmenu :openFn="() => openItem(Number(row.itemId))" />
           </template>
           <template v-slot:in="{ row }">
             <span
@@ -151,6 +145,26 @@ const headers = ref<Array<ITableHeader>>([
               }}
             </span></template>
         </ITable>
+        <div class="py-4 min-w-full w-full h-full lg:px-8">
+          <!-- card -->
+          <div class="rounded-xl" v-if="isLoading == false">
+            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
+              <div class="w-full flex flex-row">
+                <div class="basis-4/5 overflow-x-auto font-Tajawal">
+                  <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
+                    @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+                </div>
+                <div class="basis-1/5" v-if="data.length >= limits[0].id">
+                  <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="Limit" :options="limits"
+                    :IsRequire="true" @onChange="getFilterData()" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <SimpleLoading v-if="isLoading"></SimpleLoading>
+          <!-- end card -->
+        </div>
       </IRow>
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
@@ -158,7 +172,7 @@ const headers = ref<Array<ITableHeader>>([
             <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
               @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
           </div>
-          
+
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>

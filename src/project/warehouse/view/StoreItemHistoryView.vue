@@ -6,7 +6,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useSectionStore } from "@/project/section/sectionStore";
 
 import { t } from "@/utilities/I18nPlugin";
-import type { IStoreItemHistory, IStoreItemFilter } from "../IStore";
+import type { IStoreItemHistory, IStoreItemFilter } from "../IStore"; 
 import { useStoringStore } from "../storingStore";
 import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { storeToRefs } from "pinia";

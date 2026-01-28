@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IStore, IStoreFilter, IStoreItemFilter } from "./IStore";
+import type { IInventoryFilter, IStore, IStoreFilter, IStoreItemFilter } from "./IStore";
 
 export const useStoringStore = defineStore("StoringStore", () => {
   const stores = ref<IStore[]>([]);
@@ -19,8 +19,8 @@ export const useStoringStore = defineStore("StoringStore", () => {
         console.log("in get stocks : " + errors);
       });
   }
-  async function get_filter(params: IStoreFilter, page: number) {
-    return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
+  async function get_filter(params: IInventoryFilter, page: number) {
+    return await Api.get(`/stockSys/inventory/balances?page=${page}`, { params: params });
   }
   async function get_summation(params: IStoreFilter, page: number) {
     return await Api.get(`${pathUrl}/summation?page=${page}`, {

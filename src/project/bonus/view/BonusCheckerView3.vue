@@ -45,6 +45,7 @@ import axios from "axios";
 import { DropdownMenuArrow } from "radix-vue";
 import { forEach } from "lodash";
 import PrintCombo from "@/components/PrintCombo.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 const route = useRoute();
 const router = useRouter();
 watch(
