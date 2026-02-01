@@ -6,7 +6,7 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useSectionStore } from "@/project/section/sectionStore";
 
 import { t } from "@/utilities/I18nPlugin";
-import type { IStoreItemHistory, IStoreItemFilter } from "../IStore"; 
+import type { IStoreItemHistory, IStoreItemFilter, IInverntoryHistoryFilter } from "../IStore"; 
 import { useStoringStore } from "../storingStore";
 import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { storeToRefs } from "pinia";
@@ -45,15 +45,9 @@ const dataBase = ref<Array<IStoreItemHistory>>([]);
 const fastSearch = ref("");
 
 // Search filter configuration
-const searchFilter = ref<IStoreItemFilter>({
+const searchFilter = ref<IInverntoryHistoryFilter>({
   itemId: "0",
   limit: 10,
-  description: "",
-  summation: true,
-  isSection: false,
-  isEmployee: false,
-  employeeId: 0,
-  sectionId: 0,
 });
 
 // Table headers configuration
@@ -115,15 +109,13 @@ const getFilterData = async (page = 1) => {
     dataBase.value = [];
     isLoading.value = true;
 
-    searchFilter.value.description = fastSearch.value;
+    // searchFilter.value.description = fastSearch.value;
     searchFilter.value.itemId = route.params.id.toString();
-    if (searchFilter.value.isSection == false) {
-      searchFilter.value.sectionId = 0;
-    }
-    const response = await get_item(searchFilter.value, page);
+     
+    const response = await get_item(searchFilter.value, page);console.log(response);
     if (response.status === 200) {
       dataPage.value = response.data.data;
-      data.value = dataPage.value.data;
+      data.value = dataPage.value.data;console.log(data.value);
       dataBase.value = dataPage.value.data;
     }
   } catch (error) {
@@ -136,7 +128,7 @@ const getFilterData = async (page = 1) => {
 // Navigation functions
 const openItem = (id: number, billType: string) => {
   const routeName =
-    billType === "in" ? "inputVoucherUpdate" : "outputVoucherUpdate";
+    billType === "input" ? "inputVoucherUpdate" : (billType === "output" ? "outputVoucherUpdate" : "retrievalVoucherUpdate");
   router.push({
     name: routeName,
     params: { id },
@@ -187,7 +179,7 @@ onMounted(async () => {
               :OnKeyEnter="getFilterData"
             />
           </ICol>
-          <ICol>
+          <!-- <ICol>
             <ISelect
               class="w-[180px]"
               :options="sections"
@@ -202,7 +194,7 @@ onMounted(async () => {
                 <input type="checkbox" v-model="searchFilter.isSection" />
               </template>
             </ISelect>
-          </ICol> 
+          </ICol>  -->
         </ISearchBar>
       </IRow>
 
@@ -211,9 +203,9 @@ onMounted(async () => {
           <template v-slot:name="{ row }">
             <span>{{ row.Employee.name }}</span>
           </template>
-
+ 
           <template v-slot:billType="{ row }">
-            <span>{{ row.billType === "in" ? t("In") : t("Out") }}</span>
+            <span>{{ row.billType === "input" ? t("In") : (row.billType === "output" ? t("Out") : t("Retrieval")) }}</span>
           </template>
 
           <template v-slot:price="{ row }">

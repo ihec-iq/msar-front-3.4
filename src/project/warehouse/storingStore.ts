@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IInventoryFilter, IStore, IStoreFilter, IStoreItemFilter } from "./IStore";
+import type { IInventoryFilter, IInverntoryHistoryFilter, IStore, IStoreFilter, IStoreItemFilter } from "./IStore";
 
 export const useStoringStore = defineStore("StoringStore", () => {
   const stores = ref<IStore[]>([]);
@@ -38,7 +38,15 @@ export const useStoringStore = defineStore("StoringStore", () => {
     });
   }
   //outputVoucherEmployees;
-  async function get_item(params: IStoreItemFilter, page: number) {
+  async function get_item(params: IInverntoryHistoryFilter, page: number) {
+    return await Api.get(
+      `/stockSys/inventory/movements?page=${page}`,
+      {
+        params: params,
+      }
+    );
+  }
+   async function get_item_old(params: IStoreItemFilter, page: number) {
     return await Api.get(
       `${pathUrl}/item/history/${params.itemId}?page=${page}`,
       {

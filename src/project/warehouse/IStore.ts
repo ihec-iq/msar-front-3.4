@@ -41,6 +41,15 @@ export interface IInventoryFilter {
   itemId?: string; 
   limit: number;
 }
+export interface IInverntoryHistoryFilter {
+  stockId?: string;
+  itemId?: string;
+  from?: string;
+  to?: string;
+  movementType?: string;
+  limit: number; 
+  employeeId?: number;
+}
 export interface IStoreItemFilter {
   stock?: string;
   itemId?: string;
