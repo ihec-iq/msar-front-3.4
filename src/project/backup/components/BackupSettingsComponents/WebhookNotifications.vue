@@ -3,9 +3,9 @@ import type { IBackupSettings } from "../../IBackup";
 import { useBackupStore } from "../../backupStore";
 import Swal from "sweetalert2";
 
-const props = defineProps<{
-  formData: IBackupSettings;
-}>();
+const formData = defineModel<IBackupSettings>("formData", {
+  required: true,
+});
 
 const backupStore = useBackupStore();
 
@@ -46,7 +46,7 @@ const extractPayload = (resp: any) => {
 
 // Test Webhook
 const testWebhook = async () => {
-  const raw = props.formData.webhook_urls;
+  const raw = formData.value.webhook_urls;
   if (!raw || !raw.trim()) {
     await Swal.fire({
       icon: "warning",
@@ -92,7 +92,8 @@ const testWebhook = async () => {
             http_status: resp?.status ?? null,
             headers: resp?.headers ?? null,
             body: extractPayload(resp),
-            extra: resp?.data && typeof resp.data === "object" ? resp.data : null,
+            extra:
+              resp?.data && typeof resp.data === "object" ? resp.data : null,
           };
         } catch (err: any) {
           const r = err?.response;
@@ -101,7 +102,7 @@ const testWebhook = async () => {
             kind: r ? ("error" as const) : ("network" as const),
             http_status: r?.status ?? null,
             headers: r?.headers ?? null,
-            body: extractPayload(r) ?? (err?.message ?? err),
+            body: extractPayload(r) ?? err?.message ?? err,
             extra: r?.data && typeof r.data === "object" ? r.data : null,
           };
         }
@@ -136,10 +137,17 @@ const testWebhook = async () => {
       const badgeCls = isSuccess
         ? "bg-green-100 text-green-700 border-green-200"
         : isError
-        ? "bg-red-100 text-red-700 border-red-200"
-        : "bg-amber-100 text-amber-800 border-amber-200";
-      const lineCls = isSuccess ? "text-green-700" : isError ? "text-red-700" : "text-amber-800";
-      const http = r.http_status != null ? `HTTP ${escapeHtml(r.http_status)}` : "لا يوجد كود";
+          ? "bg-red-100 text-red-700 border-red-200"
+          : "bg-amber-100 text-amber-800 border-amber-200";
+      const lineCls = isSuccess
+        ? "text-green-700"
+        : isError
+          ? "text-red-700"
+          : "text-amber-800";
+      const http =
+        r.http_status != null
+          ? `HTTP ${escapeHtml(r.http_status)}`
+          : "لا يوجد كود";
       const url = escapeHtml(r.url ?? `#${idx + 1}`);
 
       return `
@@ -212,7 +220,12 @@ const testWebhook = async () => {
 
     await Swal.fire({
       icon: failed > 0 ? (ok > 0 ? "warning" : "error") : "success",
-      title: failed > 0 ? (ok > 0 ? "تم الإرسال مع بعض الأخطاء" : "فشل الإرسال") : "تم الإرسال بنجاح",
+      title:
+        failed > 0
+          ? ok > 0
+            ? "تم الإرسال مع بعض الأخطاء"
+            : "فشل الإرسال"
+          : "تم الإرسال بنجاح",
       html,
       width: 900,
     });
@@ -240,7 +253,11 @@ const testWebhook = async () => {
         <h3 class="font-medium text-gray-900">إشعارات Webhook</h3>
       </div>
       <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" v-model="formData.webhook_enabled" class="sr-only peer" />
+        <input
+          type="checkbox"
+          v-model="formData.webhook_enabled"
+          class="sr-only peer"
+        />
         <div
           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
         ></div>
@@ -249,7 +266,9 @@ const testWebhook = async () => {
 
     <div v-if="formData.webhook_enabled" class="space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Webhook URL</label>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Webhook URL</label
+        >
         <div class="flex gap-2">
           <input
             type="text"
@@ -267,14 +286,18 @@ const testWebhook = async () => {
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Webhook Secret</label>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Webhook Secret</label
+        >
         <input
           type="password"
           v-model="formData.webhook_secret"
           placeholder="your-secret-key"
           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <p class="mt-1 text-xs text-gray-500">مفتاح سري للتحقق من صحة الطلبات</p>
+        <p class="mt-1 text-xs text-gray-500">
+          مفتاح سري للتحقق من صحة الطلبات
+        </p>
       </div>
     </div>
   </div>

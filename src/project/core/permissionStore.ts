@@ -17,7 +17,6 @@ export const usePermissionsStore = defineStore("PermissionStore", () => {
     }
   }
 
-
   //const doubleCount = computed(() => count.value * 2);
   const can = (name: string) => {
     if (UserPermissions.value?.length == 0) return 0;

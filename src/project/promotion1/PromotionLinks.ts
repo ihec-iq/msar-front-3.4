@@ -6,8 +6,8 @@ export const PromotionLinks: Array<IconLink> = [
   {
     routerName: "promotionCheckerView",
     title: "تنبيه استحقاق الترويج",
-    icon: '<svg ...>...</svg>', // Replace with actual SVG
-    iconX: '<svg ...>...</svg>', // Replace with actual SVG
+    icon: "<svg ...>...</svg>", // Replace with actual SVG
+    iconX: "<svg ...>...</svg>", // Replace with actual SVG
     tab: "Company",
     description: "تنبيهات الترويج المستحقة للموظفين",
     permissions: [EnumPermission.ShowArchives],
@@ -16,8 +16,8 @@ export const PromotionLinks: Array<IconLink> = [
   {
     routerName: "promotionIndex",
     title: "الترويج",
-    icon: '<svg ...>...</svg>', // Replace with actual SVG
-    iconX: '<svg ...>...</svg>', // Replace with actual SVG
+    icon: "<svg ...>...</svg>", // Replace with actual SVG
+    iconX: "<svg ...>...</svg>", // Replace with actual SVG
     tab: "Company",
     description: "اضافة الترويج للموظفين",
     permissions: [EnumPermission.ShowArchives],
@@ -25,9 +25,9 @@ export const PromotionLinks: Array<IconLink> = [
   },
   {
     routerName: "promotionJobTitleIndex",
-    title: t('Promotion.JobTitle'),
-    icon: '<svg ...>...</svg>', // Replace with actual SVG
-    iconX: '<svg ...>...</svg>', // Replace with actual SVG
+    title: t("Promotion.JobTitle"),
+    icon: "<svg ...>...</svg>", // Replace with actual SVG
+    iconX: "<svg ...>...</svg>", // Replace with actual SVG
     tab: "Company",
     description: "اضافة الترويج للموظفين",
     permissions: [EnumPermission.ShowArchives],
@@ -35,7 +35,7 @@ export const PromotionLinks: Array<IconLink> = [
   },
   {
     routerName: "promotionSettingView",
-    title: t('Setting.Name'),
+    title: t("Setting.Name"),
     mdi: "mdi-cog",
     tab: "Company",
     description: "اعدادات الترويج",

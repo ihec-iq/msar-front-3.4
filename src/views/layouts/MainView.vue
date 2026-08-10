@@ -34,10 +34,10 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
         whenMobileView
           ? 'ltr:ml-0 rtl:mr-0'
           : isClose
-          ? 'ltr:ml-[80px] rtl:mr-[80px] xs:ltr:ml-[65px] xs:rtl:mr-[65px]'
-          : !isCloseStick
-          ? 'md:rtl:mr-[256px] md:ltr:ml-[256px] opacity-30'
-          : 'md:rtl:mr-[256px] md:ltr:ml-[256px]',
+            ? 'ltr:ml-[80px] rtl:mr-[80px] xs:ltr:ml-[65px] xs:rtl:mr-[65px]'
+            : !isCloseStick
+              ? 'md:rtl:mr-[256px] md:ltr:ml-[256px] opacity-30'
+              : 'md:rtl:mr-[256px] md:ltr:ml-[256px]',
       ]"
       class="flex-1 bg-white overflow-hidden dark:bg-[#25293c] flex flex-col min-h-screen h-full print:ltr:ml-0 print:rtl:mr-0 duration-500"
     >

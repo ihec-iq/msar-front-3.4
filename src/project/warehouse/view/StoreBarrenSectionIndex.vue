@@ -12,7 +12,6 @@ const data = ref<Array<IBarrenSectionReportIndex>>([]);
 const dataPage = ref();
 const dataBase = ref<Array<IBarrenSectionReportIndex>>([]);
 
-
 const { get_BarrenSection } = useStoringStore();
 
 import { limits } from "@/utilities/defaultParams";
@@ -47,7 +46,6 @@ const filterByIDName = (item: IBarrenSectionReportIndex) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -81,7 +79,6 @@ const getFilterData = async (page = 1) => {
       console.log(error);
     });
 
-
   isLoading.value = false;
 };
 //#endregion
@@ -102,41 +99,59 @@ onMounted(async () => {
 });
 interface IBarrenSectionReportIndex {
   sectionId: number;
-  sectionName: string; 
-  count: string; 
+  sectionName: string;
+  count: string;
 }
-
- 
 </script>
 <template>
   <IPage :HeaderTitle="t('Store.BarrenSectionIndex')" :isLoading="isLoading">
     <IPageContent>
-      <IRow  >
-        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px] ">
+      <IRow>
+        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px]">
           <ICol>
-            <IInput :label="t('Title')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
-              :OnKeyEnter="getFilterData" />       
+            <IInput
+              :label="t('Title')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
-          <ICol v-if="data.length >= limits[0].id" >
-                <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-                  :IsRequire="true" @onChange="getFilterData()" /> 
-          </ICol> 
+          <ICol v-if="data.length >= limits[0].id">
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </ICol>
         </ISearchBar>
       </IRow>
       <IRow>
-      <IRow :cols="2"  :cols-lg="2" :cols-md="2" :cols-sm="1" >
-        <ICol :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.sectionId">
-          <CardBarrenSectionReportIndex :item="item" />
-        </ICol>
-      </IRow>
+        <IRow :cols="2" :cols-lg="2" :cols-md="2" :cols-sm="1">
+          <ICol
+            :span="1"
+            :span-lg="1"
+            :span-md="1"
+            v-for="item in data"
+            :key="item.sectionId"
+          >
+            <CardBarrenSectionReportIndex :item="item" />
+          </ICol>
+        </IRow>
       </IRow>
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-5/5 hidden">
-            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
           </div>
-          
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>

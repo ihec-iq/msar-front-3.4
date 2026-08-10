@@ -1,24 +1,12 @@
-const generateColorClass = (variable) => {
-  return ({ opacityValue }) =>
-    opacityValue
-      ? `rgba(var(--${variable}), ${opacityValue})`
-      : `rgb(var(--${variable}))`;
-};
-const backgroundColor = {
-  primary: generateColorClass("bg-primary"),
-  secondary: generateColorClass("bg-secondary"),
-  tertiary: generateColorClass("bg-tertiary"),
-};
-
-/* eslint-disable no-undef */
-const { blackA, green, grass, mauve } = require("@radix-ui/colors");
-const animate = require("tailwindcss-animate");
+import { blackA, green, grass, mauve } from "@radix-ui/colors";
+import animate from "tailwindcss-animate";
 import { setupInspiraUI } from "@inspira-ui/plugins";
 import type { Config } from "tailwindcss";
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: ["class"],
-  safelist: ["dark"],
+
+// `darkMode`, `safelist` and `theme.container` are not read from the JS config
+// in Tailwind v4 — they live in src/assets/tailwind.css as @custom-variant,
+// @source inline() and @utility respectively.
+export default {
   prefix: "",
 
   content: [
@@ -31,18 +19,6 @@ module.exports = {
     fontFamily: {
       Tajawal: ["Tajawal", "sans-serif"],
       Tajawal_bold: ["Tajawal_bold", "sans-serif"],
-    },
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        xs: "350px",
-        sm: "640px",
-        md: "768px",
-        lg: "1024px",
-        xl: "1280px",
-        "2xl": "1400px",
-      },
     },
     extend: {
       colors: {
@@ -268,5 +244,5 @@ module.exports = {
       },
     },
   },
-  plugins: [animate, setupInspiraUI, require("tailwindcss-animate")],
-};
+  plugins: [animate, setupInspiraUI],
+} satisfies Config;

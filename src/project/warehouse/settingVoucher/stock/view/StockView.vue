@@ -19,13 +19,13 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 const { validate, required, isObject } = useValidation();
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "name",
     caption: t("Item.Name"),
     rules: [required()],
-  }, 
+  },
 ];
 import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
@@ -48,7 +48,7 @@ const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const store = () => {
-  if(!can(EnumPermission.AddWarehouseSetting)) return;
+  if (!can(EnumPermission.AddWarehouseSetting)) return;
   errors.value = null;
   validationResult.value = validate(stock.value, rules);
   if (!validationResult.value.success) {
@@ -58,8 +58,7 @@ const store = () => {
   errors.value = null;
   const formData = prepareFormData(stock.value);
 
-  StockStore
-    .store(formData)
+  StockStore.store(formData)
     .then((response) => {
       if (response.status == 200) {
         Swal.fire({
@@ -92,8 +91,7 @@ function update() {
   errors.value = null;
   const formData = prepareFormData(stock.value);
 
-  StockStore
-    .update(stock.value.id, formData)
+  StockStore.update(stock.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -136,7 +134,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-          await StockStore._delete(stock.value.id).then(() => {
+        await StockStore._delete(stock.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -149,8 +147,7 @@ const Delete = async () => {
 };
 const showData = async () => {
   isLoding.value = true;
-  await StockStore
-    .show(id.value)
+  await StockStore.show(id.value)
     .then((response) => {
       if (response.status == 200) {
         stock.value.id = response.data.data.id;
@@ -193,22 +190,46 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
-        <IRow cols-lg="2"  cols="2" cols-md="2">
+        <IRow cols-lg="2" cols="2" cols-md="2">
           <ICol>
-            <IInput :label="t('Name')" name="name" v-model="stock.name" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Name')"
+              name="name"
+              v-model="stock.name"
+              :type="EnumInputType.Text"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('Description')" name="description" v-model="stock.description"
-              :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Description')"
+              name="description"
+              v-model="stock.description"
+              :type="EnumInputType.Text"
+            />
           </ICol>
         </IRow>
-        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
-        <IFooterCrud :isAdd="stock.id == 0 && can(EnumPermission.AddWarehouseSetting)" :isUpdate="stock.id != 0 && can(EnumPermission.EditWarehouseSetting)" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
+        <IFooterCrud
+          :isAdd="stock.id == 0 && can(EnumPermission.AddWarehouseSetting)"
+          :isUpdate="stock.id != 0 && can(EnumPermission.EditWarehouseSetting)"
+          :onCreate="store"
+          :onUpdate="update"
+          :onDelete="Delete"
+        />
       </IRow>
     </IPageContent>
   </IPage>

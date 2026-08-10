@@ -9,7 +9,7 @@ export interface IVacationDaily {
   Vacation: IVacation;
   EmployeeAlter: IEmployee;
   Reason: IVacationReason;
-  createdAt?:string
+  createdAt?: string;
 }
 
 export interface IVacationDailyFilter {

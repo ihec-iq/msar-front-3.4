@@ -31,7 +31,10 @@ const namePage = ref("Setting.PromotionName");
 const update = async () => {
   errors.value = null;
   try {
-    await SettingStore.updateByKeyStr(prepareFormData(SettingPromotionData.value), SettingPromotionData.value.id.toString());
+    await SettingStore.updateByKeyStr(
+      prepareFormData(SettingPromotionData.value),
+      SettingPromotionData.value.id.toString()
+    );
     SuccessToast();
   } catch (e: any) {
     ErrorToast(e.toString());
@@ -52,19 +55,20 @@ onMounted(async () => {
 
   isLoading.value = false;
 });
-
 </script>
 
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
-    <template #headerButtons>
-    </template>
+    <template #headerButtons> </template>
     <IPageContent>
       <IRow>
         <IRow cols-lg="4" cols-md="2" cols-sm="1">
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Setting.SettingPromotionData')" v-model="SettingPromotionData.valInt"
-              :type="EnumInputType.Number" />
+            <IInput
+              :label="t('Setting.SettingPromotionData')"
+              v-model="SettingPromotionData.valInt"
+              :type="EnumInputType.Number"
+            />
           </ICol>
         </IRow>
       </IRow>
@@ -75,4 +79,4 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
-<style></style> 
+<style></style>

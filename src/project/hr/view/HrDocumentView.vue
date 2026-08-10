@@ -91,7 +91,7 @@ const addSelectedEmployee = () => {
     SelectedEmployeesData.value = [...SelectedEmployeesData.value];
     SelectedEmployee.value = { id: 0, name: "" };
   }
-  let HtmlSelectedEmployee = document.getElementById("SelectedEmployee");
+  const HtmlSelectedEmployee = document.getElementById("SelectedEmployee");
   HtmlSelectedEmployee?.focus();
 };
 
@@ -129,7 +129,7 @@ const store = async () => {
 
   if (result.value === false || result.value === undefined) return;
 
-  const formData = prepareFormData(hrDocument.value); 
+  const formData = prepareFormData(hrDocument.value);
   formData.append("chosePushBy", ChosePushBy.value.toString());
   if (ChosePushBy.value == EnumTypeChoseShareDocument.toSection)
     formData.append("selectedSectionId", SelectedSection.value.id.toString());
@@ -318,7 +318,8 @@ const showData = async () => {
         hrDocument.value.HrDocumentType = response.data.data.HrDocumentType;
         hrDocument.value.Employee = response.data.data.Employee;
         hrDocument.value.FilesDocument = response.data.data.FilesDocument;
-        hrDocument.value.isActive = response.data.data.isActive == 1 ? true : false;
+        hrDocument.value.isActive =
+          response.data.data.isActive == 1 ? true : false;
         ChosePushBy.value = EnumTypeChoseShareDocument.toEmployee;
       }
     })
@@ -336,33 +337,33 @@ const showData = async () => {
   Loading.value = false;
 };
 //#endregion
-const disabledChangeEmployee = ref(false)
+const disabledChangeEmployee = ref(false);
 
 onMounted(async () => {
   isLoading.value = true;
   //console.log(can("show employees1"));
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   filesDataInput.value = [];
-  await Promise.all(
-    [
-      sectionStore.get_sections(),
-      HrDocumentStore.get_employees(),
-      HrDocumentStore.get_hrDocumentTypes(),
-    ]
-  )
+  await Promise.all([
+    sectionStore.get_sections(),
+    HrDocumentStore.get_employees(),
+    HrDocumentStore.get_hrDocumentTypes(),
+  ]);
 
   //check if selected emplioyee or not
   if (Number.isNaN(employeeId.value) || employeeId.value === undefined) {
     // that mean it normal document and not select any employee
-    disabledChangeEmployee.value = false
+    disabledChangeEmployee.value = false;
   } else {
     // it selected employee
-    disabledChangeEmployee.value = true
-    useEmployeeStore().show(employeeId.value).then((response) => {
-      reset()
-      hrDocument.value.Employee.id = response.data.data.id;
-      hrDocument.value.Employee.name = response.data.data.name;
-    })
+    disabledChangeEmployee.value = true;
+    useEmployeeStore()
+      .show(employeeId.value)
+      .then((response) => {
+        reset();
+        hrDocument.value.Employee.id = response.data.data.id;
+        hrDocument.value.Employee.name = response.data.data.name;
+      });
   }
 
   if (Number.isNaN(id.value) || id.value === undefined) {
@@ -377,17 +378,25 @@ onMounted(async () => {
   isLoading.value = false;
 });
 const changeSelectedType = () => {
-  hrDocument.value.addDays = hrDocument.value.HrDocumentType.addDays ? Number(hrDocument.value.HrDocumentType.addDays) : 0;
-  hrDocument.value.addMonths = hrDocument.value.HrDocumentType.addMonths ? Number(hrDocument.value.HrDocumentType.addMonths) : 0;
-}
+  hrDocument.value.addDays = hrDocument.value.HrDocumentType.addDays
+    ? Number(hrDocument.value.HrDocumentType.addDays)
+    : 0;
+  hrDocument.value.addMonths = hrDocument.value.HrDocumentType.addMonths
+    ? Number(hrDocument.value.HrDocumentType.addMonths)
+    : 0;
+};
 </script>
 <template>
-
-
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
@@ -395,48 +404,97 @@ const changeSelectedType = () => {
           <van-tab title="معلومات الكتاب">
             <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Title')" name="Name" v-model="hrDocument.title" :type="EnumInputType.Text" />
+                <IInput
+                  :label="t('Title')"
+                  name="Name"
+                  v-model="hrDocument.title"
+                  :type="EnumInputType.Text"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Number')" name="Number" v-model="hrDocument.number" :type="EnumInputType.Text" />
+                <IInput
+                  :label="t('Number')"
+                  name="Number"
+                  v-model="hrDocument.number"
+                  :type="EnumInputType.Text"
+                />
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Date')" name="EmployeeDateWork" v-model="hrDocument.issueDate"
-                  :type="EnumInputType.Date" />
+                <IInput
+                  :label="t('Date')"
+                  name="EmployeeDateWork"
+                  v-model="hrDocument.issueDate"
+                  :type="EnumInputType.Date"
+                />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
                   {{ t("TypeBook") }}
                 </div>
                 <vSelect
                   class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                  v-model="hrDocument.HrDocumentType" :options="hrDocumentTypes"
-                  :reduce="(hrDocumentType: IHrDocumentType) => hrDocumentType" label="name" :getOptionLabel="(hrDocumentType: IHrDocumentType) => hrDocumentType.name
-                    " @update:modelValue="changeSelectedType">
+                  v-model="hrDocument.HrDocumentType"
+                  :options="hrDocumentTypes"
+                  :reduce="(hrDocumentType: IHrDocumentType) => hrDocumentType"
+                  label="name"
+                  :getOptionLabel="
+                    (hrDocumentType: IHrDocumentType) => hrDocumentType.name
+                  "
+                  @update:modelValue="changeSelectedType"
+                >
                   <template #option="{ name, addDays, addMonths }">
-                    <div class="dir:rtl text-right p-1 border-2 border-solid border-red-700">
-                      <span>{{ name }}</span> <br /><span v-if="addDays > 0" class="dark:text-gray-100 text-gray-600">{{
-                        t('HrDocument.AddDays') }} {{ addDays }} {{ t('Day') }}</span>
-                      <span v-if="addMonths > 0" class="dark:text-gray-100 text-gray-600">{{
-                        t('HrDocument.AddMonths') }} {{ addMonths }} {{ t('Month') }}</span>
+                    <div
+                      class="dir:rtl text-right p-1 border-2 border-solid border-red-700"
+                    >
+                      <span>{{ name }}</span> <br /><span
+                        v-if="addDays > 0"
+                        class="dark:text-gray-100 text-gray-600"
+                        >{{ t("HrDocument.AddDays") }} {{ addDays }}
+                        {{ t("Day") }}</span
+                      >
+                      <span
+                        v-if="addMonths > 0"
+                        class="dark:text-gray-100 text-gray-600"
+                        >{{ t("HrDocument.AddMonths") }} {{ addMonths }}
+                        {{ t("Month") }}</span
+                      >
                     </div>
                   </template>
                 </vSelect>
               </ICol>
               <ICol span="1" span-md="2" span-sm="4" class="flex flex-row">
-                <IInput :label="t('HrDocument.AddDays')" name="AddDays" v-model="hrDocument.addDays" class="w-40 mx-2"
-                  :type="EnumInputType.Number" />
-                <IInput :label="t('HrDocument.AddMonths')" name="AddMonths" v-model="hrDocument.addMonths"
-                  class="w-40 mx-2" :type="EnumInputType.Number" />
+                <IInput
+                  :label="t('HrDocument.AddDays')"
+                  name="AddDays"
+                  v-model="hrDocument.addDays"
+                  class="w-40 mx-2"
+                  :type="EnumInputType.Number"
+                />
+                <IInput
+                  :label="t('HrDocument.AddMonths')"
+                  name="AddMonths"
+                  v-model="hrDocument.addMonths"
+                  class="w-40 mx-2"
+                  :type="EnumInputType.Number"
+                />
               </ICol>
               <ICol span="1" span-md="2" span-sm="4">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
                   {{ t("Employee.Title") }}
                 </div>
-                <vSelect :disabled="disabledChangeEmployee"
-                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight "
-                  v-model="hrDocument.Employee" :options="employees" :reduce="(employee: IEmployeeLite) => employee"
-                  label="name" :getOptionLabel="(employee: IEmployeeLite) => employee.name">
+                <vSelect
+                  :disabled="disabledChangeEmployee"
+                  class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="hrDocument.Employee"
+                  :options="employees"
+                  :reduce="(employee: IEmployeeLite) => employee"
+                  label="name"
+                  :getOptionLabel="(employee: IEmployeeLite) => employee.name"
+                >
                   <template #option="{ name }">
                     <div>
                       <span>{{ name }} </span>
@@ -445,31 +503,54 @@ const changeSelectedType = () => {
                 </vSelect>
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
-                <ICheckbox :label="t('IsActive')" v-model="hrDocument.isActive" name="isActive" :IsRequire="true" />
+                <ICheckbox
+                  :label="t('IsActive')"
+                  v-model="hrDocument.isActive"
+                  name="isActive"
+                  :IsRequire="true"
+                />
               </ICol>
-
             </IRow>
             <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IInput :label="t('Notes')" v-model="hrDocument.notes" name="notes" />
+                <IInput
+                  :label="t('Notes')"
+                  v-model="hrDocument.notes"
+                  name="notes"
+                />
               </ICol>
             </IRow>
             <!-- file -->
             <IRow cols-lg="1" cols-md="1" cols-sm="1">
-              <div class="collapse align-middle w-full" v-if="ToNumber(hrDocument.FilesDocument?.length) > 0">
-                <input type="checkbox" class="" v-model="openSectionDocument" checked />
+              <div
+                class="collapse align-middle w-full"
+                v-if="ToNumber(hrDocument.FilesDocument?.length) > 0"
+              >
+                <input
+                  type="checkbox"
+                  class=""
+                  v-model="openSectionDocument"
+                  checked
+                />
                 <div
-                  class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2">
+                  class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
+                >
                   <span class="mx-2 px-2">
-                    لديك {{ hrDocument.FilesDocument?.length }} ملفات مرفقة , اضغط للعرض
-                    الملفات
+                    لديك {{ hrDocument.FilesDocument?.length }} ملفات مرفقة ,
+                    اضغط للعرض الملفات
                   </span>
                   <Icon icon="mingcute:attachment-fill" />
                 </div>
                 <div class="collapse-content grid grid-cols-4">
                   <div class="mt-5"></div>
-                  <ICol span="1" span-md="2" span-sm="1" class="" v-for="document in hrDocument.FilesDocument"
-                    :key="document.name">
+                  <ICol
+                    span="1"
+                    span-md="2"
+                    span-sm="1"
+                    class=""
+                    v-for="document in hrDocument.FilesDocument"
+                    :key="document.name"
+                  >
                     <FilePreview :file="document" @updateList="showData" />
                   </ICol>
                 </div>
@@ -481,52 +562,99 @@ const changeSelectedType = () => {
                 <div class="w-64 content-center" v-if="isLoading">
                   <div
                     class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                    role="status">
+                    role="status"
+                  >
                     <span
-                      class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                      class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                      >Loading...</span
+                    >
                   </div>
                 </div>
               </div>
               <div id="DropZone"></div>
             </div>
           </van-tab>
-          <van-tab title="توزيع متعدد" v-if="hrDocument.id == 0 && disabledChangeEmployee == false">
+          <van-tab
+            title="توزيع متعدد"
+            v-if="hrDocument.id == 0 && disabledChangeEmployee == false"
+          >
             <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IRadio label="توزيع مفرد  " name="ChosePushBy" v-model="ChosePushBy" value="0" />
+                <IRadio
+                  label="توزيع مفرد  "
+                  name="ChosePushBy"
+                  v-model="ChosePushBy"
+                  value="0"
+                />
               </ICol>
             </IRow>
             <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IRadio label="توزيع حسب القسم" name="ChosePushBy" v-model="ChosePushBy" value="1" />
+                <IRadio
+                  label="توزيع حسب القسم"
+                  name="ChosePushBy"
+                  v-model="ChosePushBy"
+                  value="1"
+                />
               </ICol>
 
               <ICol span="1" span-md="1" span-sm="1">
-                <ISelectObject :label="t('Employee.Section')" v-model="SelectedSection" name="selectedSection"
-                  :options="sections" :IsRequire="true" :-is-disabled="ChosePushBy != EnumTypeChoseShareDocument.toSection
-                    " />
+                <ISelectObject
+                  :label="t('Employee.Section')"
+                  v-model="SelectedSection"
+                  name="selectedSection"
+                  :options="sections"
+                  :IsRequire="true"
+                  :-is-disabled="
+                    ChosePushBy != EnumTypeChoseShareDocument.toSection
+                  "
+                />
               </ICol>
             </IRow>
             <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IRadio label="توزيع لجميع الموظفين" name="ChosePushBy" v-model="ChosePushBy" value="2" />
+                <IRadio
+                  label="توزيع لجميع الموظفين"
+                  name="ChosePushBy"
+                  v-model="ChosePushBy"
+                  value="2"
+                />
               </ICol>
             </IRow>
             <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
-                <IRadio label="توزيع محدد" name="ChosePushBy" v-model="ChosePushBy" value="3" />
+                <IRadio
+                  label="توزيع محدد"
+                  name="ChosePushBy"
+                  v-model="ChosePushBy"
+                  value="3"
+                />
               </ICol>
-              <ICol span="1" span-md="1" span-sm="1" :disabled="ChosePushBy != EnumTypeChoseShareDocument.toCustom">
-                <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              <ICol
+                span="1"
+                span-md="1"
+                span-sm="1"
+                :disabled="ChosePushBy != EnumTypeChoseShareDocument.toCustom"
+              >
+                <div
+                  class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+                >
                   {{ t("Employee.Title") }} قم بأختيار
                 </div>
                 <div class="flex pb-2">
                   <div class="flex w-full">
-                    <vSelect id="SelectedEmployee"
+                    <vSelect
+                      id="SelectedEmployee"
                       class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                      v-model="SelectedEmployee" :options="employees" :reduce="(employee: IEmployeeLite) => employee"
-                      label="name" @change="onChange($event)" :getOptionLabel="(employee: IEmployeeLite) => employee.name
-                        ">
+                      v-model="SelectedEmployee"
+                      :options="employees"
+                      :reduce="(employee: IEmployeeLite) => employee"
+                      label="name"
+                      @change="onChange($event)"
+                      :getOptionLabel="
+                        (employee: IEmployeeLite) => employee.name
+                      "
+                    >
                       <template #option="{ name }">
                         <div>
                           <span>{{ name }}</span>
@@ -535,11 +663,18 @@ const changeSelectedType = () => {
                     </vSelect>
                   </div>
                   <div class="flex w-1/4">
-                    <IButton2 @click="addSelectedEmployee" id="SelectedEmployeeButton" :text="t('Add')" />
+                    <IButton2
+                      @click="addSelectedEmployee"
+                      id="SelectedEmployeeButton"
+                      :text="t('Add')"
+                    />
                   </div>
                 </div>
 
-                <ITable :items="SelectedEmployeesData" :headers="SelectedEmployeesHeaders">
+                <ITable
+                  :items="SelectedEmployeesData"
+                  :headers="SelectedEmployeesHeaders"
+                >
                   <template v-slot:name="{ row }">
                     <span>{{ row.name }}</span>
                   </template>
@@ -547,7 +682,10 @@ const changeSelectedType = () => {
                     <span>{{ row.id }}</span>
                   </template>
                   <template v-slot:delete="{ row }">
-                    <IButton2 @click="deleteSelectedEmployee(row.name)" :text="t('Delete')" />
+                    <IButton2
+                      @click="deleteSelectedEmployee(row.name)"
+                      :text="t('Delete')"
+                    />
                   </template>
                 </ITable>
               </ICol>
@@ -558,7 +696,12 @@ const changeSelectedType = () => {
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud :isAdd="hrDocument.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+      <IFooterCrud
+        :isAdd="hrDocument.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
     </template>
   </IPage>
 </template>

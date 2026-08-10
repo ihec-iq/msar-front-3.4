@@ -45,7 +45,8 @@ export default [
   {
     path: "/archiveType/:id",
     name: "archiveTypeUpdate",
-    component: () => import("@/project/archive/archiveType/view/archiveTypeView.vue"),
+    component: () =>
+      import("@/project/archive/archiveType/view/archiveTypeView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -53,7 +54,8 @@ export default [
   {
     path: "/archiveType",
     name: "archiveTypeAdd",
-    component: () => import("@/project/archive/archiveType/view/archiveTypeView.vue"),
+    component: () =>
+      import("@/project/archive/archiveType/view/archiveTypeView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

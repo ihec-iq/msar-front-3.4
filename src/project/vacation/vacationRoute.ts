@@ -12,7 +12,8 @@ export default [
   {
     path: "/vacation/report/period",
     name: "vacationPeriod",
-    component: () => import("@/project/vacation/view/VacationReportPeriodView.vue"),
+    component: () =>
+      import("@/project/vacation/view/VacationReportPeriodView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -28,7 +29,8 @@ export default [
   {
     path: "/vacation/report/:id",
     name: "vacationReportEmployee",
-    component: () => import("@/project/vacation/view/VacationReportEmployee.vue"),
+    component: () =>
+      import("@/project/vacation/view/VacationReportEmployee.vue"),
     meta: {
       middleware: [authMiddleware],
     },

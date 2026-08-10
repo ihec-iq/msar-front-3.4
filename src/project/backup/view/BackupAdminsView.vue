@@ -66,13 +66,22 @@ const isFormValid = computed(() => {
   if (!formData.value.name.trim()) return false;
 
   // Conditional validation - only if channel is selected
-  if (formData.value.notify_via.includes("email") && !formData.value.email.trim()) {
+  if (
+    formData.value.notify_via.includes("email") &&
+    !formData.value.email.trim()
+  ) {
     return false;
   }
-  if (formData.value.notify_via.includes("telegram") && !formData.value.telegram_id?.trim()) {
+  if (
+    formData.value.notify_via.includes("telegram") &&
+    !formData.value.telegram_id?.trim()
+  ) {
     return false;
   }
-  if (formData.value.notify_via.includes("webhook") && !formData.value.webhook_url?.trim()) {
+  if (
+    formData.value.notify_via.includes("webhook") &&
+    !formData.value.webhook_url?.trim()
+  ) {
     return false;
   }
 
@@ -104,8 +113,7 @@ const saveAdmin = async () => {
     showDialog.value = false;
     await backupStore.getAdmins();
   } catch (error: any) {
-    const errorMessage =
-      error?.response?.data?.message || "فشل الحفظ";
+    const errorMessage = error?.response?.data?.message || "فشل الحفظ";
     await Swal.fire({ icon: "error", title: "خطأ", text: errorMessage });
   }
 };
@@ -149,7 +157,9 @@ const closeDialog = () => {
         class="bg-white rounded-lg shadow p-12 text-center"
       >
         <div class="text-6xl mb-4">👥</div>
-        <h3 class="text-xl font-semibold text-gray-700 mb-2">لا يوجد مسؤولون</h3>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">
+          لا يوجد مسؤولون
+        </h3>
         <p class="text-gray-500 mb-6">ابدأ بإضافة مسؤول لتلقي الإشعارات</p>
         <button
           @click="openAddDialog"
@@ -164,33 +174,53 @@ const closeDialog = () => {
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              <th
+                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+              >
                 الاسم
               </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              <th
+                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+              >
                 قنوات الإشعار
               </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              <th
+                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+              >
                 البريد الإلكتروني
               </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              <th
+                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+              >
                 معرف تليجرام
               </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              <th
+                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+              >
                 Webhook URL
               </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              <th
+                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+              >
                 الحالة
               </th>
-              <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+              <th
+                class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase"
+              >
                 الإجراءات
               </th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="admin in admins" :key="admin.id" class="hover:bg-gray-50">
+            <tr
+              v-for="admin in admins"
+              :key="admin.id"
+              class="hover:bg-gray-50"
+            >
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm font-medium text-gray-900">{{ admin.name }}</div>
+                <div class="text-sm font-medium text-gray-900">
+                  {{ admin.name }}
+                </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex flex-wrap gap-1">
@@ -215,17 +245,26 @@ const closeDialog = () => {
                 </div>
               </td>
               <td class="px-6 py-4">
-                <div class="text-sm text-gray-900 max-w-xs truncate" :title="admin.email">
+                <div
+                  class="text-sm text-gray-900 max-w-xs truncate"
+                  :title="admin.email"
+                >
                   {{ admin.email || "-" }}
                 </div>
               </td>
               <td class="px-6 py-4">
-                <div class="text-sm text-gray-900 max-w-xs truncate" :title="admin.telegram_id">
+                <div
+                  class="text-sm text-gray-900 max-w-xs truncate"
+                  :title="admin.telegram_id"
+                >
                   {{ admin.telegram_id || "-" }}
                 </div>
               </td>
               <td class="px-6 py-4">
-                <div class="text-sm text-gray-900 max-w-xs truncate" :title="admin.webhook_url">
+                <div
+                  class="text-sm text-gray-900 max-w-xs truncate"
+                  :title="admin.webhook_url"
+                >
                   {{ admin.webhook_url || "-" }}
                 </div>
               </td>
@@ -241,7 +280,9 @@ const closeDialog = () => {
                   {{ admin.active ? "فعال" : "غير فعال" }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+              <td
+                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium"
+              >
                 <button
                   @click="openEditDialog(admin)"
                   class="text-blue-600 hover:text-blue-900 me-4"
@@ -261,7 +302,11 @@ const closeDialog = () => {
       </div>
     </IPageContent>
     <template #Footer>
-      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+      <IFooterCrud
+        :show-add="false"
+        :show-update="false"
+        :show-delete="false"
+      />
     </template>
   </IPage>
 
@@ -273,7 +318,9 @@ const closeDialog = () => {
       @click="closeDialog"
     >
       <!-- Backdrop -->
-      <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+      <div
+        class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+      ></div>
 
       <!-- Dialog Container -->
       <div class="flex min-h-full items-center justify-center p-4">
@@ -282,7 +329,9 @@ const closeDialog = () => {
           @click.stop
         >
           <!-- Header -->
-          <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div
+            class="flex items-center justify-between px-6 py-4 border-b border-gray-200"
+          >
             <h3 class="text-xl font-bold text-gray-900">
               {{ isEditing ? "تعديل مسؤول" : "إضافة مسؤول جديد" }}
             </h3>
@@ -290,8 +339,18 @@ const closeDialog = () => {
               @click="closeDialog"
               class="text-gray-400 hover:text-gray-600 transition-colors"
             >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -325,7 +384,9 @@ const closeDialog = () => {
                       @change="toggleNotifyVia('email')"
                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span class="ms-2 text-sm text-gray-700">بريد إلكتروني</span>
+                    <span class="ms-2 text-sm text-gray-700"
+                      >بريد إلكتروني</span
+                    >
                   </label>
                   <label class="flex items-center cursor-pointer">
                     <input
@@ -346,7 +407,9 @@ const closeDialog = () => {
                     <span class="ms-2 text-sm text-gray-700">Webhook</span>
                   </label>
                 </div>
-                <p class="text-xs text-gray-500 mt-2">اختياري - يمكن اختيار قناة أو أكثر أو لا شيء</p>
+                <p class="text-xs text-gray-500 mt-2">
+                  اختياري - يمكن اختيار قناة أو أكثر أو لا شيء
+                </p>
               </div>
 
               <!-- Email -->
@@ -398,10 +461,16 @@ const closeDialog = () => {
               </div>
 
               <!-- Active Status -->
-              <div class="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg">
+              <div
+                class="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg"
+              >
                 <div>
-                  <label class="text-sm font-medium text-gray-700">حالة المسؤول</label>
-                  <p class="text-xs text-gray-500 mt-0.5">تفعيل أو تعطيل استقبال الإشعارات</p>
+                  <label class="text-sm font-medium text-gray-700"
+                    >حالة المسؤول</label
+                  >
+                  <p class="text-xs text-gray-500 mt-0.5">
+                    تفعيل أو تعطيل استقبال الإشعارات
+                  </p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input

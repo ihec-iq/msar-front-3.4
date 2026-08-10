@@ -12,10 +12,10 @@ export const useArchiveTypeStore = defineStore("useArchiveTypeStore", () => {
 
   async function getBySectionUser() {
     await Api.get(`${pathBase}/by/section`).then((response) => {
-      archiveTypes.value = response.data.data
+      archiveTypes.value = response.data.data;
       return new Promise(function (myReslove, myReject) {
         myReslove(response);
-      })
+      });
     });
   }
 
@@ -36,7 +36,7 @@ export const useArchiveTypeStore = defineStore("useArchiveTypeStore", () => {
   }
 
   const resetData = () => {
-    archiveType.value = { id: 0, name: "", description: ""  };
+    archiveType.value = { id: 0, name: "", description: "" };
   };
 
   async function getArchiveTypes() {
@@ -44,8 +44,7 @@ export const useArchiveTypeStore = defineStore("useArchiveTypeStore", () => {
       .then((response) => {
         if (response.status == 200) {
           archiveTypes.value = response.data.data;
-          console.log('get Archive Type')
-
+          console.log("get Archive Type");
         }
       })
       .catch((errors) => {
@@ -64,7 +63,7 @@ export const useArchiveTypeStore = defineStore("useArchiveTypeStore", () => {
         console.log("in get ArchiveType by id : " + errors);
       });
   }
- 
+
   return {
     archiveTypes,
     archiveType,

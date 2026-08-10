@@ -53,7 +53,7 @@ const store = async () => {
       });
     }
   }
-}
+};
 
 const update = async () => {
   errors.value = null;
@@ -65,7 +65,10 @@ const update = async () => {
   });
 
   try {
-    const response = await BonusStore.update_BonusJobTitle(BonusJobTitle.value.id, formData);
+    const response = await BonusStore.update_BonusJobTitle(
+      BonusJobTitle.value.id,
+      formData
+    );
     if (response.status === 200) {
       SuccessToast();
       router.go(-1);
@@ -103,21 +106,23 @@ const Delete = async () => {
 };
 
 const showData = async () => {
-  await BonusStore.show_BonusJobTitle(id.value).then((response) => {
-    if (response.status === 200) {
-      Object.assign(BonusJobTitle.value, response.data.data);
-    }
-  }).catch((error) => {
-    console.error(error);
-    Swal.fire({
-      icon: "warning",
-      title: "Employee file does not exist!",
-      showConfirmButton: false,
-      timer: 1500,
-    }).then(() => {
-      router.go(-1);
+  await BonusStore.show_BonusJobTitle(id.value)
+    .then((response) => {
+      if (response.status === 200) {
+        Object.assign(BonusJobTitle.value, response.data.data);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      Swal.fire({
+        icon: "warning",
+        title: "Employee file does not exist!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        router.go(-1);
+      });
     });
-  });
 };
 const reset = () => {
   BonusStore.resetDataBonusJobTitle();
@@ -136,31 +141,50 @@ onMounted(async () => {
   }
   isLoading.value = false;
 });
-
 </script>
 
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
     <template #headerButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" preIcon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        preIcon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
         <IRow cols-lg="4" cols-md="2" cols-sm="1">
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Name')" name="Name" v-model="BonusJobTitle.name" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Name')"
+              name="Name"
+              v-model="BonusJobTitle.name"
+              :type="EnumInputType.Text"
+            />
           </ICol>
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Description')" name="Description" v-model="BonusJobTitle.description"
-              :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Description')"
+              name="Description"
+              v-model="BonusJobTitle.description"
+              :type="EnumInputType.Text"
+            />
           </ICol>
         </IRow>
       </IRow>
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud :isAdd="BonusJobTitle.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+      <IFooterCrud
+        :isAdd="BonusJobTitle.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
     </template>
   </IPage>
 </template>

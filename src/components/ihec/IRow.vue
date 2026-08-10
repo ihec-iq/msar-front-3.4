@@ -116,7 +116,11 @@ function onKeyToggle(e: KeyboardEvent) {
     <div
       v-if="title"
       class="flex items-center justify-between w-full px-3 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-blue-700 dark:text-blue-300 font-semibold select-none shadow-sm"
-      :class="collapsible ? 'cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors' : ''"
+      :class="
+        collapsible
+          ? 'cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors'
+          : ''
+      "
       role="button"
       :aria-expanded="isOpen"
       :tabindex="collapsible ? 0 : -1"
@@ -140,10 +144,7 @@ function onKeyToggle(e: KeyboardEvent) {
 
     <!-- Content -->
     <transition name="row-collapse">
-      <div
-        v-show="isOpen"
-        class="w-full mt-3"
-      >
+      <div v-show="isOpen" class="w-full mt-3">
         <div
           :class="gridClass"
           class="w-full rounded-xl bg-white/60 dark:bg-white/5 p-2 sm:p-3 lg:p-4 shadow-sm"
@@ -159,7 +160,9 @@ function onKeyToggle(e: KeyboardEvent) {
 /* Smooth height toggle; keep lightweight */
 .row-collapse-enter-active,
 .row-collapse-leave-active {
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 .row-collapse-enter-from,
 .row-collapse-leave-to {

@@ -14,8 +14,8 @@ export interface IHrDocument {
   addMonths: number;
   UserCreate?: IUser;
   UserUpdate?: IUser;
-  isActive:boolean;
-  notes: string
+  isActive: boolean;
+  notes: string;
 }
 
 export interface IHrDocumentType {

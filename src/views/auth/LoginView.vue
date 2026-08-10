@@ -107,7 +107,10 @@ onMounted(async () => {
   await useConfigStore()
     .load()
     .then(() => {
-      if (Config.value.connectionString == null || Config.value.connectionString == "") {
+      if (
+        Config.value.connectionString == null ||
+        Config.value.connectionString == ""
+      ) {
         const swalWithBootstrapButtons = Swal.mixin({
           customClass: {
             confirmButton: "btn m-2 bg-red-700",
@@ -140,8 +143,12 @@ onMounted(async () => {
   <!-- <div
     class="bg-purple-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-[#0051ff] bottom-0 leading-5 h-full w-full overflow-hidden"
   ></div> -->
-  <div class="relative z-30 overflow-y-hidden sm:flex sm:flex-row justify-evenly bg-transparent rounded-3xl">
-    <div class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md">
+  <div
+    class="relative z-30 overflow-y-hidden sm:flex sm:flex-row justify-evenly bg-transparent rounded-3xl"
+  >
+    <div
+      class="flex-col lg:flex xs:hidden self-center lg:px-14 sm:max-w-4xl xl:max-w-md"
+    >
       <div class="self-start hidden lg:flex flex-col text-gray-300">
         <!-- <p class="pr-3 text-sm opacity-75">
           Lorem ipsum is placeholder text commonly used in the graphic, print,
@@ -163,13 +170,30 @@ onMounted(async () => {
           </p> -->
         </div>
         <div class="space-y-6">
-          <Form v-if="isLoading == false" :initial-values="loginForm" @submit="onSubmit" :validation-schema="schema"
-            @invalid-submit="onInvalidSubmit">
+          <Form
+            v-if="isLoading == false"
+            :initial-values="loginForm"
+            @submit="onSubmit"
+            :validation-schema="schema"
+            @invalid-submit="onInvalidSubmit"
+          >
             <div class="relative mb-2" x-data="{ show: true }">
-              <TextInput v-model="loginForm.email" name="email" type="email" :label="t('E-mail')"
-                :placeholder="t('Your Email Address')" success-message="ادخل الاميل او اسم الحساب" />
-              <TextInput v-model="loginForm.password" name="password" type="password" :label="t('Password')"
-                :placeholder="t('Your password')" success-message="ادخل رمز الحساب" />
+              <TextInput
+                v-model="loginForm.email"
+                name="email"
+                type="email"
+                :label="t('E-mail')"
+                :placeholder="t('Your Email Address')"
+                success-message="ادخل الاميل او اسم الحساب"
+              />
+              <TextInput
+                v-model="loginForm.password"
+                name="password"
+                type="password"
+                :label="t('Password')"
+                :placeholder="t('Your password')"
+                success-message="ادخل رمز الحساب"
+              />
             </div>
             <div class="flex items-center justify-between">
               <div class="mb-3 text-red-600 text-lg" v-if="errs != ''">
@@ -184,8 +208,10 @@ onMounted(async () => {
               </div>
             </div> -->
             <div>
-              <button type="submit"
-                class="submit-btn w-full flex justify-center bg-[#0344d2] hover:bg-[#02287a] text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500">
+              <button
+                type="submit"
+                class="submit-btn w-full flex justify-center bg-[#0344d2] hover:bg-[#02287a] text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500"
+              >
                 {{ t("Sign In") }}
               </button>
             </div>
@@ -278,19 +304,28 @@ onMounted(async () => {
   </svg> -->
   <div class="waveWrapper waveAnimation">
     <div class="waveWrapperInner bgTop">
-      <div class="wave waveTop" style="
+      <div
+        class="wave waveTop"
+        style="
           background-image: url(&quot;http://front-end-noobs.com/jecko/img/wave-top.png&quot;);
-        "></div>
+        "
+      ></div>
     </div>
     <div class="waveWrapperInner bgMiddle">
-      <div class="wave waveMiddle" style="
+      <div
+        class="wave waveMiddle"
+        style="
           background-image: url(&quot;http://front-end-noobs.com/jecko/img/wave-mid.png&quot;);
-        "></div>
+        "
+      ></div>
     </div>
     <div class="waveWrapperInner bgBottom">
-      <div class="wave waveBottom" style="
+      <div
+        class="wave waveBottom"
+        style="
           background-image: url(&quot;http://front-end-noobs.com/jecko/img/wave-bot.png&quot;);
-        "></div>
+        "
+      ></div>
     </div>
   </div>
   <div class="fixed top-4 right-5 z-40">
@@ -484,30 +519,33 @@ onMounted(async () => {
 }
 
 @keyframes animate {
-
   0%,
   100% {
-    clip-path: polygon(0% 45%,
-        16% 44%,
-        33% 50%,
-        54% 60%,
-        70% 61%,
-        84% 59%,
-        100% 52%,
-        100% 100%,
-        0% 100%);
+    clip-path: polygon(
+      0% 45%,
+      16% 44%,
+      33% 50%,
+      54% 60%,
+      70% 61%,
+      84% 59%,
+      100% 52%,
+      100% 100%,
+      0% 100%
+    );
   }
 
   50% {
-    clip-path: polygon(0% 60%,
-        15% 65%,
-        34% 66%,
-        51% 62%,
-        67% 50%,
-        84% 45%,
-        100% 46%,
-        100% 100%,
-        0% 100%);
+    clip-path: polygon(
+      0% 60%,
+      15% 65%,
+      34% 66%,
+      51% 62%,
+      67% 50%,
+      84% 45%,
+      100% 46%,
+      100% 100%,
+      0% 100%
+    );
   }
 }
 </style>

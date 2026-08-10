@@ -11,7 +11,10 @@ function dataURItoBlob(dataURI: string): Blob {
   return new Blob([ab], { type: mimeString });
 }
 
-export function ImageResizer(file: File, maxSize: number): Promise<Blob | File> {
+export function ImageResizer(
+  file: File,
+  maxSize: number
+): Promise<Blob | File> {
   if (!file.type.match(/image.*/)) {
     return Promise.resolve(file);
   }

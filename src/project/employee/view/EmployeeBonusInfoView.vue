@@ -81,7 +81,7 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {
@@ -186,12 +186,12 @@ const showData = async () => {
         Object.assign(employee.value, response.data.data);
         isPerson.value = employee.value.isPerson == 0 ? false : true;
         isMoveSection.value = employee.value.isMoveSection == 0 ? false : true;
-        getFiles()
+        getFiles();
       }
     })
     .catch((errors) => {
       console.log(errors);
-      let error = getError(errors);
+      const error = getError(errors);
       console.log(error);
       Swal.fire({
         icon: "warning",
@@ -211,7 +211,7 @@ const back = () => {
   });
 };
 const ShowUser = () => {
-  let userId = employee.value.User?.id;
+  const userId = employee.value.User?.id;
   router.push({
     name: "userUpdate",
     params: { id: userId },

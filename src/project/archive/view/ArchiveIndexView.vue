@@ -73,7 +73,7 @@ const searchFilter = ref<IArchiveFilter>({
   hasDate: false,
 });
 const scrollPageTo = (navEl: string) => {
-  let element = document.getElementById(navEl);
+  const element = document.getElementById(navEl);
   //element?.scrollIntoView({ behavior: "smooth" });
   // console.log(navEl);
   // console.log(element?.offsetTop);

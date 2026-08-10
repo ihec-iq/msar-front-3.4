@@ -51,7 +51,6 @@ const filterByIDName = (item: IBarrenSectionReportView) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -65,15 +64,16 @@ const searchFilter = ref<IStoreFilter>({
   description: "",
   summation: true,
 });
-const sectionName = ref("")
+const sectionName = ref("");
 const getSection = async () => {
-  sectionName.value = ''
-  await useSectionStore().show(id.value).then((response) => {
-    sectionName.value = response.data.data.name
-  })
-}
+  sectionName.value = "";
+  await useSectionStore()
+    .show(id.value)
+    .then((response) => {
+      sectionName.value = response.data.data.name;
+    });
+};
 const getFilterData = async (page = 1) => {
-  
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
@@ -94,15 +94,14 @@ const getFilterData = async (page = 1) => {
       console.log(error);
     });
 
-
   isLoading.value = false;
 };
-//#endregion 
+//#endregion
 //#region Pagination
 //#endregion
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowStorage]);
-  await getSection()
+  await getSection();
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   await getFilterData(1);
@@ -116,7 +115,7 @@ interface IBarrenSectionReportView {
   price: number;
   employeeName: string;
   employeeId: number;
-  OutputId: number
+  OutputId: number;
 }
 interface IGroupedReport {
   employeeName: string;
@@ -158,7 +157,13 @@ function groupByEmployee(data: IBarrenSectionReportView[]): IGroupedReport[] {
 }
 
 const headers = ref<Array<ITableHeader>>([
-  { caption: t("Details"), value: "actions", print: false, sortable: false, width: "30" },
+  {
+    caption: t("Details"),
+    value: "actions",
+    print: false,
+    sortable: false,
+    width: "30",
+  },
   { caption: t("Item.Name"), value: "itemName" },
   { caption: t("Count"), value: "count" },
   { caption: t("OutputVoucher.Number"), value: "numberOutput" },
@@ -178,7 +183,7 @@ const showGroupedData = () => {
   } else {
     //data.value = dataBase.value;
   }
-}
+};
 const goToDetails = (id: number) => {
   const routeUrl = router.resolve({
     name: "outputVoucherUpdate",
@@ -199,41 +204,74 @@ const printTable = async () => {
 };
 </script>
 <template>
-  <IPage :HeaderTitle="t('Store.BarrenSectionIndex') + ' - ' + sectionName" :isLoading="isLoading">
+  <IPage
+    :HeaderTitle="t('Store.BarrenSectionIndex') + ' - ' + sectionName"
+    :isLoading="isLoading"
+  >
     <IPageContent>
       <IRow>
-        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px] ">
+        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px]">
           <ICol>
-            <IInput :label="t('Title')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
-              :OnKeyEnter="getFilterData" />
+            <IInput
+              :label="t('Title')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
           <ICol>
-            <ICheckbox label="عرض بشكل تجميعي" v-model="checkGroup" :onChange="showGroupedData" />
+            <ICheckbox
+              label="عرض بشكل تجميعي"
+              v-model="checkGroup"
+              :onChange="showGroupedData"
+            />
           </ICol>
           <ICol v-if="data.length >= limits[0].id">
-            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-              :IsRequire="true" @onChange="getFilterData()" />
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
           </ICol>
           <ICol v-if="data.length > 0">
-            <IButton2 class="rtl:ml-2 ltr:mr-2 xs:mt-2 mt-4" color="amber" :variant="EnumButtonType.Outlined"
-              :text="t('Print')" preIcon="printer" :onClick="printTable" width="25" />
+            <IButton2
+              class="rtl:ml-2 ltr:mr-2 xs:mt-2 mt-4"
+              color="amber"
+              :variant="EnumButtonType.Outlined"
+              :text="t('Print')"
+              preIcon="printer"
+              :onClick="printTable"
+              width="25"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow v-if="!checkGroup">
-        <ITable :items="data" :headers="headersWithEmployee" :showRowNumber=true :showColumnsButton="false"
-          :page-size="100" :page-size-options="[100, 250, 500]">
+        <ITable
+          :items="data"
+          :headers="headersWithEmployee"
+          :showRowNumber="true"
+          :showColumnsButton="false"
+          :page-size="100"
+          :page-size-options="[100, 250, 500]"
+        >
           <template v-slot:actions="{ row }">
             <button
               class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"
-              @click="goToDetails(row.OutputId as number)">
-              <i class="fas fa-external-link-alt mr-1"></i>{{ t('Open') }} {{ row.OutputId }}
+              @click="goToDetails(row.OutputId as number)"
+            >
+              <i class="fas fa-external-link-alt mr-1"></i>{{ t("Open") }}
+              {{ row.OutputId }}
             </button>
           </template>
           <template v-slot:count="{ row }">
             <span
-              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2">↓{{
-                ConvertToMoneyFormat(row.count) }}
+              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+              >↓{{ ConvertToMoneyFormat(row.count) }}
             </span>
           </template>
           <template v-slot:price="{ row }">
@@ -243,28 +281,37 @@ const printTable = async () => {
       </IRow>
       <div class="w-full" v-else>
         <div class="">
-          <div v-for="item in groupedData" class="mb-2">
+          <div v-for="item in groupedData" :key="item.employeeId" class="mb-2">
             <div class="bg-gray-50 border border-gray-300 p-2 rounded-md">
               <div class="mt-2">
-                <ITable :items="item.items" :headers="headers" :showRowNumber=true :showColumnsButton="false"
-                  :page-size="100" :page-size-options="[100, 250, 500]">
+                <ITable
+                  :items="item.items"
+                  :headers="headers"
+                  :showRowNumber="true"
+                  :showColumnsButton="false"
+                  :page-size="100"
+                  :page-size-options="[100, 250, 500]"
+                >
                   <template v-slot:headerTitle>
                     <div
-                      class="font-bold text-lg bg-gray-100 p-2 rounded-md shadow-sm border border-gray-200 mb-2 text-center print:text-center print:bg-gray-100 print:border print:shadow-sm print:p-2">
+                      class="font-bold text-lg bg-gray-100 p-2 rounded-md shadow-sm border border-gray-200 mb-2 text-center print:text-center print:bg-gray-100 print:border print:shadow-sm print:p-2"
+                    >
                       {{ item.employeeName }}
                     </div>
                   </template>
                   <template v-slot:actions="{ row }">
                     <button
                       class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-200 transition-colors duration-200"
-                      @click="goToDetails(row.OutputId as number)">
-                      <i class="fas fa-external-link-alt mr-1"></i>{{ t('Open') }}
+                      @click="goToDetails(row.OutputId as number)"
+                    >
+                      <i class="fas fa-external-link-alt mr-1"></i
+                      >{{ t("Open") }}
                     </button>
                   </template>
                   <template v-slot:count="{ row }">
                     <span
-                      class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2">↓{{
-                        ConvertToMoneyFormat(row.count) }}
+                      class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+                      >↓{{ ConvertToMoneyFormat(row.count) }}
                     </span>
                   </template>
                   <template v-slot:price="{ row }">
@@ -279,10 +326,13 @@ const printTable = async () => {
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-5/5 hidden">
-            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
           </div>
-
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
@@ -295,7 +345,7 @@ const printTable = async () => {
 </template>
 <style>
 @media print {
-  .table-container>*:not(#printable-table) {
+  .table-container > *:not(#printable-table) {
     display: none !important;
   }
 }

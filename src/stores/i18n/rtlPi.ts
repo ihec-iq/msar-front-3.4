@@ -1,5 +1,6 @@
 import { onMounted, ref } from "vue";
 import { defineStore } from "pinia";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 export const useRtlStore = defineStore("rtlStore", () => {
   const isRtl = ref<boolean>(false);

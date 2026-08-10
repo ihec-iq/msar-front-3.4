@@ -46,7 +46,7 @@ onMounted(async () => {
   }
 });
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 //#region CURD
 const storeObject = () => {
@@ -181,32 +181,31 @@ const reset = () => {
       />
     </template>
     <IPageContent>
-      <IRow> 
-          <IRow cols-lg="2"  cols="2" cols-md="2">
-            <ICol>
-              <IInput
-                :label="t('Name')"
-                name="name"
-                v-model="archiveType.name"
-                type="text"
-            /></ICol>
-            <ICol>
-              <IInput
-                :label="t('Description')"
-                name="description"
-                v-model="archiveType.description"
-                type="text"
-            /></ICol>
-          </IRow>
-          <IErrorMessages :validationResult="validationResult" />
+      <IRow>
+        <IRow cols-lg="2" cols="2" cols-md="2">
+          <ICol>
+            <IInput
+              :label="t('Name')"
+              name="name"
+              v-model="archiveType.name"
+              type="text"
+          /></ICol>
+          <ICol>
+            <IInput
+              :label="t('Description')"
+              name="description"
+              v-model="archiveType.description"
+              type="text"
+          /></ICol>
+        </IRow>
+        <IErrorMessages :validationResult="validationResult" />
 
-          <IFooterCrud
-            :isAdd="archiveType.id == 0"
-            :onCreate="storeObject"
-            :onUpdate="updateObject"
-            :onDelete="deleteObject"
-          />
-         
+        <IFooterCrud
+          :isAdd="archiveType.id == 0"
+          :onCreate="storeObject"
+          :onUpdate="updateObject"
+          :onDelete="deleteObject"
+        />
       </IRow>
     </IPageContent>
   </IPage>

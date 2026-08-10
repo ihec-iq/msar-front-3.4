@@ -1,6 +1,6 @@
 import type { IconLink } from "@/components/fixed/FixedMenu";
 import { EnumPermission } from "@/utilities/EnumSystem";
- 
+
 export const SettingLinks: Array<IconLink> = [
   {
     routerName: "userIndex",
@@ -11,7 +11,7 @@ export const SettingLinks: Array<IconLink> = [
     tab: "Feature Admin",
     description: "التحكم في معلومات المستخدمين",
     isActive: true,
-    permissions: [EnumPermission.ShowUsers]
+    permissions: [EnumPermission.ShowUsers],
   },
   {
     routerName: "roleIndex",
@@ -22,7 +22,6 @@ export const SettingLinks: Array<IconLink> = [
     tab: "Company",
     description: "كروبات الصلاحيات والتعديل عليها",
     isActive: true,
-    permissions: [EnumPermission.ShowUsers]
-
+    permissions: [EnumPermission.ShowUsers],
   },
 ];

@@ -19,13 +19,13 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 const { validate, required, isObject } = useValidation();
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "name",
     caption: t("Item.Name"),
     rules: [required()],
-  }, 
+  },
 ];
 import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
@@ -48,7 +48,7 @@ const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const store = () => {
-  if(!can(EnumPermission.AddWarehouseSetting)) return;
+  if (!can(EnumPermission.AddWarehouseSetting)) return;
   errors.value = null;
   validationResult.value = validate(inputVoucherState.value, rules);
   if (!validationResult.value.success) {
@@ -58,8 +58,7 @@ const store = () => {
   errors.value = null;
   const formData = prepareFormData(inputVoucherState.value);
 
-  InputVoucherStateStore
-    .store(formData)
+  InputVoucherStateStore.store(formData)
     .then((response) => {
       if (response.status == 200) {
         Swal.fire({
@@ -83,7 +82,7 @@ const store = () => {
     });
 };
 function update() {
-  if(!can(EnumPermission.EditWarehouseSetting)) return;
+  if (!can(EnumPermission.EditWarehouseSetting)) return;
   errors.value = null;
   validationResult.value = validate(inputVoucherState.value, rules);
   if (!validationResult.value.success) {
@@ -93,8 +92,7 @@ function update() {
   errors.value = null;
   const formData = prepareFormData(inputVoucherState.value);
 
-  InputVoucherStateStore
-      .update(inputVoucherState.value.id, formData)
+  InputVoucherStateStore.update(inputVoucherState.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -137,21 +135,22 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-          await InputVoucherStateStore._delete(inputVoucherState.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        });
+        await InputVoucherStateStore._delete(inputVoucherState.value.id).then(
+          () => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          }
+        );
       }
     });
 };
 const showData = async () => {
   isLoding.value = true;
-  await InputVoucherStateStore
-    .show(id.value)
+  await InputVoucherStateStore.show(id.value)
     .then((response) => {
       if (response.status == 200) {
         inputVoucherState.value.id = response.data.data.id;
@@ -182,7 +181,7 @@ onMounted(async () => {
   } else {
     inputVoucherState.value.id = id.value;
     await showData();
-    namePage.value =   t("Warehouse.InputVoucherState.Update");
+    namePage.value = t("Warehouse.InputVoucherState.Update");
   }
   isLoding.value = false;
 });
@@ -193,18 +192,47 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
-        <IRow cols-lg="2"  cols="2" cols-md="2">
+        <IRow cols-lg="2" cols="2" cols-md="2">
           <ICol>
-            <IInput :label="t('Name')" name="name" v-model="inputVoucherState.name" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Name')"
+              name="name"
+              v-model="inputVoucherState.name"
+              :type="EnumInputType.Text"
+            />
           </ICol>
         </IRow>
-        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
-        <IFooterCrud :isAdd="inputVoucherState.id == 0 && can(EnumPermission.AddWarehouseSetting)? true : false" :isUpdate="inputVoucherState.id != 0 && can(EnumPermission.EditWarehouseSetting)? true : false" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
+        <IFooterCrud
+          :isAdd="
+            inputVoucherState.id == 0 && can(EnumPermission.AddWarehouseSetting)
+              ? true
+              : false
+          "
+          :isUpdate="
+            inputVoucherState.id != 0 &&
+            can(EnumPermission.EditWarehouseSetting)
+              ? true
+              : false
+          "
+          :onCreate="store"
+          :onUpdate="update"
+          :onDelete="Delete"
+        />
       </IRow>
     </IPageContent>
   </IPage>

@@ -22,10 +22,10 @@ import {
 import { WarningToast } from "@/utilities/Toast2";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
- 
+
 const { validate, min, required, isObject, max, number } = useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {
@@ -241,7 +241,7 @@ const ChangeDate = () => {
   vacationSick.value.record = days;
 };
 const ChangeDateRecord = () => {
-  let d = new Date(vacationSick.value.dayFrom);
+  const d = new Date(vacationSick.value.dayFrom);
   d.setDate(d.getDate() + vacationSick.value.record);
   vacationSick.value.dayTo = d.toISOString().split("T")[0];
 };

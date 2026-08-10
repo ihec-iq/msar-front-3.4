@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from "vue";
- import Swal from "sweetalert2";
- import { usePermissionsStore } from "@/project/core/permissionStore";
- import { useRoute, useRouter } from "vue-router";
+import Swal from "sweetalert2";
+import { usePermissionsStore } from "@/project/core/permissionStore";
+import { useRoute, useRouter } from "vue-router";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { storeToRefs } from "pinia";
 import { t } from "@/utilities/I18nPlugin";
@@ -11,7 +11,7 @@ import type IPermission from "@/project/role/IPermission";
 import type IRole from "@/project/role/IRole";
 import { useRoleStore } from "@/project/role/roleStore";
 const rtlStore = useRtlStore();
- 
+
 const permissionsStore = usePermissionsStore();
 const namePage = ref("Add Role");
 const router = useRouter();
@@ -60,7 +60,7 @@ const Save = () => {
   else update();
   // else update();
 };
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 const roleStore = useRoleStore();
 const store = () => {
   role.checkedPermission = checkedPermission.value;

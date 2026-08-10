@@ -2,9 +2,9 @@
 defineProps({
   title: {
     type: String,
-    default: ''
-  }
-})
+    default: "",
+  },
+});
 </script>
 <template>
   <div class="w-full flex flex-col">
@@ -14,5 +14,3 @@ defineProps({
     </div>
   </div>
 </template>
-
-

@@ -80,8 +80,7 @@ export const WarehouseLinks: Array<IconLink> = [
         description: "جرد المواد حسب الاقسام",
         permissions: [EnumPermission.ShowDirectVouchers],
         isActive: true,
-      }
-      ,
+      },
       {
         routerName: "WarehouseSettingPortalView",
         title: "الاعدادات",
@@ -113,5 +112,5 @@ export const WarehouseLinks: Array<IconLink> = [
       },
       ...ItemLinks,
     ],
-  }
+  },
 ];

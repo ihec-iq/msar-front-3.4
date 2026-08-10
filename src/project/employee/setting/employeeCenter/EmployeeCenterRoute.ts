@@ -2,13 +2,12 @@ import authMiddleware from "@/router/middleware/authMiddleware";
 
 export default [
   {
-    path: "/EmployeeCenters/:search?",  
+    path: "/EmployeeCenters/:search?",
     name: "EmployeeCenterIndex",
     component: () => import("./view/EmployeeCenterIndexView.vue"),
     meta: {
-      middleware: [authMiddleware],   
+      middleware: [authMiddleware],
     },
-
   },
   {
     path: "/EmployeeCenter",
@@ -26,5 +25,4 @@ export default [
       middleware: [authMiddleware],
     },
   },
-
 ];

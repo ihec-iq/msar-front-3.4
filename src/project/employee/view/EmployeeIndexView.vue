@@ -59,7 +59,7 @@ const filterByIDName = (employee: IEmployee) => {
 };
 const makeFastSearch = () => {
   return;
-  // eslint-disable-next-line no-self-assign
+
   // if (fastSearch.value == "") data.value = dataBase.value;
   // else {
   //   data.value = dataBase.value.filter(filterByIDName);
@@ -141,25 +141,56 @@ const headers = ref<Array<ITableHeader>>([
     </template>
     <IPageContent>
       <IRow>
-        <ISearchBar :getDataButton="getFilterData" class="w-full  border-b-2 border-gray-200 ">
+        <ISearchBar
+          :getDataButton="getFilterData"
+          class="w-full border-b-2 border-gray-200"
+        >
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
-            <IInput :label="t('SearchForUser')" :placeholder="t('Search')" v-model="fastSearch" type="text"
-              :OnKeyEnter="getFilterData" />
+            <IInput
+              :label="t('SearchForUser')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              type="text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
           <!-- date -->
           <ICol :span-lg="1" :span-md="2" :span="1" class="min-w-[150px]">
-            <ISelect :label="t('Employee.Section')" v-model="searchFilter.sectionId" name="archiveTypeId"
-              :options="sections" :IsRequire="true" @onChange="getFilterData()" />
+            <ISelect
+              :label="t('Employee.Section')"
+              v-model="searchFilter.sectionId"
+              name="archiveTypeId"
+              :options="sections"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
           </ICol>
-          <ICol :span-lg="1" v-if="data.length >= limits[0].id" :span-md="2" :span="1">
-            <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-              @onChange="getFilterData()" />
+          <ICol
+            :span-lg="1"
+            v-if="data.length >= limits[0].id"
+            :span-md="2"
+            :span="1"
+          >
+            <ISelect
+              name="limit"
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow class="z-[999]">
         <SimpleLoading v-if="isLoading" />
-        <ITable :items="data" :headers="headers" :showRowNumber="true" :showColumnsButton="false" :showSearch="false">
+        <ITable
+          :items="data"
+          :headers="headers"
+          :showRowNumber="true"
+          :showColumnsButton="false"
+          :showSearch="false"
+        >
           <template v-slot:section="{ row }">
             <span>{{ row.Section.name }}</span>
           </template>
@@ -175,8 +206,12 @@ const headers = ref<Array<ITableHeader>>([
                 <EditButton title="Employee.Info" @click="update(row.id)" />
               </li>
               <li>
-                <EditButton title="Employee.HistoryReport" @click="history(row.id)" class="w-full"
-                  icon="mdi-clipboard-text-clock-outline" />
+                <EditButton
+                  title="Employee.HistoryReport"
+                  @click="history(row.id)"
+                  class="w-full"
+                  icon="mdi-clipboard-text-clock-outline"
+                />
               </li>
             </IDropdown>
           </template>
@@ -190,8 +225,12 @@ const headers = ref<Array<ITableHeader>>([
             :searchFilter="searchFilter"
           ></IPagination> -->
           <div class="w-full overflow-auto">
-            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
           </div>
         </IRow>
       </IRow>

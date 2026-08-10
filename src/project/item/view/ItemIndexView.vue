@@ -51,7 +51,6 @@ const filterByIDName = (item: IItem) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -104,7 +103,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :cols="1" :cols-md="2"  :cols-lg="1">
+      <IRow :cols="1" :cols-md="2" :cols-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4" class="flex">
             <IInput
@@ -115,15 +114,15 @@ onMounted(async () => {
               :OnKeyEnter="getFilterData"
             />
             <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect
-              :label="t('Limit')"
-              v-model="searchFilter.limit"
-              name="archiveTypeId"
-              :options="limits"
-              :IsRequire="true"
-              @onChange="getFilterData()"
-            />
-          </div>
+              <ISelect
+                :label="t('Limit')"
+                v-model="searchFilter.limit"
+                name="archiveTypeId"
+                :options="limits"
+                :IsRequire="true"
+                @onChange="getFilterData()"
+              />
+            </div>
           </ICol>
         </ISearchBar>
       </IRow>
@@ -152,7 +151,6 @@ onMounted(async () => {
                   :limit="searchFilter.limit"
                 />
               </div>
-             
             </div>
           </div>
         </div>

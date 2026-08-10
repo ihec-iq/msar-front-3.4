@@ -18,10 +18,10 @@ export interface IUser {
   Employee?: IEmployee;
 }
 export interface IUserLite {
-    id: number;
-    name: string;
-    user_name?: string;
-    email?: string;
+  id: number;
+  name: string;
+  user_name?: string;
+  email?: string;
 }
 export interface IUserFilter {
   limit: number;

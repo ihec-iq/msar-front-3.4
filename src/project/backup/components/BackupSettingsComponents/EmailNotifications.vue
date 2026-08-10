@@ -4,27 +4,30 @@ import type { IBackupSettings } from "../../IBackup";
 import { useBackupStore } from "../../backupStore";
 import Swal from "sweetalert2";
 
-const props = defineProps<{
-  formData: IBackupSettings;
-}>();
+const formData = defineModel<IBackupSettings>("formData", {
+  required: true,
+});
 
 const backupStore = useBackupStore();
 const newEmailRecipient = ref("");
 
 // Email recipients management
 const addEmailRecipient = () => {
-  if (!props.formData.email_recipients) {
-    props.formData.email_recipients = [];
+  if (!formData.value.email_recipients) {
+    formData.value.email_recipients = [];
   }
-  if (newEmailRecipient.value && !props.formData.email_recipients.includes(newEmailRecipient.value)) {
-    props.formData.email_recipients.push(newEmailRecipient.value);
+  if (
+    newEmailRecipient.value &&
+    !formData.value.email_recipients.includes(newEmailRecipient.value)
+  ) {
+    formData.value.email_recipients.push(newEmailRecipient.value);
     newEmailRecipient.value = "";
   }
 };
 
 const removeEmailRecipient = (index: number) => {
-  if (props.formData.email_recipients) {
-    props.formData.email_recipients.splice(index, 1);
+  if (formData.value.email_recipients) {
+    formData.value.email_recipients.splice(index, 1);
   }
 };
 
@@ -66,7 +69,11 @@ const testEmail = async () => {
         <h3 class="font-medium text-gray-900">إشعارات البريد الإلكتروني</h3>
       </div>
       <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" v-model="formData.email_enabled" class="sr-only peer" />
+        <input
+          type="checkbox"
+          v-model="formData.email_enabled"
+          class="sr-only peer"
+        />
         <div
           class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] rtl:after:end-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
         ></div>
@@ -75,7 +82,9 @@ const testEmail = async () => {
 
     <div v-if="formData.email_enabled" class="space-y-3">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">عناوين البريد الإلكتروني</label>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >عناوين البريد الإلكتروني</label
+        >
         <div class="flex gap-2 mb-2">
           <input
             type="email"
@@ -104,7 +113,10 @@ const testEmail = async () => {
             class="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm border border-blue-200"
           >
             {{ email }}
-            <button @click="removeEmailRecipient(index)" class="ms-2 text-blue-600 hover:text-blue-800 font-bold">
+            <button
+              @click="removeEmailRecipient(index)"
+              class="ms-2 text-blue-600 hover:text-blue-800 font-bold"
+            >
               ×
             </button>
           </span>

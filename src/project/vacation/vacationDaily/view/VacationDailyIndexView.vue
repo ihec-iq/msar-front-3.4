@@ -24,6 +24,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import CardVacationDailyIndex from "./CardVacationDailyIndex.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -57,7 +58,6 @@ const filterByIDName = (_vacationDaily: IVacationDailyFilter) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     //data.value = dataBase.value.filter(filterByIDName);
@@ -125,13 +125,26 @@ onMounted(async () => {
       <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" type="text"
-              :OnKeyEnter="getFilterData" :cached="true" cached-name="searchVacationDaily" />
+            <IInput
+              :label="t('Search')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              type="text"
+              :OnKeyEnter="getFilterData"
+              :cached="true"
+              cached-name="searchVacationDaily"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow :cols="2" :cols-lg="2" :cols-md="2">
-        <ICol :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.id">
+        <ICol
+          :span="1"
+          :span-lg="1"
+          :span-md="1"
+          v-for="item in data"
+          :key="item.id"
+        >
           <!-- card -->
           <CardVacationDailyIndex :item="item" />
           <!-- end card -->
@@ -140,12 +153,21 @@ onMounted(async () => {
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-4/5 overflow-auto">
-            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
           </div>
           <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-              @onChange="getFilterData()" />
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
           </div>
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>

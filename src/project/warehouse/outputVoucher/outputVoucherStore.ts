@@ -114,7 +114,7 @@ export const useOutputVoucherStore = defineStore(
       try {
         outputVoucher.Items?.splice(index, 1);
       } catch (error) {
-        console.log("delete item in outputVoucher items : ",error);
+        console.log("delete item in outputVoucher items : ", error);
       }
     }
     function resetData() {

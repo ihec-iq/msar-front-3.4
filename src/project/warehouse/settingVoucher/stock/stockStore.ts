@@ -34,7 +34,7 @@ export const useStockStore = defineStore("StockStore", () => {
   const store = async (payload: object) => {
     return await Api.post(`${pathUrl}/store`, payload);
   };
-  const update = async (id: number, payload: object ) => {
+  const update = async (id: number, payload: object) => {
     return await Api.post(`${pathUrl}/update/${id}`, payload);
   };
   const _delete = async (id: number) => {

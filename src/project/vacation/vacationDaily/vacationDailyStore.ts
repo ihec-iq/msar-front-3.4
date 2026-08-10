@@ -19,7 +19,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
         Section: { id: 0, name: "" },
         MoveSection: {
           id: 0,
-          name: ""
+          name: "",
         },
         isMoveSection: 0,
         isPerson: 1,
@@ -35,16 +35,16 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
           id: 0,
           name: "",
           level: "",
-          code: ""
+          code: "",
         },
         EmployeeType: {
           id: 0,
-          name: ""
+          name: "",
         },
         EmployeeCenter: {
           id: 0,
-          name: ""
-        }
+          name: "",
+        },
       },
       id: 0,
       deservedRecord: 0,
@@ -58,7 +58,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       remainingSick: 0,
       currentYearSickVacations: 0,
       record: 0,
-      recordSick: 0
+      recordSick: 0,
     },
     record: 0,
     EmployeeAlter: {
@@ -67,7 +67,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       Section: { id: 0, name: "" },
       MoveSection: {
         id: 0,
-        name: ""
+        name: "",
       },
       isMoveSection: 0,
       isPerson: 1,
@@ -83,17 +83,17 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
         id: 0,
         name: "",
         level: "",
-        code: ""
+        code: "",
       },
       EmployeeType: {
         id: 0,
-        name: ""
+        name: "",
       },
       EmployeeCenter: {
         id: 0,
-        name: ""
-      }, 
-      isChecked: false
+        name: "",
+      },
+      isChecked: false,
     },
     Reason: {
       id: 1,
@@ -114,7 +114,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
         Section: { id: 0, name: "" },
         MoveSection: {
           id: 0,
-          name: ""
+          name: "",
         },
         isMoveSection: 0,
         isPerson: 1,
@@ -130,16 +130,16 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
           id: 0,
           name: "",
           level: "",
-          code: ""
+          code: "",
         },
         EmployeeType: {
           id: 0,
-          name: ""
+          name: "",
         },
         EmployeeCenter: {
           id: 0,
-          name: ""
-        }
+          name: "",
+        },
       },
       id: 0,
       deservedRecord: 0,
@@ -161,7 +161,7 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
       Section: { id: 0, name: "" },
       MoveSection: {
         id: 0,
-        name: ""
+        name: "",
       },
       isMoveSection: 0,
       isPerson: 1,
@@ -177,19 +177,19 @@ export const useVacationDailyStore = defineStore("vacationDailyStore", () => {
         id: 0,
         name: "",
         level: "",
-        code: ""
+        code: "",
       },
       EmployeeType: {
         id: 0,
-        name: ""
+        name: "",
       },
       EmployeeCenter: {
         id: 0,
-        name: ""
+        name: "",
       },
-      isChecked: false
+      isChecked: false,
     };
-       
+
     vacationDaily.Reason = {
       id: 0,
       name: "",

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import type { PropType } from 'vue'
+import { ref, watch } from "vue";
+import type { PropType } from "vue";
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 const localValue = ref(false);
 
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    required: false
+    required: false,
   },
   label: {
     type: String,
@@ -29,15 +29,18 @@ const props = defineProps({
   onChange: {
     type: Function as PropType<() => void>,
     required: false,
-  }
+  },
 });
 
-watch(() => props.modelValue, (newValue) => {
-  localValue.value = newValue;
-});
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    localValue.value = newValue;
+  }
+);
 
 const handleChange = () => {
-  emit('update:modelValue', localValue.value);
+  emit("update:modelValue", localValue.value);
   if (props.onChange) {
     props.onChange();
   }

@@ -23,7 +23,11 @@ export const VacationLinks: Array<IconLink> = [
         description:
           "البوابة الاساسية للنظام ومن خلالها تستطيع الدخول على كافة  خدمات النظام",
         isActive: true,
-        permissions: [EnumPermission.ShowVacationsDaily, EnumPermission.ShowVacationsTime, EnumPermission.ShowVacationsSick]
+        permissions: [
+          EnumPermission.ShowVacationsDaily,
+          EnumPermission.ShowVacationsTime,
+          EnumPermission.ShowVacationsSick,
+        ],
       },
       {
         routerName: "vacationTimeIndex",
@@ -34,7 +38,7 @@ export const VacationLinks: Array<IconLink> = [
         tab: "vacationPortal",
         description: "اضافة اجازة زمنية لعدد من الساعات",
         isActive: true,
-        permissions: [EnumPermission.ShowVacationsTime]
+        permissions: [EnumPermission.ShowVacationsTime],
       },
       {
         routerName: "vacationDailyIndex",
@@ -45,7 +49,7 @@ export const VacationLinks: Array<IconLink> = [
         tab: "vacationPortal",
         description: "اضافة اجازة اعتيادية لعدد من الايام",
         isActive: true,
-        permissions: [EnumPermission.ShowVacationsDaily]
+        permissions: [EnumPermission.ShowVacationsDaily],
       },
       {
         routerName: "vacationSickIndex",
@@ -56,8 +60,8 @@ export const VacationLinks: Array<IconLink> = [
         tab: "vacationPortal",
         description: "اضافة اجازة مرضية لعدد من الايام",
         isActive: true,
-        permissions: [EnumPermission.ShowVacationsSick]
+        permissions: [EnumPermission.ShowVacationsSick],
       },
-    ]
-  }
+    ],
+  },
 ];

@@ -39,13 +39,34 @@ const addObject = () => {
       <IButton width="28" :onClick="addObject" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :cols="1" :colsSm="2" :colsMd="3" :colsLg="4" :colsXl="6" gap="6" :collapsible="true">
-        <ICol class="my-2" :span="1" :span-lg="1" :span-md="1" v-for="item in archiveTypes" :key="item.id">
+      <IRow
+        :cols="1"
+        :colsSm="2"
+        :colsMd="3"
+        :colsLg="4"
+        :colsXl="6"
+        gap="6"
+        :collapsible="true"
+      >
+        <ICol
+          class="my-2"
+          :span="1"
+          :span-lg="1"
+          :span-md="1"
+          v-for="item in archiveTypes"
+          :key="item.id"
+        >
           <ArchiveTypeCard :item="item" />
         </ICol>
       </IRow>
     </IPageContent>
-    <IFooterCrud :isAdd="false" :show-delete="false" :show-add="false" :show-update="false"> </IFooterCrud>
+    <IFooterCrud
+      :isAdd="false"
+      :show-delete="false"
+      :show-add="false"
+      :show-update="false"
+    >
+    </IFooterCrud>
   </IPage>
   <SimpleLoading v-if="isLoading"></SimpleLoading>
 </template>

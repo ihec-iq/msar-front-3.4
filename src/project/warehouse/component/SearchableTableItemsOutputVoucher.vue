@@ -392,7 +392,7 @@ onBeforeUnmount(() => {
         >
           بحث
         </button>
-      </div> 
+      </div>
       <slot name="trailing"></slot>
     </div>
 

@@ -13,9 +13,9 @@ export interface IStore {
   countIn?: number;
   countOut?: number;
   countReIn?: number;
-  countReOut?: number; 
+  countReOut?: number;
 }
- 
+
 export interface IStoreItemHistory {
   voucherId: number;
   itemId: number;
@@ -37,8 +37,8 @@ export interface IStoreFilter {
   id?: number;
 }
 export interface IInventoryFilter {
-  itemName?: string; 
-  itemId?: string; 
+  itemName?: string;
+  itemId?: string;
   limit: number;
 }
 export interface IInverntoryHistoryFilter {
@@ -47,7 +47,7 @@ export interface IInverntoryHistoryFilter {
   from?: string;
   to?: string;
   movementType?: string;
-  limit: number; 
+  limit: number;
   employeeId?: number;
 }
 export interface IStoreItemFilter {

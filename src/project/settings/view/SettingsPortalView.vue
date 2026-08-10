@@ -16,7 +16,9 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('Settings')">
     <IPageContent>
-      <CardPortalComponent :links="SettingsLinks[0].children"></CardPortalComponent>
+      <CardPortalComponent
+        :links="SettingsLinks[0].children"
+      ></CardPortalComponent>
     </IPageContent>
   </IPage>
 </template>

@@ -1,24 +1,25 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import VueApexCharts from 'vue3-apexcharts'
+import { ref, computed } from "vue";
+import VueApexCharts from "vue3-apexcharts";
+import type { ApexOptions } from "apexcharts";
 
 interface Props {
-  data: Array<{ label: string; value: number }>
-  title?: string
-  height?: string
-  horizontal?: boolean
+  data: Array<{ label: string; value: number }>;
+  title?: string;
+  height?: string;
+  horizontal?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  title: '',
-  height: '350',
+  title: "",
+  height: "350",
   horizontal: false,
-})
+});
 
-const chartOptions = computed(() => ({
+const chartOptions = computed<ApexOptions>(() => ({
   chart: {
-    type: 'bar',
-    fontFamily: 'Cairo, sans-serif',
+    type: "bar",
+    fontFamily: "Cairo, sans-serif",
     toolbar: {
       show: true,
     },
@@ -28,43 +29,45 @@ const chartOptions = computed(() => ({
       horizontal: props.horizontal,
       borderRadius: 4,
       dataLabels: {
-        position: 'top',
+        position: "top",
       },
-    }
+    },
   },
-  colors: ['#3B82F6'],
+  colors: ["#3B82F6"],
   dataLabels: {
     enabled: true,
     offsetY: props.horizontal ? 0 : -20,
     style: {
-      fontSize: '12px',
-      colors: ['#304758']
-    }
+      fontSize: "12px",
+      colors: ["#304758"],
+    },
   },
   xaxis: {
-    categories: props.data.map(item => item.label),
+    categories: props.data.map((item) => item.label),
     labels: {
       style: {
-        fontSize: '12px',
-      }
-    }
+        fontSize: "12px",
+      },
+    },
   },
   yaxis: {
     labels: {
       style: {
-        fontSize: '12px',
-      }
-    }
+        fontSize: "12px",
+      },
+    },
   },
   grid: {
-    borderColor: '#f1f1f1',
-  }
-}))
+    borderColor: "#f1f1f1",
+  },
+}));
 
-const series = computed(() => [{
-  name: props.title || 'العدد',
-  data: props.data.map(item => item.value)
-}])
+const series = computed(() => [
+  {
+    name: props.title || "العدد",
+    data: props.data.map((item) => item.value),
+  },
+]);
 </script>
 
 <template>

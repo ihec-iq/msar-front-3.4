@@ -74,7 +74,7 @@ const getFilterData = async (page = 1) => {
       if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = dataPage.value.data;
-        dataBase.value = dataPage.value.data; 
+        dataBase.value = dataPage.value.data;
         makeExcel(data.value);
       }
     })
@@ -123,7 +123,7 @@ import ITable from "@/components/ITable/ITable.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import IPage from "@/components/ihec/IPage.vue";
-import IRole from "@/project/role/IRole";
+import type IRole from "@/project/role/IRole";
 const app = getCurrentInstance();
 const trns = app?.appContext.config.globalProperties.$trns;
 </script>
@@ -133,7 +133,7 @@ const trns = app?.appContext.config.globalProperties.$trns;
       <IButton width="28" :onClick="add" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1">
             <IInput
@@ -147,14 +147,20 @@ const trns = app?.appContext.config.globalProperties.$trns;
         </ISearchBar>
       </IRow>
       <IRow>
-        <ITable :items="data" :headers="headers" :showRowNumber="true" :showColumnsButton="false" :showSearch=false>
-          <template v-slot:actions="{ row }">         
-                <EditButton @click="update(row.id)" />
+        <ITable
+          :items="data"
+          :headers="headers"
+          :showRowNumber="true"
+          :showColumnsButton="false"
+          :showSearch="false"
+        >
+          <template v-slot:actions="{ row }">
+            <EditButton @click="update(row.id)" />
           </template>
           <template v-slot:roles="{ row }">
             <span v-if="row.roles != '[]'" class="flex justify-center">
               <p
-                v-for="role  in (row.roles as Array<IRole>).slice(0, 3)"
+                v-for="role in (row.roles as Array<IRole>).slice(0, 3)"
                 :key="role.id"
                 class="text-sm leading-none text-text dark:text-textLight ml-2 flex-shrink"
               >

@@ -19,13 +19,13 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 const { validate, required, isObject } = useValidation();
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "name",
     caption: t("Item.Name"),
     rules: [required()],
-  }, 
+  },
 ];
 import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
@@ -48,19 +48,17 @@ const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const store = () => {
-  if(!can(EnumPermission.AddEmployeeSetting)) return;
+  if (!can(EnumPermission.AddEmployeeSetting)) return;
   errors.value = null;
   validationResult.value = validate(employeeType.value, rules);
   if (!validationResult.value.success) {
-
     WarningToast(t("ValidationFails"));
     return;
   }
   errors.value = null;
   const formData = prepareFormData(employeeType.value);
 
-  EmployeeTypeStore
-    .store(formData)
+  EmployeeTypeStore.store(formData)
     .then((response) => {
       if (response.status == 200) {
         Swal.fire({
@@ -84,19 +82,17 @@ const store = () => {
     });
 };
 function update() {
-  if(!can(EnumPermission.EditEmployeeSetting)) return;
+  if (!can(EnumPermission.EditEmployeeSetting)) return;
   errors.value = null;
   validationResult.value = validate(employeeType.value, rules);
   if (!validationResult.value.success) {
-
     WarningToast(t("ValidationFails"));
     return;
   }
   errors.value = null;
   const formData = prepareFormData(employeeType.value);
 
-  EmployeeTypeStore
-      .update(employeeType.value.id, formData)
+  EmployeeTypeStore.update(employeeType.value.id, formData)
     .then((response) => {
       if (response.status === 200) {
         Swal.fire({
@@ -139,7 +135,7 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-          await EmployeeTypeStore._delete(employeeType.value.id).then(() => {
+        await EmployeeTypeStore._delete(employeeType.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
@@ -152,8 +148,7 @@ const Delete = async () => {
 };
 const showData = async () => {
   isLoding.value = true;
-  await EmployeeTypeStore
-    .show(id.value)
+  await EmployeeTypeStore.show(id.value)
     .then((response) => {
       if (response.status == 200) {
         employeeType.value.id = response.data.data.id;
@@ -185,7 +180,7 @@ onMounted(async () => {
   } else {
     employeeType.value.id = id.value;
     await showData();
-    namePage.value =   t("EmployeeType.Update");
+    namePage.value = t("EmployeeType.Update");
   }
   isLoding.value = false;
 });
@@ -196,21 +191,47 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
-        <IRow cols-lg="2"  cols="2" cols-md="2">
+        <IRow cols-lg="2" cols="2" cols-md="2">
           <ICol>
-            <IInput :label="t('Name')" name="name" v-model="employeeType.name" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Name')"
+              name="name"
+              v-model="employeeType.name"
+              :type="EnumInputType.Text"
+            />
           </ICol>
         </IRow>
-        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
-        <IFooterCrud :isAdd="employeeType.id == 0 && can(EnumPermission.AddEmployeeSetting)? true : false" :isUpdate="employeeType.id != 0 && can(EnumPermission.EditEmployeeSetting)? true : false" :onCreate="store" 
-        :onUpdate="update" :onDelete="Delete" />
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
+        <IFooterCrud
+          :isAdd="
+            employeeType.id == 0 && can(EnumPermission.AddEmployeeSetting)
+              ? true
+              : false
+          "
+          :isUpdate="
+            employeeType.id != 0 && can(EnumPermission.EditEmployeeSetting)
+              ? true
+              : false
+          "
+          :onCreate="store"
+          :onUpdate="update"
+          :onDelete="Delete"
+        />
       </IRow>
-
     </IPageContent>
   </IPage>
 </template>

@@ -14,7 +14,6 @@ export interface IRetrievalVoucher {
   Employee: IRetrievalVoucherEmployee;
   itemsCount?: number;
   Stock: IStock;
-
 }
 export interface IRetrievalVoucherItem {
   id?: number;

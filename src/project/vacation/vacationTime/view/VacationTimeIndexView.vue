@@ -48,7 +48,6 @@ const filterByIDName = (_vacationTime: IVacationTimeFilter) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     //data.value = dataBase.value.filter(filterByIDName);
@@ -97,7 +96,8 @@ onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   let index = 1;
-  if (await localStorage.getItem("indexVacationTime") != undefined) index = Number(localStorage.getItem("indexVacationTime"));
+  if ((await localStorage.getItem("indexVacationTime")) != undefined)
+    index = Number(localStorage.getItem("indexVacationTime"));
 
   // must to wait fastSearch to get init value from localStorage.getItem
   await fastSearch.value;
@@ -113,13 +113,26 @@ onMounted(async () => {
       <IRow :cols="2" :cols-md="2" :cols-lg="2" :sm="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" type="text"
-              :OnKeyEnter="getFilterData" :cached="true" cached-name="searchVacationTime" />
+            <IInput
+              :label="t('Search')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              type="text"
+              :OnKeyEnter="getFilterData"
+              :cached="true"
+              cached-name="searchVacationTime"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow :cols="2" :cols-lg="2" :cols-md="2" :cols-sm="1">
-        <ICol :span="1" :span-lg="1" :span-md="1" v-for="item in data" :key="item.id">
+        <ICol
+          :span="1"
+          :span-lg="1"
+          :span-md="1"
+          v-for="item in data"
+          :key="item.id"
+        >
           <!-- card -->
           <CardVactionTimeIndex :item="item" />
           <!-- end card -->
@@ -129,12 +142,22 @@ onMounted(async () => {
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-4/5">
-            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
           </div>
           <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-              :IsRequire="true" @onChange="getFilterData()" />
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
           </div>
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>

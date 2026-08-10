@@ -93,18 +93,18 @@ const loadSettings = async () => {
           data.email_recipients ||
           (data.emails
             ? data.emails
-              .split(",")
-              .map((e: string) => e.trim())
-              .filter((e: string) => e)
+                .split(",")
+                .map((e: string) => e.trim())
+                .filter((e: string) => e)
             : []),
         telegram_enabled: data.telegram_enabled || false,
         telegram_bot_token: data.telegram_bot_token || null,
         telegram_chat_ids:
           data.telegram_chat_ids && typeof data.telegram_chat_ids === "string"
             ? data.telegram_chat_ids
-              .split(",")
-              .map((id: string) => id.trim())
-              .filter((id: string) => id)
+                .split(",")
+                .map((id: string) => id.trim())
+                .filter((id: string) => id)
             : Array.isArray(data.telegram_chat_ids)
               ? data.telegram_chat_ids
               : [],
@@ -130,17 +130,18 @@ const saveSettings = async () => {
       ...formData.value,
       email_recipients:
         formData.value.email_recipients &&
-          Array.isArray(formData.value.email_recipients)
+        Array.isArray(formData.value.email_recipients)
           ? formData.value.email_recipients.join(",")
           : formData.value.email_recipients,
       telegram_chat_ids:
         formData.value.telegram_chat_ids &&
-          Array.isArray(formData.value.telegram_chat_ids)
+        Array.isArray(formData.value.telegram_chat_ids)
           ? formData.value.telegram_chat_ids.join(",")
           : formData.value.telegram_chat_ids,
       // Ensure webhook_url is a string (not array)
       webhook_urls:
-        formData.value.webhook_urls && Array.isArray(formData.value.webhook_urls)
+        formData.value.webhook_urls &&
+        Array.isArray(formData.value.webhook_urls)
           ? formData.value.webhook_urls[0]
           : formData.value.webhook_urls,
     };
@@ -187,7 +188,9 @@ const saveSettings = async () => {
                 <span
                   class="text-xl"
                   :class="
-                    activeSection === item.id ? 'scale-110' : 'group-hover:scale-110 transition-transform'
+                    activeSection === item.id
+                      ? 'scale-110'
+                      : 'group-hover:scale-110 transition-transform'
                   "
                   >{{ item.icon }}</span
                 >
@@ -212,21 +215,32 @@ const saveSettings = async () => {
         <main class="flex-1 min-w-0">
           <!-- General Settings Section (merged with Auto Backup) -->
           <div v-show="activeSection === 'general'" class="space-y-6">
-            <GeneralSettings :formData="formData" />
-            <AutoBackupSettings :formData="formData" />
+            <GeneralSettings v-model:formData="formData" />
+            <AutoBackupSettings v-model:formData="formData" />
           </div>
 
           <!-- Retention Policy Section -->
-          <RetentionPolicy v-show="activeSection === 'retention'" :formData="formData" />
+          <RetentionPolicy
+            v-show="activeSection === 'retention'"
+            v-model:formData="formData"
+          />
 
           <!-- Notifications Section -->
-          <NotificationSettings v-show="activeSection === 'notifications'" :formData="formData" />
+          <NotificationSettings
+            v-show="activeSection === 'notifications'"
+            v-model:formData="formData"
+            @persist="saveSettings"
+          />
         </main>
       </div>
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+      <IFooterCrud
+        :show-add="false"
+        :show-update="false"
+        :show-delete="false"
+      />
     </template>
   </IPage>
 </template>

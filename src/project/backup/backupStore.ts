@@ -437,7 +437,7 @@ export const useBackupStore = defineStore("backupStore", () => {
   /**
    * Send test webhook
    */
-  async function sendTestWebhook(host : string) {
+  async function sendTestWebhook(host: string) {
     try {
       const response = await Api.get(`${host}`);
       return response;

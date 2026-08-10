@@ -29,7 +29,7 @@ const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const Loading = ref(false);
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 
 //#region popUp
@@ -151,7 +151,7 @@ import type { IItem } from "@/project/item/IItem";
 
 const { validate, isArray, required, isObject } = useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {
@@ -333,10 +333,10 @@ const handleEnter = (event: KeyboardEvent) => {
     (option: IItem) => option.name === enteredValue
   );
   if (matchingOption === undefined && enteredValue.length > 0) {
-    let btn = document.getElementById("my_modal_7");
+    const btn = document.getElementById("my_modal_7");
     item.value.name = enteredValue;
     btn?.click();
-    let NameItemEnterNew = document.getElementById("NameItemEnterNew");
+    const NameItemEnterNew = document.getElementById("NameItemEnterNew");
     NameItemEnterNew?.focus();
     //xxx
   }
@@ -346,7 +346,7 @@ const setItemFromChild = (_item: IItem) => {
 };
 onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowDirectVouchers]);
-  await directVoucherStore.getEmployees().then(() => { });
+  await directVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = t("DirectVoucher");
     directVoucher.value.id = 0;
@@ -362,30 +362,50 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="Loading">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IContainer>
         <IForm>
           <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('InputVoucher.Number')" name="directVoucher.Number" v-model="directVoucher.number"
-                type="text" />
+              <IInput
+                :label="t('InputVoucher.Number')"
+                name="directVoucher.Number"
+                v-model="directVoucher.number"
+                type="text"
+              />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('Date')" name="directVoucher.Date" v-model="directVoucher.date" type="date" />
+              <IInput
+                :label="t('Date')"
+                name="directVoucher.Date"
+                v-model="directVoucher.date"
+                type="date"
+              />
             </ICol>
 
             <ICol span="1" span-md="2" span-sm="1">
-              <div class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              <div
+                class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
                 {{ t("OutputVoucherEmployeeRequest") }}
               </div>
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="directVoucher.Employee.id" :options="directVoucherEmployees"
-                :reduce="(employee: IEmployee) => employee" label="name"
-                :getOptionLabel="(employee: IEmployee) => employee.name">
+                v-model="directVoucher.Employee.id"
+                :options="directVoucherEmployees"
+                :reduce="(employee: IEmployee) => employee"
+                label="name"
+                :getOptionLabel="(employee: IEmployee) => employee.name"
+              >
                 <template #option="{ name }">
                   <div>
                     <span>{{ name }}</span>
@@ -396,13 +416,22 @@ onMounted(async () => {
           </IRow>
           <IRow>
             <ICol>
-              <IInput :label="t('Description')" name="Description" v-model="directVoucher.notes" type="text" />
+              <IInput
+                :label="t('Description')"
+                name="Description"
+                v-model="directVoucher.notes"
+                type="text"
+              />
             </ICol>
           </IRow>
           <IRow>
             <ICol>
-              <van-button class="border-none duration-500 rounded-lg bg-create hover:bg-createHover" type="success"
-                is-link @click="AddPopup()">{{ t("Item.Add") }}
+              <van-button
+                class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
+                type="success"
+                is-link
+                @click="AddPopup()"
+                >{{ t("Item.Add") }}
               </van-button>
             </ICol>
           </IRow>
@@ -419,12 +448,19 @@ onMounted(async () => {
                   {{ (row.count * row.price).toLocaleString() }}
                 </template>
                 <template v-slot:Actions="{ row, rowIndex }">
-                  <van-button class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"
-                    type="success" is-link @click="updatePopup(rowIndex, row)">{{ t("Edit") }}
+                  <van-button
+                    class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"
+                    type="success"
+                    is-link
+                    @click="updatePopup(rowIndex, row)"
+                    >{{ t("Edit") }}
                   </van-button>
                   |
-                  <van-button class="duration-500 rounded-lg m-2 bg-white hover:bg-deleteHover border-red-700 border-2"
-                    is-link @click="deleteItem(rowIndex)">{{ t("Delete") }}
+                  <van-button
+                    class="duration-500 rounded-lg m-2 bg-white hover:bg-deleteHover border-red-700 border-2"
+                    is-link
+                    @click="deleteItem(rowIndex)"
+                    >{{ t("Delete") }}
                   </van-button>
                 </template>
               </ITable>
@@ -439,46 +475,62 @@ onMounted(async () => {
       </IContainer>
     </IPageContent>
     <IContainer>
-      <van-popup class="overflow-hidden dark:bg-darkNav" v-model:show="showPop" round position="bottom">
+      <van-popup
+        class="overflow-hidden dark:bg-darkNav"
+        v-model:show="showPop"
+        round
+        position="bottom"
+      >
         <!-- for search Item -->
         <IRow cols-lg="4" cols-md="1" cols-sm="1">
           <ICol>
-            <div class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300">
+            <div
+              class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
+            >
               {{ t("Item") }}
             </div>
             <vSelect
               class="capitalize rounded-md border-2 p-2 dark:text-gray-200 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 mb-10"
-              v-model="VoucherItemTemp.Item" :options="items" :reduce="(_item: IItem) => _item"
-              :get-option-label="(_item: IItem) => _item.name" @keydown.enter="handleEnter" :create-option="(_item: IItem) => ({
-                input_voucher_id: 0,
-                Item: {
-                  name: '',
-                  id: 0,
-                  code: 0,
-                  description: 0,
-                  Category: { id: 0, name: '' },
-                  measuringUnit: '',
-                },
-                description: '',
-                count: 0,
-                price: 0,
-                value: 0,
-                notes: '',
-              })
-                ">
+              v-model="VoucherItemTemp.Item"
+              :options="items"
+              :reduce="(_item: IItem) => _item"
+              :get-option-label="(_item: IItem) => _item.name"
+              @keydown.enter="handleEnter"
+              :create-option="
+                (_item: IItem) => ({
+                  input_voucher_id: 0,
+                  Item: {
+                    name: '',
+                    id: 0,
+                    code: 0,
+                    description: 0,
+                    Category: { id: 0, name: '' },
+                    measuringUnit: '',
+                  },
+                  description: '',
+                  count: 0,
+                  price: 0,
+                  value: 0,
+                  notes: '',
+                })
+              "
+            >
               <template #option="{ code, Category, description, name }">
                 <div class="rtl:text-right border-2 p-2 rounded-md">
                   <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold">
+                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
+                  >
                     {{ name }}
                   </div>
                   <cite>
                     <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                    >
                       {{ t("Code") }}: {{ code }}
                     </div>
                     <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1">
+                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
+                    >
                       {{ t("Category") }}: {{ Category.name }}
                     </div>
                   </cite>
@@ -491,71 +543,145 @@ onMounted(async () => {
             </vSelect>
             <AddItemPopup :setItem="setItemFromChild"></AddItemPopup>
           </ICol>
-          <ICol span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1" v-if="VoucherItemTemp.Item == null"
-            class="border-2 border-dotted border-gray-600">
+          <ICol
+            span="3"
+            span-xl="3"
+            span-lg="3"
+            span-md="1"
+            span-sm="1"
+            span-xs="1"
+            v-if="VoucherItemTemp.Item == null"
+            class="border-2 border-dotted border-gray-600"
+          >
             <div class="w-full text-center align-middle border-gray-600">
-              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
+              <div
+                class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
+              >
                 قم بأختيار مادة
               </div>
             </div>
           </ICol>
-          <ICol :span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1"
-            v-else-if="VoucherItemTemp.Item.name != ''">
-            <IRow  cols="4">
+          <ICol
+            :span="3"
+            span-xl="3"
+            span-lg="3"
+            span-md="1"
+            span-sm="1"
+            span-xs="1"
+            v-else-if="VoucherItemTemp.Item.name != ''"
+          >
+            <IRow cols="4">
               <ICol span="1">
                 <ILabel :title="t('Code')">
-                  {{ VoucherItemTemp.Item.code }}</ILabel>
+                  {{ VoucherItemTemp.Item.code }}</ILabel
+                >
               </ICol>
               <ICol span="1">
                 <ILabel :title="t('Category')">
-                  {{ VoucherItemTemp.Item.Category.name }}</ILabel>
+                  {{ VoucherItemTemp.Item.Category.name }}</ILabel
+                >
               </ICol>
               <ICol span="1">
                 <ILabel :title="t('Description')">
-                  {{ VoucherItemTemp.Item.description }}</ILabel>
+                  {{ VoucherItemTemp.Item.description }}</ILabel
+                >
               </ICol>
             </IRow>
           </ICol>
-          <ICol span="3" span-xl="3" span-lg="3" span-md="1" span-sm="1" span-xs="1" v-else
-            class="border-2 border-dotted border-gray-600">
+          <ICol
+            span="3"
+            span-xl="3"
+            span-lg="3"
+            span-md="1"
+            span-sm="1"
+            span-xs="1"
+            v-else
+            class="border-2 border-dotted border-gray-600"
+          >
             <div class="w-full text-center align-middle border-gray-600">
-              <div class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full">
+              <div
+                class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
+              >
                 قم بأختيار مادة
               </div>
             </div>
           </ICol>
         </IRow>
         <!-- for insert item proparties -->
-        <IRow cols-lg="4"  :cols="4" cols-xl="4" cols-md="2" cols-sm="1">
+        <IRow cols-lg="4" :cols="4" cols-xl="4" cols-md="2" cols-sm="1">
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput :label="t('Item.Description')" v-model="VoucherItemTemp.description" />
+            <IInput
+              :label="t('Item.Description')"
+              v-model="VoucherItemTemp.description"
+            />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput :label="t('Count')" :on-input="ChangeValueTotal" type="number" v-model="VoucherItemTemp.count"
-              :min="1" />
+            <IInput
+              :label="t('Count')"
+              :on-input="ChangeValueTotal"
+              type="number"
+              v-model="VoucherItemTemp.count"
+              :min="1"
+            />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput :label="t('Price')" :on-input="ChangeValueTotal" type="number" v-model="VoucherItemTemp.price"
-              :min="1" />
+            <IInput
+              :label="t('Price')"
+              :on-input="ChangeValueTotal"
+              type="number"
+              v-model="VoucherItemTemp.price"
+              :min="1"
+            />
           </ICol>
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput :label="t('Total')" type="number" v-model="VoucherItemTemp.value" />
+            <IInput
+              :label="t('Total')"
+              type="number"
+              v-model="VoucherItemTemp.value"
+            />
           </ICol>
           <ICol :span="4" span-lg="4" span-xl="1" span-md="1">
-            <IInput :label="t('Notes')" type="text" v-model="VoucherItemTemp.notes" />
+            <IInput
+              :label="t('Notes')"
+              type="text"
+              v-model="VoucherItemTemp.notes"
+            />
           </ICol>
         </IRow>
         <!-- buttons -->
         <IContainer class="flex flex-row my-10">
-          <IButton :text="t('Add')" color="blue" type="default" :on-click="AddItem" v-if="IsAdd" />
-          <IButton :text="t('Update')" color="blue" type="default" :on-click="EditItem" v-else />
-          <IButton class="" pre-icon="close-box" :text="t('Close')" color="blue" type="text"
-            :on-click="() => (showPop = false)" />
+          <IButton
+            :text="t('Add')"
+            color="blue"
+            type="default"
+            :on-click="AddItem"
+            v-if="IsAdd"
+          />
+          <IButton
+            :text="t('Update')"
+            color="blue"
+            type="default"
+            :on-click="EditItem"
+            v-else
+          />
+          <IButton
+            class=""
+            pre-icon="close-box"
+            :text="t('Close')"
+            color="blue"
+            type="text"
+            :on-click="() => (showPop = false)"
+          />
         </IContainer>
       </van-popup>
     </IContainer>
     <template #Footer>
-      <IFooterCrud :isAdd="directVoucher.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+      <IFooterCrud
+        :isAdd="directVoucher.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
     </template>
   </IPage>
 </template>

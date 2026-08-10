@@ -2,11 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type {
-  IArchive,
-  IArchiveFilter,
-  IArchiveType,
-} from "./IArchive";
+import type { IArchive, IArchiveFilter, IArchiveType } from "./IArchive";
 
 export const useArchiveStore = defineStore("archiveStore", () => {
   const archive = ref<IArchive>({
@@ -61,7 +57,6 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     const path = `${pathBase}/document/delete/${id}`;
     return await Api.delete(path);
   }
-  
 
   const resetData = () => {
     archive.value = {
@@ -80,7 +75,7 @@ export const useArchiveStore = defineStore("archiveStore", () => {
   return {
     archive,
     archiveTypes,
-    archiveType, 
+    archiveType,
     get,
     get_filter,
     show,

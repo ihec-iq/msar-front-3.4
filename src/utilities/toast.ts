@@ -8,7 +8,13 @@ export function showToast(
     description: string;
     status: ToastStatus;
     action?: { label: string; onClick: () => void };
-    position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
+    position?:
+      | "top-left"
+      | "top-right"
+      | "bottom-left"
+      | "bottom-right"
+      | "top-center"
+      | "bottom-center";
   }
 ) {
   toast(title, {
@@ -22,7 +28,7 @@ export function showToast(
     class: `toast-${options.status}`,
     icon: () => getStatusIcon(options.status),
     style: getStatusStyle(options.status),
-    position: options.position || 'bottom-right', // Default position if not specified
+    position: options.position || "bottom-right", // Default position if not specified
   });
 }
 // Add this helper to return proper background + text colors

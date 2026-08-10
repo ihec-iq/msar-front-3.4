@@ -49,7 +49,6 @@ const filterByIDName = (item: IItemCategory) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -103,20 +102,37 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :cols="1" :cols-md="1"  :cols-lg="1">
+      <IRow :cols="1" :cols-md="1" :cols-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
-            <IInput :label="t('Search')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
-              :OnKeyEnter="getFilterData" />
+            <IInput
+              :label="t('Search')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
-          <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4" v-if="data.length >= limits[0].id">
-            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-                    :IsRequire="true" @onChange="getFilterData()" />
-          </ICol> 
+          <ICol
+            :span-lg="1"
+            :span-md="2"
+            :span="1"
+            :span-sm="4"
+            v-if="data.length >= limits[0].id"
+          >
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :cols="4" :cols-md="4"  :cols-lg="4">
-        <ICol class="p-3" :span="2" v-for="item   in data" :key="item.id">
+      <IRow :cols="4" :cols-md="4" :cols-lg="4">
+        <ICol class="p-3" :span="2" v-for="item in data" :key="item.id">
           <CardItemCategoryIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
         </ICol>
@@ -125,13 +141,23 @@ onMounted(async () => {
         <div class="py-4 min-w-full w-full h-full lg:px-8">
           <!-- card -->
           <div class="rounded-xl" v-if="isLoading == false">
-            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
+            <div
+              v-motion
+              :initial="{ opacity: 0, y: -15 }"
+              :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }"
+              :delay="200"
+              v-if="data.length > 0"
+            >
               <div class="w-full flex flex-row">
                 <div class="basis-4/5 overflow-x-auto font-Tajawal">
-                  <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                    @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
-                </div> 
+                  <TailwindPagination
+                    class="flex justify-center mt-6"
+                    :data="dataPage"
+                    @pagination-change-page="getFilterData"
+                    :limit="searchFilter.limit"
+                  />
+                </div>
               </div>
             </div>
           </div>

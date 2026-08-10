@@ -16,7 +16,7 @@ export const SettingsLinks: Array<IconLink> = [
       {
         routerName: "healthCheck",
         title: "حالة النظام",
-        mdi: 'mdi-health-potion',
+        mdi: "mdi-health-potion",
         tab: "HealthCheck",
         description: "حالة النظام العامة",
         isActive: true,
@@ -25,7 +25,7 @@ export const SettingsLinks: Array<IconLink> = [
       {
         routerName: "logs",
         title: "ملفات اللوج",
-        mdi: 'mdi-bug-report',
+        mdi: "mdi-bug-report",
         tab: "Logs",
         description: "ملفات اللوج للنظام",
         isActive: true,

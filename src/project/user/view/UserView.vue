@@ -108,7 +108,9 @@ const showData = async () => {
         user.value.password = random;
         user.value.password_confirmation = random;
         // for mapping roles to only their IDs
-        user.value.roles = user.value.roles.map(r => r.id);
+        user.value.roles = (user.value.roles as Array<IRole | number>).map(
+          (r) => (typeof r === "number" ? r : r.id)
+        );
       }
     })
     .catch((errors) => {
@@ -148,29 +150,64 @@ onMounted(async () => {
       <IRow>
         <IRow cols="2" cols-lg="2" cols-md="1" cols-sm="1">
           <ICol>
-            <IInput :label="t('Name')" v-model="user.name" name="title" type="text" :IsRequire="true" />
+            <IInput
+              :label="t('Name')"
+              v-model="user.name"
+              name="title"
+              type="text"
+              :IsRequire="true"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('User Name(for login)')" v-model="user.user_name" name="title" type="text"
-              :IsRequire="true" />
+            <IInput
+              :label="t('User Name(for login)')"
+              v-model="user.user_name"
+              name="title"
+              type="text"
+              :IsRequire="true"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('Email')" v-model="user.email" name="title" type="text" :IsRequire="true" />
+            <IInput
+              :label="t('Email')"
+              v-model="user.email"
+              name="title"
+              type="text"
+              :IsRequire="true"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('Password')" v-model="user.password" name="title" type="password" :IsRequire="true" />
+            <IInput
+              :label="t('Password')"
+              v-model="user.password"
+              name="title"
+              type="password"
+              :IsRequire="true"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('Rewrite Password')" v-model="user.password_confirmation" name="title" type="password"
-              :IsRequire="true" />
+            <IInput
+              :label="t('Rewrite Password')"
+              v-model="user.password_confirmation"
+              name="title"
+              type="password"
+              :IsRequire="true"
+            />
           </ICol>
           <ICol>
             <div
-              class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold">
+              class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"
+            >
               {{ t("Role") }}
             </div>
-            <vSelect multiple class="w-full h-10 rounded-sm text-text dark:text-textLight bg-selectLight dark:bg-select"
-              v-model="user.roles" label="name" :options="roleStore.roles" :reduce="(role: IRole) => role.id"></vSelect>
+            <vSelect
+              multiple
+              class="w-full h-10 rounded-sm text-text dark:text-textLight bg-selectLight dark:bg-select"
+              v-model="user.roles"
+              label="name"
+              :options="roleStore.roles"
+              :reduce="(role: IRole) => role.id"
+            ></vSelect>
             <!-- add role page -->
             <!-- <div
                   :class="{
@@ -205,14 +242,26 @@ onMounted(async () => {
               <div class="row3 flex justify-around">
                 <div class="toggles flex w-1/5 mt-10">
                   <div class="flex ltr:mr-3 rtl:ml-3">
-                    <input type="checkbox" v-model="check_any_device" class="toggle toggle-info" />
-                    <div class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium">
+                    <input
+                      type="checkbox"
+                      v-model="check_any_device"
+                      class="toggle toggle-info"
+                    />
+                    <div
+                      class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
+                    >
                       {{ t("Any Device") }}
                     </div>
                   </div>
                   <div class="flex justify-center">
-                    <input type="checkbox" v-model="check_active" class="toggle toggle-info" />
-                    <div class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium">
+                    <input
+                      type="checkbox"
+                      v-model="check_active"
+                      class="toggle toggle-info"
+                    />
+                    <div
+                      class="ltr:ml-3 rtl:mr-3 text-text dark:text-textLight duration-300 font-medium"
+                    >
                       {{ t("Active") }}
                     </div>
                   </div>
@@ -224,7 +273,12 @@ onMounted(async () => {
       </IRow>
     </IPageContent>
     <template #Footer>
-      <IFooterCrud :isAdd="user.id == 0" :onCreate="store" :onUpdate="update" :showDelete="false" />
+      <IFooterCrud
+        :isAdd="user.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :showDelete="false"
+      />
     </template>
 
     <loadingFull v-if="isLoading == true" />

@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import { Icon } from "@iconify/vue";
 import { Languages, setLocale, currentLocale } from "@/utilities/I18nPlugin";
-import { ILanguage } from "@/stores/i18n/useI18n";
+import type { ILanguage } from "@/stores/i18n/useI18n";
 
 // فتح/إغلاق
 const open = ref(false);
@@ -56,15 +56,16 @@ const isActive = (code: string) => code === currentLocale.value.code;
       ref="btnRef"
       type="button"
       @click="toggle"
-      class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-sky-400/70
-             bg-white dark:bg-[#2e3145] text-gray-800 dark:text-gray-100
-             hover:bg-gray-50 dark:hover:bg-[#373b54] transition"
+      class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-sky-400/70 bg-white dark:bg-[#2e3145] text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-[#373b54] transition"
       aria-haspopup="listbox"
       :aria-expanded="open"
     >
       <Icon icon="mdi:web" class="text-lg" />
       <span class="text-sm font-medium">{{ currentLocale.name }}</span>
-      <Icon :icon="open ? 'mdi:chevron-up' : 'mdi:chevron-down'" class="text-xl opacity-80" />
+      <Icon
+        :icon="open ? 'mdi:chevron-up' : 'mdi:chevron-down'"
+        class="text-xl opacity-80"
+      />
     </button>
 
     <!-- اللوحة -->
@@ -72,9 +73,7 @@ const isActive = (code: string) => code === currentLocale.value.code;
       v-show="open"
       ref="panelRef"
       tabindex="-1"
-      class="absolute z-[1000] mt-2 min-w-[10rem] max-h-72 overflow-auto rounded-xl
-             bg-white dark:bg-[#2e3145] shadow-lg ring-1 ring-black/5 dark:ring-white/10
-             p-1 ltr:right-0 rtl:left-0"
+      class="absolute z-[1000] mt-2 min-w-[10rem] max-h-72 overflow-auto rounded-xl bg-white dark:bg-[#2e3145] shadow-lg ring-1 ring-black/5 dark:ring-white/10 p-1 ltr:right-0 rtl:left-0"
       role="listbox"
     >
       <button
@@ -83,9 +82,7 @@ const isActive = (code: string) => code === currentLocale.value.code;
         @click="choose(lang)"
         role="option"
         :aria-selected="isActive(lang.code)"
-        class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg
-               text-sm text-gray-800 dark:text-gray-100 hover:bg-gray-100/80 dark:hover:bg-white/10
-               transition"
+        class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-sm text-gray-800 dark:text-gray-100 hover:bg-gray-100/80 dark:hover:bg-white/10 transition"
         :class="isActive(lang.code) ? 'bg-sky-100/70 dark:bg-white/10' : ''"
       >
         <div class="flex items-center gap-2">

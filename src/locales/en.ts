@@ -135,11 +135,11 @@ export default {
   EmployeeRequest: "Employee Request",
   noData: "No Data !!!",
   ID: "ID",
-  Profile: "Profile", 
+  Profile: "Profile",
   Archive: {
-    Portal : "Archive Portal",
-    Index : "Archive",
-    Title:"Archive"
+    Portal: "Archive Portal",
+    Index: "Archive",
+    Title: "Archive",
   },
   AllArchives: "All Archives",
   Title: "Title",
@@ -171,7 +171,7 @@ export default {
   Code: "Code",
   Category: "Category",
   Item: {
-    Portal : "Items Portal",
+    Portal: "Items Portal",
     Name: "Name",
     Index: "Item",
     Add: "Add Item",

@@ -20,13 +20,13 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 const { validate, required, isObject } = useValidation();
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "name",
     caption: t("Item.Name"),
     rules: [required()],
-  }, 
+  },
 ];
 import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
@@ -50,24 +50,19 @@ const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const store = () => {
-  if(!can(EnumPermission.AddEmployeeSetting)) return;
+  if (!can(EnumPermission.AddEmployeeSetting)) return;
   errors.value = null;
   validationResult.value = validate(employeeCenter.value, rules);
   if (!validationResult.value.success) {
-
-
     WarningToast(t("ValidationFails"));
     return;
   }
   errors.value = null;
   const formData = prepareFormData(employeeCenter.value);
 
-
-  EmployeeCenterStore
-    .store(formData)
+  EmployeeCenterStore.store(formData)
     .then((response) => {
       if (response.status == 200) {
-
         Swal.fire({
           icon: "success",
           title: "Your item has been saved",
@@ -86,25 +81,20 @@ const store = () => {
         text: error.response.data.message,
         footer: "",
       });
-
     });
 };
 function update() {
-  if(!can(EnumPermission.EditEmployeeSetting)) return;
+  if (!can(EnumPermission.EditEmployeeSetting)) return;
   errors.value = null;
   validationResult.value = validate(employeeCenter.value, rules);
   if (!validationResult.value.success) {
-
-
     WarningToast(t("ValidationFails"));
     return;
   }
   errors.value = null;
   const formData = prepareFormData(employeeCenter.value);
 
-
-  EmployeeCenterStore
-      .update(employeeCenter.value.id, formData)
+  EmployeeCenterStore.update(employeeCenter.value.id, formData)
 
     .then((response) => {
       if (response.status === 200) {
@@ -126,7 +116,6 @@ function update() {
         text: error.response.data.message,
         footer: "",
       });
-
     });
 }
 const Delete = async () => {
@@ -149,12 +138,11 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-          await EmployeeCenterStore._delete(employeeCenter.value.id).then(() => {
+        await EmployeeCenterStore._delete(employeeCenter.value.id).then(() => {
           swalWithBootstrapButtons.fire(
             t("Deleted!"),
             t("Deleted successfully ."),
             "success"
-
           );
           router.go(-1);
         });
@@ -163,15 +151,13 @@ const Delete = async () => {
 };
 const showData = async () => {
   isLoding.value = true;
-  await EmployeeCenterStore
-    .show(id.value)
+  await EmployeeCenterStore.show(id.value)
 
     .then((response) => {
       if (response.status == 200) {
         employeeCenter.value.id = response.data.data.id;
         employeeCenter.value.name = response.data.data.name;
       }
-
     })
     .catch((errors) => {
       console.log(errors);
@@ -194,12 +180,11 @@ onMounted(async () => {
     namePage.value = t("EmployeeCenter.Add");
     employeeCenter.value.id = 0;
 
-
     reset();
   } else {
     employeeCenter.value.id = id.value;
     await showData();
-    namePage.value =   t("EmployeeCenter.Update");
+    namePage.value = t("EmployeeCenter.Update");
   }
 
   isLoding.value = false;
@@ -209,26 +194,50 @@ const reset = () => {
 };
 </script>
 <template>
-
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
-        <IRow cols-lg="2"  cols="2" cols-md="2">
+        <IRow cols-lg="2" cols="2" cols-md="2">
           <ICol>
-            <IInput :label="t('Name')" name="name" v-model="employeeCenter.name" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Name')"
+              name="name"
+              v-model="employeeCenter.name"
+              :type="EnumInputType.Text"
+            />
           </ICol>
         </IRow>
-        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
 
-        <IFooterCrud :isAdd="employeeCenter.id == 0 && can(EnumPermission.AddEmployeeSetting)? true : false" :isUpdate="employeeCenter.id != 0 && can(EnumPermission.EditEmployeeSetting)? true : false" :onCreate="store" 
-        :onUpdate="update" :onDelete="Delete" />
+        <IFooterCrud
+          :isAdd="
+            employeeCenter.id == 0 && can(EnumPermission.AddEmployeeSetting)
+              ? true
+              : false
+          "
+          :isUpdate="
+            employeeCenter.id != 0 && can(EnumPermission.EditEmployeeSetting)
+              ? true
+              : false
+          "
+          :onCreate="store"
+          :onUpdate="update"
+          :onDelete="Delete"
+        />
       </IRow>
-
-
     </IPageContent>
   </IPage>
 </template>

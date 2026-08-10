@@ -14,41 +14,41 @@ const { isClose, is } = storeToRefs(rtlStore);
 
 const show = ref(false);
 document.onkeydown = function (e) {
-    if (
-        (e.key === "k" && (e.ctrlKey || e.metaKey)) ||
-        (e.key === "K" && (e.ctrlKey || e.metaKey))
-    ) {
-        e.preventDefault();
-        show.value = true;
-    }
+  if (
+    (e.key === "k" && (e.ctrlKey || e.metaKey)) ||
+    (e.key === "K" && (e.ctrlKey || e.metaKey))
+  ) {
+    e.preventDefault();
+    show.value = true;
+  }
 
-    if ((e.key === "b" && e.ctrlKey) || (e.key === "B" && e.ctrlKey)) {
-        e.preventDefault();
-        isClose.value = !isClose.value;
-    }
+  if ((e.key === "b" && e.ctrlKey) || (e.key === "B" && e.ctrlKey)) {
+    e.preventDefault();
+    isClose.value = !isClose.value;
+  }
 };
 
 onMounted(async () => {
-    await useConfigStore().load();
-    Api.defaults.baseURL = String(Config.value.connectionString) + "/api";
-    useAuthStore().CheckAuth();
+  await useConfigStore().load();
+  Api.defaults.baseURL = String(Config.value.connectionString) + "/api";
+  useAuthStore().CheckAuth();
 
-    let htmlEl = document.querySelector("html");
-    let dir: string | any = "rtl";
-    if (localStorage.getItem("dir")?.toString() != undefined)
-        dir = localStorage.getItem("dir")?.toString();
-    htmlEl?.setAttribute("dir", dir);
-    localStorage.getItem("isLtr");
-    // lang
-    let lang: string | any = "ar";
-    lang = localStorage.getItem("lang");
-    htmlEl?.setAttribute("lang", lang);
+  const htmlEl = document.querySelector("html");
+  let dir: string | any = "rtl";
+  if (localStorage.getItem("dir")?.toString() != undefined)
+    dir = localStorage.getItem("dir")?.toString();
+  htmlEl?.setAttribute("dir", dir);
+  localStorage.getItem("isLtr");
+  // lang
+  let lang: string | any = "ar";
+  lang = localStorage.getItem("lang");
+  htmlEl?.setAttribute("lang", lang);
 });
 </script>
 
 <template>
-    <div class="font-Tajawal image-bg p-0 m-0">
-        <Toaster />
-        <RouterView></RouterView>
-    </div>
+  <div class="font-Tajawal image-bg p-0 m-0">
+    <Toaster />
+    <RouterView></RouterView>
+  </div>
 </template>

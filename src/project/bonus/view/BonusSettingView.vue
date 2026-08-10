@@ -13,7 +13,7 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import type { ISetting } from "@/project/core/ISetting";
 import IPage from "@/components/ihec/IPage.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
- 
+
 const route = useRoute();
 const router = useRouter();
 const { checkPermissionAccessArray } = usePermissionsStore();
@@ -23,27 +23,25 @@ const SettingNumberDayesAlertBonus = ref<ISetting>({
   key: EnumSetting.SettingNumberDayesAlertBonus,
 });
 
-
 const isLoading = ref(false);
 const errors = ref<string | null>(null);
 const namePage = ref("Setting.Name");
 
-
-
 const update = async () => {
   errors.value = null;
-  try { 
-      await SettingStore.updateByKeyStr(prepareFormData(SettingNumberDayesAlertBonus.value),SettingNumberDayesAlertBonus.value.id.toString())
-      SuccessToast();
+  try {
+    await SettingStore.updateByKeyStr(
+      prepareFormData(SettingNumberDayesAlertBonus.value),
+      SettingNumberDayesAlertBonus.value.id.toString()
+    );
+    SuccessToast();
   } catch (e: any) {
-    ErrorToast(e.toString())
+    ErrorToast(e.toString());
   }
-}
-
-
+};
 
 const showData = async (key: string) => {
-  return SettingStore.showByKey(key)
+  return SettingStore.showByKey(key);
 };
 onMounted(async () => {
   isLoading.value = true;
@@ -51,23 +49,24 @@ onMounted(async () => {
 
   await showData(SettingNumberDayesAlertBonus.value.key).then((response) => {
     Object.assign(SettingNumberDayesAlertBonus.value, response);
-  })
+  });
 
   isLoading.value = false;
 });
-
 </script>
 
 <template>
   <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
-    <template #headerButtons>
-    </template>
+    <template #headerButtons> </template>
     <IPageContent>
       <IRow>
         <IRow cols-lg="4" cols-md="2" cols-sm="1">
           <ICol span="1" span-md="1" span-sm="1">
-            <IInput :label="t('Setting.SettingNumberDayesAlertBonus')" v-model="SettingNumberDayesAlertBonus.valInt"
-              :type="EnumInputType.Number" />
+            <IInput
+              :label="t('Setting.SettingNumberDayesAlertBonus')"
+              v-model="SettingNumberDayesAlertBonus.valInt"
+              :type="EnumInputType.Number"
+            />
           </ICol>
         </IRow>
       </IRow>

@@ -4,7 +4,6 @@ import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
 import type { IEmployeeCenter } from "./IEmployeeCenter";
 
-
 export const useEmployeeCenterStore = defineStore("EmployeeCenterStore", () => {
   const employeeCenter = reactive<IEmployeeCenter>({
     id: 0,
@@ -18,10 +17,8 @@ export const useEmployeeCenterStore = defineStore("EmployeeCenterStore", () => {
     await Api.get(`${pathUrl}`)
       .then((response) => {
         if (response.status == 200) {
-
           employeeCenters.value = response.data.data;
         }
-
       })
       .catch((errors) => {
         console.log("in get employeeTypes : " + errors);
@@ -36,7 +33,7 @@ export const useEmployeeCenterStore = defineStore("EmployeeCenterStore", () => {
   const store = async (payload: object) => {
     return await Api.post(`${pathUrl}/store`, payload);
   };
-  const update = async (id: number, payload: object ) => {
+  const update = async (id: number, payload: object) => {
     return await Api.post(`${pathUrl}/update/${id}`, payload);
   };
   const _delete = async (id: number) => {

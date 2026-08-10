@@ -26,7 +26,8 @@ const dataBase = ref<Array<IPromotion>>([]); // Updated type
 const { get_filter } = usePromotionStore(); // Updated store method
 
 const fastSearch = ref("");
-const searchFilter = ref<IPromotionFilter>({ // Updated filter type
+const searchFilter = ref<IPromotionFilter>({
+  // Updated filter type
   title: "",
   limit: 10,
   employeeName: "",
@@ -34,10 +35,10 @@ const searchFilter = ref<IPromotionFilter>({ // Updated filter type
 });
 
 const add = () => {
-    usePromotionStore().resetData();
-    router.push({
-        name: "promotionAdd",
-    });
+  usePromotionStore().resetData();
+  router.push({
+    name: "promotionAdd",
+  });
 };
 
 const getFilterData = async (page = 1) => {
@@ -47,7 +48,8 @@ const getFilterData = async (page = 1) => {
 };
 
 const update = (id: number) => {
-  router.push({ // Updated to use router
+  router.push({
+    // Updated to use router
     name: "promotionUpdate", // Updated route name
     params: { id: id },
   });
@@ -73,16 +75,23 @@ const headers = ref<Array<ITableHeader>>([
 ]); // Updated headers
 </script>
 <template>
-  <IPage :HeaderTitle="t('Promotion.Index')" :is-loading="isLoading"> <!-- Updated title -->
+  <IPage :HeaderTitle="t('Promotion.Index')" :is-loading="isLoading">
+    <!-- Updated title -->
     <template #HeaderButtons>
-      <IButton width="28" :onClick="add" :text="t('Promotion.Add')" /> <!-- Updated button text -->
+      <IButton width="28" :onClick="add" :text="t('Promotion.Add')" />
+      <!-- Updated button text -->
     </template>
     <IPageContent>
-      <IRow :cols="3" :cols-md="2"  :cols-lg="3">
+      <IRow :cols="3" :cols-md="2" :cols-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
-            <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch"
-              :type="EnumInputType.Text" :OnKeyEnter="getFilterData" />
+            <IInput
+              :label="t('SearchForUser')"
+              :placeholder="t('SearchForUser')"
+              v-model="fastSearch"
+              :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
@@ -111,12 +120,22 @@ const headers = ref<Array<ITableHeader>>([
         <IRow v-if="data.length > 0">
           <div class="w-full flex flex-row">
             <div class="basis-4/5 overflow-auto">
-              <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+              <TailwindPagination
+                class="flex justify-center mt-6"
+                :data="dataPage"
+                @pagination-change-page="getFilterData"
+                :limit="searchFilter.limit"
+              />
             </div>
             <div class="basis-1/5" v-if="data.length >= limits[0].id">
-              <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-                @onChange="getFilterData()" />
+              <ISelect
+                name="limit"
+                :label="t('Limit')"
+                v-model="searchFilter.limit"
+                :options="limits"
+                :IsRequire="true"
+                @onChange="getFilterData()"
+              />
             </div>
           </div>
           <SimpleLoading v-if="isLoading">.</SimpleLoading>

@@ -71,19 +71,13 @@ const colClass = computed(() => {
 });
 
 /** مسافة جانبية اختيارية (لو ما في gap على مستوى IRow) */
-const gutterClass = computed(() =>
-  props.gutter ? "ltr:mr-2 rtl:ml-2" : ""
-);
+const gutterClass = computed(() => (props.gutter ? "ltr:mr-2 rtl:ml-2" : ""));
 
 /** صنف التعطيل */
-const disabledClass = computed(() =>
-  props.disabled ? "icol--disabled" : ""
-);
+const disabledClass = computed(() => (props.disabled ? "icol--disabled" : ""));
 
 /** نص الـ debug */
-const debugText = computed(
-  () => (props.debug ? colClass.value : "")
-);
+const debugText = computed(() => (props.debug ? colClass.value : ""));
 </script>
 
 <template>

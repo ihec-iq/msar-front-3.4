@@ -47,7 +47,8 @@ export default [
     meta: {
       middleware: [authMiddleware],
     },
-  },{
+  },
+  {
     path: "/employeeSettingPortal",
     name: "employeeSettingPortal",
     component: () => import("./view/EmployeeSettingPortalView.vue"),

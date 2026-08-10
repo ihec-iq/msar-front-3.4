@@ -15,7 +15,7 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('Item.Portal')">
     <IPageContent>
-      <CardPortalComponent :links="ItemLinks[0].children"/>
+      <CardPortalComponent :links="ItemLinks[0].children" />
     </IPageContent>
     <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>

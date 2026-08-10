@@ -15,10 +15,10 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('Bonus.Portal')">
     <IPageContent>
-      <IRow2 :gap="2"  > 
-         <CardPortalComponent :links="BonusLinks"></CardPortalComponent>
+      <IRow2 :gap="2">
+        <CardPortalComponent :links="BonusLinks"></CardPortalComponent>
       </IRow2>
     </IPageContent>
-    <IFooterCrud :is-add="true" :show-add="false"/>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>

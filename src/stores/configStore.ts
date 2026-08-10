@@ -26,7 +26,7 @@ export const useConfigStore = defineStore("ConfigStore", () => {
       await storeOrganization(orgName);
     } catch (error) {
       console.error("Error writing configuration:", error);
-      throw new Error("Failed to store configuration");
+      throw new Error("Failed to store configuration", { cause: error });
     }
   };
 
@@ -44,7 +44,7 @@ export const useConfigStore = defineStore("ConfigStore", () => {
       Api.defaults.baseURL = config + "/api";
     } catch (error) {
       console.error("Error writing connection config:", error);
-      throw new Error("Failed to store connection string");
+      throw new Error("Failed to store connection string", { cause: error });
     }
   };
 
@@ -61,7 +61,7 @@ export const useConfigStore = defineStore("ConfigStore", () => {
       Config.value.organization = orgName;
     } catch (error) {
       console.error("Error writing organization config:", error);
-      throw new Error("Failed to store organization");
+      throw new Error("Failed to store organization", { cause: error });
     }
   };
 
@@ -86,12 +86,20 @@ export const useConfigStore = defineStore("ConfigStore", () => {
    */
   const load = async (): Promise<void> => {
     try {
+      // Must go through useLocalStorage: set() namespaces keys with the app
+      // instance id, so localStorage.getItem("ConnectionString") never matched.
+      const storage = useLocalStorage();
+      const readString = (key: string): string | null => {
+        const value = storage.get({ key, withEncrypt: false });
+        return typeof value === "string" ? value : null;
+      };
+
       // Load connection string with fallback to environment config
-      const storedUrl = localStorage.getItem("ConnectionString");
-      Config.value.connectionString = storedUrl || envConfig._baseURL;
+      Config.value.connectionString =
+        readString("ConnectionString") || envConfig._baseURL;
 
       // Load organization
-      Config.value.organization = localStorage.getItem("Organization");
+      Config.value.organization = readString("Organization");
 
       // Initialize API base URL
       if (Config.value.connectionString) {
@@ -99,7 +107,7 @@ export const useConfigStore = defineStore("ConfigStore", () => {
       }
     } catch (error) {
       console.error("Error loading configuration:", error);
-      throw new Error("Failed to load configuration");
+      throw new Error("Failed to load configuration", { cause: error });
     }
   };
 

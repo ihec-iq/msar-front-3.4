@@ -27,12 +27,12 @@
 const props = defineProps({
   isOpenModel: {
     type: Boolean,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const emit = defineEmits(['close'])
-const close = () => emit('close')
+const emit = defineEmits(["close"]);
+const close = () => emit("close");
 </script>
 
 <style scoped>

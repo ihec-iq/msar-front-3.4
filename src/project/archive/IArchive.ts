@@ -7,7 +7,7 @@ export interface IArchive {
   description: string;
   FilesDocument: Array<IDocument>;
   isIn: number;
-  isInWord?: string; 
+  isInWord?: string;
   ArchiveType: IArchiveType;
 }
 export interface IArchiveType {

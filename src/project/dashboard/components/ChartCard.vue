@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
 interface Props {
-  title: string
-  height?: string
+  title: string;
+  height?: string;
 }
 
 withDefaults(defineProps<Props>(), {
-  height: '400px',
-})
+  height: "400px",
+});
 </script>
 
 <template>

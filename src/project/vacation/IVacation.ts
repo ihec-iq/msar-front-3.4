@@ -22,7 +22,7 @@ export interface IVacationFilter {
   employeeName: string;
   issueDateFrom?: string;
   issueDateTo?: string;
-  hasDate? : boolean,
+  hasDate?: boolean;
   dayFrom?: string;
   dayTo?: string;
   record?: number;

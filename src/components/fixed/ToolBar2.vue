@@ -34,8 +34,8 @@ const closePopup = () => {
 };
 //#endregion
 //#region Theme Setting
-let isDark = useDark();
-let themeDark = ref(false);
+const isDark = useDark();
+const themeDark = ref(false);
 const loadRtl = ref(localStorage.getItem("isLtr"));
 const toggleDark = useToggle(isDark);
 const changeDark = () => {

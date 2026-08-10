@@ -34,9 +34,15 @@ const getPath = (files: Array<IDocument>) => {
 </script>
 <template>
   <div
-    class="bg-cardLight hover:bg-[#E8F6FD] dark:bg-[#22262A] flex w-full p-5 rounded-md border border-gray-200 shadow-sm shadow-gray-600 duration-500 hover:border hover:border-gray-400 hover:shadow-sm hover:shadow-gray-600">
+    class="bg-cardLight hover:bg-[#E8F6FD] dark:bg-[#22262A] flex w-full p-5 rounded-md border border-gray-200 shadow-sm shadow-gray-600 duration-500 hover:border hover:border-gray-400 hover:shadow-sm hover:shadow-gray-600"
+  >
     <div class="w-1/4">
-      <img @click="update(item.id)" class="rounded-lg cursor-pointer" :src="getPath(item.FilesDocument).toString()" alt="" />
+      <img
+        @click="update(item.id)"
+        class="rounded-lg cursor-pointer"
+        :src="getPath(item.FilesDocument).toString()"
+        alt=""
+      />
     </div>
     <div class="w-3/4 overflow-hidden">
       <div class="ltr:ml-2 rtl:mr-2 ltr:text-left rtl:text-right">
@@ -54,13 +60,21 @@ const getPath = (files: Array<IDocument>) => {
           </span>
         </div>
         <div class="flex justify-betweens">
-          <div class="text-text dark:text-textGray" v-html="item.description"></div>
+          <div
+            class="text-text dark:text-textGray"
+            v-html="item.description"
+          ></div>
         </div>
       </div>
     </div>
 
     <div class="dropdown">
-      <IButton type="outlined" width="18" :text="t('Edit')" :onClick="() => update(item.id)" />
+      <IButton
+        type="outlined"
+        width="18"
+        :text="t('Edit')"
+        :onClick="() => update(item.id)"
+      />
     </div>
   </div>
 </template>

@@ -24,18 +24,18 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 const { validate, required, isObject } = useValidation();
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "name",
     caption: t("Item.Name"),
     rules: [required()],
-  }, 
+  },
   {
     field: "Category",
     caption: t("Item.Category"),
     rules: [isObject({ key: "id", message: "" })],
-  }, 
+  },
 ];
 import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
@@ -55,7 +55,7 @@ const { categories } = storeToRefs(useItemCategoryStore());
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const store = () => {
@@ -105,7 +105,7 @@ function update() {
           timer: 1500,
         });
         //showData();
-        router.replace({ params: { id: item.value.id } })
+        router.replace({ params: { id: item.value.id } });
       }
     })
     .catch((error) => {
@@ -139,23 +139,26 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemStore._delete(item.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        }).catch((error) => {
-          //errors.value = Object.values(error.response.data.errors).flat().join();
-          errors.value = itemStore.getError(error);
-          Swal.fire({
-            icon: "error",
-            title: t("Deleted not successfully ."),
-            text: error.response.data.message,
-            footer: "",
+        await itemStore
+          ._delete(item.value.id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          })
+          .catch((error) => {
+            //errors.value = Object.values(error.response.data.errors).flat().join();
+            errors.value = itemStore.getError(error);
+            Swal.fire({
+              icon: "error",
+              title: t("Deleted not successfully ."),
+              text: error.response.data.message,
+              footer: "",
+            });
           });
-        });
       }
     });
 };
@@ -169,8 +172,8 @@ const showData = async () => {
         item.value.Category = response.data.data.Category as IItemCategory;
         item.value.code = response.data.data.code;
         item.value.description = response.data.data.description;
-        item.value.id = response.data.data.id 
-        item.value.measuringUnit = response.data.data.measuringUnit
+        item.value.id = response.data.data.id;
+        item.value.measuringUnit = response.data.data.measuringUnit;
       }
     })
     .catch((errors) => {
@@ -214,38 +217,76 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="t(namePage)">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
         <IForm>
           <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="1" span-sm="1">
-              <IInput :label="t('Item.Name')" name="name" v-model="item.name" :type="EnumInputType.Text" />
+              <IInput
+                :label="t('Item.Name')"
+                name="name"
+                v-model="item.name"
+                :type="EnumInputType.Text"
+              />
             </ICol>
             <ICol span="1" span-md="1" span-sm="1">
-              <IInput :label="t('Item.Code')" name="code" v-model="item.code" :type="EnumInputType.Text" />
+              <IInput
+                :label="t('Item.Code')"
+                name="code"
+                v-model="item.code"
+                :type="EnumInputType.Text"
+              />
             </ICol>
             <ICol span="1" span-md="1" span-sm="1">
-              <ISelect :label="t('Item.Category')" v-model="item.Category.id" name="Item.Category" :options="categories"
-                :IsRequire="true" />
+              <ISelect
+                :label="t('Item.Category')"
+                v-model="item.Category.id"
+                name="Item.Category"
+                :options="categories"
+                :IsRequire="true"
+              />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('Item.Unit')" name="Item.Unit" v-model="item.measuringUnit"
-                :type="EnumInputType.Text" />
+              <IInput
+                :label="t('Item.Unit')"
+                name="Item.Unit"
+                v-model="item.measuringUnit"
+                :type="EnumInputType.Text"
+              />
             </ICol>
           </IRow>
           <IRow>
             <ICol>
-              <IInput :label="t('Description')" name="name" v-model="item.description" :type="EnumInputType.Text" />
+              <IInput
+                :label="t('Description')"
+                name="name"
+                v-model="item.description"
+                :type="EnumInputType.Text"
+              />
             </ICol>
           </IRow>
         </IForm>
       </IRow>
       <IRow>
-        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
-        <IFooterCrud :isAdd="item.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
+        <IFooterCrud
+          :isAdd="item.id == 0"
+          :onCreate="store"
+          :onUpdate="update"
+          :onDelete="Delete"
+        />
       </IRow>
     </IPageContent>
   </IPage>

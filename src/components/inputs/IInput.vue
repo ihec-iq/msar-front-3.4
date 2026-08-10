@@ -5,6 +5,7 @@ import { ref, onMounted, nextTick } from "vue";
 const modelValue = defineModel<any>();
 import { t } from "@/utilities/I18nPlugin";
 import { Icon } from "@iconify/vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const props = defineProps({
   type: {
@@ -37,11 +38,11 @@ const props = defineProps({
   },
   OnKeyEnter: {
     type: Function,
-    default: () => { },
+    default: () => {},
   },
   FnClick: {
     type: Function,
-    default: () => { },
+    default: () => {},
   },
   FunIcon: {
     type: String,
@@ -53,7 +54,7 @@ const props = defineProps({
   },
   onInput: {
     type: Function,
-    default: () => { },
+    default: () => {},
   },
   cached: { type: Boolean, default: false },
   cachedName: { type: String, default: "" },
@@ -73,9 +74,7 @@ const inputClasses = ref("_input");
 const customPlaceholder = ref(props.placeholder);
 
 const setInvalidBorder = (invalid: boolean) => {
-  inputClasses.value = invalid
-    ? "_input border border-red-500"
-    : "_input";
+  inputClasses.value = invalid ? "_input border border-red-500" : "_input";
 };
 
 const animateShake = () => {
@@ -98,9 +97,14 @@ const checkRequired = () => {
 };
 
 const checkNumberBoundaries = () => {
-  if (props.type !== "number" || modelValue.value === null || modelValue.value === undefined) return;
+  if (
+    props.type !== "number" ||
+    modelValue.value === null ||
+    modelValue.value === undefined
+  )
+    return;
 
-  let value = Number(modelValue.value);
+  const value = Number(modelValue.value);
   let invalid = false;
   let corrected = false;
 
@@ -132,8 +136,8 @@ const checkNumberBoundaries = () => {
 const keydown = () => {
   if (props.cached && props.cachedName !== "") {
     useLocalStorage().set({
-      key: props.cachedName, 
-      value: modelValue.value, 
+      key: props.cachedName,
+      value: modelValue.value,
       withEncrypt: false,
     });
   }
@@ -153,23 +157,45 @@ onMounted(async () => {
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
     <div class="flex flex-row relative items-center">
-      <i v-if="FunIcon" @click="FnClick()" class="cursor-pointer absolute left-2 text-gray-500" :title="FnTooltip">
+      <i
+        v-if="FunIcon"
+        @click="FnClick()"
+        class="cursor-pointer absolute left-2 text-gray-500"
+        :title="FnTooltip"
+      >
         <Icon :icon="`mdi:${FunIcon}`" class="w-5 h-5" />
       </i>
-      <input ref="inputRef" :disabled="disabled" :type="type" v-model="modelValue" :placeholder="customPlaceholder"
-        :style="{ direction: dir }" @change="keydown" @focusout="() => { checkRequired(); checkNumberBoundaries(); }"
-        @input="() => props.onInput(modelValue.value)" :max="max" :min="min" :class="[
+      <input
+        ref="inputRef"
+        :disabled="disabled"
+        :type="type"
+        v-model="modelValue"
+        :placeholder="customPlaceholder"
+        :style="{ direction: dir }"
+        @change="keydown"
+        @focusout="
+          () => {
+            checkRequired();
+            checkNumberBoundaries();
+          }
+        "
+        @input="() => props.onInput(modelValue.value)"
+        :max="max"
+        :min="min"
+        :class="[
           inputClasses,
-          disabled ? 'bg-gray-200 dark:bg-gray-700 cursor-not-allowed opacity-60' : '',
-          'focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px] border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input text-text dark:text-textLight'
-        ]" />
+          disabled
+            ? 'bg-gray-200 dark:bg-gray-700 cursor-not-allowed opacity-60'
+            : '',
+          'focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px] border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input text-text dark:text-textLight',
+        ]"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
 @keyframes shake {
-
   0%,
   100% {
     transform: translateX(0);

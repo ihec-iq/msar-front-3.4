@@ -54,7 +54,7 @@ const { sections } = storeToRefs(useSectionStore());
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 const limit = ref(10);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
@@ -217,7 +217,7 @@ const headersSick = ref<Array<ITableHeader>>([
     :is-loading="isLoadingDaily && isLoadingTime && isLoadingSick"
   >
     <IPageContent>
-      <IRow :cols="3" :cols-md="2"  :cols-lg="3">
+      <IRow :cols="3" :cols-md="2" :cols-lg="3">
         <ICol :span-lg="1" :span-md="1" :span="1" :span-sm="1">
           <IInput
             :disabled="true"
@@ -234,7 +234,11 @@ const headersSick = ref<Array<ITableHeader>>([
         </ICol>
       </IRow>
       <IRow>
-        <ITable :items="dataVacationTime" :headers="headersTime" :title="t('VacationTime.Title')">
+        <ITable
+          :items="dataVacationTime"
+          :headers="headersTime"
+          :title="t('VacationTime.Title')"
+        >
           <template v-slot:name="{ row }">
             {{ row.Vacation.Employee.name }}
           </template>
@@ -249,7 +253,11 @@ const headersSick = ref<Array<ITableHeader>>([
         <SimpleLoading v-if="isLoadingTime">.</SimpleLoading>
       </IRow>
       <IRow class="p-0">
-        <ITable :items="dataVacationDaily" :headers="headersDaily" :title="t('VacationDaily.Title')">
+        <ITable
+          :items="dataVacationDaily"
+          :headers="headersDaily"
+          :title="t('VacationDaily.Title')"
+        >
           <template v-slot:name="{ row }">
             {{ row.Vacation.Employee.name }}
           </template>
@@ -264,7 +272,11 @@ const headersSick = ref<Array<ITableHeader>>([
         <SimpleLoading v-if="isLoadingDaily">.</SimpleLoading>
       </IRow>
       <IRow>
-        <ITable :items="dataVacationSick" :headers="headersSick" :title="t('VacationSick.Title')">
+        <ITable
+          :items="dataVacationSick"
+          :headers="headersSick"
+          :title="t('VacationSick.Title')"
+        >
           <template v-slot:name="{ row }">
             {{ row.Vacation.Employee.name }}
           </template>

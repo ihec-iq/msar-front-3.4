@@ -39,7 +39,6 @@ const add = () => {
   });
 };
 
-
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (item: IEmployeeType) => {
@@ -55,12 +54,11 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
- 
+
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-   await EmployeeTypeStore
-    .get()
-     .then((response) => {
+  await EmployeeTypeStore.get()
+    .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data;
         data.value = response.data.data;
@@ -78,7 +76,6 @@ const update = (id: number) => {
     name: "EmployeeTypeUpdate",
     params: { id: id },
   });
-
 };
 
 //#region Pagination
@@ -99,7 +96,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="add" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -117,8 +114,8 @@ onMounted(async () => {
           <CardEmployeeTypeIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
         </ICol>
-      </IRow> 
+      </IRow>
     </IPageContent>
-    <IFooterCrud :is-add="true" :show-add="false"/>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>

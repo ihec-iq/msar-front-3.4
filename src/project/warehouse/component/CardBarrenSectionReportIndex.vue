@@ -32,23 +32,45 @@ const goToDetails = () => {
     <div class="flex-1 overflow-hidden">
       <div class="space-y-3">
         <p class="truncate text-xl font-bold text-primary dark:text-secondary">
-          {{ item.sectionName  }}
+          {{ item.sectionName }}
         </p>
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-textGray">
+        <div
+          class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-textGray"
+        >
           <div class="flex items-center gap-1.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17 12H12V17H17V12M16 1V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H18V1M19 19H5V8H19V19Z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M17 12H12V17H17V12M16 1V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3H18V1M19 19H5V8H19V19Z"
+              />
             </svg>
-            <span>{{ item.count }}  </span>
+            <span>{{ item.count }} </span>
           </div>
         </div>
-        <p v-if="item.notes" class="line-clamp-2 text-sm text-text dark:text-textLight" v-html="item.notes" />
+        <p
+          v-if="item.notes"
+          class="line-clamp-2 text-sm text-text dark:text-textLight"
+          v-html="item.notes"
+        />
       </div>
     </div>
     <div class="flex-shrink-0 self-center">
-      <div class="rounded-full bg-gray-100 p-2 transition-colors duration-300 group-hover:bg-primary/20 dark:bg-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-colors duration-300 group-hover:text-primary dark:text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z" />
+      <div
+        class="rounded-full bg-gray-100 p-2 transition-colors duration-300 group-hover:bg-primary/20 dark:bg-gray-700"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-gray-500 transition-colors duration-300 group-hover:text-primary dark:text-gray-400"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z"
+          />
         </svg>
       </div>
     </div>

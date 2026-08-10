@@ -56,7 +56,7 @@ const filterByIDName = (bonuses: IBonus) => {
 };
 const makeFastSearch = () => {
   return;
-  // eslint-disable-next-line no-self-assign
+
   // if (fastSearch.value == "") data.value = dataBase.value;
   // else {
   //   data.value = dataBase.value.filter(filterByIDName);
@@ -71,7 +71,7 @@ const searchFilter = ref<IBonusFilter>({
 });
 const getFilterData = async (page = 1) => {
   useLocalStorage().set({
-    key: "indexBonuses",  
+    key: "indexBonuses",
     value: page.toString(),
     withEncrypt: false,
   });
@@ -136,8 +136,13 @@ const headers = ref<Array<ITableHeader>>([
       <IRow :cols="3" :cols-md="2" :cols-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
-            <IInput :label="t('SearchForUser')" :placeholder="t('SearchForUser')" v-model="fastSearch"
-              :type="EnumInputType.Text" :OnKeyEnter="getFilterData" />
+            <IInput
+              :label="t('SearchForUser')"
+              :placeholder="t('SearchForUser')"
+              v-model="fastSearch"
+              :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
@@ -178,12 +183,22 @@ const headers = ref<Array<ITableHeader>>([
           ></IPagination> -->
           <div class="w-full flex flex-row">
             <div class="basis-4/5 overflow-auto">
-              <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+              <TailwindPagination
+                class="flex justify-center mt-6"
+                :data="dataPage"
+                @pagination-change-page="getFilterData"
+                :limit="searchFilter.limit"
+              />
             </div>
             <div class="basis-1/5" v-if="data.length >= limits[0].id">
-              <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-                @onChange="getFilterData()" />
+              <ISelect
+                name="limit"
+                :label="t('Limit')"
+                v-model="searchFilter.limit"
+                :options="limits"
+                :IsRequire="true"
+                @onChange="getFilterData()"
+              />
             </div>
           </div>
           <SimpleLoading v-if="isLoading">.</SimpleLoading>

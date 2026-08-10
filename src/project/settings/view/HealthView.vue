@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
-import { storeToRefs } from "pinia"; 
+import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { Icon } from "@iconify/vue";
@@ -54,10 +54,8 @@ const route = useRoute();
 const Loading = ref(false);
 const router = useRouter();
 
- 
 onMounted(async () => {
   try {
-  
   } catch {
     // تجاهل الأخطاء الأولية
   }
@@ -75,7 +73,7 @@ onMounted(async () => {
             :type="EnumButtonType.Primary"
             :text="t('Refresh')"
             preIcon="refresh"
-            @click="() => { }"
+            @click="() => {}"
           />
         </ICol>
       </IRow>

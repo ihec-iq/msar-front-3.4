@@ -14,16 +14,15 @@
   "compilerOptions": {
     "strict": true,
     "target": "es6",
-    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ]
     },
     "noImplicitAny": false,
     "allowJs": true,
     "module": "es2022",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },
   "include": [

@@ -34,35 +34,25 @@ onMounted(() => {
   window.addEventListener("resize", updateColumns);
 });
 onUnmounted(() => window.removeEventListener("resize", updateColumns));
-
 </script>
 
 <template>
-  <div class=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 p-4 md:p-6">
-    <router-link v-for="link in LinksBase" :key="link.routerName" :to="{ name: link.routerName }" class="
-      relative block overflow-hidden rounded-2xl
-      bg-neutral-50 dark:bg-neutral-800
-      shadow-sm
-      transition-all duration-200 ease-out
-      hover:shadow-md hover:-translate-y-1
-      active:scale-[0.98] active:duration-100
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-      focus-visible:ring-blue-600 dark:focus-visible:ring-blue-400
-    ">
+  <div
+    class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 p-4 md:p-6"
+  >
+    <router-link
+      v-for="link in LinksBase"
+      :key="link.routerName"
+      :to="{ name: link.routerName }"
+      class="relative block overflow-hidden rounded-2xl bg-neutral-50 dark:bg-neutral-800 shadow-sm transition-all duration-200 ease-out hover:shadow-md hover:-translate-y-1 active:scale-[0.98] active:duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-400"
+    >
       <CardPortalSingleComponent :Link="link" />
 
-      <div class="
-        absolute inset-0
-        bg-black
-        opacity-0
-        transition-opacity
-        duration-200
-        hover:opacity-[0.05]
-        active:opacity-[0.08]
-      "></div>
+      <div
+        class="absolute inset-0 bg-black opacity-0 transition-opacity duration-200 hover:opacity-[0.05] active:opacity-[0.08]"
+      ></div>
     </router-link>
   </div>
-
 </template>
 
 <style scoped>

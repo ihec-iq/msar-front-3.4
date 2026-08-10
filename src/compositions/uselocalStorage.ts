@@ -4,19 +4,19 @@ export function useLocalStorage() {
   const APP_PREFIX = "" + getAppInstanceId();
 
   function getAppInstanceId() {
-  const STORAGE_KEY = "ali7med";
+    const STORAGE_KEY = "ali7med";
 
-  // Check if key exists
-  let id = localStorage.getItem(STORAGE_KEY);
+    // Check if key exists
+    let id = localStorage.getItem(STORAGE_KEY);
 
-  // If not exist → generate new UUID and save it
-  if (!id) {
-    id = crypto.randomUUID();  // Generates unique ID
-    localStorage.setItem(STORAGE_KEY, id);
+    // If not exist → generate new UUID and save it
+    if (!id) {
+      id = crypto.randomUUID(); // Generates unique ID
+      localStorage.setItem(STORAGE_KEY, id);
+    }
+
+    return id;
   }
-
-  return id;
-}
   function get({
     key,
     withEncrypt = false,

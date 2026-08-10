@@ -15,10 +15,16 @@ onMounted(async () => {
 <template>
   <IPage :HeaderTitle="t('Backup.Portal')">
     <IPageContent>
-      <CardPortalComponent :links="BackupLinks[0].children"></CardPortalComponent>
+      <CardPortalComponent
+        :links="BackupLinks[0].children"
+      ></CardPortalComponent>
     </IPageContent>
     <template #Footer>
-      <IFooterCrud :show-add="false"  :show-update="false" :show-delete="false" />
+      <IFooterCrud
+        :show-add="false"
+        :show-update="false"
+        :show-delete="false"
+      />
     </template>
   </IPage>
 </template>

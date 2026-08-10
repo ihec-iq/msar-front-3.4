@@ -103,9 +103,7 @@ export enum EnumDirection {
   LTR = "ltr",
   Auto = "inherit",
 }
-export enum   EnumSetting {
+export enum EnumSetting {
   SettingNumberDayesAlertBonus = "SettingNumberDayesAlertBonus",
   SettingNumberDayesAlertPromotion = "SettingNumberDayesAlertPromotion",
 }
-
-

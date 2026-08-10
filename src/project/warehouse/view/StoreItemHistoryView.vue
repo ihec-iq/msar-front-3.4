@@ -6,7 +6,11 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import { useSectionStore } from "@/project/section/sectionStore";
 
 import { t } from "@/utilities/I18nPlugin";
-import type { IStoreItemHistory, IStoreItemFilter, IInverntoryHistoryFilter } from "../IStore"; 
+import type {
+  IStoreItemHistory,
+  IStoreItemFilter,
+  IInverntoryHistoryFilter,
+} from "../IStore";
 import { useStoringStore } from "../storingStore";
 import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { storeToRefs } from "pinia";
@@ -111,11 +115,13 @@ const getFilterData = async (page = 1) => {
 
     // searchFilter.value.description = fastSearch.value;
     searchFilter.value.itemId = route.params.id.toString();
-     
-    const response = await get_item(searchFilter.value, page);console.log(response);
+
+    const response = await get_item(searchFilter.value, page);
+    console.log(response);
     if (response.status === 200) {
       dataPage.value = response.data.data;
-      data.value = dataPage.value.data;console.log(data.value);
+      data.value = dataPage.value.data;
+      console.log(data.value);
       dataBase.value = dataPage.value.data;
     }
   } catch (error) {
@@ -128,7 +134,11 @@ const getFilterData = async (page = 1) => {
 // Navigation functions
 const openItem = (id: number, billType: string) => {
   const routeName =
-    billType === "input" ? "inputVoucherUpdate" : (billType === "output" ? "outputVoucherUpdate" : "retrievalVoucherUpdate");
+    billType === "input"
+      ? "inputVoucherUpdate"
+      : billType === "output"
+        ? "outputVoucherUpdate"
+        : "retrievalVoucherUpdate";
   router.push({
     name: routeName,
     params: { id },
@@ -203,9 +213,15 @@ onMounted(async () => {
           <template v-slot:name="{ row }">
             <span>{{ row.Employee.name }}</span>
           </template>
- 
+
           <template v-slot:billType="{ row }">
-            <span>{{ row.billType === "input" ? t("In") : (row.billType === "output" ? t("Out") : t("Retrieval")) }}</span>
+            <span>{{
+              row.billType === "input"
+                ? t("In")
+                : row.billType === "output"
+                  ? t("Out")
+                  : t("Retrieval")
+            }}</span>
           </template>
 
           <template v-slot:price="{ row }">
@@ -239,7 +255,7 @@ onMounted(async () => {
       </IRow>
     </IPageContent>
     <template #Footer>
-      <IFooter/>
+      <IFooter />
     </template>
   </IPage>
 </template>

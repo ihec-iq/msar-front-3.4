@@ -4,7 +4,6 @@ import type { IStock } from "../settingVoucher/stock/IStock";
 import type { IDocument } from "@/project/archive/IArchive";
 import type { IUserFilter, IUserLite } from "@/project/user/IUser";
 
- 
 export interface IOutputVoucher {
   id: number;
   number: string;
@@ -17,16 +16,16 @@ export interface IOutputVoucher {
   Employee: IOutputVoucherEmployee;
   itemsCount?: number;
   FilesDocument?: Array<IDocument>;
-  UserCreated?:IUserLite 
+  UserCreated?: IUserLite;
 }
 export interface IOutputVoucherItem {
   id?: number;
   outputVoucherId: number;
   Item?: IItem;
-  inputVoucherItemId: number; 
-  InputVoucherItem: IInputVoucherItem; 
+  inputVoucherItemId: number;
+  InputVoucherItem: IInputVoucherItem;
   description: string;
-  count: number; 
+  count: number;
   price: number;
   value: number;
   notes: string;

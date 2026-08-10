@@ -10,14 +10,7 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 // Define breakpoint types
 type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 type SizeValue =
-  | "1/4"
-  | "1/3"
-  | "1/2"
-  | "2/3"
-  | "3/4"
-  | "full"
-  | "auto"
-  | number;
+  "1/4" | "1/3" | "1/2" | "2/3" | "3/4" | "full" | "auto" | number;
 
 // Props interface
 interface Props {

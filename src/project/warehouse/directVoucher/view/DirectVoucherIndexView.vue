@@ -36,7 +36,7 @@ const addItem = () => {
   directVoucher.number = "";
   directVoucher.date = "";
   directVoucher.notes = "";
-  directVoucher.Items = []; 
+  directVoucher.Items = [];
   router.push({
     name: "directVoucherAdd",
   });
@@ -53,7 +53,6 @@ const filterByIDName = (item: IDirectVoucher) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -106,7 +105,7 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -120,7 +119,7 @@ onMounted(async () => {
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
-      <IRow :cols="4"  :cols-lg="4" :cols-md="3" :cols-sm="1" >
+      <IRow :cols="4" :cols-lg="4" :cols-md="3" :cols-sm="1">
         <ICol
           class="my-2"
           :span="1"

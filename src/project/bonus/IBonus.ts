@@ -21,7 +21,7 @@ export interface IDocBouns {
   title: string;
   number: string;
   addDays: number;
-  date : string;
+  date: string;
   addMonths: number;
   issueDate: string;
   isActive: number;
@@ -44,7 +44,7 @@ export interface IBonusTotal {
   TotalDocuments: Array<IDocBouns>;
 }
 export interface IBonusEmployeeTotal {
-   id: number;
+  id: number;
   checked: boolean;
   name: string;
   dateWork: string;
@@ -58,8 +58,8 @@ export interface IBonusEmployeeTotal {
     degree: string;
     salary: string;
     notes: string;
-    difBonusDate: string
-  }; 
+    difBonusDate: string;
+  };
   position: string;
   center: string;
   section: string;

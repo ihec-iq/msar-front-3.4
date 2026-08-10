@@ -36,8 +36,8 @@ import {
 } from "@/utilities/Validation";
 import { makeFormDataFromObject } from "@/utilities/tools";
 import { ImageResizer } from "@/utilities/imageResizer";
-const { validate, min, required, foreignKey, max, sameAs, isObject } = useValidation();
-
+const { validate, min, required, foreignKey, max, sameAs, isObject } =
+  useValidation();
 
 const archiveStore = useArchiveStore();
 const { archive } = storeToRefs(useArchiveStore());
@@ -72,29 +72,34 @@ const id = ref(Number(route.params.id));
 const isIn = ref(true);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const reset = () => {
   archiveStore.resetData();
 };
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const store = async () => {
   errors.value = null;
   validationResult.value = validate(archive.value, rules);
   if (!validationResult.value.success) {
     //WarningToast(t("ValidationFails"));
-    let messages = validationResult.value.errors[0].messages.join('، ')
-    showToast(t('FailedValidation') + " : " + validationResult.value.errors[0].fieldName, {
-      description: messages,
-      status: "warning",
-      action: {
-        label: "Done",
-        onClick: () => { },
-      },
-    });
+    const messages = validationResult.value.errors[0].messages.join("، ");
+    showToast(
+      t("FailedValidation") +
+        " : " +
+        validationResult.value.errors[0].fieldName,
+      {
+        description: messages,
+        status: "warning",
+        action: {
+          label: "Done",
+          onClick: () => {},
+        },
+      }
+    );
     return;
   }
 
@@ -150,7 +155,7 @@ const update = async () => {
       errors.value = archiveStore.getError(error);
       ErrorToast();
     });
-}
+};
 
 const Delete = () => {
   crud_delete({
@@ -197,16 +202,15 @@ const updateList = () => {
 //#endregion
 window.onerror = function (msg, url, line, col, error) {
   //code to handle or report error goes here
-  console.log(msg)
-
-}
+  console.log(msg);
+};
 onMounted(async () => {
   isLoading.value = true;
   checkPermissionAccessArray([EnumPermission.ShowArchives]);
   if (Number.isNaN(id.value) || id.value === undefined) {
     namePage.value = "ArchiveAdd";
     archive.value.id = 0;
-    reset()
+    reset();
   } else {
     await showData();
     archive.value.id = id.value;
@@ -224,52 +228,98 @@ const chackArchiveTypeLoad = async () => {
   )
     await useArchiveTypeStore().getBySectionUser();
 };
-
 </script>
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
         <IForm>
           <IRow>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('Title')" v-model="archive.title" name="title" :type="EnumInputType.Text"
-                :IsRequire="true" />
+              <IInput
+                :label="t('Title')"
+                v-model="archive.title"
+                name="title"
+                :type="EnumInputType.Text"
+                :IsRequire="true"
+              />
             </ICol>
           </IRow>
           <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('NumberBook')" v-model="archive.number" name="number" :type="EnumInputType.Text" />
+              <IInput
+                :label="t('NumberBook')"
+                v-model="archive.number"
+                name="number"
+                :type="EnumInputType.Text"
+              />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('Date')" v-model="archive.issueDate" name="issueDate" :type="EnumInputType.Date"
-                :IsRequire="true" />
+              <IInput
+                :label="t('Date')"
+                v-model="archive.issueDate"
+                name="issueDate"
+                :type="EnumInputType.Date"
+                :IsRequire="true"
+              />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <ISelectObject :label="t('ArchiveType')" v-model="archive.ArchiveType" name="ArchiveType"
-                :options="archiveTypes" :IsRequire="true" @click=chackArchiveTypeLoad() />
+              <ISelectObject
+                :label="t('ArchiveType')"
+                v-model="archive.ArchiveType"
+                name="ArchiveType"
+                :options="archiveTypes"
+                :IsRequire="true"
+                @click="chackArchiveTypeLoad()"
+              />
             </ICol>
             <ICol span="1" span-md="2" span-sm="1">
-              <IInput :label="t('way')" v-model="archive.way" name="way" :type="EnumInputType.Text" />
+              <IInput
+                :label="t('way')"
+                v-model="archive.way"
+                name="way"
+                :type="EnumInputType.Text"
+              />
             </ICol>
             <ICol span="4" span-md="4" span-sm="4">
-              <IInput :label="t('Description')" v-model="archive.description" name="description"
-                :type="EnumInputType.Text" class="w-full" />
+              <IInput
+                :label="t('Description')"
+                v-model="archive.description"
+                name="description"
+                :type="EnumInputType.Text"
+                class="w-full"
+              />
             </ICol>
           </IRow>
           <IRow>
             <ICol span="1" span-md="2" span-sm="1">
-              <ICheckbox :label="`${t('TypeBook')}: ${isIn ? t('In') : t('Out')}`" v-model="isIn" :checked="true"
-                :IsRequire="true" />
+              <ICheckbox
+                :label="`${t('TypeBook')}: ${isIn ? t('In') : t('Out')}`"
+                v-model="isIn"
+                :checked="true"
+                :IsRequire="true"
+              />
             </ICol>
           </IRow>
           <!-- file -->
           <IRow cols-lg="4" cols-md="4" cols-sm="2">
-            <ICol span="3" span-md="3" span-sm="2" v-for="document in archive.FilesDocument" :key="document.name">
+            <ICol
+              span="3"
+              span-md="3"
+              span-sm="2"
+              v-for="document in archive.FilesDocument"
+              :key="document.name"
+            >
               <FilePreview :file="document" @updateList="updateList">
               </FilePreview>
             </ICol>
@@ -280,9 +330,12 @@ const chackArchiveTypeLoad = async () => {
               <div class="w-64 content-center" v-if="isLoading">
                 <div
                   class="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                  role="status">
+                  role="status"
+                >
                   <span
-                    class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                    class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                    >Loading...</span
+                  >
                 </div>
               </div>
             </div>
@@ -294,7 +347,12 @@ const chackArchiveTypeLoad = async () => {
     </IPageContent>
 
     <template #Footer>
-      <IFooterCrud :isAdd="archive.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+      <IFooterCrud
+        :isAdd="archive.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+      />
     </template>
   </IPage>
 </template>

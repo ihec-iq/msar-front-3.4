@@ -2,7 +2,11 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IHrDocument, IHrDocumentFilter, IHrDocumentType } from "./IHrDocument";
+import type {
+  IHrDocument,
+  IHrDocumentFilter,
+  IHrDocumentType,
+} from "./IHrDocument";
 import type { IEmployeeLite } from "../employee/IEmployee";
 
 export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
@@ -14,15 +18,15 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
     issueDate: new Date().toISOString().split("T")[0],
     Employee: {
       id: 0,
-      name: ""
+      name: "",
     },
     HrDocumentType: {
       id: 0,
-      name: ""
+      name: "",
     },
     isActive: true,
     number: "",
-    notes: ""
+    notes: "",
   });
   const hrDocuments = ref<Array<IHrDocument>>([]);
   const hrDocumentTypes = ref<Array<IHrDocumentType>>([]);
@@ -52,36 +56,38 @@ export const useHrDocumentStore = defineStore("HrDocumentStore", () => {
       issueDate: new Date().toISOString().split("T")[0],
       Employee: {
         id: 0,
-        name: ""
+        name: "",
       },
       HrDocumentType: {
         id: 0,
-        name: ""
+        name: "",
       },
       isActive: true,
       number: "",
-      notes: ""
+      notes: "",
     };
   }
   async function get_filter(params: IHrDocumentFilter, page: number) {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
   }
   async function get_hrDocumentTypes() {
-    return await Api.get(`/hr_document_type`).then((response: any) => {
-      if (response.status == 200) {
-        hrDocumentTypes.value = response.data.data;
-      }
-    })
+    return await Api.get(`/hr_document_type`)
+      .then((response: any) => {
+        if (response.status == 200) {
+          hrDocumentTypes.value = response.data.data;
+        }
+      })
       .catch((errors: any) => {
         console.log("in get get hrDocumentTypes : " + errors);
       });
   }
   async function get_employees() {
-    return await Api.get(`/employee/lite`).then((response: any) => {
-      if (response.status == 200) {
-        employees.value = response.data.data;
-      }
-    })
+    return await Api.get(`/employee/lite`)
+      .then((response: any) => {
+        if (response.status == 200) {
+          employees.value = response.data.data;
+        }
+      })
       .catch((errors: any) => {
         console.log("in get get hrDocumentTypes : " + errors);
       });

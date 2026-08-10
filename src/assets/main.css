@@ -1,3 +1,5 @@
+@reference "./tailwind.css";
+
 :root {
   --primary: #38cae4;
   --secondary: #35383c;
@@ -161,9 +163,6 @@
   background-color: var(--secondaryHoverLight);
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @font-face {
   font-family: "Tajawal";
@@ -179,7 +178,7 @@
 
 @layer components {
   .container-main {
-    @apply bg-cardLight btn dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 
+    @apply bg-cardLight dark:bg-card hover:bg-gray-300 dark:hover:bg-gray-800 
     flex w-full rounded-lg border border-gray-300 shadow-sm shadow-gray-500 
     duration-500 hover:border hover:border-gray-400 hover:shadow-md hover:shadow-gray-600;
   }

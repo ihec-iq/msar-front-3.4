@@ -3,7 +3,6 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import { t } from "@/utilities/I18nPlugin";
 import { VacationLinks } from "../vacation/VacationLinks";
 
-
 export const EmployeeLinks: Array<IconLink> = [
   {
     routerName: "employeePortal",
@@ -27,13 +26,14 @@ export const EmployeeLinks: Array<IconLink> = [
         children: [
           {
             routerName: "EmployeeTypeIndex",
-            title: t('Employee.Type'),
-            mdi:"setting",
+            title: t("Employee.Type"),
+            mdi: "setting",
             tab: "employeePortal",
             description: "",
             permissions: [EnumPermission.ShowEmployees],
             isActive: true,
-          },]
+          },
+        ],
       },
       {
         routerName: "hrDocumentIndex",
@@ -45,7 +45,7 @@ export const EmployeeLinks: Array<IconLink> = [
         description:
           "البوابة الاساسية لضبارة الموظفين ومن خلالها تستطيع الدخول على كافة خدمات النظام",
         isActive: true,
-        permissions: [EnumPermission.ShowEmployees]
+        permissions: [EnumPermission.ShowEmployees],
       },
       {
         routerName: "bonusPortal",
@@ -56,7 +56,7 @@ export const EmployeeLinks: Array<IconLink> = [
         tab: "employeePortal",
         description: "اضافة العلاوات للموظفين",
         isActive: true,
-        permissions: [EnumPermission.ShowEmployees]
+        permissions: [EnumPermission.ShowEmployees],
       },
       {
         routerName: "promotionPortal",
@@ -67,21 +67,21 @@ export const EmployeeLinks: Array<IconLink> = [
         tab: "employeePortal",
         description: "اضافة الترفيعات للموظفين",
         isActive: true,
-        permissions: [EnumPermission.ShowEmployees]
+        permissions: [EnumPermission.ShowEmployees],
       },
       ...VacationLinks,
       {
         routerName: "employeeSettingPortal",
-        title: t('Setting.Name'),
-        mdi:"mdi-cog",
+        title: t("Setting.Name"),
+        mdi: "mdi-cog",
         tab: "employeePortal",
         description: "",
         isActive: true,
         permissions: [EnumPermission.ShowEmployeeSetting],
-        children:[
+        children: [
           {
             routerName: "EmployeeTypeIndex",
-            title: t('EmployeeType.Index'),
+            title: t("EmployeeType.Index"),
             mdi: "mdi-cog",
             tab: "employeePortal",
             description: "",
@@ -90,7 +90,7 @@ export const EmployeeLinks: Array<IconLink> = [
           },
           {
             routerName: "EmployeeCenterIndex",
-            title: t('EmployeeCenter.Index'),
+            title: t("EmployeeCenter.Index"),
             mdi: "mdi-cog",
             tab: "employeePortal",
             description: "",
@@ -99,17 +99,15 @@ export const EmployeeLinks: Array<IconLink> = [
           },
           {
             routerName: "EmployeePositionIndex",
-            title: t('EmployeePosition.Index'),
+            title: t("EmployeePosition.Index"),
             mdi: "mdi-cog",
             tab: "employeePortal",
             description: "",
             isActive: true,
             permissions: [EnumPermission.ShowEmployeeSetting],
-          }   
-        ]
-      }
-    ]
-
-
-  }
+          },
+        ],
+      },
+    ],
+  },
 ];

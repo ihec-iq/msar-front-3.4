@@ -89,19 +89,34 @@ onMounted(fetchData);
 <template>
   <IPage :HeaderTitle="t('Roles and Permissions')">
     <template #HeaderButtons>
-      <IButton2 preIcon="add" :text="t('Add New Role')" :onClick="() => navigateTo('roleAdd')" />
+      <IButton2
+        preIcon="add"
+        :text="t('Add New Role')"
+        :onClick="() => navigateTo('roleAdd')"
+      />
     </template>
 
     <IPageContent>
       <div v-if="isLoading" class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div v-for="i in 4" :key="i" class="h-48 animate-pulse rounded-2xl bg-gray-200 dark:bg-gray-700"></div>
+        <div
+          v-for="i in 4"
+          :key="i"
+          class="h-48 animate-pulse rounded-2xl bg-gray-200 dark:bg-gray-700"
+        ></div>
       </div>
 
-      <div v-else-if="roles.length > 0" class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div
+        v-else-if="roles.length > 0"
+        class="grid grid-cols-1 gap-6 md:grid-cols-2"
+      >
         <div v-for="role in roles" :key="role.id" class="relative">
           <div class="absolute top-4 left-4 z-20">
             <IDropdown>
-              <li class="mb-1"><EditButton @click="navigateTo('roleUpdate', { id: role.id })" /></li>
+              <li class="mb-1">
+                <EditButton
+                  @click="navigateTo('roleUpdate', { id: role.id })"
+                />
+              </li>
               <li><DeleteButton @click="confirmAndDelete(role.id)" /></li>
             </IDropdown>
           </div>
@@ -113,15 +128,23 @@ onMounted(fetchData);
             class="group flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-indigo-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:border-indigo-500"
           >
             <div>
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ role.name }}</h3>
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                {{ role.name }}
+              </h3>
               <p class="mt-1 text-sm text-gray-500">
                 {{ t("Permissions Count") }}:
-                <span class="font-semibold text-indigo-600 dark:text-indigo-400">{{ role.permissions.length }}</span>
+                <span
+                  class="font-semibold text-indigo-600 dark:text-indigo-400"
+                  >{{ role.permissions.length }}</span
+                >
               </p>
             </div>
 
             <div class="mt-4">
-              <p v-if="role.permissions.length === 0" class="text-sm italic text-gray-400">
+              <p
+                v-if="role.permissions.length === 0"
+                class="text-sm italic text-gray-400"
+              >
                 {{ t("No permissions assigned.") }}
               </p>
               <div v-else class="flex flex-wrap gap-2">
@@ -149,9 +172,18 @@ onMounted(fetchData);
         class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 py-20 text-center dark:border-gray-600 dark:bg-gray-800"
       >
         <Icon icon="mdi:shield-off-outline" class="h-16 w-16 text-gray-400" />
-        <h3 class="mt-4 text-xl font-semibold text-gray-800 dark:text-white">{{ t("No Roles Found") }}</h3>
-        <p class="mt-2 text-gray-500">{{ t("Get started by creating a new role.") }}</p>
-        <IButton2 class="mt-6" preIcon="add" :text="t('Create First Role')" :onClick="() => navigateTo('roleAdd')" />
+        <h3 class="mt-4 text-xl font-semibold text-gray-800 dark:text-white">
+          {{ t("No Roles Found") }}
+        </h3>
+        <p class="mt-2 text-gray-500">
+          {{ t("Get started by creating a new role.") }}
+        </p>
+        <IButton2
+          class="mt-6"
+          preIcon="add"
+          :text="t('Create First Role')"
+          :onClick="() => navigateTo('roleAdd')"
+        />
       </div>
     </IPageContent>
   </IPage>

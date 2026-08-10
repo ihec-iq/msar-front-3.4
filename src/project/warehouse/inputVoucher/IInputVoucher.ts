@@ -35,7 +35,7 @@ export interface IInputVoucherItem {
   price?: number;
   value: number;
   notes?: string;
-  fingerprint? : string;
+  fingerprint?: string;
 }
 
 export interface IInputVoucherItemVSelect {

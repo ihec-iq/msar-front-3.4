@@ -14,7 +14,7 @@ export const useVacationStore = defineStore("vacationStore", () => {
       Section: { id: 0, name: "" },
       MoveSection: {
         id: 0,
-        name: ""
+        name: "",
       },
       isMoveSection: 0,
       isPerson: 1,
@@ -30,16 +30,16 @@ export const useVacationStore = defineStore("vacationStore", () => {
         id: 0,
         name: "",
         level: "",
-        code: ""
+        code: "",
       },
       EmployeeType: {
         id: 0,
-        name: ""
+        name: "",
       },
       EmployeeCenter: {
         id: 0,
-        name: ""
-      }
+        name: "",
+      },
     },
     record: 0,
     recordSick: 0,
@@ -52,18 +52,18 @@ export const useVacationStore = defineStore("vacationStore", () => {
     deservedSickRecord: 0,
     takenSick: 0,
     remainingSick: 0,
-    currentYearSickVacations: 0
+    currentYearSickVacations: 0,
   });
   function reset() {
     vacation.id = 0;
-    vacation.record = 1; 
+    vacation.record = 1;
     vacation.Employee = {
       id: 0,
       name: "",
       Section: { id: 0, name: "" },
       MoveSection: {
         id: 0,
-        name: ""
+        name: "",
       },
       isMoveSection: 0,
       isPerson: 1,
@@ -79,16 +79,16 @@ export const useVacationStore = defineStore("vacationStore", () => {
         id: 0,
         name: "",
         level: "",
-        code: ""
+        code: "",
       },
       EmployeeType: {
         id: 0,
-        name: ""
+        name: "",
       },
       EmployeeCenter: {
         id: 0,
-        name: ""
-      }
+        name: "",
+      },
     };
   }
   const pathBase = "/vacationSys";

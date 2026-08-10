@@ -5,7 +5,12 @@ import type { IUser } from "@/project/user/IUser";
 import type { IVacationDaily } from "@/project/vacation/vacationDaily/IVacationDaily";
 import type { IVacationSick } from "@/project/vacation/vacationSick/IVacationSick";
 import type { IVacationTime } from "@/project/vacation/vacationTime/IVacationTime";
-import type { IDegreeStage, IBonusJobTitle, IStudy, ICertificate } from "@/project/bonus/IBonus";
+import type {
+  IDegreeStage,
+  IBonusJobTitle,
+  IStudy,
+  ICertificate,
+} from "@/project/bonus/IBonus";
 import type { IDocument } from "@/project/archive/IArchive";
 import type { IEmployeeType } from "@/project/employee/setting/employeeType/IEmployeeType";
 import type { IEmployeeCenter } from "@/project/employee/setting/employeeCenter/IEmployeeCenter";
@@ -16,7 +21,7 @@ export interface IEmployee {
   name: string;
   Section: ISection;
   MoveSection: ISection;
-  isMoveSection : number;
+  isMoveSection: number;
   isPerson: number;
   dateWork: string;
   number: string;
@@ -29,11 +34,11 @@ export interface IEmployee {
   takeVacation: number;
   initVacationSick: number;
   takeVacationSick: number;
-  User?:IUser;
+  User?: IUser;
   vacationDaily?: Array<IVacationDaily>;
   vacationSick?: Array<IVacationSick>;
   vacationTime?: Array<IVacationTime>;
-  issueDate?:string;
+  issueDate?: string;
   BonusJobTitle?: IBonusJobTitle;
   Study?: IStudy;
   Certificate?: ICertificate;
@@ -55,7 +60,7 @@ export interface IEmployeeBonus {
   DegreeStage: string;
   numberLastBonus: string;
   dateLastBonus: string;
-  difNextBonusDate:string;
+  difNextBonusDate: string;
   dateNextBonus: string;
 }
 export interface IEmployeeLite {
@@ -108,5 +113,3 @@ export interface IEmployeeFilter {
   checked?: boolean;
   employeeId?: number;
 }
- 
-  

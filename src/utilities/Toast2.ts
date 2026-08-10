@@ -7,7 +7,7 @@ const { isRtl } = useRtlStore();
 const timeout: number = 2500;
 const toast = useToast();
 
-function SuccessToast(message: String = t("ToastMessages.Success")) {
+function SuccessToast(message: string = t("ToastMessages.Success")) {
   toast.success(message, {
     position: POSITION.TOP_CENTER,
     timeout: timeout,
@@ -23,7 +23,7 @@ function SuccessToast(message: String = t("ToastMessages.Success")) {
   });
 }
 
-function ErrorToast(message: String = t("ToastMessages.Error")) {
+function ErrorToast(message: string = t("ToastMessages.Error")) {
   toast.error(message, {
     position: POSITION.TOP_CENTER,
     timeout: timeout,
@@ -39,7 +39,7 @@ function ErrorToast(message: String = t("ToastMessages.Error")) {
   });
 }
 
-function WarningToast(message: String = t("ToastMessages.Warning")) {
+function WarningToast(message: string = t("ToastMessages.Warning")) {
   toast.warning(message, {
     position: POSITION.TOP_CENTER,
     timeout: timeout,
@@ -50,8 +50,8 @@ function WarningToast(message: String = t("ToastMessages.Warning")) {
     showCloseButtonOnHover: false,
     hideProgressBar: false,
     closeButton: {
-      component: 'button',
-      label: 'Click me'
+      component: "button",
+      label: "Click me",
     },
     icon: true,
     rtl: isRtl,

@@ -1,4 +1,3 @@
-
 export interface ITableItem {
   [key: string]: any;
 }

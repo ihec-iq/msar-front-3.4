@@ -47,7 +47,6 @@ const filterByIDName = (item: IStock) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -55,12 +54,11 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
- 
+
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-   await StockStore
-    .get()
-     .then((response) => {
+  await StockStore.get()
+    .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data;
         data.value = response.data.data;
@@ -97,7 +95,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Warehouse.Stock.Add')" />
     </template>
     <IPageContent>
-      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -115,8 +113,8 @@ onMounted(async () => {
           <CardStockIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
         </ICol>
-      </IRow> 
+      </IRow>
     </IPageContent>
-    <IFooterCrud :is-add="true" :show-add="false"/>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>

@@ -31,30 +31,42 @@ const loadHealth = async () => {
 const statusColor = computed(() => {
   if (!healthCheck.value) return "gray";
   switch (healthCheck.value.status) {
-    case "ok": return "green";
-    case "warning": return "yellow";
-    case "error": return "red";
-    default: return "gray";
+    case "ok":
+      return "green";
+    case "warning":
+      return "yellow";
+    case "error":
+      return "red";
+    default:
+      return "gray";
   }
 });
 
 const statusIcon = computed(() => {
   if (!healthCheck.value) return "❓";
   switch (healthCheck.value.status) {
-    case "ok": return "✅";
-    case "warning": return "⚠️";
-    case "error": return "❌";
-    default: return "❓";
+    case "ok":
+      return "✅";
+    case "warning":
+      return "⚠️";
+    case "error":
+      return "❌";
+    default:
+      return "❓";
   }
 });
 
 const statusText = computed(() => {
   if (!healthCheck.value) return "غير معروف";
   switch (healthCheck.value.status) {
-    case "ok": return "النظام يعمل بشكل صحيح";
-    case "warning": return "تحذير";
-    case "error": return "خطأ";
-    default: return "غير معروف";
+    case "ok":
+      return "النظام يعمل بشكل صحيح";
+    case "warning":
+      return "تحذير";
+    case "error":
+      return "خطأ";
+    default:
+      return "غير معروف";
   }
 });
 
@@ -67,8 +79,8 @@ const timeSinceLastBackup = computed(() => {
   if (!healthCheck.value?.last_success_at) return null;
   const lastBackup = dayjs(healthCheck.value.last_success_at);
   const now = dayjs();
-  const hours = now.diff(lastBackup, 'hour');
-  const minutes = now.diff(lastBackup, 'minute') % 60;
+  const hours = now.diff(lastBackup, "hour");
+  const minutes = now.diff(lastBackup, "minute") % 60;
 
   if (hours < 1) return `منذ ${minutes} دقيقة`;
   if (hours < 24) return `منذ ${hours} ساعة و ${minutes} دقيقة`;
@@ -80,7 +92,12 @@ const timeSinceLastBackup = computed(() => {
 <template>
   <IPage :HeaderTitle="t('Backup.Health')">
     <template #HeaderButtons>
-      <IButton width="28" :onClick="loadHealth" text="تحديث" :disabled="isLoadingHealth" />
+      <IButton
+        width="28"
+        :onClick="loadHealth"
+        text="تحديث"
+        :disabled="isLoadingHealth"
+      />
     </template>
 
     <IPageContent>
@@ -98,7 +115,10 @@ const timeSinceLastBackup = computed(() => {
           <div class="text-6xl mb-4">
             {{ statusIcon }}
           </div>
-          <h2 class="text-2xl font-bold mb-2" :class="`text-${statusColor}-700`">
+          <h2
+            class="text-2xl font-bold mb-2"
+            :class="`text-${statusColor}-700`"
+          >
             {{ statusText }}
           </h2>
           <p class="text-gray-600 text-sm">
@@ -112,21 +132,35 @@ const timeSinceLastBackup = computed(() => {
           <div class="bg-white rounded-lg shadow p-6">
             <div class="flex items-start justify-between mb-4">
               <div>
-                <h3 class="font-semibold text-lg text-gray-900">آخر نسخة احتياطية ناجحة</h3>
-                <p class="text-sm text-gray-500 mt-1">آخر مرة تم فيها إنشاء نسخة احتياطية بنجاح</p>
+                <h3 class="font-semibold text-lg text-gray-900">
+                  آخر نسخة احتياطية ناجحة
+                </h3>
+                <p class="text-sm text-gray-500 mt-1">
+                  آخر مرة تم فيها إنشاء نسخة احتياطية بنجاح
+                </p>
               </div>
               <span class="text-3xl">💾</span>
             </div>
 
             <div class="space-y-2">
-              <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <span class="text-sm font-medium text-gray-700">التاريخ والوقت</span>
-                <span class="text-sm text-gray-900">{{ formatDate(healthCheck.last_success_at) }}</span>
+              <div
+                class="flex justify-between items-center p-3 bg-gray-50 rounded"
+              >
+                <span class="text-sm font-medium text-gray-700"
+                  >التاريخ والوقت</span
+                >
+                <span class="text-sm text-gray-900">{{
+                  formatDate(healthCheck.last_success_at)
+                }}</span>
               </div>
 
-              <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+              <div
+                class="flex justify-between items-center p-3 bg-gray-50 rounded"
+              >
                 <span class="text-sm font-medium text-gray-700">منذ</span>
-                <span class="text-sm text-gray-900">{{ timeSinceLastBackup }}</span>
+                <span class="text-sm text-gray-900">{{
+                  timeSinceLastBackup
+                }}</span>
               </div>
             </div>
           </div>
@@ -136,29 +170,57 @@ const timeSinceLastBackup = computed(() => {
             <div class="flex items-start justify-between mb-4">
               <div>
                 <h3 class="font-semibold text-lg text-gray-900">حالة النظام</h3>
-                <p class="text-sm text-gray-500 mt-1">الحالة العامة لنظام النسخ الاحتياطي</p>
+                <p class="text-sm text-gray-500 mt-1">
+                  الحالة العامة لنظام النسخ الاحتياطي
+                </p>
               </div>
               <span class="text-3xl">{{ statusIcon }}</span>
             </div>
 
             <div class="space-y-2">
-              <div class="flex justify-between items-center p-3 rounded"
-                :class="statusColor === 'green' ? 'bg-green-50' : statusColor === 'yellow' ? 'bg-yellow-50' : 'bg-red-50'">
-                <span class="text-sm font-medium"
-                  :class="statusColor === 'green' ? 'text-green-700' : statusColor === 'yellow' ? 'text-yellow-700' : 'text-red-700'">
+              <div
+                class="flex justify-between items-center p-3 rounded"
+                :class="
+                  statusColor === 'green'
+                    ? 'bg-green-50'
+                    : statusColor === 'yellow'
+                      ? 'bg-yellow-50'
+                      : 'bg-red-50'
+                "
+              >
+                <span
+                  class="text-sm font-medium"
+                  :class="
+                    statusColor === 'green'
+                      ? 'text-green-700'
+                      : statusColor === 'yellow'
+                        ? 'text-yellow-700'
+                        : 'text-red-700'
+                  "
+                >
                   الحالة
                 </span>
-                <span class="text-sm font-semibold"
-                  :class="statusColor === 'green' ? 'text-green-900' : statusColor === 'yellow' ? 'text-yellow-900' : 'text-red-900'">
+                <span
+                  class="text-sm font-semibold"
+                  :class="
+                    statusColor === 'green'
+                      ? 'text-green-900'
+                      : statusColor === 'yellow'
+                        ? 'text-yellow-900'
+                        : 'text-red-900'
+                  "
+                >
                   {{ statusText }}
                 </span>
               </div>
 
               <div class="p-3 bg-blue-50 rounded">
                 <p class="text-sm text-blue-800">
-                  {{ healthCheck.status === 'ok'
-                    ? 'جميع أنظمة النسخ الاحتياطي تعمل بشكل طبيعي'
-                    : 'يرجى التحقق من إعدادات النسخ الاحتياطي' }}
+                  {{
+                    healthCheck.status === "ok"
+                      ? "جميع أنظمة النسخ الاحتياطي تعمل بشكل طبيعي"
+                      : "يرجى التحقق من إعدادات النسخ الاحتياطي"
+                  }}
                 </p>
               </div>
             </div>
@@ -172,8 +234,9 @@ const timeSinceLastBackup = computed(() => {
             <div>
               <h4 class="font-semibold text-blue-900 mb-1">معلومات</h4>
               <p class="text-sm text-blue-800">
-                يتم فحص حالة النظام تلقائياً. إذا كانت هناك أي مشاكل، سيتم إرسال إشعارات للمسؤولين.
-                آخر نسخة احتياطية ناجحة كانت {{ timeSinceLastBackup }}.
+                يتم فحص حالة النظام تلقائياً. إذا كانت هناك أي مشاكل، سيتم إرسال
+                إشعارات للمسؤولين. آخر نسخة احتياطية ناجحة كانت
+                {{ timeSinceLastBackup }}.
               </p>
             </div>
           </div>
@@ -181,7 +244,11 @@ const timeSinceLastBackup = computed(() => {
       </div>
     </IPageContent>
     <template #Footer>
-      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+      <IFooterCrud
+        :show-add="false"
+        :show-update="false"
+        :show-delete="false"
+      />
     </template>
   </IPage>
 </template>

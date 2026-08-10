@@ -31,7 +31,7 @@ const props = defineProps({
 });
 const iconBase = computed(() => {
   return props.icon != "" ? "mdi:" + props.icon : "";
-}); 
+});
 const classIcon = computed(() => {
   let _classIcon = "";
   if (props.type === "default") {
@@ -91,14 +91,14 @@ const buttonClass = computed(() => {
 });
 </script>
 
-<template>{{  }}
+<template>
+  {{}}
   <button @click="onClick()" :class="buttonClass" class="rounded-xl mx-1">
-    <Icon :icon="iconBase"
-      :class="classIcon"
-      class="grow-0" />
+    <Icon :icon="iconBase" :class="classIcon" class="grow-0" />
   </button>
 </template>
 <style scoped>
+@reference "../../assets/tailwind.css";
 button:hover {
   @apply transform scale-105;
 }

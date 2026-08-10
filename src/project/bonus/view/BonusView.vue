@@ -184,7 +184,7 @@ onMounted(async () => {
         <IRow v-if="isLoading">
           <div class="skeleton h-32 w-full"></div>
         </IRow>
-        
+
         <IRow2
           v-else-if="Bonus.Employee.BonusJobTitle.id != 0"
           :title="t('Bonus.EmployeeDataCurrent')"

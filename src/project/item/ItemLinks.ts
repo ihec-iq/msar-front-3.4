@@ -48,5 +48,5 @@ export const ItemLinks: Array<IconUserLink> = [
         isActive: true,
       },
     ],
-  }
+  },
 ];

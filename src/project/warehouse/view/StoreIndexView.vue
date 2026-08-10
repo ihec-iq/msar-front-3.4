@@ -47,7 +47,6 @@ const filterByIDName = (item: IStore) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -77,7 +76,6 @@ const getFilterData = async (page = 1) => {
     .catch((error) => {
       console.log(error);
     });
-
 
   isLoading.value = false;
 };
@@ -110,54 +108,89 @@ const headers = ref<Array<ITableHeader>>([
   <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
     <IPageContent>
       <IRow class="z-[999999]">
-        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px] ">
+        <ISearchBar :getDataButton="getFilterData" class="min-w-[500px]">
           <ICol>
-            <IInput :label="t('Title')" :placeholder="t('Search')" v-model="fastSearch" :type="EnumInputType.Text"
-              :OnKeyEnter="getFilterData" />
+            <IInput
+              :label="t('Title')"
+              :placeholder="t('Search')"
+              v-model="fastSearch"
+              :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
           <ICol v-if="data.length >= limits[0].id">
-            <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="archiveTypeId" :options="limits"
-              :IsRequire="true" @onChange="getFilterData()" />
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow>
-        <ITable :items="data" :headers="headers" :show-pagination="false" :is-loading="isLoading">
+        <ITable
+          :items="data"
+          :headers="headers"
+          :show-pagination="false"
+          :is-loading="isLoading"
+        >
           <template v-slot:actions="{ row }">
             <dropdownmenu :openFn="() => openItem(Number(row.itemId))" />
           </template>
           <template v-slot:in="{ row }">
             <span
-              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2">↓{{
-                Number(row.countIn) + Number(row.countReIn) }}</span>
+              class="bg-green-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ml-2"
+              >↓{{ Number(row.countIn) + Number(row.countReIn) }}</span
+            >
           </template>
           <template v-slot:price="{ row }">
             <span> {{ ConvertToMoneyFormat(row.price) }}</span>
           </template>
           <template v-slot:out="{ row }">
             <span
-              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2">↑{{
-                Number(row.countOut) + Number(row.countReOut) }}</span></template>
+              class="bg-red-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800 ml-2"
+              >↑{{ Number(row.countOut) + Number(row.countReOut) }}</span
+            ></template
+          >
           <template v-slot:count="{ row }">
             <span
-              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2">{{
-                Number(row.count)
-              }}
-            </span></template>
+              class="bg-blue-100 text-blue-800 text-16 font-bold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
+              >{{ Number(row.count) }}
+            </span></template
+          >
         </ITable>
         <div class="py-4 min-w-full w-full h-full lg:px-8">
           <!-- card -->
           <div class="rounded-xl" v-if="isLoading == false">
-            <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-              :variants="{ custom: { scale: 2 } }" :delay="200" v-if="data.length > 0">
+            <div
+              v-motion
+              :initial="{ opacity: 0, y: -15 }"
+              :enter="{ opacity: 1, y: 0 }"
+              :variants="{ custom: { scale: 2 } }"
+              :delay="200"
+              v-if="data.length > 0"
+            >
               <div class="w-full flex flex-row">
                 <div class="basis-4/5 overflow-x-auto font-Tajawal">
-                  <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                    @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+                  <TailwindPagination
+                    class="flex justify-center mt-6"
+                    :data="dataPage"
+                    @pagination-change-page="getFilterData"
+                    :limit="searchFilter.limit"
+                  />
                 </div>
                 <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                  <ISelect :label="t('Limit')" v-model="searchFilter.limit" name="Limit" :options="limits"
-                    :IsRequire="true" @onChange="getFilterData()" />
+                  <ISelect
+                    :label="t('Limit')"
+                    v-model="searchFilter.limit"
+                    name="Limit"
+                    :options="limits"
+                    :IsRequire="true"
+                    @onChange="getFilterData()"
+                  />
                 </div>
               </div>
             </div>
@@ -169,10 +202,13 @@ const headers = ref<Array<ITableHeader>>([
       <IRow v-if="data.length > 0">
         <div class="w-full flex flex-row">
           <div class="basis-5/5 hidden">
-            <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-              @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
           </div>
-
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>

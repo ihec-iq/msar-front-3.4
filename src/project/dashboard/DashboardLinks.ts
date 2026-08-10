@@ -10,7 +10,6 @@ export const DashboardLinks: Array<IconLink> = [
     description: "",
     permissions: [EnumPermission.Dashboard],
     isActive: true,
-    children: [
-    ],
-  }
+    children: [],
+  },
 ];

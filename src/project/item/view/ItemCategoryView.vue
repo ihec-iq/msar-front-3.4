@@ -19,13 +19,13 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 const { validate, required, isObject } = useValidation();
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "name",
     caption: t("Item.Name"),
     rules: [required()],
-  }, 
+  },
 ];
 import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
@@ -135,23 +135,26 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemCategoryStore._delete(category.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        }).catch((error) => {
-          //errors.value = Object.values(error.response.data.errors).flat().join();
-          errors.value = itemCategoryStore.getError(error);
-          Swal.fire({
-            icon: "error",
-            title: t("Deleted not successfully ."),
-            text: error.response.data.message,
-            footer: "",
+        await itemCategoryStore
+          ._delete(category.value.id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          })
+          .catch((error) => {
+            //errors.value = Object.values(error.response.data.errors).flat().join();
+            errors.value = itemCategoryStore.getError(error);
+            Swal.fire({
+              icon: "error",
+              title: t("Deleted not successfully ."),
+              text: error.response.data.message,
+              footer: "",
+            });
           });
-        });
       }
     });
 };
@@ -201,22 +204,45 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
-        <IRow cols-lg="2"  cols="2" cols-md="2">
+        <IRow cols-lg="2" cols="2" cols-md="2">
           <ICol>
-            <IInput :label="t('Name')" name="name" v-model="category.name" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Name')"
+              name="name"
+              v-model="category.name"
+              :type="EnumInputType.Text"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('Description')" name="description" v-model="category.description"
-              :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Description')"
+              name="description"
+              v-model="category.description"
+              :type="EnumInputType.Text"
+            />
           </ICol>
         </IRow>
-        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
-        <IFooterCrud :isAdd="category.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
+        <IFooterCrud
+          :isAdd="category.id == 0"
+          :onCreate="store"
+          :onUpdate="update"
+          :onDelete="Delete"
+        />
       </IRow>
     </IPageContent>
   </IPage>

@@ -20,7 +20,7 @@ import {
   type IFieldValidation,
 } from "@/utilities/Validation";
 const { validate, required, isObject } = useValidation();
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "name",
@@ -54,18 +54,15 @@ const store = () => {
   errors.value = null;
   validationResult.value = validate(employeePosition.value, rules);
   if (!validationResult.value.success) {
-
     WarningToast(t("ValidationFails"));
     return;
   }
   errors.value = null;
   const formData = prepareFormData(employeePosition.value);
 
-  EmployeePositionStore
-    .store(formData)
+  EmployeePositionStore.store(formData)
     .then((response) => {
       if (response.status == 200) {
-
         Swal.fire({
           icon: "success",
           title: "Your item has been saved",
@@ -84,7 +81,6 @@ const store = () => {
         text: error.response.data.message,
         footer: "",
       });
-
     });
 };
 function update() {
@@ -92,15 +88,13 @@ function update() {
   errors.value = null;
   validationResult.value = validate(employeePosition.value, rules);
   if (!validationResult.value.success) {
-
     WarningToast(t("ValidationFails"));
     return;
   }
   errors.value = null;
   const formData = prepareFormData(employeePosition.value);
 
-  EmployeePositionStore
-    .update(employeePosition.value.id, formData)
+  EmployeePositionStore.update(employeePosition.value.id, formData)
 
     .then((response) => {
       if (response.status === 200) {
@@ -122,7 +116,6 @@ function update() {
         text: error.response.data.message,
         footer: "",
       });
-
     });
 }
 const Delete = async () => {
@@ -145,22 +138,22 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await EmployeePositionStore._delete(employeePosition.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-
-          );
-          router.go(-1);
-        });
+        await EmployeePositionStore._delete(employeePosition.value.id).then(
+          () => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          }
+        );
       }
     });
 };
 const showData = async () => {
   isLoding.value = true;
-  await EmployeePositionStore
-    .show(id.value)
+  await EmployeePositionStore.show(id.value)
 
     .then((response) => {
       if (response.status == 200) {
@@ -207,30 +200,64 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :variant="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
-        <IRow cols-lg="2"  cols="2" cols-md="2">
+        <IRow cols-lg="2" cols="2" cols-md="2">
           <ICol>
-            <IInput :label="t('EmployeePosition.Name')" name="name" v-model="employeePosition.name" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('EmployeePosition.Name')"
+              name="name"
+              v-model="employeePosition.name"
+              :type="EnumInputType.Text"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('EmployeePosition.Level')" name="level" v-model="employeePosition.level" :type="EnumInputType.Text" />
-
+            <IInput
+              :label="t('EmployeePosition.Level')"
+              name="level"
+              v-model="employeePosition.level"
+              :type="EnumInputType.Text"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('EmployeePosition.Code')" name="code" v-model="employeePosition.code" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('EmployeePosition.Code')"
+              name="code"
+              v-model="employeePosition.code"
+              :type="EnumInputType.Text"
+            />
           </ICol>
         </IRow>
-        <IErrorMessages :validationResult="validationResult" ref="someRefName" />
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
 
-        <IFooterCrud :isAdd="employeePosition.id == 0 && can(EnumPermission.AddEmployeeSetting) ? true : false"
-          :isUpdate="employeePosition.id != 0 && can(EnumPermission.EditEmployeeSetting) ? true : false"
-          :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+        <IFooterCrud
+          :isAdd="
+            employeePosition.id == 0 && can(EnumPermission.AddEmployeeSetting)
+              ? true
+              : false
+          "
+          :isUpdate="
+            employeePosition.id != 0 && can(EnumPermission.EditEmployeeSetting)
+              ? true
+              : false
+          "
+          :onCreate="store"
+          :onUpdate="update"
+          :onDelete="Delete"
+        />
       </IRow>
-
     </IPageContent>
   </IPage>
 </template>

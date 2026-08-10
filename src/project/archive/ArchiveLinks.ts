@@ -1,6 +1,6 @@
 import type { IconLink } from "@/components/fixed/FixedMenu";
 import { EnumPermission } from "@/utilities/EnumSystem";
- 
+
 export const ArchiveLinks: Array<IconLink> = [
   {
     routerName: "archivePortal",

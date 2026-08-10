@@ -5,7 +5,7 @@ export interface IDirectVoucher {
   number: string;
   date: string;
   notes: string;
-  Items: Array<IDirectVoucherItem>; 
+  Items: Array<IDirectVoucherItem>;
   Employee: IDirectVoucherEmployee;
   itemsCount?: number;
 }

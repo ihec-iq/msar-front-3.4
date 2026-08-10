@@ -52,7 +52,7 @@ export const useSettingsStore = defineStore("settingsStore", () => {
   }
   async function download_log(): Promise<void> {
     // XHR مع credentials → Sanctum لن يحاول redirect
-     const res = await Api.get(`${pathUrl}/download`, {
+    const res = await Api.get(`${pathUrl}/download`, {
       responseType: "blob",
     });
     const blob = new Blob([res.data], { type: "text/plain;charset=utf-8" });

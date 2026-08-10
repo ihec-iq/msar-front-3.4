@@ -1,138 +1,159 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount, computed, type PropType } from 'vue'
-import axios  from 'axios'
-import type { CancelTokenSource } from 'axios'
+import {
+  ref,
+  watch,
+  onMounted,
+  onBeforeUnmount,
+  computed,
+  type PropType,
+} from "vue";
+import axios from "axios";
+import type { CancelTokenSource } from "axios";
 // ربط ثنائي مباشر
-const model = defineModel<Record<string, any> | null>({ default: null })
+const model = defineModel<Record<string, any> | null>({ default: null });
 
 const props = defineProps({
-  labelKey: { type: String, default: 'name' },
+  labelKey: { type: String, default: "name" },
   trackBy: { type: String, required: true },
-  placeholder: { type: String, default: 'اختر عنصرًا' },
-  noResultsText: { type: String, default: 'لا توجد نتائج مطابقة' },
+  placeholder: { type: String, default: "اختر عنصرًا" },
+  noResultsText: { type: String, default: "لا توجد نتائج مطابقة" },
   disabled: { type: Boolean, default: false },
   async: { type: Boolean, default: false },
   fetchFunction: {
-    type: Function as PropType<(query: string) => Promise<Record<string, any>[]>>,
+    type: Function as PropType<
+      (query: string) => Promise<Record<string, any>[]>
+    >,
     required: false,
   },
-})
+});
 
 // State
-const isOpen = ref(false)
-const searchTerm = ref('')
-const filteredOptions = ref<Record<string, any>[]>([])
-const isLoading = ref(false)
-const selectContainer = ref<HTMLDivElement | null>(null)
-const highlightedIndex = ref(-1)
-let debounceTimer: ReturnType<typeof setTimeout> | null = null
-let cancelToken: CancelTokenSource | null = null
+const isOpen = ref(false);
+const searchTerm = ref("");
+const filteredOptions = ref<Record<string, any>[]>([]);
+const isLoading = ref(false);
+const selectContainer = ref<HTMLDivElement | null>(null);
+const highlightedIndex = ref(-1);
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+let cancelToken: CancelTokenSource | null = null;
 
 // Derived
-const hasSelection = computed(() => !!model.value)
+const hasSelection = computed(() => !!model.value);
 const activeDescendant = computed(() =>
   highlightedIndex.value >= 0 && filteredOptions.value.length > 0
     ? `option-${highlightedIndex.value}`
     : undefined
-)
+);
 
 // Helpers
 const resolveNestedProperty = (obj: Record<string, any>, path: string): any => {
   try {
-    return path.split('.').reduce((o, key) => (o && o[key] !== undefined ? o[key] : null), obj)
+    return path
+      .split(".")
+      .reduce((o, key) => (o && o[key] !== undefined ? o[key] : null), obj);
   } catch {
-    return null
+    return null;
   }
-}
+};
 
 // Fetch async results
 const fetchAsyncResults = async (query: string) => {
-  if (!props.fetchFunction) return
-  if (cancelToken) cancelToken.cancel()
-  cancelToken = axios.CancelToken.source()
-  isLoading.value = true
+  if (!props.fetchFunction) return;
+  if (cancelToken) cancelToken.cancel();
+  cancelToken = axios.CancelToken.source();
+  isLoading.value = true;
   try {
-    const results = await props.fetchFunction(query)
-    filteredOptions.value.splice(0, filteredOptions.value.length, ...(results || []))
+    const results = await props.fetchFunction(query);
+    filteredOptions.value.splice(
+      0,
+      filteredOptions.value.length,
+      ...(results || [])
+    );
   } catch (err) {
     if (!axios.isCancel(err)) {
-      console.error('API Error:', err)
-      filteredOptions.value = []
+      console.error("API Error:", err);
+      filteredOptions.value = [];
     }
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 // Debounce search
 watch(searchTerm, (val) => {
-  if (debounceTimer) clearTimeout(debounceTimer)
+  if (debounceTimer) clearTimeout(debounceTimer);
   debounceTimer = setTimeout(async () => {
     if (props.async && props.fetchFunction) {
-      await fetchAsyncResults(val)
+      await fetchAsyncResults(val);
     }
-  }, 300)
-})
+  }, 300);
+});
 
 // Actions
 const openDropdown = () => {
-  if (props.disabled) return
-  isOpen.value = true
-  highlightedIndex.value = -1
-}
+  if (props.disabled) return;
+  isOpen.value = true;
+  highlightedIndex.value = -1;
+};
 
 const closeDropdown = () => {
-  isOpen.value = false
-  highlightedIndex.value = -1
-}
+  isOpen.value = false;
+  highlightedIndex.value = -1;
+};
 
 const selectOption = (option: Record<string, any>) => {
-  model.value = option
-  searchTerm.value = resolveNestedProperty(option, props.labelKey) || ''
-  closeDropdown()
-}
+  model.value = option;
+  searchTerm.value = resolveNestedProperty(option, props.labelKey) || "";
+  closeDropdown();
+};
 
 const clearSelection = () => {
-  searchTerm.value = ''
-  model.value = null
-  filteredOptions.value = []
-  highlightedIndex.value = -1
-}
+  searchTerm.value = "";
+  model.value = null;
+  filteredOptions.value = [];
+  highlightedIndex.value = -1;
+};
 
 // Keyboard
 const highlightNext = () => {
-  if (highlightedIndex.value < filteredOptions.value.length - 1) highlightedIndex.value++
-}
+  if (highlightedIndex.value < filteredOptions.value.length - 1)
+    highlightedIndex.value++;
+};
 const highlightPrevious = () => {
-  if (highlightedIndex.value > 0) highlightedIndex.value--
-}
+  if (highlightedIndex.value > 0) highlightedIndex.value--;
+};
 const selectHighlighted = () => {
   if (highlightedIndex.value >= 0) {
-    selectOption(filteredOptions.value[highlightedIndex.value])
+    selectOption(filteredOptions.value[highlightedIndex.value]);
   }
-}
+};
 
 // Outside click
 const handleClickOutside = (event: MouseEvent) => {
-  if (selectContainer.value && !selectContainer.value.contains(event.target as Node)) {
-    closeDropdown()
+  if (
+    selectContainer.value &&
+    !selectContainer.value.contains(event.target as Node)
+  ) {
+    closeDropdown();
   }
-}
+};
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
+  document.addEventListener("click", handleClickOutside);
   if (model.value) {
-    searchTerm.value = resolveNestedProperty(model.value, props.labelKey) || ''
+    searchTerm.value = resolveNestedProperty(model.value, props.labelKey) || "";
   }
-})
+});
 onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+  document.removeEventListener("click", handleClickOutside);
+});
 
 // sync when parent changes value
 watch(model, (val) => {
-  searchTerm.value = val ? resolveNestedProperty(val, props.labelKey) || '' : ''
-})
+  searchTerm.value = val
+    ? resolveNestedProperty(val, props.labelKey) || ""
+    : "";
+});
 </script>
 
 <template>
@@ -171,7 +192,12 @@ watch(model, (val) => {
           viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
       </button>
     </div>
@@ -182,7 +208,10 @@ watch(model, (val) => {
       class="absolute z-10 w-full mt-1 overflow-y-auto bg-white border border-gray-300 rounded-lg shadow-lg max-h-60"
       role="listbox"
     >
-      <li v-if="isLoading" class="px-4 py-2 text-gray-500 text-center select-none">
+      <li
+        v-if="isLoading"
+        class="px-4 py-2 text-gray-500 text-center select-none"
+      >
         جاري التحميل...
       </li>
 

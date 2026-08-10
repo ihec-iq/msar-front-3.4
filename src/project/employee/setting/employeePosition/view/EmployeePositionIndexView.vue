@@ -17,7 +17,6 @@ const { employeePosition } = useEmployeePositionStore();
 const EmployeePositionStore = useEmployeePositionStore();
 import CardEmployeePositionIndex from "./CardEmployeePositionIndex.vue";
 
-
 import { EnumPermission } from "@/utilities/EnumSystem";
 import IPage from "@/components/ihec/IPage.vue";
 import IInput from "@/components/inputs/IInput.vue";
@@ -41,8 +40,6 @@ const add = () => {
   });
 };
 
-
-
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (item: IEmployeePosition) => {
@@ -58,12 +55,11 @@ const makeFastSearch = () => {
 };
 //#endregion
 //#region Search
- 
+
 const getFilterData = async (page: number = 1) => {
   isLoading.value = true;
-   await EmployeePositionStore
-    .get()
-     .then((response) => {
+  await EmployeePositionStore.get()
+    .then((response) => {
       if (response.status == 200) {
         dataPage.value = response.data;
         data.value = response.data.data;
@@ -81,7 +77,6 @@ const update = (id: number) => {
     name: "EmployeePositionUpdate",
     params: { id: id },
   });
-
 };
 
 //#region Pagination
@@ -102,7 +97,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="add" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -120,8 +115,8 @@ onMounted(async () => {
           <CardEmployeePositionIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
         </ICol>
-      </IRow> 
+      </IRow>
     </IPageContent>
-    <IFooterCrud :is-add="true" :show-add="false"/>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>

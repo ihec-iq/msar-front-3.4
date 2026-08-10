@@ -49,7 +49,7 @@ const update = (id: number) => {
           <img src="@/assets/svg/bag.svg" class="h-4 w-4" alt="Category Icon" />
           <span>{{ item.Category.name }}</span>
         </div>
-        
+
         <span class="text-gray-300 dark:text-gray-600">|</span>
 
         <div>

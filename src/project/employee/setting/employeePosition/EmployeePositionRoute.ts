@@ -17,7 +17,6 @@ export default [
     meta: {
       middleware: [authMiddleware],
     },
-
   },
   {
     path: "/EmployeePosition/:id",

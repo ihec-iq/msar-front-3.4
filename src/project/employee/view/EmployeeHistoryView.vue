@@ -30,12 +30,12 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 
 const RetrievalVoucher = ref<{
   number: string;
-  date: string; 
+  date: string;
   requestEmployeeId: string;
   Items?: Array<IEmployeeHistory>;
 }>({
   number: "",
-  date: new Date().toISOString().split("T")[0], 
+  date: new Date().toISOString().split("T")[0],
   requestEmployeeId: "1",
 });
 
@@ -63,7 +63,6 @@ const filterByIDName = (item: IEmployeeHistory) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -160,7 +159,7 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t('Store.Index')" :isLoading="isLoading">
     <IPageContent>
-      <IRow :cols="5" :cols-md="2"  :cols-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1">
             <IInput
@@ -285,7 +284,7 @@ const headers = ref<Array<ITableHeader>>([
                       class="w-full outline-none h-10 px-3 py-2 border-2 border-emerald-900 rounded-md bg-lightOutput dark:bg-input text-text dark:text-textLight"
                     />
                   </div>
-                </div> 
+                </div>
                 <div class="w-4/12 mr-2 flex">
                   <div
                     class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"

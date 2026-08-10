@@ -55,7 +55,7 @@ const goBack = () => {
 </script>
 <template>
   <div class="flex flex-wrap flex-row-reverse justify-between p-4">
-    <div class="flex gap-3 ">
+    <div class="flex gap-3">
       <slot name="Pre"></slot>
       <IButton
         v-if="props.isAdd && props.showAdd"
@@ -75,12 +75,11 @@ const goBack = () => {
         :onClick="props.onDelete"
       />
       <slot name="Post"></slot>
-
     </div>
-     
+
     <IButton2
       color="red"
-      :onClick="goBack" 
+      :onClick="goBack"
       pre-icon="arrow-left-top"
       :variant="EnumButtonType.Text"
       :text="t('Back')"

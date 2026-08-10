@@ -9,7 +9,12 @@ import { storeToRefs } from "pinia";
 import { TailwindPagination } from "laravel-vue-pagination";
 import { t } from "@/utilities/I18nPlugin";
 import SimpleLoading from "@/components/general/loading.vue";
-import type { IBonus, IBonusEmployeeChecker, IBonusEmployeeTotal, IBonusFilter } from "../IBonus";
+import type {
+  IBonus,
+  IBonusEmployeeChecker,
+  IBonusEmployeeTotal,
+  IBonusFilter,
+} from "../IBonus";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
@@ -66,7 +71,7 @@ const filterByIDName = (Bonus: IBonus) => {
 };
 const makeFastSearch = () => {
   return;
-  // eslint-disable-next-line no-self-assign
+
   // if (fastSearch.value == "") data.value = dataBase.value;
   // else {
   //   data.value = dataBase.value.filter(filterByIDName);
@@ -132,7 +137,7 @@ const printWindow = () => {
     ${prtHtml}
   </body>
 </html>`);
-  var options = {
+  const options = {
     silent: false,
     printBackground: true,
     color: false,
@@ -173,11 +178,14 @@ const getFilterData = async (page = 1) => {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
-        SettingStore.updateByKeyInt(SettingNumberDayesAlertBonus.value.key, Number(searchFilter.value.bound));
+        SettingStore.updateByKeyInt(
+          SettingNumberDayesAlertBonus.value.key,
+          Number(searchFilter.value.bound)
+        );
       }
     })
     .catch((error) => {
-      let errors = getError(error);
+      const errors = getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -226,7 +234,7 @@ onMounted(async () => {
       searchFilter.value.bound = SettingNumberDayesAlertBonus.value.valInt;
     }
   );
-  let check = await localStorage.getItem("check" + IdPage);
+  const check = await localStorage.getItem("check" + IdPage);
   if (check != undefined)
     searchFilter.value.isBound = check == "1" ? true : false;
   let index = 1;
@@ -300,14 +308,14 @@ const openFileHrDocument = (id: number) => {
 };
 //#endregion
 const drowHtmlData = (): string => {
-  let html = ""
+  let html = "";
 
   for (let index = 0; index < data.value.length; index++) {
     const element = data.value[index];
     html += drowRow(element);
   }
-  return html
-}
+  return html;
+};
 const drowRow = (row: IBonusEmployeeTotal): string => {
   // if (row.getBonusEmployeeTotal.length <= 1)
   //   return `<tr class="border-2 border-black text-[12px] text-center">
@@ -347,10 +355,11 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
   // </tr>`;
   let html = "";
   // Calculate length based on division by 2, rounding up for odd numbers
-  const length = row.getBonusEmployeeTotal.length % 2 === 0
-    ? Math.floor(row.getBonusEmployeeTotal.length / 2)
-    : Math.floor(row.getBonusEmployeeTotal.length / 2) + 1;
-  let indexSub = 0
+  const length =
+    row.getBonusEmployeeTotal.length % 2 === 0
+      ? Math.floor(row.getBonusEmployeeTotal.length / 2)
+      : Math.floor(row.getBonusEmployeeTotal.length / 2) + 1;
+  let indexSub = 0;
   for (let i = 0; i < length; i++) {
     //begin of row
     html += `<tr class="border-2 border-black text-[12px] text-center">`;
@@ -385,34 +394,42 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
     // build the repeated Bonus (Degree, Stage, Salary)
     try {
       for (let j = 0; j < 2; j++) {
-        let yearNow = new Date().getFullYear().toString()
-        let year = row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(8, 10)
+        const yearNow = new Date().getFullYear().toString();
+        let year = row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(
+          8,
+          10
+        );
 
-        let month = parseInt(year) <= parseInt(yearNow)
-          ? row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(5, 7)
-          : ""
-        let day = parseInt(year) <= parseInt(yearNow)
-          ? row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(0, 4)
-          : ""
-        let degree = parseInt(year) <= parseInt(yearNow)
-          ? row.getBonusEmployeeTotal[indexSub].DegreeStage.degree
-          : ""
-        let stage = parseInt(year) <= parseInt(yearNow)
-          ? row.getBonusEmployeeTotal[indexSub].DegreeStage.stage
-          : ""
-        let salary = parseInt(year) <= parseInt(yearNow)
-          ? row.getBonusEmployeeTotal[indexSub].DegreeStage.salary
-          : ""
-        year = parseInt(year) <= parseInt(yearNow)
-          ? year
-          : ""
+        const month =
+          parseInt(year) <= parseInt(yearNow)
+            ? row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(5, 7)
+            : "";
+        const day =
+          parseInt(year) <= parseInt(yearNow)
+            ? row.getBonusEmployeeTotal[indexSub].nextDateBonus?.slice(0, 4)
+            : "";
+        const degree =
+          parseInt(year) <= parseInt(yearNow)
+            ? row.getBonusEmployeeTotal[indexSub].DegreeStage.degree
+            : "";
+        const stage =
+          parseInt(year) <= parseInt(yearNow)
+            ? row.getBonusEmployeeTotal[indexSub].DegreeStage.stage
+            : "";
+        const salary =
+          parseInt(year) <= parseInt(yearNow)
+            ? row.getBonusEmployeeTotal[indexSub].DegreeStage.salary
+            : "";
+        year = parseInt(year) <= parseInt(yearNow) ? year : "";
         html += `<td class="
-        <td class="border-black border-x-2 border-solid">`
-        forEach(row.getBonusEmployeeTotal[indexSub].Documents, (item, index) => {
-          html += item.title + " " + item.number + " في " + item.date + " , ";
-        })
-        html +=
-          `</td>
+        <td class="border-black border-x-2 border-solid">`;
+        forEach(
+          row.getBonusEmployeeTotal[indexSub].Documents,
+          (item, index) => {
+            html += item.title + " " + item.number + " في " + item.date + " , ";
+          }
+        );
+        html += `</td>
         <td class="border-black border-x-2 border-solid">${year}</td>
         <td class="border-black border-x-2 border-solid">${month}</td>
         <td class="border-black border-x-2 border-solid text-[10px] ">${day}</td>
@@ -420,8 +437,7 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
         <td class="border-black border-x-2 border-solid">${stage}</td>
         <td class="border-black border-x-2 border-solid">${salary}</td> 
         `;
-        indexSub += 1
-
+        indexSub += 1;
       }
     } catch (error) {
       console.log(error);
@@ -429,69 +445,120 @@ const drowRow = (row: IBonusEmployeeTotal): string => {
 
     // end of row
     html += `</tr>`;
-
   }
   return html;
-}
+};
 
-
-const isOpenModel = ref(false)
+const isOpenModel = ref(false);
 </script>
 <template>
-  <IPage :HeaderTitle="t('Bonus.Alert')" :is-loading="isLoading" :isOpenModel="isOpenModel"
-    @update:isOpenModel="isOpenModel = $event">
+  <IPage
+    :HeaderTitle="t('Bonus.Alert')"
+    :is-loading="isLoading"
+    :isOpenModel="isOpenModel"
+    @update:isOpenModel="isOpenModel = $event"
+  >
     <template #HeaderButtons>
-      <IButton class="w-[200px]" :onClick="recheck" :text="t('Bonus.ReCalculate')" />
+      <IButton
+        class="w-[200px]"
+        :onClick="recheck"
+        :text="t('Bonus.ReCalculate')"
+      />
     </template>
     <IPageContent>
       <IRow :cols="1" :cols-md="1" :cols-lg="1" class="scroll-auto">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="3" :span-md="3" :span="2" :span-sm="4">
-            <IInput :placeholder="t('SearchForUser')" v-model="fastSearch" :type="EnumInputType.Text"
-              :OnKeyEnter="getFilterData" />
+            <IInput
+              :placeholder="t('SearchForUser')"
+              v-model="fastSearch"
+              :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
             <ISelect :label="t('BonusSection')" v-model="searchFilter.sectionId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol> -->
-          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center">
-            <ICheckbox :label="t('Bonus.IsBoundFilter') + ' ' + t('Days')" v-model="searchFilter.isBound"
-              :IsRequire="true" @Change="
+          <ICol
+            :span-lg="3"
+            :span-md="3"
+            :span="1"
+            class="flex items-center justify-center"
+          >
+            <ICheckbox
+              :label="t('Bonus.IsBoundFilter') + ' ' + t('Days')"
+              v-model="searchFilter.isBound"
+              :IsRequire="true"
+              @Change="
                 getFilterData();
-              changeCheck();
-              " class="flex items-center justify-center" />
-            <IInput v-model="searchFilter.bound" :disabled="!searchFilter.isBound" :type="EnumInputType.Number"
-              class="w-[100px]" @keyup.enter="getFilterData" />
+                changeCheck();
+              "
+              class="flex items-center justify-center"
+            />
+            <IInput
+              v-model="searchFilter.bound"
+              :disabled="!searchFilter.isBound"
+              :type="EnumInputType.Number"
+              class="w-[100px]"
+              @keyup.enter="getFilterData"
+            />
           </ICol>
-          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center" v-if="data.length > 0">
+          <ICol
+            :span-lg="3"
+            :span-md="3"
+            :span="1"
+            class="flex items-center justify-center"
+            v-if="data.length > 0"
+          >
             <ICheckbox v-model="ShowPrint">عرض الطباعة</ICheckbox>
             <IButton :onClick="printAll" :text="t('Print')" v-if="ShowPrint" />
           </ICol>
-          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center" v-if="data.length > 0">
-            <PrintCombo :printOptions="[
-              { label: 'جدول العلاوات', elementId: 'printMe' }
-            ]" :headerHtml="`<div style='font-weight:700'>مكتب كربلاء الانتخابي</div><div>تقرير آلي</div>`"
+          <ICol
+            :span-lg="3"
+            :span-md="3"
+            :span="1"
+            class="flex items-center justify-center"
+            v-if="data.length > 0"
+          >
+            <PrintCombo
+              :printOptions="[{ label: 'جدول العلاوات', elementId: 'printMe' }]"
+              :headerHtml="`<div style='font-weight:700'>مكتب كربلاء الانتخابي</div><div>تقرير آلي</div>`"
               :pageFooterHtml="`<p>كل الحقوق محفوظة - نظام مسار لادارة المؤوسسات</p>`"
               :reportFooterHtml="`توقيع المدير • التاريخ: ${new Date().toLocaleDateString()}`"
-              :reportFooterNewPage="false" footerAlign="center" :defaultPageSize="'A4'" :defaultOrientation="'portrait'"
-              :defaultMarginMm="15" />
+              :reportFooterNewPage="false"
+              footerAlign="center"
+              :defaultPageSize="'A4'"
+              :defaultOrientation="'portrait'"
+              :defaultMarginMm="15"
+            />
           </ICol>
-          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center"
-            v-if="data.length >= limits[0].id">
-            <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-              @onChange="getFilterData()" />
+          <ICol
+            :span-lg="3"
+            :span-md="3"
+            :span="1"
+            class="flex items-center justify-center"
+            v-if="data.length >= limits[0].id"
+          >
+            <ISelect
+              name="limit"
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
-
-
 
       <IRow id="PrintArea" class="hiddenss" v-if="ShowPrint">
         <div id="printMe" class="[print-color-adjust:exact] p-1">
           <div class="overflow-auto">
             <div
-              class="flex items-center content-center justify-center text-md font-bold w-[1140px] border-black border-x-2 border-t-2">
+              class="flex items-center content-center justify-center text-md font-bold w-[1140px] border-black border-x-2 border-t-2"
+            >
               استحقاق العلاوة السنوية لموظفي كادر مكتب انتخابات كربلاء
             </div>
             <table class="table-fixed text-sm w-[1040px]" dir="rtl">
@@ -507,10 +574,14 @@ const isOpenModel = ref(false)
                   <th colspan="3" class="tdborderx w-[70px]">
                     تاريخ الاستحقاق
                   </th>
-                  <th class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180">
+                  <th
+                    class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180"
+                  >
                     الدرجة
                   </th>
-                  <th class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180">
+                  <th
+                    class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180"
+                  >
                     المرحلة
                   </th>
                   <th class="tdborderx w-[44px]">مقدار الراتب</th>
@@ -520,10 +591,14 @@ const isOpenModel = ref(false)
                   <th colspan="3" class="tdborderx w-[70px]">
                     تاريخ الاستحقاق
                   </th>
-                  <th class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180">
+                  <th
+                    class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180"
+                  >
                     الدرجة
                   </th>
-                  <th class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180">
+                  <th
+                    class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180"
+                  >
                     المرحلة
                   </th>
                   <th class="tdborderx w-[44px]">مقدار الراتب</th>
@@ -533,10 +608,14 @@ const isOpenModel = ref(false)
                   <th colspan="3" class="tdborderx w-[70px]">
                     تاريخ الاستحقاق
                   </th>
-                  <th class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180">
+                  <th
+                    class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180"
+                  >
                     الدرجة
                   </th>
-                  <th class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180">
+                  <th
+                    class="tdborderx w-[24px] [writing-mode:vertical-lr] rotate-180"
+                  >
                     المرحلة
                   </th>
                   <th class="tdborderx w-[44px]">مقدار الراتب</th>
@@ -549,7 +628,10 @@ const isOpenModel = ref(false)
                   <th class="tdborderx w-[60px]"></th>
                   <th class="tdborderx w-[60px]"></th>
                   <th class="tdborderx w-[60px]"></th>
-                  <th colspan="6" class="tdborderx w-[280px] border-t-2 text-center">
+                  <th
+                    colspan="6"
+                    class="tdborderx w-[280px] border-t-2 text-center"
+                  >
                     الاستحقاق السابق
                   </th>
                   <th colspan="7" class="tdborderx border-t-2 text-center">
@@ -560,9 +642,7 @@ const isOpenModel = ref(false)
                   </th>
                 </tr>
               </thead>
-              <tbody class="text-[12px]" v-html="drowHtmlData()">
-
-              </tbody>
+              <tbody class="text-[12px]" v-html="drowHtmlData()"></tbody>
             </table>
           </div>
         </div>
@@ -575,8 +655,16 @@ const isOpenModel = ref(false)
         </div> -->
         <ITable :items="data" :headers="headers">
           <template v-slot:checkId="{ row }">
-            <div class="cursor-pointer h-full w-full" @click="row.checked = !row.checked">
-              <input type="checkbox" v-model="row.checked" class="cursor-pointer" :id="'checkId' + row.id" />
+            <div
+              class="cursor-pointer h-full w-full"
+              @click="row.checked = !row.checked"
+            >
+              <input
+                type="checkbox"
+                v-model="row.checked"
+                class="cursor-pointer"
+                :id="'checkId' + row.id"
+              />
             </div>
           </template>
           <template v-slot:current.dateBonus="{ row }">
@@ -592,18 +680,31 @@ const isOpenModel = ref(false)
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
-                <EditButton title="Employee.Info" class="p-0 m-0" @click="update(row.id)" />
+                <EditButton
+                  title="Employee.Info"
+                  class="p-0 m-0"
+                  @click="update(row.id)"
+                />
               </li>
               <li>
-                <EditButton title="Bonus.OpenDocuments" class="p-0 m-0" @click="
-                  getFiles(1, row.id);
-                openPopup();
-                " />
+                <EditButton
+                  title="Bonus.OpenDocuments"
+                  class="p-0 m-0"
+                  @click="
+                    getFiles(1, row.id);
+                    openPopup();
+                  "
+                />
               </li>
             </IDropdown>
           </template>
           <template v-slot:btnAddBound="{ row }">
-            <IButton @click="addBound(row.id)" icon="mdi-bookmark-plus" type="outlined" :text="t('Bonus.Add')" />
+            <IButton
+              @click="addBound(row.id)"
+              icon="mdi-bookmark-plus"
+              type="outlined"
+              :text="t('Bonus.Add')"
+            />
           </template>
         </ITable>
         <IRow v-if="data.length > 0">
@@ -616,8 +717,12 @@ const isOpenModel = ref(false)
           ></IPagination> -->
           <div class="w-full flex flex-row">
             <div class="overflow-auto">
-              <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+              <TailwindPagination
+                class="flex justify-center mt-6"
+                :data="dataPage"
+                @pagination-change-page="getFilterData"
+                :limit="searchFilter.limit"
+              />
             </div>
           </div>
           <SimpleLoading v-if="isLoading">.</SimpleLoading>
@@ -633,23 +738,41 @@ const isOpenModel = ref(false)
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
     <van-popup
       class="bg-customer h-[90%] z-[999999] w-full lg:w-[90%] md:w-[90%] sm:w-[90%] xs:w-full dark:bg-content flex overflow-auto"
-      v-model:show="showPop" round>
+      v-model:show="showPop"
+      round
+    >
       <div class="dark:text-textLight w-full">
-        <div class="text-2xl text-center text-text dark:text-textLight p-2 font-bold mt-6">
+        <div
+          class="text-2xl text-center text-text dark:text-textLight p-2 font-bold mt-6"
+        >
           {{ t("Bonus.OpenDocuments") }}
         </div>
-        <div v-motion :initial="{ opacity: 0, y: -15 }" :enter="{ opacity: 1, y: 0 }"
-          :variants="{ custom: { scale: 2 } }" :delay="200">
+        <div
+          v-motion
+          :initial="{ opacity: 0, y: -15 }"
+          :enter="{ opacity: 1, y: 0 }"
+          :variants="{ custom: { scale: 2 } }"
+          :delay="200"
+        >
           <div class="flex items-center justify-around w-full">
-            <ITable :items="dataBaseFiles" :headers="headerFiles" :showNoData="true" :showRowNumber="true">
+            <ITable
+              :items="dataBaseFiles"
+              :headers="headerFiles"
+              :showNoData="true"
+              :showRowNumber="true"
+            >
               <template v-slot:isActive="{ row }">
-                <span v-if="row.isActive"
-                  class="flex justify-center w-full items-center border-2 rounded-md dark:text-textLight text-text border-green-400 bg-green-100 dark:bg-green-950 p-0">
+                <span
+                  v-if="row.isActive"
+                  class="flex justify-center w-full items-center border-2 rounded-md dark:text-textLight text-text border-green-400 bg-green-100 dark:bg-green-950 p-0"
+                >
                   <Icon icon="mdi-check-circle" class="text-green-600"></Icon>
                   مفعل
                 </span>
-                <span v-else
-                  class="flex justify-center w-full items-center border-2 dark:text-textLight text-text border-red-400 rounded-md bg-red-100 dark:bg-red-950 p-0">
+                <span
+                  v-else
+                  class="flex justify-center w-full items-center border-2 dark:text-textLight text-text border-red-400 rounded-md bg-red-100 dark:bg-red-950 p-0"
+                >
                   <Icon icon="mdi-pause-octagon" class="text-red-600"></Icon>
                   <span>غير مفعل</span>
                 </span>
@@ -658,20 +781,28 @@ const isOpenModel = ref(false)
                 <span>{{ row.HrDocumentType.name }}</span>
               </template>
               <template v-slot:actions="{ row }">
-                <OpenButton title="Open" @click="openFileHrDocument(row.id)" class="m-1" />
+                <OpenButton
+                  title="Open"
+                  @click="openFileHrDocument(row.id)"
+                  class="m-1"
+                />
               </template>
             </ITable>
           </div>
           <SimpleLoading v-if="isLoading">.</SimpleLoading>
         </div>
         <div class="flex absolute bottom-14 w-full text-center">
-          <div @click="getFiles()"
-            class="flex items-center justify-center sm:w-[95%] md:w-2/4 bg-amber-900 text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer">
+          <div
+            @click="getFiles()"
+            class="flex items-center justify-center sm:w-[95%] md:w-2/4 bg-amber-900 text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer"
+          >
             {{ t("Refresh") }}
             <Icon icon="mdi-refresh" class="text-white" />
           </div>
-          <div @click="closePopup()"
-            class="flex items-center justify-center sm:w-[95%] md:w-2/4 bg-blue-900 text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer">
+          <div
+            @click="closePopup()"
+            class="flex items-center justify-center sm:w-[95%] md:w-2/4 bg-blue-900 text-textLight mx-4 p-2 text-xl rounded-lg cursor-pointer"
+          >
             {{ t("Close") }}
             <Icon icon="mdi-close" class="text-white" />
           </div>
@@ -681,6 +812,7 @@ const isOpenModel = ref(false)
   </IPage>
 </template>
 <style scoped lang="postcss">
+@reference "../../../assets/tailwind.css";
 .tdborderx {
   @apply border-black border-x-2 border-solid;
 }

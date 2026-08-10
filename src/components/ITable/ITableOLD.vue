@@ -1,7 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, type CSSProperties, nextTick } from "vue";
+import {
+  ref,
+  computed,
+  watch,
+  onMounted,
+  type CSSProperties,
+  nextTick,
+} from "vue";
 import type { PropType, VNode } from "vue";
 import { t } from "@/utilities/I18nPlugin";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 // ============ Types ============
 export interface ITableItem {
@@ -13,9 +21,9 @@ export interface ITableHeader {
   value: string; // column key
   visible?: boolean; // default: true
   sortable?: boolean; // default: true
-  sortKey?: string;   // if provided, use this key for sorting
-  print?: boolean;    // default: true
-  width?: string;     // e.g. "160px" or "12rem"
+  sortKey?: string; // if provided, use this key for sorting
+  print?: boolean; // default: true
+  width?: string; // e.g. "160px" or "12rem"
   align?: "left" | "center" | "right";
   // Optional logical formatter when you do not want to use a slot
   format?: (row: ITableItem, cellValue: unknown) => string | number | VNode;
@@ -102,7 +110,7 @@ const selectedRowKeys = ref<Array<string | number>>([...props.selectedKeys]);
 
 // Initialize visible columns from header.visible (default true) or persisted value
 function buildInitialVisibleColumns(headers: ITableHeader[]): string[] {
-  return headers.filter(h => h.visible !== false).map(h => h.value);
+  return headers.filter((h) => h.visible !== false).map((h) => h.value);
 }
 function persistenceStorageKey(): string {
   return `ITable/visibleColumns/${props.persistKey || props.title || "default"}`;
@@ -190,7 +198,9 @@ const stringNumberCollator = new Intl.Collator(undefined, {
 
 function getCellValue(row: ITableItem, keyPath: string): unknown {
   // dot.path support
-  return keyPath.split(".").reduce<unknown>((acc: any, part) => acc?.[part], row);
+  return keyPath
+    .split(".")
+    .reduce<unknown>((acc: any, part) => acc?.[part], row);
 }
 
 function compareValues(a: unknown, b: unknown): number {
@@ -201,22 +211,39 @@ function compareValues(a: unknown, b: unknown): number {
 
   // Date support
   const aTime =
-    a instanceof Date ? a.getTime() : Number.isNaN(Date.parse(String(a))) ? NaN : Date.parse(String(a));
+    a instanceof Date
+      ? a.getTime()
+      : Number.isNaN(Date.parse(String(a)))
+        ? NaN
+        : Date.parse(String(a));
   const bTime =
-    b instanceof Date ? b.getTime() : Number.isNaN(Date.parse(String(b))) ? NaN : Date.parse(String(b));
+    b instanceof Date
+      ? b.getTime()
+      : Number.isNaN(Date.parse(String(b)))
+        ? NaN
+        : Date.parse(String(b));
   if (!Number.isNaN(aTime) && !Number.isNaN(bTime)) return aTime - bTime;
 
   // Numeric fallback (handles "1,234.50", "$99", etc.)
-  const numericA = typeof a === "number" ? a : Number(String(a).replace(/[^0-9.-]+/g, ""));
-  const numericB = typeof b === "number" ? b : Number(String(b).replace(/[^0-9.-]+/g, ""));
-  if (!Number.isNaN(numericA) && !Number.isNaN(numericB) && String(a).trim() !== "" && String(b).trim() !== "") {
+  const numericA =
+    typeof a === "number" ? a : Number(String(a).replace(/[^0-9.-]+/g, ""));
+  const numericB =
+    typeof b === "number" ? b : Number(String(b).replace(/[^0-9.-]+/g, ""));
+  if (
+    !Number.isNaN(numericA) &&
+    !Number.isNaN(numericB) &&
+    String(a).trim() !== "" &&
+    String(b).trim() !== ""
+  ) {
     return numericA - numericB;
   }
 
   return stringNumberCollator.compare(String(a), String(b));
 }
 
-function ariaSortForHeader(header: ITableHeader): "none" | "ascending" | "descending" {
+function ariaSortForHeader(
+  header: ITableHeader
+): "none" | "ascending" | "descending" {
   if (sortKey.value !== (header.sortKey || header.value)) return "none";
   return sortAscending.value ? "ascending" : "descending";
 }
@@ -235,7 +262,10 @@ function toggleSortForColumn(header: ITableHeader): void {
     sortKey.value = key;
     sortAscending.value = true;
   }
-  emit("sort-change", { sortKey: sortKey.value, ascending: sortAscending.value });
+  emit("sort-change", {
+    sortKey: sortKey.value,
+    ascending: sortAscending.value,
+  });
   if (!props.serverSide) resetPage();
 }
 
@@ -258,7 +288,8 @@ function toggleColumnVisibility(key: string): void {
 // Row keys (for selection and v-for)
 function getRowKey(row: ITableItem, index: number): string | number {
   if (typeof props.rowKey === "function") return props.rowKey(row, index);
-  if (typeof props.rowKey === "string" && props.rowKey) return (row as any)[props.rowKey] ?? index;
+  if (typeof props.rowKey === "string" && props.rowKey)
+    return (row as any)[props.rowKey] ?? index;
   return index;
 }
 
@@ -281,9 +312,13 @@ function toggleSelectAllOnPage(): void {
     getRowKey(row, idx + (currentPage.value - 1) * currentPageSize.value)
   );
   if (allRowsOnPageSelected.value) {
-    selectedRowKeys.value = selectedRowKeys.value.filter((k) => !pageKeys.includes(k));
+    selectedRowKeys.value = selectedRowKeys.value.filter(
+      (k) => !pageKeys.includes(k)
+    );
   } else {
-    selectedRowKeys.value = Array.from(new Set([...selectedRowKeys.value, ...pageKeys]));
+    selectedRowKeys.value = Array.from(
+      new Set([...selectedRowKeys.value, ...pageKeys])
+    );
   }
   emit("update:selectedKeys", selectedRowKeys.value);
 }
@@ -299,7 +334,9 @@ function toggleRowSelected(row: ITableItem, index: number): void {
 }
 
 // ============ Derived data ============
-const printableHeaders = computed<ITableHeader[]>(() => props.headers.filter((h) => h.print !== false));
+const printableHeaders = computed<ITableHeader[]>(() =>
+  props.headers.filter((h) => h.print !== false)
+);
 
 const filteredItems = computed<ITableItem[]>(() => {
   if (props.serverSide) return props.items;
@@ -307,7 +344,9 @@ const filteredItems = computed<ITableItem[]>(() => {
   if (!query) return props.items;
   return props.items.filter((row) =>
     visibleColumns.value.some((key) =>
-      String(getCellValue(row, key) ?? "").toLowerCase().includes(query)
+      String(getCellValue(row, key) ?? "")
+        .toLowerCase()
+        .includes(query)
     )
   );
 });
@@ -331,7 +370,10 @@ const paginatedItems = computed<ITableItem[]>(() => {
 
 const totalPages = computed<number>(() => {
   if (props.serverSide || !props.showPagination) return 0;
-  return Math.max(1, Math.ceil(sortedItems.value.length / currentPageSize.value));
+  return Math.max(
+    1,
+    Math.ceil(sortedItems.value.length / currentPageSize.value)
+  );
 });
 
 // Column widths (sample first N rows for perf)
@@ -343,12 +385,18 @@ const columnStyleMap = computed<Record<string, CSSProperties>>(() => {
       styleMap[header.value] = { width: header.width, whiteSpace: "nowrap" };
       continue;
     }
-    const sample = props.items.slice(0, COLUMN_SAMPLE_COUNT).map((row) =>
-      String(getCellValue(row, header.value) ?? "")
+    const sample = props.items
+      .slice(0, COLUMN_SAMPLE_COUNT)
+      .map((row) => String(getCellValue(row, header.value) ?? ""));
+    const maxLength = Math.max(
+      header.value.length,
+      ...sample.map((s) => s.length)
     );
-    const maxLength = Math.max(header.value.length, ...sample.map((s) => s.length));
     const minWidthPx = maxLength * 8 + 24; // 8px/char + padding
-    styleMap[header.value] = { minWidth: `${minWidthPx}px`, whiteSpace: "nowrap" };
+    styleMap[header.value] = {
+      minWidth: `${minWidthPx}px`,
+      whiteSpace: "nowrap",
+    };
   }
   return styleMap;
 });
@@ -392,7 +440,9 @@ const printTable = async (): Promise<void> => {
   const hiddenColumnIndexes: number[] = [];
   props.headers.forEach((header, index) => {
     if (header.print === false) {
-      hiddenColumnIndexes.push(index + (props.showRowNumber ? 1 : 0) + (props.selectable ? 1 : 0));
+      hiddenColumnIndexes.push(
+        index + (props.showRowNumber ? 1 : 0) + (props.selectable ? 1 : 0)
+      );
     }
   });
 
@@ -442,7 +492,7 @@ const printTable = async (): Promise<void> => {
     popup.print();
     popup.close();
   }, 250);
-}
+};
 </script>
 
 <template>
@@ -453,58 +503,115 @@ const printTable = async (): Promise<void> => {
         <div class="flex items-center gap-3">
           <!-- Search -->
           <div class="relative" v-if="showSearch">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <svg
+                class="h-4 w-4 text-gray-400 dark:text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
               </svg>
             </div>
-            <input v-model="rawSearchText" :placeholder="t('search') || 'Search...'"
-              class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            <input
+              v-model="rawSearchText"
+              :placeholder="t('search') || 'Search...'"
+              class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
           </div>
 
           <!-- Column visibility -->
           <div class="relative" v-if="showColumnsButton">
-            <button @click="showColumnPopup = !showColumnPopup" type="button"
-              class="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-200 to-blue-200 dark:from-purple-700 dark:to-blue-700 hover:from-purple-300 hover:to-blue-300 dark:hover:from-purple-800 dark:hover:to-blue-800 text-purple-800 dark:text-blue-100 font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-700 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2">
-                </path>
+            <button
+              @click="showColumnPopup = !showColumnPopup"
+              type="button"
+              class="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-200 to-blue-200 dark:from-purple-700 dark:to-blue-700 hover:from-purple-300 hover:to-blue-300 dark:hover:from-purple-800 dark:hover:to-blue-800 text-purple-800 dark:text-blue-100 font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-300 dark:focus:ring-purple-700 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"
+                ></path>
               </svg>
-              <span class="text-sm font-semibold">{{ t("columns") || "Columns" }}</span>
-              <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': showColumnPopup }" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              <span class="text-sm font-semibold">{{
+                t("columns") || "Columns"
+              }}</span>
+              <svg
+                class="w-3 h-3 transition-transform"
+                :class="{ 'rotate-180': showColumnPopup }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
 
             <!-- Popup -->
-            <div v-if="showColumnPopup"
-              class="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl z-50 min-w-72 backdrop-blur-sm">
+            <div
+              v-if="showColumnPopup"
+              class="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl z-50 min-w-72 backdrop-blur-sm"
+            >
               <div class="p-5">
                 <div class="mb-4 flex justify-between items-center">
                   <span class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ t("visible") }} {{ visibleColumns.length }} {{ t("of") }} {{ props.headers.length }}
+                    {{ t("visible") }} {{ visibleColumns.length }} {{ t("of") }}
+                    {{ props.headers.length }}
                   </span>
-                  <button @click="toggleAllColumns"
-                    class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
-                    {{ visibleColumns.length === props.headers.length ? (t("hideAll") || "Hide All") : (t("showAll") ||
-                    "Show All") }}
+                  <button
+                    @click="toggleAllColumns"
+                    class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                  >
+                    {{
+                      visibleColumns.length === props.headers.length
+                        ? t("hideAll") || "Hide All"
+                        : t("showAll") || "Show All"
+                    }}
                   </button>
                 </div>
 
-                <div class="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
-                  <label v-for="header in props.headers" :key="header.value"
-                    class="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors group">
-                    <input type="checkbox" :value="header.value" v-model="visibleColumns"
-                      class="w-4 h-4 text-blue-600 border-2 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 bg-white dark:bg-gray-700" />
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div
+                  class="space-y-1 max-h-64 overflow-y-auto custom-scrollbar"
+                >
+                  <label
+                    v-for="header in props.headers"
+                    :key="header.value"
+                    class="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer transition-colors group"
+                  >
+                    <input
+                      type="checkbox"
+                      :value="header.value"
+                      v-model="visibleColumns"
+                      class="w-4 h-4 text-blue-600 border-2 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 bg-white dark:bg-gray-700"
+                    />
+                    <span
+                      class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
                       {{ header.caption }}
-                      <span v-if="header.print === false"
-                        class="ml-2 text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full">Print
-                        Hidden</span>
+                      <span
+                        v-if="header.print === false"
+                        class="ml-2 text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full"
+                        >Print Hidden</span
+                      >
                     </span>
                   </label>
                 </div>
@@ -520,28 +627,61 @@ const printTable = async (): Promise<void> => {
         <div class="flex items-center gap-3">
           <!-- Page size -->
           <div v-if="showPagination" class="flex items-center gap-2">
-            <span class="text-sm text-gray-600 dark:text-gray-400">{{ t("rowsPerPage") || "Rows" }}</span>
+            <span class="text-sm text-gray-600 dark:text-gray-400">{{
+              t("rowsPerPage") || "Rows"
+            }}</span>
             <select
               class="px-2 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-gray-100"
-              v-model.number="currentPageSize" @change="emit('update:pageSize', currentPageSize); resetPage();">
-              <option v-for="size in pageSizeOptions" :key="size" :value="size">{{ size }}</option>
+              v-model.number="currentPageSize"
+              @change="
+                emit('update:pageSize', currentPageSize);
+                resetPage();
+              "
+            >
+              <option v-for="size in pageSizeOptions" :key="size" :value="size">
+                {{ size }}
+              </option>
             </select>
           </div>
 
-          <button v-if="showExportButton" @click="exportToExcel"
-            class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <button
+            v-if="showExportButton"
+            @click="exportToExcel"
+            class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
             {{ t("exportExcel") || "Export Excel" }}
           </button>
 
-          <button v-if="showPrintButton" @click="printTable"
-            class="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          <button
+            v-if="showPrintButton"
+            @click="printTable"
+            class="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              />
             </svg>
             {{ t("print") || "Print" }}
           </button>
@@ -552,48 +692,102 @@ const printTable = async (): Promise<void> => {
       </div>
 
       <!-- Printable Table Container -->
-      <div id="printable-table" class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700"
-        role="grid" :aria-rowcount="sortedItems.length">
+      <div
+        id="printable-table"
+        class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700"
+        role="grid"
+        :aria-rowcount="sortedItems.length"
+      >
         <slot name="headerTitle"></slot>
 
         <table class="w-full border-collapse">
           <thead>
             <tr
-              class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-750 border-b border-gray-200 dark:border-gray-600">
-              <th v-if="selectable"
+              class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-750 border-b border-gray-200 dark:border-gray-600"
+            >
+              <th
+                v-if="selectable"
                 class="px-4 py-3 text-center text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600"
-                :class="{ 'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700': stickyHeader }">
-                <input type="checkbox" :checked="allRowsOnPageSelected" @change="toggleSelectAllOnPage"
-                  aria-label="Select all on page" />
+                :class="{
+                  'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700':
+                    stickyHeader,
+                }"
+              >
+                <input
+                  type="checkbox"
+                  :checked="allRowsOnPageSelected"
+                  @change="toggleSelectAllOnPage"
+                  aria-label="Select all on page"
+                />
               </th>
 
-              <th v-if="props.showRowNumber"
+              <th
+                v-if="props.showRowNumber"
                 class="px-4 py-3 text-center text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider border-r border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-700"
-                :class="{ 'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700': stickyHeader }">
+                :class="{
+                  'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700':
+                    stickyHeader,
+                }"
+              >
                 #
               </th>
 
-              <th v-for="header in props.headers" :key="header.value" v-show="visibleColumns.includes(header.value)"
-                :style="getColumnStyle(header.value)" :aria-sort="ariaSortForHeader(header)" :class="[
+              <th
+                v-for="header in props.headers"
+                :key="header.value"
+                v-show="visibleColumns.includes(header.value)"
+                :style="getColumnStyle(header.value)"
+                :aria-sort="ariaSortForHeader(header)"
+                :class="[
                   'px-4 py-3 select-none text-left border-r border-gray-200 dark:border-gray-600 last:border-r-0',
-                  stickyHeader ? 'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700' : '',
-                  header.align === 'center' ? 'text-center' : header.align === 'right' ? 'text-right' : 'text-left',
-                ]">
-                <button type="button" class="w-full flex items-center justify-between focus:outline-none"
-                  :class="header.sortable === false ? 'cursor-default' : 'cursor-pointer hover:opacity-80'"
-                  @click="toggleSortForColumn(header)">
-                  <span class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                  stickyHeader
+                    ? 'sticky top-0 z-10 bg-gray-100 dark:bg-gray-700'
+                    : '',
+                  header.align === 'center'
+                    ? 'text-center'
+                    : header.align === 'right'
+                      ? 'text-right'
+                      : 'text-left',
+                ]"
+              >
+                <button
+                  type="button"
+                  class="w-full flex items-center justify-between focus:outline-none"
+                  :class="
+                    header.sortable === false
+                      ? 'cursor-default'
+                      : 'cursor-pointer hover:opacity-80'
+                  "
+                  @click="toggleSortForColumn(header)"
+                >
+                  <span
+                    class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider"
+                  >
                     {{ header.caption }}
-                    <span v-if="header.print === false" class="ml-1 text-gray-400 dark:text-gray-500 print-hide"
-                      title="Hidden on print">
-                      <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    <span
+                      v-if="header.print === false"
+                      class="ml-1 text-gray-400 dark:text-gray-500 print-hide"
+                      title="Hidden on print"
+                    >
+                      <svg
+                        class="w-4 h-4 inline-block"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                        />
                       </svg>
                     </span>
                   </span>
-                  <span v-if="sortKey === (header.sortKey || header.value)"
-                    class="text-blue-600 dark:text-blue-400 font-bold text-sm">
+                  <span
+                    v-if="sortKey === (header.sortKey || header.value)"
+                    class="text-blue-600 dark:text-blue-400 font-bold text-sm"
+                  >
                     {{ sortAscending ? "↑" : "↓" }}
                   </span>
                 </button>
@@ -602,31 +796,68 @@ const printTable = async (): Promise<void> => {
           </thead>
 
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            <tr v-for="(row, rowIndexOnPage) in paginatedItems"
-              :key="getRowKey(row, rowIndexOnPage + (currentPage - 1) * currentPageSize)"
+            <tr
+              v-for="(row, rowIndexOnPage) in paginatedItems"
+              :key="
+                getRowKey(
+                  row,
+                  rowIndexOnPage + (currentPage - 1) * currentPageSize
+                )
+              "
               class="hover:bg-blue-50 dark:hover:bg-gray-700/50 transition-all duration-150 group"
-              @click="onRowClick(row, rowIndexOnPage)">
-              <td v-if="selectable"
-                class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 font-medium border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                <input type="checkbox"
-                  :checked="selectedRowKeys.includes(getRowKey(row, rowIndexOnPage + (currentPage - 1) * currentPageSize))"
-                  @change="toggleRowSelected(row, rowIndexOnPage + (currentPage - 1) * currentPageSize)"
-                  aria-label="Select row" />
+              @click="onRowClick(row, rowIndexOnPage)"
+            >
+              <td
+                v-if="selectable"
+                class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 font-medium border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50"
+              >
+                <input
+                  type="checkbox"
+                  :checked="
+                    selectedRowKeys.includes(
+                      getRowKey(
+                        row,
+                        rowIndexOnPage + (currentPage - 1) * currentPageSize
+                      )
+                    )
+                  "
+                  @change="
+                    toggleRowSelected(
+                      row,
+                      rowIndexOnPage + (currentPage - 1) * currentPageSize
+                    )
+                  "
+                  aria-label="Select row"
+                />
               </td>
 
-              <td v-if="props.showRowNumber"
-                class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 font-medium border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 group-hover:bg-blue-100 dark:group-hover:bg-gray-600/50">
+              <td
+                v-if="props.showRowNumber"
+                class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 font-medium border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 group-hover:bg-blue-100 dark:group-hover:bg-gray-600/50"
+              >
                 {{ rowIndexOnPage + 1 + (currentPage - 1) * currentPageSize }}
               </td>
 
-              <td v-for="header in props.headers" :key="header.value" v-show="visibleColumns.includes(header.value)"
+              <td
+                v-for="header in props.headers"
+                :key="header.value"
+                v-show="visibleColumns.includes(header.value)"
                 :style="getColumnStyle(header.value)"
                 class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 border-r border-gray-200 dark:border-gray-700 last:border-r-0"
                 :class="[
                   props.dense ? 'py-2' : 'py-3',
-                  header.align === 'center' ? 'text-center' : header.align === 'right' ? 'text-right' : 'text-left',
-                ]">
-                <slot :name="header.value" :row="row" :value="getCellValue(row, header.value)">
+                  header.align === 'center'
+                    ? 'text-center'
+                    : header.align === 'right'
+                      ? 'text-right'
+                      : 'text-left',
+                ]"
+              >
+                <slot
+                  :name="header.value"
+                  :row="row"
+                  :value="getCellValue(row, header.value)"
+                >
                   <!-- Fallback to formatter or raw value -->
                   <template v-if="header.format">
                     {{ header.format(row, getCellValue(row, header.value)) }}
@@ -642,36 +873,57 @@ const printTable = async (): Promise<void> => {
       </div>
 
       <!-- Pagination -->
-      <div class="mt-4 flex justify-between items-center" v-if="showPagination && !serverSide">
+      <div
+        class="mt-4 flex justify-between items-center"
+        v-if="showPagination && !serverSide"
+      >
         <div class="text-sm text-gray-600 dark:text-gray-400">
           {{ t("showing") || "Showing" }}
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{ (currentPage - 1) * currentPageSize + 1
-            }}</span>
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{
+            (currentPage - 1) * currentPageSize + 1
+          }}</span>
           -
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{ Math.min(currentPage * currentPageSize,
-            sortedItems.length) }}</span>
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{
+            Math.min(currentPage * currentPageSize, sortedItems.length)
+          }}</span>
           {{ t("of") || "of" }}
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{ sortedItems.length }}</span>
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{
+            sortedItems.length
+          }}</span>
           {{ t("results") || "results" }}
         </div>
 
         <div class="flex items-center gap-2">
-          <button @click="currentPage = currentPage - 1; emit('update:currentPage', currentPage)"
+          <button
+            @click="
+              currentPage = currentPage - 1;
+              emit('update:currentPage', currentPage);
+            "
             :disabled="currentPage === 1"
-            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:text-gray-100">
+            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:text-gray-100"
+          >
             {{ t("prev") || "Prev" }}
           </button>
 
           <span class="px-3 py-2 text-sm text-gray-600 dark:text-gray-400">
             {{ t("page") || "Page" }}
-            <span class="font-medium text-gray-900 dark:text-gray-100">{{ currentPage }}</span>
+            <span class="font-medium text-gray-900 dark:text-gray-100">{{
+              currentPage
+            }}</span>
             {{ t("of") || "of" }}
-            <span class="font-medium text-gray-900 dark:text-gray-100">{{ totalPages }}</span>
+            <span class="font-medium text-gray-900 dark:text-gray-100">{{
+              totalPages
+            }}</span>
           </span>
 
-          <button @click="currentPage = currentPage + 1; emit('update:currentPage', currentPage)"
+          <button
+            @click="
+              currentPage = currentPage + 1;
+              emit('update:currentPage', currentPage);
+            "
             :disabled="currentPage >= totalPages"
-            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:text-gray-100">
+            class="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:text-gray-100"
+          >
             {{ t("next") || "Next" }}
           </button>
         </div>
@@ -682,19 +934,29 @@ const printTable = async (): Promise<void> => {
     </div>
 
     <!-- No Data Message -->
-    <div v-else-if="!props.items.length && props.showNoData"
-      class="text-center mt-8 py-8 text-gray-500 dark:text-gray-400">
+    <div
+      v-else-if="!props.items.length && props.showNoData"
+      class="text-center mt-8 py-8 text-gray-500 dark:text-gray-400"
+    >
       <div class="text-lg">{{ t(props.titleNoData) || t("noData") }}</div>
     </div>
 
     <!-- No Results Message -->
-    <div v-else-if="!filteredItems.length"
-      class="text-center py-4 text-gray-500 dark:text-gray-400 border-2 border-dotted border-gray-400 rounded-lg">
-      <div class="text-lg">{{ t(props.titleNoData) || "No results found for your search" }}</div>
+    <div
+      v-else-if="!filteredItems.length"
+      class="text-center py-4 text-gray-500 dark:text-gray-400 border-2 border-dotted border-gray-400 rounded-lg"
+    >
+      <div class="text-lg">
+        {{ t(props.titleNoData) || "No results found for your search" }}
+      </div>
     </div>
 
     <!-- Overlay to close popup when clicking outside -->
-    <div v-if="showColumnPopup" @click="showColumnPopup = false" class="fixed inset-0 z-40"></div>
+    <div
+      v-if="showColumnPopup"
+      @click="showColumnPopup = false"
+      class="fixed inset-0 z-40"
+    ></div>
   </div>
 </template>
 
@@ -734,7 +996,6 @@ const printTable = async (): Promise<void> => {
 /* Print simplifications */
 
 @media print {
-
   /* Hide everything under this component… */
   .table-container,
   .table-container * {

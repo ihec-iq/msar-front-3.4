@@ -15,7 +15,7 @@ export const useDirectVoucherStore = defineStore("DirectVoucherStore", () => {
     number: "",
     date: new Date().toISOString().split("T")[0],
     notes: "",
-    Items: [], 
+    Items: [],
     Employee: { name: "", id: 0 },
   });
   const directVouchers = ref<IDirectVoucher[]>([]);
@@ -62,7 +62,9 @@ export const useDirectVoucherStore = defineStore("DirectVoucherStore", () => {
         }
       })
       .catch((errors) => {
-        console.log("in get input get Items For getAvailableItemsVSelect : " + errors);
+        console.log(
+          "in get input get Items For getAvailableItemsVSelect : " + errors
+        );
       });
   }
   async function getEmployees() {
@@ -109,7 +111,7 @@ export const useDirectVoucherStore = defineStore("DirectVoucherStore", () => {
     directVoucher.number = "";
     directVoucher.date = "";
     directVoucher.notes = "";
-    directVoucher.Items = []; 
+    directVoucher.Items = [];
     directVoucher.Employee = { name: "", id: 0 };
   }
   return {

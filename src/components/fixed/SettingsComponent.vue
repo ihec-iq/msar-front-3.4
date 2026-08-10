@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
@@ -7,7 +6,7 @@ import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { ref } from "vue";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
 const { ChangeDirection } = useRtlStore();
-import { useAuthStore } from "@/stores/authStore"; 
+import { useAuthStore } from "@/stores/authStore";
 import type { ILanguage } from "@/stores/i18n/useI18n";
 
 const authStore = useAuthStore();
@@ -28,8 +27,8 @@ const changeLanguage = () => {
 };
 
 //#region Dark Mode
-let isDark = useDark();
-let themeDark = ref(false);
+const isDark = useDark();
+const themeDark = ref(false);
 const toggleDark = useToggle(isDark);
 const changeDark = () => {
   themeDark.value = !themeDark.value;

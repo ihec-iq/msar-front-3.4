@@ -17,7 +17,7 @@ export default [
       middleware: [authMiddleware],
     },
   },
- 
+
   {
     path: "/bonus/add",
     name: "bonusAdd",
@@ -42,7 +42,7 @@ export default [
       middleware: [authMiddleware],
     },
   },
-   //#region Bonus Job Title
+  //#region Bonus Job Title
   {
     path: "/bonusJobTitle/index",
     name: "bonusJobTitleIndex",

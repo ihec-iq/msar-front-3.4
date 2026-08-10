@@ -1,52 +1,55 @@
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
-import { Icon } from '@iconify/vue'
+import { computed } from "vue";
+import { Icon } from "@iconify/vue";
 
 interface Props {
-  title: string
-  value: number | string
-  icon?: string
-  color?: string
-  trend?: number
-  loading?: boolean
+  title: string;
+  value: number | string;
+  icon?: string;
+  color?: string;
+  trend?: number;
+  loading?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  icon: 'mdi-chart-line',
-  color: 'blue',
+  icon: "mdi-chart-line",
+  color: "blue",
   loading: false,
-})
+});
 
 const cardClass = computed(() => {
-  const baseClass = 'bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow'
-  return baseClass
-})
+  const baseClass =
+    "bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow";
+  return baseClass;
+});
 
 const iconColor = computed(() => {
   const colors: Record<string, string> = {
-    blue: 'text-blue-500',
-    green: 'text-green-500',
-    red: 'text-red-500',
-    yellow: 'text-yellow-500',
-    purple: 'text-purple-500',
-  }
-  return colors[props.color] || colors.blue
-})
+    blue: "text-blue-500",
+    green: "text-green-500",
+    red: "text-red-500",
+    yellow: "text-yellow-500",
+    purple: "text-purple-500",
+  };
+  return colors[props.color] || colors.blue;
+});
 
 const trendClass = computed(() => {
-  if (!props.trend) return ''
-  return props.trend > 0 ? 'text-green-600' : 'text-red-600'
-})
+  if (!props.trend) return "";
+  return props.trend > 0 ? "text-green-600" : "text-red-600";
+});
 
 const trendIcon = computed(() => {
-  if (!props.trend) return ''
-  return props.trend > 0 ? 'mdi:trending-up' : 'mdi:trending-down'
-})
+  if (!props.trend) return "";
+  return props.trend > 0 ? "mdi:trending-up" : "mdi:trending-down";
+});
 
 const mainIcon = computed(() => {
   // Convert mdi-icon-name to mdi:icon-name format
-  return props.icon.startsWith('mdi:') ? props.icon : `mdi:${props.icon.replace('mdi-', '')}`
-})
+  return props.icon.startsWith("mdi:")
+    ? props.icon
+    : `mdi:${props.icon.replace("mdi-", "")}`;
+});
 </script>
 
 <template>
@@ -58,7 +61,9 @@ const mainIcon = computed(() => {
           <div class="h-8 bg-gray-200 rounded w-24"></div>
         </div>
         <p v-else class="text-3xl font-bold text-gray-900">
-          {{ typeof value === 'number' ? value.toLocaleString('ar-EG') : value }}
+          {{
+            typeof value === "number" ? value.toLocaleString("ar-EG") : value
+          }}
         </p>
 
         <div v-if="trend" class="flex items-center mt-2" :class="trendClass">
@@ -68,7 +73,10 @@ const mainIcon = computed(() => {
       </div>
 
       <div class="mr-4">
-        <div class="w-12 h-12 rounded-full bg-opacity-10 flex items-center justify-center" :class="`bg-${color}-500`">
+        <div
+          class="w-12 h-12 rounded-full bg-opacity-10 flex items-center justify-center"
+          :class="`bg-${color}-500`"
+        >
           <Icon :icon="mainIcon" class="text-2xl" :class="iconColor" />
         </div>
       </div>

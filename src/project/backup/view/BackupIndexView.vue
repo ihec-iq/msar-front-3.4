@@ -243,8 +243,18 @@ const goToSettings = () => {
 <template>
   <IPage :HeaderTitle="t('Backup.List')">
     <template #HeaderButtons>
-      <IButton width="28" :onClick="handleRunBackup" :text="t('Backup.RunBackup')" :disabled="isRunningBackup" />
-      <IButton width="28" :onClick="goToSettings" :text="t('Settings')" class="ms-2" />
+      <IButton
+        width="28"
+        :onClick="handleRunBackup"
+        :text="t('Backup.RunBackup')"
+        :disabled="isRunningBackup"
+      />
+      <IButton
+        width="28"
+        :onClick="goToSettings"
+        :text="t('Settings')"
+        class="ms-2"
+      />
     </template>
 
     <IPageContent>
@@ -257,9 +267,18 @@ const goToSettings = () => {
               <p class="text-2xl font-bold text-gray-800">{{ totalBackups }}</p>
             </div>
             <div class="bg-blue-100 rounded-full p-3">
-              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+              <svg
+                class="w-8 h-8 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+                />
               </svg>
             </div>
           </div>
@@ -274,9 +293,18 @@ const goToSettings = () => {
               </p>
             </div>
             <div class="bg-green-100 rounded-full p-3">
-              <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+              <svg
+                class="w-8 h-8 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
+                />
               </svg>
             </div>
           </div>
@@ -295,9 +323,18 @@ const goToSettings = () => {
               </p>
             </div>
             <div class="bg-purple-100 rounded-full p-3">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                class="w-8 h-8 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
           </div>
@@ -308,14 +345,24 @@ const goToSettings = () => {
       <div class="bg-white rounded-lg shadow p-4 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">بحث</label>
-            <input v-model="searchQuery" type="text" placeholder="ابحث في النسخ..."
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >بحث</label
+            >
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="ابحث في النسخ..."
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">النوع</label>
-            <select v-model="selectedType"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >النوع</label
+            >
+            <select
+              v-model="selectedType"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               <option value="all">الكل</option>
               <option value="both">كامل</option>
               <option value="db">قاعدة البيانات</option>
@@ -323,18 +370,26 @@ const goToSettings = () => {
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">ترتيب حسب</label>
-            <select v-model="sortBy"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >ترتيب حسب</label
+            >
+            <select
+              v-model="sortBy"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               <option value="date">التاريخ</option>
               <option value="name">الاسم</option>
               <option value="size">الحجم</option>
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">الترتيب</label>
-            <select v-model="sortOrder"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >الترتيب</label
+            >
+            <select
+              v-model="sortOrder"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               <option value="desc">تنازلي</option>
               <option value="asc">تصاعدي</option>
             </select>
@@ -352,19 +407,29 @@ const goToSettings = () => {
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   اسم الملف
                 </th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   النوع
                 </th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   الحجم
                 </th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   التاريخ
                 </th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   الإجراءات
                 </th>
               </tr>
@@ -375,11 +440,14 @@ const goToSettings = () => {
                   {{ getFileName(file.path) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" :class="{
-                    'bg-blue-100 text-blue-800': file.type === 'both',
-                    'bg-green-100 text-green-800': file.type === 'db',
-                    'bg-yellow-100 text-yellow-800': file.type === 'files',
-                  }">
+                  <span
+                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                    :class="{
+                      'bg-blue-100 text-blue-800': file.type === 'both',
+                      'bg-green-100 text-green-800': file.type === 'db',
+                      'bg-yellow-100 text-yellow-800': file.type === 'files',
+                    }"
+                  >
                     {{
                       file.type === "both"
                         ? "كامل"
@@ -396,22 +464,61 @@ const goToSettings = () => {
                   {{ formatDate(file.lastModified) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button @click="handleDownload(file)" class="text-blue-600 hover:text-blue-900 me-3" title="تحميل">
-                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  <button
+                    @click="handleDownload(file)"
+                    class="text-blue-600 hover:text-blue-900 me-3"
+                    title="تحميل"
+                  >
+                    <svg
+                      class="w-5 h-5 inline"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                      />
                     </svg>
                   </button>
-                  <button @click="goToRestore(file)" class="text-green-600 hover:text-green-900 me-3" title="استعادة">
-                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  <button
+                    @click="goToRestore(file)"
+                    class="text-green-600 hover:text-green-900 me-3"
+                    title="استعادة"
+                  >
+                    <svg
+                      class="w-5 h-5 inline"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
                     </svg>
                   </button>
-                  <button @click="handleDelete(file)" class="text-red-600 hover:text-red-900" title="حذف">
-                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  <button
+                    @click="handleDelete(file)"
+                    class="text-red-600 hover:text-red-900"
+                    title="حذف"
+                  >
+                    <svg
+                      class="w-5 h-5 inline"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </button>
                 </td>
@@ -422,16 +529,22 @@ const goToSettings = () => {
 
         <!-- Delete All Button -->
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <button @click="handleDeleteAll"
+          <button
+            @click="handleDeleteAll"
             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-            :disabled="backupFiles.length === 0">
+            :disabled="backupFiles.length === 0"
+          >
             حذف جميع النسخ
           </button>
         </div>
       </div>
     </IPageContent>
     <template #Footer>
-      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+      <IFooterCrud
+        :show-add="false"
+        :show-update="false"
+        :show-delete="false"
+      />
     </template>
   </IPage>
 </template>

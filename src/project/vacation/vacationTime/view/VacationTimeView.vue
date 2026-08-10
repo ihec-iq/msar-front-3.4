@@ -26,7 +26,7 @@ import { makeFormDataFromObject } from "@/utilities/tools";
 const { validate, min, required, isObject, foreignKey, max, number } =
   useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {

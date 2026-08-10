@@ -90,21 +90,31 @@ const formatSize = (size?: number) => {
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "success": return "bg-green-100 text-green-800";
-    case "failed": return "bg-red-100 text-red-800";
-    case "running": return "bg-blue-100 text-blue-800";
-    case "pending": return "bg-yellow-100 text-yellow-800";
-    default: return "bg-gray-100 text-gray-800";
+    case "success":
+      return "bg-green-100 text-green-800";
+    case "failed":
+      return "bg-red-100 text-red-800";
+    case "running":
+      return "bg-blue-100 text-blue-800";
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    default:
+      return "bg-gray-100 text-gray-800";
   }
 };
 
 const getStatusLabel = (status: string) => {
   switch (status) {
-    case "success": return "نجح";
-    case "failed": return "فشل";
-    case "running": return "قيد التشغيل";
-    case "pending": return "قيد الانتظار";
-    default: return status;
+    case "success":
+      return "نجح";
+    case "failed":
+      return "فشل";
+    case "running":
+      return "قيد التشغيل";
+    case "pending":
+      return "قيد الانتظار";
+    default:
+      return status;
   }
 };
 
@@ -114,7 +124,12 @@ const filteredLogsCount = computed(() => logs.value.length);
 <template>
   <IPage :HeaderTitle="t('Backup.Logs')">
     <template #HeaderButtons>
-      <IButton width="24" :onClick="refreshLogs" text="تحديث" :disabled="isLoadingLogs" />
+      <IButton
+        width="24"
+        :onClick="refreshLogs"
+        text="تحديث"
+        :disabled="isLoadingLogs"
+      />
     </template>
 
     <IPageContent>
@@ -123,9 +138,13 @@ const filteredLogsCount = computed(() => logs.value.length);
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <!-- Status Filter -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">الحالة</label>
-            <select v-model="filters.status"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >الحالة</label
+            >
+            <select
+              v-model="filters.status"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               <option value="all">الكل</option>
               <option value="success">نجح</option>
               <option value="failed">فشل</option>
@@ -136,9 +155,13 @@ const filteredLogsCount = computed(() => logs.value.length);
 
           <!-- Backup Type Filter -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">النوع</label>
-            <select v-model="filters.type"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >النوع</label
+            >
+            <select
+              v-model="filters.type"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               <option value="all">الكل</option>
               <option value="manual">يدوي</option>
               <option value="auto">تلقائي</option>
@@ -147,9 +170,13 @@ const filteredLogsCount = computed(() => logs.value.length);
 
           <!-- Limit Filter -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">عدد النتائج</label>
-            <select v-model.number="filters.limit"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >عدد النتائج</label
+            >
+            <select
+              v-model.number="filters.limit"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               <option :value="10">10</option>
               <option :value="25">25</option>
               <option :value="50">50</option>
@@ -159,14 +186,18 @@ const filteredLogsCount = computed(() => logs.value.length);
 
           <!-- Action Buttons -->
           <div class="flex items-end gap-2">
-            <button @click="applyFilters"
+            <button
+              @click="applyFilters"
               class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-              :disabled="isLoadingLogs">
+              :disabled="isLoadingLogs"
+            >
               تطبيق
             </button>
-            <button @click="clearFilters"
+            <button
+              @click="clearFilters"
               class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 disabled:opacity-50"
-              :disabled="isLoadingLogs">
+              :disabled="isLoadingLogs"
+            >
               إعادة تعيين
             </button>
           </div>
@@ -174,36 +205,75 @@ const filteredLogsCount = computed(() => logs.value.length);
 
         <!-- Results Count -->
         <div class="mt-3 text-sm text-gray-600">
-          عدد السجلات: <span class="font-semibold">{{ filteredLogsCount }}</span>
+          عدد السجلات:
+          <span class="font-semibold">{{ filteredLogsCount }}</span>
         </div>
       </div>
 
       <!-- Logs Table -->
       <div class="bg-white rounded-lg shadow">
         <SimpleLoading v-if="isLoadingLogs" />
-        <div v-else-if="logs.length === 0" class="p-8 text-center text-gray-500">
+        <div
+          v-else-if="logs.length === 0"
+          class="p-8 text-center text-gray-500"
+        >
           <div class="text-4xl mb-2">📝</div>
           <p class="text-lg font-medium">لا توجد سجلات</p>
-          <p class="text-sm mt-1">لم يتم العثور على سجلات مطابقة للفلاتر المحددة</p>
+          <p class="text-sm mt-1">
+            لم يتم العثور على سجلات مطابقة للفلاتر المحددة
+          </p>
         </div>
         <div v-else class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase w-12"></th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">#</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">النوع</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحجم</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المدة</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">التاريخ</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الرسالة</th>
+                <th
+                  class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase w-12"
+                ></th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                >
+                  #
+                </th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                >
+                  النوع
+                </th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                >
+                  الحالة
+                </th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                >
+                  الحجم
+                </th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                >
+                  المدة
+                </th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                >
+                  التاريخ
+                </th>
+                <th
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                >
+                  الرسالة
+                </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <template v-for="log in logs" :key="log.id">
                 <!-- Main Row -->
-                <tr class="hover:bg-gray-50 cursor-pointer transition-colors" @click="toggleExpand(log.id)">
+                <tr
+                  class="hover:bg-gray-50 cursor-pointer transition-colors"
+                  @click="toggleExpand(log.id)"
+                >
                   <td class="px-4 py-4 text-center">
                     <button class="text-gray-400 hover:text-gray-600">
                       <span v-if="expandedLogId === log.id">▼</span>
@@ -212,21 +282,38 @@ const filteredLogsCount = computed(() => logs.value.length);
                   </td>
                   <td class="px-6 py-4 text-sm text-gray-900">{{ log.id }}</td>
                   <td class="px-6 py-4">
-                    <span class="px-2 py-1 text-xs rounded-full"
-                      :class="log.type === 'auto' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'">
+                    <span
+                      class="px-2 py-1 text-xs rounded-full"
+                      :class="
+                        log.type === 'auto'
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-purple-100 text-purple-800'
+                      "
+                    >
                       {{ log.type === "auto" ? "تلقائي" : "يدوي" }}
                     </span>
                   </td>
                   <td class="px-6 py-4">
-                    <span class="px-2 py-1 text-xs rounded-full" :class="getStatusColor(log.status)">
+                    <span
+                      class="px-2 py-1 text-xs rounded-full"
+                      :class="getStatusColor(log.status)"
+                    >
                       {{ getStatusLabel(log.status) }}
                     </span>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-500">{{ formatSize(log.total_size) }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-500">{{ formatDuration(log.duration) }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-500">{{ formatDate(log.created_at) }}</td>
                   <td class="px-6 py-4 text-sm text-gray-500">
-                    <span class="truncate max-w-xs block">{{ log.message || "-" }}</span>
+                    {{ formatSize(log.total_size) }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500">
+                    {{ formatDuration(log.duration) }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500">
+                    {{ formatDate(log.created_at) }}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500">
+                    <span class="truncate max-w-xs block">{{
+                      log.message || "-"
+                    }}</span>
                   </td>
                 </tr>
 
@@ -237,23 +324,36 @@ const filteredLogsCount = computed(() => logs.value.length);
                       <!-- Left Column -->
                       <div class="space-y-3">
                         <div>
-                          <span class="font-semibold text-gray-700">تشمل الملفات:</span>
-                          <span class="ms-2">{{ log.include_files ? "نعم" : "لا" }}</span>
+                          <span class="font-semibold text-gray-700"
+                            >تشمل الملفات:</span
+                          >
+                          <span class="ms-2">{{
+                            log.include_files ? "نعم" : "لا"
+                          }}</span>
                         </div>
 
                         <div v-if="log.databases && log.databases.length > 0">
-                          <span class="font-semibold text-gray-700">قواعد البيانات:</span>
+                          <span class="font-semibold text-gray-700"
+                            >قواعد البيانات:</span
+                          >
                           <div class="mt-1 flex flex-wrap gap-1">
-                            <span v-for="db in log.databases" :key="db"
-                              class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                            <span
+                              v-for="db in log.databases"
+                              :key="db"
+                              class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                            >
                               {{ db }}
                             </span>
                           </div>
                         </div>
 
                         <div v-if="log.checksum">
-                          <span class="font-semibold text-gray-700">Checksum:</span>
-                          <div class="mt-1 font-mono text-xs bg-gray-100 p-2 rounded break-all">
+                          <span class="font-semibold text-gray-700"
+                            >Checksum:</span
+                          >
+                          <div
+                            class="mt-1 font-mono text-xs bg-gray-100 p-2 rounded break-all"
+                          >
                             {{ log.checksum }}
                           </div>
                         </div>
@@ -262,26 +362,46 @@ const filteredLogsCount = computed(() => logs.value.length);
                       <!-- Right Column -->
                       <div class="space-y-3">
                         <div v-if="log.started_at">
-                          <span class="font-semibold text-gray-700">وقت البدء:</span>
-                          <span class="ms-2">{{ formatDate(log.started_at) }}</span>
+                          <span class="font-semibold text-gray-700"
+                            >وقت البدء:</span
+                          >
+                          <span class="ms-2">{{
+                            formatDate(log.started_at)
+                          }}</span>
                         </div>
 
                         <div v-if="log.completed_at">
-                          <span class="font-semibold text-gray-700">وقت الانتهاء:</span>
-                          <span class="ms-2">{{ formatDate(log.completed_at) }}</span>
+                          <span class="font-semibold text-gray-700"
+                            >وقت الانتهاء:</span
+                          >
+                          <span class="ms-2">{{
+                            formatDate(log.completed_at)
+                          }}</span>
                         </div>
 
                         <div v-if="log.error_details" class="col-span-2">
-                          <span class="font-semibold text-red-700">تفاصيل الخطأ:</span>
-                          <div class="mt-1 p-3 bg-red-50 border border-red-200 rounded text-red-800">
+                          <span class="font-semibold text-red-700"
+                            >تفاصيل الخطأ:</span
+                          >
+                          <div
+                            class="mt-1 p-3 bg-red-50 border border-red-200 rounded text-red-800"
+                          >
                             {{ log.error_details }}
                           </div>
                         </div>
 
                         <div v-if="log.files && log.files.length > 0">
-                          <span class="font-semibold text-gray-700">الملفات المضمنة:</span>
-                          <div class="mt-1 text-xs text-gray-600 max-h-20 overflow-y-auto">
-                            <div v-for="file in log.files" :key="file" class="py-1">
+                          <span class="font-semibold text-gray-700"
+                            >الملفات المضمنة:</span
+                          >
+                          <div
+                            class="mt-1 text-xs text-gray-600 max-h-20 overflow-y-auto"
+                          >
+                            <div
+                              v-for="file in log.files"
+                              :key="file"
+                              class="py-1"
+                            >
                               {{ file }}
                             </div>
                           </div>
@@ -297,7 +417,11 @@ const filteredLogsCount = computed(() => logs.value.length);
       </div>
     </IPageContent>
     <template #Footer>
-      <IFooterCrud :show-add="false" :show-update="false" :show-delete="false" />
+      <IFooterCrud
+        :show-add="false"
+        :show-update="false"
+        :show-delete="false"
+      />
     </template>
   </IPage>
 </template>

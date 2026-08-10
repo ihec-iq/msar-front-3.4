@@ -7,8 +7,7 @@ import { useRouter } from "vue-router";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import PageTitle from "@/components/general/namePage.vue";
 import { t } from "@/utilities/I18nPlugin";
- 
- 
+
 const permissionsStore = usePermissionsStore();
 const namePage = ref("Add Role");
 // const { permissions } = permissionsStore;
