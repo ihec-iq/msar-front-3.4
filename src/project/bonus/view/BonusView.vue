@@ -8,7 +8,7 @@ import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import vSelect from "vue-select";
 import { useBonusStore } from "@/project/bonus/bonusStore";
-import { SuccessToast } from "@/utilities/Toast";
+import { SuccessToast } from "@/utilities/Toast2";
 import type { IEmployeeLite } from "@/project/employee/IEmployee";
 import type { IDegreeStage } from "@/project/bonus/IBonus";
 import { ConvertToMoneyFormat } from "@/utilities/tools";
@@ -172,7 +172,7 @@ onMounted(async () => {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         preIcon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -184,13 +184,14 @@ onMounted(async () => {
         <IRow v-if="isLoading">
           <div class="skeleton h-32 w-full"></div>
         </IRow>
+
         <IRow2
           v-else-if="Bonus.Employee.BonusJobTitle.id != 0"
           :title="t('Bonus.EmployeeDataCurrent')"
           :gap="2"
-          class="rounded-sm border-2 border-solid border-red-400"
+          class="rounded-sm pb-3 border-2 border-solid border-red-400"
         >
-          <ICol2 :md="6" :lg="6">
+          <ICol2 :md="6" :lg="6" class="m-1">
             <ILabel :title="t('Bonus.JobTitle')">
               {{ Bonus.Employee.BonusJobTitle.name }}
             </ILabel>
@@ -213,7 +214,7 @@ onMounted(async () => {
         </IRow2>
 
         <!-- for new Bonus of employee -->
-        <IRow col-lg="4" col-md="2" col-sm="1">
+        <IRow cols-lg="4" cols-md="2" cols-sm="1">
           <ICol span="1" span-md="2" span-sm="4">
             <div
               class="md:text-sm text-base mr-3 mb-2 font-bold text-text dark:text-textLight"
@@ -295,7 +296,7 @@ onMounted(async () => {
         <IRow>
           <ICol span="1" span-md="1" span-sm="1">
             <IButton2
-              :type="EnumButtonType.Outlined"
+              :variant="EnumButtonType.Outlined"
               :onClick="
                 () => {
                   Bonus.notes = ' ';

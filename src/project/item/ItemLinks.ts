@@ -21,7 +21,7 @@ export const ItemLinks: Array<IconUserLink> = [
     iconX:
       ' <svg    xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"    stroke="currentColor"   ><path  fill="currentColor"  d="M4 2a2 2 0 0 0-2 2v10h2V4h10V2H4m4 4a2 2 0 0 0-2 2v10h2V8h10V6H8m12 6v8h-8v-8h8m0-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2Z"/>  </svg>',
     tab: "itemPortal",
-    description: "المواد الاساسية في النظام والاصناف الخاصة بها",
+    description: "مواد الادخال المخزني",
     permissions: [EnumPermission.ShowItems],
     isActive: true,
     children: [
@@ -48,5 +48,5 @@ export const ItemLinks: Array<IconUserLink> = [
         isActive: true,
       },
     ],
-  }
+  },
 ];

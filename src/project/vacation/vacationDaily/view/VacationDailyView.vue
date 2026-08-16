@@ -15,11 +15,11 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 
 const { validate, min, required, foreignKey, max, number } = useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {
@@ -277,7 +277,7 @@ const printWindow = () => {
     ${prtHtml}
   </body>
 </html>`);
-  var options = {
+  const options = {
     silent: false,
     printBackground: true,
     color: false,
@@ -310,12 +310,12 @@ const ChangeDate = () => {
   const days = Math.round(
     (new Date(vacationDaily.value.dayTo).valueOf() -
       new Date(vacationDaily.value.dayFrom).valueOf()) /
-    oneDay
+      oneDay
   );
   vacationDaily.value.record = days;
 };
 const ChangeDateRecord = () => {
-  let d = new Date(vacationDaily.value.dayFrom);
+  const d = new Date(vacationDaily.value.dayFrom);
   d.setDate(d.getDate() + vacationDaily.value.record);
   vacationDaily.value.dayTo = d.toISOString().split("T")[0];
 };
@@ -339,7 +339,8 @@ const filterEmployeesBySection = (_employee: IEmployee) => {
   if (
     (vacationDaily.value.Vacation.Employee?.EmployeePosition.level === "1" ||
       vacationDaily.value.Vacation.Employee?.EmployeePosition.level === "0") &&
-    (_employee.EmployeePosition.level === "0" || _employee.EmployeePosition.level === "1") &&
+    (_employee.EmployeePosition.level === "0" ||
+      _employee.EmployeePosition.level === "1") &&
     _employee.id != vacationDaily.value.Vacation.Employee?.id
   ) {
     return true;
@@ -348,14 +349,14 @@ const filterEmployeesBySection = (_employee: IEmployee) => {
     vacationDaily.value.Vacation.Employee.isMoveSection == 1 &&
     vacationDaily.value.Vacation?.Employee.MoveSection.id != 1 &&
     _employee.Section.id ==
-    vacationDaily.value.Vacation?.Employee.MoveSection.id &&
+      vacationDaily.value.Vacation?.Employee.MoveSection.id &&
     _employee.id != vacationDaily.value.Vacation.Employee?.id
   ) {
     return true;
   } else {
     if (
       _employee.Section.id ==
-      vacationDaily.value.Vacation?.Employee.Section.id &&
+        vacationDaily.value.Vacation?.Employee.Section.id &&
       _employee.id != vacationDaily.value.Vacation.Employee?.id
     ) {
       return true;
@@ -380,7 +381,6 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IPageContent from "@/components/ihec/IPageContent.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import { t } from "@/utilities/I18nPlugin";
-
 
 onMounted(async () => {
   //console.log(can("show items1"));
@@ -416,78 +416,125 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading" id="printMe1">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col="4" col-lg="4" col-md="2" col-sm="1">
+          <IRow cols="4" cols-lg="4" cols-md="2" cols-sm="1">
             <ICol>
-              <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
                 {{ t("DateFrom") }}
               </div>
-              <input v-model="vacationDaily.dayFrom" type="date" @change="ChangeDate()" class="DateStyle" />
+              <input
+                v-model="vacationDaily.dayFrom"
+                type="date"
+                @change="ChangeDate()"
+                class="DateStyle"
+              />
             </ICol>
             <ICol>
-              <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
                 {{ t("DateTo") }}
               </div>
-              <input v-model="vacationDaily.dayTo" type="date" @change="ChangeDate()"
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+              <input
+                v-model="vacationDaily.dayTo"
+                type="date"
+                @change="ChangeDate()"
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              />
             </ICol>
             <ICol>
-              <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
                 {{ t("RecordDaily") }}
               </div>
-              <input v-model="vacationDaily.record" type="number" @input="ChangeDateRecord()" min="1"
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight" />
+              <input
+                v-model="vacationDaily.record"
+                type="number"
+                @input="ChangeDateRecord()"
+                min="1"
+                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+              />
             </ICol>
             <ICol>
-              <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
                 {{ t("OutputVoucherEmployeeRequest") }}
               </div>
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="vacationDaily.Vacation" :options="vacations" :reduce="(vacation: IVacation) => vacation"
-                label="name" :getOptionLabel="(vacation: IVacation) => vacation.Employee.name
-                  ">
+                v-model="vacationDaily.Vacation"
+                :options="vacations"
+                :reduce="(vacation: IVacation) => vacation"
+                label="name"
+                :getOptionLabel="
+                  (vacation: IVacation) => vacation.Employee.name
+                "
+              >
                 <template #option="{ Employee }">
                   <div>
-                    <span>{{ Employee.name }}</span><br />
+                    <span>{{ Employee.name }}</span
+                    ><br />
                     <span class="text-xs align-super text-gray-400">
-                      ({{ Employee.Section.name }})</span>
+                      ({{ Employee.Section.name }})</span
+                    >
                   </div>
                 </template>
               </vSelect>
             </ICol>
             <ICol>
-              <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
                 {{ t("OutputVoucherEmployeeAlter") }}
               </div>
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="vacationDaily.EmployeeAlter" :options="SelectedEmployees"
-                :reduce="(employee: IEmployee) => employee" label="name"
-                :getOptionLabel="(employee: IEmployee) => employee.name">
+                v-model="vacationDaily.EmployeeAlter"
+                :options="SelectedEmployees"
+                :reduce="(employee: IEmployee) => employee"
+                label="name"
+                :getOptionLabel="(employee: IEmployee) => employee.name"
+              >
                 <template #option="{ name, Section }">
                   <div>
                     <span>{{ name }}</span>
                     <br />
                     <span class="text-xs align-super text-gray-400">
-                      ({{ Section.name }})</span>
+                      ({{ Section.name }})</span
+                    >
                   </div>
                 </template>
               </vSelect>
             </ICol>
             <ICol>
-              <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+              <div
+                class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+              >
                 {{ t("VacationReason") }}
               </div>
               <vSelect
                 class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="vacationDaily.Reason" :options="reasons" :reduce="(reason: IVacationReason) => reason"
-                label="name" :getOptionLabel="(reason: IVacationReason) => reason.name">
+                v-model="vacationDaily.Reason"
+                :options="reasons"
+                :reduce="(reason: IVacationReason) => reason"
+                label="name"
+                :getOptionLabel="(reason: IVacationReason) => reason.name"
+              >
                 <template #option="{ name }">
                   <div>
                     <span>{{ name }}</span>
@@ -501,23 +548,48 @@ const reset = () => {
       <IErrorMessages :validationResult="validationResult" />
     </IPageContent>
     <template #Footer>
-      <IFooterCrud :isAdd="vacationDaily.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete"
-        :showAdd="can(EnumPermission.AddVacationDaily) == 1" :showUpdate="can(EnumPermission.EditVacationDaily) == 1"
-        :showDelete="can(EnumPermission.DeleteVacationDaily) == 1">
+      <IFooterCrud
+        :isAdd="vacationDaily.id == 0"
+        :onCreate="store"
+        :onUpdate="update"
+        :onDelete="Delete"
+        :showAdd="can(EnumPermission.AddVacationDaily) == 1"
+        :showUpdate="can(EnumPermission.EditVacationDaily) == 1"
+        :showDelete="can(EnumPermission.DeleteVacationDaily) == 1"
+      >
         <template #Pre>
-          <IButton2 v-if="vacationDaily.id != 0" :text="t('Print')" pre-icon="printer" :type="EnumButtonType.Outlined"
-            :onClick="printWindow" />
-          <IButton2 v-if="vacationDaily.id == 0" :text="t('CreateWithPrint')" :type="EnumButtonType.Outlined"
-            pre-icon="printer-pos-plus" :onClick="storeWithPrint" />
-          <IButton2 v-if="vacationDaily.id == 0" text="Test" :type="EnumButtonType.Outlined" pre-icon="printer-pos-plus"
-            :onClick="printWindow" />
+          <IButton2
+            v-if="vacationDaily.id != 0"
+            :text="t('Print')"
+            pre-icon="printer"
+            :variant="EnumButtonType.Outlined"
+            :onClick="printWindow"
+          />
+          <IButton2
+            v-if="vacationDaily.id == 0"
+            :text="t('CreateWithPrint')"
+            :variant="EnumButtonType.Outlined"
+            pre-icon="printer-pos-plus"
+            :onClick="storeWithPrint"
+          />
+          <IButton2
+            v-if="vacationDaily.id == 0"
+            text="Test"
+            :variant="EnumButtonType.Outlined"
+            pre-icon="printer-pos-plus"
+            :onClick="printWindow"
+          />
         </template>
       </IFooterCrud>
     </template>
   </IPage>
 
-  <div class="hidden print:w-[900px] w-[900px] tablePrint m-2 print:bg-white bg-white" id="printMe"
-    style="background-color: white !important" print:rtl>
+  <div
+    class="hidden print:w-[900px] w-[900px] tablePrint m-2 print:bg-white bg-white"
+    id="printMe"
+    style="background-color: white !important"
+    print:rtl
+  >
     <div id="Header" class="w-[900px] print:w-[900px] print:bg-white bg-white">
       <br />
       <br />
@@ -527,7 +599,11 @@ const reset = () => {
       <br />
       <br />
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
-      <img src="@/assets/image/ihec_logo_header1.png" class="downHeader w-[900px] print:w-[900px]" alt="" />
+      <img
+        src="@/assets/image/ihec_logo_header1.png"
+        class="downHeader w-[900px] print:w-[900px]"
+        alt=""
+      />
     </div>
     <div id="body" class="print:bg-white bg-white">
       <table
@@ -536,7 +612,8 @@ const reset = () => {
           width: 890px !important ;
           margin: 3px !important ;
           text-align: right;
-        ">
+        "
+      >
         <tr class="RowTable">
           <td class="RowHeader w-[50%]">اسم الموظف</td>
           <td class="RowContent w-[50%]">
@@ -574,7 +651,9 @@ const reset = () => {
       </table>
     </div>
 
-    <div class="divFooter1 z-0 w-[900px] print:w-[900px] print:bg-white bg-white">
+    <div
+      class="divFooter1 z-0 w-[900px] print:w-[900px] print:bg-white bg-white"
+    >
       <!-- <img src="@/assets/ihec_logo_header1.png" class="print-img" /> -->
       <table
         class="print:bg-white bg-white float-right w-[900px] print:w-[900px] content-center print:rtl rtl border-[#27156D] border-solid border-2 print:border-[#27156D] print:border-solid print:border-2"
@@ -582,7 +661,8 @@ const reset = () => {
           width: 890px !important ;
           margin: 3px !important ;
           text-align: right;
-        ">
+        "
+      >
         <caption></caption>
         <tr class="RowTable margin15" style="align-content: center !important">
           <td class="font-bold text-xl text-text dark:text-textLight p-10">
@@ -603,12 +683,17 @@ const reset = () => {
           </td>
         </tr>
       </table>
-      <img alt="" src="@/assets/image/ihec_logo_footer1.png" class="w-[903px] print:w-[903px]"
-        style="margin-right: -10" />
+      <img
+        alt=""
+        src="@/assets/image/ihec_logo_footer1.png"
+        class="w-[903px] print:w-[903px]"
+        style="margin-right: -10"
+      />
     </div>
   </div>
 </template>
 <style scoped>
+@reference "../../../../assets/tailwind.css";
 .RowHeader {
   @apply font-bold pr-2 pt-2 text-xl outline-none h-10 px-3 py-2 rounded-md text-text dark:text-textLight;
 }
@@ -621,7 +706,8 @@ const reset = () => {
   @apply border-solid border-2 border-[#27156D];
 }
 
-@media screen {}
+@media screen {
+}
 
 @media print {
   table {

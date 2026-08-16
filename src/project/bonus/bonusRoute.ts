@@ -17,7 +17,7 @@ export default [
       middleware: [authMiddleware],
     },
   },
- 
+
   {
     path: "/bonus/add",
     name: "bonusAdd",
@@ -42,7 +42,7 @@ export default [
       middleware: [authMiddleware],
     },
   },
-   //#region Bonus Job Title
+  //#region Bonus Job Title
   {
     path: "/bonusJobTitle/index",
     name: "bonusJobTitleIndex",
@@ -79,7 +79,15 @@ export default [
   {
     path: "/bonusChecker",
     name: "bonusCheckerView",
-    component: () => import("@/project/bonus/view/BonusCheckerView.vue"),
+    component: () => import("@/project/bonus/view/BonusCheckerView3.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
+    path: "/bonusChecker3",
+    name: "bonusCheckerView3",
+    component: () => import("@/project/bonus/view/BonusCheckerView3.vue"),
     meta: {
       middleware: [authMiddleware],
     },

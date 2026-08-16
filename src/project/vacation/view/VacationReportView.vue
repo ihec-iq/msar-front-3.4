@@ -22,10 +22,11 @@ const { get_filter } = useVacationStore();
 import { limits } from "@/utilities/defaultParams";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import { EnumPermission } from "@/utilities/EnumSystem";
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import ShowButton from "@/components/dropDown/ShowButton.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -45,7 +46,6 @@ const filterByIDName = (vacation: IVacation) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -58,7 +58,11 @@ const searchFilter = ref<IVacationFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexVacationReport", page.toString());
+  useLocalStorage().set({
+    key: "indexVacationReport",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   dataPage.value = [];
   data.value = [];
   dataBase.value = [];
@@ -167,7 +171,7 @@ const headersExcel = {
       </button>
     </template>
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput

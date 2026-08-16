@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { defineStore } from "pinia";
+import { ref } from "vue";
 import Api from "@/api/apiConfig"; // Assuming you have a similar API setup
-import type { IPromotion, IPromotionFilter } from './IPromotion';
+import type { IPromotion, IPromotionFilter } from "./IPromotion";
 
-export const usePromotionStore = defineStore('promotion', () => {
+export const usePromotionStore = defineStore("promotion", () => {
   const promotions = ref<Array<IPromotion>>([]);
   const promotion = ref<IPromotion>({
     id: 0,
@@ -11,7 +11,15 @@ export const usePromotionStore = defineStore('promotion', () => {
     numberPromotion: "",
     issueDate: new Date().toISOString().split("T")[0],
     note: "",
-    DegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 },
+    DegreeStage: {
+      id: 0,
+      title: "",
+      Degree: { id: 0, name: "" },
+      Stage: { id: 0, name: "" },
+      salary: 0,
+      yearlyBonus: 0,
+      yearlyService: 0,
+    },
     BonusJobTitle: { id: 0, name: "", description: "" },
   });
   const isLoading = ref(false);
@@ -20,7 +28,7 @@ export const usePromotionStore = defineStore('promotion', () => {
   async function get() {
     isLoading.value = true;
     try {
-      const response = await Api.get('/promotions');
+      const response = await Api.get("/promotions");
       if (response.status === 200) {
         promotions.value = response.data.data;
       }
@@ -30,35 +38,44 @@ export const usePromotionStore = defineStore('promotion', () => {
       isLoading.value = false;
     }
   }
-    const resetData = () => {
-        promotion.value = {
-            id: 0,
-            issueDate: new Date().toISOString().split("T")[0],
-            numberPromotion: "",
-            Employee: { id: 0, name: "" },
-            BonusJobTitle: { id: 0, name: "", description: "" },
-            DegreeStage: { id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 },
-            note: ""
-        };
-    }
-    const pathBase = "";
-    const pathUrl = `${pathBase}/promotion`;
-    const pathEmployeeUrl = `${pathBase}/employee`;
-    async function get_filter(params: IPromotionFilter, page: number) {
-        return await Api.get(`${pathUrl}/filter?page=${page}`, { params });
-    }
-    async function get_checkPromotion(params: IPromotionFilter, page: number) {
-        return await Api.get(`${pathEmployeeUrl}/promotion/check?page=${page}`, { params });
-    }
-    async function calculatePromotion(params: IPromotionFilter) {
-        return await Api.get(`${pathEmployeeUrl}/promotion/calculate`, { params });
-    }
-
+  const resetData = () => {
+    promotion.value = {
+      id: 0,
+      issueDate: new Date().toISOString().split("T")[0],
+      numberPromotion: "",
+      Employee: { id: 0, name: "" },
+      BonusJobTitle: { id: 0, name: "", description: "" },
+      DegreeStage: {
+        id: 0,
+        title: "",
+        Degree: { id: 0, name: "" },
+        Stage: { id: 0, name: "" },
+        salary: 0,
+        yearlyBonus: 0,
+        yearlyService: 0,
+      },
+      note: "",
+    };
+  };
+  const pathBase = "";
+  const pathUrl = `${pathBase}/promotion`;
+  const pathEmployeeUrl = `${pathBase}/employee`;
+  async function get_filter(params: IPromotionFilter, page: number) {
+    return await Api.get(`${pathUrl}/filter?page=${page}`, { params });
+  }
+  async function get_checkPromotion(params: IPromotionFilter, page: number) {
+    return await Api.get(`${pathEmployeeUrl}/promotion/check?page=${page}`, {
+      params,
+    });
+  }
+  async function calculatePromotion(params: IPromotionFilter) {
+    return await Api.get(`${pathEmployeeUrl}/promotion/calculate`, { params });
+  }
 
   async function store(params: object) {
     isLoading.value = true;
     try {
-      await Api.post('/promotions/store', params);
+      await Api.post("/promotions/store", params);
       await get(); // Refresh the list after storing
     } catch (err: any) {
       error.value = err.message;
@@ -118,4 +135,4 @@ export const usePromotionStore = defineStore('promotion', () => {
     _delete,
     show,
   };
-}); 
+});

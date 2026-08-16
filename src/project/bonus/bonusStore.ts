@@ -2,7 +2,14 @@ import { ref, computed, h } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IBonusFilter, IBonusJobTitle, IStudy, ICertificate, IBonus, IDegreeStage } from "./IBonus";
+import type {
+  IBonusFilter,
+  IBonusJobTitle,
+  IStudy,
+  ICertificate,
+  IBonus,
+  IDegreeStage,
+} from "./IBonus";
 import type { IEmployeeLite } from "../employee/IEmployee";
 
 export const useBonusStore = defineStore("BonusStore", () => {
@@ -23,10 +30,10 @@ export const useBonusStore = defineStore("BonusStore", () => {
         Stage: { id: 0, name: "" },
         salary: 0,
         yearlyBonus: 0,
-        yearlyService: 0
+        yearlyService: 0,
       },
       BonusJobTitle: { id: 0, name: "", description: "" },
-      Study: { id: 0, name: "" }
+      Study: { id: 0, name: "" },
     },
     DegreeStage: {
       id: 0,
@@ -35,15 +42,27 @@ export const useBonusStore = defineStore("BonusStore", () => {
       Stage: { id: 0, name: "" },
       salary: 0,
       yearlyBonus: 0,
-      yearlyService: 0
+      yearlyService: 0,
     },
-    notes: ""
+    notes: "",
   });
-  const BonusJobTitle = ref<IBonusJobTitle>({ id: 0, name: "", description: "" });
+  const BonusJobTitle = ref<IBonusJobTitle>({
+    id: 0,
+    name: "",
+    description: "",
+  });
   const Study = ref<IStudy>({ id: 0, name: "" });
   const Certificate = ref<ICertificate>({ id: 0, name: "" });
 
-  const DegreeStage = ref<IDegreeStage>({ id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 });
+  const DegreeStage = ref<IDegreeStage>({
+    id: 0,
+    title: "",
+    Degree: { id: 0, name: "" },
+    Stage: { id: 0, name: "" },
+    salary: 0,
+    yearlyBonus: 0,
+    yearlyService: 0,
+  });
 
   const Bonuses = ref<Array<IBonus>>([]);
   const BonusJobTitles = ref<Array<IBonusJobTitle>>([]);
@@ -74,17 +93,18 @@ export const useBonusStore = defineStore("BonusStore", () => {
         dateLastBonus: "",
         dateNextBonus: "",
         numberLastBonus: "",
-        DegreeStage: { // Added this property
+        DegreeStage: {
+          // Added this property
           id: 0,
           title: "",
           Degree: { id: 0, name: "" },
           Stage: { id: 0, name: "" },
           salary: 0,
           yearlyBonus: 0,
-          yearlyService: 0
+          yearlyService: 0,
         },
         BonusJobTitle: { id: 0, name: "", description: "" },
-        Study: { id: 0, name: "" }
+        Study: { id: 0, name: "" },
       },
       DegreeStage: {
         id: 0,
@@ -93,11 +113,11 @@ export const useBonusStore = defineStore("BonusStore", () => {
         Stage: { id: 0, name: "" },
         salary: 0,
         yearlyBonus: 0,
-        yearlyService: 0
+        yearlyService: 0,
       },
-      notes: ""
+      notes: "",
     };
-  }
+  };
   async function get() {
     return await Api.get(`${pathUrl}`);
   }
@@ -112,7 +132,14 @@ export const useBonusStore = defineStore("BonusStore", () => {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params });
   }
   async function get_checkBonus(params: IBonusFilter, page: number) {
-    return await Api.get(`${pathEmployeeUrl}/bonus/check?page=${page}`, { params });
+    return await Api.get(`${pathEmployeeUrl}/bonus/check?page=${page}`, {
+      params,
+    });
+  }
+  async function filterWithBonus(params: IBonusFilter, page: number) {
+    return await Api.get(`${pathEmployeeUrl}/filter/with/bonus?page=${page}`, {
+      params,
+    });
   }
   async function calculateBonus(params: IBonusFilter) {
     return await Api.get(`${pathEmployeeUrl}/bonus/calculate`, { params });
@@ -123,14 +150,17 @@ export const useBonusStore = defineStore("BonusStore", () => {
     BonusJobTitle.value = {
       id: 0,
       name: "",
-      description: ""
+      description: "",
     };
-  }
-  async function get_BonusJobTitle(params: object = {}, hardRefresh: boolean = false) {
+  };
+  async function get_BonusJobTitle(
+    params: object = {},
+    hardRefresh: boolean = false
+  ) {
     if (hardRefresh == false || BonusJobTitles.value.length == 0) {
       return await Api.get(`bonus_job_title`, { params }).then((response) => {
         if (response.status == 200) {
-        BonusJobTitles.value = response.data.data;
+          BonusJobTitles.value = response.data.data;
         }
       });
     }
@@ -156,9 +186,9 @@ export const useBonusStore = defineStore("BonusStore", () => {
   const resetDataStudy = () => {
     Study.value = {
       id: 0,
-      name: ""
+      name: "",
     };
-  }
+  };
   async function get_Study(hardRefresh: boolean = false) {
     if (hardRefresh == false || BonusJobTitles.value.length == 0) {
       return await Api.get(`study`).then((response) => {
@@ -181,13 +211,13 @@ export const useBonusStore = defineStore("BonusStore", () => {
     return await Api.get(`study/${id}`);
   }
   //#endregion
-//#region Certificate
+  //#region Certificate
   const resetDataCertificate = () => {
     Certificate.value = {
       id: 0,
-      name: ""
+      name: "",
     };
-  }
+  };
   async function get_Certificate(hardRefresh: boolean = false) {
     if (hardRefresh == false || Certificates.value.length == 0) {
       return await Api.get(`certificate`).then((response) => {
@@ -210,7 +240,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
     return await Api.get(`certificate/${id}`);
   }
   //#endregion
-  //#region DegreeStage  
+  //#region DegreeStage
   const resetDataDegreeStage = () => {
     DegreeStage.value = {
       id: 0,
@@ -219,9 +249,9 @@ export const useBonusStore = defineStore("BonusStore", () => {
       Stage: { id: 0, name: "" },
       salary: 0,
       yearlyBonus: 0,
-      yearlyService: 0
+      yearlyService: 0,
     };
-  }
+  };
   async function get_DegreeStage(hardRefresh: boolean = false) {
     if (hardRefresh == false || BonusJobTitles.value.length == 0) {
       return await Api.get(`bonus_degree_stage`).then((response) => {
@@ -302,6 +332,7 @@ export const useBonusStore = defineStore("BonusStore", () => {
     get,
     get_filter,
     get_checkBonus,
+    filterWithBonus,
     calculateBonus,
     get_Bonuses,
     get_BonusJobTitle,

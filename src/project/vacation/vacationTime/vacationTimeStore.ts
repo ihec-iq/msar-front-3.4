@@ -20,7 +20,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
         Section: { id: 0, name: "" },
         MoveSection: {
           id: 0,
-          name: ""
+          name: "",
         },
         isMoveSection: 0,
         isPerson: 1,
@@ -35,17 +35,16 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
           id: 0,
           name: "",
           level: "",
-          code: ""
+          code: "",
         },
         EmployeeType: {
           id: 0,
-          name: ""
+          name: "",
         },
         EmployeeCenter: {
           id: 0,
           name: "",
-          code: ""
-        }
+        },
       },
       record: 0,
       id: 0,
@@ -59,7 +58,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       deservedSickRecord: 0,
       takenSick: 0,
       remainingSick: 0,
-      currentYearSickVacations: 0
+      currentYearSickVacations: 0,
     },
     record: 0.5,
     Reason: {
@@ -93,7 +92,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
         Section: { id: 0, name: "" },
         MoveSection: {
           id: 0,
-          name: ""
+          name: "",
         },
         isMoveSection: 0,
         isPerson: 1,
@@ -108,17 +107,16 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
           id: 0,
           name: "",
           level: "",
-          code: ""
+          code: "",
         },
         EmployeeType: {
           id: 0,
-          name: ""
+          name: "",
         },
         EmployeeCenter: {
           id: 0,
           name: "",
-          code: ""
-        }
+        },
       },
       record: 0,
       id: 0,
@@ -132,7 +130,7 @@ export const useVacationTimeStore = defineStore("vacationTimeStore", () => {
       deservedSickRecord: 0,
       takenSick: 0,
       remainingSick: 0,
-      currentYearSickVacations: 0
+      currentYearSickVacations: 0,
     };
   }
   const pathBase = "/vacationSys";

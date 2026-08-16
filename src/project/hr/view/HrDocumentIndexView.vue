@@ -29,6 +29,7 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import { useEmployeeStore } from "@/project/employee/employeeStore";
 import { isNumber } from "@/utilities/tools";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -55,7 +56,7 @@ const filterByIDName = (hrDocument: IHrDocument) => {
 };
 const makeFastSearch = () => {
   return;
-  // eslint-disable-next-line no-self-assign
+
   // if (fastSearch.value == "") data.value = dataBase.value;
   // else {
   //   data.value = dataBase.value.filter(filterByIDName);
@@ -69,7 +70,11 @@ const searchFilter = ref<IHrDocumentFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexHrDocument", page.toString());
+  useLocalStorage().set({
+    key: "indexHrDocument",
+    value: page.toString(),
+    withEncrypt: false,
+  });
 
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value.toString();
@@ -107,14 +112,15 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  if (isNumber(route.params.employeeId as string)){
+  if (isNumber(route.params.employeeId as string)) {
     console.log(route.params.employeeId);
-    await useEmployeeStore().show(Number(route.params.employeeId)).then((response)=>{
-      fastSearch.value = response.data.data.name;
-    }) 
+    await useEmployeeStore()
+      .show(Number(route.params.employeeId))
+      .then((response) => {
+        fastSearch.value = response.data.data.name;
+      });
   }
-    
- 
+
   //await useSectionStore().get_sections();
 
   let index = 1;
@@ -128,12 +134,12 @@ onMounted(async () => {
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Title"), value: "title" },
   { caption: t("Number"), value: "number" },
-  { caption: t("Details"), value: "actions" },
+  { caption: t("Details"), value: "actions", print: false, width: "50px" },
   { caption: t("Employee.Title"), value: "EmployeeName" },
   { caption: t("Date"), value: "issueDate" },
-  { caption: t("HrDocument.Type"), value: "HrDocumentype" },
+  { caption: t("HrDocument.Type"), value: "HrDocumentType" },
   { caption: t("HrDocument.AddMonths"), value: "addMonths" },
-  { caption: t("HrDocument.AddDayes"), value: "addDays" },
+  { caption: t("HrDocument.AddDays"), value: "addDays" },
 ]);
 </script>
 <template>
@@ -142,7 +148,7 @@ const headers = ref<Array<ITableHeader>>([
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="3" :col-md="2" :col-lg="3">
+      <IRow :cols="3" :cols-md="2" :cols-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
             <IInput
@@ -171,15 +177,11 @@ const headers = ref<Array<ITableHeader>>([
           <template v-slot:EmployeeName="{ row }">
             <span>{{ row.Employee.name }}</span>
           </template>
-          <template v-slot:HrDocumentype="{ row }">
-            <span>{{ row.Type.name }}</span>
+          <template v-slot:HrDocumentType="{ row }">
+            <span>{{ row.HrDocumentType.name }}</span>
           </template>
           <template v-slot:actions="{ row }">
-            <IDropdown>
-              <li>
-                <EditButton @click="update(row.id)" />
-              </li>
-            </IDropdown>
+            <EditButton @click="update(row.id)" />
           </template>
         </ITable>
         <IRow v-if="data.length > 0">

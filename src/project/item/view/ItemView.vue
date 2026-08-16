@@ -1,3 +1,4 @@
+import { makeFormDataFromObject } from './../../../utilities/tools';
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -8,15 +9,36 @@ import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 
 import { t } from "@/utilities/I18nPlugin";
-import type { IItem } from "../IItem";
+import type { IItem, IItemCategory } from "../IItem";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import IInput from "@/components/inputs/IInput.vue";
 import IButton2 from "@/components/ihec/IButton2.vue";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import { prepareFormData } from "@/utilities/crudTool";
 
-//region"Drag and Drop"
-
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+const { validate, required, isObject } = useValidation();
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const rules: Array<IFieldValidation> = [
+  {
+    field: "name",
+    caption: t("Item.Name"),
+    rules: [required()],
+  },
+  {
+    field: "Category",
+    caption: t("Item.Category"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+];
+import { WarningToast } from "@/utilities/Toast2";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 //#endregion
 
 //#region Vars
@@ -33,18 +55,18 @@ const { categories } = storeToRefs(useItemCategoryStore());
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 //#region CURD
 const store = () => {
   errors.value = null;
-  const formData = new FormData();
-  formData.append("id", String(item.value.id));
-  formData.append("name", item.value.name);
-  formData.append("description", item.value.description);
-  formData.append("code", item.value.code);
-  formData.append("measuringUnit", item.value.measuringUnit);
-  formData.append("Category", JSON.stringify(item.value.Category));
+  validationResult.value = validate(item.value, rules);
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+  errors.value = null;
+  const formData = prepareFormData(item.value);
   itemStore
     .store(formData)
     .then((response) => {
@@ -71,12 +93,7 @@ const store = () => {
 };
 function update() {
   errors.value = null;
-  const formData = new FormData();
-  formData.append("name", item.value.name.toString());
-  formData.append("description", item.value.description.toString());
-  formData.append("code", item.value.code.toString());
-  formData.append("measuringUnit", item.value.measuringUnit.toString());
-  formData.append("Category", JSON.stringify(item.value.Category));
+  const formData = prepareFormData(item.value);
   itemStore
     .update(item.value.id, formData)
     .then((response) => {
@@ -87,7 +104,8 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
-        showData();
+        //showData();
+        router.replace({ params: { id: item.value.id } });
       }
     })
     .catch((error) => {
@@ -121,14 +139,26 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemStore._delete(item.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        });
+        await itemStore
+          ._delete(item.value.id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          })
+          .catch((error) => {
+            //errors.value = Object.values(error.response.data.errors).flat().join();
+            errors.value = itemStore.getError(error);
+            Swal.fire({
+              icon: "error",
+              title: t("Deleted not successfully ."),
+              text: error.response.data.message,
+              footer: "",
+            });
+          });
       }
     });
 };
@@ -139,7 +169,11 @@ const showData = async () => {
     .then((response) => {
       if (response.status == 200) {
         item.value.name = response.data.data.name;
-        item.value = response.data.data as IItem;
+        item.value.Category = response.data.data.Category as IItemCategory;
+        item.value.code = response.data.data.code;
+        item.value.description = response.data.data.description;
+        item.value.id = response.data.data.id;
+        item.value.measuringUnit = response.data.data.measuringUnit;
       }
     })
     .catch((errors) => {
@@ -186,7 +220,7 @@ const reset = () => {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -195,21 +229,23 @@ const reset = () => {
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('Item.Name')"
                 name="name"
                 v-model="item.name"
                 :type="EnumInputType.Text"
-            /></ICol>
+              />
+            </ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('Item.Code')"
                 name="code"
                 v-model="item.code"
                 :type="EnumInputType.Text"
-            /></ICol>
+              />
+            </ICol>
             <ICol span="1" span-md="1" span-sm="1">
               <ISelect
                 :label="t('Item.Category')"
@@ -225,7 +261,8 @@ const reset = () => {
                 name="Item.Unit"
                 v-model="item.measuringUnit"
                 :type="EnumInputType.Text"
-            /></ICol>
+              />
+            </ICol>
           </IRow>
           <IRow>
             <ICol>
@@ -234,11 +271,16 @@ const reset = () => {
                 name="name"
                 v-model="item.description"
                 :type="EnumInputType.Text"
-            /></ICol>
+              />
+            </ICol>
           </IRow>
         </IForm>
       </IRow>
       <IRow>
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
         <IFooterCrud
           :isAdd="item.id == 0"
           :onCreate="store"

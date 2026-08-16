@@ -19,6 +19,7 @@ import { limits } from "@/utilities/defaultParams";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardVactionTimeIndex from "./CardVactionTimeIndex.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -47,7 +48,6 @@ const filterByIDName = (_vacationTime: IVacationTimeFilter) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     //data.value = dataBase.value.filter(filterByIDName);
@@ -61,8 +61,11 @@ const searchFilter = ref<IVacationTimeFilter>({
   employeeName: "",
 });
 const getFilterData = async (page: number = 1) => {
-    localStorage.setItem("indexVacationTime", page.toString());
-
+  useLocalStorage().set({
+    key: "indexVacationTime",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
   await useVacationTimeStore()
@@ -93,7 +96,8 @@ onMounted(async () => {
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
   let index = 1;
-  if (await localStorage.getItem("indexVacationTime") != undefined) index = Number(localStorage.getItem("indexVacationTime"));
+  if ((await localStorage.getItem("indexVacationTime")) != undefined)
+    index = Number(localStorage.getItem("indexVacationTime"));
 
   // must to wait fastSearch to get init value from localStorage.getItem
   await fastSearch.value;
@@ -106,7 +110,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="2" :col-md="2" :col-lg="2" :sm="1">
+      <IRow :cols="2" :cols-md="2" :cols-lg="2" :sm="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -121,7 +125,7 @@ onMounted(async () => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
+      <IRow :cols="2" :cols-lg="2" :cols-md="2" :cols-sm="1">
         <ICol
           :span="1"
           :span-lg="1"

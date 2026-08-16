@@ -21,6 +21,7 @@ import ICol from "@/components/ihec/ICol.vue";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import CardVactionSickIndex from "./CardVactionSickIndex.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -49,7 +50,6 @@ const filterByIDName = (_vacationSick: IVacationSickFilter) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     //data.value = dataBase.value.filter(filterByIDName);
@@ -72,8 +72,11 @@ const CNumber = (val: any = 0): number => {
 };
 
 const getFilterData = async (page: number = 1) => {
-    localStorage.setItem("indexVacationSick", page.toString());
-
+  useLocalStorage().set({
+    key: "indexVacationSick",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
 
@@ -99,7 +102,7 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowVacationsSick]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-let index = 1;
+  let index = 1;
 
   if (localStorage.getItem("indexVacationSick") != undefined)
     index = Number(localStorage.getItem("indexVacationSick"));
@@ -116,7 +119,7 @@ let index = 1;
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -132,7 +135,7 @@ let index = 1;
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
-      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
+      <IRow :cols="2" :cols-lg="2" :cols-md="2" :cols-sm="1">
         <ICol
           :span="1"
           :span-lg="1"

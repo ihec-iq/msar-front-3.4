@@ -24,7 +24,9 @@ defineProps({
 </script>
 <template>
   <div class="w-11/12 mr-2">
-    <div class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight">
+    <div
+      class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
+    >
       {{ t(label) }}
     </div>
     <input

@@ -46,7 +46,6 @@ const filterByIDName = (item: IStoreItemHistory) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -61,6 +60,7 @@ const searchFilter = ref<IStoreItemFilter>({
   summation: true,
   isEmployee: false,
   employeeId: 0,
+  isSection: false,
 });
 const getFilterData = async (page = 1) => {
   dataPage.value = [];

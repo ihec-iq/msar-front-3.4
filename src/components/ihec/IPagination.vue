@@ -1,17 +1,22 @@
 <script setup lang="ts">
+// NOTE: this component has no live call sites — every <IPagination> in
+// src/ is commented out. It now exposes searchFilter as a model, so any
+// revived usage must bind v-model:searchFilter, not :searchFilter.
+// Delete this file if pagination is not coming back.
 import { t } from "@/utilities/I18nPlugin";
 import { TailwindPagination } from "laravel-vue-pagination";
 
-const props = defineProps({
+const searchFilter = defineModel("searchFilter", {
+  type: Object,
+  required: true,
+});
+
+defineProps({
   data: {
     type: Object,
     required: true,
   },
   dataPage: {
-    type: Object,
-    required: true,
-  },
-  searchFilter: {
     type: Object,
     required: true,
   },
@@ -33,7 +38,7 @@ const props = defineProps({
         class="flex justify-center mt-6"
         :data="dataPage"
         @pagination-change-page="getFilterData()"
-        :limit="props.searchFilter.limit"
+        :limit="searchFilter.limit"
       />
     </div>
     <div class="basis-1/5" v-if="data.length >= limits[0].id">
@@ -46,4 +51,5 @@ const props = defineProps({
       />
     </div>
   </div>
-</template>@/utilities/I18nPlugin
+</template>
+@/utilities/I18nPlugin

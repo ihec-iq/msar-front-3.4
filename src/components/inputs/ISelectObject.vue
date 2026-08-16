@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 
 const modelValue = defineModel<any>();
 const emits = defineEmits<{
@@ -46,23 +46,19 @@ const checkRequired = () => {
   }
 };
 </script>
-<template>  
+<template>
   <div class="mb-2 mx-1" :class="{ disabled: IsDisabled }">
     <label class="_inputLabel" :for="name">
       <span v-if="IsRequire" class="text-red-600">*</span> {{ label }}
     </label>
-    <select 
+    <select
       :class="inputClasses"
       :name="name"
       v-model="modelValue"
       @change="Change"
       @focusout="checkRequired"
     >
-      <option
-        v-for="(option, index) in options"
-        :key="index"
-        :value="option"
-      >
+      <option v-for="(option, index) in options" :key="index" :value="option">
         {{ option.name }}
       </option>
     </select>

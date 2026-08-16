@@ -3,14 +3,18 @@ import CryptoJS from "crypto-js";
 // Define the secretKey locally
 const secretKey: string = import.meta.env.VITE_SECRET_KEY || "default-dev-key"; // Load from environment or use fallback
 
-type EncryptFunction = (data: Record<string, unknown> | string) => string | null;
+type EncryptFunction = (
+  data: Record<string, unknown> | string
+) => string | null;
 type DecryptFunction = (
   encryptedData: string
 ) => Record<string, unknown> | null;
 
 export function useCrypto() {
   // Encrypt data
-  const encryptData: EncryptFunction = (data : string | Record<string, unknown>) => {
+  const encryptData: EncryptFunction = (
+    data: string | Record<string, unknown>
+  ) => {
     try {
       const encrypted = CryptoJS.AES.encrypt(
         JSON.stringify(data),
@@ -25,7 +29,7 @@ export function useCrypto() {
 
   // Decrypt data
   const decryptData: DecryptFunction = (encryptedData) => {
-    try { 
+    try {
       if (!encryptedData) {
         return null;
       }

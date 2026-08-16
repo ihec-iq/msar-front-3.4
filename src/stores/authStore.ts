@@ -52,7 +52,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const setToken = async (_token: string) => {
     if (!_token || _token == "") return logout();
     token.value = _token;
-    localStorage.setItem(EnumNameToken.isAuthenticated, "1");
+    useLocalStorage().set({
+      key: EnumNameToken.isAuthenticated,
+      value: 1,
+      withEncrypt: false,
+    });
     Api.defaults.headers.common["Authorization"] = `Bearer ${_token}`;
     isAuthenticated.value = true;
     setSecureToken(_token);
@@ -100,6 +104,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         ? true
         : false;
     token.value = await getSecureToken();
+    checkToken(token.value);
     user.value = await getUser();
     if (user.value) setPermissions(user.value.permissions);
   };
@@ -120,10 +125,10 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
 });
 
-export const removeUnUsedLogin = () => { 
-  localStorage.removeItem(EnumNameToken.tokenENCRYPT);
-  localStorage.removeItem(EnumNameToken.userENCRYPT);
-  localStorage.removeItem(EnumNameToken.isAuthenticated); 
+export const removeUnUsedLogin = () => {
+  useLocalStorage().remove(EnumNameToken.isAuthenticated);
+  useLocalStorage().remove(EnumNameToken.userENCRYPT);
+  useLocalStorage().remove(EnumNameToken.tokenENCRYPT);
 };
 export const setSecureToken = (token: string) => {
   // Add additional browser-specific identifier
@@ -145,7 +150,10 @@ export const getSecureToken = async () => {
     key: EnumNameToken.tokenENCRYPT,
     withEncrypt: true,
   });
-  if (!storedData) return null;
+  if (!storedData || storedData == null) {
+    removeUnUsedLogin();
+    return null;
+  }
   try {
     const { token, fingerprint, timestamp } = JSON.parse(storedData.toString());
     // Check token age (e.g., expire after 7 days)
@@ -157,11 +165,14 @@ export const getSecureToken = async () => {
     }
 
     // Verify browser fingerprint
-    if (fingerprint !== generateBrowserFingerprint()) {
-      console.log("Fingerprint mismatch");
-      removeUnUsedLogin();
-      return null;
-    }
+    // temporary disable
+    // if (fingerprint !== generateBrowserFingerprint()) {
+    //   console.log("Fingerprint stored:", fingerprint);
+    //   console.log("Fingerprint current:", generateBrowserFingerprint());
+    //   console.log("Fingerprint mismatch");
+    //   removeUnUsedLogin();
+    //   return null;
+    // }
     Api.defaults.headers.common["Authorization"] = "Bearer " + token;
     return token;
   } catch (error) {
@@ -170,7 +181,6 @@ export const getSecureToken = async () => {
     return null;
   }
 };
-
 // Generate a unique browser fingerprint
 export const generateBrowserFingerprint = () => {
   return CryptoJS.MD5(

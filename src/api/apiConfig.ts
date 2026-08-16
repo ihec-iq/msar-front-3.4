@@ -1,6 +1,5 @@
 // Import necessary modules and dependencies
 import axios from "axios";
-import Swal from "sweetalert2";
 import router from "@/router";
 import envConfig from "./envConfig";
 import { useToast, POSITION } from "vue-toastification";
@@ -8,15 +7,17 @@ import { useAuthStore, getSecureToken } from "@/stores/authStore";
 
 // Initialize Axios instance
 const Api = axios.create({
-  baseURL: envConfig._baseURL,
+  baseURL: envConfig._baseURL + "/api",
 });
-
 // Set default Axios configurations
 Api.defaults.withCredentials = true;
 Api.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-Api.defaults.headers.common["Access-Control-Allow-Methods"] = "DELETE, POST, GET, PUT";
+Api.defaults.headers.common["Access-Control-Allow-Methods"] = "*";
+Api.defaults.headers.common["Access-Control-Allow-Headers"] = "*";
 Api.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+Api.defaults.headers.common["Content-Type"] = "multipart/form-data";
 
+//  await Api.get("/sanctum/csrf-cookie");
 // Attach authorization token lazily
 // Api.interceptors.request.use((config) => {
 //   const token = getSecureToken(); // Get the token when needed
@@ -36,22 +37,25 @@ Api.interceptors.response.use(
 );
 
 // Compose a global error handler function
-const composeErrorHandler = (error : any) => {
+const composeErrorHandler = (error: any) => {
+  // console.log("composeErrorHandler")
   const statusCode = error.response ? error.response.status : null;
-  const authStore = useAuthStore();
-
   switch (statusCode) {
     case 404:
-      console.error("The requested resource does not exist or has been deleted.");
+      console.error(
+        "The requested resource does not exist or has been deleted."
+      );
       //router.back();
       break;
-
     case 401:
-      showErrorToast("Your session has expired. Redirecting to the login page.");
-      authStore.logout();
-      router.push("/login");
+      const authStore = useAuthStore();
+      showErrorToast(
+        "Your session has expired. Redirecting to the login page."
+      );
+      window.location.reload();
+      //authStore.logout();
+      //router.push("/login");
       break;
-
     default:
       handleNetworkErrors(error);
       break;
@@ -59,20 +63,22 @@ const composeErrorHandler = (error : any) => {
 };
 
 // Handle specific network-related errors
-const handleNetworkErrors = (error : any) => {
+const handleNetworkErrors = (error: any) => {
   const authStore = useAuthStore();
-
+  // console.log("handleNetworkErrors")
   switch (error.code) {
     case "ERR_NETWORK":
-      showErrorToast("Server connection is unavailable. Please contact technical support.");
+      showErrorToast(
+        "Server connection is unavailable. Please contact technical support."
+      );
       authStore.logout();
-      router.push("/login");
+      //router.push("/login");
       break;
 
     case "ERR_CONNECTION_REFUSED":
       showErrorToast("Connection refused by the server. Redirecting to login.");
       authStore.logout();
-      router.push("/login");
+      //router.push("/login");
       break;
 
     default:

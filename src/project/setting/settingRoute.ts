@@ -1,8 +1,8 @@
 import authMiddleware from "@/router/middleware/authMiddleware";
- export default [
+export default [
   {
     path: "/settingPortal",
-     name: "settingPortal",
+    name: "settingPortal",
     component: () => import("./view/SettingPortalView.vue"),
     meta: {
       middleware: [authMiddleware],

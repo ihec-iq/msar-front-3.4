@@ -1,86 +1,121 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
-import { DefaultURL } from "@/utilities/defualts";
+import envConfig from "@/api/envConfig";
+import axios from "axios";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
+
+interface ConfigState {
+  organization: string | null;
+  connectionString: string | null;
+}
 
 export const useConfigStore = defineStore("ConfigStore", () => {
-  const Organization = ref<string | null>("");
-  const ConnectionString = ref<string | null>("");
+  // State with proper types according to ConfigState interface
+  const Config = ref<ConfigState>({
+    organization: null,
+    connectionString: null,
+  });
 
-  const store = async (config: string, organization: string) => {
+  /**
+   * Store both organization and connection string
+   */
+  const store = async (config: string, orgName: string): Promise<void> => {
     try {
-      await localStorage.setItem("ConnectionString", config);
-      ConnectionString.value = config;
-      await localStorage.setItem("Organization", organization);
-      Organization.value = organization;
-      Api.defaults.baseURL = String(ConnectionString.value);
+      await storeConnection(config);
+      await storeOrganization(orgName);
+    } catch (error) {
+      console.error("Error writing configuration:", error);
+      throw new Error("Failed to store configuration", { cause: error });
+    }
+  };
+
+  /**
+   * Store connection string in localStorage and update state
+   */
+  const storeConnection = async (config: string): Promise<void> => {
+    try {
+      useLocalStorage().set({
+        key: "ConnectionString",
+        value: config,
+        withEncrypt: false,
+      });
+      Config.value.connectionString = config;
+      Api.defaults.baseURL = config + "/api";
     } catch (error) {
       console.error("Error writing connection config:", error);
+      throw new Error("Failed to store connection string", { cause: error });
     }
   };
 
-  const storeConnection = async (config: string) => {
-    if (ConnectionString.value) {
-      try {
-        await localStorage.setItem("ConnectionString", config);
-        ConnectionString.value = config;
-
-        Api.defaults.baseURL = String(ConnectionString.value);
-      } catch (error) {
-        console.error("Error writing connection config:", error);
-      }
-    } else {
-      console.log("save Config failed");
-    }
-  };
-
-  async function checkConnection(server: string) {
-    return await new Promise((resolve, reject) => {
-       Api.get(server+"/check")
-      .then((response) => {
-        if (response.status == 200) {
-          if (response.status == 200) {
-            if (response.data.state == "ERP MSAR API running...") {
-              resolve(true);
-            }
-            resolve(false);
-          }
-        }
-      })
-      .catch((errors) => {
-        console.log("in checkConnection : " + errors);
-        resolve(false);
-      });
-    });
-  }
-
-  const storeOrganization = async (organization: string) => {
-    if (Organization.value) {
-      try {
-        await localStorage.setItem("Organization", organization);
-        Organization.value = organization;
-      } catch (error) {
-        console.error("Error writing organization config:", error);
-      }
-    } else {
-      console.log("save Config failed");
-    }
-  };
-  const load = async () => {
+  /**
+   * Store organization in localStorage and update state
+   */
+  const storeOrganization = async (orgName: string): Promise<void> => {
     try {
-      const URL = ref(await localStorage.getItem("ConnectionString"));
-      if (URL.value == "" || URL.value == undefined || URL.value == null)
-        URL.value = DefaultURL;
-      ConnectionString.value = URL.value;
-      Organization.value = localStorage.getItem("Organization");
+      useLocalStorage().set({
+        key: "Organization",
+        value: orgName,
+        withEncrypt: false,
+      });
+      Config.value.organization = orgName;
     } catch (error) {
-      console.error("Error reading file:", error);
+      console.error("Error writing organization config:", error);
+      throw new Error("Failed to store organization", { cause: error });
     }
   };
 
+  /**
+   * Check if connection to server is valid
+   */
+  const checkConnection = async (server: string): Promise<boolean> => {
+    try {
+      const response = await axios.get(`${server}/check`);
+      return (
+        response.status === 200 &&
+        response.data.state === "ERP MSAR API running..."
+      );
+    } catch (error) {
+      console.error("Connection check failed:", error);
+      return false;
+    }
+  };
+
+  /**
+   * Load configuration from localStorage or fallback to defaults
+   */
+  const load = async (): Promise<void> => {
+    try {
+      // Must go through useLocalStorage: set() namespaces keys with the app
+      // instance id, so localStorage.getItem("ConnectionString") never matched.
+      const storage = useLocalStorage();
+      const readString = (key: string): string | null => {
+        const value = storage.get({ key, withEncrypt: false });
+        return typeof value === "string" ? value : null;
+      };
+
+      // Load connection string with fallback to environment config
+      Config.value.connectionString =
+        readString("ConnectionString") || envConfig._baseURL;
+
+      // Load organization
+      Config.value.organization = readString("Organization");
+
+      // Initialize API base URL
+      if (Config.value.connectionString) {
+        Api.defaults.baseURL = Config.value.connectionString + "/api";
+      }
+    } catch (error) {
+      console.error("Error loading configuration:", error);
+      throw new Error("Failed to load configuration", { cause: error });
+    }
+  };
+
+  // Expose store state and actions
   return {
-    ConnectionString,
-    Organization,
+    // Expose state properties
+    Config,
+    // Actions
     store,
     checkConnection,
     storeConnection,

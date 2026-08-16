@@ -29,7 +29,7 @@ const id = ref(Number(route.params.id));
 const rtlStore = useRtlStore();
 const Loading = ref(false);
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 
 //#region popUp
@@ -43,7 +43,7 @@ const VoucherItemTemp = ref<IDirectVoucherItem>({
     id: 0,
     code: "",
     description: "",
-    Category: { id: 0, name: "" },
+    Category: { id: 0, name: "", description: "" },
     measuringUnit: "",
   },
   description: "",
@@ -66,7 +66,7 @@ const resetVoucherItem = () => {
       id: 0,
       code: "",
       description: "",
-      Category: { id: 0, name: "" },
+      Category: { id: 0, name: "", description: "" },
       measuringUnit: "",
     },
     description: "",
@@ -144,14 +144,14 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
 import type { IItem } from "@/project/item/IItem";
 
 const { validate, isArray, required, isObject } = useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {
@@ -183,10 +183,6 @@ const store = () => {
   formData.append(
     "employeeRequestId",
     directVoucher.value.Employee.id.toString()
-  );
-  formData.append(
-    "signaturePerson",
-    String(directVoucher.value.signaturePerson)
   );
   directVoucherStore
     .store(formData)
@@ -222,10 +218,6 @@ function update() {
   formData.append(
     "employeeRequestId",
     directVoucher.value.Employee.id.toString()
-  );
-  formData.append(
-    "signaturePerson",
-    String(directVoucher.value.signaturePerson)
   );
   directVoucherStore
     .update(directVoucher.value.id, formData)
@@ -295,8 +287,6 @@ const showData = async (id: number) => {
         directVoucher.value.notes = response.data.data.notes;
         directVoucher.value.Items = response.data.data.Items;
         directVoucher.value.Employee = response.data.data.Employee;
-        directVoucher.value.signaturePerson =
-          response.data.data.signaturePerson;
       }
     })
     .catch((errors) => {
@@ -343,10 +333,10 @@ const handleEnter = (event: KeyboardEvent) => {
     (option: IItem) => option.name === enteredValue
   );
   if (matchingOption === undefined && enteredValue.length > 0) {
-    let btn = document.getElementById("my_modal_7");
+    const btn = document.getElementById("my_modal_7");
     item.value.name = enteredValue;
     btn?.click();
-    let NameItemEnterNew = document.getElementById("NameItemEnterNew");
+    const NameItemEnterNew = document.getElementById("NameItemEnterNew");
     NameItemEnterNew?.focus();
     //xxx
   }
@@ -375,7 +365,7 @@ onMounted(async () => {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -384,7 +374,7 @@ onMounted(async () => {
     <IPageContent>
       <IContainer>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('InputVoucher.Number')"
@@ -422,14 +412,6 @@ onMounted(async () => {
                   </div>
                 </template>
               </vSelect>
-            </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
-              <IInput
-                :label="t('InputVoucherSignaturePerson')"
-                name="InputVoucherNumer"
-                v-model="directVoucher.signaturePerson"
-                type="text"
-              />
             </ICol>
           </IRow>
           <IRow>
@@ -485,7 +467,9 @@ onMounted(async () => {
             </ICol>
           </IRow>
           <IRow>
-            <ICol><IErrorMessages :validationResult="validationResult" /></ICol>
+            <ICol>
+              <IErrorMessages :validationResult="validationResult" />
+            </ICol>
           </IRow>
         </IForm>
       </IContainer>
@@ -498,7 +482,7 @@ onMounted(async () => {
         position="bottom"
       >
         <!-- for search Item -->
-        <IRow col-lg="4" col-md="1" col-sm="1" col-xs="1">
+        <IRow cols-lg="4" cols-md="1" cols-sm="1">
           <ICol>
             <div
               class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
@@ -523,7 +507,7 @@ onMounted(async () => {
                     Category: { id: 0, name: '' },
                     measuringUnit: '',
                   },
-                  describtion: '',
+                  description: '',
                   count: 0,
                   price: 0,
                   value: 0,
@@ -586,7 +570,7 @@ onMounted(async () => {
             span-xs="1"
             v-else-if="VoucherItemTemp.Item.name != ''"
           >
-            <IRow col="4">
+            <IRow cols="4">
               <ICol span="1">
                 <ILabel :title="t('Code')">
                   {{ VoucherItemTemp.Item.code }}</ILabel
@@ -624,7 +608,7 @@ onMounted(async () => {
           </ICol>
         </IRow>
         <!-- for insert item proparties -->
-        <IRow col-lg="4" :col="4" col-xl="4" col-md="2" col-sm="1" col-xs="1">
+        <IRow cols-lg="4" :cols="4" cols-xl="4" cols-md="2" cols-sm="1">
           <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
             <IInput
               :label="t('Item.Description')"

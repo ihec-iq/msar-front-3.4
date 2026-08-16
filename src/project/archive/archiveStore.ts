@@ -2,26 +2,20 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type {
-  IArchive,
-  IArchiveFilter,
-  IArchiveType,
-} from "./IArchive";
+import type { IArchive, IArchiveFilter, IArchiveType } from "./IArchive";
 
 export const useArchiveStore = defineStore("archiveStore", () => {
   const archive = ref<IArchive>({
     id: 0,
     title: "",
     issueDate: new Date().toISOString().split("T")[0],
-    Files: [],
+    FilesDocument: [],
     description: "",
     way: "",
     number: "",
     isIn: 1,
     isInWord: "",
-    archiveType: { id: 0, name: "" },
-    archiveTypeId: 0,
-    archiveTypeName: ""
+    ArchiveType: { id: 0, name: "" },
   });
   const archiveType = ref<IArchiveType>({ id: 0, name: "", description: "" });
   const archiveTypes = ref<IArchiveType[]>([]);
@@ -63,28 +57,25 @@ export const useArchiveStore = defineStore("archiveStore", () => {
     const path = `${pathBase}/document/delete/${id}`;
     return await Api.delete(path);
   }
-  
 
   const resetData = () => {
     archive.value = {
       id: 0,
       title: "",
       issueDate: new Date().toISOString().split("T")[0],
-      Files: [],
+      FilesDocument: [],
       description: "",
       way: "",
       number: "",
       isIn: 1,
       isInWord: "",
-      archiveType: { id: 0, name: "" },
-      archiveTypeId: 0,
-      archiveTypeName: ""
+      ArchiveType: { id: 0, name: "" },
     };
   };
   return {
     archive,
     archiveTypes,
-    archiveType, 
+    archiveType,
     get,
     get_filter,
     show,

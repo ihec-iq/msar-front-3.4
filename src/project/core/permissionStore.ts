@@ -10,14 +10,12 @@ export const usePermissionsStore = defineStore("PermissionStore", () => {
   const UserPermissions = ref<Array<string>>([]);
   async function get() {
     if (permissions.value.length < 1) {
-      console.log('Get Permssions from DB')
       await Api.get("/permission").then((response) => {
         permissions.value = response.data.data;
         permissionsBase.value = response.data.data;
       });
     }
   }
-
 
   //const doubleCount = computed(() => count.value * 2);
   const can = (name: string) => {
@@ -31,6 +29,7 @@ export const usePermissionsStore = defineStore("PermissionStore", () => {
     router.push("/unauthorized");
   };
   const checkPermissionAccessArray = (names: string[]) => {
+    // console.log(hasCommonItems(names, UserPermissions.value))
     if (UserPermissions.value?.length == 0) router.push("/unauthorized");
     if (hasCommonItems(names, UserPermissions.value)) return true;
     router.push("/unauthorized");

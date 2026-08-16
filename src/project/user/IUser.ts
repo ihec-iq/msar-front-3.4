@@ -13,9 +13,15 @@ export interface IUser {
   password_confirmation?: string;
   active?: number;
   any_device?: number;
-  roles: Array<IRole>;
+  roles: Array<IRole> | Array<number>;
   permissions: Array<string>;
   Employee?: IEmployee;
+}
+export interface IUserLite {
+  id: number;
+  name: string;
+  user_name?: string;
+  email?: string;
 }
 export interface IUserFilter {
   limit: number;

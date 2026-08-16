@@ -19,7 +19,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         Section: { id: 0, name: "" },
         MoveSection: {
           id: 0,
-          name: ""
+          name: "",
         },
         isMoveSection: 0,
         isPerson: 1,
@@ -34,17 +34,16 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
           id: 0,
           name: "",
           level: "",
-          code: ""
+          code: "",
         },
         EmployeeType: {
           id: 0,
-          name: ""
+          name: "",
         },
         EmployeeCenter: {
           id: 0,
           name: "",
-          code: ""
-        }
+        },
       },
       record: 0,
       id: 0,
@@ -58,7 +57,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       deservedSickRecord: 0,
       takenSick: 0,
       remainingSick: 0,
-      currentYearSickVacations: 0
+      currentYearSickVacations: 0,
     },
     record: 1,
     Reason: {
@@ -81,7 +80,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
         Section: { id: 0, name: "" },
         MoveSection: {
           id: 0,
-          name: ""
+          name: "",
         },
         isMoveSection: 0,
         isPerson: 1,
@@ -96,17 +95,16 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
           id: 0,
           name: "",
           level: "",
-          code: ""
+          code: "",
         },
         EmployeeType: {
           id: 0,
-          name: ""
+          name: "",
         },
         EmployeeCenter: {
           id: 0,
           name: "",
-          code: ""
-        }
+        },
       },
       record: 0,
       id: 0,
@@ -120,7 +118,7 @@ export const useVacationSickStore = defineStore("vacationSickStore", () => {
       deservedSickRecord: 0,
       takenSick: 0,
       remainingSick: 0,
-      currentYearSickVacations: 0
+      currentYearSickVacations: 0,
     };
   }
   const pathBase = "/vacationSys";

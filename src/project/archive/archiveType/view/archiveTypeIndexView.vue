@@ -10,6 +10,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import { storeToRefs } from "pinia";
 import IPage from "@/components/ihec/IPage.vue";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
+import IRow from "@/components/ihec/IRow.vue";
 
 const { checkPermissionAccessArray } = usePermissionsStore();
 const isLoading = ref(false);
@@ -38,7 +39,15 @@ const addObject = () => {
       <IButton width="28" :onClick="addObject" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="4" :col-lg="4" :col-md="3" :col-sm="1" :col-xs="1">
+      <IRow
+        :cols="1"
+        :colsSm="2"
+        :colsMd="3"
+        :colsLg="4"
+        :colsXl="6"
+        gap="6"
+        :collapsible="true"
+      >
         <ICol
           class="my-2"
           :span="1"
@@ -51,7 +60,13 @@ const addObject = () => {
         </ICol>
       </IRow>
     </IPageContent>
-    <IFooterCrud :isAdd="false" :show-delete="false" :show-add="false" :show-update="false"> </IFooterCrud>
+    <IFooterCrud
+      :isAdd="false"
+      :show-delete="false"
+      :show-add="false"
+      :show-update="false"
+    >
+    </IFooterCrud>
   </IPage>
   <SimpleLoading v-if="isLoading"></SimpleLoading>
 </template>

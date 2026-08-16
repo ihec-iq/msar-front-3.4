@@ -31,13 +31,14 @@ import type { IEmployee } from "@/project/employee/IEmployee";
 import ICheckbox from "@/components/inputs/ICheckbox.vue";
 import { useSettingStore } from "@/project/core/settingStore";
 import type { ISetting } from "@/project/core/ISetting";
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 import IDropdown from "@/components/ihec/IDropdown.vue";
 import { getError } from "@/utilities/helpers";
 import Swal from "sweetalert2";
-import IInput from "@/components/inputs/IInput.vue"; 
+import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import ISearchBar from "@/components/ihec/ISearchBar.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -49,7 +50,6 @@ watch(
   }
 );
 
-
 //#region Fast Search
 const fastSearch = ref("");
 const filterByIDName = (Promotion: IPromotion) => {
@@ -59,7 +59,7 @@ const filterByIDName = (Promotion: IPromotion) => {
 };
 const makeFastSearch = () => {
   return;
-  // eslint-disable-next-line no-self-assign
+
   // if (fastSearch.value == "") data.value = dataBase.value;
   // else {
   //   data.value = dataBase.value.filter(filterByIDName);
@@ -77,13 +77,18 @@ const searchFilter = ref<IPromotionFilter>({
   limit: 10,
   title: "",
   isBound: true,
-  bound: 0
+  bound: 0,
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("checkPromotion", page.toString());
+  useLocalStorage().set({
+    key: "checkPromotion",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
-  searchFilter.value.bound = searchFilter.value.bound == 0 ? 0 : searchFilter.value.bound;
+  searchFilter.value.bound =
+    searchFilter.value.bound == 0 ? 0 : searchFilter.value.bound;
   await get_checkPromotion(searchFilter.value, page)
     .then((response) => {
       if (response.status == 200) {
@@ -93,7 +98,7 @@ const getFilterData = async (page = 1) => {
       }
     })
     .catch((error) => {
-      let errors = getError(error);
+      const errors = getError(error);
       Swal.fire({
         icon: "error",
         title: "create new data fails!!!",
@@ -130,15 +135,17 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowEmployees]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  await SettingStore.showByKey(SettingNumberDayesAlertPromotion.value.key).then((response) => {
-    Object.assign(SettingNumberDayesAlertPromotion.value, response);
-    if (SettingNumberDayesAlertPromotion.value.valInt == 0) {
-      SettingNumberDayesAlertPromotion.value.valInt = 30;
-    } else if (SettingNumberDayesAlertPromotion.value.valInt === undefined) {
-      location.reload();
+  await SettingStore.showByKey(SettingNumberDayesAlertPromotion.value.key).then(
+    (response) => {
+      Object.assign(SettingNumberDayesAlertPromotion.value, response);
+      if (SettingNumberDayesAlertPromotion.value.valInt == 0) {
+        SettingNumberDayesAlertPromotion.value.valInt = 30;
+      } else if (SettingNumberDayesAlertPromotion.value.valInt === undefined) {
+        location.reload();
+      }
+      searchFilter.value.bound = SettingNumberDayesAlertPromotion.value.valInt;
     }
-    searchFilter.value.bound = SettingNumberDayesAlertPromotion.value.valInt;
-  })
+  );
   let index = 1;
 
   if (localStorage.getItem("checkPromotion") != undefined)
@@ -151,7 +158,10 @@ const headers = ref<Array<ITableHeader>>([
   { caption: t("Employee.Title"), value: "name" },
   { caption: t("Details"), value: "actions" },
   { caption: t("Promotion.dateLastPromotion"), value: "dateLastPromotion" },
-  { caption: t("Promotion.difNextPromotionDate"), value: "difNextPromotionDateShow" },
+  {
+    caption: t("Promotion.difNextPromotionDate"),
+    value: "difNextPromotionDateShow",
+  },
   { caption: t("Promotion.dateNextPromotion"), value: "dateNextPromotion" },
   { caption: t("Promotion.Study"), value: "promotionStudy" },
   { caption: t("Promotion.DegreeStage"), value: "DegreeStage" },
@@ -161,41 +171,74 @@ const headers = ref<Array<ITableHeader>>([
 <template>
   <IPage :HeaderTitle="t('Promotion.Alert')" :is-loading="isLoading">
     <template #HeaderButtons>
-      <IButton width="28" :onClick="recheck" :text="t('Promotion.ReCalculate')" />
+      <IButton
+        width="28"
+        :onClick="recheck"
+        :text="t('Promotion.ReCalculate')"
+      />
     </template>
     <IPageContent>
-      <IRow :col="1" :col-md="1" :col-lg="1" class="scroll-auto">
+      <IRow :cols="1" :cols-md="1" :cols-lg="1" class="scroll-auto">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="3" :span-md="3" :span="2" :span-sm="4">
-            <IInput   :placeholder="t('SearchForUser')" v-model="fastSearch"
-              :type="EnumInputType.Text" :OnKeyEnter="getFilterData" />
+            <IInput
+              :placeholder="t('SearchForUser')"
+              v-model="fastSearch"
+              :type="EnumInputType.Text"
+              :OnKeyEnter="getFilterData"
+            />
           </ICol>
           <!-- date -->
           <!-- <ICol :span-lg="1" :span-md="2" :span="1">
             <ISelect :label="t('PromotionSection')" v-model="searchFilter.sectionId"
               :options="sections" :IsRequire="true" @onChange="getFilterData()" />
           </ICol> -->
-          <ICol :span-lg="3" :span-md="3" :span="1" class="flex items-center justify-center">
-            <ICheckbox :label="t('Promotion.IsBoundFilter') + ' ' + t('Days')" v-model="searchFilter.isBound"
-              :IsRequire="true" @onChange="getFilterData()" class="flex items-center justify-center" />
-            <IInput v-model="searchFilter.bound" :disabled="!searchFilter.isBound" :type="EnumInputType.Number" class="w-[100px]" @keyup.enter="getFilterData" />
+          <ICol
+            :span-lg="3"
+            :span-md="3"
+            :span="1"
+            class="flex items-center justify-center"
+          >
+            <ICheckbox
+              :label="t('Promotion.IsBoundFilter') + ' ' + t('Days')"
+              v-model="searchFilter.isBound"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+              class="flex items-center justify-center"
+            />
+            <IInput
+              v-model="searchFilter.bound"
+              :disabled="!searchFilter.isBound"
+              :type="EnumInputType.Number"
+              class="w-[100px]"
+              @keyup.enter="getFilterData"
+            />
           </ICol>
         </ISearchBar>
       </IRow>
       <IRow>
         <ITable :items="data" :headers="headers">
           <template v-slot:difNextPromotionDateShow="{ row }">
-            <span>{{ row.difNextPromotionDate + " " + t('Day') }} </span>
+            <span>{{ row.difNextPromotionDate + " " + t("Day") }} </span>
           </template>
           <template v-slot:actions="{ row }">
             <IDropdown>
               <li>
-                <EditButton title="Employee.Info" class="p-0 m-0" @click="update(row.id)" />
+                <EditButton
+                  title="Employee.Info"
+                  class="p-0 m-0"
+                  @click="update(row.id)"
+                />
               </li>
             </IDropdown>
           </template>
           <template v-slot:btnAddBound="{ row }">
-            <IButton @click="addBound(row.id)" icon="mdi-bookmark-plus" type="outlined" :text="t('Promotion.Add')" />
+            <IButton
+              @click="addBound(row.id)"
+              icon="mdi-bookmark-plus"
+              type="outlined"
+              :text="t('Promotion.Add')"
+            />
           </template>
         </ITable>
         <IRow v-if="data.length > 0">
@@ -208,12 +251,22 @@ const headers = ref<Array<ITableHeader>>([
           ></IPagination> -->
           <div class="w-full flex flex-row">
             <div class="basis-4/5 overflow-auto">
-              <TailwindPagination class="flex justify-center mt-6" :data="dataPage"
-                @pagination-change-page="getFilterData" :limit="searchFilter.limit" />
+              <TailwindPagination
+                class="flex justify-center mt-6"
+                :data="dataPage"
+                @pagination-change-page="getFilterData"
+                :limit="searchFilter.limit"
+              />
             </div>
             <div class="basis-1/5" v-if="data.length >= limits[0].id">
-              <ISelect name="limit" :label="t('Limit')" v-model="searchFilter.limit" :options="limits" :IsRequire="true"
-                @onChange="getFilterData()" />
+              <ISelect
+                name="limit"
+                :label="t('Limit')"
+                v-model="searchFilter.limit"
+                :options="limits"
+                :IsRequire="true"
+                @onChange="getFilterData()"
+              />
             </div>
           </div>
           <SimpleLoading v-if="isLoading">.</SimpleLoading>

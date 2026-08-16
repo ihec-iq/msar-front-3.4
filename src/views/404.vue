@@ -647,7 +647,8 @@ nav .menu .menu_icon:hover .icon:after {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: inset 5px 20px 40px rgba(54, 24, 79, 0.25),
+  box-shadow:
+    inset 5px 20px 40px rgba(54, 24, 79, 0.25),
     inset 5px 0px 5px rgba(50, 36, 62, 0.3),
     inset 5px 5px 20px rgba(50, 36, 62, 0.25),
     2px 2px 5px rgba(255, 255, 255, 0.2);
@@ -672,7 +673,8 @@ nav .menu .menu_icon:hover .icon:after {
   height: 600px;
   background-color: rgba(54, 24, 79, 0.3);
   border-radius: 100%;
-  box-shadow: inset 5px 20px 40px rgba(54, 24, 79, 0.25),
+  box-shadow:
+    inset 5px 20px 40px rgba(54, 24, 79, 0.25),
     inset 5px 0px 5px rgba(50, 36, 62, 0.3),
     inset 5px 5px 20px rgba(50, 36, 62, 0.25),
     2px 2px 5px rgba(255, 255, 255, 0.2);

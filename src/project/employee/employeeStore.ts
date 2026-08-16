@@ -2,7 +2,10 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import Api from "@/api/apiConfig";
 import { getError } from "@/utilities/helpers";
-import type { IEmployee, IEmployeeCenter, IEmployeeFilter, IEmployeePosition, IEmployeeType } from "@/project/employee/IEmployee";
+import type { IEmployee, IEmployeeFilter } from "@/project/employee/IEmployee";
+import type { IEmployeeType } from "./setting/employeeType/IEmployeeType";
+import type { IEmployeePosition } from "./setting/employeePosition/IEmployeePosition";
+import type { IEmployeeCenter } from "./setting/employeeCenter/IEmployeeCenter";
 
 export const useEmployeeStore = defineStore("useEmployeeStore", () => {
   const employee = ref<IEmployee>({
@@ -29,41 +32,40 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
     },
     MoveSection: {
       id: 0,
-      name: ""
+      name: "",
     },
     isMoveSection: 0,
     EmployeeCenter: {
       id: 0,
       name: "",
-      code: ""
     },
     BonusJobTitle: {
       id: 0,
       name: "",
-      description: ""
+      description: "",
     },
     Study: {
       id: 0,
-      name: ""
+      name: "",
     },
     DegreeStage: {
       id: 0,
       title: "",
       Degree: {
         id: 0,
-        name: ""
+        name: "",
       },
       Stage: {
         id: 0,
-        name: ""
+        name: "",
       },
       salary: 0,
       yearlyBonus: 0,
-      yearlyService: 0
+      yearlyService: 0,
     },
     numberLastBonus: "",
-    dateLastBonus: "", 
-    dateNextBonus: ""
+    dateLastBonus: "",
+    dateNextBonus: "",
   });
   const error = ref<string | null>(null);
 
@@ -116,74 +118,95 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
       EmployeeCenter: {
         id: 0,
         name: "",
-        code: ""
       },
       BonusJobTitle: {
         id: 0,
         name: "",
-        description: ""
+        description: "",
       },
       Study: {
         id: 0,
-        name: ""
+        name: "",
       },
       DegreeStage: {
         id: 0,
         title: "",
         Degree: {
           id: 0,
-          name: ""
+          name: "",
         },
         Stage: {
           id: 0,
-          name: ""
+          name: "",
         },
         salary: 0,
         yearlyBonus: 0,
-        yearlyService: 0
+        yearlyService: 0,
       },
       numberLastBonus: "",
       dateLastBonus: "",
-      dateNextBonus: "" 
+      dateNextBonus: "",
     };
   }
   async function get_filter(params: IEmployeeFilter, page: number) {
-    return await Api.get(`${pathUrl}/filter?page=${page}`, { params: params });
+    try {
+      return await Api.get(`${pathUrl}/filter?page=${page}`, {
+        params: params,
+      });
+    } catch (error: any) {
+      // Handle errors where response might not exist
+      console.error("Error:", error.response?.data || error.message);
+    }
+    return;
+  }
+  async function get_light_filter(params: IEmployeeFilter, page: number) {
+    try {
+      return await Api.get(`${pathUrl}/filter/lite?page=${page}`, {
+        params: params,
+      });
+    } catch (error: any) {
+      // Handle errors where response might not exist
+      console.error("Error:", error.response?.data || error.message);
+    }
+    return;
   }
   async function get_employee_positions(hardRefresh: boolean = false) {
     if (hardRefresh == false || employees_positions.value.length == 0) {
-      return await Api.get(`employee_position`).then((response: any) => {
-        if (response.status == 200) {
-        employees_positions.value = response.data.data;
-      }
-    })
-      .catch((errors: any) => {
-        console.log("in get employees_positions : " + errors);
-      });
+      return await Api.get(`employee_position`)
+        .then((response: any) => {
+          if (response.status == 200) {
+            employees_positions.value = response.data.data;
+          }
+        })
+        .catch((errors: any) => {
+          console.log("in get employees_positions : " + errors);
+        });
     }
   }
   async function get_employee_types(hardRefresh: boolean = false) {
     if (hardRefresh == false || employees_types.value.length == 0) {
-      return await Api.get(`employee_type`).then((response: any) => {
-        if (response.status == 200) {
-          employees_types.value = response.data.data;
-        }
-      })
-      .catch((errors: any) => {
-        console.log("in get employee_type : " + errors);
-        });;
+      return await Api.get(`employee_type`)
+        .then((response: any) => {
+          if (response.status == 200) {
+            employees_types.value = response.data.data;
+          }
+        })
+        .catch((errors: any) => {
+          console.log("in get employee_type : " + errors);
+        });
     }
   }
   async function get_employee_centers(hardRefresh: boolean = false) {
     if (hardRefresh == false || employees_centers.value.length == 0) {
-      return await Api.get(`employee_center`).then((response: any) => {
-        if (response.status == 200) {
-          employees_centers.value = response.data.data;
-        }
-      })
-      .catch((errors: any) => {
-        console.log("in get employee_center : " + errors);
-        });;
+      return await Api.get(`employee_center`)
+        .then((response: any) => {
+          if (response.status == 200) {
+            employees_centers.value = response.data.data;
+          }
+        })
+        .catch((errors: any) => {
+          console.log("in get employee_center : " + errors);
+        });
     }
   }
   async function getItemHistory(params: IEmployeeFilter, page: number) {
@@ -192,7 +215,7 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
     });
   }
   async function store(prams: object) {
-    return await Api.post(`${pathUrl}/store/`, prams);
+    return await Api.post(`${pathUrl}/store`, prams);
   }
   async function update(id: number, params: object) {
     return await Api.post(`${pathUrl}/update/${id}`, params);
@@ -205,7 +228,7 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
   }
   async function showBonusLite(id: number) {
     return await Api.get(`${pathUrl}/show/bonus/lite/${id}`);
-  } 
+  }
   async function _delete(id: number) {
     return await Api.delete(`${pathUrl}/delete/${id}`);
   }
@@ -218,6 +241,7 @@ export const useEmployeeStore = defineStore("useEmployeeStore", () => {
     employees_positions,
     get,
     get_filter,
+    get_light_filter,
     getItemHistory,
     get_employees,
     get_employee_positions,

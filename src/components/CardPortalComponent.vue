@@ -1,85 +1,60 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type { IconLink } from "./fixed/FixedMenu";
-import { t } from "@/utilities/I18nPlugin";
-import { Icon } from "@iconify/vue";
-import ICol2 from "./ihec/ICol2.vue";
-import IRow2 from "./ihec/IRow2.vue";
+// The CardPortalSingleComponent is the visual representation of your link.
+// It will be placed inside the Material Design card container.
+import CardPortalSingleComponent from "./CardPortalSingleComponent.vue"; // Assuming path
+
 const props = defineProps({
   links: {
-    type: Array<Object>,
+    type: Array as () => IconLink[],
     required: false,
-    default: [],
+    default: () => [],
   },
 });
+
 const LinksBase = computed(() => {
-  return props.links as Array<IconLink>;
+  return props.links;
 });
+import { ref, onMounted, onUnmounted } from "vue";
+
+const columns = ref(1);
+
+const updateColumns = () => {
+  const width = window.innerWidth;
+  if (width < 640) columns.value = 1;
+  else if (width < 768) columns.value = 2;
+  else if (width < 1024) columns.value = 3;
+  else if (width < 1280) columns.value = 4;
+  else columns.value = 5;
+};
+
+onMounted(() => {
+  updateColumns();
+  window.addEventListener("resize", updateColumns);
+});
+onUnmounted(() => window.removeEventListener("resize", updateColumns));
 </script>
 
 <template>
-  <IRow2 :gap="2">
-    <ICol2 :cols="12" v-for="Link in LinksBase" :key="Link.routerName">
-      <router-link :to="{ name: Link.routerName }">
-        <span href="" class="group relative block h-64 sm:h-50 lg:h-60">
-          <span class="absolute inset-0 border-2 border-dashed border-black"></span>
+  <div
+    class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 p-4 md:p-6"
+  >
+    <router-link
+      v-for="link in LinksBase"
+      :key="link.routerName"
+      :to="{ name: link.routerName }"
+      class="relative block overflow-hidden rounded-2xl bg-neutral-50 dark:bg-neutral-800 shadow-sm transition-all duration-200 ease-out hover:shadow-md hover:-translate-y-1 active:scale-[0.98] active:duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-400"
+    >
+      <CardPortalSingleComponent :Link="link" />
 
-          <div
-            class="relative flex h-full transform items-end border-2 border-black bg-white transition-transform group-hover:-translate-x-2 group-hover:-translate-y-2">
-            <div class="p-4 !pt-0 transition-opacity group-hover:absolute group-hover:opacity-0 sm:p-6 lg:p-8">
-              <div title="Feature"
-                class="dark:text-navIconColorHoverDark dark:hover:text-navIconColoDark hover:text-navIconColoDark text-[#444] p-4 inline-flex justify-center rounded-md smooth-hover">
-                <span v-html="Link.iconX" class="dark:text-content"></span>
-                <Icon v-if="Link?.mdi" :icon="Link?.mdi" class="dark:text-content size-16" :class="{
-                  ['text-' + Link.color]: Link?.color,
-                  'animate-shake': Link?.shake
-                }"></Icon>
-              </div>
-
-              <h2 class="dark:text-gray-800 mt-4 text-xl font-medium sm:text-2xl ">
-                {{ Link.title }}
-              </h2>
-            </div>
-
-            <div
-              class="absolute p-4 opacity-0 transition-opacity group-hover:relative group-hover:opacity-100 sm:p-6 lg:p-8">
-              <h3 class="dark:text-gray-700 mt-4 text-xl font-medium sm:text-2xl">
-                {{ Link.title }}
-              </h3>
-
-              <p class="dark:text-gray-600 mt-4 text-sm sm:text-base">
-                {{ Link.description }}
-              </p>
-
-              <p class="dark:text-gray-600 mt-8 font-bold">
-                {{ t("Show") }}
-              </p>
-            </div>
-          </div>
-        </span>
-      </router-link>
-    </ICol2>
-  </IRow2>
+      <div
+        class="absolute inset-0 bg-black opacity-0 transition-opacity duration-200 hover:opacity-[0.05] active:opacity-[0.08]"
+      ></div>
+    </router-link>
+  </div>
 </template>
 
 <style scoped>
-.animate-shake {
-  animation: shake 0.5s infinite;
-}
-
-@keyframes shake {
-
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-
-  25% {
-    transform: rotate(-5deg);
-  }
-
-  75% {
-    transform: rotate(5deg);
-  }
-}
+/* The 'jiggle' animation is no longer needed for this cleaner Material Design feel. */
 </style>

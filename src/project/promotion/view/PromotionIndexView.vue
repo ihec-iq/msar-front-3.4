@@ -26,6 +26,7 @@ import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -53,7 +54,7 @@ const filterByIDName = (promotiones: IPromotion) => {
 };
 const makeFastSearch = () => {
   return;
-  // eslint-disable-next-line no-self-assign
+
   // if (fastSearch.value == "") data.value = dataBase.value;
   // else {
   //   data.value = dataBase.value.filter(filterByIDName);
@@ -67,8 +68,11 @@ const searchFilter = ref<IPromotionFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexPromotiones", page.toString());
-
+  useLocalStorage().set({
+    key: "indexPromotiones",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value.toString();
   //searchFilter.value.title = fastSearch.value.toString();
@@ -126,7 +130,7 @@ const headers = ref<Array<ITableHeader>>([
       <IButton width="28" :onClick="add" :text="t('Promotion.Add')" />
     </template>
     <IPageContent>
-      <IRow :col="3" :col-md="2" :col-lg="3">
+      <IRow :cols="3" :cols-md="2" :cols-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
             <IInput
@@ -201,6 +205,6 @@ const headers = ref<Array<ITableHeader>>([
         <div id="PageDataEnd"></div>
       </IRow>
     </IPageContent>
-    <IFooterCrud :is-add="true" :show-add="false"/>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>

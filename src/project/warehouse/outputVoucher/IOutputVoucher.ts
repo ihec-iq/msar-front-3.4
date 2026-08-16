@@ -1,26 +1,31 @@
 import type { IInputVoucherItem } from "../inputVoucher/IInputVoucher";
 import type { IItem } from "@/project/item/IItem";
-import type { IStock } from "../IStock";
+import type { IStock } from "../settingVoucher/stock/IStock";
+import type { IDocument } from "@/project/archive/IArchive";
+import type { IUserFilter, IUserLite } from "@/project/user/IUser";
 
 export interface IOutputVoucher {
   id: number;
   number: string;
   date: string;
+  dateBill: string;
+  numberBill: string;
   notes: string;
   Items: Array<IOutputVoucherItem>;
-  signaturePerson: string;
   Stock: IStock;
   Employee: IOutputVoucherEmployee;
   itemsCount?: number;
+  FilesDocument?: Array<IDocument>;
+  UserCreated?: IUserLite;
 }
 export interface IOutputVoucherItem {
   id?: number;
   outputVoucherId: number;
   Item?: IItem;
   inputVoucherItemId: number;
-  InputVoucherItem: IInputVoucherItem; 
+  InputVoucherItem: IInputVoucherItem;
   description: string;
-  count: number; 
+  count: number;
   price: number;
   value: number;
   notes: string;

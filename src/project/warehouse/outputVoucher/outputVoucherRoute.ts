@@ -4,7 +4,8 @@ export default [
   {
     path: "/outputVouchers/:search?",
     name: "outputVoucherIndex",
-    component: () => import("@/project/warehouse/outputVoucher/view/OutputVoucherIndexView.vue"),
+    component: () =>
+      import("@/project/warehouse/outputVoucher/view/OutputVoucherIndexView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -12,7 +13,8 @@ export default [
   {
     path: "/outputVoucher",
     name: "outputVoucherAdd",
-    component: () => import("@/project/warehouse/outputVoucher/view/OutputVoucherView.vue"),
+    component: () =>
+      import("@/project/warehouse/outputVoucher/view/OutputVoucherView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -20,7 +22,8 @@ export default [
   {
     path: "/outputVoucher/:id",
     name: "outputVoucherUpdate",
-    component: () => import("@/project/warehouse/outputVoucher/view/OutputVoucherView.vue"),
+    component: () =>
+      import("@/project/warehouse/outputVoucher/view/OutputVoucherView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

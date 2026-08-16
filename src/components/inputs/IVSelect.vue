@@ -5,34 +5,13 @@ const emits = defineEmits<{
   (e: "onChange"): void;
 }>();
 defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  labelVSelect: {
-    type: String,
-    default: "name",
-  },
-  options: {
-    type: Array<any>,
-    required: true,
-  },
-  IsRequire: {
-    type: Boolean,
-    default: false,
-  },
-  multiple: {
-    type: Boolean,
-    default: false,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
+  name: { type: String, required: true },
+  label: { type: String, required: true },
+  labelVSelect: { type: String, default: "name" },
+  options: { type: Array<any>, required: true },
+  IsRequire: { type: Boolean, default: false },
+  multiple: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
 });
 const Change = () => {
   emits("onChange");
@@ -47,7 +26,6 @@ const Change = () => {
     </label>
     <vSelect
       :id="name"
-      class="_input"
       v-model="modelValue"
       :options="options"
       :reduce="(user: any) => user"
@@ -57,6 +35,7 @@ const Change = () => {
       @change="Change"
       :multiple="multiple"
       :disabled="disabled"
+      class="focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px] border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input text-text dark:text-textLight"
     >
       <template #option="{ name }">
         <div class="_input">

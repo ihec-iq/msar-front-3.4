@@ -13,9 +13,9 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('UserIndex')">
+  <IPage :HeaderTitle="t('Item.Portal')">
     <IPageContent>
-      <CardPortalComponent :links="ItemLinks[0].children"></CardPortalComponent>
+      <CardPortalComponent :links="ItemLinks[0].children" />
     </IPageContent>
     <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>

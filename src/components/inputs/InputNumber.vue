@@ -107,7 +107,9 @@ input {
   /* border: 1px solid transparent; */
   /* padding: 15px 10px; */
   outline: none;
-  transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out,
+  transition:
+    border-color 0.3s ease-in-out,
+    color 0.3s ease-in-out,
     background-color 0.3s ease-in-out;
   /* background-color: #1f2937; */
   --tw-border-opacity: 1;

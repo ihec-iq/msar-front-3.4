@@ -24,9 +24,9 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
         Stage: { id: 0, name: "" },
         salary: 0,
         yearlyBonus: 0,
-        yearlyService: 0
+        yearlyService: 0,
       },
-      BonusJobTitle: { id: 0, name: "", description: "" }
+      BonusJobTitle: { id: 0, name: "", description: "" },
     },
     DegreeStage: {
       id: 0,
@@ -35,11 +35,19 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
       Stage: { id: 0, name: "" },
       salary: 0,
       yearlyBonus: 0,
-      yearlyService: 0
+      yearlyService: 0,
     },
-    notes: ""
+    notes: "",
   });
-  const DegreeStage = ref<IDegreeStage>({ id: 0, title: "", Degree: { id: 0, name: "" }, Stage: { id: 0, name: "" }, salary: 0, yearlyBonus: 0, yearlyService: 0 });
+  const DegreeStage = ref<IDegreeStage>({
+    id: 0,
+    title: "",
+    Degree: { id: 0, name: "" },
+    Stage: { id: 0, name: "" },
+    salary: 0,
+    yearlyBonus: 0,
+    yearlyService: 0,
+  });
 
   const Promotiones = ref<Array<IPromotion>>([]);
   const DegreeStages = ref<Array<IDegreeStage>>([]);
@@ -53,7 +61,9 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
   const error = ref<string | null>(null);
 
   const sortedPromotiones = computed(() => {
-    return [...Promotiones.value].sort((a, b) => a.number.localeCompare(b.number));
+    return [...Promotiones.value].sort((a, b) =>
+      a.number.localeCompare(b.number)
+    );
   });
 
   const resetDataPromotion = () => {
@@ -67,14 +77,15 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
         dateLastPromotion: "",
         dateNextPromotion: "",
         numberLastPromotion: "",
-        DegreeStage: { // Added this property
+        DegreeStage: {
+          // Added this property
           id: 0,
           title: "",
           Degree: { id: 0, name: "" },
           Stage: { id: 0, name: "" },
           salary: 0,
           yearlyBonus: 0,
-          yearlyService: 0
+          yearlyService: 0,
         },
         BonusJobTitle: { id: 0, name: "", description: "" },
       },
@@ -85,11 +96,11 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
         Stage: { id: 0, name: "" },
         salary: 0,
         yearlyBonus: 0,
-        yearlyService: 0
+        yearlyService: 0,
       },
-      notes: ""
+      notes: "",
     };
-  }
+  };
   async function get() {
     return await Api.get(`${pathUrl}`);
   }
@@ -104,14 +115,13 @@ export const usePromotionStore = defineStore("PromotionStore", () => {
     return await Api.get(`${pathUrl}/filter?page=${page}`, { params });
   }
   async function get_checkPromotion(params: IPromotionFilter, page: number) {
-    return await Api.get(`${pathEmployeeUrl}/promotion/check?page=${page}`, { params });
+    return await Api.get(`${pathEmployeeUrl}/promotion/check?page=${page}`, {
+      params,
+    });
   }
   async function calculatePromotion(params: IPromotionFilter) {
     return await Api.get(`${pathEmployeeUrl}/promotion/calculate`, { params });
   }
-
-    
- 
 
   async function get_EmployeesLite() {
     return await Api.get(`/employee/lite`).then((response) => {

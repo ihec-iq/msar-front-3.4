@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import SimpleLoading from "@/components/general/SimpleLoading.vue";
 import { useDark, useToggle, useColorMode } from "@vueuse/core";
 import { useRtlStore } from "@/stores/i18n/rtlPi";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 const rtlStore = useRtlStore();
 const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
@@ -37,14 +38,7 @@ const showPopup = () => {
 const closePopup = () => {
   showPop.value = false;
 };
-let isDark = useDark();
-let themeDark = ref(false);
-const toggleDark = useToggle(isDark);
-const changeDark = () => {
-  themeDark.value = !themeDark.value;
-  toggleDark(themeDark.value);
-};
-const { ConnectionString } = storeToRefs(useConfigStore());
+const { Config } = storeToRefs(useConfigStore());
 interface ILogin {
   email: string;
   password: string;
@@ -82,9 +76,15 @@ const Login = async () => {
   await authStore
     .login(loginForm)
     .then(() => {
-      router.push({
-        name: "Dashboard",
-      });
+      const redirectPath = localStorage.getItem("redirectPathMsar");
+      if (redirectPath) {
+        useLocalStorage().remove("redirectPathMsar");
+        router.push(redirectPath);
+      } else {
+        router.push({
+          name: "Home",
+        });
+      }
     })
     .catch((error) => {
       isLoading.value = false;
@@ -93,11 +93,24 @@ const Login = async () => {
   isLoading.value = false;
 };
 onMounted(async () => {
-  if (authStore.isAuthenticated) router.push({ name: "Dashboard" });
+  authStore.CheckAuth();
+  if (authStore.isAuthenticated) {
+    const redirectPath = localStorage.getItem("redirectPathMsar");
+    if (redirectPath) {
+      router.push(redirectPath);
+    } else {
+      router.push({
+        name: "Home",
+      });
+    }
+  }
   await useConfigStore()
     .load()
     .then(() => {
-      if (ConnectionString.value == null || ConnectionString.value == "") {
+      if (
+        Config.value.connectionString == null ||
+        Config.value.connectionString == ""
+      ) {
         const swalWithBootstrapButtons = Swal.mixin({
           customClass: {
             confirmButton: "btn m-2 bg-red-700",
@@ -354,33 +367,43 @@ onMounted(async () => {
   0% {
     transform: translate(1px, 1px);
   }
+
   10% {
     transform: translate(-1px, -2px);
   }
+
   20% {
     transform: translate(-3px, 0px);
   }
+
   30% {
     transform: translate(3px, 2px);
   }
+
   40% {
     transform: translate(1px, -1px);
   }
+
   50% {
     transform: translate(-1px, 2px);
   }
+
   60% {
     transform: translate(-3px, 1px);
   }
+
   70% {
     transform: translate(3px, 1px);
   }
+
   80% {
     transform: translate(-1px, -1px);
   }
+
   90% {
     transform: translate(1px, 2px);
   }
+
   100% {
     transform: translate(1px, -2px);
   }
@@ -389,17 +412,21 @@ onMounted(async () => {
 .submit-btn:hover {
   transform: scale(1.1);
 }
+
 @keyframes move_wave {
   0% {
     transform: translateX(0) translateZ(0) scaleY(1);
   }
+
   50% {
     transform: translateX(-25%) translateZ(0) scaleY(0.55);
   }
+
   100% {
     transform: translateX(-50%) translateZ(0) scaleY(1);
   }
 }
+
 .waveWrapper {
   overflow: hidden;
   position: absolute;
@@ -409,6 +436,7 @@ onMounted(async () => {
   top: 0;
   margin: auto;
 }
+
 .waveWrapperInner {
   position: absolute;
   width: 100%;
@@ -417,17 +445,21 @@ onMounted(async () => {
   bottom: -1px;
   background-image: linear-gradient(to top, #162c99 20%, #27273c 80%);
 }
+
 .bgTop {
   z-index: 15;
   opacity: 0.5;
 }
+
 .bgMiddle {
   z-index: 10;
   opacity: 0.75;
 }
+
 .bgBottom {
   z-index: 5;
 }
+
 .wave {
   position: absolute;
   left: 0;
@@ -437,24 +469,30 @@ onMounted(async () => {
   background-position: 0 bottom;
   transform-origin: center bottom;
 }
+
 .waveTop {
   background-size: 50% 100px;
 }
+
 .waveAnimation .waveTop {
   animation: move-wave 3s;
   -webkit-animation: move-wave 3s;
   -webkit-animation-delay: 1s;
   animation-delay: 1s;
 }
+
 .waveMiddle {
   background-size: 50% 120px;
 }
+
 .waveAnimation .waveMiddle {
   animation: move_wave 10s linear infinite;
 }
+
 .waveBottom {
   background-size: 50% 100px;
 }
+
 .waveAnimation .waveBottom {
   animation: move_wave 15s linear infinite;
 }
@@ -510,4 +548,4 @@ onMounted(async () => {
     );
   }
 }
-</style> 
+</style>

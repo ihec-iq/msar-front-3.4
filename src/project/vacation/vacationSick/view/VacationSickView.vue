@@ -19,13 +19,13 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
- 
+
 const { validate, min, required, isObject, max, number } = useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {
@@ -241,7 +241,7 @@ const ChangeDate = () => {
   vacationSick.value.record = days;
 };
 const ChangeDateRecord = () => {
-  let d = new Date(vacationSick.value.dayFrom);
+  const d = new Date(vacationSick.value.dayFrom);
   d.setDate(d.getDate() + vacationSick.value.record);
   vacationSick.value.dayTo = d.toISOString().split("T")[0];
 };
@@ -252,7 +252,7 @@ const ChangeDateRecord = () => {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -261,7 +261,7 @@ const ChangeDateRecord = () => {
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="2" span-md="1" span-sm="1">
               <IInput
                 :label="t('DateFrom')"

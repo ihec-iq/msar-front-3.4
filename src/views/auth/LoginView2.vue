@@ -13,14 +13,14 @@ import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
 import SimpleLoading from "@/components/general/SimpleLoading.vue";
 import CardContainer from "@/components/ui/card-3d/CardContainer.vue";
-const { ConnectionString } = storeToRefs(useConfigStore());
- 
-const version :string= import.meta.env.VITE_APP_VERSION; // Get the version from package.json
-interface ILogin {
+import { useLocalStorage } from "@/compositions/uselocalStorage";
+const { Config } = storeToRefs(useConfigStore());
+
+const version = (import.meta as any).env.VITE_APP_VERSION; // Get the version from package.json
+const loginForm = reactive<{
   email: string;
   password: string;
-}
-const loginForm = reactive<ILogin>({
+}>({
   email: "admin@admin.com",
   password: "password",
 });
@@ -53,9 +53,15 @@ const Login = async () => {
   await authStore
     .login(loginForm)
     .then(() => {
-      router.push({
-        name: "Dashboard",
-      });
+      const redirectPath = localStorage.getItem("redirectPathMsar");
+      if (redirectPath) {
+        router.push({ name: redirectPath as string });
+        useLocalStorage().remove("redirectPathMsar");
+      } else {
+        router.push({
+          name: "Home",
+        });
+      }
     })
     .catch((error) => {
       isLoading.value = false;
@@ -71,12 +77,21 @@ const Login = async () => {
     });
   isLoading.value = false;
 };
+const isAuthenticated = storeToRefs(useAuthStore());
 onMounted(async () => {
-  if (authStore.isAuthenticated) router.push({ name: "Dashboard" });
+  await authStore.CheckAuth();
+  if (authStore.isAuthenticated) {
+    router.push({
+      name: "Home",
+    });
+  }
   await useConfigStore()
     .load()
     .then(() => {
-      if (ConnectionString.value == null || ConnectionString.value == "") {
+      if (
+        Config.value.connectionString == null ||
+        Config.value.connectionString == ""
+      ) {
         const swalWithBootstrapButtons = Swal.mixin({
           customClass: {
             confirmButton: "btn m-2 bg-red-700",
@@ -120,12 +135,12 @@ onMounted(async () => {
           <div class="text-center">
             <img
               class="h-24 mx-auto"
-              src="@/assets/logo-512x512.png"
-              alt="Apple"
+              src="@/assets/logo.png"
+              alt="MSAR ERP LOGO"
             />
 
             <span
-              class=" whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-zinc-700/75"
+              class="whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-zinc-700/75"
             >
               تسجيل الدخول
             </span>
@@ -208,10 +223,9 @@ onMounted(async () => {
                 <a
                   href=""
                   class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-300"
-                  >
-                  v{{ version }}
-                  </a
                 >
+                  v{{ version }}
+                </a>
               </div>
             </div>
 

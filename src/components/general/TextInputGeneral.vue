@@ -40,15 +40,13 @@ const name = toRef(props, "name");
 
 // we don't provide any rules here because we are using form-level validation
 // https://vee-validate.logaretm.com/v4/guide/validation#form-level-validation
-const {
-  value,
-  errorMessage,
-  handleBlur,
-  handleChange,
-  meta,
-} = useField(name, undefined, {
-  initialValue: props.value,
-});
+const { value, errorMessage, handleBlur, handleChange, meta } = useField(
+  name,
+  undefined,
+  {
+    initialValue: props.value,
+  }
+);
 </script>
 
 <template>
@@ -66,7 +64,7 @@ const {
       :placeholder="placeholder"
       @input="handleChange"
       @blur="handleBlur"
-     />  
+    />
     <p class="help-message" v-show="!meta.valid">
       {{ errorsMessage || errorMessage }}
     </p>
@@ -109,7 +107,9 @@ input {
   padding: 15px 10px;
   outline: none;
   width: 100%;
-  transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out,
+  transition:
+    border-color 0.3s ease-in-out,
+    color 0.3s ease-in-out,
     background-color 0.3s ease-in-out;
 }
 

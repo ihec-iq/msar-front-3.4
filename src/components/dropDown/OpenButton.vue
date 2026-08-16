@@ -11,11 +11,14 @@ const props = defineProps({
 onMounted(() => {});
 </script>
 <template>
-  <button class="flex justify-between dropdown-item text-sm p-2 font-normal
-    whitespace-nowrap bg-transparent text-text dark:text-textLight
-  hover:bg-gray-200 hover:border-2 dark:hover:bg-gray-900 dark:border-gray-700 border-gray-300 border-2 rounded-md"
-    href="#">
+  <button
+    class="flex justify-between dropdown-item text-sm p-2 font-normal whitespace-nowrap bg-transparent text-text dark:text-textLight hover:bg-gray-200 hover:border-2 dark:hover:bg-gray-900 dark:border-gray-700 border-gray-300 border-2 rounded-md"
+    href="#"
+  >
     <div class="mx-2 text-lg">{{ t(title) }}</div>
-    <Icon :icon="icon" class="h-6 w-6 text-currentColor mx-2 dark:text-gray-400" />
+    <Icon
+      :icon="icon"
+      class="h-6 w-6 text-currentColor mx-2 dark:text-gray-400"
+    />
   </button>
 </template>

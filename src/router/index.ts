@@ -11,7 +11,10 @@ import userRoute from "@/project/user/userRoute";
 import roleRoute from "@/project/role/roleRoute";
 import warehouseRoute from "@/project/warehouse/warehouseRoute";
 import employeeRoute from "@/project/employee/employeeRoute";
-import hrRoute from '@/project/hr/hrRoute';
+import hrRoute from "@/project/hr/hrRoute";
+import backupRoute from "@/project/backup/backupRoute";
+import settingsRoute from "@/project/settings/settingsRoute";
+import dashboardRoute from "@/project/dashboard/dashboardRoute";
 
 //#endregion
 import DefaultLayout from "@/views/layouts/MainView.vue";
@@ -19,7 +22,8 @@ import bonusRoute from "@/project/bonus/bonusRoute";
 import promotionRoute from "@/project/promotion/promotionRoute";
 const router = createRouter({
   history: createWebHistory(
-    process.env.NODE_ENV === "production" ? "/erp-msar/" : "/",
+    process.env.NODE_ENV === "production" ? "/erp-msar/" : "/"
+    // process.env.NODE_ENV === "production" ? "/" : "/",
   ), //import.meta.env.BASE_URL
   linkExactActiveClass: "linkExactActiveClass",
   routes: [
@@ -53,6 +57,7 @@ const router = createRouter({
       name: "main",
       component: DefaultLayout,
       children: [
+        ...dashboardRoute,
         ...archiveRoute,
         ...itemRoute,
         ...itemCategoryRoute,
@@ -64,10 +69,20 @@ const router = createRouter({
         ...promotionRoute,
         ...employeeRoute,
         ...hrRoute,
+        ...backupRoute,
+        ...settingsRoute,
         {
-          path: "/dashboard",
-          name: "Dashboard",
+          path: "/home",
+          name: "Home",
           component: () => import("@/views/HomeView.vue"),
+          meta: {
+            middleware: [authMiddleware],
+          },
+        },
+        {
+          path: "/div",
+          name: "div",
+          component: () => import("@/views/DivView.vue"),
           meta: {
             middleware: [authMiddleware],
           },
@@ -115,17 +130,35 @@ const router = createRouter({
   ],
 });
 router.beforeResolve(async (to, from, next) => {
-  const middlewares: unknown = to.meta.middleware;
-  if (middlewares) {
-    // If middlewares are defined for the route
-    for (const middleware of middlewares as Function[]) {
-      await middleware(to, from, next);
-    }
+  const middlewares = to.meta.middleware as Function[] | undefined;
+
+  if (!middlewares) {
+    next(); // No middlewares: proceed immediately
+    return;
   }
-  next();
-  return;
+
+  // Track if next() has been called
+  let nextCalled = false;
+
+  // Create a wrapped next() function to block multiple calls
+  const wrappedNext: typeof next = (to?: any) => {
+    if (nextCalled) return;
+    nextCalled = true;
+    next(to);
+  };
+
+  // Execute middlewares sequentially
+  for (const middleware of middlewares) {
+    await middleware(to, from, wrappedNext);
+    if (nextCalled) break; // Stop if next() was called
+  }
+
+  // If no middleware called next(), proceed
+  if (!nextCalled) {
+    next();
+  }
 });
-router.onError(err => {
-  console.log('<!-- router error: ' + err.message + ' -->')
-})
+router.onError((err) => {
+  console.log("<!-- router error: " + err.message + " -->");
+});
 export default router;

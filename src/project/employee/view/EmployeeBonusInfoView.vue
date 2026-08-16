@@ -30,7 +30,7 @@ import type {
   IBonusFilter,
 } from "@/project/bonus/IBonus";
 import { prepareFormData } from "@/utilities/crudTool";
-import { ErrorToast, SuccessToast } from "@/utilities/Toast";
+import { ErrorToast, SuccessToast } from "@/utilities/Toast2";
 import EditButton from "@/components/dropDown/EditButton.vue";
 import { Icon } from "@iconify/vue";
 import { getError } from "@/utilities/helpers";
@@ -69,7 +69,7 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import { makeFormDataFromObject } from "@/utilities/tools";
 import OpenButton from "@/components/dropDown/OpenButton.vue";
@@ -81,12 +81,12 @@ import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {
     field: "Section",
-    caption: t("InputVoucherNumber"),
+    caption: t("InputVoucher.Number"),
     rules: [required()],
   },
   // {
@@ -186,12 +186,12 @@ const showData = async () => {
         Object.assign(employee.value, response.data.data);
         isPerson.value = employee.value.isPerson == 0 ? false : true;
         isMoveSection.value = employee.value.isMoveSection == 0 ? false : true;
-        getFiles()
+        getFiles();
       }
     })
     .catch((errors) => {
       console.log(errors);
-      let error = getError(errors);
+      const error = getError(errors);
       console.log(error);
       Swal.fire({
         icon: "warning",
@@ -211,7 +211,7 @@ const back = () => {
   });
 };
 const ShowUser = () => {
-  let userId = employee.value.User?.id;
+  const userId = employee.value.User?.id;
   router.push({
     name: "userUpdate",
     params: { id: userId },
@@ -342,7 +342,7 @@ const headerFiles = ref<Array<ITableHeader>>([
   { caption: t("Date"), value: "issueDate" },
   { caption: t("HrDocument.Type"), value: "HrDocumentype" },
   { caption: t("HrDocument.AddMonths"), value: "addMonths" },
-  { caption: t("HrDocument.AddDayes"), value: "addDays" },
+  { caption: t("HrDocument.AddDays"), value: "addDays" },
   { caption: t("Notes"), value: "notes" },
 ]);
 const headerBonus = ref<Array<ITableHeader>>([
@@ -400,7 +400,7 @@ const active = ref(0);
       <!-- <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -412,9 +412,9 @@ const active = ref(0);
           <van-tab title="معلومات العلاوات" name="employee">
             <IRow
               title="معلومات العلاوة الحالية"
-              col-lg="4"
-              col-md="2"
-              col-sm="1"
+              cols-lg="4"
+              cols-md="2"
+              cols-sm="1"
             >
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput
@@ -437,7 +437,7 @@ const active = ref(0);
                 />
               </ICol>
             </IRow>
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="2" span-sm="4">
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -591,7 +591,7 @@ const active = ref(0);
                 />
               </div>
             </IRow>
-            <IRow col-lg="1" col-md="1" col-sm="1">
+            <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseFiles" :headers="headerFiles">
                   <template v-slot:isActive="{ row }">
@@ -660,7 +660,7 @@ const active = ref(0);
                 />
               </div>
             </IRow>
-            <IRow col-lg="1" col-md="1" col-sm="1">
+            <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseBonus" :headers="headerBonus">
                   <template v-slot:actions="{ row }">

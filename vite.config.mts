@@ -1,142 +1,84 @@
 import { fileURLToPath, URL } from "node:url";
-
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
 import Components from "unplugin-vue-components/vite";
 import { VantResolver } from "unplugin-vue-components/resolvers";
-import { VitePWA } from "vite-plugin-pwa";
 import AutoImport from "unplugin-auto-import/vite";
 
-export default defineConfig({
-  plugins: [
-    vue({
-      script: {
-        defineModel: true,
-      },
-    }),
-    ,
-    vueJsx(),
-    Components({
-      resolvers: [VantResolver()],
-      dts: true,
-    }),
-    [
-      VitePWA({
-        includeAssets: [
-          "favicon.ico",
-          "apple-touch-icon.png",
-          "mask-icon.svg",
-          "fonts/*.ttf",
-          "images/*.png",
-          "css/*.css",
-        ],
-        registerType: "autoUpdate",
-        injectRegister: "auto",
-        workbox: {
-          globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
-        },
-        manifest: {
-          name: "FlowApp",
-          short_name: "Flow App",
-          theme_color: "#fff",
-          background_color: "#fff",
-          display: "standalone",
-          orientation: "portrait",
-          scope: "/",
-          start_url: "/",
-          related_applications: [
-            {
-              platform: "webapp",
-              url: "https://10.10.10.10/erp-msar/manifest.webmanifest",
-            },
-          ],
-          icons: [
-            {
-              src: "images/icons/icon-72x72.png",
-              sizes: "72x72",
-              type: "image/png",
-            },
-            {
-              src: "images/icons/icon-96x96.png",
-              sizes: "96x96",
-              type: "image/png",
-            },
-            {
-              src: "images/icons/icon-128x128.png",
-              sizes: "128x128",
-              type: "image/png",
-            },
-            {
-              src: "images/icons/icon-144x144.png",
-              sizes: "144x144",
-              type: "image/png",
-            },
-            {
-              src: "images/icons/icon-152x152.png",
-              sizes: "152x152",
-              type: "image/png",
-            },
-            {
-              src: "images/icons/icon-192x192.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
-            {
-              src: "images/icons/icon-384x384.png",
-              sizes: "384x384",
-              type: "image/png",
-            },
-            {
-              src: "images/icons/icon-512x512.png",
-              sizes: "512x512",
-              type: "image/png",
-              purpose: "any",
-            },
-            {
-              src: "images/icons/icon-512x512.png",
-              sizes: "512x512",
-              type: "image/png",
-              purpose: "maskable",
-            },
-          ],
-          prefer_related_applications: false,
-        },
+// Vite 8 builds with Rolldown, which takes chunk groups as regex tests rather
+// than the old object form of `manualChunks`.
+const chunkGroups = {
+  "vue-vendor": ["vue", "vue-router", "pinia"],
+  "ui-vendor": [
+    "@headlessui/vue",
+    "@heroicons/vue",
+    "sweetalert2",
+    "vue-sonner",
+  ],
+  "form-vendor": ["vee-validate", "@vuelidate/core", "yup"],
+  "table-vendor": ["@tanstack/vue-table", "laravel-vue-pagination"],
+  utils: ["axios", "dayjs", "crypto-js"],
+};
+
+// Anchor on the package directory so "vue" does not also swallow "vue-select".
+const packagePattern = (pkg: string) =>
+  pkg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\//g, "[\\\\/]");
+
+const groups = Object.entries(chunkGroups).map(([name, packages]) => ({
+  name,
+  test: new RegExp(
+    `[\\\\/]node_modules[\\\\/](${packages.map(packagePattern).join("|")})[\\\\/]`
+  ),
+}));
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "VITE_");
+
+  return {
+    plugins: [
+      vue(),
+      Components({
+        resolvers: [VantResolver()],
+        dts: true,
+      }),
+      AutoImport({
+        dts: true,
+        eslintrc: { enabled: true },
+        include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
+        imports: ["vue", "vue-router", "pinia"],
       }),
     ],
-    AutoImport({
-      /* options */
-      dts: true,
-      eslintrc: {
-        enabled: true, // <-- this
+
+    resolve: {
+      alias: {
+        "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
-      include: [
-        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-        /\.vue$/,
-        /\.vue\?vue/, // .vue
-        /\.md$/, // .md
-      ],
-      imports: [
-        // presets
-        "vue",
-        "vue-router",
-        "pinia",
-      ],
-    }),
-  ],
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
-  },
-  define: {
-    "process.env": process.env,
-  },
-  base: process.env.NODE_ENV === "production" ? "/ihec/" : "/",
-  server: {
-    watch: {
-      usePolling: true
+
+    define: {
+      "process.env": {},
+      "process.env.NODE_ENV": JSON.stringify(mode),
     },
-    port: 1990
-  },
+
+    base: mode === "production" ? (env.VITE_BASE ?? "/") : "/",
+
+    build: {
+      // Tailwind v4's floor (Safari 16.4 / Chrome 111 / Firefox 128);
+      // kept in sync with the browserslist field in package.json.
+      target: ["chrome111", "edge111", "firefox128", "safari16.4"],
+      cssTarget: ["chrome111", "edge111", "firefox128", "safari16.4"],
+      rollupOptions: {
+        output: {
+          advancedChunks: { groups },
+        },
+      },
+      chunkSizeWarningLimit: 600,
+    },
+
+    server: {
+      watch: { usePolling: true },
+    },
+
+    envPrefix: ["VITE_"],
+  };
 });

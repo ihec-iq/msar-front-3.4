@@ -1,6 +1,5 @@
 import type { IconLink } from "@/components/fixed/FixedMenu";
 import { EnumPermission } from "@/utilities/EnumSystem";
- 
 
 export const HrLinks: Array<IconLink> = [
   {
@@ -13,5 +12,5 @@ export const HrLinks: Array<IconLink> = [
     description: "ضبارة الكتب الرسمية للموظفين",
     permissions: [EnumPermission.ShowArchives],
     isActive: true,
-  }, 
+  },
 ];

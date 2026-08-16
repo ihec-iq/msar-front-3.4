@@ -1,19 +1,16 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "extends": "@vue/tsconfig/tsconfig.json",
   "include": [
     "env.d.ts",
     "src/**/*",
-    "src/**/*.vue"
-, "automateWhatsApp.js"    // "src/**/*.d.mts"
+    "src/**/*.vue"  // "src/**/*.d.mts"
   ],
   "exclude": [
     "src/**/__tests__/*"
   ],
   "compilerOptions": {
     "composite": true,
-    "ignoreDeprecations": "5.0",
     "verbatimModuleSyntax": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"

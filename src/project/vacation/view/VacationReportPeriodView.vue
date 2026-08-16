@@ -37,7 +37,7 @@ import ICol from "@/components/ihec/ICol.vue";
 import IPage from "@/components/ihec/IPage.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import ILabel from "@/components/ihec/ILabel.vue";
-import ITable from "@/components/ihec/ITable.vue";
+import ITable from "@/components/ITable/ITable.vue";
 import type { IVacationFilter } from "../IVacation";
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
@@ -55,7 +55,7 @@ const { sections } = storeToRefs(useSectionStore());
 const Loading = ref(false);
 
 const router = useRouter();
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 //#endregion
 const limit = ref(10);
 const dataVacationTime = ref<Array<IVacationTime>>([]);
@@ -113,7 +113,7 @@ const getDataDaily = async (
       if (response.status == 200) {
         dataPageVacationDaily.value = response.data.data;
         dataVacationDaily.value = response.data.data.data;
-       }
+      }
     })
     .catch((error) => {
       console.log(error);
@@ -195,7 +195,7 @@ const headersSick = ref<Array<ITableHeader>>([
     :is-loading="isLoadingDaily && isLoadingTime && isLoadingSick"
   >
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -218,7 +218,7 @@ const headersSick = ref<Array<ITableHeader>>([
               for="default-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              {{ t("SearhFilter.enableDateFilter") }}</label
+              {{ t("searchFilter.enableDateFilter") }}</label
             >
           </ICol>
           <ICol :span-lg="1" :span-md="2" :span="1">

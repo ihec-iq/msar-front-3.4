@@ -8,13 +8,15 @@ const { checkPermissionAccessArray } = usePermissionsStore();
 import CardPortalComponent from "@/components/CardPortalComponent.vue";
 
 onMounted(async () => {
-    checkPermissionAccessArray([EnumPermission.ShowArchives]); // Updated permission
+  checkPermissionAccessArray([EnumPermission.ShowArchives]); // Updated permission
 });
 </script>
 <template>
-    <IPage :HeaderTitle="t('Promotion.Portal')"> <!-- Updated title -->
-        <IPageContent>
-            <CardPortalComponent :links="PromotionLinks"></CardPortalComponent> <!-- Updated links -->
-        </IPageContent>
-    </IPage>
+  <IPage :HeaderTitle="t('Promotion.Portal')">
+    <!-- Updated title -->
+    <IPageContent>
+      <CardPortalComponent :links="PromotionLinks"></CardPortalComponent>
+      <!-- Updated links -->
+    </IPageContent>
+  </IPage>
 </template>

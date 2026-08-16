@@ -17,7 +17,7 @@ export default [
       middleware: [authMiddleware],
     },
   },
- 
+
   {
     path: "/promotion/add",
     name: "promotionAdd",
@@ -42,7 +42,7 @@ export default [
       middleware: [authMiddleware],
     },
   },
-   //#region Promotion Job Title
+  //#region Promotion Job Title
   {
     path: "/promotionJobTitle/index",
     name: "promotionJobTitleIndex",
@@ -54,7 +54,8 @@ export default [
   {
     path: "/promotionSetting",
     name: "promotionSettingView",
-    component: () => import("@/project/promotion/view/PromotionSettingView.vue"),
+    component: () =>
+      import("@/project/promotion/view/PromotionSettingView.vue"),
     meta: {
       middleware: [authMiddleware],
     },
@@ -62,7 +63,8 @@ export default [
   {
     path: "/promotionChecker",
     name: "promotionCheckerView",
-    component: () => import("@/project/promotion/view/PromotionCheckerView.vue"),
+    component: () =>
+      import("@/project/promotion/view/PromotionCheckerView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

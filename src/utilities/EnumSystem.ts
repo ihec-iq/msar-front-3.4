@@ -5,6 +5,10 @@ export enum EnumPermission {
   EditUser = "edit user",
   DeleteUser = "delete user",
   ShowUsers = "show users",
+  AddWarehouseSetting = "add warehouse setting",
+  EditWarehouseSetting = "edit warehouse setting",
+  DeleteWarehouseSetting = "delete warehouse setting",
+  ShowWarehouseSettings = "show warehouse settings",
   AddArchive = "add archive",
   EditArchive = "edit archive",
   DeleteArchive = "delete archive",
@@ -79,15 +83,27 @@ export enum EnumPermission {
   EditPromotionSetting = "edit promotion setting",
   DeletePromotionSetting = "delete promotion setting",
   HasSectionOnly = "has section only",
+  AddEmployeeSetting = "add employee setting",
+  EditEmployeeSetting = "edit employee setting",
+  DeleteEmployeeSetting = "delete employee setting",
+  ShowEmployeeSetting = "show employee setting",
+  // Backup System Permissions
+  ShowBackups = "show backups",
+  CreateBackup = "create backup",
+  DeleteBackup = "delete backup",
+  RestoreBackup = "restore backup",
+  DownloadBackup = "download backup",
+  ManageBackupSettings = "manage backup settings",
+  ManageBackupAdmins = "manage backup admins",
+  ShowBackupLogs = "show backup logs",
+  ShowBackupHealth = "show backup health",
 }
 export enum EnumDirection {
   RTL = "rtl",
   LTR = "ltr",
   Auto = "inherit",
 }
-export enum   EnumSetting {
+export enum EnumSetting {
   SettingNumberDayesAlertBonus = "SettingNumberDayesAlertBonus",
   SettingNumberDayesAlertPromotion = "SettingNumberDayesAlertPromotion",
 }
-
-

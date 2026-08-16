@@ -107,4 +107,3 @@ const truncatedNotes = computed(() => {
     </div>
   </div>
 </template>
-

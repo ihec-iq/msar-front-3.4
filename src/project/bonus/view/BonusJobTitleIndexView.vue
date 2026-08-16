@@ -2,7 +2,7 @@
 import { onMounted, ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useBonusStore } from "../bonusStore";
- 
+
 import { storeToRefs } from "pinia";
 
 import { TailwindPagination } from "laravel-vue-pagination";
@@ -26,6 +26,7 @@ import ISelect from "@/components/inputs/ISelect.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import type { ITableHeader } from "@/types/core/components/ITable";
 import IPage from "@/components/ihec/IPage.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 const route = useRoute();
 const router = useRouter();
 watch(
@@ -39,7 +40,7 @@ watch(
 const addItem = () => {
   useBonusStore().resetDataBonusJobTitle();
   router.push({
-    name: "bonusJobTitleAdd",   
+    name: "bonusJobTitleAdd",
   });
 };
 
@@ -52,7 +53,7 @@ const filterByIDName = (bonusJobTitles: IBonusJobTitle) => {
 };
 const makeFastSearch = () => {
   return;
-  // eslint-disable-next-line no-self-assign
+
   // if (fastSearch.value == "") data.value = dataBase.value;
   // else {
   //   data.value = dataBase.value.filter(filterByIDName);
@@ -66,13 +67,17 @@ const searchFilter = ref<IBonusFilter>({
   employeeName: "",
 });
 const getFilterData = async (page = 1) => {
-  localStorage.setItem("indexBonusJobTitles", page.toString());
+  useLocalStorage().set({
+    key: "indexBonusJobTitles",
+    value: page.toString(),
+    withEncrypt: false,
+  });
 
   isLoading.value = true;
   searchFilter.value.name = fastSearch.value.toString();
   await getFilter_BonusJobTitle(searchFilter.value, page)
     .then((response) => {
-       if (response.status == 200) {
+      if (response.status == 200) {
         dataPage.value = response.data.data;
         data.value = response.data.data.data;
         dataBase.value = response.data.data.data;
@@ -90,7 +95,7 @@ const update = (id: number) => {
     params: { id: id },
   });
 };
- 
+
 //#region Pagination
 //#endregion
 onMounted(async () => {
@@ -111,7 +116,7 @@ onMounted(async () => {
 const headers = ref<Array<ITableHeader>>([
   { caption: t("Name"), value: "name" },
   { caption: t("Details"), value: "actions" },
-  { caption: t("Description"), value: "description" }, 
+  { caption: t("Description"), value: "description" },
 ]);
 </script>
 <template>
@@ -120,7 +125,7 @@ const headers = ref<Array<ITableHeader>>([
       <IButton width="28" :onClick="addItem" :text="t('Bonus.JobTitleAdd')" />
     </template>
     <IPageContent>
-      <IRow :col="3" :col-md="2" :col-lg="3">
+      <IRow :cols="3" :cols-md="2" :cols-lg="3">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="2" :span-md="2" :span="2" :span-sm="4">
             <IInput

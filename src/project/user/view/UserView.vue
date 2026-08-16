@@ -107,6 +107,10 @@ const showData = async () => {
         check_active.value = user.value.active == 1 ? true : false;
         user.value.password = random;
         user.value.password_confirmation = random;
+        // for mapping roles to only their IDs
+        user.value.roles = (user.value.roles as Array<IRole | number>).map(
+          (r) => (typeof r === "number" ? r : r.id)
+        );
       }
     })
     .catch((errors) => {
@@ -144,7 +148,7 @@ onMounted(async () => {
   <IPage :HeaderTitle="t(namePage)" :is-loading="isLoading">
     <IPageContent>
       <IRow>
-        <IRow col="2" col-lg="2" col-md="1" col-sm="1">
+        <IRow cols="2" cols-lg="2" cols-md="1" cols-sm="1">
           <ICol>
             <IInput
               :label="t('Name')"
@@ -152,7 +156,8 @@ onMounted(async () => {
               name="title"
               type="text"
               :IsRequire="true"
-          /></ICol>
+            />
+          </ICol>
           <ICol>
             <IInput
               :label="t('User Name(for login)')"
@@ -160,7 +165,8 @@ onMounted(async () => {
               name="title"
               type="text"
               :IsRequire="true"
-          /></ICol>
+            />
+          </ICol>
           <ICol>
             <IInput
               :label="t('Email')"
@@ -168,7 +174,8 @@ onMounted(async () => {
               name="title"
               type="text"
               :IsRequire="true"
-          /></ICol>
+            />
+          </ICol>
           <ICol>
             <IInput
               :label="t('Password')"
@@ -176,7 +183,8 @@ onMounted(async () => {
               name="title"
               type="password"
               :IsRequire="true"
-          /></ICol>
+            />
+          </ICol>
           <ICol>
             <IInput
               :label="t('Rewrite Password')"
@@ -184,7 +192,8 @@ onMounted(async () => {
               name="title"
               type="password"
               :IsRequire="true"
-          /></ICol>
+            />
+          </ICol>
           <ICol>
             <div
               class="mb-1 ml-2 capitalize focus:outline-none focus:border focus:border-gray-700 sm:text-sm text-base text-text dark:text-textLight font-bold"

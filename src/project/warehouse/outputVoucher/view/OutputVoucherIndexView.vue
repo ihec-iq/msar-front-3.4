@@ -5,11 +5,8 @@ import { TailwindPagination } from "laravel-vue-pagination";
 import SimpleLoading from "@/components/general/loading.vue";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 const { checkPermissionAccessArray } = usePermissionsStore();
-import type {
-  IOutputVoucher,
-  IOutputVoucherFilter,
-} from "../IOutputVoucher";
- import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
+import type { IOutputVoucher, IOutputVoucherFilter } from "../IOutputVoucher";
+import { useOutputVoucherStore } from "@/project/warehouse/outputVoucher/outputVoucherStore";
 import { t } from "@/utilities/I18nPlugin";
 const isLoading = ref(false);
 const data = ref<Array<IOutputVoucher>>([]);
@@ -50,7 +47,6 @@ const filterByIDName = (item: IOutputVoucher) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -97,13 +93,13 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <IPage :HeaderTitle="t('OutputVoucher')">
+  <IPage :HeaderTitle="t('OutputVoucher.Index')" :is-loading="isLoading">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow>
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -114,33 +110,6 @@ onMounted(async () => {
               :OnKeyEnter="getFilterData"
             />
           </ICol>
-        </ISearchBar>
-      </IRow>
-      <!-- Show Data -->
-      <IRow :col="2" :col-lg="2" :col-md="2" :col-sm="1" :col-xs="1">
-        <ICol
-          :span="1"
-          :span-lg="1"
-          :span-md="1"
-          v-for="item in data"
-          :key="item.id"
-        >
-          <!-- card -->
-          <CardOutputVoucherIndex :item="item" />
-          <!-- end card -->
-        </ICol>
-      </IRow>
-      <!-- Pagination -->
-      <IRow v-if="data.length > 0">
-        <div class="w-full flex flex-row">
-          <div class="basis-4/5 hidden">
-            <TailwindPagination
-              class="flex justify-center mt-6"
-              :data="dataPage"
-              @pagination-change-page="getFilterData"
-              :limit="searchFilter.limit"
-            />
-          </div>
           <div class="basis-1/5" v-if="data.length >= limits[0].id">
             <ISelect
               :label="t('Limit')"
@@ -151,6 +120,30 @@ onMounted(async () => {
               @onChange="getFilterData()"
             />
           </div>
+        </ISearchBar>
+      </IRow>
+      <IRow :cols="2" :cols-lg="2" :cols-md="2" :cols-sm="1">
+        <ICol
+          :span="1"
+          :span-lg="1"
+          :span-md="1"
+          v-for="item in data"
+          :key="item.id"
+        >
+          <CardOutputVoucherIndex :item="item" />
+        </ICol>
+      </IRow>
+      <!-- Pagination -->
+      <IRow v-if="data.length > 0">
+        <div class="w-full flex flex-row">
+          <div class="">
+            <TailwindPagination
+              class="flex justify-center mt-6"
+              :data="dataPage"
+              @pagination-change-page="getFilterData"
+              :limit="searchFilter.limit"
+            />
+          </div>
         </div>
         <SimpleLoading v-if="isLoading">.</SimpleLoading>
       </IRow>
@@ -158,4 +151,3 @@ onMounted(async () => {
     <IFooterCrud :is-add="true" :show-add="false"> </IFooterCrud>
   </IPage>
 </template>
- 

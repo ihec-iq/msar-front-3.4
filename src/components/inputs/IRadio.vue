@@ -33,7 +33,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="mb-2 flex h-full ">
+  <div class="mb-2 flex h-full">
     <input
       :disabled="disabled"
       type="radio"
@@ -48,6 +48,5 @@ defineProps({
       ><span v-if="label != ''"></span> {{ label }}
       <slot class="_inputLabel"></slot>
     </label>
-    
   </div>
 </template>

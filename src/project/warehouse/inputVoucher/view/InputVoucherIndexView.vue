@@ -17,7 +17,7 @@ const { get_filter, resetData } = useInputVoucherStore();
 
 import { limits } from "@/utilities/defaultParams";
 import CardInputVoucherIndex from "./CardInputVoucherIndex.vue";
-import IPageContent from "@/components/ihec/IPageContent.vue" ;
+import IPageContent from "@/components/ihec/IPageContent.vue";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
@@ -50,7 +50,6 @@ const filterByIDName = (item: IInputVoucher) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -67,17 +66,16 @@ const getFilterData = async (page = 1) => {
   isLoading.value = true;
   searchFilter.value.name = "";
   if (fastSearch.value != "") searchFilter.value.name = fastSearch.value;
-  await get_filter(searchFilter.value, page)
-    .then((response) => {
-      if (response.status == 200) {
-        dataPage.value = response.data.data;
-        data.value = response.data.data.data;
-        dataBase.value = response.data.data.data;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  await get_filter(searchFilter.value, page).then((response) => {
+    if (response != null && response.status == 200) {
+      dataPage.value = response.data.data;
+      data.value = response.data.data.data;
+      dataBase.value = response.data.data.data;
+    }
+  });
+  // .catch((error) => {
+  //   console.log(error);
+  // });
   isLoading.value = false;
 };
 //#endregion
@@ -104,7 +102,7 @@ onMounted(async () => {
     </template>
     <IPageContent>
       <!-- Search Bar -->
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="1" :cols-md="2" :cols-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -115,10 +113,20 @@ onMounted(async () => {
               :OnKeyEnter="getFilterData"
             />
           </ICol>
+          <div v-if="data.length >= limits[0].id">
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </div>
         </ISearchBar>
       </IRow>
       <!-- Show Data -->
-      <IRow :col="4" :col-lg="4" :col-md="3" :col-sm="1" :col-xs="1">
+      <IRow :cols="4" :cols-lg="4" :cols-md="3" :cols-sm="1">
         <ICol
           class="my-2"
           :span="1"
@@ -128,7 +136,15 @@ onMounted(async () => {
           :key="item.id"
         >
           <!-- card -->
-          <CardInputVoucherIndex :item="item" />
+          <CardInputVoucherIndex
+            :item="item"
+            :notesAreHtml="true"
+            :loading="isLoading"
+            :disabled="false"
+            routeName="inputVoucherUpdate"
+            tone="brand"
+            density="compact"
+          />
           <!-- end card -->
         </ICol>
       </IRow>
@@ -141,16 +157,6 @@ onMounted(async () => {
               :data="dataPage"
               @pagination-change-page="getFilterData"
               :limit="searchFilter.limit"
-            />
-          </div>
-          <div class="basis-1/5" v-if="data.length >= limits[0].id">
-            <ISelect
-              :label="t('Limit')"
-              v-model="searchFilter.limit"
-              name="archiveTypeId"
-              :options="limits"
-              :IsRequire="true"
-              @onChange="getFilterData()"
             />
           </div>
         </div>

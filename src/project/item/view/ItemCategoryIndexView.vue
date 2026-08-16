@@ -49,7 +49,6 @@ const filterByIDName = (item: IItemCategory) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     data.value = dataBase.value.filter(filterByIDName);
@@ -93,8 +92,6 @@ onMounted(async () => {
   checkPermissionAccessArray([EnumPermission.ShowCategoriesItem]);
   if (route.params.search != undefined)
     fastSearch.value = route.params.search.toString() || "";
-  console.log("in index catitem");
-
   await getFilterData(1);
   isLoading.value = false;
 });
@@ -105,7 +102,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="1" :cols-md="1" :cols-lg="1">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -116,9 +113,25 @@ onMounted(async () => {
               :OnKeyEnter="getFilterData"
             />
           </ICol>
+          <ICol
+            :span-lg="1"
+            :span-md="2"
+            :span="1"
+            :span-sm="4"
+            v-if="data.length >= limits[0].id"
+          >
+            <ISelect
+              :label="t('Limit')"
+              v-model="searchFilter.limit"
+              name="archiveTypeId"
+              :options="limits"
+              :IsRequire="true"
+              @onChange="getFilterData()"
+            />
+          </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :col="2" :colMd="2" :colLg="2">
+      <IRow :cols="4" :cols-md="4" :cols-lg="4">
         <ICol class="p-3" :span="2" v-for="item in data" :key="item.id">
           <CardItemCategoryIndex :item="item" />
           <SimpleLoading v-if="isLoading"></SimpleLoading>
@@ -145,16 +158,6 @@ onMounted(async () => {
                     :limit="searchFilter.limit"
                   />
                 </div>
-                <div class="basis-1/5" v-if="data.length >= limits[0].id">
-                  <ISelect
-                    :label="t('Limit')"
-                    v-model="searchFilter.limit"
-                    name="archiveTypeId"
-                    :options="limits"
-                    :IsRequire="true"
-                    @onChange="getFilterData()"
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -163,6 +166,6 @@ onMounted(async () => {
         </div>
       </IRow>
     </IPageContent>
-    <IFooterCrud :is-add="true" :show-add="false"/>
+    <IFooterCrud :is-add="true" :show-add="false" />
   </IPage>
 </template>

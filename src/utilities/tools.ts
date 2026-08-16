@@ -39,9 +39,7 @@ export const makeRandom = (length?: number): string => {
     .repeat(length);
 };
 export function isNumber(value?: string | number): boolean {
-  return ((value != null) &&
-    (value !== '') &&
-    !isNaN(Number(value.toString())));
+  return value != null && value !== "" && !isNaN(Number(value.toString()));
 }
 export const CNumber = (val: any = 0): number => {
   if (!isNumber(val)) return 0;
@@ -60,30 +58,51 @@ export const ToNumberShow = (val: any) => {
   else return round(val, 2);
 };
 export const dateWithoutTime = function (date: string) {
-  return date ? date.split("T")[0] : ""
-}
+  return date ? date.split("T")[0] : "";
+};
 export const timeWithoutDate = function (date: string) {
-  return date ? date.split("T")[0] : ""
-}
-export const ConvertToMoneyFormat = function (number: string) {
-  return (number).toLocaleString().replace(/,/g, ",",)
-}
+  return date ? date.split("T")[0] : "";
+};
+export const ConvertToMoneyFormat = function (number: string | any) {
+  if (number == null || number == undefined || number == "") return "0";
+  return number.toLocaleString().replace(/,/g, ",");
+};
 
 export const makeFormDataFromObject = (object: any, keys: Array<string> = []) =>
   Object.keys(object).reduce((formData, key) => {
-    if (keys.length>0){
+    if (keys.length > 0 && !keys.includes(key)) return formData;
+
+    const value = object[key];
+
+    if (value === null || value === undefined) {
+      formData.append(key, "");
+    } else if (typeof value === "object") {
+      formData.append(key, JSON.stringify(value));
+    } else {
+      formData.append(key, value);
+    }
+
+    return formData;
+  }, new FormData());
+
+export const makeFormDataFromObjectOld = (
+  object: any,
+  keys: Array<string> = []
+) =>
+  Object.keys(object).reduce((formData, key) => {
+    if (keys.length > 0) {
       if (keys.includes(key)) {
         let value = object[key];
         if (typeof value === "object" && value !== null)
           value = JSON.stringify(value);
         formData.append(key, value);
       }
-    }else{
+    } else {
       let value = object[key];
       if (typeof value === "object" && value !== null)
         value = JSON.stringify(value);
       formData.append(key, value);
     }
-    
+
     return formData;
   }, new FormData());

@@ -13,7 +13,7 @@ const { isRtl } = storeToRefs(rtlStore);
 const { ChangeDirection } = useRtlStore();
 const route = useRoute();
 import { useConfigStore } from "@/stores/configStore";
-const { Organization } = storeToRefs(useConfigStore());
+const { Config } = storeToRefs(useConfigStore());
 const colorMode = useColorMode({
   modes: {
     red: "red",
@@ -34,8 +34,8 @@ const closePopup = () => {
 };
 //#endregion
 //#region Theme Setting
-let isDark = useDark();
-let themeDark = ref(false);
+const isDark = useDark();
+const themeDark = ref(false);
 const loadRtl = ref(localStorage.getItem("isLtr"));
 const toggleDark = useToggle(isDark);
 const changeDark = () => {
@@ -102,7 +102,7 @@ onMounted(async () => {
         <div class="text-gray-500 text-2xl">#</div>
         <div class="ml-2 text-sm text-text dark:text-textLight">
           <!-- {{ t("General") }} -->
-          {{ Organization }} - {{ user?.Employee?.name }}
+          {{ Config.organization }} - {{ user?.Employee?.name }}
         </div>
       </div>
       <div

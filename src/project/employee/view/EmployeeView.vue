@@ -29,12 +29,20 @@ import type {
   IStudy,
 } from "@/project/bonus/IBonus";
 import { prepareFormData } from "@/utilities/crudTool";
-import { ErrorToast, SuccessToast } from "@/utilities/Toast";
+import { ErrorToast, SuccessToast } from "@/utilities/Toast2";
 import EditButton from "@/components/dropDown/EditButton.vue";
 import { Icon } from "@iconify/vue";
 import { getError } from "@/utilities/helpers";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
+import { WarningToast } from "@/utilities/Toast2";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { makeFormDataFromObject } from "@/utilities/tools";
+import OpenButton from "@/components/dropDown/OpenButton.vue";
+import IRow from "@/components/ihec/IRow.vue";
+import IRow2 from "@/components/ihec/IRow2.vue";
+import ICol2 from "@/components/ihec/ICol2.vue";
+import ICol from "@/components/ihec/ICol.vue";
 //region"Drag and Drop"
 
 //#endregion
@@ -68,24 +76,14 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
-import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
-import { makeFormDataFromObject } from "@/utilities/tools";
-import OpenButton from "@/components/dropDown/OpenButton.vue";
-import IRow from "@/components/ihec/IRow.vue";
-import IRow2 from "@/components/ihec/IRow2.vue";
-import ICol2 from "@/components/ihec/ICol2.vue";
-import ICol from "@/components/ihec/ICol.vue";
-
+import ITable from "@/components/ITable/ITable.vue";
 const { validate, isArray, required, isObject } = useValidation();
-
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
-
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 const rules: Array<IFieldValidation> = [
   {
     field: "Section",
-    caption: t("InputVoucherNumber"),
-    rules: [required()],
+    caption: t("InputVoucher.Number"),
+    rules: [required(), isObject({ key: "id", message: "" })],
   },
   // {
   //   field: "Employee",
@@ -93,8 +91,18 @@ const rules: Array<IFieldValidation> = [
   //   rules: [isObject({ key: "id", message: "" })],
   // },
   {
-    field: "Section",
-    caption: t("Section"),
+    field: "EmployeeCenter",
+    caption: t("Employee.Center"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "EmployeeType",
+    caption: t("Employee.Type"),
+    rules: [isObject({ key: "id", message: "" })],
+  },
+  {
+    field: "EmployeePosition",
+    caption: t("Employee.Position"),
     rules: [isObject({ key: "id", message: "" })],
   },
   {
@@ -156,7 +164,6 @@ const update = async () => {
   const formData = prepareFormData(employee.value);
   try {
     const response = await employeeStore.update(employee.value.id, formData);
-    console.log(response);
     if (response.status === 200) {
       SuccessToast();
       //router.go(-1);
@@ -211,7 +218,7 @@ const showData = async () => {
     })
     .catch((errors) => {
       console.log(errors);
-      let error = getError(errors);
+      const error = getError(errors);
       console.log(error);
       Swal.fire({
         icon: "warning",
@@ -226,16 +233,11 @@ const showData = async () => {
 };
 //#endregion
 const back = () => {
-  router.push({
-    name: "Employee.Index",
-  });
+  router.push({ name: "Employee.Index" });
 };
 const ShowUser = () => {
-  let userId = employee.value.User?.id;
-  router.push({
-    name: "userUpdate",
-    params: { id: userId },
-  });
+  const userId = employee.value.User?.id;
+  router.push({ name: "userUpdate", params: { id: userId } });
 };
 const isLoading = ref(false);
 onMounted(async () => {
@@ -330,7 +332,7 @@ const headerFiles = ref<Array<ITableHeader>>([
   { caption: t("Date"), value: "issueDate" },
   { caption: t("HrDocument.Type"), value: "HrDocumentype" },
   { caption: t("HrDocument.AddMonths"), value: "addMonths" },
-  { caption: t("HrDocument.AddDayes"), value: "addDays" },
+  { caption: t("HrDocument.AddDays"), value: "addDays" },
   { caption: t("Notes"), value: "notes" },
 ]);
 const headerBonus = ref<Array<ITableHeader>>([
@@ -340,40 +342,22 @@ const headerBonus = ref<Array<ITableHeader>>([
   { caption: t("Date"), value: "issueDate" },
 ]);
 const openFileHrDocument = (id: number) => {
-  router.push({
-    name: "hrDocumentUpdate",
-    params: { id: id },
-  });
+  router.push({ name: "hrDocumentUpdate", params: { id: id } });
 };
 const addHrDocument = (id: number) => {
-  router.push({
-    name: "hrDocumentAddByEmployee",
-    params: { employeeId: id },
-  });
+  router.push({ name: "hrDocumentAddByEmployee", params: { employeeId: id } });
 };
 const openHrDocument = (id: number) => {
-  router.push({
-    name: "hrDocumentIndex",
-    params: { employeeId: id },
-  });
+  router.push({ name: "hrDocumentIndex", params: { employeeId: id } });
 };
 const openFileBonus = (id: number) => {
-  router.push({
-    name: "bonusUpdate",
-    params: { id: id },
-  });
+  router.push({ name: "bonusUpdate", params: { id: id } });
 };
 const addBonus = (id: number) => {
-  router.push({
-    name: "bonusAddByEmployee",
-    params: { employeeId: id },
-  });
+  router.push({ name: "bonusAddByEmployee", params: { employeeId: id } });
 };
 const openBonus = (id: number) => {
-  router.push({
-    name: "bonusIndex",
-    params: { employeeId: id },
-  });
+  router.push({ name: "bonusIndex", params: { employeeId: id } });
 };
 const loadData = (tab: any) => {
   if (tab.name == "files") getFiles();
@@ -388,7 +372,7 @@ const active = ref(0);
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -398,7 +382,7 @@ const active = ref(0);
       <IRow>
         <van-tabs v-model:active="active" @click-tab="loadData" sticky>
           <van-tab title="معلومات الموظف" name="employee">
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <IInput
                   :label="t('Name')"
@@ -516,7 +500,7 @@ const active = ref(0);
                       {{ t("Bonus.Study") }}
                     </div>
                     <vSelect
-                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                      class="_input focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px] border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input text-text dark:text-textLight"
                       v-model="employee.Study"
                       :options="BonusStore.Studies"
                       :reduce="(Study: IStudy) => Study"
@@ -539,7 +523,7 @@ const active = ref(0);
                       {{ t("Bonus.Certificate") }}
                     </div>
                     <vSelect
-                      class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                      class="_input focus:outline-none focus:ring-0 focus:border-gray-900 outline-none border-[1px] border-gray-300 dark:border-gray-800 h-10 px-3 py-2 dark:bg-input text-text dark:text-textLight"
                       v-model="employee.Certificate"
                       :options="BonusStore.Certificates"
                       :reduce="(Certificate: ICertificate) => Certificate"
@@ -584,7 +568,7 @@ const active = ref(0);
               </vSelect>
             </ICol> -->
             </IRow>
-            <IRow col-lg="4" col-md="2" col-sm="1">
+            <IRow cols-lg="4" cols-md="2" cols-sm="1">
               <ICol span="1" span-md="2" span-sm="4">
                 <div
                   class="mb-2 md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -693,9 +677,9 @@ const active = ref(0);
               />
             </div>
             <IRow
-              col-lg="3"
-              col-md="2"
-              col-sm="1"
+              cols-lg="3"
+              cols-md="2"
+              cols-sm="1"
               class="bg-[#C2D7FB]"
               v-if="showUserPanel"
             >
@@ -710,7 +694,7 @@ const active = ref(0);
               </ICol>
               <ICol span="1" span-md="1" span-sm="1">
                 <IButton2
-                  :type="EnumButtonType.Outlined"
+                  :variant="EnumButtonType.Outlined"
                   class="mt-3"
                   v-if="employee.User?.id"
                   :on-click="ShowUser"
@@ -719,34 +703,34 @@ const active = ref(0);
               </ICol>
             </IRow>
           </van-tab>
-            <van-tab title="ملفات الضبارة" v-if="employee.id > 0" name="files">
+          <van-tab title="ملفات الضبارة" v-if="employee.id > 0" name="files">
             <IRow class="flex justify-between spin-out-3">
               <div class="flex">
-              <EditButton
-                class="mt-3 border-gray border-2 ml-2"
-                v-if="employee.id != 0"
-                @click="addHrDocument(employee.id)"
-                title="HrDocument.Add"
-                icon="mdi-plus-box"
-              />
-              <EditButton
-                class="mt-3 border-gray border-2 ml-2"
-                v-if="employee.id != 0"
-                @click="getFiles"
-                :title="t('Refresh')"
-                icon="mdi-refresh"
-              />
-              <EditButton
-                class="mt-3 border-gray border-2 ml-2"
-                v-if="employee.id != 0"
-                @click="openHrDocument(employee.id)"
-                title="HrDocument.Open"
-                icon="mdi-open-in-new"
-              />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="addHrDocument(employee.id)"
+                  title="HrDocument.Add"
+                  icon="mdi-plus-box"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="getFiles"
+                  :title="t('Refresh')"
+                  icon="mdi-refresh"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="openHrDocument(employee.id)"
+                  title="HrDocument.Open"
+                  icon="mdi-open-in-new"
+                />
               </div>
             </IRow>
 
-            <IRow col-lg="1" col-md="1" col-sm="1">
+            <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseFiles" :headers="headerFiles">
                   <template v-slot:isActive="{ row }">
@@ -790,22 +774,23 @@ const active = ref(0);
             v-if="employee.id > 0"
             name="bonus"
           >
-          <IRow class="flex justify-between spin-out-3">
+            <IRow class="flex justify-between spin-out-3">
               <div class="flex">
-              <EditButton
+                <EditButton
                   class="mt-3 border-gray border-2 ml-2"
                   v-if="employee.id != 0"
                   @click="addBonus(employee.id)"
                   title="Bonus.Add"
-                  icon="mdi-plus-box"/>
-              <EditButton
-                class="mt-3 border-gray border-2 ml-2"
-                v-if="employee.id != 0"
-                @click="getBonus"
-                :title="t('Refresh')"
-                icon="mdi-refresh"
-              />
-               <EditButton
+                  icon="mdi-plus-box"
+                />
+                <EditButton
+                  class="mt-3 border-gray border-2 ml-2"
+                  v-if="employee.id != 0"
+                  @click="getBonus"
+                  :title="t('Refresh')"
+                  icon="mdi-refresh"
+                />
+                <EditButton
                   class="mt-3 border-gray border-2"
                   v-if="employee.id != 0"
                   @click="openBonus(employee.id)"
@@ -813,8 +798,8 @@ const active = ref(0);
                   icon="mdi-open-in-new"
                 />
               </div>
-            </IRow> 
-            <IRow col-lg="1" col-md="1" col-sm="1">
+            </IRow>
+            <IRow cols-lg="1" cols-md="1" cols-sm="1">
               <ICol span="1" span-md="1" span-sm="1">
                 <ITable :items="dataBaseBonus" :headers="headerBonus">
                   <template v-slot:actions="{ row }">
@@ -830,10 +815,14 @@ const active = ref(0);
           </van-tab>
         </van-tabs>
       </IRow>
+      <IRow>
+        <ICol>
+          <IErrorMessages :validationResult="validationResult" />
+        </ICol>
+      </IRow>
     </IPageContent>
 
     <template #Footer>
-      <IErrorMessages :validationResult="validationResult" ref="someRefName" />
       <IFooterCrud
         :isAdd="employee.id == 0"
         :onCreate="store"

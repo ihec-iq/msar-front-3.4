@@ -24,6 +24,7 @@ import { EnumPermission } from "@/utilities/EnumSystem";
 import IFooterCrud from "@/components/ihec/IFooterCrud.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import CardVacationDailyIndex from "./CardVacationDailyIndex.vue";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -57,7 +58,6 @@ const filterByIDName = (_vacationDaily: IVacationDailyFilter) => {
   } else return false;
 };
 const makeFastSearch = () => {
-  // eslint-disable-next-line no-self-assign
   if (fastSearch.value == "") data.value = dataBase.value;
   else {
     //data.value = dataBase.value.filter(filterByIDName);
@@ -71,8 +71,11 @@ const searchFilter = ref<IVacationDailyFilter>({
   employeeName: "",
 });
 const getFilterData = async (page: number = 1) => {
-  localStorage.setItem("indexVacationDaily", page.toString());
-
+  useLocalStorage().set({
+    key: "indexVacationDaily",
+    value: page.toString(),
+    withEncrypt: false,
+  });
   isLoading.value = true;
   searchFilter.value.employeeName = fastSearch.value;
   await useVacationDailyStore()
@@ -119,7 +122,7 @@ onMounted(async () => {
       <IButton width="28" :onClick="addItem" :text="t('Add')" />
     </template>
     <IPageContent>
-      <IRow :col="5" :col-md="2" :col-lg="4">
+      <IRow :cols="5" :cols-md="2" :cols-lg="4">
         <ISearchBar :getDataButton="getFilterData">
           <ICol :span-lg="1" :span-md="2" :span="1" :span-sm="4">
             <IInput
@@ -134,7 +137,7 @@ onMounted(async () => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow :col="2" :col-lg="2" :col-md="2">
+      <IRow :cols="2" :cols-lg="2" :cols-md="2">
         <ICol
           :span="1"
           :span-lg="1"

@@ -1,5 +1,5 @@
 import type { IVacation, IVacationReason } from "../IVacation";
- 
+
 export interface IVacationTime {
   id: number;
   date: string;
@@ -8,7 +8,7 @@ export interface IVacationTime {
   record: number;
   Vacation: IVacation;
   Reason: IVacationReason;
-  createdAt?: string
+  createdAt?: string;
 }
 
 export interface IVacationTimeFilter {

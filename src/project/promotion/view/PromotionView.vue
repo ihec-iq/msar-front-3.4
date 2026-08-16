@@ -8,7 +8,7 @@ import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
 import vSelect from "vue-select";
 import { usePromotionStore } from "@/project/promotion/promotionStore";
-import { SuccessToast } from "@/utilities/Toast";
+import { SuccessToast } from "@/utilities/Toast2";
 import type { IEmployeeLite } from "@/project/employee/IEmployee";
 import type { IDegreeStage } from "@/project/bonus/IBonus";
 
@@ -170,7 +170,7 @@ onMounted(async () => {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         preIcon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -185,9 +185,9 @@ onMounted(async () => {
         <IRow
           v-else
           :title="t('Promotion.EmployeeDataCurrent')"
-          col-lg="4"
-          col-md="2"
-          col-sm="1"
+          cols-lg="4"
+          cols-md="2"
+          cols-sm="1"
           class="rounded-sm border-2 border-solid border-red-400"
         >
           <ICol span="1" span-md="2" span-sm="4">
@@ -227,7 +227,7 @@ onMounted(async () => {
         </IRow>
 
         <!-- for new Promotion of employee -->
-        <IRow col-lg="4" col-md="2" col-sm="1">
+        <IRow cols-lg="4" cols-md="2" cols-sm="1">
           <ICol span="1" span-md="2" span-sm="4">
             <div
               class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
@@ -309,7 +309,7 @@ onMounted(async () => {
         <IRow>
           <ICol span="1" span-md="1" span-sm="1">
             <IButton2
-              :type="EnumButtonType.Outlined"
+              :variant="EnumButtonType.Outlined"
               :onClick="
                 () => {
                   Promotion.notes = ' ';

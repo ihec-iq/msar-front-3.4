@@ -1,6 +1,6 @@
 import type { IItem } from "@/project/item/IItem";
 import type { IInputVoucherItem } from "../inputVoucher/IInputVoucher";
-import type { IStock } from "../IStock";
+import type { IStock } from "../settingVoucher/stock/IStock";
 
 export interface IRetrievalVoucher {
   id: number;
@@ -14,7 +14,6 @@ export interface IRetrievalVoucher {
   Employee: IRetrievalVoucherEmployee;
   itemsCount?: number;
   Stock: IStock;
-
 }
 export interface IRetrievalVoucherItem {
   id?: number;

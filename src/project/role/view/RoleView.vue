@@ -36,7 +36,10 @@ const toggleCheck = () => {
 //#endregion
 const fastSearch = ref("");
 const filterByIDName = (item: IPermission) => {
-  if (item.name.includes(fastSearch.value)) {
+  if (
+    item.name.includes(fastSearch.value) ||
+    item.name_ar?.includes(fastSearch.value)
+  ) {
     return true;
   }
   return false;
@@ -61,7 +64,7 @@ const Save = () => {
   else update();
   // else update();
 };
-const errors = ref<String | null>();
+const errors = ref<string | null>();
 const roleStore = useRoleStore();
 const store = () => {
   role.checkedPermission = checkedPermission.value;
@@ -210,7 +213,7 @@ onMounted(async () => {
               class="checkbox checkbox-md checkbox-success"
             />
             <label class="text-gray-200 ml-1 mr-4 capitalize">
-              {{ permission.name }}
+              {{ permission.name_ar }}
             </label>
             <div class="relative flex flex-col items-center group">
               <svg

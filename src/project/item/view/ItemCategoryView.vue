@@ -4,7 +4,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useItemCategoryStore } from "../itemCategoryStore";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
-import { useRtlStore } from "@/stores/i18n/rtlPi";
 import { usePermissionsStore } from "@/project/core/permissionStore";
 import { t } from "@/utilities/I18nPlugin";
 import { EnumPermission } from "@/utilities/EnumSystem";
@@ -13,8 +12,24 @@ import IPageContent from "@/components/ihec/IPageContent.vue";
 import IInput from "@/components/inputs/IInput.vue";
 import { EnumInputType } from "@/components/ihec/enums/EnumInputType";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
-//region"Drag and Drop"
-
+//region"Validation"
+import {
+  useValidation,
+  type IValidationResult,
+  type IFieldValidation,
+} from "@/utilities/Validation";
+const { validate, required, isObject } = useValidation();
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const rules: Array<IFieldValidation> = [
+  {
+    field: "name",
+    caption: t("Item.Name"),
+    rules: [required()],
+  },
+];
+import { WarningToast } from "@/utilities/Toast2";
+import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
+import { prepareFormData } from "@/utilities/crudTool";
 //#endregion
 
 //#region Vars
@@ -34,10 +49,13 @@ const errors = ref<string | null>();
 //#region CURD
 const store = () => {
   errors.value = null;
-  const formData = new FormData();
-  formData.append("id", category.value.id.toString());
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
+  validationResult.value = validate(category.value, rules);
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+  errors.value = null;
+  const formData = prepareFormData(category.value);
 
   itemCategoryStore
     .store(formData)
@@ -65,9 +83,14 @@ const store = () => {
 };
 function update() {
   errors.value = null;
-  const formData = new FormData();
-  formData.append("name", category.value.name.toString());
-  formData.append("description", String(category.value.description));
+  validationResult.value = validate(category.value, rules);
+  if (!validationResult.value.success) {
+    WarningToast(t("ValidationFails"));
+    return;
+  }
+  errors.value = null;
+  const formData = prepareFormData(category.value);
+
   itemCategoryStore
     .update(category.value.id, formData)
     .then((response) => {
@@ -112,14 +135,26 @@ const Delete = async () => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        await itemCategoryStore._delete(category.value.id).then(() => {
-          swalWithBootstrapButtons.fire(
-            t("Deleted!"),
-            t("Deleted successfully ."),
-            "success"
-          );
-          router.go(-1);
-        });
+        await itemCategoryStore
+          ._delete(category.value.id)
+          .then(() => {
+            swalWithBootstrapButtons.fire(
+              t("Deleted!"),
+              t("Deleted successfully ."),
+              "success"
+            );
+            router.go(-1);
+          })
+          .catch((error) => {
+            //errors.value = Object.values(error.response.data.errors).flat().join();
+            errors.value = itemCategoryStore.getError(error);
+            Swal.fire({
+              icon: "error",
+              title: t("Deleted not successfully ."),
+              text: error.response.data.message,
+              footer: "",
+            });
+          });
       }
     });
 };
@@ -169,21 +204,45 @@ const reset = () => {
 <template>
   <IPage :HeaderTitle="namePage" :islo="isLoding">
     <template #HeaderButtons>
-      <IButton2 color="green" width="28" :type="EnumButtonType.Outlined" pre-icon="view-grid-plus" :onClick="reset"
-        :text="t('New')" />
+      <IButton2
+        color="green"
+        width="28"
+        :variant="EnumButtonType.Outlined"
+        pre-icon="view-grid-plus"
+        :onClick="reset"
+        :text="t('New')"
+      />
     </template>
     <IPageContent>
       <IRow>
-        <IRow col-lg="2" col="2" col-md="2">
+        <IRow cols-lg="2" cols="2" cols-md="2">
           <ICol>
-            <IInput :label="t('Name')" name="name" v-model="category.name" :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Name')"
+              name="name"
+              v-model="category.name"
+              :type="EnumInputType.Text"
+            />
           </ICol>
           <ICol>
-            <IInput :label="t('Description')" name="description" v-model="category.description"
-              :type="EnumInputType.Text" />
+            <IInput
+              :label="t('Description')"
+              name="description"
+              v-model="category.description"
+              :type="EnumInputType.Text"
+            />
           </ICol>
         </IRow>
-        <IFooterCrud :isAdd="category.id == 0" :onCreate="store" :onUpdate="update" :onDelete="Delete" />
+        <IErrorMessages
+          :validationResult="validationResult"
+          ref="someRefName"
+        />
+        <IFooterCrud
+          :isAdd="category.id == 0"
+          :onCreate="store"
+          :onUpdate="update"
+          :onDelete="Delete"
+        />
       </IRow>
     </IPageContent>
   </IPage>

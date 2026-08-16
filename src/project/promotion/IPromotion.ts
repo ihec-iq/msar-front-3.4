@@ -1,5 +1,5 @@
 import type { IUser } from "../user/IUser";
-import type {  IEmployeeLitePromotion } from "../employee/IEmployee";
+import type { IEmployeeLitePromotion } from "../employee/IEmployee";
 import type { IDocument } from "../archive/IArchive";
 import type { IDegreeStage } from "../bonus/IBonus";
 
@@ -7,7 +7,7 @@ export interface IPromotion {
   id: number;
   issueDate: string;
   number: string;
-  Employee: IEmployeeLitePromotion; 
+  Employee: IEmployeeLitePromotion;
   DegreeStage: IDegreeStage;
   Files?: Array<IDocument>;
   UserCreate?: IUser;
@@ -15,7 +15,6 @@ export interface IPromotion {
   notes: string;
 }
 
- 
 export interface IPromotionFilter {
   title: string;
   limit: number;
@@ -23,7 +22,6 @@ export interface IPromotionFilter {
   employeeId?: number;
   employeeName?: string;
   name?: string;
-  isBound?:boolean;
+  isBound?: boolean;
   bound?: number;
-
 }

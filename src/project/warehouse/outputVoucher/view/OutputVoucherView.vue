@@ -4,7 +4,6 @@ import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import { storeToRefs } from "pinia";
 import { usePermissionsStore } from "@/project/core/permissionStore";
-import { useStockStore } from "../../stockStore";
 import { useOutputVoucherStore } from "./../outputVoucherStore";
 import { useInputVoucherStore } from "@/project/warehouse/inputVoucher/inputVoucherStore";
 import type { IOutputVoucherItem } from "../IOutputVoucher";
@@ -19,8 +18,11 @@ import IButton2 from "@/components/ihec/IButton2.vue";
 import type { IEmployee } from "@/project/employee/IEmployee";
 import IBasis from "@/components/ihec/IBasis.vue";
 import IFlex from "@/components/ihec/IFlex.vue";
-import { makeFormDataFromObject } from "@/utilities/tools";
-const { inputVoucherItemsVSelect } = storeToRefs(useInputVoucherStore());
+import {
+  ConvertToMoneyFormat,
+  makeFormDataFromObject,
+  ToNumberShow,
+} from "@/utilities/tools";
 
 //region"Validation"
 import {
@@ -28,36 +30,49 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { SuccessToast, WarningToast } from "@/utilities/Toast2";
 import IErrorMessages from "@/components/ihec/IErrorMessages.vue";
 import IPage from "@/components/ihec/IPage.vue";
+import ILabel from "@/components/ihec/ILabel.vue";
 
 const { validate, isArray, required, isObject } = useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
-  {
-    field: "number",
-    caption: t("OutputVoucherNumber"),
-    rules: [required()],
-  },
+  { field: "number", caption: t("OutputVoucher.Number"), rules: [required()] },
   {
     field: "Employee",
-    caption: t("OutputVoucherEmployeeRequest"),
-    rules: [isObject({ key: "id", message: "" })],
+    caption: t("EmployeeRequest"),
+    rules: [isObject({ key: "id", message: "يجب ان تقوم بأختيار الموظف" })],
   },
   {
     field: "Items",
     caption: t("Item.Sum"),
-    rules: [isArray()],
+    rules: [isArray({ message: "يجب ان يحتوي السند على مواد" })],
   },
 ];
 //#endregion
-
+//#region Drag & Drop
+import { useDragDropStore } from "@/project/archive/dragDrop";
+import FilePreview from "@/project/archive/view/FilePreview.vue";
+import DragDrop from "@/project/archive/view/DragDrop.vue";
+import { showToast } from "@/utilities/toast";
+import ISelectObject from "@/components/inputs/ISelectObject.vue";
+import ISelect from "@/components/inputs/ISelect.vue";
+import ISelect2 from "@/components/inputs/ISelect2.vue";
+import IButton from "@/components/ihec/IButton.vue";
+import IRow from "@/components/ihec/IRow.vue";
+import SearchableTableItemsOutputVOucher from "../../component/SearchableTableItemsOutputVoucher.vue";
+import SearchableTableItemsOutputVoucher from "../../component/SearchableTableItemsOutputVoucher.vue";
+import { Label } from "radix-vue";
+const { filesDataInput } = storeToRefs(useDragDropStore());
+const updateList = () => {
+  if (id.value > 0) showData(id.value);
+};
 //#region Vars
 const { checkPermissionAccessArray } = usePermissionsStore();
-const namePage = ref("OutputVoucher");
+const namePage = ref("OutputVoucher.Add");
 const route = useRoute();
 const id = ref(Number(route.params.id));
 
@@ -76,10 +91,7 @@ const OutputVoucherItem = ref<IOutputVoucherItem>({
     name: "",
     code: "",
     description: "",
-    Category: {
-      id: 1,
-      name: "",
-    },
+    Category: { id: 1, name: "", description: "" },
     measuringUnit: "",
   },
   description: "",
@@ -89,15 +101,13 @@ const OutputVoucherItem = ref<IOutputVoucherItem>({
   notes: "",
   inputVoucherItemId: 0,
   InputVoucherItem: {
+    inputVoucherId: 0,
     Item: {
       id: 0,
       name: "",
       code: "",
       description: "",
-      Category: {
-        id: 0,
-        name: "",
-      },
+      Category: { id: 0, name: "", description: "" },
       measuringUnit: "",
     },
     description: "",
@@ -114,6 +124,7 @@ const AddPopup = () => {
 const resetVoucherItem = () => {
   IsAdd.value = true;
   indexSelectedVoucherItem.value = 0;
+
   OutputVoucherItem.value = {
     id: 0,
     Item: {
@@ -121,10 +132,7 @@ const resetVoucherItem = () => {
       name: "",
       code: "",
       description: "",
-      Category: {
-        id: 1,
-        name: "",
-      },
+      Category: { id: 1, name: "", description: "" },
       measuringUnit: "",
     },
     description: "",
@@ -140,10 +148,7 @@ const resetVoucherItem = () => {
         name: "",
         code: "",
         description: "",
-        Category: {
-          id: 0,
-          name: "",
-        },
+        Category: { id: 0, name: "", description: "" },
         measuringUnit: "",
       },
       description: "",
@@ -155,6 +160,7 @@ const resetVoucherItem = () => {
 };
 //#region Item Row
 const deleteItem = (index: number) => {
+  isLoading.value = true;
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn m-2 bg-red-700",
@@ -174,47 +180,61 @@ const deleteItem = (index: number) => {
     })
     .then(async (result) => {
       if (result.isConfirmed) {
-        outputVoucherStore.removeItem(index);
+        await outputVoucherStore.removeItem(index);
       }
     });
+  isLoading.value = false;
 };
 const updatePopup = (index: number, itemX: IOutputVoucherItem) => {
   showPop.value = true;
   IsAdd.value = false;
   indexSelectedVoucherItem.value = index;
   OutputVoucherItem.value = itemX;
-  OutputVoucherItem.value.inputVoucherItemId = Number(
-    itemX.InputVoucherItem.id
-  );
+  OutputVoucherItem.value.inputVoucherItemId = Number(itemX.inputVoucherItemId);
 };
 const AddItem = () => {
-  OutputVoucherItem.value.Item = OutputVoucherItem.value.InputVoucherItem?.Item;
-  OutputVoucherItem.value.description = String(
-    OutputVoucherItem.value.InputVoucherItem?.description
-  );
-  OutputVoucherItem.value.price = Number(
-    OutputVoucherItem.value.InputVoucherItem?.price
-  );
+  // OutputVoucherItem.value.Item = OutputVoucherItem.value.Item;
+  // OutputVoucherItem.value.description = String(
+  //   OutputVoucherItem.value.InputVoucherItem?.description
+  // );
+  // OutputVoucherItem.value.price = Number(
+  //   OutputVoucherItem.value.InputVoucherItem?.price
+  // );
   ChangeValueTotal();
-  OutputVoucherItem.value.inputVoucherItemId = Number(
-    OutputVoucherItem.value.InputVoucherItem.id
-  );
+  // OutputVoucherItem.value.inputVoucherItemId = Number(
+  //   OutputVoucherItem.value.inputVoucherItemId
+  // );
   outputVoucherStore.addItem(OutputVoucherItem.value);
-
   resetVoucherItem();
+  OutputVoucherItem.value.InputVoucherItem = {
+    Item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      Category: { id: 0, name: "", description: "" },
+      measuringUnit: "",
+    },
+    description: "",
+    count: 1,
+    price: 1,
+    value: 1,
+  };
   showPop.value = false;
 };
 const ChangeValueTotal = () => {
   OutputVoucherItem.value.value =
-    OutputVoucherItem.value.count *
-    Number(OutputVoucherItem.value.InputVoucherItem?.price);
+    (Number(OutputVoucherItem.value.count) || 0) *
+    (OutputVoucherItem.value.InputVoucherItem?.price || 0);
 };
 
 // for change the value of total in form item
 watch(
-  () => OutputVoucherItem.value.InputVoucherItem.price,
+  () => OutputVoucherItem.value?.InputVoucherItem,
   (newX) => {
-    ChangeValueTotal();
+    if (OutputVoucherItem.value) {
+      ChangeValueTotal();
+    }
   }
 );
 const indexSelectedVoucherItem = ref(0);
@@ -230,25 +250,56 @@ const EditItem = () => {
 };
 //#endregion
 
-const Loading = ref(false);
+const isLoading = ref(false);
 const router = useRouter();
 const errors = ref<string | null>();
 
 //#region CURD
 const reset = () => {
   outputVoucherStore.resetData();
+  OutputVoucherItem.value.InputVoucherItem = {
+    Item: {
+      id: 0,
+      name: "",
+      code: "",
+      description: "",
+      Category: { id: 0, name: "", description: "" },
+      measuringUnit: "",
+    },
+    description: "",
+    count: 1,
+    price: 1,
+    value: 1,
+  };
 };
 
 const store = () => {
   validationResult.value = validate(outputVoucher.value, rules);
 
   if (!validationResult.value.success) {
-    WarningToast(t("ValidationFails"));
+    const messages = validationResult.value.errors[0].messages.join("، ");
+    showToast(
+      t("FailedValidation") +
+        " : " +
+        validationResult.value.errors[0].fieldName,
+      {
+        description: messages,
+        status: "warning",
+        action: {
+          label: "Done",
+          onClick: () => {},
+        },
+      }
+    );
     return;
   }
 
   errors.value = null;
   const sendData = makeFormDataFromObject(outputVoucher.value);
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    sendData.append("FilesDocument[]", files[i]);
+  }
   sendData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -263,6 +314,8 @@ const store = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        useInputVoucherStore().getAvailableItemsVSelect();
+        filesDataInput.value = [];
         router.go(-1);
       }
     })
@@ -281,11 +334,29 @@ function update() {
   validationResult.value = validate(outputVoucher.value, rules);
 
   if (!validationResult.value.success) {
-    WarningToast(t("ValidationFails"));
+    const messages = validationResult.value.errors[0].messages.join("، ");
+    showToast(
+      t("FailedValidation") +
+        " : " +
+        validationResult.value.errors[0].fieldName,
+      {
+        description: messages,
+        status: "warning",
+        action: {
+          label: "Done",
+          onClick: () => {},
+        },
+      }
+    );
+    return;
     return;
   }
   errors.value = null;
   const sendData = makeFormDataFromObject(outputVoucher.value);
+  const files = filesDataInput.value;
+  for (let i = 0; i < files.length; i++) {
+    sendData.append("FilesDocument[]", files[i]);
+  }
   sendData.append(
     "employeeRequestId",
     outputVoucher.value.Employee.id.toString()
@@ -301,6 +372,8 @@ function update() {
           showConfirmButton: false,
           timer: 1500,
         });
+        filesDataInput.value = [];
+        useInputVoucherStore().getAvailableItemsVSelect();
         showData(outputVoucher.value.id);
       }
     })
@@ -341,13 +414,14 @@ const Delete = async () => {
             t("Deleted successfully ."),
             "success"
           );
+          filesDataInput.value = [];
           router.go(-1);
         });
       }
     });
 };
 const showData = async (id: number) => {
-  Loading.value = true;
+  isLoading.value = true;
   await outputVoucherStore
     .show(id)
     .then((response) => {
@@ -358,9 +432,10 @@ const showData = async (id: number) => {
         outputVoucher.value.notes = response.data.data.notes;
         outputVoucher.value.Items = response.data.data.Items;
         outputVoucher.value.Employee = response.data.data.Employee;
-        outputVoucher.value.Stock = response.data.data.Stock;
-        outputVoucher.value.signaturePerson =
-          response.data.data.signaturePerson;
+        outputVoucher.value.numberBill = response.data.data.numberBill;
+        outputVoucher.value.dateBill = response.data.data.dateBill;
+        outputVoucher.value.FilesDocument = response.data.data.FilesDocument;
+        filesDataInput.value = [];
       }
     })
     .catch((errors) => {
@@ -371,60 +446,138 @@ const showData = async (id: number) => {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
+        filesDataInput.value = [];
         router.go(-1);
       });
     });
-  Loading.value = false;
+  isLoading.value = false;
 };
 //#endregion
-const { stocks } = storeToRefs(useStockStore());
-
+const getItemsVSelect = async (query?: string | undefined) => {
+  inputVoucherItemsVSelect.value =
+    await useInputVoucherStore().getItemsVSelect2(query);
+};
 onMounted(async () => {
-  Loading.value = true;
-
+  isLoading.value = true;
+  filesDataInput.value = [];
   checkPermissionAccessArray([EnumPermission.ShowOutputVouchers]);
   await outputVoucherStore.getEmployees().then(() => {});
   if (Number.isNaN(id.value) || id.value === undefined) {
-    namePage.value = "AddOutputVoucher";
+    namePage.value = "OutputVoucher.Add";
     outputVoucher.value.id = 0;
     outputVoucher.value.date = new Date().toISOString().split("T")[0];
   } else {
     outputVoucher.value.id = id.value;
     await showData(id.value);
-    namePage.value = "UpdateOutputVoucher";
+    namePage.value = "OutputVoucher.Update";
   }
-  await useStockStore().get_stocks();
   await useInputVoucherStore().getAvailableItemsVSelect();
-  Loading.value = false;
+  isLoading.value = false;
 });
-const ChangeStock = async () => {
-  Loading.value = true;
 
-  await useInputVoucherStore()
-    .getAvailableItemsVSelect(outputVoucher.value.Stock.id.toString())
-    .then(() => {
-      //console.log("Get Store ");
-    });
-  Loading.value = false;
-};
 const headers = ref<Array<ITableHeader>>([
   { caption: t("ID"), value: "id" },
   { caption: t("Item.Index"), value: "Item" },
   { caption: t("Item.Description"), value: "Description" },
   { caption: t("Count"), value: "count" },
-  { caption: t("Price"), value: "price" },
+  { caption: t("Price"), value: "Price" },
   { caption: t("Total"), value: "Total" },
   { caption: t("Notes"), value: "notes" },
   { caption: t("Actions"), value: "Actions" },
 ]);
+const checkBillExists = () => {
+  if (outputVoucher.value.number === "") {
+    WarningToast(t("InputVoucher.NumberRequired"));
+    return;
+  }
+  outputVoucherStore
+    .checkBillExists(outputVoucher.value.number, outputVoucher.value.date)
+    .then((response) => {
+      if (response && response.status === 200) {
+        if (response.data.data && response.data.data.length > 0) {
+          showToast(t("InputVoucher.BillExists"), {
+            description: " هل تريد فتح المستند الاول",
+            status: "warning",
+            position: "top-center",
+            action: {
+              label: t("Open"),
+              onClick: () => {
+                outputVoucher.value.number = "";
+                router.push({
+                  name: "outputVoucherUpdate",
+                  params: { id: response.data.data[0].id },
+                });
+                showData(response.data.data[0].id);
+              },
+            },
+          });
+        }
+      }
+    })
+    .catch((error) => {
+      SuccessToast(t("InputVoucher.BillNotExists"));
+    });
+};
+const goToInputVoucher = (id: number) => {
+  const routeUrl = router.resolve({
+    name: "inputVoucherUpdate",
+    params: { id: id },
+  });
+  window.open(routeUrl.href, "_blank");
+  return;
+};
+// في نفس الصفحة اللي تستعمل بيها الكومبوننت
+const inputVoucherItemsVSelect = ref<IInputVoucherItem[]>([]);
+
+function convertToMoneyFormat(value: number | string) {
+  const num = Number(value || 0);
+  return num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+}
+
+/** منع إدخال HTML غير مرغوب */
+function escapeHtml(text: string) {
+  return String(text ?? "").replace(
+    /[&<>"']/g,
+    (m) =>
+      (
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        }) as Record<string, string>
+      )[m]
+  );
+}
+
+/** إبراز المطابقة بـ <mark> (case-insensitive) */
+function highlightMatch(text: string, query: string) {
+  const safe = escapeHtml(text);
+  const q = String(query ?? "").trim();
+  if (!q) return safe;
+  const pattern = new RegExp(
+    `(${q.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")})`,
+    "ig"
+  );
+  return safe.replace(pattern, "<mark>$1</mark>");
+}
+
+async function fetchFn(query: string, page = 1) {
+  const raw = await useInputVoucherStore().getItemsVSelect3(query, page);
+  if (Array.isArray(raw)) return { items: raw, nextPage: null };
+  if (raw?.items) return { items: raw.items, nextPage: raw.nextPage ?? null };
+  if (raw?.data) return { items: raw.data, nextPage: null };
+  return { items: [], nextPage: null };
+}
 </script>
 <template>
-  <IPage :HeaderTitle="t(namePage)" :isLoading="Loading">
+  <IPage :HeaderTitle="t(namePage)" :isLoading="isLoading">
     <template #HeaderButtons>
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -433,127 +586,180 @@ const headers = ref<Array<ITableHeader>>([
     <IPageContent>
       <IContainer>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol span="1" span-md="2" span-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
+            <ICol
+              span="1"
+              span-md="2"
+              span-sm="1"
+              class="flex flex-wrap items-center"
+            >
               <IInput
-                :label="t('OutputVoucherNumber')"
+                :label="t('OutputVoucher.Number')"
+                class="w-[50%]"
                 name="Number"
                 v-model="outputVoucher.number"
                 :type="EnumInputType.Text"
+                :FnClick="checkBillExists"
+                FunIcon="search"
+                FnTooltip="بحث عن رقم المستند وتاريخه داخل النظام"
               />
-            </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('Date')"
-                name="InputVoucherNumer"
+                class="w-[50%]"
+                name="OutputVoucherDate"
                 v-model="outputVoucher.date"
                 :type="EnumInputType.Date"
               />
             </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
-              <div
-                class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
-              >
-                {{ t("OutputVoucherEmployeeRequest") }}
-              </div>
-              <vSelect
-                class="w-full outline-none h-10 px-3 py-2 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
-                v-model="outputVoucher.Employee"
-                :options="outputVoucherEmployees"
-                :reduce="(employee: IEmployee) => employee"
-                label="name"
-                :getOptionLabel="(employee: IEmployee) => employee.name"
-              >
-                <template #option="{ name }">
-                  <div>
-                    <span>{{ name }}</span>
-                  </div>
-                </template>
-              </vSelect>
-            </ICol>
-            <ICol span="1" span-md="2" span-sm="1">
+            <ICol span="1" span-md="2" span-sm="1" class="flex flex-row">
               <IInput
-                :label="t('InputVoucherSignaturePerson')"
-                name="InputVoucherNumer"
-                v-model="outputVoucher.signaturePerson"
+                class="w-[50%]"
+                :label="t('InputVoucher.NumberBill')"
+                name="OutputVoucher.NumberBill"
+                v-model="outputVoucher.numberBill"
                 :type="EnumInputType.Text"
               />
+              <IInput
+                class="w-[50%]"
+                :label="t('OutputVoucher.DateBill')"
+                name="OutputVoucherNumber"
+                v-model="outputVoucher.dateBill"
+                :type="EnumInputType.Date"
+              />
             </ICol>
-          </IRow>
-          <IRow col-lg="4" col-md="2" col-sm="1">
-            <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-              <div class="mb-2">
-                <label class="_inputLabel">
-                  <span class="text-red-600">*</span> {{ t("Stock") }}
-                </label>
-                <select
-                  v-model="outputVoucher.Stock"
-                  class="_input"
-                  @change="ChangeStock()"
+            <ICol span="2" span-md="2" span-sm="2" class="flex flex-row">
+              <div class="w-[100%]">
+                <div
+                  class="md:text-sm text-base mr-3 font-bold text-text dark:text-textLight"
                 >
-                  <option
-                    v-for="stock in stocks"
-                    :key="stock.id"
-                    :value="stock"
-                  >
-                    {{ stock.name }}
-                  </option>
-                </select>
+                  {{ t("EmployeeRequest") }}
+                </div>
+                <vSelect
+                  class="w-full outline-none focus:border-gray-800 h-10 mt-1 px-3 py-1 rounded-md bg-lightInput dark:bg-input text-text dark:text-textLight"
+                  v-model="outputVoucher.Employee"
+                  :options="outputVoucherEmployees"
+                  :reduce="(employee: IEmployee) => employee"
+                  label="name"
+                  :getOptionLabel="(employee: IEmployee) => employee.name"
+                >
+                  <template #option="{ name }">
+                    <div>
+                      <span>{{ name }}</span>
+                    </div>
+                  </template>
+                </vSelect>
               </div>
             </ICol>
-            <ICol span="3">
+            <ICol span="1" span-md="2" span-sm="1">
               <IInput
                 :label="t('Notes')"
-                name="InputVoucherNumer"
+                name="InputVoucherNumber"
                 v-model="outputVoucher.notes"
                 :type="EnumInputType.Text"
               />
             </ICol>
           </IRow>
-          <IRow >
-            <ICol>
-              <van-button
-                class="border-none duration-500 rounded-lg bg-create hover:bg-createHover"
-                type="success"
-                is-link
-                @click="AddPopup()"
-                >{{ t("Item.Add") }}
-              </van-button>
+
+          <IRow>
+            <ICol span="2" span-md="2" span-sm="2">
+              <IButton2
+                :text="t('Item.Choose')"
+                color="blue"
+                :variant="EnumButtonType.Outlined"
+                post-icon="plus"
+                :on-click="AddPopup"
+                class="w-fit"
+              />
             </ICol>
           </IRow>
           <IRow>
             <ICol>
-              <ITable :items="outputVoucher.Items" :headers="headers">
+              <ITable
+                :items="outputVoucher.Items"
+                :headers="headers"
+                :showRowNumber="true"
+                :showColumnsButton="false"
+              >
                 <template v-slot:Item="{ row }">
-                  {{ row.InputVoucherItem.Item.name }}
+                  {{ row.Item.name }}
                 </template>
                 <template v-slot:Description="{ row }">
-                  {{ row.InputVoucherItem.description }}
+                  {{ row.description }}
                 </template>
                 <template v-slot:Total="{ row }">
-                  {{ row.count * row.price }}
+                  {{ ConvertToMoneyFormat(row.count * row.price) }}
                 </template>
-                <template v-slot:Actions="{ row, rowIndex }">
-                  <van-button
-                    class="border-none duration-500 m-2 rounded-lg bg-create hover:bg-createHover"
-                    type="success"
-                    is-link
-                    @click="updatePopup(rowIndex, row)"
-                    >{{ t("Edit") }}
-                  </van-button>
-                  |
-                  <van-button
-                    class="duration-500 rounded-lg m-2 bg-white hover:bg-deleteHover border-red-700 border-2"
-                    is-link
-                    @click="deleteItem(rowIndex)"
-                    >{{ t("Delete") }}
-                  </van-button>
+                <template v-slot:Price="{ row }">
+                  {{ ConvertToMoneyFormat(row.price) }}
+                </template>
+                <template v-slot:Actions="{ row }">
+                  <div class="flex flex-row items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      @click="
+                        updatePopup(outputVoucher.Items.indexOf(row), row)
+                      "
+                      class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15.232 5.232l3.536 3.536m-2.036-1.5a2.5 2.5 0 113.536 3.536L7.5 21H3v-4.5L16.732 6.768z"
+                        />
+                      </svg>
+                      {{ t("Edit") }}
+                    </button>
+                    <button
+                      type="button"
+                      @click="deleteItem(outputVoucher.Items.indexOf(row))"
+                      class="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-700 dark:text-red-200 px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                      {{ t("Delete") }}
+                    </button>
+                  </div>
                 </template>
               </ITable>
             </ICol>
           </IRow>
+          <!-- file -->
+          <IRow :collapse="true" :OpenCollapse="false" :title="t('files')">
+            <ICol
+              span="3"
+              span-md="3"
+              span-sm="2"
+              v-for="document in outputVoucher.FilesDocument"
+              :key="document.name"
+            >
+              <FilePreview :file="document" @updateList="updateList">
+              </FilePreview>
+            </ICol>
+            <DragDrop></DragDrop>
+          </IRow>
+
           <IRow>
-            <ICol><IErrorMessages :validationResult="validationResult" /></ICol>
+            <ICol>
+              <IErrorMessages :validationResult="validationResult" />
+            </ICol>
           </IRow>
         </IForm>
       </IContainer>
@@ -566,71 +772,93 @@ const headers = ref<Array<ITableHeader>>([
         position="bottom"
       >
         <!-- for search Item -->
-
         <IFlex class="p-2">
-          <IBasis base="1/4">
-            <div
-              class="mb-1 md:text-sm text-base ml-2 font-bold dark:text-gray-300"
+          <IBasis base="2/4">
+            <label class="px-2">{{ t("Item.Choose") }}</label>
+            <SearchableTableItemsOutputVoucher
+              v-model="OutputVoucherItem"
+              label-key="Item.name"
+              track-by="fingerprint"
+              :placeholder="t('Item.Choose')"
+              :async="true"
+              :fetch-function="fetchFn"
+              :dialog-z-index="2147483647"
             >
-              {{ t("Item") }}
-            </div>
-            <vSelect
-              class="capitalize rounded-md border-2 p-2 dark:bg-gray-800 focus:outline-none focus:border focus:border-gray-700 text-gray-800 dark:text-gray-200 mb-10"
-              v-model="OutputVoucherItem.InputVoucherItem"
-              :options="inputVoucherItemsVSelect"
-              :reduce="(_item: IInputVoucherItem) => _item"
-              :get-option-label="(_item: IInputVoucherItem) => _item.Item.name"
-            >
-              <template #option="{ Item, outValue, inValue, notes,description }">
-                <div class="rtl:text-right border-2 p-2 rounded-md bg-gray-800 dark:bg-gray-100">
-                  <div
-                    class="rounded-md focus:outline-none focus:border focus:border-gray-700 dark:bg-gray-800 dark:text-gray-100 p-1 mb-1 font-bold"
-                  >
-                    {{ Item.name.toString() }}
+              <template #item="{ option, isHighlighted, query }">
+                <div
+                  class="result-card"
+                  :class="{ 'result-card--active': isHighlighted }"
+                >
+                  <div class="result-card__head">
+                    <div class="result-card__title-wrap">
+                      <div class="result-card__icon">
+                        <svg
+                          class="h-6 w-6 text-gray-500"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-14L4 7v10l8 4m0-14L4 7"
+                          />
+                        </svg>
+                      </div>
+                      <!-- الاسم مع تظليل -->
+                      <h3
+                        class="result-card__title"
+                        v-html="highlightMatch(option?.Item?.name ?? '', query)"
+                      ></h3>
+                    </div>
+
+                    <span class="result-card__badge">
+                      متاح: {{ ConvertToMoneyFormat(option?.count) }}
+                    </span>
                   </div>
-                  <cite>
+
+                  <div class="result-card__grid">
+                    <div class="result-card__label">الكود:</div>
                     <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
-                    >
-                      {{ t("Code") }}: {{ Item.code.toString() }}
+                      class="result-card__value"
+                      v-html="highlightMatch(option?.Item?.code ?? '', query)"
+                    ></div>
+                    <div class="result-card__label">التصنيف:</div>
+                    <div class="result-card__value">
+                      {{ option?.Item?.Category?.name ?? "—" }}
                     </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
-                    >
-                      {{ t("Category") }}:
-                      {{ Item.Category.name.toString() }}
+                    <div class="result-card__label">السعر:</div>
+                    <div class="result-card__value result-card__value--strong">
+                      {{ ConvertToMoneyFormat(option?.price) }}
                     </div>
-                    <div
-                      v-if="description"
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-gray-500 text-gray-200 p-1 mb-1"
-                    >
-                      {{ t("Item.Description") }}:
-                      {{ description.toString() }}
-                     
-                    </div>
-                    <div
-                      class="rounded-md focus:outline-none focus:border focus:border-gray-400 bg-amber-800 text-gray-200 p-1 mb-1"
-                    >
-                      {{ t("Available") }}:
-                      {{ Number(inValue) - Number(outValue) }}
-                    </div>
-                    <cite class="flex flex-wrap text-left text-xs w-fit">
-                      {{ notes }}
-                    </cite>
-                  </cite>
-                  <!-- <br />
-                  <cite>
-                    {{ Item.description }}
-                  </cite> -->
+                  </div>
+
+                  <div
+                    v-if="option?.description || option?.notes"
+                    class="result-card__footer"
+                  >
+                    <p v-if="option?.description" class="result-card__desc">
+                      {{ option.description }}
+                    </p>
+                    <p v-if="option?.notes" class="result-card__notes">
+                      {{ option.notes }}
+                    </p>
+                  </div>
                 </div>
               </template>
-            </vSelect>
+
+              <template #footer>
+                <div class="hint">استخدم ↑ ↓ للتنقّل و Enter للاختيار</div>
+              </template>
+            </SearchableTableItemsOutputVoucher>
           </IBasis>
           <IBasis
-            base="3/4"
+            base="2/4"
             v-if="OutputVoucherItem.InputVoucherItem == null"
             class="border-2 border-dotted border-gray-600"
-            ><div class="w-full text-center align-middle border-gray-600">
+          >
+            <div class="w-full text-center align-middle border-gray-600">
               <div
                 class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
               >
@@ -640,9 +868,11 @@ const headers = ref<Array<ITableHeader>>([
           </IBasis>
           <IBasis
             base="3/4"
+            title="معلومات بطاقة المادة"
             v-else-if="
               OutputVoucherItem.InputVoucherItem.Item?.Category.name != ''
             "
+            class="border-2 border-dotted border-gray-400 px-2 pb-2"
           >
             <IFlex>
               <IBasis base="1/4">
@@ -652,105 +882,135 @@ const headers = ref<Array<ITableHeader>>([
               </IBasis>
               <IBasis base="1/4">
                 <ILabel :title="t('Category')">
-                  {{
-                    OutputVoucherItem.InputVoucherItem.Item?.Category.name
-                  }}</ILabel
-                >
+                  {{ OutputVoucherItem.InputVoucherItem.Item?.Category.name }}
+                </ILabel>
               </IBasis>
-              <IBasis base="1/2"
-                ><ILabel :title="t('Description')">
+              <IBasis base="1/4">
+                <ILabel :title="t('Price')">
+                  {{
+                    ConvertToMoneyFormat(
+                      OutputVoucherItem.InputVoucherItem.price
+                    )
+                  }}
+                </ILabel>
+              </IBasis>
+              <IBasis base="1/2">
+                <ILabel :title="t('Description')">
                   {{ OutputVoucherItem.InputVoucherItem.Item?.description }} -
                   {{ OutputVoucherItem.InputVoucherItem.notes }}</ILabel
                 >
               </IBasis>
             </IFlex>
+            <div class="flex p-2">
+              <div class="w-full">
+                <ILabel title="ملاحظات سند الادخال">
+                  {{ OutputVoucherItem.InputVoucherItem.description }}
+                </ILabel>
+              </div>
+
+              <!-- <div class="w-1/4">
+              <IInput
+                :label="t('Price')"
+                :on-input="ChangeValueTotal"
+                :type="EnumInputType.Number"
+                v-model="OutputVoucherItem.InputVoucherItem.price"
+              />
+            </div> -->
+              <div class="w-2/5 flex">
+                <ILabel title="سعر سند الادخال" class="mx-1">
+                  {{
+                    ConvertToMoneyFormat(
+                      OutputVoucherItem.InputVoucherItem.price
+                    )
+                  }}
+                </ILabel>
+                <IButton2
+                  class="mt-5"
+                  text="فتح السند"
+                  color="blue"
+                  :variant="EnumButtonType.Text"
+                  pre-icon="folder"
+                  :onClick="
+                    () =>
+                      goToInputVoucher(
+                        OutputVoucherItem.InputVoucherItem.inputVoucherId ?? 0
+                      )
+                  "
+                />
+              </div>
+            </div>
           </IBasis>
           <IBasis
             base="3/4"
             v-else
             class="border-2 border-dotted border-gray-600"
-            ><div class="w-full text-center align-middle border-gray-600">
+          >
+            <div class="w-full text-center align-middle border-gray-600">
               <div
                 class="md:text-sm text-base ml-2 font-bold dark:text-gray-300 mt-auto mb-auto w-full"
               >
                 قم بأختيار مادة
               </div>
-            </div></IBasis
-          >
+            </div>
+          </IBasis>
         </IFlex>
+        <!-- for insert item Properties -->
+        <div v-if="OutputVoucherItem.inputVoucherItemId > 0">
+          <IRow>
+            <ICol class="flex">
+              <div class="w-1/5">
+                <IInput
+                  :label="t('Count')"
+                  :on-input="ChangeValueTotal"
+                  :type="EnumInputType.Number"
+                  v-model="OutputVoucherItem.count"
+                  :max="
+                    Number(OutputVoucherItem.InputVoucherItem.countIn) -
+                    Number(OutputVoucherItem.InputVoucherItem.countOut) +
+                    Number(OutputVoucherItem.InputVoucherItem.countReIn) -
+                    Number(OutputVoucherItem.InputVoucherItem.countReOut)
+                  "
+                  :auto-correct="false"
+                  :min="1"
+                />
+              </div>
+              <div class="w-1/5">
+                <ILabel :title="t('Total')">
+                  {{ ConvertToMoneyFormat(OutputVoucherItem.value) }}
+                </ILabel>
+              </div>
+              <IInput
+                class="w-3/5"
+                :label="t('Note')"
+                :type="EnumInputType.Text"
+                v-model="OutputVoucherItem.notes"
+              />
+            </ICol>
+          </IRow>
+        </div>
 
-        <!-- for insert item proparties -->
-        <IRow
-          col-lg="4"
-          col-xl="4"
-          col-md="2"
-          col-sm="1"
-          col-xs="1"
-          v-if="OutputVoucherItem.InputVoucherItem != null"
-        >
-          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <ILabel :title="t('Item.Description')">
-              {{ OutputVoucherItem.InputVoucherItem.description }}</ILabel
-            >
-          </ICol>
-          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('Count')"
-              :on-input="ChangeValueTotal"
-              :type="EnumInputType.Number"
-              v-model="OutputVoucherItem.count"
-              :max="
-                Number(OutputVoucherItem.InputVoucherItem.inValue) -
-                Number(OutputVoucherItem.InputVoucherItem.outValue)
-              "
-              :min="1"
-            />
-          </ICol>
-          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('Price')"
-              :on-input="ChangeValueTotal"
-              :type="EnumInputType.Number"
-              v-model="OutputVoucherItem.InputVoucherItem.price"
-            />
-          </ICol>
-          <ICol :span="1" span-lg="1" span-xl="1" span-md="1">
-            <IInput
-              :label="t('Total')"
-              :type="EnumInputType.Number"
-              v-model="OutputVoucherItem.value"
-            />
-          </ICol>
-          <ICol :span="3" :span-lg="3" :span-md="2" :span-xl="1">
-            <IInput
-              :label="t('Note')"
-              :type="EnumInputType.Text"
-              v-model="OutputVoucherItem.notes"
-            />
-          </ICol>
-        </IRow>
         <!-- buttons -->
-        <IContainer class="flex flex-row my-10">
+        <IContainer class="flex flex-row my-10 px-2">
           <IButton2
             :text="t('Add')"
             color="blue"
-            :type="EnumButtonType.Default"
+            :variant="EnumButtonType.Default"
             :on-click="AddItem"
-            v-if="IsAdd"
+            v-if="IsAdd && OutputVoucherItem.inputVoucherItemId > 0"
           />
           <IButton2
             :text="t('Update')"
-            color="blue"
-            :type="EnumButtonType.Default"
+            color="green"
+            :variant="EnumButtonType.Outlined"
             :on-click="EditItem"
-            v-else
+            v-if="IsAdd == false && OutputVoucherItem.inputVoucherItemId > 0"
           />
           <IButton2
-            class=""
+            class="mx-2"
             pre-icon="close-box"
             :text="t('Close')"
             color="blue"
-            :type="EnumButtonType.Text"
+            :variant="EnumButtonType.Outlined"
             :on-click="() => (showPop = false)"
           />
         </IContainer>
@@ -766,3 +1026,142 @@ const headers = ref<Array<ITableHeader>>([
     </template>
   </IPage>
 </template>
+<style scoped>
+/* بطاقة النتيجة */
+.result-card {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--tw-ring-offset-shadow, rgba(229, 231, 235, 0.9));
+  padding: 12px;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.12s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.result-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* حالة السطر المحدّد من الكيبورد */
+.result-card--active {
+  border-color: rgba(99, 40, 241, 0.55);
+  /* indigo */
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.18),
+    /* outer ring */ 0 10px 28px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #eef2ff 0%, #f5f7ff 100%);
+  /* خلفية لطيفة */
+  transform: translateY(-1px);
+}
+
+/* الهيدر */
+.result-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.result-card__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.result-card__icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #e5e7eb;
+}
+
+.result-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* شبكة التفاصيل */
+.result-card__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+  font-size: 0.9rem;
+}
+
+.result-card__label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.result-card__value {
+  color: #374151;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-card__value--strong {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* تذييل */
+.result-card__footer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(229, 231, 235, 0.7);
+}
+
+.result-card__desc {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.result-card__notes {
+  white-space: pre-wrap;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 0.78rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* تمييز الكلمة المطابقة */
+mark {
+  background: #ffec99;
+  border-radius: 4px;
+  padding: 0 2px;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* تلميح الفوتر */
+.hint {
+  padding: 8px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+</style>

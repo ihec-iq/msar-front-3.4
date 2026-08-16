@@ -5,12 +5,10 @@ export interface IArchive {
   issueDate: string;
   number: string;
   description: string;
-  Files: Array<IDocument>;
+  FilesDocument: Array<IDocument>;
   isIn: number;
   isInWord?: string;
-  archiveTypeId: number;
-  archiveTypeName: string;
-  archiveType?: IArchiveType;
+  ArchiveType: IArchiveType;
 }
 export interface IArchiveType {
   id: number;

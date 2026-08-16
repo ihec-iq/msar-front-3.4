@@ -48,14 +48,7 @@ watch(
 );
 
 const addArchive = () => {
-  archive.id = 0;
-  archive.title = "";
-  archive.issueDate = new Date().toISOString().split("T")[0];
-  archive.Files = [];
-  archive.number = "";
-  archive.description = "";
-  archive.isIn = 1;
-  archive.archiveTypeId = 0;
+  useArchiveStore().resetData();
   router.push({
     name: "archiveAdd",
   });
@@ -80,7 +73,7 @@ const searchFilter = ref<IArchiveFilter>({
   hasDate: false,
 });
 const scrollPageTo = (navEl: string) => {
-  let element = document.getElementById(navEl);
+  const element = document.getElementById(navEl);
   //element?.scrollIntoView({ behavior: "smooth" });
   // console.log(navEl);
   // console.log(element?.offsetTop);
@@ -117,7 +110,7 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
 //#endregion
 </script>
 <template>
-  <IPage :HeaderTitle="t('Archive')">
+  <IPage :HeaderTitle="t('Archive.Index')">
     <template #HeaderButtons>
       <IButton width="28" :onClick="addArchive" :text="t('Add')" />
     </template>
@@ -148,7 +141,7 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
               for="default-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              {{ t("SearhFilter.enableDateFilter") }}</label
+              {{ t("searchFilter.enableDateFilter") }}</label
             >
           </ICol>
           <ICol :span-lg="1" :span-md="2" :span="1">
@@ -171,10 +164,10 @@ const getFilterData = async (page = 1, archiveType: number = 0) => {
           </ICol>
         </ISearchBar>
       </IRow>
-      <IRow>
-        <CardsArchiveTypeIndex :OnClick="getFilterData"></CardsArchiveTypeIndex>
+      <IRow class="mt-0 overflow-x-auto">
+        <CardsArchiveTypeIndex :OnClick="getFilterData" />
       </IRow>
-      <IRow>
+      <IRow class="mt-0 overflow-x-auto">
         <EmailCardArchiveIndex
           v-for="(item, index) in data"
           :key="index"

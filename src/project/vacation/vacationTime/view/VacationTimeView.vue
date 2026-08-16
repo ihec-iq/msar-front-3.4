@@ -20,13 +20,13 @@ import {
   type IValidationResult,
   type IFieldValidation,
 } from "@/utilities/Validation";
-import { WarningToast } from "@/utilities/Toast";
+import { WarningToast } from "@/utilities/Toast2";
 import { makeFormDataFromObject } from "@/utilities/tools";
 
 const { validate, min, required, isObject, foreignKey, max, number } =
   useValidation();
 
-let validationResult = ref<IValidationResult>({ success: true, errors: [] });
+const validationResult = ref<IValidationResult>({ success: true, errors: [] });
 
 const rules: Array<IFieldValidation> = [
   {
@@ -286,7 +286,7 @@ const ChangeDateRecord = () => {
       <IButton2
         color="green"
         width="28"
-        :type="EnumButtonType.Outlined"
+        :variant="EnumButtonType.Outlined"
         pre-icon="view-grid-plus"
         :onClick="reset"
         :text="t('New')"
@@ -295,7 +295,7 @@ const ChangeDateRecord = () => {
     <IPageContent>
       <IRow>
         <IForm>
-          <IRow col-lg="4" col-md="2" col-sm="1">
+          <IRow cols-lg="4" cols-md="2" cols-sm="1">
             <ICol span="1" span-md="1" span-sm="1">
               <IInput
                 :label="t('Date')"

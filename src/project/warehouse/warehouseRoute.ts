@@ -3,11 +3,15 @@ import inputVoucherRoute from "./inputVoucher/inputVoucherRoute";
 import outputVoucherRoute from "./outputVoucher/outputVoucherRoute";
 import retrievalVoucherRoute from "./retrievalVoucher/retrievalVoucherRoute";
 import directVoucherRoute from "./directVoucher/directVoucherRoute";
+import stockRoute from "./settingVoucher/stock/StockRoute";
+import inputVoucherStateRoute from "./settingVoucher/inputVoucherState/InputVoucherStateRoute";
 export default [
   ...inputVoucherRoute,
   ...outputVoucherRoute,
   ...retrievalVoucherRoute,
   ...directVoucherRoute,
+  ...stockRoute,
+  ...inputVoucherStateRoute,
   {
     path: "/warehousePortal",
     name: "warehousePortal",
@@ -25,9 +29,33 @@ export default [
     },
   },
   {
+    path: "/barren/section",
+    name: "barrenSectionIndex",
+    component: () => import("./view/StoreBarrenSectionIndex.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
+    path: "/barren/section/:id",
+    name: "barrenSectionReport",
+    component: () => import("./view/StoreBarrenSectionView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
     path: "/ItemHistory/:id",
     name: "ItemHistory",
     component: () => import("./view/StoreItemHistoryView.vue"),
+    meta: {
+      middleware: [authMiddleware],
+    },
+  },
+  {
+    path: "/WarehouseSettingPortalView",
+    name: "WarehouseSettingPortalView",
+    component: () => import("./view/WarehouseSettingPortalView.vue"),
     meta: {
       middleware: [authMiddleware],
     },

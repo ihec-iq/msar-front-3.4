@@ -1,6 +1,7 @@
 import { ReactiveRepository } from "./ReactiveRepository";
 import { readonly } from "vue";
 import axios from "axios";
+import { useLocalStorage } from "@/compositions/uselocalStorage";
 
 export interface I18nInformation {
   info: { lang: string | any };
@@ -33,7 +34,11 @@ class I18nRepository extends ReactiveRepository<I18nInformation> {
     this.state.info.lang = localStorage.getItem("lang")?.toString();
     if (!this.state.info.lang || this.state.info.lang == undefined) {
       this.setLanguage("en");
-      localStorage.setItem("lang", "en");
+      useLocalStorage().set({
+        key: "lang",
+        value: "en",
+        withEncrypt: false,
+      });
       // console.log("Defualt EN ");
     }
     // console.log(this.state.info.lang);
@@ -49,7 +54,11 @@ class I18nRepository extends ReactiveRepository<I18nInformation> {
         .then((r) => {
           this.state.langTextRepo[lang] = r.data as Record<string, string>;
           this.state.info.lang = lang;
-          localStorage.setItem("lang", lang);
+          useLocalStorage().set({
+            key: "lang",
+            value: lang,
+            withEncrypt: false,
+          });
         })
         .catch(() => {
           this.state.langTextRepo[lang] = {};

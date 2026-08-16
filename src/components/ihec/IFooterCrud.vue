@@ -5,6 +5,7 @@ import { t } from "@/utilities/I18nPlugin";
 import IButton from "./IButton.vue";
 import IButton2 from "./IButton2.vue";
 import { EnumButtonType } from "@/components/ihec/enums/EnumButtonType";
+import { Icon } from "@iconify/vue";
 
 const props = defineProps({
   onCreate: {
@@ -21,7 +22,7 @@ const props = defineProps({
   },
   isAdd: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   showUpdate: {
     type: Boolean,
@@ -54,7 +55,7 @@ const goBack = () => {
 </script>
 <template>
   <div class="flex flex-wrap flex-row-reverse justify-between p-4">
-    <div class="flex gap-3 ">
+    <div class="flex gap-3">
       <slot name="Pre"></slot>
       <IButton
         v-if="props.isAdd && props.showAdd"
@@ -74,13 +75,13 @@ const goBack = () => {
         :onClick="props.onDelete"
       />
       <slot name="Post"></slot>
-
     </div>
+
     <IButton2
       color="red"
       :onClick="goBack"
       pre-icon="arrow-left-top"
-      :type="EnumButtonType.Text"
+      :variant="EnumButtonType.Text"
       :text="t('Back')"
       class="text-lg"
     />

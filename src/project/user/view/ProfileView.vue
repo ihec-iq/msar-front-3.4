@@ -42,6 +42,7 @@ const userInfo = ref<IUser>({
   created: "",
   expire_date: "",
 });
+
 const random = Math.floor(Math.random() * 10)
   .toString()
   .repeat(8);
@@ -80,7 +81,7 @@ onMounted(async () => {
   if (authStore.user) {
     userInfo.value = authStore.user as IUser;
   } else {
-    router.push({ name: "Dashboard" });
+    router.push({ name: "Home" });
   }
   check_active.value = userInfo.value.active?.toString() == "1";
   check_any_device.value = userInfo.value.any_device?.toString() == "1";
@@ -139,8 +140,8 @@ onMounted(async () => {
               >
                 {{ t("Active") }} :
                 {{ check_active ? " مفعل " : " غير مفعل " }}</ICheckbox
-              ></IBasis
-            >
+              >
+            </IBasis>
           </IFlex>
           <ISection :title="t('Change Password')"></ISection>
           <IFlex>
@@ -150,14 +151,16 @@ onMounted(async () => {
                 name="Name"
                 v-model="UserPassword.password"
                 type="password"
-            /></IBasis>
+              />
+            </IBasis>
             <IBasis base="1/3">
               <IInput
                 :label="t('Rewrite Password')"
                 name="Name"
                 v-model="UserPassword.rePassword"
                 type="password"
-            /></IBasis>
+              />
+            </IBasis>
           </IFlex>
         </IForm>
       </IRow>
@@ -173,4 +176,3 @@ onMounted(async () => {
     </template>
   </IPage>
 </template>
-@/views/role/role/roles/roleStore @/utilities/I18nPlugin

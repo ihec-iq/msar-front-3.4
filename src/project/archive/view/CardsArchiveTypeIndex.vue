@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { useArchiveStore } from "../archiveStore";
 import { storeToRefs } from "pinia";
-import { onMounted, defineEmits, ref, type PropType } from "vue";
+import { onMounted, ref, type PropType } from "vue";
 import { Icon } from "@iconify/vue";
 import CardArchiveTypeIndex from "./CardArchiveTypeIndex.vue";
 import { useArchiveTypeStore } from "../archiveType/archiveTypeStore";
 
 const archiveTypeStore = useArchiveTypeStore();
 const { archiveTypes } = storeToRefs(useArchiveTypeStore());
-const ischecked = ref(false);
+const isChecked = ref(false);
 const emits = defineEmits<{
   getFilterData: [number, number]; // Define the event structure with three parameters
 }>();
@@ -21,37 +20,38 @@ const props = defineProps({
 const onClick = (index: number) => {
   //emits("getFilterData", 1, index);
   props.OnClick(1, index);
-  ischecked.value = false;
+  isChecked.value = false;
 };
 onMounted(async () => {
   await archiveTypeStore.getBySectionUser();
 });
+const visibleCard = ref(false);
 </script>
 <template>
-  <div class="collapse align-middle" v-if="archiveTypes.length > 0">
-    <input type="checkbox" class="" v-model="ischecked" />
+  <div
+    class="bg-opacity-50 bg-blue-100 py-2 px-2 rounded-lg overflow-x-auto"
+    v-if="archiveTypes.length > 0"
+  >
     <div
-      class="collapse-title align-middle content-center items-center flex border-dotted border-gray-200 border-2"
+      class="collapse-title w-full hover:cursor-pointer flex border-dotted border-gray-200 border-2"
+      @click="visibleCard = !visibleCard"
     >
-      <span class="mx-2 px-2"> للاطلاع على كافة الكتب حسب نوع الكتاب </span>
-      <Icon icon="mdi:filter-check" />
+      <span class="mx-2 mb-1 px-2"> للاطلاع على الكتب حسب نوع الكتاب </span>
+      <Icon icon="mdi:filter-check" class="mt-1" />
     </div>
-    <div class="collapse-content grid grid-cols-4">
-      <div class="mt-5"></div>
+    <div class="flex mt-2 gap-2" v-if="visibleCard">
       <CardArchiveTypeIndex
         title="عرض الجميع"
-        count="0"
-        class="col-span-4"
+        :count="archiveTypes.length"
         @click="onClick(-1)"
-      ></CardArchiveTypeIndex>
+      />
       <CardArchiveTypeIndex
         v-for="archiveType in archiveTypes"
         :key="archiveType.id"
-        class="col-span-4"
         :title="archiveType.name"
         :count="archiveType.archives?.toString()"
         @click="onClick(archiveType.id)"
-      ></CardArchiveTypeIndex>
+      />
     </div>
   </div>
 </template>
